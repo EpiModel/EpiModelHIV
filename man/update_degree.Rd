@@ -28,4 +28,7 @@ This function queries the degree of each node within a network using the
 sociality term in a summary function call to the network, and then sets this
 as a race-based vertex attribute on the output network.
 }
+\seealso{
+\code{\link{assign_degree}}
+}
 

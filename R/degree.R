@@ -16,6 +16,7 @@
 #' target network given a bivariate degree mixing matrix of main, casual, and
 #' one-partnerships contained in the \code{nwstats} data.
 #'
+#' @seealso \code{\link{update_degree}}
 #' @export
 #'
 assign_degree <- function(nw, deg.type, nwstats) {
@@ -80,6 +81,7 @@ assign_degree <- function(nw, deg.type, nwstats) {
 #' sociality term in a summary function call to the network, and then sets this
 #' as a race-based vertex attribute on the output network.
 #'
+#' @seealso \code{\link{assign_degree}}
 #' @export
 #'
 update_degree <- function(nw, nw.source, deg.type, at) {
