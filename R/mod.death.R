@@ -1,0 +1,96 @@
+
+#' @title Death Module
+#'
+#' @description Module function for simulting both general and disease-related
+#'              deaths among population members.
+#'
+#' @inheritParams aging.mard
+#'
+#' @details
+#' Deaths are divided into two categories: general deaths, for which demographic
+#' data on age-specific mortality rates applies; and disease-related diseases,
+#' for which the rate of death is a function of progression to end-stage AIDS.
+#' Which nodes have died is determined stochastically for general deaths using
+#' draws from a binomial distribution, and deterministically for disease-related
+#' deaths after nodes have reach a maximum viral load value set in the
+#' \code{vl.fatal} parameter.
+#'
+#' @return
+#' This function returns the updated \code{dat} object accounting for deaths.
+#' The deaths are deactivated from the main and casual networks, as those are in
+#' \code{networkDynamic} class objects; dead nodes are not deleted from the
+#' instant network until the \code{\link{simnet.mard}} module for bookkeeping
+#' purposes.
+#'
+#' @keywords module
+#' @export
+#'
+deaths.mard <- function(dat, at) {
+
+  ## General deaths
+  age <- floor(dat$attr$age)
+  race <- dat$attr$race
+  active <- dat$attr$active
+
+  alive.B <- which(active == 1 & race == "B")
+  age.B <- age[alive.B]
+  death.probs.B <- dat$param$asmr.B[age.B]
+  deaths.B <- alive.B[rbinom(length(death.probs.B), 1, death.probs.B) == 1]
+
+  alive.W <- which(active == 1 & race == "W")
+  age.W <- age[alive.W]
+  death.probs.W <- dat$param$asmr.W[age.W]
+  deaths.W <- alive.W[rbinom(length(death.probs.W), 1, death.probs.W) == 1]
+
+  dth.gen <- c(deaths.B, deaths.W)
+
+
+  ## Disease deaths
+  dth.dis <- which(dat$attr$active == 1 &
+                   dat$attr$stage == "D" &
+                   dat$attr$vl >= dat$param$vl.fatal)
+
+  dth.all <- NULL
+  dth.all <- c(dth.gen, dth.dis)
+
+  if (length(dth.all) > 0) {
+
+    dat$attr$active[dth.all] <- 0
+    dat$attr$depart.time[dth.all] <- at
+
+    for (i in 1:2) {
+      dat$nw[[i]] <- deactivate.vertices(dat$nw[[i]],
+                                         onset = at,
+                                         terminus = Inf,
+                                         v = dth.all,
+                                         deactivate.edges = TRUE)
+    }
+  }
+
+
+  ## Summary Output
+  dat$epi$dth.gen[at] <- length(dth.gen)
+  dat$epi$dth.gen.B[at] <- length(deaths.B)
+  dat$epi$dth.gen.W[at] <- length(deaths.W)
+  dat$epi$dth.gen.y[at] <- sum(age[dth.all] < 30)
+  dat$epi$dth.gen.o[at] <- sum(age[dth.all] >= 30)
+  dat$epi$dth.gen.B.y[at] <- sum(age[deaths.B] < 30)
+  dat$epi$dth.gen.B.o[at] <- sum(age[deaths.B] >= 30)
+  dat$epi$dth.gen.W.y[at] <- sum(age[deaths.W] < 30)
+  dat$epi$dth.gen.W.o[at] <- sum(age[deaths.W] >= 30)
+
+  dat$epi$dth.dis[at] <- length(dth.dis)
+  dat$epi$dth.dis.B[at] <- sum(race[dth.dis] == "B")
+  dat$epi$dth.dis.W[at] <- sum(race[dth.dis] == "W")
+  dat$epi$dth.dis.y[at] <- sum(age[dth.dis] < 30)
+  dat$epi$dth.dis.o[at] <- sum(age[dth.dis] >= 30)
+  dat$epi$dth.dis.B.y[at] <- sum(race[dth.dis] == "B" & age[dth.dis] < 30)
+  dat$epi$dth.dis.B.o[at] <- sum(race[dth.dis] == "B" & age[dth.dis] >= 30)
+  dat$epi$dth.dis.W.y[at] <- sum(race[dth.dis] == "W" & age[dth.dis] < 30)
+  dat$epi$dth.dis.W.o[at] <- sum(race[dth.dis] == "W" & age[dth.dis] >= 30)
+
+  dat$epi$dth.all[at] <- length(dth.all)
+  dat$temp$dth.all <- dth.all
+
+  return(dat)
+}

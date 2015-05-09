@@ -1,0 +1,321 @@
+
+#' @title Calculate Target Statistics for Network Model Estimation
+#'
+#' @description Translates the raw parameters for the network model to target
+#'              statistics used in the estimation and simulation of the network
+#'              model.
+#'
+#' @param tUnit Time unit relative to 1 for daily.
+#' @param num.B Population size of black MSM.
+#' @param num.W Population size of white MSM.
+#' @param deg.mp.B Degree distribution matrix for main and casual partners for
+#'        black MSM.
+#' @param deg.mp.W Degree distribution matrix for main and causal partners for
+#'        white MSM.
+#' @param mdeg.inst.B Mean degree or rate of instant partnerships per time step
+#'        for black MSM.
+#' @param mdeg.inst.W Mean degree or rate of instant partnerships per time step
+#'        for white MSM.
+#' @param prop.hom.mpi.B Proportion of main, casual, and instant partnerships
+#'        in same race for black MSM.
+#' @param prop.hom.mpi.W Proportion of main, casual, and instant partnerships
+#'        in same race for white MSM.
+#' @param balance Balancing of edges by race for number of mixed-race partnerships,
+#'        with options of \code{"black"} to apply black MSM counts, \code{"white"}
+#'        to apply white MSM counts, and \code{"mean"} to average over them.
+#' @param sqrt.adiff.BB Mean absolute differences in the square root of ages in
+#'        main, casual, and instant partnerships between two black MSM.
+#' @param sqrt.adiff.WW Mean absolute differences in the square root of ages in
+#'        main, casual, and instant partnerships between two white MSM.
+#' @param sqrt.adiff.BW Mean absolute differences in the square root of ages in
+#'        main, casual, and instant partnerships in mixed-raced couples.
+#' @param age.method Method for calculating the square root of age differences,
+#'        with \code{"heterogeneous"} using the individual \code{sqrt.adiff.XX}
+#'        values and \code{"homogeneous"} using a weighted average of them.
+#' @param diss.main Dissolution model formula for main partnerships.
+#' @param diss.pers Dissolution model formula for casual partnerships.
+#' @param durs.main Duration of BB, BW, and WW main partnerships.
+#' @param durs.pers Duration of BB, BW, and WW casual partnerships.
+#' @param ages Vector of ages in years for population.
+#' @param asmr.B Age-sex-specific mortality rate for black MSM.
+#' @param asmr.W Age-sex-specific mortality rate for white MSM.
+#' @param role.freq.B Frequency of black MSM as insertive, receptive, and vers.
+#' @param role.freq.W Frequency of white MSM as insertive, receptive, and vers.
+#'
+#' @export
+#'
+calc_nwstats.mard <- function(tUnit = 7,
+                              num.B,
+                              num.W,
+                              deg.mp.B,
+                              deg.mp.W,
+                              mdeg.inst.B,
+                              mdeg.inst.W,
+                              prop.hom.mpi.B,
+                              prop.hom.mpi.W,
+                              balance = "mean",
+                              sqrt.adiff.BB,
+                              sqrt.adiff.WW,
+                              sqrt.adiff.BW,
+                              age.method = "heterogeneous",
+                              diss.main,
+                              diss.pers,
+                              durs.main,
+                              durs.pers,
+                              ages,
+                              asmr.B,
+                              asmr.W,
+                              role.freq.B,
+                              role.freq.W) {
+
+  if (sum(deg.mp.B) != 1) {
+    stop("deg.mp.B must sum to 1.")
+  }
+  if (sum(deg.mp.W) != 1) {
+    stop("deg.mp.W must sum to 1.")
+  }
+
+  # deg.pers nodal attribute
+  deg.pers.B <- apportion.lr(num.B, c("B0", "B1", "B2"), colSums(deg.mp.B))
+  deg.pers.W <- apportion.lr(num.W, c("W0", "W1", "W2"), colSums(deg.mp.W))
+
+  # deg main nodal attribute
+  deg.main.B <- apportion.lr(num.B, c("B0", "B1"), rowSums(deg.mp.B))
+  deg.main.W <- apportion.lr(num.W, c("W0", "W1"), rowSums(deg.mp.W))
+
+  # Main partnerships -------------------------------------------------------
+
+  # Persons in partnerships by casual degree by race
+  totdeg.m.by.dp <- c(num.B * deg.mp.B[2, ], num.W * deg.mp.W[2, ])
+
+  # Persons in partnerships by race
+  totdeg.m.by.race <- c(sum(totdeg.m.by.dp[1:3]), sum(totdeg.m.by.dp[4:6]))
+
+  # Number of partnerships
+  edges.m <- (sum(totdeg.m.by.dp)) / 2
+
+  # Number of mixed-race partnerships, with balancing to decide
+  edges.m.B2W <- totdeg.m.by.race[1] * (1 - prop.hom.mpi.B[1])
+  edges.m.W2B <- totdeg.m.by.race[2] * (1 - prop.hom.mpi.W[1])
+  edges.het.m <- switch(balance,
+                        black = edges.m.B2W,
+                        white = edges.m.W2B,
+                        mean = (edges.m.B2W + edges.m.W2B) / 2)
+
+  # Number of same-race partnerships
+  edges.hom.m <- (totdeg.m.by.race - edges.het.m) / 2
+
+  # Nodemix target stat: numer of BB, BW, WW partnerships
+  edges.nodemix.m <- c(edges.hom.m[1], edges.het.m, edges.hom.m[2])
+
+
+  # Sqrt absdiff term for age
+  if (!(age.method %in% c("heterogeneous", "homogeneous"))) {
+    stop("age.method must be \"heterogeneous\" or \"homogeneous\" ", call. = FALSE)
+  }
+  if (age.method == "heterogeneous") {
+    sqrt.adiff.m <- edges.nodemix.m * c(sqrt.adiff.BB[1],
+                                        sqrt.adiff.BW[1],
+                                        sqrt.adiff.WW[1])
+  }
+  if (age.method == "homogeneous") {
+    weighted.avg <- sum(edges.nodemix.m * c(sqrt.adiff.BB[1],
+                                            sqrt.adiff.BW[1],
+                                            sqrt.adiff.WW[1])) /
+      sum(edges.nodemix.m)
+    sqrt.adiff.m <- edges.nodemix.m * weighted.avg
+  }
+
+  # Compile target stats
+  stats.m <- c(edges.m,
+               edges.nodemix.m[2:3],
+               totdeg.m.by.dp[c(2:3, 5:6)],
+               sqrt.adiff.m)
+
+
+  # Dissolution model
+  exp.mort <- (mean(asmr.B[ages]) + mean(asmr.W[ages])) / 2
+
+  coef.diss.m <- dissolution_coefs(dissolution = diss.main,
+                                   duration = durs.main,
+                                   d.rate = exp.mort)
+
+
+
+  # Casual partnerships -----------------------------------------------------
+
+  # Persons in partnerships by main degree by race
+  totdeg.p.by.dm <- c(num.B * deg.mp.B[, 2] + num.B * deg.mp.B[, 3] * 2,
+                      num.W * deg.mp.W[, 2] + num.W * deg.mp.W[, 3] * 2)
+
+  # Persons in partnerships by race
+  totdeg.p.by.race <- c(sum(totdeg.p.by.dm[1:2]), sum(totdeg.p.by.dm[3:4]))
+
+  # Persons concurrent by race
+  conc.p.by.race <- c(sum(deg.mp.B[, 3]) * num.B, sum(deg.mp.W[, 3]) * num.W)
+
+  # Number of partnerships
+  edges.p <- (sum(totdeg.p.by.dm)) / 2
+
+  # Number of mixed-race partnerships, with balancing to decide
+  edges.p.B2W <- totdeg.p.by.race[1] * (1 - prop.hom.mpi.B[2])
+  edges.p.W2B <- totdeg.p.by.race[2] * (1 - prop.hom.mpi.W[2])
+  edges.het.p <- switch(balance,
+                        black = edges.p.B2W,
+                        white = edges.p.W2B,
+                        mean = (edges.p.B2W + edges.p.W2B) / 2)
+
+  # Number of same-race partnerships
+  edges.hom.p <- (totdeg.p.by.race - edges.het.p) / 2
+
+  # Nodemix target stat: number of BB, BW, WW partnerships
+  edges.nodemix.p <- c(edges.hom.p[1], edges.het.p, edges.hom.p[2])
+
+  # Sqrt absdiff term for age
+  if (age.method == "heterogeneous") {
+    sqrt.adiff.p <- edges.nodemix.p * c(sqrt.adiff.BB[2],
+                                        sqrt.adiff.BW[2],
+                                        sqrt.adiff.WW[2])
+  }
+  if (age.method == "homogeneous") {
+    weighted.avg <- sum(edges.nodemix.p * c(sqrt.adiff.BB[2],
+                                            sqrt.adiff.BW[2],
+                                            sqrt.adiff.WW[2])) /
+      sum(edges.nodemix.p)
+    sqrt.adiff.p <- edges.nodemix.p * weighted.avg
+  }
+
+  # Compile target statistics
+  stats.p <- c(edges.p,
+               edges.nodemix.p[2:3],
+               totdeg.p.by.dm[c(2, 4)],
+               conc.p.by.race,
+               sqrt.adiff.p)
+
+  # Dissolution model
+  coef.diss.p <- dissolution_coefs(dissolution = diss.pers,
+                                   duration = durs.pers,
+                                   d.rate = exp.mort)
+
+
+
+  # Instant partnerships ----------------------------------------------------
+
+  # Number of instant partnerships per time step, by main and casl degree, for race
+  num.inst.B <- num.B * deg.mp.B * mdeg.inst.B
+  num.inst.W <- num.W * deg.mp.W * mdeg.inst.W
+
+  # Number of instant partnerships per time step, by race
+  totdeg.i.by.race <- c(sum(num.inst.B), sum(num.inst.W))
+
+  # Number of partnerships
+  edges.i <- sum(totdeg.i.by.race) / 2
+
+  # Number of mixed-race partnerships, with balancing to decide
+  edges.i.B2W <- totdeg.i.by.race[1] * (1 - prop.hom.mpi.B[3])
+  edges.i.W2B <- totdeg.i.by.race[2] * (1 - prop.hom.mpi.W[3])
+  edges.het.i <- switch(balance,
+                        black = edges.i.B2W,
+                        white = edges.i.W2B,
+                        mean = (edges.i.B2W + edges.i.W2B) / 2)
+
+  # Number of same-race partnerships
+  edges.hom.i <- edges.i - edges.het.i
+
+  # Nodemix target stat: number of BB, BW, WW partnerships
+  edges.nodemix.i <- c((totdeg.i.by.race[1] - edges.het.i) / 2,
+                       edges.het.i,
+                       (totdeg.i.by.race[1] - edges.het.i) / 2)
+
+  if (age.method == "heterogeneous") {
+    sqrt.adiff.i <- edges.nodemix.i * c(sqrt.adiff.BB[3],
+                                        sqrt.adiff.BW[3],
+                                        sqrt.adiff.WW[3])
+  }
+  if (age.method == "homogeneous") {
+    weighted.avg <- sum(edges.nodemix.i * c(sqrt.adiff.BB[3],
+                                            sqrt.adiff.BW[3],
+                                            sqrt.adiff.WW[3])) /
+      sum(edges.nodemix.i)
+    sqrt.adiff.i <- edges.nodemix.i * weighted.avg
+  }
+
+  stats.i <- c(edges.i,
+               num.inst.B[-1],
+               num.inst.W,
+               edges.hom.i,
+               sqrt.adiff.i)
+
+
+  # Compile results ---------------------------------------------------------
+  out <- list()
+  out$deg.pers <- c(deg.pers.B, deg.pers.W)
+  out$deg.main <- c(deg.main.B, deg.main.W)
+  out$stats.m <- stats.m
+  out$stats.p <- stats.p
+  out$stats.i <- stats.i
+  out$coef.diss.m <- coef.diss.m
+  out$coef.diss.p <- coef.diss.p
+
+  out$ages <- ages
+  out$asmr.B <- asmr.B
+  out$asmr.W <- asmr.W
+
+  out$tUnit <- tUnit
+  out$num.B <- num.B
+  out$num.W <- num.W
+
+  out$deg.mp.B <- deg.mp.B
+  out$deg.mp.W <- deg.mp.W
+
+  out$role.freq.B <- role.freq.B
+  out$role.freq.W <- role.freq.W
+
+  class(out) <- "nwstats"
+  return(out)
+}
+
+
+#' @title Make Base Population
+#'
+#' @description description
+#'
+#' @param nwstats Output from \code{\link{calc_nwstats.mard}}.
+#'
+#' @details
+#' This function ...
+#'
+#' @export
+base_nw.mard <- function(nwstats) {
+
+  num.B <- nwstats$num.B
+  num.W <- nwstats$num.W
+
+  # Initialize network
+  n <- num.B + num.W
+  nw <- network::network.initialize(n, directed = FALSE)
+
+  # Calculate attributes
+  race <- c(rep("B", num.B), rep("W", num.W))
+  race <- sample(race)
+
+  ager <- nwstats$ages
+  ages <- seq(min(ager), max(ager) + 1, 1 / (365 / nwstats$tUnit))
+  age <- sample(ages, n, TRUE)
+  sqrt.age <- sqrt(age)
+
+  role.B <- sample(apportion.lr(num.B, c("I", "R", "V"), nwstats$role.freq.B))
+  role.W <- sample(apportion.lr(num.W, c("I", "R", "V"), nwstats$role.freq.W))
+  role <- rep(NA, n)
+  role[race == "B"] <- role.B
+  role[race == "W"] <- role.W
+
+  attr.names <- c("race", "sqrt.age", "role.class")
+  attr.values <- list(race, sqrt.age, role)
+  nw <- network::set.vertex.attribute(nw, attr.names, attr.values)
+
+  return(nw)
+}
+
+
+
