@@ -82,7 +82,10 @@ acts.mard <- function(dat, at) {
 
     # Processes ---------------------------------------------------------------
 
-    disc.el <- disc_check(el, status)
+    # Construct discordant edgelist
+    disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
+    disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
+
 
     if (nrow(disc.el) > 0) {
 
@@ -155,47 +158,3 @@ acts.mard <- function(dat, at) {
 
   return(dat)
 }
-
-
-#' @title Check for Discordant Pairs
-#'
-#' @description Checks that the discordant edgelist is in a proper form before
-#'              returning its values in a matrix.
-#'
-#' @param el Current edgelist.
-#' @param status Disease status vector.
-#'
-#' @return
-#' This function returns an edgelist of only the discordant relations, with the
-#' seropositive man in the first column.
-#'
-#' @keywords submodule
-#' @export
-#'
-disc_check <- function(el, status) {
-
-  if (class(el) != "matrix") {
-    stop("argument el must be a matrix")
-  }
-  if (ncol(el) != 2) {
-    stop("argument el must have two columns")
-  }
-  if (mode(el) != "numeric") {
-    stop("argument el must be numeric")
-  }
-  if (any(el != round(el)) == "TRUE") {
-    stop("argument el must be integer values")
-  }
-  if ((0 %in% el) == "TRUE") {
-    stop("argument el cannot contain 0")
-  }
-  if (any(el > length(status)) == "TRUE") {
-    stop("argument el cannot contain values greater than length of status")
-  }
-
-  out <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
-  out <- rbind(out, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
-
-  return(out)
-}
-
