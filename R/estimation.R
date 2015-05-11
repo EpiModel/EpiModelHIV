@@ -1,46 +1,62 @@
 
 #' @title Calculate Target Statistics for Network Model Estimation
 #'
-#' @description Translates the raw parameters for the network model to target
-#'              statistics used in the estimation and simulation of the network
-#'              model.
+#' @description Calculates the target statistics for the formation and dissolution
+#'              components of the network model to be estimated with \code{netest}.
 #'
 #' @param tUnit Time unit relative to 1 for daily.
 #' @param num.B Population size of black MSM.
 #' @param num.W Population size of white MSM.
 #' @param deg.mp.B Degree distribution matrix for main and casual partners for
-#'        black MSM.
+#'        black MSM, as a 2 by 3 matrix.
 #' @param deg.mp.W Degree distribution matrix for main and causal partners for
-#'        white MSM.
-#' @param mdeg.inst.B Mean degree or rate of instant partnerships per time step
+#'        white MSM, as a 2 by 3 matrix.
+#' @param mdeg.inst.B Mean degree, or rate, of one-off partnerships per time step
 #'        for black MSM.
-#' @param mdeg.inst.W Mean degree or rate of instant partnerships per time step
+#' @param mdeg.inst.W Mean degree, or rate, of one-off partnerships per time step
 #'        for white MSM.
-#' @param prop.hom.mpi.B Proportion of main, casual, and instant partnerships
-#'        in same race for black MSM.
-#' @param prop.hom.mpi.W Proportion of main, casual, and instant partnerships
-#'        in same race for white MSM.
-#' @param balance Balancing of edges by race for number of mixed-race partnerships,
-#'        with options of \code{"black"} to apply black MSM counts, \code{"white"}
-#'        to apply white MSM counts, and \code{"mean"} to average over them.
-#' @param sqrt.adiff.BB Mean absolute differences in the square root of ages in
-#'        main, casual, and instant partnerships between two black MSM.
-#' @param sqrt.adiff.WW Mean absolute differences in the square root of ages in
-#'        main, casual, and instant partnerships between two white MSM.
-#' @param sqrt.adiff.BW Mean absolute differences in the square root of ages in
-#'        main, casual, and instant partnerships in mixed-raced couples.
+#' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, casual,
+#'        and one-off partnerships in same race for black MSM.
+#' @param prop.hom.mpi.W A vector of length 3 for the proportion of main, casual,
+#'        and one-off partnerships in same race for white MSM.
+#' @param balance Method for balancing of edges by race for number of mixed-race
+#'        partnerships, with options of \code{"black"} to apply black MSM counts,
+#'        \code{"white"} to apply white MSM counts, and \code{"mean"} to take
+#'        the average of the two expectations.
+#' @param sqrt.adiff.BB Vector of length 3 with the mean absolute differences
+#'        in the square root of ages in main, casual, and one-off black-black
+#'        partnerships.
+#' @param sqrt.adiff.WW Vector of length 3 with the mean absolute differences
+#'        in the square root of ages in main, casual, and one-off white-white
+#'        partnerships.
+#' @param sqrt.adiff.BW Vector of length 3 with the mean absolute differences
+#'        in the square root of ages in main, casual, and one-off black-white
+#'        partnerships.
 #' @param age.method Method for calculating the square root of age differences,
 #'        with \code{"heterogeneous"} using the individual \code{sqrt.adiff.XX}
-#'        values and \code{"homogeneous"} using a weighted average of them.
+#'        values and \code{"homogeneous"} using a weighted average.
 #' @param diss.main Dissolution model formula for main partnerships.
 #' @param diss.pers Dissolution model formula for casual partnerships.
-#' @param durs.main Duration of BB, BW, and WW main partnerships.
-#' @param durs.pers Duration of BB, BW, and WW casual partnerships.
-#' @param ages Vector of ages in years for population.
-#' @param asmr.B Age-sex-specific mortality rate for black MSM.
-#' @param asmr.W Age-sex-specific mortality rate for white MSM.
-#' @param role.freq.B Frequency of black MSM as insertive, receptive, and vers.
-#' @param role.freq.W Frequency of white MSM as insertive, receptive, and vers.
+#' @param durs.main Vector of length 3 with the duration of BB, BW, and WW main
+#'        partnerships in days.
+#' @param durs.pers Vector of length 3 with the duration of BB, BW, and WW
+#'        casual partnerships in days.
+#' @param ages Integer vector of ages in years that defines range of possible
+#'        initial ages in the population.
+#' @param asmr.B Vector of length 40 defining the age-specific mortality rate for
+#'        persons within that age slot, for black MSM.
+#' @param asmr.W Vector of length 40 defining the age-specific mortality rate for
+#'        persons within that age slot, for white MSM.
+#' @param role.freq.B Vector of length 3 for the probability of sexual role as
+#'        insertive, receptive, and versatile, for black MSM.
+#' @param role.freq.W Vector of length 3 for the probability of sexual role as
+#'        insertive, receptive, and versatile, for white MSM.
+#'
+#' @details
+#' This function performs basic calculations to determine the components of the
+#' formationa and dissolution models for the network model estimation to be
+#' conducted with \code{\link{netest}}. The inputs inputs for this function are
+#' calculated externally to the package in a setup scenario file.
 #'
 #' @export
 #'

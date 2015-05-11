@@ -18,61 +18,77 @@ calc_nwstats.mard(tUnit = 7, num.B, num.W, deg.mp.B, deg.mp.W, mdeg.inst.B,
 \item{num.W}{Population size of white MSM.}
 
 \item{deg.mp.B}{Degree distribution matrix for main and casual partners for
-black MSM.}
+black MSM, as a 2 by 3 matrix.}
 
 \item{deg.mp.W}{Degree distribution matrix for main and causal partners for
-white MSM.}
+white MSM, as a 2 by 3 matrix.}
 
-\item{mdeg.inst.B}{Mean degree or rate of instant partnerships per time step
+\item{mdeg.inst.B}{Mean degree, or rate, of one-off partnerships per time step
 for black MSM.}
 
-\item{mdeg.inst.W}{Mean degree or rate of instant partnerships per time step
+\item{mdeg.inst.W}{Mean degree, or rate, of one-off partnerships per time step
 for white MSM.}
 
-\item{prop.hom.mpi.B}{Proportion of main, casual, and instant partnerships
-in same race for black MSM.}
+\item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, casual,
+and one-off partnerships in same race for black MSM.}
 
-\item{prop.hom.mpi.W}{Proportion of main, casual, and instant partnerships
-in same race for white MSM.}
+\item{prop.hom.mpi.W}{A vector of length 3 for the proportion of main, casual,
+and one-off partnerships in same race for white MSM.}
 
-\item{balance}{Balancing of edges by race for number of mixed-race partnerships,
-with options of \code{"black"} to apply black MSM counts, \code{"white"}
-to apply white MSM counts, and \code{"mean"} to average over them.}
+\item{balance}{Method for balancing of edges by race for number of mixed-race
+partnerships, with options of \code{"black"} to apply black MSM counts,
+\code{"white"} to apply white MSM counts, and \code{"mean"} to take
+the average of the two expectations.}
 
-\item{sqrt.adiff.BB}{Mean absolute differences in the square root of ages in
-main, casual, and instant partnerships between two black MSM.}
+\item{sqrt.adiff.BB}{Vector of length 3 with the mean absolute differences
+in the square root of ages in main, casual, and one-off black-black
+partnerships.}
 
-\item{sqrt.adiff.WW}{Mean absolute differences in the square root of ages in
-main, casual, and instant partnerships between two white MSM.}
+\item{sqrt.adiff.WW}{Vector of length 3 with the mean absolute differences
+in the square root of ages in main, casual, and one-off white-white
+partnerships.}
 
-\item{sqrt.adiff.BW}{Mean absolute differences in the square root of ages in
-main, casual, and instant partnerships in mixed-raced couples.}
+\item{sqrt.adiff.BW}{Vector of length 3 with the mean absolute differences
+in the square root of ages in main, casual, and one-off black-white
+partnerships.}
 
 \item{age.method}{Method for calculating the square root of age differences,
 with \code{"heterogeneous"} using the individual \code{sqrt.adiff.XX}
-values and \code{"homogeneous"} using a weighted average of them.}
+values and \code{"homogeneous"} using a weighted average.}
 
 \item{diss.main}{Dissolution model formula for main partnerships.}
 
 \item{diss.pers}{Dissolution model formula for casual partnerships.}
 
-\item{durs.main}{Duration of BB, BW, and WW main partnerships.}
+\item{durs.main}{Vector of length 3 with the duration of BB, BW, and WW main
+partnerships in days.}
 
-\item{durs.pers}{Duration of BB, BW, and WW casual partnerships.}
+\item{durs.pers}{Vector of length 3 with the duration of BB, BW, and WW
+casual partnerships in days.}
 
-\item{ages}{Vector of ages in years for population.}
+\item{ages}{Integer vector of ages in years that defines range of possible
+initial ages in the population.}
 
-\item{asmr.B}{Age-sex-specific mortality rate for black MSM.}
+\item{asmr.B}{Vector of length 40 defining the age-specific mortality rate for
+persons within that age slot, for black MSM.}
 
-\item{asmr.W}{Age-sex-specific mortality rate for white MSM.}
+\item{asmr.W}{Vector of length 40 defining the age-specific mortality rate for
+persons within that age slot, for white MSM.}
 
-\item{role.freq.B}{Frequency of black MSM as insertive, receptive, and vers.}
+\item{role.freq.B}{Vector of length 3 for the probability of sexual role as
+insertive, receptive, and versatile, for black MSM.}
 
-\item{role.freq.W}{Frequency of white MSM as insertive, receptive, and vers.}
+\item{role.freq.W}{Vector of length 3 for the probability of sexual role as
+       insertive, receptive, and versatile, for white MSM.}
 }
 \description{
-Translates the raw parameters for the network model to target
-             statistics used in the estimation and simulation of the network
-             model.
+Calculates the target statistics for the formation and dissolution
+             components of the network model to be estimated with \code{netest}.
+}
+\details{
+This function performs basic calculations to determine the components of the
+formationa and dissolution models for the network model estimation to be
+conducted with \code{\link{netest}}. The inputs inputs for this function are
+calculated externally to the package in a setup scenario file.
 }
 
