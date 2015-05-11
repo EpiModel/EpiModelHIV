@@ -143,16 +143,6 @@ initialize.mard <- function(x, param, init, control, s) {
 }
 
 
-#' @title Initialization of Disease-Related Attributes
-#'
-#' @description Initializes disease-related attributes such as disease status,
-#'              time of infection, and diagnosis and treatment histories.
-#'
-#' @inheritParams aging.mard
-#'
-#' @keywords submodule
-#' @export
-#'
 init_status.mard <- function(dat) {
 
   num.B <- dat$init$num.B
@@ -571,15 +561,6 @@ init_status.mard <- function(dat) {
 }
 
 
-#' @title Initialization of CCR5 Gene
-#'
-#' @description Initializes CCR5 gene that confers disease protection.
-#'
-#' @inheritParams aging.mard
-#'
-#' @keywords submodule
-#' @export
-#'
 init_ccr5 <- function(dat) {
 
   num.B <- dat$init$num.B

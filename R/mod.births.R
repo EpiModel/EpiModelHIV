@@ -112,18 +112,6 @@ births.mard <- function(dat, at){
 }
 
 
-#' @title Set Attributes for Incoming Nodes
-#'
-#' @description Updates the attr list for new entries into the population as
-#'              set by the births module.
-#'
-#' @inheritParams births.mard
-#' @param nBirths.B Number of new entries among black MSM.
-#' @param nBirths.W Number of new entries among white MSM.
-#'
-#' @keywords submodule
-#' @export
-#'
 setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
 
   nBirths <- nBirths.B + nBirths.W
