@@ -2,17 +2,26 @@
 % Please edit documentation in R/estimation.R
 \name{base_nw.mard}
 \alias{base_nw.mard}
-\title{Make Base Population}
+\title{Construct Base Network for Model Estimation and Simulation}
 \usage{
 base_nw.mard(nwstats)
 }
 \arguments{
-\item{nwstats}{Output from \code{\link{calc_nwstats.mard}}.}
+\item{nwstats}{An object of class \code{nwstats}, as output from
+       \code{\link{calc_nwstats.mard}}.}
 }
 \description{
-description
+Initializes the base network for model estimation within
+             \code{netest}.
 }
 \details{
-This function ...
+This function takes the output of \code{\link{calc_nwstats.mard}} and constructs
+an empty network with the necessary attributes for race, square root of age,
+and sexual role class. This base network is used for all three network
+estimations.
+}
+\seealso{
+The final vertex attributes on the network for cross-network degree are
+calculated and set on the network with \code{\link{assign_degree}}.
 }
 

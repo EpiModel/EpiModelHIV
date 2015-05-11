@@ -58,6 +58,11 @@
 #' conducted with \code{\link{netest}}. The inputs inputs for this function are
 #' calculated externally to the package in a setup scenario file.
 #'
+#' @seealso
+#' Network statistics calculated here are entered into \code{\link{base_nw.mard}}
+#' to construct the base network, and then into the parameters in
+#' \code{\link{param.mard}}.
+#'
 #' @export
 #'
 calc_nwstats.mard <- function(tUnit = 7,
@@ -292,16 +297,26 @@ calc_nwstats.mard <- function(tUnit = 7,
 }
 
 
-#' @title Make Base Population
+#' @title Construct Base Network for Model Estimation and Simulation
 #'
-#' @description description
+#' @description Initializes the base network for model estimation within
+#'              \code{netest}.
 #'
-#' @param nwstats Output from \code{\link{calc_nwstats.mard}}.
+#' @param nwstats An object of class \code{nwstats}, as output from
+#'        \code{\link{calc_nwstats.mard}}.
 #'
 #' @details
-#' This function ...
+#' This function takes the output of \code{\link{calc_nwstats.mard}} and constructs
+#' an empty network with the necessary attributes for race, square root of age,
+#' and sexual role class. This base network is used for all three network
+#' estimations.
+#'
+#' @seealso
+#' The final vertex attributes on the network for cross-network degree are
+#' calculated and set on the network with \code{\link{assign_degree}}.
 #'
 #' @export
+#'
 base_nw.mard <- function(nwstats) {
 
   num.B <- nwstats$num.B

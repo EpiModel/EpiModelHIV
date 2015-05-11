@@ -91,4 +91,9 @@ formationa and dissolution models for the network model estimation to be
 conducted with \code{\link{netest}}. The inputs inputs for this function are
 calculated externally to the package in a setup scenario file.
 }
+\seealso{
+Network statistics calculated here are entered into \code{\link{base_nw.mard}}
+to construct the base network, and then into the parameters in
+\code{\link{param.mard}}.
+}
 
