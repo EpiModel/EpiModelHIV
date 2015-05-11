@@ -2,35 +2,31 @@
 % Please edit documentation in R/params.R
 \name{init.mard}
 \alias{init.mard}
-\title{Mardham2 Initial Conditions}
+\title{Epidemic Model Initial Conditions for MARDHAM Models}
 \usage{
 init.mard(nwstats, prev.B = 0.275, prev.W = 0.275,
   init.prev.age.slope.B = 0.05/12, init.prev.age.slope.W = 0.05/12, ...)
 }
 \arguments{
-\item{nwstats}{An list of target statistics created by
-\code{\link{calc_nwstats.mard}}.}
+\item{nwstats}{Target statistics for the network model. An object of class
+\code{nwstats} output from \code{\link{calc_nwstats.mard}}.}
 
-\item{prev.B}{Disease prevalence among Black MSM.}
+\item{prev.B}{Initial disease prevalence among black MSM.}
 
-\item{prev.W}{Disease prevalence among White MSM.}
+\item{prev.W}{Initial disease prevalence among white MSM.}
 
-\item{init.prev.age.slope.B}{Slope of initial prevalence by age for Black MSM.}
+\item{init.prev.age.slope.B}{Slope of initial prevalence by age for black MSM.}
 
-\item{init.prev.age.slope.W}{Slope of initial prevalence by age for White MSM.}
+\item{init.prev.age.slope.W}{Slope of initial prevalence by age for white MSM.}
 
-\item{...}{Additional arguments passed to the function.}
+\item{...}{Additional arguments passed to function.}
 }
 \value{
-A list object of class \code{init.mard}, which can be passed to
-        EpiModel function \code{netsim}.
+A list object of class \code{init.mard}, which can be passed to EpiModel
+function \code{\link{netsim}}.
 }
 \description{
-Set the initial conditions for a stochastic epidemic
-             network simulation.
-}
-\details{
-\code{nwstats} must be supplied by the user. Prevalence defaults
-         to 27.5 percent for both black and white men.
+Sets the initial conditions for a stochastic epidemic models
+             simulated with \code{\link{netsim}}.
 }
 

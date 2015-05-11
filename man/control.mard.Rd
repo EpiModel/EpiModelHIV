@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{control.mard}
 \alias{control.mard}
-\title{Mardham2 Control Settings}
+\title{Epidemic Model Control Settings for MARDHAM Models}
 \usage{
 control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 52 * 50,
   start = 1, initialize.FUN = initialize.mard, aging.FUN = aging.mard,
@@ -19,84 +19,93 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 52 * 50,
   verbose.int = 1, ...)
 }
 \arguments{
-\item{simno}{Unique identifier for the simulation run.}
+\item{simno}{Unique ID for the simulation run, used for file naming purposes
+if used in conjunction with the \code{EpiModel.hpc} package.}
 
-\item{nsims}{Number of simulations to run.}
+\item{nsims}{Number of simulations.}
 
-\item{ncores}{Number of cores to use.}
+\item{ncores}{Number of cores per run, if parallelization is used within the
+\code{EpiModel.hpc} package.}
 
-\item{nsteps}{Number of time steps in each simulation.}
+\item{nsteps}{Number of time steps per simulation.}
 
-\item{start}{Time step at which to start simulation.}
+\item{start}{Starting time step for simulation, with default to 1 to run new
+simulation. This may also be set to 1 greater than the final time
+step of a previous simulation to resume the simulation with different
+parameters.}
 
-\item{initialize.FUN}{Function to use for initialization.}
+\item{initialize.FUN}{Module function to use for initialization of the epidemic
+model.}
 
-\item{aging.FUN}{Aging function.}
+\item{aging.FUN}{Module function for aging.}
 
-\item{deaths.FUN}{Deaths function.}
+\item{deaths.FUN}{Module function for general and disease-realted deaths.}
 
-\item{births.FUN}{Births function.}
+\item{births.FUN}{Module function for births or entries into the population.}
 
-\item{test.FUN}{Disease testing function.}
+\item{test.FUN}{Module function for diagnostic disease testing.}
 
-\item{tx.FUN}{Treatment function.}
+\item{tx.FUN}{Module function for ART initiation and adherence.}
 
-\item{progress.FUN}{Disease progress function.}
+\item{progress.FUN}{Module function for HIV disease progression.}
 
-\item{vl.FUN}{Viral load function.}
+\item{vl.FUN}{Module function for HIV viral load evolution.}
 
-\item{aiclass.FUN}{AI class function.}
+\item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
 
-\item{roleclass.FUN}{Role class function.}
+\item{roleclass.FUN}{Module function for transitions in sexual roles.}
 
-\item{edgescorr.FUN}{Edges coefficient correction function.}
+\item{edgescorr.FUN}{Module function for the edges coefficient adjustment
+to preserve mean degree under varying population sizes.}
 
-\item{resimnets.FUN}{Network resimulation function.}
+\item{resimnets.FUN}{Module function for network resimulation at each time
+step.}
 
-\item{disclose.FUN}{Disclosure function.}
+\item{disclose.FUN}{Module function for HIV status disclosure.}
 
-\item{acts.FUN}{Acts function.}
+\item{acts.FUN}{Module function to simulate the number of sexual acts within
+partnerships.}
 
-\item{condoms.FUN}{Condom use function.}
+\item{condoms.FUN}{Module function to simulate condom use within acts.}
 
-\item{position.FUN}{Position function.}
+\item{position.FUN}{Module function to simulate sexual position within acts.}
 
-\item{trans.FUN}{Transmission function.}
+\item{trans.FUN}{Module function to stochastically simulate disease transmission
+over acts given individual and dyadic attributes.}
 
-\item{getprev.FUN}{Prevalence summary function.}
+\item{getprev.FUN}{Module function to calculate prevalence summary statistics.}
 
-\item{verbose.FUN}{Verbose simulation progress function.}
+\item{verbose.FUN}{Module function to print model progress to the console or
+external text files.}
 
-\item{delete.nodes}{Logical. Should inactive nodes be deleted?}
+\item{delete.nodes}{If \code{TRUE}, dead nodes will be removed from the network
+object and only active nodes will be retained.}
 
-\item{save.dal}{Logical. Should the discordant act list be saved at each time
-step?}
+\item{save.dal}{If \code{TRUE}, the discordant act list will be saved at each time
+step, otherwise it will be discarded.}
 
-\item{save.nwstats}{Logical. Should the network statistics be saved at each
-time step?}
+\item{save.nwstats}{If \code{TRUE}, the network statistics will be saved.}
 
-\item{save.network}{Logical. Should the entire networks be saved at each time
-step?}
+\item{save.network}{If \code{TRUE}, the \code{network} objects will be saved
+out at the end of simulation (necessary for restarting a simulation).}
 
-\item{save.other}{Other list elements of \code{dat} to save.}
+\item{save.other}{Character vector containing other list elements of \code{dat}
+to save.}
 
-\item{verbose}{Logical. Should simulation progress be printed from within the
-time loop?}
+\item{verbose}{If \code{TRUE}, print out simulation progress to the console
+if in interactive mode or text files if in batch mode.}
 
-\item{verbose.int}{Integer giving the interval between time steps at which
+\item{verbose.int}{Integer specifying the interval between time steps at which
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
 }
 \value{
-A list object of class \code{control.mard}, which can be passed to
-        EpiModel function \code{netsim}.
+A list object of class \code{control.mard}, which can be passed to the
+EpiModel function \code{netsim}.
 }
 \description{
-Set control options for a stochastic epidemic network model.
-}
-\details{
-Arguments that end in \code{.FUN} default to the corresponding
-         \code{.mard} function of the same name.
+Sets the controls for stochastic network models simulated with
+             \code{\link{netsim}}.
 }
 

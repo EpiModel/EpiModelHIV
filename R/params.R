@@ -1,245 +1,224 @@
 
-#' @title Mardham2 Parameters
+#' @title Epidemic Model Parameters for MARDHAM Models
 #'
-#' @description Gather transmission related parameters before simulating from a
-#'              stochastic epidemic model.
+#' @description Sets the epidemic parameters for stochastic network models
+#'              simulated with \code{\link{netsim}} for MARDHAM.
 #'
 #' @param nwstats Target statistics for the network model. An object of class
-#'        "nwstats", which emerges from \code{\link{calc_nwstats.mard}}.
+#'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
 #' @param last.neg.test.time.range.B Time range for last negative test for
 #'        black men.
-#' @param mean.test.interv.B The mean intertest interval for Black MSM who test.
+#' @param mean.test.interv.B Mean intertest interval for black MSM who test.
 #' @param last.neg.test.time.range.W Time range for last negative test for
 #'        white men.
-#' @param mean.test.interv.W The mean intertest interval for White MSM who test
-#' @param testing.pattern Whether HIV testing is memoryless (occurs with fixed
-#'        probabilty, without regard to time since previous test) or occurs in
-#'        fixed intervals.  Options are "memoryless" or "interval".
-#' @param test.window.period The length of the HIV test's window period.
-#' @param tt.traj.freq.B The proportion of Black MSM who enter into the four
-#'        testing/treatment trajectories.  Values represent, in order, the
-#'        propotions who are "NN" (never test or treat), "YN" (test, but then
-#'        never initiate treatment), "YP" (test, and then when on treatment
-#'        achieve partial suppression), "YF" (test, and then when on treatment
-#'        achieve full suppression).
-#' @param tt.traj.freq.W The proportion of White MSM who enter into the four
-#'        testing/treatment trajectories.  Values represent, in order, the
-#'        propotions who are "NN" (never test or treat), "YN" (test, but then
-#'        never initiate treatment), "YP" (test, and then when on treatment
-#'        achieve partial suppression), "YF" (test, and then when on treatment
-#'        achieve full suppression).
-#' @param prob.tx.init.B The probability per time step that a Black MSM who has
-#'        tested positive will initiate treatment for the very first time.
-#' @param prob.tx.init.W The probability per time step that a White MSM who has
-#'        tested positive will initiate treatment for the very first time.
-#' @param prob.tx.halt.B The probability per time step that a Black MSM who is
+#' @param mean.test.interv.W Mean intertest interval for white MSM who test
+#' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
+#'        for constant hazard without regard to time since previous test, or
+#'        \code{"interval"} deterministic fixed intervals.
+#' @param test.window.period Length of the HIV test window period.
+#' @param tt.traj.freq.B Proportion of black MSM who enter one of four
+#'        testing/treatment trajectories: never test or treat, test and never
+#'        initiate treatment, test and treated with partial viral suppression,
+#'        and test and treated with full suppression.
+#' @param tt.traj.freq.W Proportion of white MSM who enter into the four
+#'        testing/treatment trajectories, as defined above.
+#' @param prob.tx.init.B Probability per time step that a black MSM who has
+#'        tested positive will initiate treatment.
+#' @param prob.tx.init.W Probability per time step that a white MSM who has
+#'        tested positive will initiate treatment.
+#' @param prob.tx.halt.B Probability per time step that a black MSM who is
 #'        currently on treatment will halt treatment.
-#' @param prob.tx.halt.W The probability per time step that a White MSM who is
+#' @param prob.tx.halt.W Probability per time step that a white MSM who is
 #'        currently on treatment will halt treatment.
-#' @param prob.tx.reinit.B The probability per time step that a Black MSM who is
+#' @param prob.tx.reinit.B Probability per time step that a black MSM who is
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
-#' @param prob.tx.reinit.W The probability per time step that a White MSM who is
+#' @param prob.tx.reinit.W Probability per time step that a white MSM who is
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
-#' @param max.time.off.tx.full The number of time steps off treatment that a man
-#'        who is a full suppressor while on treatment wil last before the onset
-#'        of the AIDS stage.  Note that this includes the time before diagnosis.
-#' @param max.time.on.tx.part The number of time steps on treatment that a man
-#'        who is a partial suppressor wil last before the onset of the AIDS
-#'        stage.
-#' @param max.time.off.tx.part The number of time steps off treatment that a man
-#'        who is a partial suppressor while on treatment wil last before the
-#'        onset of the AIDS stage.  Note that this includes the time before
+#' @param max.time.off.tx.full Number of time steps off treatment for a full
+#'        suppressor before onset of AIDS, including time before diagnosis.
+#' @param max.time.on.tx.part Number of time steps on treatment for a
+#'        partial suppressor beofre onset of AIDS.
+#' @param max.time.off.tx.part Nnumber of time steps off treatment for a
+#'        partial suppressor before onset of AIDS, including time before
 #'        diagnosis.
-#' @param vl.acute.rise.dur The number of time steps over which viral load rises
-#'        during the initial phase of acute infection.
+#' @param vl.acute.rise.dur Number of time steps to peak viremia during acute
+#'        infection.
 #' @param vl.acute.peak Peak viral load (in log10 units) at the height of acute
 #'        infection.
-#' @param vl.acute.fall.dur The number of time steps over which viral load falls
-#'        during the latter phase of acute infection.
-#' @param vl.set.point Set point viral load for all men (in log10 units).
-#' @param vl.aids.onset The number of time steps of infection after which the
-#'        AIDS stage will initiate for a man who has never been on treatment.
-#' @param vl.aids.dur The duration of the AIDS stage.
-#' @param vl.fatal The viral load obtained at the end of the AIDS stage, at
-#'        which death from AIDS occurs.  Note that the code can handle
-#'        param$vl.fatal being lower than param$vl.acute.peak, as it tests for
-#'        both a sufficiently high viral load and presence in the AIDS stage to
-#'        deterine AIDS deaths.
-#' @param vl.full.supp Log10 viral load when fully suppressed.
-#' @param vl.part.supp Log10 viral load when partially suppressed
-#' @param full.supp.down.slope For men who are full suppressors, the number of
-#'        log10 units that viral load falls per time step from treatment
-#'        initiation or re-initiation until the new level is hit.
-#' @param full.supp.up.slope For men who are full suppressors, the number of
-#'        log10 units that viral load rises per time step from treatment halting
-#'        until the new level is hit.
-#' @param part.supp.down.slope For men who are partial suppressors, the number
-#'        of log10 units that viral load falls per time step from treatment
-#'        initiation or re-initiation until the new level is hit.
-#' @param part.supp.up.slope For men who are partial suppressors, the number of
-#'        log10 units that viral load rises per time step from treatment halting
-#'        until the new level is hit.
-#' @param b.rate.B The rate at which Black MSM enter the population.
-#' @param b.rate.W The rate at which White MSM enter the population.
-#' @param birth.age The age (in years) of new arrivals.
+#' @param vl.acute.fall.dur Number of time steps from peak viremia to set-point
+#'        viral load during the acute infection period.
+#' @param vl.set.point Set point viral load (in log10 units).
+#' @param vl.aids.onset Number of time steps to AIDS for a treatment-naive
+#'        patient.
+#' @param vl.aids.dur Duration of AIDS stage infection.
+#' @param vl.fatal Viral load in AIDS at which death occurs.
+#' @param vl.full.supp Log10 viral load at full suppression on ART.
+#' @param vl.part.supp Log10 viral load at partial suppression on ART.
+#' @param full.supp.down.slope For full suppressors, number of log10 units that
+#'        viral load falls per time step from treatment initiation or re-initiation
+#'        until the level in \code{vl.full.supp}.
+#' @param full.supp.up.slope For full suppressors, number of log10 units that
+#'        viral load rises per time step from treatment halting until expected
+#'        value.
+#' @param part.supp.down.slope For partial suppressors, number of log10 units
+#'        that viral load falls per time step from treatment initiation or
+#'        re-initiation until the level in \code{vl.part.supp}.
+#' @param part.supp.up.slope For partial suppressors, number of log10 units that
+#'        viral load rises per time step from treatment halting until expected value.
+#' @param b.rate.B Rate at which black MSM enter the population.
+#' @param b.rate.W Rate at which white MSM enter the population.
+#' @param birth.age Age (in years) of new arrivals.
 #' @param betabase.URAI Transmissibility for a man having unprotected receptive
-#'        anal intercourse with a positive man at set point viral load.
+#'        anal intercourse with an infected man at set point viral load.
 #' @param betabase.UIAI Transmissibility for an uncircumcised man having
-#'        unprotected insertive anal intercourse with a positive man at set
+#'        unprotected insertive anal intercourse with an infected man at set
 #'        point viral load.
-#' @param betamult.acute The factor by which acute infection is
-#'        extra-infectious, above and beyond that predicted by elevated viral
-#'        load.
-#' @param betamult.circ The factor by which to multiply infectivity from
+#' @param betamult.acute Multiplicative factor by which acute infection heightens
+#'        infectiousness, above that predicted by elevated viral load.
+#' @param betamult.circ Factor by which to multiply infectivity from
 #'        insertive anal sex when the negative insertive partner is circumcised.
-#' @param betamult.condom The factor by which to multiply infectivity for anal
+#' @param betamult.condom Factor by which to multiply infectivity for anal
 #'        sex when a condom is used.
-#' @param disc.main.outset.B The probability that an HIV positive Black MSM will
+#' @param disc.main.outset.B Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
-#' @param disc.main.outset.W The probability that an HIV positive White MSM will
+#' @param disc.main.outset.W Probability that an HIV-infected white MSM will
 #'        disclose his status at the start of a main partnership.
-#' @param disc.main.at.diag.B The probability that a Black MSM already in a main
+#' @param disc.main.at.diag.B Probability that a black MSM already in a main
 #'        partnership will disclose at the time of diagnosis.
-#' @param disc.main.at.diag.W The probability that a White MSM already in a main
+#' @param disc.main.at.diag.W Probability that a white MSM already in a main
 #'        partnership will disclose at the time of diagnosis.
-#' @param disc.main.post.diag.B The probability that an HIV positive Black MSM
+#' @param disc.main.post.diag.B Probability that an HIV-infected black MSM
 #'        in a main partnership will disclose his status, assuming he didn't
 #'        at the start of the partnership or at diagnosis.
-#' @param disc.main.post.diag.W The probability that an HIV positive White MSM
+#' @param disc.main.post.diag.W Probability that an HIV-infected white MSM
 #'        in a main partnership will disclose his status, assuming he didn't
 #'        at the start of the partnership or at diagnosis.
-#' @param disc.pers.outset.B The probability that an HIV positive Black MSM will
+#' @param disc.pers.outset.B Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a casual partnership.
-#' @param disc.pers.outset.W The probability that an HIV positive White MSM will
+#' @param disc.pers.outset.W Probability that an HIV-infected white MSM will
 #'        disclose his status at the start of a casual partnership.
-#' @param disc.pers.at.diag.B The probability that a Black MSM already in a
+#' @param disc.pers.at.diag.B Probability that a black MSM already in a
 #'        casual partnership will disclose at the time of diagnosis.
-#' @param disc.pers.at.diag.W The probability that a White MSM already in a
+#' @param disc.pers.at.diag.W Probability that a white MSM already in a
 #'        casual partnership will disclose at the time of diagnosis.
-#' @param disc.pers.post.diag.B The probability that an HIV positive Black MSM
+#' @param disc.pers.post.diag.B Probability that an HIV-infected black MSM
 #'        in a casual partnership will disclose his status, assuming he
 #'        didn't at the start of the partnership or at diagnosis.
-#' @param disc.pers.post.diag.W The probability that an HIV positive White MSM
+#' @param disc.pers.post.diag.W Probability that an HIV-infected white MSM
 #'        in a casual partnership will disclose his status, assuming he
 #'        didn't at the start of the partnership or at diagnosis.
-#' @param disc.inst.B The probability that an HIV positive Black MSM will
+#' @param disc.inst.B Probability that an HIV-infected black MSM will
 #'        disclose his status to a one-off partner.
-#' @param disc.inst.W The probability that an HIV positive White MSM will
+#' @param disc.inst.W Probability that an HIV-infected white MSM will
 #'        disclose his status to a one-off partner.
-#' @param circ.prev.B The probablity that a Black new arrival in the population
+#' @param circ.prev.B Probablity that a black new arrival in the population
 #'        will be circumcised.
-#' @param circ.prev.W The probablity that a White new arrival in the population
+#' @param circ.prev.W Probablity that a white new arrival in the population
 #'        will be circumcised.
-#' @param ccr5.freq.B A vector of length two of frequencies of the Delta 32
-#'        mutation (homozygous and heterozygous, respecitively) in the CCR5 gene
-#'        among Black MSM.
-#' @param ccr5.freq.W A vector of length two of frequencies of the Delta 32
-#'        mutation (homozygous and heterozygous, respecitively) in the CCR5 gene
-#'        among White MSM.
-#' @param ccr5.heteroz.rr Relative risk of infection for men who are heterzygous
+#' @param ccr5.freq.B Vector of length two of frequencies of the Delta 32
+#'        mutation (homozygous and heterozygous, respectively) in the CCR5 gene
+#'        among black MSM.
+#' @param ccr5.freq.W Vector of length two of frequencies of the Delta 32
+#'        mutation (homozygous and heterozygous, respectively) in the CCR5 gene
+#'        among white MSM.
+#' @param ccr5.heteroz.rr Relative risk of infection for men who are heterozygous
 #'        in the CCR5 mutation.
-#' @param num.inst.ai.classes The number of quantiles into which men should be
-#'        divided in determining their levels of one-off AI.
-#' @param base.exp.ai.main.BB Expected coital frequency in Black-Black main
+#' @param num.inst.ai.classes Number of quantiles into which men should be
+#'        divided in determining their levels of one-off anal intercourse.
+#' @param base.exp.ai.main.BB Expected coital frequency in black-black main
 #'        partnerships (acts per week).
-#' @param base.exp.ai.main.BW Expected coital frequency in Black-White main
+#' @param base.exp.ai.main.BW Expected coital frequency in black-white main
 #'        partnerships (acts per week).
-#' @param base.exp.ai.main.WW Expected coital frequency in White-White main
+#' @param base.exp.ai.main.WW Expected coital frequency in white-white main
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.BB Expected coital frequency in Black-Black casual
+#' @param base.exp.ai.pers.BB Expected coital frequency in black-black casual
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.BW Expected coital frequency in Black-White casual
+#' @param base.exp.ai.pers.BW Expected coital frequency in black-white casual
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.WW Expected coital frequency in White-White casual
+#' @param base.exp.ai.pers.WW Expected coital frequency in white-white casual
 #'        partnerships (acts per week).
 #' @param incr.exp.ai.full.supp.main Percent increase in expected coital
-#'        frequency in main partnerships associated with full suppression of
-#'        the disease.
+#'        frequency in main partnerships after full suppression.
 #' @param incr.exp.ai.part.supp.main Percent increase in expected coital
-#'        frequency in main partnerships associated with partial suppression of
-#'        the disease.
+#'        frequency in main partnerships after partial suppression.
 #' @param redux.exp.ai.diag.main Percent reduction in expected coital frequency
-#'        in main partnerships associated with diagnosis.
+#'        in main partnerships after disease diagnosis.
 #' @param redux.exp.ai.discl.main Percent reduction in expected coital frequency
-#'        in main partnerships associated with disclosure of diagnosis.
+#'        in main partnerships after disclosure of diseasediagnosis.
 #' @param incr.exp.ai.full.supp.pers Percent increase in expected coital
-#'        frequency in casual partnerships associated with full suppression of
-#'        the disease.
+#'        frequency in casual partnerships after full suppression.
 #' @param incr.exp.ai.part.supp.pers Percent increase in expected coital
-#'        frequency in casual partnerships associated with partial suppression of
-#'        the disease.
+#'        frequency in casual partnerships after partial suppression.
 #' @param redux.exp.ai.diag.pers Percent reduction in expected coital frequency
-#'        in casual partnerships associated with diagnosis.
+#'        in casual partnerships after diagnosis.
 #' @param redux.exp.ai.discl.pers Percent reduction in expected coital frequency
-#'        in casual partnerships associated with disclosure of diagnosis.
-#' @param cprob.main.BB The probability of condom use in a Black-Black main
+#'        in casual partnerships associated after disclosure of disease diagnosis.
+#' @param cprob.main.BB Probability of condom use in a black-black main
 #'        partnership.
-#' @param cprob.main.BW The probability of condom use in a Black-White main
+#' @param cprob.main.BW Probability of condom use in a black-white main
 #'        partnership.
-#' @param cprob.main.WW The probability of condom use in a White-White main
+#' @param cprob.main.WW Probability of condom use in a white-white main
 #'        partnership.
-#' @param cprob.pers.BB The probability of condom use in a Black-Black casual
+#' @param cprob.pers.BB Probability of condom use in a black-black casual
 #'        partnership.
-#' @param cprob.pers.BW The probability of condom use in a Black-White casual
+#' @param cprob.pers.BW Probability of condom use in a black-white casual
 #'        partnership.
-#' @param cprob.pers.WW The probability of condom use in a White-White casual
+#' @param cprob.pers.WW Probability of condom use in a white-white casual
 #'        partnership.
-#' @param cprob.inst.BB The probability of condom use in a Black-Black one-off
+#' @param cprob.inst.BB Probability of condom use in a black-black one-off
 #'        partnership.
-#' @param cprob.inst.BW The probability of condom use in a Black-White one-off
+#' @param cprob.inst.BW Probability of condom use in a black-white one-off
 #'        partnership.
-#' @param cprob.inst.WW The probability of condom use in a White-White one-off
+#' @param cprob.inst.WW Probability of condom use in a white-white one-off
 #'        partnership.
 #' @param beta.cond.fsupp.main Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV positive man is fully
-#'        suppressed.
+#'        condom in a main partnership if the HIV-infected is fully suppressed.
 #' @param beta.cond.psupp.main Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV positive man is partially
-#'        suppressed.
+#'        condom in a main partnership if the HIV-infected is partially suppressed.
 #' @param beta.cond.diag.main Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV positive man has been
+#'        condom in a main partnership if the HIV-infected man has been
 #'        diagnosed.
 #' @param beta.cond.discl.main Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV positive man has disclosed
-#'        his status.
+#'        condom in a main partnership if the HIV-infected man has disclosed.
 #' @param beta.cond.fsupp.pers Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV positive man is fully
+#'        condom in a casual partnership if the HIV-infected man is fully
 #'        suppressed.
 #' @param beta.cond.psupp.pers Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV positive man is partially
+#'        condom in a casual partnership if the HIV-infected man is partially
 #'        suppressed.
 #' @param beta.cond.diag.pers Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV positive man has been
+#'        condom in a casual partnership if the HIV-infected man has been
 #'        diagnosed.
 #' @param beta.cond.discl.pers Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV positive man has disclosed
+#'        condom in a casual partnership if the HIV-infected man has disclosed
 #'        his status.
 #' @param beta.cond.fsupp.inst Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV positive man is fully
+#'        condom in a one-off partnership if the HIV-infected man is fully
 #'        suppressed.
 #' @param beta.cond.psupp.inst Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV positive man is partially
+#'        condom in a one-off partnership if the HIV-infected man is partially
 #'        suppressed.
 #' @param beta.cond.diag.inst Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV positive man has been
+#'        condom in a one-off partnership if the HIV-infected man has been
 #'        diagnosed.
 #' @param beta.cond.discl.inst Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV positive man has disclosed
+#'        condom in a one-off partnership if the HIV-infected man has disclosed
 #'        his status.
-#' @param vv.prob.iev.BB The probability that in a Black-Black partnership of
+#' @param vv.prob.iev.BB Probability that in a black-black partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
-#' @param vv.prob.iev.BW The probability that in a Black-White partnership of
+#' @param vv.prob.iev.BW Probability that in a black-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
-#' @param vv.prob.iev.WW The probability that in a White-White partnership of
+#' @param vv.prob.iev.WW Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
 #' @param ... Additional arguments passed to the function.
 #'
-#' @return A list object of class \code{param.mard}, which can be passed to
+#' @return
+#' A list object of class \code{param.mard}, which can be passed to
 #' EpiModel function \code{netsim}.
 #'
 #' @export
@@ -397,24 +376,22 @@ param.mard <- function(nwstats,
 }
 
 
-#' @title Mardham2 Initial Conditions
+#' @title Epidemic Model Initial Conditions for MARDHAM Models
 #'
-#' @description Set the initial conditions for a stochastic epidemic
-#'              network simulation.
+#' @description Sets the initial conditions for a stochastic epidemic models
+#'              simulated with \code{\link{netsim}}.
 #'
-#' @param nwstats An list of target statistics created by
-#'        \code{\link{calc_nwstats.mard}}.
-#' @param prev.B Disease prevalence among Black MSM.
-#' @param prev.W Disease prevalence among White MSM.
-#' @param init.prev.age.slope.B Slope of initial prevalence by age for Black MSM.
-#' @param init.prev.age.slope.W Slope of initial prevalence by age for White MSM.
-#' @param ... Additional arguments passed to the function.
+#' @param nwstats Target statistics for the network model. An object of class
+#'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
+#' @param prev.B Initial disease prevalence among black MSM.
+#' @param prev.W Initial disease prevalence among white MSM.
+#' @param init.prev.age.slope.B Slope of initial prevalence by age for black MSM.
+#' @param init.prev.age.slope.W Slope of initial prevalence by age for white MSM.
+#' @param ... Additional arguments passed to function.
 #'
-#'@details \code{nwstats} must be supplied by the user. Prevalence defaults
-#'          to 27.5 percent for both black and white men.
-#'
-#' @return A list object of class \code{init.mard}, which can be passed to
-#'         EpiModel function \code{netsim}.
+#' @return
+#' A list object of class \code{init.mard}, which can be passed to EpiModel
+#' function \code{\link{netsim}}.
 #'
 #' @export
 init.mard <- function(nwstats,
@@ -450,54 +427,65 @@ init.mard <- function(nwstats,
 }
 
 
-#' @title Mardham2 Control Settings
+#' @title Epidemic Model Control Settings for MARDHAM Models
 #'
-#' @description Set control options for a stochastic epidemic network model.
+#' @description Sets the controls for stochastic network models simulated with
+#'              \code{\link{netsim}}.
 #'
-#'
-#' @details Arguments that end in \code{.FUN} default to the corresponding
-#'          \code{.mard} function of the same name.
-#'
-#' @param simno Unique identifier for the simulation run.
-#' @param nsims Number of simulations to run.
-#' @param ncores Number of cores to use.
-#' @param nsteps Number of time steps in each simulation.
-#' @param start Time step at which to start simulation.
-#' @param initialize.FUN Function to use for initialization.
-#' @param aging.FUN Aging function.
-#' @param deaths.FUN Deaths function.
-#' @param births.FUN Births function.
-#' @param test.FUN Disease testing function.
-#' @param tx.FUN Treatment function.
-#' @param progress.FUN Disease progress function.
-#' @param vl.FUN Viral load function.
-#' @param aiclass.FUN AI class function.
-#' @param roleclass.FUN Role class function.
-#' @param edgescorr.FUN Edges coefficient correction function.
-#' @param resimnets.FUN Network resimulation function.
-#' @param disclose.FUN Disclosure function.
-#' @param acts.FUN Acts function.
-#' @param condoms.FUN Condom use function.
-#' @param position.FUN Position function.
-#' @param trans.FUN Transmission function.
-#' @param getprev.FUN Prevalence summary function.
-#' @param verbose.FUN Verbose simulation progress function.
-#' @param delete.nodes Logical. Should inactive nodes be deleted?
-#' @param save.dal Logical. Should the discordant act list be saved at each time
-#'        step?
-#' @param save.nwstats Logical. Should the network statistics be saved at each
-#'        time step?
-#' @param save.network Logical. Should the entire networks be saved at each time
-#'        step?
-#' @param save.other Other list elements of \code{dat} to save.
-#' @param verbose Logical. Should simulation progress be printed from within the
-#'        time loop?
-#' @param verbose.int Integer giving the interval between time steps at which
+#' @param simno Unique ID for the simulation run, used for file naming purposes
+#'        if used in conjunction with the \code{EpiModel.hpc} package.
+#' @param nsims Number of simulations.
+#' @param ncores Number of cores per run, if parallelization is used within the
+#'        \code{EpiModel.hpc} package.
+#' @param nsteps Number of time steps per simulation.
+#' @param start Starting time step for simulation, with default to 1 to run new
+#'        simulation. This may also be set to 1 greater than the final time
+#'        step of a previous simulation to resume the simulation with different
+#'        parameters.
+#' @param initialize.FUN Module function to use for initialization of the epidemic
+#'        model.
+#' @param aging.FUN Module function for aging.
+#' @param deaths.FUN Module function for general and disease-realted deaths.
+#' @param births.FUN Module function for births or entries into the population.
+#' @param test.FUN Module function for diagnostic disease testing.
+#' @param tx.FUN Module function for ART initiation and adherence.
+#' @param progress.FUN Module function for HIV disease progression.
+#' @param vl.FUN Module function for HIV viral load evolution.
+#' @param aiclass.FUN Module function for one-off AI risk class transitions.
+#' @param roleclass.FUN Module function for transitions in sexual roles.
+#' @param edgescorr.FUN Module function for the edges coefficient adjustment
+#'        to preserve mean degree under varying population sizes.
+#' @param resimnets.FUN Module function for network resimulation at each time
+#'        step.
+#' @param disclose.FUN Module function for HIV status disclosure.
+#' @param acts.FUN Module function to simulate the number of sexual acts within
+#'        partnerships.
+#' @param condoms.FUN Module function to simulate condom use within acts.
+#' @param position.FUN Module function to simulate sexual position within acts.
+#' @param trans.FUN Module function to stochastically simulate disease transmission
+#'        over acts given individual and dyadic attributes.
+#' @param getprev.FUN Module function to calculate prevalence summary statistics.
+#' @param verbose.FUN Module function to print model progress to the console or
+#'        external text files.
+#' @param delete.nodes If \code{TRUE}, dead nodes will be removed from the network
+#'        object and only active nodes will be retained.
+#' @param save.dal If \code{TRUE}, the discordant act list will be saved at each time
+#'        step, otherwise it will be discarded.
+#' @param save.nwstats If \code{TRUE}, the network statistics will be saved.
+#' @param save.network If \code{TRUE}, the \code{network} objects will be saved
+#'        out at the end of simulation (necessary for restarting a simulation).
+#' @param save.other Character vector containing other list elements of \code{dat}
+#'        to save.
+#' @param verbose If \code{TRUE}, print out simulation progress to the console
+#'        if in interactive mode or text files if in batch mode.
+#' @param verbose.int Integer specifying the interval between time steps at which
 #'        progress is printed.
 #' @param ... Additional arguments passed to the function.
 #'
-#' @return A list object of class \code{control.mard}, which can be passed to
-#'         EpiModel function \code{netsim}.
+#'
+#' @return
+#' A list object of class \code{control.mard}, which can be passed to the
+#' EpiModel function \code{netsim}.
 #'
 #' @export
 control.mard <- function(simno = 1,
