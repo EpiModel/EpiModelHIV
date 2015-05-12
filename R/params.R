@@ -6,12 +6,12 @@
 #'
 #' @param nwstats Target statistics for the network model. An object of class
 #'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
-#' @param last.neg.test.int.B Time range for last negative test for
+#' @param last.neg.test.B.int Time range for last negative test for
 #'        black men.
-#' @param mean.test.int.B Mean intertest interval for black MSM who test.
-#' @param last.neg.test.int.W Time range for last negative test for
+#' @param mean.test.B.int Mean intertest interval for black MSM who test.
+#' @param last.neg.test.W.int Time range for last negative test for
 #'        white men.
-#' @param mean.test.int.W Mean intertest interval for white MSM who test
+#' @param mean.test.W.int Mean intertest interval for white MSM who test
 #' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
@@ -223,10 +223,10 @@
 #'
 #' @export
 param.mard <- function(nwstats,
-                       last.neg.test.int.B = round(301 / 7),
-                       mean.test.int.B = round(301 / 7),
-                       last.neg.test.int.W = round(315 / 7),
-                       mean.test.int.W = round(315 / 7),
+                       last.neg.test.B.int = round(301 / 7),
+                       mean.test.B.int = round(301 / 7),
+                       last.neg.test.W.int = round(315 / 7),
+                       mean.test.W.int = round(315 / 7),
                        testing.pattern = "interval",
                        test.window.int = 3,
 
