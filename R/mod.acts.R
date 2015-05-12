@@ -38,13 +38,13 @@ acts.mard <- function(dat, at) {
 
     # Parameters
     if (type == "main") {
-      base.exp.ai.BB <- dat$param$base.exp.ai.main.BB
-      base.exp.ai.BW <- dat$param$base.exp.ai.main.BW
-      base.exp.ai.WW <- dat$param$base.exp.ai.main.WW
-      redux.exp.ai.diag <- dat$param$redux.exp.ai.diag.main
-      redux.exp.ai.discl <- dat$param$redux.exp.ai.discl.main
-      incr.exp.ai.full.supp <- dat$param$incr.exp.ai.full.supp.main
-      incr.exp.ai.part.supp <- dat$param$incr.exp.ai.part.supp.main
+      base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
+      base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
+      base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
+      redux.ai.diag <- dat$param$redux.ai.diag.main
+      redux.ai.discl <- dat$param$redux.ai.discl.main
+      incr.ai.full.supp <- dat$param$incr.ai.full.supp.main
+      incr.ai.part.supp <- dat$param$incr.ai.part.supp.main
       fixed <- FALSE
       if (dat$control$delete.nodes == TRUE) {
         el <- matrix(as.edgelist(dat$nw$m), ncol = 2)
@@ -53,13 +53,13 @@ acts.mard <- function(dat, at) {
       }
     }
     if (type == "pers") {
-      base.exp.ai.BB <- dat$param$base.exp.ai.pers.BB
-      base.exp.ai.BW <- dat$param$base.exp.ai.pers.BW
-      base.exp.ai.WW <- dat$param$base.exp.ai.pers.WW
-      redux.exp.ai.diag <- dat$param$redux.exp.ai.diag.pers
-      redux.exp.ai.discl <- dat$param$redux.exp.ai.discl.pers
-      incr.exp.ai.full.supp <- dat$param$incr.exp.ai.full.supp.pers
-      incr.exp.ai.part.supp <- dat$param$incr.exp.ai.part.supp.pers
+      base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
+      base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
+      base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
+      redux.ai.diag <- dat$param$redux.ai.diag.pers
+      redux.ai.discl <- dat$param$redux.ai.discl.pers
+      incr.ai.full.supp <- dat$param$incr.ai.full.supp.pers
+      incr.ai.part.supp <- dat$param$incr.ai.part.supp.pers
       fixed <- FALSE
       if (dat$control$delete.nodes == TRUE) {
         el <- matrix(as.edgelist(dat$nw$p), ncol = 2)
@@ -68,13 +68,13 @@ acts.mard <- function(dat, at) {
       }
     }
     if (type == "inst") {
-      base.exp.ai.BB <- 1
-      base.exp.ai.BW <- 1
-      base.exp.ai.WW <- 1
-      redux.exp.ai.diag <- 0
-      redux.exp.ai.discl <- 0
-      incr.exp.ai.full.supp <- 0
-      incr.exp.ai.part.supp <- 0
+      base.ai.BB.rate <- 1
+      base.ai.BW.rate <- 1
+      base.ai.WW.rate <- 1
+      redux.ai.diag <- 0
+      redux.ai.discl <- 0
+      incr.ai.full.supp <- 0
+      incr.ai.part.supp <- 0
       fixed <- TRUE
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
@@ -95,9 +95,9 @@ acts.mard <- function(dat, at) {
       race.2 <- race[disc.el[, 2]]
       num.B <- (race.1 == "B") + (race.2 == "B")
 
-      exp.ai <- (num.B == 2) * base.exp.ai.BB +
-                (num.B == 1) * base.exp.ai.BW +
-                (num.B == 0) * base.exp.ai.WW
+      exp.ai <- (num.B == 2) * base.ai.BB.rate +
+                (num.B == 1) * base.ai.BW.rate +
+                (num.B == 0) * base.ai.BW.rate
 
       pos.diag <- diag.status[disc.el[, 1]]
       pos.tx    <- tx.status[disc.el[, 1]]
@@ -109,13 +109,13 @@ acts.mard <- function(dat, at) {
                          which(uid[disc.el[x, 2]] == dlist$neg))) != 0
       })
 
-      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * (1 - redux.exp.ai.diag)
+      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * (1 - redux.ai.diag)
       exp.ai[disclosed == TRUE] <- exp.ai[disclosed == TRUE] *
-                                   (1 - redux.exp.ai.discl)
+                                   (1 - redux.ai.discl)
       exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] *
-                                                   (1 + incr.exp.ai.full.supp)
+                                                   (1 + incr.ai.full.supp)
       exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] *
-                                                   (1 + incr.exp.ai.part.supp)
+                                                   (1 + incr.ai.part.supp)
 
       if (fixed == FALSE) {
         ai <- rpois(length(exp.ai), exp.ai)

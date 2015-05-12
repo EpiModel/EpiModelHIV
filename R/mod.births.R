@@ -24,8 +24,8 @@
 births.mard <- function(dat, at){
 
   # Variables ---------------------------------------------------------------
-  b.rate.B <- dat$param$b.rate.B
-  b.rate.W <- dat$param$b.rate.W
+  b.B.rate <- dat$param$b.B.rate
+  b.W.rate <- dat$param$b.W.rate
 
   active <- dat$attr$active
   race <- dat$attr$race
@@ -36,8 +36,8 @@ births.mard <- function(dat, at){
 
 
   # Process -----------------------------------------------------------------
-  nBirths.B <- rpois(1, b.rate.B * numB)
-  nBirths.W <- rpois(1, b.rate.W * numW)
+  nBirths.B <- rpois(1, b.B.rate * numB)
+  nBirths.W <- rpois(1, b.W.rate * numW)
   nBirths <- nBirths.B + nBirths.W
 
 

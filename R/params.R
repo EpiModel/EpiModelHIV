@@ -67,8 +67,8 @@
 #'        re-initiation until the level in \code{vl.part.supp}.
 #' @param part.supp.up.slope For partial suppressors, number of log10 units that
 #'        viral load rises per time step from treatment halting until expected value.
-#' @param b.rate.B Rate at which black MSM enter the population.
-#' @param b.rate.W Rate at which white MSM enter the population.
+#' @param b.B.rate Rate at which black MSM enter the population.
+#' @param b.W.rate Rate at which white MSM enter the population.
 #' @param birth.age Age (in years) of new arrivals.
 #' @param betabase.URAI Transmissibility for a man having unprotected receptive
 #'        anal intercourse with an infected man at set point viral load.
@@ -127,17 +127,17 @@
 #'        in the CCR5 mutation.
 #' @param num.inst.ai.classes Number of quantiles into which men should be
 #'        divided in determining their levels of one-off anal intercourse.
-#' @param base.ai.main.rate.BB Expected coital frequency in black-black main
+#' @param base.ai.main.BB.rate Expected coital frequency in black-black main
 #'        partnerships (acts per week).
-#' @param base.ai.main.rate.BW Expected coital frequency in black-white main
+#' @param base.ai.main.BW.rate Expected coital frequency in black-white main
 #'        partnerships (acts per week).
-#' @param base.ai.main.rate.WW Expected coital frequency in white-white main
+#' @param base.ai.main.WW.rate Expected coital frequency in white-white main
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.BB Expected coital frequency in black-black casual
+#' @param base.ai.pers.BB.rate Expected coital frequency in black-black casual
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.BW Expected coital frequency in black-white casual
+#' @param base.ai.pers.BW.rate Expected coital frequency in black-white casual
 #'        partnerships (acts per week).
-#' @param base.exp.ai.pers.WW Expected coital frequency in white-white casual
+#' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per week).
 #' @param incr.exp.ai.full.supp.main Percent increase in expected coital
 #'        frequency in main partnerships after full suppression.
@@ -257,8 +257,8 @@ param.mard <- function(nwstats,
                        part.supp.down.slope = 0.25,
                        part.supp.up.slope = 0.25,
 
-                       b.rate.B = 1e-3,
-                       b.rate.W = 1e-3,
+                       b.B.rate = 1e-3,
+                       b.W.rate = 1e-3,
                        birth.age = 18,
 
                        betabase.URAI = 0.0082 * 1.09,
@@ -290,12 +290,12 @@ param.mard <- function(nwstats,
                        ccr5.heteroz.rr = 0.3,
 
                        num.inst.ai.classes = 1,
-                       base.exp.ai.main.BB = 1.19,
-                       base.exp.ai.main.BW = 1.79,
-                       base.exp.ai.main.WW = 1.56,
-                       base.exp.ai.pers.BB = 0.75,
-                       base.exp.ai.pers.BW = 1.13,
-                       base.exp.ai.pers.WW = 0.98,
+                       base.ai.main.BB.rate = 1.19,
+                       base.ai.main.BW.rate = 1.79,
+                       base.ai.main.WW.rate = 1.56,
+                       base.ai.pers.BB.rate = 0.75,
+                       base.ai.pers.BW.rate = 1.13,
+                       base.ai.pers.WW.rate = 0.98,
                        incr.exp.ai.full.supp.main = 0,
                        incr.exp.ai.part.supp.main = 0,
                        redux.exp.ai.diag.main = 0,
