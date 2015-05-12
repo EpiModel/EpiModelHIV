@@ -264,13 +264,13 @@ init_status.mard <- function(dat) {
   if (dat$param$testing.pattern == "interval") {
     ttntest <- ceiling(runif(length(selected),
                              min = 0,
-                             max = dat$param$mean.test.interv.B * (race[selected] == "B") +
-                                   dat$param$mean.test.interv.W * (race[selected] == "W")))
+                             max = dat$param$mean.test.int.B * (race[selected] == "B") +
+                                   dat$param$mean.test.int.W * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
     ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.interv.B * (race[selected] == "B") +
-                          dat$param$mean.test.interv.W * (race[selected] == "W")))
+                     1 / (dat$param$mean.test.int.B * (race[selected] == "B") +
+                          dat$param$mean.test.int.W * (race[selected] == "W")))
   }
 
   twind <- dat$param$test.window.period
@@ -285,8 +285,8 @@ init_status.mard <- function(dat) {
 
   # Create set of expected values for (cum.time.off.tx, cum.time.on.tx)
 
-  tx.init.time.B <- twind + dat$param$last.neg.test.time.range.B + 1 / dat$param$prob.tx.init.B
-  tx.init.time.W <- twind + dat$param$last.neg.test.time.range.W + 1 / dat$param$prob.tx.init.W
+  tx.init.time.B <- twind + dat$param$last.neg.test.int.B + 1 / dat$param$prob.tx.init.B
+  tx.init.time.W <- twind + dat$param$last.neg.test.int.W + 1 / dat$param$prob.tx.init.W
 
   # Stage for Blacks
   prop.time.on.tx.B <- dat$param$prob.tx.reinit.B /
@@ -383,13 +383,13 @@ init_status.mard <- function(dat) {
   if (dat$param$testing.pattern == "interval") {
     ttntest <- ceiling(runif(length(selected),
                              min = 0,
-                             max = dat$param$mean.test.interv.B * (race[selected] == "B") +
-                                   dat$param$mean.test.interv.W * (race[selected] == "W")))
+                             max = dat$param$mean.test.int.B * (race[selected] == "B") +
+                                   dat$param$mean.test.int.W * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
     ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.interv.B * (race[selected] == "B") +
-                          dat$param$mean.test.interv.W * (race[selected] == "W")))
+                     1 / (dat$param$mean.test.int.B * (race[selected] == "B") +
+                          dat$param$mean.test.int.W * (race[selected] == "W")))
   }
 
   diag.status[selected][ttntest > cum.time.off.tx[selected] - twind] <- 0
@@ -500,14 +500,14 @@ init_status.mard <- function(dat) {
   if (dat$param$testing.pattern == "interval") {
     ttntest <- ceiling(runif(length(selected),
                              min = 0,
-                             max = dat$param$mean.test.interv.B * (race[selected] == "B") +
-                                   dat$param$mean.test.interv.W * (race[selected] == "W")))
+                             max = dat$param$mean.test.int.B * (race[selected] == "B") +
+                                   dat$param$mean.test.int.W * (race[selected] == "W")))
   }
 
   if (dat$param$testing.pattern == "memoryless") {
     ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.interv.B * (race[selected] == "B") +
-                          dat$param$mean.test.interv.W * (race[selected] == "W")))
+                     1 / (dat$param$mean.test.int.B * (race[selected] == "B") +
+                          dat$param$mean.test.int.W * (race[selected] == "W")))
   }
 
 
@@ -526,13 +526,13 @@ init_status.mard <- function(dat) {
   if (dat$param$testing.pattern == "interval") {
     tslt <- ceiling(runif(length(selected),
                           min = 0,
-                          max = dat$param$mean.test.interv.B * (race[selected] == "B") +
-                                dat$param$mean.test.interv.W * (race[selected] == "W")))
+                          max = dat$param$mean.test.int.B * (race[selected] == "B") +
+                                dat$param$mean.test.int.W * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
     tslt <- rgeom(length(selected),
-                  1 / (dat$param$mean.test.interv.B * (race[selected] == "B") +
-                       dat$param$mean.test.interv.W * (race[selected] == "W")))
+                  1 / (dat$param$mean.test.int.B * (race[selected] == "B") +
+                       dat$param$mean.test.int.W * (race[selected] == "W")))
   }
   last.neg.test[selected] <- -tslt
 

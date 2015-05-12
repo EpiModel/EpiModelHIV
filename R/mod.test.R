@@ -32,8 +32,8 @@ test.mard <- function(dat, at) {
 
   # Parameters
   testing.pattern <- dat$param$testing.pattern
-  mean.test.interv.B <- dat$param$mean.test.interv.B
-  mean.test.interv.W <- dat$param$mean.test.interv.W
+  mean.test.int.B <- dat$param$mean.test.int.B
+  mean.test.int.W <- dat$param$mean.test.int.W
   twind <- dat$attr$test.window.period
 
 
@@ -42,11 +42,11 @@ test.mard <- function(dat, at) {
   if (testing.pattern == "memoryless") {
     elig.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    testing.B <- elig.B[rbinom(length(elig.B), 1, 1 / mean.test.interv.B) == 1]
+    testing.B <- elig.B[rbinom(length(elig.B), 1, 1 / mean.test.int.B) == 1]
 
     elig.W <- which(active == 1 & race == "W" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    testing.W <- elig.W[rbinom(length(elig.W), 1, 1 / mean.test.interv.W) == 1]
+    testing.W <- elig.W[rbinom(length(elig.W), 1, 1 / mean.test.int.W) == 1]
   }
 
   if (testing.pattern == "interval") {
@@ -56,10 +56,10 @@ test.mard <- function(dat, at) {
 
     tst.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
                    (diag.status == 0 | is.na(diag.status)) &
-                   tsincelntst >= mean.test.interv.B)
+                   tsincelntst >= mean.test.int.B)
     tst.W <- which(active == 1 & race == "W" & tt.traj != "NN" &
                    (diag.status == 0 | is.na(diag.status)) &
-                   tsincelntst >= mean.test.interv.W)
+                   tsincelntst >= mean.test.int.W)
   }
 
   tst.pos.B <- tst.B[status[tst.B] == 1 & inf.time[tst.B] <= at - twind]
