@@ -38,12 +38,12 @@ tx.mard <- function(dat, at) {
   stage <- dat$attr$stage
 
   # Parameters
-  tx.init.prob.B <- dat$param$tx.init.prob.B
-  tx.init.prob.W <- dat$param$tx.init.prob.W
-  tx.halt.prob.B <- dat$param$tx.halt.prob.B
-  tx.halt.prob.W <- dat$param$tx.halt.prob.W
-  tx.reinit.prob.B <- dat$param$tx.reinit.prob.B
-  tx.reinit.prob.W <- dat$param$tx.reinit.prob.W
+  tx.init.B.prob <- dat$param$tx.init.B.prob
+  tx.init.W.prob <- dat$param$tx.init.W.prob
+  tx.halt.B.prob <- dat$param$tx.halt.B.prob
+  tx.halt.W.prob <- dat$param$tx.halt.W.prob
+  tx.reinit.B.prob <- dat$param$tx.reinit.B.prob
+  tx.reinit.W.prob <- dat$param$tx.reinit.W.prob
 
 
   # Initiation --------------------------------------------------------------
@@ -52,14 +52,14 @@ tx.mard <- function(dat, at) {
                           tt.traj %in% c("YP", "YF") & cum.time.on.tx == 0 &
                           stage != "D")
   tx.init.B <- tx.init.elig.B[rbinom(length(tx.init.elig.B), 1,
-                                     tx.init.prob.B) == 1]
+                                     tx.init.B.prob) == 1]
 
   tx.init.elig.W <- which(active == 1 & race == "W" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c("YP", "YF") & cum.time.on.tx == 0 &
                           stage != "D")
   tx.init.W <- tx.init.elig.W[rbinom(length(tx.init.elig.W), 1,
-                                     tx.init.prob.W) == 1]
+                                     tx.init.W.prob) == 1]
 
   tx.init <- c(tx.init.B, tx.init.W)
 
@@ -70,11 +70,11 @@ tx.mard <- function(dat, at) {
   # Halting -----------------------------------------------------------------
   tx.halt.elig.B <- which(active == 1 & race == "B" & tx.status == 1)
   tx.halt.B <- tx.halt.elig.B[rbinom(length(tx.halt.elig.B), 1,
-                                     tx.halt.prob.B) == 1]
+                                     tx.halt.B.prob) == 1]
 
   tx.halt.elig.W <- which(active == 1 & race == "W" & tx.status == 1)
   tx.halt.W <- tx.halt.elig.W[rbinom(length(tx.halt.elig.W),
-                                     1, tx.halt.prob.W) == 1]
+                                     1, tx.halt.W.prob) == 1]
   tx.halt <- c(tx.halt.B, tx.halt.W)
   dat$attr$tx.status[tx.halt] <- 0
 
@@ -83,12 +83,12 @@ tx.mard <- function(dat, at) {
   tx.reinit.elig.B <- which(active == 1 & race == "B" & tx.status == 0 &
                             cum.time.on.tx > 0 & stage != "D")
   tx.reinit.B <- tx.reinit.elig.B[rbinom(length(tx.reinit.elig.B),
-                                         1, tx.reinit.prob.B) == 1]
+                                         1, tx.reinit.B.prob) == 1]
 
   tx.reinit.elig.W <- which(active == 1 & race == "W" & tx.status == 0 &
                             cum.time.on.tx > 0 & stage != "D")
   tx.reinit.W <- tx.reinit.elig.W[rbinom(length(tx.reinit.elig.W),
-                                         1, tx.reinit.prob.W) == 1]
+                                         1, tx.reinit.W.prob) == 1]
 
   tx.reinit <- c(tx.reinit.B, tx.reinit.W)
   dat$attr$tx.status[tx.reinit] <- 1

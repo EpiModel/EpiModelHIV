@@ -87,8 +87,8 @@ initialize.mard <- function(x, param, init, control, s) {
 
   # Circumcision
   circ <- rep(NA, num)
-  circ[ids.B] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.prob.B))
-  circ[ids.W] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.prob.W))
+  circ[ids.B] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.B.prob))
+  circ[ids.W] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
   # One-off AI class
@@ -101,9 +101,9 @@ initialize.mard <- function(x, param, init, control, s) {
   # Role class
   role.class <- rep(NA, num)
   role.class[ids.B] <- sample(apportion.lr(num.B, c("I", "R", "V"),
-                                           param$role.freq.B))
+                                           param$role.B.prob))
   role.class[ids.W] <- sample(apportion.lr(num.W, c("I", "R", "V"),
-                                           param$role.freq.W))
+                                           param$role.W.prob))
   dat$attr$role.class <- role.class
 
   # Ins.quot
@@ -183,9 +183,9 @@ init_status.mard <- function(dat) {
   # Treatment trajectory
   tt.traj <- rep(NA, num)
   tt.traj[ids.B] <- sample(apportion.lr(num.B, c("NN", "YN", "YP", "YF"),
-                                        dat$param$tt.traj.prob.B))
+                                        dat$param$tt.traj.B.prob))
   tt.traj[ids.W] <- sample(apportion.lr(num.W, c("NN", "YN", "YP", "YF"),
-                                        dat$param$tt.traj.prob.W))
+                                        dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
 
 
@@ -285,12 +285,12 @@ init_status.mard <- function(dat) {
 
   # Create set of expected values for (cum.time.off.tx, cum.time.on.tx)
 
-  tx.init.time.B <- twind.int + dat$param$last.neg.test.int.B + 1 / dat$param$tx.init.prob.B
-  tx.init.time.W <- twind.int + dat$param$last.neg.test.int.W + 1 / dat$param$tx.init.prob.W
+  tx.init.time.B <- twind.int + dat$param$last.neg.test.int.B + 1 / dat$param$tx.init.B.prob
+  tx.init.time.W <- twind.int + dat$param$last.neg.test.int.W + 1 / dat$param$tx.init.W.prob
 
   # Stage for Blacks
-  prop.time.on.tx.B <- dat$param$tx.reinit.prob.B /
-                       (dat$param$tx.halt.prob.B + dat$param$tx.reinit.prob.B)
+  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob /
+                       (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
   offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)),
                     nrow = tx.init.time.B)
   numsteps.B <- (dat$param$max.time.off.tx.full.int - tx.init.time.B) /
@@ -312,8 +312,8 @@ init_status.mard <- function(dat) {
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
   # Stage for Whites
-  prop.time.on.tx.W <- dat$param$tx.reinit.prob.W /
-    (dat$param$tx.halt.prob.W + dat$param$tx.reinit.prob.W)
+  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
+    (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
   offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)),
                     nrow = tx.init.time.W)
   numsteps.W <- (dat$param$max.time.off.tx.full.int - tx.init.time.W) /
@@ -404,8 +404,8 @@ init_status.mard <- function(dat) {
 
   # Create set of expected values for (cum.time.off.tx,cum.time.on.tx)
 
-  prop.time.on.tx.B <- dat$param$tx.reinit.prob.B /
-                       (dat$param$tx.halt.prob.B + dat$param$tx.reinit.prob.B)
+  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob /
+                       (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
   offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)),
                     nrow = tx.init.time.B)
   while (offon.B[nrow(offon.B), 1] / dat$param$max.time.off.tx.part.int +
@@ -427,8 +427,8 @@ init_status.mard <- function(dat) {
   stage.B <- rep(c("AR", "AF", "C", "D"), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
-  prop.time.on.tx.W <- dat$param$tx.reinit.prob.W /
-                       (dat$param$tx.halt.prob.W + dat$param$tx.reinit.prob.W)
+  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
+                       (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
   offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)),
                     nrow = tx.init.time.W)
 
@@ -579,9 +579,9 @@ init_ccr5 <- function(dat) {
   ccr5 <- rep("WW", num)
 
   # homozygotes for deletion
-  num.ccr5.DD.B <- dat$param$ccr5.prob.B[1] * num.B
+  num.ccr5.DD.B <- dat$param$ccr5.B.prob[1] * num.B
   # heterozygotes
-  num.ccr5.DW.B <- dat$param$ccr5.prob.B[2] * num.B
+  num.ccr5.DW.B <- dat$param$ccr5.B.prob[2] * num.B
   # homozygotes for deletion
   num.ccr5.WW.B <- num.B - num.ccr5.DD.B - num.ccr5.DW.B
   # DD's can't be infected
@@ -600,8 +600,8 @@ init_ccr5 <- function(dat) {
   ccr5[uninf.ccr5.DW.B] <- "DW"
   ccr5[uninf.ccr5.DD.B] <- "DD"
 
-  num.ccr5.DD.W <- dat$param$ccr5.prob.W[1] * num.W
-  num.ccr5.DW.W <- dat$param$ccr5.prob.W[2] * num.W
+  num.ccr5.DD.W <- dat$param$ccr5.W.prob[1] * num.W
+  num.ccr5.DW.W <- dat$param$ccr5.W.prob[2] * num.W
   num.ccr5.WW.W <- num.W - num.ccr5.DD.W - num.ccr5.DW.W
   num.uninf.ccr5.DD.W <- round(num.ccr5.DD.W)
   num.inf.ccr5.DW.W <- round(num.ccr5.DW.W * nInfW * ccr5.heteroz.rr /

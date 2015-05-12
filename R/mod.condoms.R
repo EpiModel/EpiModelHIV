@@ -42,9 +42,9 @@ condoms.mard <- function(dat, at) {
     }
 
     if (type == "main") {
-      c.prob.BB <- dat$param$c.main.prob.BB
-      c.prob.BW <- dat$param$c.main.prob.BW
-      c.prob.WW <- dat$param$c.main.prob.WW
+      c.BB.prob <- dat$param$c.main.BB.prob
+      c.BW.prob <- dat$param$c.main.BW.prob
+      c.WW.prob <- dat$param$c.main.WW.prob
       beta.diag <- dat$param$beta.cond.diag.main
       beta.discl <- dat$param$beta.cond.discl.main
       beta.fsupp <- dat$param$beta.cond.fsupp.main
@@ -52,9 +52,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
-      c.prob.BB <- dat$param$c.pers.prob.BB
-      c.prob.BW <- dat$param$c.pers.prob.BW
-      c.prob.WW <- dat$param$c.pers.prob.WW
+      c.BB.prob <- dat$param$c.pers.BB.prob
+      c.BW.prob <- dat$param$c.pers.BW.prob
+      c.WW.prob <- dat$param$c.pers.WW.prob
       beta.diag <- dat$param$beta.cond.diag.pers
       beta.discl <- dat$param$beta.cond.discl.pers
       beta.fsupp <- dat$param$beta.cond.fsupp.pers
@@ -62,9 +62,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
-      c.prob.BB <- dat$param$c.inst.prob.BB
-      c.prob.BW <- dat$param$c.inst.prob.BW
-      c.prob.WW <- dat$param$c.inst.prob.WW
+      c.BB.prob <- dat$param$c.inst.BB.prob
+      c.BW.prob <- dat$param$c.inst.BW.prob
+      c.WW.prob <- dat$param$c.inst.WW.prob
       beta.diag <- dat$param$beta.cond.diag.inst
       beta.discl <- dat$param$beta.cond.discl.inst
       beta.fsupp <- dat$param$beta.cond.fsupp.inst
@@ -84,9 +84,9 @@ condoms.mard <- function(dat, at) {
     race.2 <- race[dal[, 2]]
     num.B <- (race.1 == "B") + (race.2 == "B")
 
-    cond.prob <- (num.B == 2) * c.prob.BB +
-                 (num.B == 1) * c.prob.BW +
-                 (num.B == 0) * c.prob.WW
+    cond.prob <- (num.B == 2) * c.BB.prob +
+                 (num.B == 1) * c.BW.prob +
+                 (num.B == 0) * c.WW.prob
 
     logodds.cond <- log(cond.prob / (1 - cond.prob))
 

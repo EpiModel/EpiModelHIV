@@ -34,13 +34,13 @@ deaths.mard <- function(dat, at) {
 
   alive.B <- which(active == 1 & race == "B")
   age.B <- age[alive.B]
-  death.probs.B <- dat$param$asmr.B[age.B]
-  deaths.B <- alive.B[rbinom(length(death.probs.B), 1, death.probs.B) == 1]
+  death.B.prob <- dat$param$asmr.B[age.B]
+  deaths.B <- alive.B[rbinom(length(death.B.prob), 1, death.B.prob) == 1]
 
   alive.W <- which(active == 1 & race == "W")
   age.W <- age[alive.W]
-  death.probs.W <- dat$param$asmr.W[age.W]
-  deaths.W <- alive.W[rbinom(length(death.probs.W), 1, death.probs.W) == 1]
+  death.W.prob <- dat$param$asmr.W[age.W]
+  deaths.W <- alive.W[rbinom(length(death.W.prob), 1, death.W.prob) == 1]
 
   dth.gen <- c(deaths.B, deaths.W)
 

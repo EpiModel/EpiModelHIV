@@ -35,30 +35,30 @@ disclose.mard <- function(dat, at){
 
     # Parameters and network
     if (type == "main") {
-      disc.outset.prob.B <- dat$param$disc.main.outset.prob.B
-      disc.at.diag.prob.B <- dat$param$disc.main.at.diag.prob.B
-      disc.post.diag.prob.B <- dat$param$disc.main.post.diag.prob.B
-      disc.outset.prob.W <- dat$param$disc.main.outset.prob.W
-      disc.at.diag.prob.W <- dat$param$disc.main.at.diag.prob.W
-      disc.post.diag.prob.W <- dat$param$disc.main.post.diag.prob.W
+      disc.outset.B.prob <- dat$param$disc.outset.main.B.prob
+      disc.at.diag.B.prob <- dat$param$disc.at.diag.main.B.prob
+      disc.post.diag.B.prob <- dat$param$disc.post.diag.main.B.prob
+      disc.outset.W.prob <- dat$param$disc.outset.main.W.prob
+      disc.at.diag.W.prob <- dat$param$disc.at.diag.main.W.prob
+      disc.post.diag.W.prob <- dat$param$disc.post.diag.main.W.prob
       net <- dat$nw$m
       discl.type <- "M"
     }
 
     if (type == "pers") {
-      disc.outset.prob.B <- dat$param$disc.pers.outset.prob.B
-      disc.at.diag.prob.B <- dat$param$disc.pers.at.diag.prob.B
-      disc.post.diag.prob.B <- dat$param$disc.pers.post.diag.prob.B
-      disc.outset.prob.W <- dat$param$disc.pers.outset.prob.W
-      disc.at.diag.prob.W <- dat$param$disc.pers.at.diag.prob.W
-      disc.post.diag.prob.W <- dat$param$disc.pers.post.diag.prob.W
+      disc.outset.B.prob <- dat$param$disc.outset.pers.B.prob
+      disc.at.diag.B.prob <- dat$param$disc.at.diag.pers.B.prob
+      disc.post.diag.B.prob <- dat$param$disc.post.diag.pers.B.prob
+      disc.outset.W.prob <- dat$param$disc.outset.pers.W.prob
+      disc.at.diag.W.prob <- dat$param$disc.at.diag.pers.W.prob
+      disc.post.diag.W.prob <- dat$param$disc.post.diag.pers.W.prob
       net <- dat$nw$p
       discl.type <- "P"
     }
 
     if (type == "inst") {
-      disc.inst.prob.B <- dat$param$disc.inst.prob.B
-      disc.inst.prob.W <- dat$param$disc.inst.prob.W
+      disc.inst.B.prob <- dat$param$disc.inst.B.prob
+      disc.inst.W.prob <- dat$param$disc.inst.W.prob
       net <- dat$nw$i
       discl.type <- "I"
     }
@@ -118,28 +118,28 @@ disclose.mard <- function(dat, at){
         # Assign disclosure probs
         dl.prob <- vector("numeric", length = nrow(nd.dx))
         dl.prob[nd.dx$pos.race == "B" &
-                nd.dx$new.rel == TRUE] <- disc.outset.prob.B
+                nd.dx$new.rel == TRUE] <- disc.outset.B.prob
         dl.prob[nd.dx$pos.race == "B" &
                 nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == TRUE] <- disc.at.diag.prob.B
+                nd.dx$new.dx == TRUE] <- disc.at.diag.B.prob
         dl.prob[nd.dx$pos.race == "B" &
                 nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == FALSE] <- disc.post.diag.prob.B
+                nd.dx$new.dx == FALSE] <- disc.post.diag.B.prob
 
         dl.prob[nd.dx$pos.race == "W" &
-                nd.dx$new.rel == TRUE] <- disc.outset.prob.W
+                nd.dx$new.rel == TRUE] <- disc.outset.W.prob
         dl.prob[nd.dx$pos.race == "W" &
                 nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == TRUE] <- disc.at.diag.prob.W
+                nd.dx$new.dx == TRUE] <- disc.at.diag.W.prob
         dl.prob[nd.dx$pos.race == "W" &
                 nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == FALSE] <- disc.post.diag.prob.W
+                nd.dx$new.dx == FALSE] <- disc.post.diag.W.prob
       }
 
       if (type == "inst") {
         dl.prob <- vector("numeric", length = nrow(nd.dx))
-        dl.prob[nd.dx$pos.race == "B"] <- disc.inst.prob.B
-        dl.prob[nd.dx$pos.race == "W"] <- disc.inst.prob.W
+        dl.prob[nd.dx$pos.race == "B"] <- disc.inst.B.prob
+        dl.prob[nd.dx$pos.race == "W"] <- disc.inst.W.prob
       }
 
       # Determine disclosers

@@ -146,20 +146,20 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
 
   dat$attr$tt.traj[newIds[newB]] <- sample(c("NN", "YN", "YP", "YF"),
                                            nBirths.B, replace = TRUE,
-                                           prob = dat$param$tt.traj.freq.B)
+                                           prob = dat$param$tt.traj.B.prob)
   dat$attr$tt.traj[newIds[newW]] <- sample(c("NN", "YN", "YP", "YF"),
                                            nBirths.W, replace = TRUE,
-                                           prob = dat$param$tt.traj.freq.W)
+                                           prob = dat$param$tt.traj.W.prob)
 
-  dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.prev.B)
-  dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.prev.W)
+  dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
+  dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
 
   dat$attr$role.class[newIds[newB]] <- sample(c("I", "R", "V"),
                                               nBirths.B, replace = TRUE,
-                                              prob = dat$param$role.freq.B)
+                                              prob = dat$param$role.B.prob)
   dat$attr$role.class[newIds[newW]] <- sample(c("I", "R", "V"),
                                               nBirths.W, replace = TRUE,
-                                              prob = dat$param$role.freq.W)
+                                              prob = dat$param$role.W.prob)
 
   ins.quot <- rep(NA, nBirths)
   ins.quot[dat$attr$role.class[newIds] == "I"]  <- 1
@@ -169,18 +169,18 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$ins.quot[newIds] <- ins.quot
 
   # CCR5
-  ccr5.freq.B <- dat$param$ccr5.freq.B
-  ccr5.freq.W <- dat$param$ccr5.freq.W
+  ccr5.B.prob <- dat$param$ccr5.B.prob
+  ccr5.W.prob <- dat$param$ccr5.W.prob
   dat$attr$ccr5[newIds[newB]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.B, replace = TRUE,
-                                        prob = c(1 - sum(ccr5.freq.B),
-                                                 ccr5.freq.B[2],
-                                                 ccr5.freq.B[1]))
+                                        prob = c(1 - sum(ccr5.B.prob),
+                                                 ccr5.B.prob[2],
+                                                 ccr5.B.prob[1]))
   dat$attr$ccr5[newIds[newW]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.W, replace = TRUE,
-                                        prob = c(1 - sum(ccr5.freq.W),
-                                                 ccr5.freq.W[2],
-                                                 ccr5.freq.W[1]))
+                                        prob = c(1 - sum(ccr5.W.prob),
+                                                 ccr5.W.prob[2],
+                                                 ccr5.W.prob[1]))
 
   return(dat)
 

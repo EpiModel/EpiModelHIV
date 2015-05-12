@@ -36,9 +36,9 @@ position.mard <- function(dat, at) {
   ins.quot <- dat$attr$ins.quot
   race <- dat$attr$race
 
-  vv.iev.prob.BB <- dat$param$vv.iev.prob.BB
-  vv.iev.prob.BW <- dat$param$vv.iev.prob.BW
-  vv.iev.prob.WW <- dat$param$vv.iev.prob.WW
+  vv.iev.BB.prob <- dat$param$vv.iev.BB.prob
+  vv.iev.BW.prob <- dat$param$vv.iev.BW.prob
+  vv.iev.WW.prob <- dat$param$vv.iev.WW.prob
 
 
   # Process -----------------------------------------------------------------
@@ -55,9 +55,9 @@ position.mard <- function(dat, at) {
   vv <- which(pos.role.class == "V" & neg.role.class == "V")
   vv.race.combo <- paste0(race[dal$pos[vv]], race[dal$neg[vv]])
   vv.race.combo[vv.race.combo == "WB"] <- "BW"
-  vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.prob.BB +
-                 (vv.race.combo == "BW") * vv.iev.prob.BW +
-                 (vv.race.combo == "WW") * vv.iev.prob.WW
+  vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.BB.prob +
+                 (vv.race.combo == "BW") * vv.iev.BW.prob +
+                 (vv.race.combo == "WW") * vv.iev.WW.prob
 
   iev <- rbinom(length(vv), 1, vv.iev.prob)
   dal$ins[vv[iev == 1]] <- "B"
