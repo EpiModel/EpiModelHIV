@@ -16,24 +16,24 @@
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
 #' @param test.window.period Length of the HIV test window period.
-#' @param tt.traj.freq.B Proportion of black MSM who enter one of four
+#' @param tt.traj.prob.B Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
 #'        initiate treatment, test and treated with partial viral suppression,
 #'        and test and treated with full suppression.
-#' @param tt.traj.freq.W Proportion of white MSM who enter into the four
+#' @param tt.traj.prob.W Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
-#' @param prob.tx.init.B Probability per time step that a black MSM who has
+#' @param tx.init.prob.B Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
-#' @param prob.tx.init.W Probability per time step that a white MSM who has
+#' @param tx.init.prob.W Probability per time step that a white MSM who has
 #'        tested positive will initiate treatment.
-#' @param prob.tx.halt.B Probability per time step that a black MSM who is
+#' @param tx.halt.prob.B Probability per time step that a black MSM who is
 #'        currently on treatment will halt treatment.
-#' @param prob.tx.halt.W Probability per time step that a white MSM who is
+#' @param tx.halt.prob.W Probability per time step that a white MSM who is
 #'        currently on treatment will halt treatment.
-#' @param prob.tx.reinit.B Probability per time step that a black MSM who is
+#' @param tx.reinit.prob.B Probability per time step that a black MSM who is
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
-#' @param prob.tx.reinit.W Probability per time step that a white MSM who is
+#' @param tx.reinit.prob.W Probability per time step that a white MSM who is
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
 #' @param max.time.off.tx.full Number of time steps off treatment for a full
@@ -81,46 +81,46 @@
 #'        insertive anal sex when the negative insertive partner is circumcised.
 #' @param betamult.condom Factor by which to multiply infectivity for anal
 #'        sex when a condom is used.
-#' @param disc.main.outset.B Probability that an HIV-infected black MSM will
+#' @param disc.main.outset.prob.B Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
-#' @param disc.main.outset.W Probability that an HIV-infected white MSM will
+#' @param disc.main.outset.prob.W Probability that an HIV-infected white MSM will
 #'        disclose his status at the start of a main partnership.
-#' @param disc.main.at.diag.B Probability that a black MSM already in a main
+#' @param disc.main.at.diag.prob.B Probability that a black MSM already in a main
 #'        partnership will disclose at the time of diagnosis.
-#' @param disc.main.at.diag.W Probability that a white MSM already in a main
+#' @param disc.main.at.diag.prob.W Probability that a white MSM already in a main
 #'        partnership will disclose at the time of diagnosis.
-#' @param disc.main.post.diag.B Probability that an HIV-infected black MSM
+#' @param disc.main.post.diag.prob.B Probability that an HIV-infected black MSM
 #'        in a main partnership will disclose his status, assuming he didn't
 #'        at the start of the partnership or at diagnosis.
-#' @param disc.main.post.diag.W Probability that an HIV-infected white MSM
+#' @param disc.main.post.diag.prob.W Probability that an HIV-infected white MSM
 #'        in a main partnership will disclose his status, assuming he didn't
 #'        at the start of the partnership or at diagnosis.
-#' @param disc.pers.outset.B Probability that an HIV-infected black MSM will
+#' @param disc.pers.outset.prob.B Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a casual partnership.
-#' @param disc.pers.outset.W Probability that an HIV-infected white MSM will
+#' @param disc.pers.outset.prob.W Probability that an HIV-infected white MSM will
 #'        disclose his status at the start of a casual partnership.
-#' @param disc.pers.at.diag.B Probability that a black MSM already in a
+#' @param disc.pers.at.diag.prob.B Probability that a black MSM already in a
 #'        casual partnership will disclose at the time of diagnosis.
-#' @param disc.pers.at.diag.W Probability that a white MSM already in a
+#' @param disc.pers.at.diag.prob.W Probability that a white MSM already in a
 #'        casual partnership will disclose at the time of diagnosis.
-#' @param disc.pers.post.diag.B Probability that an HIV-infected black MSM
+#' @param disc.pers.post.diag.prob.B Probability that an HIV-infected black MSM
 #'        in a casual partnership will disclose his status, assuming he
 #'        didn't at the start of the partnership or at diagnosis.
-#' @param disc.pers.post.diag.W Probability that an HIV-infected white MSM
+#' @param disc.pers.post.diag.prob.W Probability that an HIV-infected white MSM
 #'        in a casual partnership will disclose his status, assuming he
 #'        didn't at the start of the partnership or at diagnosis.
-#' @param disc.inst.B Probability that an HIV-infected black MSM will
+#' @param disc.inst.prob.B Probability that an HIV-infected black MSM will
 #'        disclose his status to a one-off partner.
-#' @param disc.inst.W Probability that an HIV-infected white MSM will
+#' @param disc.inst.prob.W Probability that an HIV-infected white MSM will
 #'        disclose his status to a one-off partner.
-#' @param circ.prev.B Probablity that a black new arrival in the population
+#' @param circ.prob.B Probablity that a black new arrival in the population
 #'        will be circumcised.
-#' @param circ.prev.W Probablity that a white new arrival in the population
+#' @param circ.prob.W Probablity that a white new arrival in the population
 #'        will be circumcised.
-#' @param ccr5.freq.B Vector of length two of frequencies of the Delta 32
+#' @param ccr5.prob.B Vector of length two of frequencies of the Delta 32
 #'        mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 #'        among black MSM.
-#' @param ccr5.freq.W Vector of length two of frequencies of the Delta 32
+#' @param ccr5.prob.W Vector of length two of frequencies of the Delta 32
 #'        mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 #'        among white MSM.
 #' @param ccr5.heteroz.rr Relative risk of infection for men who are heterozygous
@@ -155,23 +155,23 @@
 #'        in casual partnerships after diagnosis.
 #' @param redux.exp.ai.discl.pers Percent reduction in expected coital frequency
 #'        in casual partnerships associated after disclosure of disease diagnosis.
-#' @param cprob.main.BB Probability of condom use in a black-black main
+#' @param c.main.prob.BB Probability of condom use in a black-black main
 #'        partnership.
-#' @param cprob.main.BW Probability of condom use in a black-white main
+#' @param c.main.prob.BW Probability of condom use in a black-white main
 #'        partnership.
-#' @param cprob.main.WW Probability of condom use in a white-white main
+#' @param c.main.prob.WW Probability of condom use in a white-white main
 #'        partnership.
-#' @param cprob.pers.BB Probability of condom use in a black-black casual
+#' @param c.pers.prob.BB Probability of condom use in a black-black casual
 #'        partnership.
-#' @param cprob.pers.BW Probability of condom use in a black-white casual
+#' @param c.pers.prob.BW Probability of condom use in a black-white casual
 #'        partnership.
-#' @param cprob.pers.WW Probability of condom use in a white-white casual
+#' @param c.pers.prob.WW Probability of condom use in a white-white casual
 #'        partnership.
-#' @param cprob.inst.BB Probability of condom use in a black-black one-off
+#' @param c.inst.prob.BB Probability of condom use in a black-black one-off
 #'        partnership.
-#' @param cprob.inst.BW Probability of condom use in a black-white one-off
+#' @param c.inst.prob.BW Probability of condom use in a black-white one-off
 #'        partnership.
-#' @param cprob.inst.WW Probability of condom use in a white-white one-off
+#' @param c.inst.prob.WW Probability of condom use in a white-white one-off
 #'        partnership.
 #' @param beta.cond.fsupp.main Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected is fully suppressed.
@@ -206,13 +206,13 @@
 #' @param beta.cond.discl.inst Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man has disclosed
 #'        his status.
-#' @param vv.prob.iev.BB Probability that in a black-black partnership of
+#' @param vv.iev.prob.BB Probability that in a black-black partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
-#' @param vv.prob.iev.BW Probability that in a black-white partnership of
+#' @param vv.iev.prob.BW Probability that in a black-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
-#' @param vv.prob.iev.WW Probability that in a white-white partnership of
+#' @param vv.iev.prob.WW Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
 #' @param ... Additional arguments passed to the function.
@@ -230,15 +230,15 @@ param.mard <- function(nwstats,
                        testing.pattern = "interval",
                        test.window.period = 3,
 
-                       tt.traj.freq.B = c(0.077, 0.000, 0.356, 0.567),
-                       tt.traj.freq.W = c(0.052, 0.000, 0.331, 0.617),
+                       tt.traj.prob.B = c(0.077, 0.000, 0.356, 0.567),
+                       tt.traj.prob.W = c(0.052, 0.000, 0.331, 0.617),
 
-                       prob.tx.init.B = 0.092,
-                       prob.tx.init.W = 0.127,
-                       prob.tx.halt.B = 0.0102,
-                       prob.tx.halt.W = 0.0071,
-                       prob.tx.reinit.B = 0.00066,
-                       prob.tx.reinit.W = 0.00291,
+                       tx.init.prob.B = 0.092,
+                       tx.init.prob.W = 0.127,
+                       tx.halt.prob.B = 0.0102,
+                       tx.halt.prob.W = 0.0071,
+                       tx.reinit.prob.B = 0.00066,
+                       tx.reinit.prob.W = 0.00291,
 
                        max.time.off.tx.full = 520,
                        max.time.on.tx.part = 52 * 15,
@@ -267,26 +267,26 @@ param.mard <- function(nwstats,
                        betamult.circ = 0.4,
                        betamult.condom = 0.25,
 
-                       disc.main.outset.B = (0.685 + 0.889) / 2,
-                       disc.main.outset.W = (0.685 + 0.889) / 2,
-                       disc.main.at.diag.B = 1,
-                       disc.main.at.diag.W = 1,
-                       disc.main.post.diag.B = 0,
-                       disc.main.post.diag.W = 0,
-                       disc.pers.outset.B = (0.527 + 0.828) / 2,
-                       disc.pers.outset.W = (0.527 + 0.828) / 2,
-                       disc.pers.at.diag.B = 1,
-                       disc.pers.at.diag.W = 1,
-                       disc.pers.post.diag.B = 0,
-                       disc.pers.post.diag.W = 0,
-                       disc.inst.B = (0.445 + 0.691) / 2,
-                       disc.inst.W = (0.445 + 0.691) / 2,
+                       disc.main.outset.prob.B = (0.685 + 0.889) / 2,
+                       disc.main.outset.prob.W = (0.685 + 0.889) / 2,
+                       disc.main.at.diag.prob.B = 1,
+                       disc.main.at.diag.prob.W = 1,
+                       disc.main.post.diag.prob.B = 0,
+                       disc.main.post.diag.prob.W = 0,
+                       disc.pers.outset.prob.B = (0.527 + 0.828) / 2,
+                       disc.pers.outset.prob.W = (0.527 + 0.828) / 2,
+                       disc.pers.at.diag.prob.B = 1,
+                       disc.pers.at.diag.prob.W = 1,
+                       disc.pers.post.diag.prob.B = 0,
+                       disc.pers.post.diag.prob.W = 0,
+                       disc.inst.prob.B = (0.445 + 0.691) / 2,
+                       disc.inst.prob.W = (0.445 + 0.691) / 2,
 
-                       circ.prev.B = 0.874,
-                       circ.prev.W = 0.918,
+                       circ.prob.B = 0.874,
+                       circ.prob.W = 0.918,
 
-                       ccr5.freq.B = c(0.0105, 0.105),
-                       ccr5.freq.W = c(0.0105, 0.105),
+                       ccr5.prob.B = c(0.0105, 0.105),
+                       ccr5.prob.W = c(0.0105, 0.105),
                        ccr5.heteroz.rr = 0.3,
 
                        num.inst.ai.classes = 1,
@@ -305,15 +305,15 @@ param.mard <- function(nwstats,
                        redux.exp.ai.diag.pers = 0,
                        redux.exp.ai.discl.pers = 0,
 
-                       cprob.main.BB = 0.38,
-                       cprob.main.BW = 0.10,
-                       cprob.main.WW = 0.15,
-                       cprob.pers.BB = 0.39,
-                       cprob.pers.BW = 0.11,
-                       cprob.pers.WW = 0.16,
-                       cprob.inst.BB = 0.49,
-                       cprob.inst.BW = 0.15,
-                       cprob.inst.WW = 0.22,
+                       c.main.prob.BB = 0.38,
+                       c.main.prob.BW = 0.10,
+                       c.main.prob.WW = 0.15,
+                       c.pers.prob.BB = 0.39,
+                       c.pers.prob.BW = 0.11,
+                       c.pers.prob.WW = 0.16,
+                       c.inst.prob.BB = 0.49,
+                       c.inst.prob.BW = 0.15,
+                       c.inst.prob.WW = 0.22,
 
                        beta.cond.fsupp.main = 0.0,
                        beta.cond.psupp.main = 0.0,
@@ -328,9 +328,9 @@ param.mard <- function(nwstats,
                        beta.cond.diag.inst = -0.67,
                        beta.cond.discl.inst = -0.85,
 
-                       vv.prob.iev.BB = 0.42,
-                       vv.prob.iev.BW = 0.56,
-                       vv.prob.iev.WW = 0.49,
+                       vv.iev.prob.BB = 0.42,
+                       vv.iev.prob.BW = 0.56,
+                       vv.iev.prob.WW = 0.49,
                        ...) {
 
   p <- list()

@@ -78,14 +78,14 @@ trans.mard <- function(dat, at){
   ip.stage.time <- stage.time[disc.ip[, 1]]
   ip.ccr5 <- ccr5[disc.ip[, 2]]
 
-  tp.ip <- betabase.URAI * 2.45 ^ (ip.vl - 4.5)
-  tp.ip[ip.stage == "AR"] <- tp.ip[ip.stage == "AR"] * betamult.acute
-  tp.ip[ip.stage == "AF"] <- tp.ip[ip.stage == "AF"] *
+  trans.ip.prob <- betabase.URAI * 2.45 ^ (ip.vl - 4.5)
+  trans.ip.prob[ip.stage == "AR"] <- trans.ip.prob[ip.stage == "AR"] * betamult.acute
+  trans.ip.prob[ip.stage == "AF"] <- trans.ip.prob[ip.stage == "AF"] *
     (1 + (betamult.acute - 1) * (vl.acute.fall.dur - ip.stage.time[ip.stage == "AF"]) /
                                  vl.acute.fall.dur)
-  tp.ip[disc.ip$uai == 0] <- tp.ip[disc.ip$uai == 0] * betamult.condom
-  tp.ip[ip.ccr5 == "DD"] <- tp.ip[ip.ccr5 == "DD"] * 0
-  tp.ip[ip.ccr5 == "DW"] <- tp.ip[ip.ccr5 == "DW"] * ccr5.heteroz.rr
+  trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * betamult.condom
+  trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
+  trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
   # Transmission probability: receptive position
   rp.vl <- vl[disc.rp[, 2]]
@@ -94,22 +94,22 @@ trans.mard <- function(dat, at){
   rp.circ <- circ[disc.rp[, 1]]
   rp.ccr5 <- ccr5[disc.rp[, 1]]
 
-  tp.rp <- betabase.UIAI * 2.45 ^ (rp.vl - 4.5)
-  tp.rp[rp.stage == "AR"] <- tp.rp[rp.stage == "AR"] * betamult.acute
-  tp.rp[rp.stage == "AF"] <- tp.rp[rp.stage == "AF"] *
+  trans.rp.prob <- betabase.UIAI * 2.45 ^ (rp.vl - 4.5)
+  trans.rp.prob[rp.stage == "AR"] <- trans.rp.prob[rp.stage == "AR"] * betamult.acute
+  trans.rp.prob[rp.stage == "AF"] <- trans.rp.prob[rp.stage == "AF"] *
     (1 + (betamult.acute - 1) * (vl.acute.fall.dur - rp.stage.time[rp.stage == "AF"] ) /
                                  vl.acute.fall.dur)
-  tp.rp[rp.circ == 1] <- tp.rp[rp.circ == 1] * betamult.circ
-  tp.rp[disc.rp$uai == 0] <- tp.rp[disc.rp$uai == 0] * betamult.condom
-  tp.rp[rp.ccr5 == "DD"] <- tp.rp[rp.ccr5 == "DD"] * 0
-  tp.rp[rp.ccr5 == "DW"] <- tp.rp[rp.ccr5 == "DW"] * ccr5.heteroz.rr
+  trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * betamult.circ
+  trans.rp.prob[disc.rp$uai == 0] <- trans.rp.prob[disc.rp$uai == 0] * betamult.condom
+  trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0
+  trans.rp.prob[rp.ccr5 == "DW"] <- trans.rp.prob[rp.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  stopifnot(min(tp.ip) >= 0, max(tp.ip) <= 1,
-            min(tp.rp) >= 0, max(tp.rp) <= 1)
+  stopifnot(min(trans.ip.prob) >= 0, max(trans.ip.prob) <= 1,
+            min(trans.rp.prob) >= 0, max(trans.rp.prob) <= 1)
 
   # Stochastic transmission
-  trans.ip <- rbinom(length(tp.ip), 1, tp.ip)
-  trans.rp <- rbinom(length(tp.rp), 1, tp.rp)
+  trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
+  trans.rp <- rbinom(length(trans.rp.prob), 1, trans.rp.prob)
 
 
   # Output ------------------------------------------------------------------

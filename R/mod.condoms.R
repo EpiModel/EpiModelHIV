@@ -42,9 +42,9 @@ condoms.mard <- function(dat, at) {
     }
 
     if (type == "main") {
-      cprob.BB <- dat$param$cprob.main.BB
-      cprob.BW <- dat$param$cprob.main.BW
-      cprob.WW <- dat$param$cprob.main.WW
+      c.prob.BB <- dat$param$c.main.prob.BB
+      c.prob.BW <- dat$param$c.main.prob.BW
+      c.prob.WW <- dat$param$c.main.prob.WW
       beta.diag <- dat$param$beta.cond.diag.main
       beta.discl <- dat$param$beta.cond.discl.main
       beta.fsupp <- dat$param$beta.cond.fsupp.main
@@ -52,9 +52,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
-      cprob.BB <- dat$param$cprob.pers.BB
-      cprob.BW <- dat$param$cprob.pers.BW
-      cprob.WW <- dat$param$cprob.pers.WW
+      c.prob.BB <- dat$param$c.pers.prob.BB
+      c.prob.BW <- dat$param$c.pers.prob.BW
+      c.prob.WW <- dat$param$c.pers.prob.WW
       beta.diag <- dat$param$beta.cond.diag.pers
       beta.discl <- dat$param$beta.cond.discl.pers
       beta.fsupp <- dat$param$beta.cond.fsupp.pers
@@ -62,9 +62,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
-      cprob.BB <- dat$param$cprob.inst.BB
-      cprob.BW <- dat$param$cprob.inst.BW
-      cprob.WW <- dat$param$cprob.inst.WW
+      c.prob.BB <- dat$param$c.inst.prob.BB
+      c.prob.BW <- dat$param$c.inst.prob.BW
+      c.prob.WW <- dat$param$c.inst.prob.WW
       beta.diag <- dat$param$beta.cond.diag.inst
       beta.discl <- dat$param$beta.cond.discl.inst
       beta.fsupp <- dat$param$beta.cond.fsupp.inst
@@ -77,18 +77,18 @@ condoms.mard <- function(dat, at) {
     # Processes ---------------------------------------------------------------
 
     if (nrow(dal) > 0) {
-      prob.cond <- rep(NA, dim(dal)[1])
+      cond.prob <- rep(NA, dim(dal)[1])
     }
 
     race.1 <- race[dal[, 1]]
     race.2 <- race[dal[, 2]]
     num.B <- (race.1 == "B") + (race.2 == "B")
 
-    prob.cond <- (num.B == 2) * cprob.BB +
-                 (num.B == 1) * cprob.BW +
-                 (num.B == 0) * cprob.WW
+    cond.prob <- (num.B == 2) * c.prob.BB +
+                 (num.B == 1) * c.prob.BW +
+                 (num.B == 0) * c.prob.WW
 
-    logodds.cond <- log(prob.cond / (1 - prob.cond))
+    logodds.cond <- log(cond.prob / (1 - cond.prob))
 
     pos.diag <- diag.status[dal[, 1]]
 
@@ -117,13 +117,13 @@ condoms.mard <- function(dat, at) {
     isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
     logodds.cond[isPS] <- logodds.cond[isPS] * (1 + beta.psupp)
 
-    old.prob.cond <- prob.cond
-    prob.cond <- exp(logodds.cond) / (1 + exp(logodds.cond))
+    old.cond.prob <- cond.prob
+    cond.prob <- exp(logodds.cond) / (1 + exp(logodds.cond))
 
-    prob.cond[is.na(prob.cond) & old.prob.cond == 0] <- 0
-    prob.cond[is.na(prob.cond) & old.prob.cond == 1] <- 1
+    cond.prob[is.na(cond.prob) & old.cond.prob == 0] <- 0
+    cond.prob[is.na(cond.prob) & old.cond.prob == 1] <- 1
 
-    uai <- rbinom(length(prob.cond), 1, 1 - prob.cond)
+    uai <- rbinom(length(cond.prob), 1, 1 - cond.prob)
 
 
     # Output ------------------------------------------------------------------

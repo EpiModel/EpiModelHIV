@@ -36,9 +36,9 @@ position.mard <- function(dat, at) {
   ins.quot <- dat$attr$ins.quot
   race <- dat$attr$race
 
-  vv.prob.iev.BB <- dat$param$vv.prob.iev.BB
-  vv.prob.iev.BW <- dat$param$vv.prob.iev.BW
-  vv.prob.iev.WW <- dat$param$vv.prob.iev.WW
+  vv.iev.prob.BB <- dat$param$vv.iev.prob.BB
+  vv.iev.prob.BW <- dat$param$vv.iev.prob.BW
+  vv.iev.prob.WW <- dat$param$vv.iev.prob.WW
 
 
   # Process -----------------------------------------------------------------
@@ -55,17 +55,17 @@ position.mard <- function(dat, at) {
   vv <- which(pos.role.class == "V" & neg.role.class == "V")
   vv.race.combo <- paste0(race[dal$pos[vv]], race[dal$neg[vv]])
   vv.race.combo[vv.race.combo == "WB"] <- "BW"
-  vv.prob.iev <- (vv.race.combo == "BB") * vv.prob.iev.BB +
-                 (vv.race.combo == "BW") * vv.prob.iev.BW +
-                 (vv.race.combo == "WW") * vv.prob.iev.WW
+  vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.prob.BB +
+                 (vv.race.combo == "BW") * vv.iev.prob.BW +
+                 (vv.race.combo == "WW") * vv.iev.prob.WW
 
-  iev <- rbinom(length(vv), 1, vv.prob.iev)
+  iev <- rbinom(length(vv), 1, vv.iev.prob)
   dal$ins[vv[iev == 1]] <- "B"
   vv.remaining <- vv[iev == 0]
 
-  prob.inspos <- ins.quot[dal$pos[vv.remaining]] /
+  inspos.prob <- ins.quot[dal$pos[vv.remaining]] /
                  (ins.quot[dal$pos[vv.remaining]] + ins.quot[dal$neg[vv.remaining]])
-  inspos <- rbinom(length(vv.remaining), 1, prob.inspos)
+  inspos <- rbinom(length(vv.remaining), 1, inspos.prob)
   dal$ins[vv.remaining[inspos == 1]] <- "P"
   dal$ins[vv.remaining[inspos == 0]] <- "N"
 
