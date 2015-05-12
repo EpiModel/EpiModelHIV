@@ -34,7 +34,7 @@ test.mard <- function(dat, at) {
   testing.pattern <- dat$param$testing.pattern
   mean.test.int.B <- dat$param$mean.test.int.B
   mean.test.int.W <- dat$param$mean.test.int.W
-  twind <- dat$attr$test.window.period
+  twind.int <- dat$attr$test.window.int
 
 
   # Process -----------------------------------------------------------------
@@ -62,10 +62,10 @@ test.mard <- function(dat, at) {
                    tsincelntst >= mean.test.int.W)
   }
 
-  tst.pos.B <- tst.B[status[tst.B] == 1 & inf.time[tst.B] <= at - twind]
+  tst.pos.B <- tst.B[status[tst.B] == 1 & inf.time[tst.B] <= at - twind.int]
   tst.neg.B <- setdiff(tst.B, tst.pos.B)
 
-  tst.pos.W <- tst.W[status[tst.W] == 1 & inf.time[tst.W] <= at - twind]
+  tst.pos.W <- tst.W[status[tst.W] == 1 & inf.time[tst.W] <= at - twind.int]
   tst.neg.W <- setdiff(tst.W, tst.pos.W)
 
   tst.pos <- c(tst.pos.B, tst.pos.W)

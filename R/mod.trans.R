@@ -48,7 +48,7 @@ trans.mard <- function(dat, at){
   betabase.URAI <- dat$param$betabase.URAI
   betabase.UIAI <- dat$param$betabase.UIAI
   betamult.acute <- dat$param$betamult.acute
-  vl.acute.fall.dur <- dat$param$vl.acute.fall.dur
+  vl.acute.fall.int <- dat$param$vl.acute.fall.int
   betamult.condom <- dat$param$betamult.condom
   betamult.circ <- dat$param$betamult.circ
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
@@ -81,8 +81,8 @@ trans.mard <- function(dat, at){
   trans.ip.prob <- betabase.URAI * 2.45 ^ (ip.vl - 4.5)
   trans.ip.prob[ip.stage == "AR"] <- trans.ip.prob[ip.stage == "AR"] * betamult.acute
   trans.ip.prob[ip.stage == "AF"] <- trans.ip.prob[ip.stage == "AF"] *
-    (1 + (betamult.acute - 1) * (vl.acute.fall.dur - ip.stage.time[ip.stage == "AF"]) /
-                                 vl.acute.fall.dur)
+    (1 + (betamult.acute - 1) * (vl.acute.fall.int - ip.stage.time[ip.stage == "AF"]) /
+                                 vl.acute.fall.int)
   trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * betamult.condom
   trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
   trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
@@ -97,8 +97,8 @@ trans.mard <- function(dat, at){
   trans.rp.prob <- betabase.UIAI * 2.45 ^ (rp.vl - 4.5)
   trans.rp.prob[rp.stage == "AR"] <- trans.rp.prob[rp.stage == "AR"] * betamult.acute
   trans.rp.prob[rp.stage == "AF"] <- trans.rp.prob[rp.stage == "AF"] *
-    (1 + (betamult.acute - 1) * (vl.acute.fall.dur - rp.stage.time[rp.stage == "AF"] ) /
-                                 vl.acute.fall.dur)
+    (1 + (betamult.acute - 1) * (vl.acute.fall.int - rp.stage.time[rp.stage == "AF"] ) /
+                                 vl.acute.fall.int)
   trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * betamult.circ
   trans.rp.prob[disc.rp$uai == 0] <- trans.rp.prob[disc.rp$uai == 0] * betamult.condom
   trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0

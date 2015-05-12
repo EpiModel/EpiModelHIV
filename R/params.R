@@ -15,7 +15,7 @@
 #' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
-#' @param test.window.period Length of the HIV test window period.
+#' @param test.window.int Length of the HIV test window period.
 #' @param tt.traj.prob.B Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
 #'        initiate treatment, test and treated with partial viral suppression,
@@ -36,23 +36,23 @@
 #' @param tx.reinit.prob.W Probability per time step that a white MSM who is
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
-#' @param max.time.off.tx.full Number of time steps off treatment for a full
+#' @param max.time.off.tx.full.int Number of time steps off treatment for a full
 #'        suppressor before onset of AIDS, including time before diagnosis.
-#' @param max.time.on.tx.part Number of time steps on treatment for a
+#' @param max.time.on.tx.part.int Number of time steps on treatment for a
 #'        partial suppressor beofre onset of AIDS.
-#' @param max.time.off.tx.part Nnumber of time steps off treatment for a
+#' @param max.time.off.tx.part.int Nnumber of time steps off treatment for a
 #'        partial suppressor before onset of AIDS, including time before
 #'        diagnosis.
-#' @param vl.acute.rise.dur Number of time steps to peak viremia during acute
+#' @param vl.acute.rise.int Number of time steps to peak viremia during acute
 #'        infection.
 #' @param vl.acute.peak Peak viral load (in log10 units) at the height of acute
 #'        infection.
-#' @param vl.acute.fall.dur Number of time steps from peak viremia to set-point
+#' @param vl.acute.fall.int Number of time steps from peak viremia to set-point
 #'        viral load during the acute infection period.
 #' @param vl.set.point Set point viral load (in log10 units).
-#' @param vl.aids.onset Number of time steps to AIDS for a treatment-naive
+#' @param vl.aids.onset.int Number of time steps to AIDS for a treatment-naive
 #'        patient.
-#' @param vl.aids.dur Duration of AIDS stage infection.
+#' @param vl.aids.int Duration of AIDS stage infection.
 #' @param vl.fatal Viral load in AIDS at which death occurs.
 #' @param vl.full.supp Log10 viral load at full suppression on ART.
 #' @param vl.part.supp Log10 viral load at partial suppression on ART.
@@ -228,7 +228,7 @@ param.mard <- function(nwstats,
                        last.neg.test.int.W = round(315 / 7),
                        mean.test.int.W = round(315 / 7),
                        testing.pattern = "interval",
-                       test.window.period = 3,
+                       test.window.int = 3,
 
                        tt.traj.prob.B = c(0.077, 0.000, 0.356, 0.567),
                        tt.traj.prob.W = c(0.052, 0.000, 0.331, 0.617),
@@ -240,15 +240,15 @@ param.mard <- function(nwstats,
                        tx.reinit.prob.B = 0.00066,
                        tx.reinit.prob.W = 0.00291,
 
-                       max.time.off.tx.full = 520,
-                       max.time.on.tx.part = 52 * 15,
-                       max.time.off.tx.part = 520,
-                       vl.acute.rise.dur = 3,
+                       max.time.off.tx.full.int = 520,
+                       max.time.on.tx.part.int = 52 * 15,
+                       max.time.off.tx.part.int = 520,
+                       vl.acute.rise.int = 3,
                        vl.acute.peak = 6.886,
-                       vl.acute.fall.dur = 3,
+                       vl.acute.fall.int = 3,
                        vl.set.point = 4.5,
-                       vl.aids.onset = 520,
-                       vl.aids.dur = 52 * 2,
+                       vl.aids.onset.int = 520,
+                       vl.aids.int = 52 * 2,
                        vl.fatal = 7,
                        vl.full.supp = 1.5,
                        vl.part.supp = 3.5,
