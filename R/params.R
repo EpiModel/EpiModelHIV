@@ -70,16 +70,16 @@
 #' @param b.B.rate Rate at which black MSM enter the population.
 #' @param b.W.rate Rate at which white MSM enter the population.
 #' @param birth.age Age (in years) of new arrivals.
-#' @param betabase.URAI Transmissibility for a man having unprotected receptive
+#' @param URAI.beta Transmissibility for a man having unprotected receptive
 #'        anal intercourse with an infected man at set point viral load.
-#' @param betabase.UIAI Transmissibility for an uncircumcised man having
+#' @param UIAI.beta Transmissibility for an uncircumcised man having
 #'        unprotected insertive anal intercourse with an infected man at set
 #'        point viral load.
-#' @param betamult.acute Multiplicative factor by which acute infection heightens
+#' @param acute.beta Multiplicative factor by which acute infection heightens
 #'        infectiousness, above that predicted by elevated viral load.
-#' @param betamult.circ Factor by which to multiply infectivity from
+#' @param circ.beta Factor by which to multiply infectivity from
 #'        insertive anal sex when the negative insertive partner is circumcised.
-#' @param betamult.condom Factor by which to multiply infectivity for anal
+#' @param condom.beta Factor by which to multiply infectivity for anal
 #'        sex when a condom is used.
 #' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
@@ -139,21 +139,21 @@
 #'        partnerships (acts per week).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per week).
-#' @param incr.exp.ai.full.supp.main Percent increase in expected coital
+#' @param incr.ai.full.supp.main.rr Percent increase in expected coital
 #'        frequency in main partnerships after full suppression.
-#' @param incr.exp.ai.part.supp.main Percent increase in expected coital
+#' @param incr.ai.part.supp.main.rr Percent increase in expected coital
 #'        frequency in main partnerships after partial suppression.
-#' @param redux.exp.ai.diag.main Percent reduction in expected coital frequency
+#' @param redux.ai.diag.main.rr Percent reduction in expected coital frequency
 #'        in main partnerships after disease diagnosis.
-#' @param redux.exp.ai.discl.main Percent reduction in expected coital frequency
+#' @param redux.ai.discl.main.rr Percent reduction in expected coital frequency
 #'        in main partnerships after disclosure of diseasediagnosis.
-#' @param incr.exp.ai.full.supp.pers Percent increase in expected coital
+#' @param incr.ai.full.supp.pers.rr Percent increase in expected coital
 #'        frequency in casual partnerships after full suppression.
-#' @param incr.exp.ai.part.supp.pers Percent increase in expected coital
+#' @param incr.ai.part.supp.pers.rr Percent increase in expected coital
 #'        frequency in casual partnerships after partial suppression.
-#' @param redux.exp.ai.diag.pers Percent reduction in expected coital frequency
+#' @param redux.ai.diag.pers.rr Percent reduction in expected coital frequency
 #'        in casual partnerships after diagnosis.
-#' @param redux.exp.ai.discl.pers Percent reduction in expected coital frequency
+#' @param redux.ai.discl.pers.rr Percent reduction in expected coital frequency
 #'        in casual partnerships associated after disclosure of disease diagnosis.
 #' @param c.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
@@ -173,37 +173,37 @@
 #'        partnership.
 #' @param c.inst.WW.prob Probability of condom use in a white-white one-off
 #'        partnership.
-#' @param beta.cond.fsupp.main Beta multiplier for the log odds of using a
+#' @param cond.fsupp.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected is fully suppressed.
-#' @param beta.cond.psupp.main Beta multiplier for the log odds of using a
+#' @param cond.psupp.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected is partially suppressed.
-#' @param beta.cond.diag.main Beta multiplier for the log odds of using a
+#' @param cond.diag.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected man has been
 #'        diagnosed.
-#' @param beta.cond.discl.main Beta multiplier for the log odds of using a
+#' @param cond.discl.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected man has disclosed.
-#' @param beta.cond.fsupp.pers Beta multiplier for the log odds of using a
+#' @param cond.fsupp.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man is fully
 #'        suppressed.
-#' @param beta.cond.psupp.pers Beta multiplier for the log odds of using a
+#' @param cond.psupp.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man is partially
 #'        suppressed.
-#' @param beta.cond.diag.pers Beta multiplier for the log odds of using a
+#' @param cond.diag.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man has been
 #'        diagnosed.
-#' @param beta.cond.discl.pers Beta multiplier for the log odds of using a
+#' @param cond.discl.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man has disclosed
 #'        his status.
-#' @param beta.cond.fsupp.inst Beta multiplier for the log odds of using a
+#' @param cond.fsupp.inst.beta Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man is fully
 #'        suppressed.
-#' @param beta.cond.psupp.inst Beta multiplier for the log odds of using a
+#' @param cond.psupp.inst.beta Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man is partially
 #'        suppressed.
-#' @param beta.cond.diag.inst Beta multiplier for the log odds of using a
+#' @param cond.diag.inst.beta Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man has been
 #'        diagnosed.
-#' @param beta.cond.discl.inst Beta multiplier for the log odds of using a
+#' @param cond.discl.inst.beta Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man has disclosed
 #'        his status.
 #' @param vv.iev.BB.prob Probability that in a black-black partnership of
@@ -261,8 +261,8 @@ param.mard <- function(nwstats,
                        b.W.rate = 1e-3,
                        birth.age = 18,
 
-                       betabase.URAI = 0.0082 * 1.09,
-                       betabase.UIAI = 0.0031 * 1.09,
+                       URAI.beta = 0.0082 * 1.09,
+                       UIAI.beta = 0.0031 * 1.09,
                        betamult.acute = 4,
                        betamult.circ = 0.4,
                        betamult.condom = 0.25,
@@ -296,14 +296,14 @@ param.mard <- function(nwstats,
                        base.ai.pers.BB.rate = 0.75,
                        base.ai.pers.BW.rate = 1.13,
                        base.ai.pers.WW.rate = 0.98,
-                       incr.exp.ai.full.supp.main = 0,
-                       incr.exp.ai.part.supp.main = 0,
-                       redux.exp.ai.diag.main = 0,
-                       redux.exp.ai.discl.main = 0,
-                       incr.exp.ai.full.supp.pers = 0,
-                       incr.exp.ai.part.supp.pers = 0,
-                       redux.exp.ai.diag.pers = 0,
-                       redux.exp.ai.discl.pers = 0,
+                       incr.ai.full.supp.main.rr = 0,
+                       incr.ai.part.supp.main.rr = 0,
+                       redux.ai.diag.main.rr = 0,
+                       redux.ai.discl.main.rr = 0,
+                       incr.ai.full.supp.pers.rr = 0,
+                       incr.ai.part.supp.pers.rr = 0,
+                       redux.ai.diag.pers.rr = 0,
+                       redux.ai.discl.pers.rr = 0,
 
                        c.main.BB.prob = 0.38,
                        c.main.BW.prob = 0.10,
@@ -315,18 +315,18 @@ param.mard <- function(nwstats,
                        c.inst.BW.prob = 0.15,
                        c.inst.WW.prob = 0.22,
 
-                       beta.cond.fsupp.main = 0.0,
-                       beta.cond.psupp.main = 0.0,
-                       beta.cond.diag.main = -0.67,
-                       beta.cond.discl.main = -0.85,
-                       beta.cond.fsupp.pers = 0.0,
-                       beta.cond.psupp.pers = 0.0,
-                       beta.cond.diag.pers = -0.67,
-                       beta.cond.discl.pers = -0.85,
-                       beta.cond.fsupp.inst = 0.0,
-                       beta.cond.psupp.inst = 0.0,
-                       beta.cond.diag.inst = -0.67,
-                       beta.cond.discl.inst = -0.85,
+                       cond.fsupp.main.beta = 0.0,
+                       cond.psupp.main.beta = 0.0,
+                       cond.diag.main.beta = -0.67,
+                       cond.discl.main.beta = -0.85,
+                       cond.fsupp.pers.beta = 0.0,
+                       cond.psupp.pers.beta = 0.0,
+                       cond.diag.pers.beta = -0.67,
+                       cond.discl.pers.beta = -0.85,
+                       cond.fsupp.inst.beta = 0.0,
+                       cond.psupp.inst.beta = 0.0,
+                       cond.diag.inst.beta = -0.67,
+                       cond.discl.inst.beta = -0.85,
 
                        vv.iev.BB.prob = 0.42,
                        vv.iev.BW.prob = 0.56,

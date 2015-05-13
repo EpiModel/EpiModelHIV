@@ -41,10 +41,10 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
-      redux.ai.diag <- dat$param$redux.ai.diag.main
-      redux.ai.discl <- dat$param$redux.ai.discl.main
-      incr.ai.full.supp <- dat$param$incr.ai.full.supp.main
-      incr.ai.part.supp <- dat$param$incr.ai.part.supp.main
+      redux.ai.diag.rr <- dat$param$redux.ai.diag.main.rr
+      redux.ai.discl.rr <- dat$param$redux.ai.discl.main.rr
+      incr.ai.full.supp.rr <- dat$param$incr.ai.full.supp.main.rr
+      incr.ai.part.supp.rr <- dat$param$incr.ai.part.supp.main.rr
       fixed <- FALSE
       if (dat$control$delete.nodes == TRUE) {
         el <- matrix(as.edgelist(dat$nw$m), ncol = 2)
@@ -56,10 +56,10 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
-      redux.ai.diag <- dat$param$redux.ai.diag.pers
-      redux.ai.discl <- dat$param$redux.ai.discl.pers
-      incr.ai.full.supp <- dat$param$incr.ai.full.supp.pers
-      incr.ai.part.supp <- dat$param$incr.ai.part.supp.pers
+      redux.ai.diag.rr <- dat$param$redux.ai.diag.pers.rr
+      redux.ai.discl.rr <- dat$param$redux.ai.discl.pers.rr
+      incr.ai.full.supp.rr <- dat$param$incr.ai.full.supp.pers.rr
+      incr.ai.part.supp.rr <- dat$param$incr.ai.part.supp.pers.rr
       fixed <- FALSE
       if (dat$control$delete.nodes == TRUE) {
         el <- matrix(as.edgelist(dat$nw$p), ncol = 2)
@@ -71,10 +71,10 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
-      redux.ai.diag <- 0
-      redux.ai.discl <- 0
-      incr.ai.full.supp <- 0
-      incr.ai.part.supp <- 0
+      redux.ai.diag.rr <- 0
+      redux.ai.discl.rr <- 0
+      incr.ai.full.supp.rr <- 0
+      incr.ai.part.supp.rr <- 0
       fixed <- TRUE
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
@@ -109,13 +109,13 @@ acts.mard <- function(dat, at) {
                          which(uid[disc.el[x, 2]] == dlist$neg))) != 0
       })
 
-      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * (1 - redux.ai.diag)
+      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * (1 - redux.ai.diag.rr)
       exp.ai[disclosed == TRUE] <- exp.ai[disclosed == TRUE] *
-                                   (1 - redux.ai.discl)
+                                   (1 - redux.ai.discl.rr)
       exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] *
-                                                   (1 + incr.ai.full.supp)
+                                                   (1 + incr.ai.full.supp.rr)
       exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] *
-                                                   (1 + incr.ai.part.supp)
+                                                   (1 + incr.ai.part.supp.rr)
 
       if (fixed == FALSE) {
         ai <- rpois(length(exp.ai), exp.ai)

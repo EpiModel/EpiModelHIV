@@ -45,30 +45,30 @@ condoms.mard <- function(dat, at) {
       c.BB.prob <- dat$param$c.main.BB.prob
       c.BW.prob <- dat$param$c.main.BW.prob
       c.WW.prob <- dat$param$c.main.WW.prob
-      beta.diag <- dat$param$beta.cond.diag.main
-      beta.discl <- dat$param$beta.cond.discl.main
-      beta.fsupp <- dat$param$beta.cond.fsupp.main
-      beta.psupp <- dat$param$beta.cond.psupp.main
+      diag.beta <- dat$param$cond.diag.main.beta
+      discl.beta <- dat$param$cond.discl.main.beta
+      fsupp.beta <- dat$param$cond.fsupp.main.beta
+      psupp.beta <- dat$param$cond.psupp.main.beta
       dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
       c.BB.prob <- dat$param$c.pers.BB.prob
       c.BW.prob <- dat$param$c.pers.BW.prob
       c.WW.prob <- dat$param$c.pers.WW.prob
-      beta.diag <- dat$param$beta.cond.diag.pers
-      beta.discl <- dat$param$beta.cond.discl.pers
-      beta.fsupp <- dat$param$beta.cond.fsupp.pers
-      beta.psupp <- dat$param$beta.cond.psupp.pers
+      diag.beta <- dat$param$cond.diag.pers.beta
+      discl.beta <- dat$param$cond.discl.pers.beta
+      fsupp.beta <- dat$param$cond.fsupp.pers.beta
+      psupp.beta <- dat$param$cond.psupp.pers.beta
       dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
       c.BB.prob <- dat$param$c.inst.BB.prob
       c.BW.prob <- dat$param$c.inst.BW.prob
       c.WW.prob <- dat$param$c.inst.WW.prob
-      beta.diag <- dat$param$beta.cond.diag.inst
-      beta.discl <- dat$param$beta.cond.discl.inst
-      beta.fsupp <- dat$param$beta.cond.fsupp.inst
-      beta.psupp <- dat$param$beta.cond.psupp.inst
+      diag.beta <- dat$param$cond.diag.inst.beta
+      discl.beta <- dat$param$cond.discl.inst.beta
+      fsupp.beta <- dat$param$cond.fsupp.inst.beta
+      psupp.beta <- dat$param$cond.psupp.inst.beta
       dal <- dal[dal$type == "I", ]
     }
 
@@ -103,19 +103,19 @@ condoms.mard <- function(dat, at) {
 
     # Odds, Diagnosed
     isDx <- which(pos.diag == 1)
-    logodds.cond[isDx] <- logodds.cond[isDx] * (1 - beta.diag)
+    logodds.cond[isDx] <- logodds.cond[isDx] * (1 - diag.beta)
 
     # Odds, Disclosed
     isDisc <- which(discl == 1)
-    logodds.cond[isDisc] <- logodds.cond[isDisc] * (1 - beta.discl)
+    logodds.cond[isDisc] <- logodds.cond[isDisc] * (1 - discl.beta)
 
     # Odds, Tx Full Suppress Type
     isFS <- which(pos.tx == 1 & pos.tt.traj == "YF")
-    logodds.cond[isFS] <- logodds.cond[isFS] * (1 + beta.fsupp)
+    logodds.cond[isFS] <- logodds.cond[isFS] * (1 + fsupp.beta)
 
     # Odds, Tx Part Supress Type
     isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
-    logodds.cond[isPS] <- logodds.cond[isPS] * (1 + beta.psupp)
+    logodds.cond[isPS] <- logodds.cond[isPS] * (1 + psupp.beta)
 
     old.cond.prob <- cond.prob
     cond.prob <- exp(logodds.cond) / (1 + exp(logodds.cond))
