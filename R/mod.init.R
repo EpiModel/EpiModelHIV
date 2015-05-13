@@ -222,8 +222,6 @@ init_status.mard <- function(dat) {
   vlf  <- dat$param$vl.fatal
   vlds <- (vlf - vlsp) / vl.aids.int
   vl.acute.int <- vlar.int + vlaf.int
-  vl.aids.onset <- dat$param$vl.aids.onset.int
-  vl.aids.int <- dat$param$vl.aids.int
 
 
   ### Non-treater type: tester and non-tester
