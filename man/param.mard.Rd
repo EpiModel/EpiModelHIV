@@ -18,9 +18,9 @@ param.mard(nwstats, last.neg.test.B.int = round(301/7),
   vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
-  b.B.rate = 0.001, b.W.rate = 0.001, birth.age = 18, URAI.beta = 0.0082
-  * 1.09, UIAI.beta = 0.0031 * 1.09, acute.beta = 4, circ.beta = 0.4,
-  condom.beta = 0.25, disc.outset.main.B.prob = 0.685,
+  b.B.rate = 0.001, b.W.rate = 0.001, birth.age = 18, URAI.prob = 0.0082
+  * 1.09, UIAI.prob = 0.0031 * 1.09, acute.rr = 4, circ.rr = 0.4,
+  condom.rr = 0.25, disc.outset.main.B.prob = 0.685,
   disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
   disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
   disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
@@ -33,21 +33,21 @@ param.mard(nwstats, last.neg.test.B.int = round(301/7),
   base.ai.main.BB.rate = 1.19, base.ai.main.BW.rate = 1.79,
   base.ai.main.WW.rate = 1.56, base.ai.pers.BB.rate = 0.75,
   base.ai.pers.BW.rate = 1.13, base.ai.pers.WW.rate = 0.98,
-  incr.ai.full.supp.main.rr = 0, incr.ai.part.supp.main.rr = 0,
-  redux.ai.diag.main.rr = 0, redux.ai.discl.main.rr = 0,
-  incr.ai.full.supp.pers.rr = 0, incr.ai.part.supp.pers.rr = 0,
-  redux.ai.diag.pers.rr = 0, redux.ai.discl.pers.rr = 0,
-  c.main.BB.prob = 0.38, c.main.BW.prob = 0.1, c.main.WW.prob = 0.15,
-  c.pers.BB.prob = 0.39, c.pers.BW.prob = 0.11, c.pers.WW.prob = 0.16,
-  c.inst.BB.prob = 0.49, c.inst.BW.prob = 0.15, c.inst.WW.prob = 0.22,
-  cond.fsupp.main.beta = 0, cond.psupp.main.beta = 0,
-  cond.diag.main.beta = -0.67, cond.discl.main.beta = -0.85,
-  cond.fsupp.pers.beta = 0, cond.psupp.pers.beta = 0,
-  cond.diag.pers.beta = -0.67, cond.discl.pers.beta = -0.85,
-  cond.fsupp.inst.beta = 0, cond.psupp.inst.beta = 0,
-  cond.diag.inst.beta = -0.67, cond.discl.inst.beta = -0.85,
-  vv.iev.BB.prob = 0.42, vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49,
-  ...)
+  ai.full.supp.main.rr = 1, ai.part.supp.main.rr = 1, ai.diag.main.rr = 1,
+  ai.discl.main.rr = 1, ai.full.supp.pers.rr = 1,
+  ai.part.supp.pers.rr = 1, ai.diag.pers.rr = 1, ai.discl.pers.rr = 1,
+  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  cond.main.WW.prob = 0.15, cond.pers.BB.prob = 0.39,
+  cond.pers.BW.prob = 0.11, cond.pers.WW.prob = 0.16,
+  cond.inst.BB.prob = 0.49, cond.inst.BW.prob = 0.15,
+  cond.inst.WW.prob = 0.22, cond.fsupp.main.beta = 0,
+  cond.psupp.main.beta = 0, cond.diag.main.beta = -0.67,
+  cond.discl.main.beta = -0.85, cond.fsupp.pers.beta = 0,
+  cond.psupp.pers.beta = 0, cond.diag.pers.beta = -0.67,
+  cond.discl.pers.beta = -0.85, cond.fsupp.inst.beta = 0,
+  cond.psupp.inst.beta = 0, cond.diag.inst.beta = -0.67,
+  cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
+  vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -150,21 +150,22 @@ viral load rises per time step from treatment halting until expected value.}
 
 \item{birth.age}{Age (in years) of new arrivals.}
 
-\item{URAI.beta}{Transmissibility for a man having unprotected receptive
-anal intercourse with an infected man at set point viral load.}
+\item{URAI.prob}{Probability of transmission for a man having unprotected
+receptive anal intercourse with an infected man at set point viral
+load.}
 
-\item{UIAI.beta}{Transmissibility for an uncircumcised man having
+\item{UIAI.prob}{Probability of transmission for an uncircumcised man having
 unprotected insertive anal intercourse with an infected man at set
 point viral load.}
 
-\item{acute.beta}{Multiplicative factor by which acute infection heightens
-infectiousness, above that predicted by elevated viral load.}
+\item{acute.rr}{Relative risk of infection (compared to that predicted by
+elevated viral load) when positive partner is in the acute stage.}
 
-\item{circ.beta}{Factor by which to multiply infectivity from
-insertive anal sex when the negative insertive partner is circumcised.}
+\item{circ.rr}{Relative risk of infection from insertive anal sex when the
+negative insertive partner is circumcised.}
 
-\item{condom.beta}{Factor by which to multiply infectivity for anal
-sex when a condom is used.}
+\item{condom.rr}{Relative risk of infection from anal sex when a condom is
+used.}
 
 \item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
@@ -250,55 +251,59 @@ partnerships (acts per week).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per week).}
 
-\item{incr.ai.full.supp.main.rr}{Percent increase in expected coital
-frequency in main partnerships after full suppression.}
+\item{ai.full.supp.main.rr}{Relative expected coital frequency in main
+partnerships after full suppression (value of 1 indicates no change).}
 
-\item{incr.ai.part.supp.main.rr}{Percent increase in expected coital
-frequency in main partnerships after partial suppression.}
+\item{ai.part.supp.main.rr}{Relative expected coital frequency in main
+partnerships after partial suppression (value of 1 indicates no
+change).}
 
-\item{redux.ai.diag.main.rr}{Percent reduction in expected coital frequency
-in main partnerships after disease diagnosis.}
+\item{ai.diag.main.rr}{Relative expected coital frequency in main
+partnerships after disease diagnosis (value of 1 indicates no change).}
 
-\item{redux.ai.discl.main.rr}{Percent reduction in expected coital frequency
-in main partnerships after disclosure of diseasediagnosis.}
+\item{ai.discl.main.rr}{Relative expected coital frequency in main
+partnerships after disclosure of disease diagnosis (value of 1
+indicates no change).}
 
-\item{incr.ai.full.supp.pers.rr}{Percent increase in expected coital
-frequency in casual partnerships after full suppression.}
+\item{ai.full.supp.pers.rr}{Relative expected coital frequency in casual
+partnerships after full suppression (value of 1 indicates no change).}
 
-\item{incr.ai.part.supp.pers.rr}{Percent increase in expected coital
-frequency in casual partnerships after partial suppression.}
+\item{ai.part.supp.pers.rr}{Relative expected coital frequency in casual
+partnerships after partial suppression (value of 1 indicates no
+change).}
 
-\item{redux.ai.diag.pers.rr}{Percent reduction in expected coital frequency
-in casual partnerships after diagnosis.}
+\item{ai.diag.pers.rr}{Relative expected coital frequency in casual
+partnerships after diagnosis (value of 1 indicates no change).}
 
-\item{redux.ai.discl.pers.rr}{Percent reduction in expected coital frequency
-in casual partnerships associated after disclosure of disease diagnosis.}
+\item{ai.discl.pers.rr}{Relative expected coital frequency in casual
+partnerships associated after disclosure of disease diagnosis (value
+of 1 indicates no change).}
 
-\item{c.main.BB.prob}{Probability of condom use in a black-black main
+\item{cond.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}
 
-\item{c.main.BW.prob}{Probability of condom use in a black-white main
+\item{cond.main.BW.prob}{Probability of condom use in a black-white main
 partnership.}
 
-\item{c.main.WW.prob}{Probability of condom use in a white-white main
+\item{cond.main.WW.prob}{Probability of condom use in a white-white main
 partnership.}
 
-\item{c.pers.BB.prob}{Probability of condom use in a black-black casual
+\item{cond.pers.BB.prob}{Probability of condom use in a black-black casual
 partnership.}
 
-\item{c.pers.BW.prob}{Probability of condom use in a black-white casual
+\item{cond.pers.BW.prob}{Probability of condom use in a black-white casual
 partnership.}
 
-\item{c.pers.WW.prob}{Probability of condom use in a white-white casual
+\item{cond.pers.WW.prob}{Probability of condom use in a white-white casual
 partnership.}
 
-\item{c.inst.BB.prob}{Probability of condom use in a black-black one-off
+\item{cond.inst.BB.prob}{Probability of condom use in a black-black one-off
 partnership.}
 
-\item{c.inst.BW.prob}{Probability of condom use in a black-white one-off
+\item{cond.inst.BW.prob}{Probability of condom use in a black-white one-off
 partnership.}
 
-\item{c.inst.WW.prob}{Probability of condom use in a white-white one-off
+\item{cond.inst.WW.prob}{Probability of condom use in a white-white one-off
 partnership.}
 
 \item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
