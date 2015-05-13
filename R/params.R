@@ -139,22 +139,26 @@
 #'        partnerships (acts per week).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per week).
-#' @param ai.full.supp.main.rr Percent increase in expected coital
-#'        frequency in main partnerships after full suppression.
-#' @param ai.part.supp.main.rr Percent increase in expected coital
-#'        frequency in main partnerships after partial suppression.
-#' @param ai.diag.main.rr Percent reduction in expected coital frequency
-#'        in main partnerships after disease diagnosis.
-#' @param ai.discl.main.rr Percent reduction in expected coital frequency
-#'        in main partnerships after disclosure of disease diagnosis.
-#' @param ai.full.supp.pers.rr Percent increase in expected coital
-#'        frequency in casual partnerships after full suppression.
-#' @param ai.part.supp.pers.rr Percent increase in expected coital
-#'        frequency in casual partnerships after partial suppression.
-#' @param ai.diag.pers.rr Percent reduction in expected coital frequency
-#'        in casual partnerships after diagnosis.
-#' @param ai.discl.pers.rr Percent reduction in expected coital frequency
-#'        in casual partnerships associated after disclosure of disease diagnosis.
+#' @param ai.full.supp.main.rr Relative expected coital frequency in main
+#'        partnerships after full suppression (value of 1 indicates no change).
+#' @param ai.part.supp.main.rr Relative expected coital frequency in main
+#'        partnerships after partial suppression (value of 1 indicates no
+#'        change).
+#' @param ai.diag.main.rr Relative expected coital frequency in main
+#'        partnerships after disease diagnosis (value of 1 indicates no change).
+#' @param ai.discl.main.rr Relative expected coital frequency in main
+#'        partnerships after disclosure of disease diagnosis (value of 1
+#'        indicates no change).
+#' @param ai.full.supp.pers.rr Relative expected coital frequency in casual
+#'        partnerships after full suppression (value of 1 indicates no change).
+#' @param ai.part.supp.pers.rr Relative expected coital frequency in casual
+#'        partnerships after partial suppression (value of 1 indicates no
+#'        change).
+#' @param ai.diag.pers.rr Relative expected coital frequency in casual
+#'        partnerships after diagnosis (value of 1 indicates no change).
+#' @param ai.discl.pers.rr Relative expected coital frequency in casual
+#'        partnerships associated after disclosure of disease diagnosis (value
+#'        of 1 indicates no change).
 #' @param c.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
 #' @param c.main.BW.prob Probability of condom use in a black-white main
@@ -296,14 +300,14 @@ param.mard <- function(nwstats,
                        base.ai.pers.BB.rate = 0.75,
                        base.ai.pers.BW.rate = 1.13,
                        base.ai.pers.WW.rate = 0.98,
-                       ai.full.supp.main.rr = 0,
-                       ai.part.supp.main.rr = 0,
-                       ai.diag.main.rr = 0,
-                       ai.discl.main.rr = 0,
-                       ai.full.supp.pers.rr = 0,
-                       ai.part.supp.pers.rr = 0,
-                       ai.diag.pers.rr = 0,
-                       ai.discl.pers.rr = 0,
+                       ai.full.supp.main.rr = 1,
+                       ai.part.supp.main.rr = 1,
+                       ai.diag.main.rr = 1,
+                       ai.discl.main.rr = 1,
+                       ai.full.supp.pers.rr = 1,
+                       ai.part.supp.pers.rr = 1,
+                       ai.diag.pers.rr = 1,
+                       ai.discl.pers.rr = 1,
 
                        c.main.BB.prob = 0.38,
                        c.main.BW.prob = 0.10,

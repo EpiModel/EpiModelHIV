@@ -71,10 +71,10 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
-      ai.diag.rr <- 0
-      ai.discl.rr <- 0
-      ai.full.supp.rr <- 0
-      ai.part.supp.rr <- 0
+      ai.diag.rr <- 1
+      ai.discl.rr <- 1
+      ai.full.supp.rr <- 1
+      ai.part.supp.rr <- 1
       fixed <- TRUE
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
@@ -109,13 +109,12 @@ acts.mard <- function(dat, at) {
                          which(uid[disc.el[x, 2]] == dlist$neg))) != 0
       })
 
-      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * (1 - ai.diag.rr)
-      exp.ai[disclosed == TRUE] <- exp.ai[disclosed == TRUE] *
-                                   (1 - ai.discl.rr)
+      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * ai.diag.rr
+      exp.ai[disclosed == TRUE] <- exp.ai[disclosed == TRUE] * ai.discl.rr
       exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] *
-                                                   (1 + ai.full.supp.rr)
+                                                   ai.full.supp.rr
       exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] *
-                                                   (1 + ai.part.supp.rr)
+                                                   ai.part.supp.rr
 
       if (fixed == FALSE) {
         ai <- rpois(length(exp.ai), exp.ai)
