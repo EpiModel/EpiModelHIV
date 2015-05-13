@@ -13,13 +13,13 @@ print.nwstats <- function(x, ...) {
   cat("\nWhite (0/1/2):", colSums(x$deg.mp.W))
 
   cat("\n\nMain network model target statistics:\n")
-  cat(x$meanstats.m)
+  cat(x$stats.m)
 
   cat("\n\nCasual network model target statistics:\n")
-  cat(x$meanstats.p)
+  cat(x$stats.p)
 
   cat("\n\nInstant network model target statistics:\n")
-  cat(x$meanstats.i)
+  cat(x$stats.i)
 
   cat("\n\nMain Model ")
   print(x$coef.diss.m)
