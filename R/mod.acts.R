@@ -89,13 +89,13 @@ acts.mard <- function(dat, at) {
 
     if (nrow(disc.el) > 0) {
 
-      exp.ai <- rep(NA, dim(disc.el)[1])
+      ai.rate <- rep(NA, dim(disc.el)[1])
 
       race.1 <- race[disc.el[, 1]]
       race.2 <- race[disc.el[, 2]]
       num.B <- (race.1 == "B") + (race.2 == "B")
 
-      exp.ai <- (num.B == 2) * base.ai.BB.rate +
+      ai.rate <- (num.B == 2) * base.ai.BB.rate +
                 (num.B == 1) * base.ai.BW.rate +
                 (num.B == 0) * base.ai.WW.rate
 
@@ -109,17 +109,17 @@ acts.mard <- function(dat, at) {
                          which(uid[disc.el[x, 2]] == dlist$neg))) != 0
       })
 
-      exp.ai[pos.diag == 1] <- exp.ai[pos.diag == 1] * ai.diag.rr
-      exp.ai[disclosed == TRUE] <- exp.ai[disclosed == TRUE] * ai.discl.rr
-      exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YF"] *
+      ai.rate[pos.diag == 1] <- ai.rate[pos.diag == 1] * ai.diag.rr
+      ai.rate[disclosed == TRUE] <- ai.rate[disclosed == TRUE] * ai.discl.rr
+      ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] *
                                                    ai.full.supp.rr
-      exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] <- exp.ai[pos.tx == 1 & pos.tt.traj == "YP"] *
+      ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] *
                                                    ai.part.supp.rr
 
       if (fixed == FALSE) {
-        ai <- rpois(length(exp.ai), exp.ai)
+        ai <- rpois(length(ai.rate), ai.rate)
       } else {
-        ai <- round(exp.ai)
+        ai <- round(ai.rate)
       }
 
       if (sum(ai) > 0) {
