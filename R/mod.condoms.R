@@ -42,9 +42,9 @@ condoms.mard <- function(dat, at) {
     }
 
     if (type == "main") {
-      c.BB.prob <- dat$param$c.main.BB.prob
-      c.BW.prob <- dat$param$c.main.BW.prob
-      c.WW.prob <- dat$param$c.main.WW.prob
+      cond.BB.prob <- dat$param$cond.main.BB.prob
+      cond.BW.prob <- dat$param$cond.main.BW.prob
+      cond.WW.prob <- dat$param$cond.main.WW.prob
       diag.beta <- dat$param$cond.diag.main.beta
       discl.beta <- dat$param$cond.discl.main.beta
       fsupp.beta <- dat$param$cond.fsupp.main.beta
@@ -52,9 +52,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
-      c.BB.prob <- dat$param$c.pers.BB.prob
-      c.BW.prob <- dat$param$c.pers.BW.prob
-      c.WW.prob <- dat$param$c.pers.WW.prob
+      cond.BB.prob <- dat$param$cond.pers.BB.prob
+      cond.BW.prob <- dat$param$cond.pers.BW.prob
+      cond.WW.prob <- dat$param$cond.pers.WW.prob
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
       fsupp.beta <- dat$param$cond.fsupp.pers.beta
@@ -62,9 +62,9 @@ condoms.mard <- function(dat, at) {
       dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
-      c.BB.prob <- dat$param$c.inst.BB.prob
-      c.BW.prob <- dat$param$c.inst.BW.prob
-      c.WW.prob <- dat$param$c.inst.WW.prob
+      cond.BB.prob <- dat$param$cond.inst.BB.prob
+      cond.BW.prob <- dat$param$cond.inst.BW.prob
+      cond.WW.prob <- dat$param$cond.inst.WW.prob
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
       fsupp.beta <- dat$param$cond.fsupp.inst.beta
@@ -84,9 +84,9 @@ condoms.mard <- function(dat, at) {
     race.2 <- race[dal[, 2]]
     num.B <- (race.1 == "B") + (race.2 == "B")
 
-    cond.prob <- (num.B == 2) * c.BB.prob +
-                 (num.B == 1) * c.BW.prob +
-                 (num.B == 0) * c.WW.prob
+    cond.prob <- (num.B == 2) * cond.BB.prob +
+                 (num.B == 1) * cond.BW.prob +
+                 (num.B == 0) * cond.WW.prob
 
     logodds.cond <- log(cond.prob / (1 - cond.prob))
 

@@ -159,23 +159,23 @@
 #' @param ai.discl.pers.rr Relative expected coital frequency in casual
 #'        partnerships associated after disclosure of disease diagnosis (value
 #'        of 1 indicates no change).
-#' @param c.main.BB.prob Probability of condom use in a black-black main
+#' @param cond.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
-#' @param c.main.BW.prob Probability of condom use in a black-white main
+#' @param cond.main.BW.prob Probability of condom use in a black-white main
 #'        partnership.
-#' @param c.main.WW.prob Probability of condom use in a white-white main
+#' @param cond.main.WW.prob Probability of condom use in a white-white main
 #'        partnership.
-#' @param c.pers.BB.prob Probability of condom use in a black-black casual
+#' @param cond.pers.BB.prob Probability of condom use in a black-black casual
 #'        partnership.
-#' @param c.pers.BW.prob Probability of condom use in a black-white casual
+#' @param cond.pers.BW.prob Probability of condom use in a black-white casual
 #'        partnership.
-#' @param c.pers.WW.prob Probability of condom use in a white-white casual
+#' @param cond.pers.WW.prob Probability of condom use in a white-white casual
 #'        partnership.
-#' @param c.inst.BB.prob Probability of condom use in a black-black one-off
+#' @param cond.inst.BB.prob Probability of condom use in a black-black one-off
 #'        partnership.
-#' @param c.inst.BW.prob Probability of condom use in a black-white one-off
+#' @param cond.inst.BW.prob Probability of condom use in a black-white one-off
 #'        partnership.
-#' @param c.inst.WW.prob Probability of condom use in a white-white one-off
+#' @param cond.inst.WW.prob Probability of condom use in a white-white one-off
 #'        partnership.
 #' @param cond.fsupp.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected is fully suppressed.
@@ -309,15 +309,15 @@ param.mard <- function(nwstats,
                        ai.diag.pers.rr = 1,
                        ai.discl.pers.rr = 1,
 
-                       c.main.BB.prob = 0.38,
-                       c.main.BW.prob = 0.10,
-                       c.main.WW.prob = 0.15,
-                       c.pers.BB.prob = 0.39,
-                       c.pers.BW.prob = 0.11,
-                       c.pers.WW.prob = 0.16,
-                       c.inst.BB.prob = 0.49,
-                       c.inst.BW.prob = 0.15,
-                       c.inst.WW.prob = 0.22,
+                       cond.main.BB.prob = 0.38,
+                       cond.main.BW.prob = 0.10,
+                       cond.main.WW.prob = 0.15,
+                       cond.pers.BB.prob = 0.39,
+                       cond.pers.BW.prob = 0.11,
+                       cond.pers.WW.prob = 0.16,
+                       cond.inst.BB.prob = 0.49,
+                       cond.inst.BW.prob = 0.15,
+                       cond.inst.WW.prob = 0.22,
 
                        cond.fsupp.main.beta = 0.0,
                        cond.psupp.main.beta = 0.0,
