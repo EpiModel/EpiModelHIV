@@ -4,125 +4,126 @@
 \alias{param.mard}
 \title{Epidemic Model Parameters for MARDHAM Models}
 \usage{
-param.mard(nwstats, last.neg.test.time.range.B = round(301/7),
-  mean.test.interv.B = round(301/7),
-  last.neg.test.time.range.W = round(315/7),
-  mean.test.interv.W = round(315/7), testing.pattern = "interval",
-  test.window.period = 3, tt.traj.freq.B = c(0.077, 0, 0.356, 0.567),
-  tt.traj.freq.W = c(0.052, 0, 0.331, 0.617), prob.tx.init.B = 0.092,
-  prob.tx.init.W = 0.127, prob.tx.halt.B = 0.0102,
-  prob.tx.halt.W = 0.0071, prob.tx.reinit.B = 0.00066,
-  prob.tx.reinit.W = 0.00291, max.time.off.tx.full = 520,
-  max.time.on.tx.part = 52 * 15, max.time.off.tx.part = 520,
-  vl.acute.rise.dur = 3, vl.acute.peak = 6.886, vl.acute.fall.dur = 3,
-  vl.set.point = 4.5, vl.aids.onset = 520, vl.aids.dur = 52 * 2,
+param.mard(nwstats, last.neg.test.B.int = round(301/7),
+  mean.test.B.int = round(301/7), last.neg.test.W.int = round(315/7),
+  mean.test.W.int = round(315/7), testing.pattern = "interval",
+  test.window.int = 3, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
+  tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
+  tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
+  tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
+  tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = 520,
+  max.time.on.tx.part.int = 52 * 15, max.time.off.tx.part.int = 520,
+  vl.acute.rise.int = 3, vl.acute.peak = 6.886, vl.acute.fall.int = 3,
+  vl.set.point = 4.5, vl.aids.onset.int = 520, vl.aids.int = 52 * 2,
   vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
-  b.rate.B = 0.001, b.rate.W = 0.001, birth.age = 18,
-  betabase.URAI = 0.0082 * 1.09, betabase.UIAI = 0.0031 * 1.09,
-  betamult.acute = 4, betamult.circ = 0.4, betamult.condom = 0.25,
-  disc.main.outset.B = (0.685 + 0.889)/2, disc.main.outset.W = (0.685 +
-  0.889)/2, disc.main.at.diag.B = 1, disc.main.at.diag.W = 1,
-  disc.main.post.diag.B = 0, disc.main.post.diag.W = 0,
-  disc.pers.outset.B = (0.527 + 0.828)/2, disc.pers.outset.W = (0.527 +
-  0.828)/2, disc.pers.at.diag.B = 1, disc.pers.at.diag.W = 1,
-  disc.pers.post.diag.B = 0, disc.pers.post.diag.W = 0,
-  disc.inst.B = (0.445 + 0.691)/2, disc.inst.W = (0.445 + 0.691)/2,
-  circ.prev.B = 0.874, circ.prev.W = 0.918, ccr5.freq.B = c(0.0105,
-  0.105), ccr5.freq.W = c(0.0105, 0.105), ccr5.heteroz.rr = 0.3,
-  num.inst.ai.classes = 1, base.exp.ai.main.BB = 1.19,
-  base.exp.ai.main.BW = 1.79, base.exp.ai.main.WW = 1.56,
-  base.exp.ai.pers.BB = 0.75, base.exp.ai.pers.BW = 1.13,
-  base.exp.ai.pers.WW = 0.98, incr.exp.ai.full.supp.main = 0,
-  incr.exp.ai.part.supp.main = 0, redux.exp.ai.diag.main = 0,
-  redux.exp.ai.discl.main = 0, incr.exp.ai.full.supp.pers = 0,
-  incr.exp.ai.part.supp.pers = 0, redux.exp.ai.diag.pers = 0,
-  redux.exp.ai.discl.pers = 0, cprob.main.BB = 0.38, cprob.main.BW = 0.1,
-  cprob.main.WW = 0.15, cprob.pers.BB = 0.39, cprob.pers.BW = 0.11,
-  cprob.pers.WW = 0.16, cprob.inst.BB = 0.49, cprob.inst.BW = 0.15,
-  cprob.inst.WW = 0.22, beta.cond.fsupp.main = 0,
-  beta.cond.psupp.main = 0, beta.cond.diag.main = -0.67,
-  beta.cond.discl.main = -0.85, beta.cond.fsupp.pers = 0,
-  beta.cond.psupp.pers = 0, beta.cond.diag.pers = -0.67,
-  beta.cond.discl.pers = -0.85, beta.cond.fsupp.inst = 0,
-  beta.cond.psupp.inst = 0, beta.cond.diag.inst = -0.67,
-  beta.cond.discl.inst = -0.85, vv.prob.iev.BB = 0.42,
-  vv.prob.iev.BW = 0.56, vv.prob.iev.WW = 0.49, ...)
+  b.B.rate = 0.001, b.W.rate = 0.001, birth.age = 18, URAI.beta = 0.0082
+  * 1.09, UIAI.beta = 0.0031 * 1.09, betamult.acute = 4,
+  betamult.circ = 0.4, betamult.condom = 0.25,
+  disc.outset.main.B.prob = (0.685 + 0.889)/2,
+  disc.outset.main.W.prob = (0.685 + 0.889)/2, disc.at.diag.main.B.prob = 1,
+  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
+  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = (0.527 +
+  0.828)/2, disc.outset.pers.W.prob = (0.527 + 0.828)/2,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = (0.445 + 0.691)/2, disc.inst.W.prob = (0.445 +
+  0.691)/2, circ.B.prob = 0.874, circ.W.prob = 0.918,
+  ccr5.B.prob = c(0.0105, 0.105), ccr5.W.prob = c(0.0105, 0.105),
+  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  base.ai.main.BB.rate = 1.19, base.ai.main.BW.rate = 1.79,
+  base.ai.main.WW.rate = 1.56, base.ai.pers.BB.rate = 0.75,
+  base.ai.pers.BW.rate = 1.13, base.ai.pers.WW.rate = 0.98,
+  incr.ai.full.supp.main.rr = 0, incr.ai.part.supp.main.rr = 0,
+  redux.ai.diag.main.rr = 0, redux.ai.discl.main.rr = 0,
+  incr.ai.full.supp.pers.rr = 0, incr.ai.part.supp.pers.rr = 0,
+  redux.ai.diag.pers.rr = 0, redux.ai.discl.pers.rr = 0,
+  c.main.BB.prob = 0.38, c.main.BW.prob = 0.1, c.main.WW.prob = 0.15,
+  c.pers.BB.prob = 0.39, c.pers.BW.prob = 0.11, c.pers.WW.prob = 0.16,
+  c.inst.BB.prob = 0.49, c.inst.BW.prob = 0.15, c.inst.WW.prob = 0.22,
+  cond.fsupp.main.beta = 0, cond.psupp.main.beta = 0,
+  cond.diag.main.beta = -0.67, cond.discl.main.beta = -0.85,
+  cond.fsupp.pers.beta = 0, cond.psupp.pers.beta = 0,
+  cond.diag.pers.beta = -0.67, cond.discl.pers.beta = -0.85,
+  cond.fsupp.inst.beta = 0, cond.psupp.inst.beta = 0,
+  cond.diag.inst.beta = -0.67, cond.discl.inst.beta = -0.85,
+  vv.iev.BB.prob = 0.42, vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49,
+  ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
 \code{nwstats} output from \code{\link{calc_nwstats.mard}}.}
 
-\item{last.neg.test.time.range.B}{Time range for last negative test for
+\item{last.neg.test.B.int}{Time range for last negative test for
 black men.}
 
-\item{mean.test.interv.B}{Mean intertest interval for black MSM who test.}
+\item{mean.test.B.int}{Mean intertest interval for black MSM who test.}
 
-\item{last.neg.test.time.range.W}{Time range for last negative test for
+\item{last.neg.test.W.int}{Time range for last negative test for
 white men.}
 
-\item{mean.test.interv.W}{Mean intertest interval for white MSM who test}
+\item{mean.test.W.int}{Mean intertest interval for white MSM who test}
 
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
 for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
-\item{test.window.period}{Length of the HIV test window period.}
+\item{test.window.int}{Length of the HIV test window period.}
 
-\item{tt.traj.freq.B}{Proportion of black MSM who enter one of four
+\item{tt.traj.B.prob}{Proportion of black MSM who enter one of four
 testing/treatment trajectories: never test or treat, test and never
 initiate treatment, test and treated with partial viral suppression,
 and test and treated with full suppression.}
 
-\item{tt.traj.freq.W}{Proportion of white MSM who enter into the four
+\item{tt.traj.W.prob}{Proportion of white MSM who enter into the four
 testing/treatment trajectories, as defined above.}
 
-\item{prob.tx.init.B}{Probability per time step that a black MSM who has
+\item{tx.init.B.prob}{Probability per time step that a black MSM who has
 tested positive will initiate treatment.}
 
-\item{prob.tx.init.W}{Probability per time step that a white MSM who has
+\item{tx.init.W.prob}{Probability per time step that a white MSM who has
 tested positive will initiate treatment.}
 
-\item{prob.tx.halt.B}{Probability per time step that a black MSM who is
+\item{tx.halt.B.prob}{Probability per time step that a black MSM who is
 currently on treatment will halt treatment.}
 
-\item{prob.tx.halt.W}{Probability per time step that a white MSM who is
+\item{tx.halt.W.prob}{Probability per time step that a white MSM who is
 currently on treatment will halt treatment.}
 
-\item{prob.tx.reinit.B}{Probability per time step that a black MSM who is
+\item{tx.reinit.B.prob}{Probability per time step that a black MSM who is
 not currently on treatment but who has been in the past will
 re-initiate treatment.}
 
-\item{prob.tx.reinit.W}{Probability per time step that a white MSM who is
+\item{tx.reinit.W.prob}{Probability per time step that a white MSM who is
 not currently on treatment but who has been in the past will
 re-initiate treatment.}
 
-\item{max.time.off.tx.full}{Number of time steps off treatment for a full
+\item{max.time.off.tx.full.int}{Number of time steps off treatment for a full
 suppressor before onset of AIDS, including time before diagnosis.}
 
-\item{max.time.on.tx.part}{Number of time steps on treatment for a
+\item{max.time.on.tx.part.int}{Number of time steps on treatment for a
 partial suppressor beofre onset of AIDS.}
 
-\item{max.time.off.tx.part}{Nnumber of time steps off treatment for a
+\item{max.time.off.tx.part.int}{Nnumber of time steps off treatment for a
 partial suppressor before onset of AIDS, including time before
 diagnosis.}
 
-\item{vl.acute.rise.dur}{Number of time steps to peak viremia during acute
+\item{vl.acute.rise.int}{Number of time steps to peak viremia during acute
 infection.}
 
 \item{vl.acute.peak}{Peak viral load (in log10 units) at the height of acute
 infection.}
 
-\item{vl.acute.fall.dur}{Number of time steps from peak viremia to set-point
+\item{vl.acute.fall.int}{Number of time steps from peak viremia to set-point
 viral load during the acute infection period.}
 
 \item{vl.set.point}{Set point viral load (in log10 units).}
 
-\item{vl.aids.onset}{Number of time steps to AIDS for a treatment-naive
+\item{vl.aids.onset.int}{Number of time steps to AIDS for a treatment-naive
 patient.}
 
-\item{vl.aids.dur}{Duration of AIDS stage infection.}
+\item{vl.aids.int}{Duration of AIDS stage infection.}
 
 \item{vl.fatal}{Viral load in AIDS at which death occurs.}
 
@@ -145,85 +146,76 @@ re-initiation until the level in \code{vl.part.supp}.}
 \item{part.supp.up.slope}{For partial suppressors, number of log10 units that
 viral load rises per time step from treatment halting until expected value.}
 
-\item{b.rate.B}{Rate at which black MSM enter the population.}
+\item{b.B.rate}{Rate at which black MSM enter the population.}
 
-\item{b.rate.W}{Rate at which white MSM enter the population.}
+\item{b.W.rate}{Rate at which white MSM enter the population.}
 
 \item{birth.age}{Age (in years) of new arrivals.}
 
-\item{betabase.URAI}{Transmissibility for a man having unprotected receptive
+\item{URAI.beta}{Transmissibility for a man having unprotected receptive
 anal intercourse with an infected man at set point viral load.}
 
-\item{betabase.UIAI}{Transmissibility for an uncircumcised man having
+\item{UIAI.beta}{Transmissibility for an uncircumcised man having
 unprotected insertive anal intercourse with an infected man at set
 point viral load.}
 
-\item{betamult.acute}{Multiplicative factor by which acute infection heightens
-infectiousness, above that predicted by elevated viral load.}
-
-\item{betamult.circ}{Factor by which to multiply infectivity from
-insertive anal sex when the negative insertive partner is circumcised.}
-
-\item{betamult.condom}{Factor by which to multiply infectivity for anal
-sex when a condom is used.}
-
-\item{disc.main.outset.B}{Probability that an HIV-infected black MSM will
+\item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
 
-\item{disc.main.outset.W}{Probability that an HIV-infected white MSM will
+\item{disc.outset.main.W.prob}{Probability that an HIV-infected white MSM will
 disclose his status at the start of a main partnership.}
 
-\item{disc.main.at.diag.B}{Probability that a black MSM already in a main
+\item{disc.at.diag.main.B.prob}{Probability that a black MSM already in a main
 partnership will disclose at the time of diagnosis.}
 
-\item{disc.main.at.diag.W}{Probability that a white MSM already in a main
+\item{disc.at.diag.main.W.prob}{Probability that a white MSM already in a main
 partnership will disclose at the time of diagnosis.}
 
-\item{disc.main.post.diag.B}{Probability that an HIV-infected black MSM
+\item{disc.post.diag.main.B.prob}{Probability that an HIV-infected black MSM
 in a main partnership will disclose his status, assuming he didn't
 at the start of the partnership or at diagnosis.}
 
-\item{disc.main.post.diag.W}{Probability that an HIV-infected white MSM
+\item{disc.post.diag.main.W.prob}{Probability that an HIV-infected white MSM
 in a main partnership will disclose his status, assuming he didn't
 at the start of the partnership or at diagnosis.}
 
-\item{disc.pers.outset.B}{Probability that an HIV-infected black MSM will
+\item{disc.outset.pers.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a casual partnership.}
 
-\item{disc.pers.outset.W}{Probability that an HIV-infected white MSM will
+\item{disc.outset.pers.W.prob}{Probability that an HIV-infected white MSM will
 disclose his status at the start of a casual partnership.}
 
-\item{disc.pers.at.diag.B}{Probability that a black MSM already in a
+\item{disc.at.diag.pers.B.prob}{Probability that a black MSM already in a
 casual partnership will disclose at the time of diagnosis.}
 
-\item{disc.pers.at.diag.W}{Probability that a white MSM already in a
+\item{disc.at.diag.pers.W.prob}{Probability that a white MSM already in a
 casual partnership will disclose at the time of diagnosis.}
 
-\item{disc.pers.post.diag.B}{Probability that an HIV-infected black MSM
+\item{disc.post.diag.pers.B.prob}{Probability that an HIV-infected black MSM
 in a casual partnership will disclose his status, assuming he
 didn't at the start of the partnership or at diagnosis.}
 
-\item{disc.pers.post.diag.W}{Probability that an HIV-infected white MSM
+\item{disc.post.diag.pers.W.prob}{Probability that an HIV-infected white MSM
 in a casual partnership will disclose his status, assuming he
 didn't at the start of the partnership or at diagnosis.}
 
-\item{disc.inst.B}{Probability that an HIV-infected black MSM will
+\item{disc.inst.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status to a one-off partner.}
 
-\item{disc.inst.W}{Probability that an HIV-infected white MSM will
+\item{disc.inst.W.prob}{Probability that an HIV-infected white MSM will
 disclose his status to a one-off partner.}
 
-\item{circ.prev.B}{Probablity that a black new arrival in the population
+\item{circ.B.prob}{Probablity that a black new arrival in the population
 will be circumcised.}
 
-\item{circ.prev.W}{Probablity that a white new arrival in the population
+\item{circ.W.prob}{Probablity that a white new arrival in the population
 will be circumcised.}
 
-\item{ccr5.freq.B}{Vector of length two of frequencies of the Delta 32
+\item{ccr5.B.prob}{Vector of length two of frequencies of the Delta 32
 mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 among black MSM.}
 
-\item{ccr5.freq.W}{Vector of length two of frequencies of the Delta 32
+\item{ccr5.W.prob}{Vector of length two of frequencies of the Delta 32
 mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 among white MSM.}
 
@@ -233,133 +225,142 @@ in the CCR5 mutation.}
 \item{num.inst.ai.classes}{Number of quantiles into which men should be
 divided in determining their levels of one-off anal intercourse.}
 
-\item{base.exp.ai.main.BB}{Expected coital frequency in black-black main
+\item{base.ai.main.BB.rate}{Expected coital frequency in black-black main
 partnerships (acts per week).}
 
-\item{base.exp.ai.main.BW}{Expected coital frequency in black-white main
+\item{base.ai.main.BW.rate}{Expected coital frequency in black-white main
 partnerships (acts per week).}
 
-\item{base.exp.ai.main.WW}{Expected coital frequency in white-white main
+\item{base.ai.main.WW.rate}{Expected coital frequency in white-white main
 partnerships (acts per week).}
 
-\item{base.exp.ai.pers.BB}{Expected coital frequency in black-black casual
+\item{base.ai.pers.BB.rate}{Expected coital frequency in black-black casual
 partnerships (acts per week).}
 
-\item{base.exp.ai.pers.BW}{Expected coital frequency in black-white casual
+\item{base.ai.pers.BW.rate}{Expected coital frequency in black-white casual
 partnerships (acts per week).}
 
-\item{base.exp.ai.pers.WW}{Expected coital frequency in white-white casual
+\item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per week).}
 
-\item{incr.exp.ai.full.supp.main}{Percent increase in expected coital
+\item{incr.ai.full.supp.main.rr}{Percent increase in expected coital
 frequency in main partnerships after full suppression.}
 
-\item{incr.exp.ai.part.supp.main}{Percent increase in expected coital
+\item{incr.ai.part.supp.main.rr}{Percent increase in expected coital
 frequency in main partnerships after partial suppression.}
 
-\item{redux.exp.ai.diag.main}{Percent reduction in expected coital frequency
+\item{redux.ai.diag.main.rr}{Percent reduction in expected coital frequency
 in main partnerships after disease diagnosis.}
 
-\item{redux.exp.ai.discl.main}{Percent reduction in expected coital frequency
+\item{redux.ai.discl.main.rr}{Percent reduction in expected coital frequency
 in main partnerships after disclosure of diseasediagnosis.}
 
-\item{incr.exp.ai.full.supp.pers}{Percent increase in expected coital
+\item{incr.ai.full.supp.pers.rr}{Percent increase in expected coital
 frequency in casual partnerships after full suppression.}
 
-\item{incr.exp.ai.part.supp.pers}{Percent increase in expected coital
+\item{incr.ai.part.supp.pers.rr}{Percent increase in expected coital
 frequency in casual partnerships after partial suppression.}
 
-\item{redux.exp.ai.diag.pers}{Percent reduction in expected coital frequency
+\item{redux.ai.diag.pers.rr}{Percent reduction in expected coital frequency
 in casual partnerships after diagnosis.}
 
-\item{redux.exp.ai.discl.pers}{Percent reduction in expected coital frequency
+\item{redux.ai.discl.pers.rr}{Percent reduction in expected coital frequency
 in casual partnerships associated after disclosure of disease diagnosis.}
 
-\item{cprob.main.BB}{Probability of condom use in a black-black main
+\item{c.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}
 
-\item{cprob.main.BW}{Probability of condom use in a black-white main
+\item{c.main.BW.prob}{Probability of condom use in a black-white main
 partnership.}
 
-\item{cprob.main.WW}{Probability of condom use in a white-white main
+\item{c.main.WW.prob}{Probability of condom use in a white-white main
 partnership.}
 
-\item{cprob.pers.BB}{Probability of condom use in a black-black casual
+\item{c.pers.BB.prob}{Probability of condom use in a black-black casual
 partnership.}
 
-\item{cprob.pers.BW}{Probability of condom use in a black-white casual
+\item{c.pers.BW.prob}{Probability of condom use in a black-white casual
 partnership.}
 
-\item{cprob.pers.WW}{Probability of condom use in a white-white casual
+\item{c.pers.WW.prob}{Probability of condom use in a white-white casual
 partnership.}
 
-\item{cprob.inst.BB}{Probability of condom use in a black-black one-off
+\item{c.inst.BB.prob}{Probability of condom use in a black-black one-off
 partnership.}
 
-\item{cprob.inst.BW}{Probability of condom use in a black-white one-off
+\item{c.inst.BW.prob}{Probability of condom use in a black-white one-off
 partnership.}
 
-\item{cprob.inst.WW}{Probability of condom use in a white-white one-off
+\item{c.inst.WW.prob}{Probability of condom use in a white-white one-off
 partnership.}
 
-\item{beta.cond.fsupp.main}{Beta multiplier for the log odds of using a
+\item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected is fully suppressed.}
 
-\item{beta.cond.psupp.main}{Beta multiplier for the log odds of using a
+\item{cond.psupp.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected is partially suppressed.}
 
-\item{beta.cond.diag.main}{Beta multiplier for the log odds of using a
+\item{cond.diag.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected man has been
 diagnosed.}
 
-\item{beta.cond.discl.main}{Beta multiplier for the log odds of using a
+\item{cond.discl.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected man has disclosed.}
 
-\item{beta.cond.fsupp.pers}{Beta multiplier for the log odds of using a
+\item{cond.fsupp.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man is fully
 suppressed.}
 
-\item{beta.cond.psupp.pers}{Beta multiplier for the log odds of using a
+\item{cond.psupp.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man is partially
 suppressed.}
 
-\item{beta.cond.diag.pers}{Beta multiplier for the log odds of using a
+\item{cond.diag.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man has been
 diagnosed.}
 
-\item{beta.cond.discl.pers}{Beta multiplier for the log odds of using a
+\item{cond.discl.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man has disclosed
 his status.}
 
-\item{beta.cond.fsupp.inst}{Beta multiplier for the log odds of using a
+\item{cond.fsupp.inst.beta}{Beta multiplier for the log odds of using a
 condom in a one-off partnership if the HIV-infected man is fully
 suppressed.}
 
-\item{beta.cond.psupp.inst}{Beta multiplier for the log odds of using a
+\item{cond.psupp.inst.beta}{Beta multiplier for the log odds of using a
 condom in a one-off partnership if the HIV-infected man is partially
 suppressed.}
 
-\item{beta.cond.diag.inst}{Beta multiplier for the log odds of using a
+\item{cond.diag.inst.beta}{Beta multiplier for the log odds of using a
 condom in a one-off partnership if the HIV-infected man has been
 diagnosed.}
 
-\item{beta.cond.discl.inst}{Beta multiplier for the log odds of using a
+\item{cond.discl.inst.beta}{Beta multiplier for the log odds of using a
 condom in a one-off partnership if the HIV-infected man has disclosed
 his status.}
 
-\item{vv.prob.iev.BB}{Probability that in a black-black partnership of
+\item{vv.iev.BB.prob}{Probability that in a black-black partnership of
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
-\item{vv.prob.iev.BW}{Probability that in a black-white partnership of
+\item{vv.iev.BW.prob}{Probability that in a black-white partnership of
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
-\item{vv.prob.iev.WW}{Probability that in a white-white partnership of
+\item{vv.iev.WW.prob}{Probability that in a white-white partnership of
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{acute.beta}{Multiplicative factor by which acute infection heightens
+infectiousness, above that predicted by elevated viral load.}
+
+\item{circ.beta}{Factor by which to multiply infectivity from
+insertive anal sex when the negative insertive partner is circumcised.}
+
+\item{condom.beta}{Factor by which to multiply infectivity for anal
+sex when a condom is used.}
 }
 \value{
 A list object of class \code{param.mard}, which can be passed to
