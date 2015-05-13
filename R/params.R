@@ -263,9 +263,9 @@ param.mard <- function(nwstats,
 
                        URAI.beta = 0.0082 * 1.09,
                        UIAI.beta = 0.0031 * 1.09,
-                       betamult.acute = 4,
-                       betamult.circ = 0.4,
-                       betamult.condom = 0.25,
+                       acute.beta = 4,
+                       circ.beta = 0.4,
+                       condom.beta = 0.25,
 
                        disc.outset.main.B.prob = (0.685 + 0.889) / 2,
                        disc.outset.main.W.prob = (0.685 + 0.889) / 2,

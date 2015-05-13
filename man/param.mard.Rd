@@ -19,9 +19,8 @@ param.mard(nwstats, last.neg.test.B.int = round(301/7),
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
   b.B.rate = 0.001, b.W.rate = 0.001, birth.age = 18, URAI.beta = 0.0082
-  * 1.09, UIAI.beta = 0.0031 * 1.09, betamult.acute = 4,
-  betamult.circ = 0.4, betamult.condom = 0.25,
-  disc.outset.main.B.prob = (0.685 + 0.889)/2,
+  * 1.09, UIAI.beta = 0.0031 * 1.09, acute.beta = 4, circ.beta = 0.4,
+  condom.beta = 0.25, disc.outset.main.B.prob = (0.685 + 0.889)/2,
   disc.outset.main.W.prob = (0.685 + 0.889)/2, disc.at.diag.main.B.prob = 1,
   disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
   disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = (0.527 +
@@ -158,6 +157,15 @@ anal intercourse with an infected man at set point viral load.}
 \item{UIAI.beta}{Transmissibility for an uncircumcised man having
 unprotected insertive anal intercourse with an infected man at set
 point viral load.}
+
+\item{acute.beta}{Multiplicative factor by which acute infection heightens
+infectiousness, above that predicted by elevated viral load.}
+
+\item{circ.beta}{Factor by which to multiply infectivity from
+insertive anal sex when the negative insertive partner is circumcised.}
+
+\item{condom.beta}{Factor by which to multiply infectivity for anal
+sex when a condom is used.}
 
 \item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
@@ -352,15 +360,6 @@ two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{acute.beta}{Multiplicative factor by which acute infection heightens
-infectiousness, above that predicted by elevated viral load.}
-
-\item{circ.beta}{Factor by which to multiply infectivity from
-insertive anal sex when the negative insertive partner is circumcised.}
-
-\item{condom.beta}{Factor by which to multiply infectivity for anal
-sex when a condom is used.}
 }
 \value{
 A list object of class \code{param.mard}, which can be passed to
