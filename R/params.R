@@ -139,21 +139,21 @@
 #'        partnerships (acts per week).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per week).
-#' @param incr.ai.full.supp.main.rr Percent increase in expected coital
+#' @param ai.full.supp.main.rr Percent increase in expected coital
 #'        frequency in main partnerships after full suppression.
-#' @param incr.ai.part.supp.main.rr Percent increase in expected coital
+#' @param ai.part.supp.main.rr Percent increase in expected coital
 #'        frequency in main partnerships after partial suppression.
-#' @param redux.ai.diag.main.rr Percent reduction in expected coital frequency
+#' @param ai.diag.main.rr Percent reduction in expected coital frequency
 #'        in main partnerships after disease diagnosis.
-#' @param redux.ai.discl.main.rr Percent reduction in expected coital frequency
-#'        in main partnerships after disclosure of diseasediagnosis.
-#' @param incr.ai.full.supp.pers.rr Percent increase in expected coital
+#' @param ai.discl.main.rr Percent reduction in expected coital frequency
+#'        in main partnerships after disclosure of disease diagnosis.
+#' @param ai.full.supp.pers.rr Percent increase in expected coital
 #'        frequency in casual partnerships after full suppression.
-#' @param incr.ai.part.supp.pers.rr Percent increase in expected coital
+#' @param ai.part.supp.pers.rr Percent increase in expected coital
 #'        frequency in casual partnerships after partial suppression.
-#' @param redux.ai.diag.pers.rr Percent reduction in expected coital frequency
+#' @param ai.diag.pers.rr Percent reduction in expected coital frequency
 #'        in casual partnerships after diagnosis.
-#' @param redux.ai.discl.pers.rr Percent reduction in expected coital frequency
+#' @param ai.discl.pers.rr Percent reduction in expected coital frequency
 #'        in casual partnerships associated after disclosure of disease diagnosis.
 #' @param c.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
@@ -296,14 +296,14 @@ param.mard <- function(nwstats,
                        base.ai.pers.BB.rate = 0.75,
                        base.ai.pers.BW.rate = 1.13,
                        base.ai.pers.WW.rate = 0.98,
-                       incr.ai.full.supp.main.rr = 0,
-                       incr.ai.part.supp.main.rr = 0,
-                       redux.ai.diag.main.rr = 0,
-                       redux.ai.discl.main.rr = 0,
-                       incr.ai.full.supp.pers.rr = 0,
-                       incr.ai.part.supp.pers.rr = 0,
-                       redux.ai.diag.pers.rr = 0,
-                       redux.ai.discl.pers.rr = 0,
+                       ai.full.supp.main.rr = 0,
+                       ai.part.supp.main.rr = 0,
+                       ai.diag.main.rr = 0,
+                       ai.discl.main.rr = 0,
+                       ai.full.supp.pers.rr = 0,
+                       ai.part.supp.pers.rr = 0,
+                       ai.diag.pers.rr = 0,
+                       ai.discl.pers.rr = 0,
 
                        c.main.BB.prob = 0.38,
                        c.main.BW.prob = 0.10,
