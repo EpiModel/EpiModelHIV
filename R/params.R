@@ -70,17 +70,18 @@
 #' @param b.B.rate Rate at which black MSM enter the population.
 #' @param b.W.rate Rate at which white MSM enter the population.
 #' @param birth.age Age (in years) of new arrivals.
-#' @param URAI.beta Transmissibility for a man having unprotected receptive
-#'        anal intercourse with an infected man at set point viral load.
-#' @param UIAI.beta Transmissibility for an uncircumcised man having
+#' @param URAI.prob Probability of transmission for a man having unprotected
+#'        receptive anal intercourse with an infected man at set point viral
+#'        load.
+#' @param UIAI.prob Probability of transmission for an uncircumcised man having
 #'        unprotected insertive anal intercourse with an infected man at set
 #'        point viral load.
-#' @param acute.beta Multiplicative factor by which acute infection heightens
-#'        infectiousness, above that predicted by elevated viral load.
-#' @param circ.beta Factor by which to multiply infectivity from
-#'        insertive anal sex when the negative insertive partner is circumcised.
-#' @param condom.beta Factor by which to multiply infectivity for anal
-#'        sex when a condom is used.
+#' @param acute.rr Relative risk of infection (compared to that predicted by
+#'        elevated viral load) when positive partner is in the acute stage.
+#' @param circ.rr Relative risk of infection from insertive anal sex when the
+#'        negative insertive partner is circumcised.
+#' @param condom.rr Relative risk of infection from anal sex when a condom is
+#'        used.
 #' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
 #' @param disc.outset.main.W.prob Probability that an HIV-infected white MSM will
@@ -265,11 +266,11 @@ param.mard <- function(nwstats,
                        b.W.rate = 1e-3,
                        birth.age = 18,
 
-                       URAI.beta = 0.0082 * 1.09,
-                       UIAI.beta = 0.0031 * 1.09,
-                       acute.beta = 4,
-                       circ.beta = 0.4,
-                       condom.beta = 0.25,
+                       URAI.prob = 0.0082 * 1.09,
+                       UIAI.prob = 0.0031 * 1.09,
+                       acute.rr = 4,
+                       circ.rr = 0.4,
+                       condom.rr = 0.25,
 
                        disc.outset.main.B.prob = 0.685,
                        disc.outset.main.W.prob = 0.889,

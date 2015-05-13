@@ -45,12 +45,12 @@ trans.mard <- function(dat, at){
   age <- dat$attr$age
 
   # Parameters
-  URAI.beta <- dat$param$URAI.beta
-  UIAI.beta <- dat$param$UIAI.beta
-  acute.beta <- dat$param$acute.beta
+  URAI.prob <- dat$param$URAI.prob
+  UIAI.prob <- dat$param$UIAI.prob
+  acute.rr <- dat$param$acute.rr
   vl.acute.fall.int <- dat$param$vl.acute.fall.int
-  condom.beta <- dat$param$condom.beta
-  circ.beta <- dat$param$circ.beta
+  condom.rr <- dat$param$condom.rr
+  circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
 
   # Data
@@ -78,12 +78,12 @@ trans.mard <- function(dat, at){
   ip.stage.time <- stage.time[disc.ip[, 1]]
   ip.ccr5 <- ccr5[disc.ip[, 2]]
 
-  trans.ip.prob <- URAI.beta * 2.45 ^ (ip.vl - 4.5)
-  trans.ip.prob[ip.stage == "AR"] <- trans.ip.prob[ip.stage == "AR"] * acute.beta
+  trans.ip.prob <- URAI.prob * 2.45 ^ (ip.vl - 4.5)
+  trans.ip.prob[ip.stage == "AR"] <- trans.ip.prob[ip.stage == "AR"] * acute.rr
   trans.ip.prob[ip.stage == "AF"] <- trans.ip.prob[ip.stage == "AF"] *
-    (1 + (acute.beta - 1) * (vl.acute.fall.int - ip.stage.time[ip.stage == "AF"]) /
+    (1 + (acute.rr - 1) * (vl.acute.fall.int - ip.stage.time[ip.stage == "AF"]) /
                                  vl.acute.fall.int)
-  trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * condom.beta
+  trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * condom.rr
   trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
   trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
@@ -94,13 +94,13 @@ trans.mard <- function(dat, at){
   rp.circ <- circ[disc.rp[, 1]]
   rp.ccr5 <- ccr5[disc.rp[, 1]]
 
-  trans.rp.prob <- UIAI.beta * 2.45 ^ (rp.vl - 4.5)
-  trans.rp.prob[rp.stage == "AR"] <- trans.rp.prob[rp.stage == "AR"] * acute.beta
+  trans.rp.prob <- UIAI.prob * 2.45 ^ (rp.vl - 4.5)
+  trans.rp.prob[rp.stage == "AR"] <- trans.rp.prob[rp.stage == "AR"] * acute.rr
   trans.rp.prob[rp.stage == "AF"] <- trans.rp.prob[rp.stage == "AF"] *
-    (1 + (acute.beta - 1) * (vl.acute.fall.int - rp.stage.time[rp.stage == "AF"] ) /
+    (1 + (acute.rr - 1) * (vl.acute.fall.int - rp.stage.time[rp.stage == "AF"] ) /
                                  vl.acute.fall.int)
-  trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.beta
-  trans.rp.prob[disc.rp$uai == 0] <- trans.rp.prob[disc.rp$uai == 0] * condom.beta
+  trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.rr
+  trans.rp.prob[disc.rp$uai == 0] <- trans.rp.prob[disc.rp$uai == 0] * condom.rr
   trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0
   trans.rp.prob[rp.ccr5 == "DW"] <- trans.rp.prob[rp.ccr5 == "DW"] * ccr5.heteroz.rr
 
