@@ -97,7 +97,7 @@ acts.mard <- function(dat, at) {
 
       exp.ai <- (num.B == 2) * base.ai.BB.rate +
                 (num.B == 1) * base.ai.BW.rate +
-                (num.B == 0) * base.ai.BW.rate
+                (num.B == 0) * base.ai.WW.rate
 
       pos.diag <- diag.status[disc.el[, 1]]
       pos.tx    <- tx.status[disc.el[, 1]]
