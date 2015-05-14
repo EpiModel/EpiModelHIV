@@ -371,8 +371,8 @@ param.mard <- function(nwstats,
 
   p$modes <- 1
 
-  p$asmr.B <- nwstats$asmr.B
-  p$asmr.W <- nwstats$asmr.W
+  p$asm.B.rate <- nwstats$asm.B.rate
+  p$asm.W.rate <- nwstats$asm.W.rate
 
   p$nwstats <- NULL
 

@@ -43,13 +43,13 @@
 #'        casual partnerships in days.
 #' @param ages Integer vector of ages in years that defines range of possible
 #'        initial ages in the population.
-#' @param asmr.B Vector of length 40 defining the age-specific mortality rate for
+#' @param asm.B.rate Vector of length 40 defining the age-specific mortality rate for
 #'        persons within that age slot, for black MSM.
-#' @param asmr.W Vector of length 40 defining the age-specific mortality rate for
+#' @param asm.W.rate Vector of length 40 defining the age-specific mortality rate for
 #'        persons within that age slot, for white MSM.
-#' @param role.freq.B Vector of length 3 for the probability of sexual role as
+#' @param role.B.prob Vector of length 3 for the probability of sexual role as
 #'        insertive, receptive, and versatile, for black MSM.
-#' @param role.freq.W Vector of length 3 for the probability of sexual role as
+#' @param role.W.prob Vector of length 3 for the probability of sexual role as
 #'        insertive, receptive, and versatile, for white MSM.
 #'
 #' @details
@@ -84,10 +84,10 @@ calc_nwstats.mard <- function(tUnit = 7,
                               durs.main,
                               durs.pers,
                               ages,
-                              asmr.B,
-                              asmr.W,
-                              role.freq.B,
-                              role.freq.W) {
+                              asm.B.rate,
+                              asm.W.rate,
+                              role.B.prob,
+                              role.W.prob) {
 
   if (sum(deg.mp.B) != 1) {
     stop("deg.mp.B must sum to 1.")
@@ -155,7 +155,7 @@ calc_nwstats.mard <- function(tUnit = 7,
 
 
   # Dissolution model
-  exp.mort <- (mean(asmr.B[ages]) + mean(asmr.W[ages])) / 2
+  exp.mort <- (mean(asm.B.rate[ages]) + mean(asm.W.rate[ages])) / 2
 
   coef.diss.m <- dissolution_coefs(dissolution = diss.main,
                                    duration = durs.main,
@@ -279,8 +279,8 @@ calc_nwstats.mard <- function(tUnit = 7,
   out$coef.diss.p <- coef.diss.p
 
   out$ages <- ages
-  out$asmr.B <- asmr.B
-  out$asmr.W <- asmr.W
+  out$asm.B.rate <- asm.B.rate
+  out$asm.W.rate <- asm.W.rate
 
   out$tUnit <- tUnit
   out$num.B <- num.B
@@ -289,8 +289,8 @@ calc_nwstats.mard <- function(tUnit = 7,
   out$deg.mp.B <- deg.mp.B
   out$deg.mp.W <- deg.mp.W
 
-  out$role.freq.B <- role.freq.B
-  out$role.freq.W <- role.freq.W
+  out$role.B.prob <- role.B.prob
+  out$role.W.prob <- role.W.prob
 
   class(out) <- "nwstats"
   return(out)
@@ -335,8 +335,8 @@ base_nw.mard <- function(nwstats) {
   age <- sample(ages, n, TRUE)
   sqrt.age <- sqrt(age)
 
-  role.B <- sample(apportion.lr(num.B, c("I", "R", "V"), nwstats$role.freq.B))
-  role.W <- sample(apportion.lr(num.W, c("I", "R", "V"), nwstats$role.freq.W))
+  role.B <- sample(apportion.lr(num.B, c("I", "R", "V"), nwstats$role.B.prob))
+  role.W <- sample(apportion.lr(num.W, c("I", "R", "V"), nwstats$role.W.prob))
   role <- rep(NA, n)
   role[race == "B"] <- role.B
   role[race == "W"] <- role.W
