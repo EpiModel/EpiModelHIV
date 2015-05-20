@@ -7,7 +7,7 @@
 #' @param nwstats Target statistics for the network model. An object of class
 #'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
 #' @param last.neg.test.B.int Time range for last negative test for
-#'        black men.
+#'        black men (default in days).
 #' @param mean.test.B.int Mean intertest interval for black MSM who test.
 #' @param last.neg.test.W.int Time range for last negative test for
 #'        white men.
@@ -228,12 +228,12 @@
 #'
 #' @export
 param.mard <- function(nwstats,
-                       last.neg.test.B.int = round(301 / 7),
-                       mean.test.B.int = round(301 / 7),
-                       last.neg.test.W.int = round(315 / 7),
-                       mean.test.W.int = round(315 / 7),
+                       last.neg.test.B.int = round(301 / time.unit),
+                       mean.test.B.int = round(301 / time.unit),
+                       last.neg.test.W.int = round(315 / time.unit),
+                       mean.test.W.int = round(315 / time.unit),
                        testing.pattern = "interval",
-                       test.window.int = 3,
+                       test.window.int = round(21 / time.unit),
 
                        tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                        tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
@@ -245,15 +245,15 @@ param.mard <- function(nwstats,
                        tx.reinit.B.prob = 0.00066,
                        tx.reinit.W.prob = 0.00291,
 
-                       max.time.off.tx.full.int = 520,
-                       max.time.on.tx.part.int = 52 * 15,
-                       max.time.off.tx.part.int = 520,
-                       vl.acute.rise.int = 3,
+                       max.time.off.tx.full.int = round(520 * 7 / time.unit),
+                       max.time.on.tx.part.int = round(52 * 15 *7 / time.unit),
+                       max.time.off.tx.part.int = round(520 * 7 / time.unit),
+                       vl.acute.rise.int = round(21 / time.unit),
                        vl.acute.peak = 6.886,
-                       vl.acute.fall.int = 3,
+                       vl.acute.fall.int = round(21 / time.unit),
                        vl.set.point = 4.5,
-                       vl.aids.onset.int = 520,
-                       vl.aids.int = 52 * 2,
+                       vl.aids.onset.int = round(520 * 7 / time.unit),
+                       vl.aids.int = round(52 * 2 * 7 / time.unit),
                        vl.fatal = 7,
                        vl.full.supp = 1.5,
                        vl.part.supp = 3.5,
