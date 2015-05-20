@@ -129,17 +129,17 @@
 #' @param num.inst.ai.classes Number of quantiles into which men should be
 #'        divided in determining their levels of one-off anal intercourse.
 #' @param base.ai.main.BB.rate Expected coital frequency in black-black main
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param base.ai.main.BW.rate Expected coital frequency in black-white main
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param base.ai.main.WW.rate Expected coital frequency in white-white main
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param base.ai.pers.BB.rate Expected coital frequency in black-black casual
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param base.ai.pers.BW.rate Expected coital frequency in black-white casual
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
-#'        partnerships (acts per week).
+#'        partnerships (acts per day).
 #' @param ai.full.supp.main.rr Relative expected coital frequency in main
 #'        partnerships after full suppression (value of 1 indicates no change).
 #' @param ai.part.supp.main.rr Relative expected coital frequency in main
@@ -295,12 +295,12 @@ param.mard <- function(nwstats,
                        ccr5.heteroz.rr = 0.3,
 
                        num.inst.ai.classes = 1,
-                       base.ai.main.BB.rate = 1.19,
-                       base.ai.main.BW.rate = 1.79,
-                       base.ai.main.WW.rate = 1.56,
-                       base.ai.pers.BB.rate = 0.75,
-                       base.ai.pers.BW.rate = 1.13,
-                       base.ai.pers.WW.rate = 0.98,
+                       base.ai.main.BB.rate = 0.17,
+                       base.ai.main.BW.rate = 0.256,
+                       base.ai.main.WW.rate = 0.223,
+                       base.ai.pers.BB.rate = 0.107,
+                       base.ai.pers.BW.rate = 0.161,
+                       base.ai.pers.WW.rate = 0.14,
                        ai.full.supp.main.rr = 1,
                        ai.part.supp.main.rr = 1,
                        ai.diag.main.rr = 1,
