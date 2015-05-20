@@ -231,12 +231,12 @@
 #'
 #' @export
 param.mard <- function(nwstats,
-                       last.neg.test.B.int = round(301 / time.unit),
-                       mean.test.B.int = round(301 / time.unit),
-                       last.neg.test.W.int = round(315 / time.unit),
-                       mean.test.W.int = round(315 / time.unit),
+                       last.neg.test.B.int = 301,
+                       mean.test.B.int = 301,
+                       last.neg.test.W.int = 315,
+                       mean.test.W.int = 315,
                        testing.pattern = "interval",
-                       test.window.int = round(21 / time.unit),
+                       test.window.int = 21,
 
                        tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                        tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
@@ -248,15 +248,15 @@ param.mard <- function(nwstats,
                        tx.reinit.B.prob = 0.00066,
                        tx.reinit.W.prob = 0.00291,
 
-                       max.time.off.tx.full.int = round(520 * 7 / time.unit),
-                       max.time.on.tx.part.int = round(52 * 15 *7 / time.unit),
-                       max.time.off.tx.part.int = round(520 * 7 / time.unit),
-                       vl.acute.rise.int = round(21 / time.unit),
+                       max.time.off.tx.full.int = 520 * 7,
+                       max.time.on.tx.part.int = 52 * 15 *7,
+                       max.time.off.tx.part.int = 520 * 7,
+                       vl.acute.rise.int = 21,
                        vl.acute.peak = 6.886,
-                       vl.acute.fall.int = round(21 / time.unit),
+                       vl.acute.fall.int = 21,
                        vl.set.point = 4.5,
-                       vl.aids.onset.int = round(520 * 7 / time.unit),
-                       vl.aids.int = round(52 * 2 * 7 / time.unit),
+                       vl.aids.onset.int = 520 * 7,
+                       vl.aids.int = 52 * 2 * 7,
                        vl.fatal = 7,
                        vl.full.supp = 1.5,
                        vl.part.supp = 3.5,
@@ -298,12 +298,12 @@ param.mard <- function(nwstats,
                        ccr5.heteroz.rr = 0.3,
 
                        num.inst.ai.classes = 1,
-                       base.ai.main.BB.rate = 0.17,
-                       base.ai.main.BW.rate = 0.256,
-                       base.ai.main.WW.rate = 0.223,
-                       base.ai.pers.BB.rate = 0.107,
-                       base.ai.pers.BW.rate = 0.161,
-                       base.ai.pers.WW.rate = 0.14,
+                       base.ai.main.BB.rate = 1.19 / 7,
+                       base.ai.main.BW.rate = 1.79 / 7,
+                       base.ai.main.WW.rate = 1.56 / 7,
+                       base.ai.pers.BB.rate = 0.75 / 7,
+                       base.ai.pers.BW.rate = 1.13 / 7,
+                       base.ai.pers.WW.rate = 0.98 / 7,
                        ai.full.supp.main.rr = 1,
                        ai.part.supp.main.rr = 1,
                        ai.diag.main.rr = 1,
@@ -362,6 +362,26 @@ param.mard <- function(nwstats,
 
   ## Pull from nwstats
   p$time.unit <- nwstats$time.unit
+
+  p$last.neg.test.B.int = round(last.neg.test.B.int / p$time.unit)
+  p$mean.test.B.int = round(mean.test.B.int / p$time.unit)
+  p$last.neg.test.W.int = round(last.neg.test.W.int / p$time.unit)
+  p$mean.test.W.int = round(mean.test.W.int / p$time.unit)
+  p$test.window.int = round(test.window.int / p$time.unit)
+  p$max.time.off.tx.full.int = round(max.time.off.tx.full.int / p$time.unit)
+  p$max.time.on.tx.part.int = round(max.time.on.tx.part.int / p$time.unit)
+  p$max.time.off.tx.part.int = round(max.time.off.tx.part.int / p$time.unit)
+  p$vl.acute.rise.int = round(vl.acute.rise.int / p$time.unit)
+  p$vl.acute.fall.int = round(vl.acute.fall.int / p$time.unit)
+  p$vl.aids.onset.int = round(vl.aids.onset.int / p$time.unit)
+  p$vl.aids.int = round(vl.aids.int / p$time.unit)
+
+  p$base.ai.main.BB.rate = base.ai.main.BB.rate * p$time.unit
+  p$base.ai.main.BW.rate = base.ai.main.BW.rate * p$time.unit
+  p$base.ai.main.WW.rate = base.ai.main.WW.rate * p$time.unit
+  p$base.ai.pers.BB.rate = base.ai.pers.BB.rate * p$time.unit
+  p$base.ai.pers.BW.rate = base.ai.pers.BW.rate * p$time.unit
+  p$base.ai.pers.WW.rate = base.ai.pers.WW.rate * p$time.unit
 
   p$role.B.prob <- nwstats$role.B.prob
   p$role.W.prob <- nwstats$role.W.prob
