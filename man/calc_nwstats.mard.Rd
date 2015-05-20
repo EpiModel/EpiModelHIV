@@ -23,10 +23,10 @@ black MSM, as a 2 by 3 matrix.}
 \item{deg.mp.W}{Degree distribution matrix for main and causal partners for
 white MSM, as a 2 by 3 matrix.}
 
-\item{mdeg.inst.B}{Mean degree, or rate, of one-off partnerships per time step
+\item{mdeg.inst.B}{Mean degree, or rate, of one-off partnerships per day
 for black MSM.}
 
-\item{mdeg.inst.W}{Mean degree, or rate, of one-off partnerships per time step
+\item{mdeg.inst.W}{Mean degree, or rate, of one-off partnerships per day
 for white MSM.}
 
 \item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, casual,

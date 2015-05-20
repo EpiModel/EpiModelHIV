@@ -11,9 +11,9 @@
 #'        black MSM, as a 2 by 3 matrix.
 #' @param deg.mp.W Degree distribution matrix for main and causal partners for
 #'        white MSM, as a 2 by 3 matrix.
-#' @param mdeg.inst.B Mean degree, or rate, of one-off partnerships per time step
+#' @param mdeg.inst.B Mean degree, or rate, of one-off partnerships per day
 #'        for black MSM.
-#' @param mdeg.inst.W Mean degree, or rate, of one-off partnerships per time step
+#' @param mdeg.inst.W Mean degree, or rate, of one-off partnerships per day
 #'        for white MSM.
 #' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, casual,
 #'        and one-off partnerships in same race for black MSM.
@@ -227,8 +227,8 @@ calc_nwstats.mard <- function(time.unit = 7,
   # Instant partnerships ----------------------------------------------------
 
   # Number of instant partnerships per time step, by main and casl degree, for race
-  num.inst.B <- num.B * deg.mp.B * mdeg.inst.B
-  num.inst.W <- num.W * deg.mp.W * mdeg.inst.W
+  num.inst.B <- num.B * deg.mp.B * mdeg.inst.B * time.unit
+  num.inst.W <- num.W * deg.mp.W * mdeg.inst.W * time.unit
 
   # Number of instant partnerships per time step, by race
   totdeg.i.by.race <- c(sum(num.inst.B), sum(num.inst.W))
