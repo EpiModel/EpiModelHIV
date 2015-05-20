@@ -43,10 +43,10 @@
 #'        casual partnerships in days.
 #' @param ages Integer vector of ages in years that defines range of possible
 #'        initial ages in the population.
-#' @param asm.B.rate Vector of length 40 defining the age-specific mortality rate
-#'        in people per day for persons within that age slot, for black MSM.
-#' @param asm.W.rate Vector of length 40 defining the age-specific mortality rate
-#'        in people per day for persons within that age slot, for white MSM.
+#' @param asm.B.rate Vector of length 40 defining the age-specific
+#'        mortality rate for persons within that age slot, for black MSM.
+#' @param asm.W.rate Vector of length 40 defining the age-specific
+#'        mortality rate for persons within that age slot, for white MSM.
 #' @param role.B.prob Vector of length 3 for the probability of sexual role as
 #'        insertive, receptive, and versatile, for black MSM.
 #' @param role.W.prob Vector of length 3 for the probability of sexual role as
