@@ -249,7 +249,7 @@ param.mard <- function(nwstats,
                        tx.reinit.W.prob = 0.00291,
 
                        max.time.off.tx.full.int = 520 * 7,
-                       max.time.on.tx.part.int = 52 * 15 *7,
+                       max.time.on.tx.part.int = 52 * 15 * 7,
                        max.time.off.tx.part.int = 520 * 7,
                        vl.acute.rise.int = 21,
                        vl.acute.peak = 6.886,
@@ -265,8 +265,8 @@ param.mard <- function(nwstats,
                        part.supp.down.slope = 0.25,
                        part.supp.up.slope = 0.25,
 
-                       b.B.rate = 1e-3,
-                       b.W.rate = 1e-3,
+                       b.B.rate = 1e-3 / 7,
+                       b.W.rate = 1e-3 / 7,
                        birth.age = 18,
 
                        URAI.prob = 0.0082 * 1.09,
@@ -376,6 +376,9 @@ param.mard <- function(nwstats,
   p$vl.aids.onset.int = round(vl.aids.onset.int / p$time.unit)
   p$vl.aids.int = round(vl.aids.int / p$time.unit)
 
+  p$b.B.rate = b.B.rate * p$time.unit
+  p$b.W.rate = b.W.rate * p$time.unit
+
   p$base.ai.main.BB.rate = base.ai.main.BB.rate * p$time.unit
   p$base.ai.main.BW.rate = base.ai.main.BW.rate * p$time.unit
   p$base.ai.main.WW.rate = base.ai.main.WW.rate * p$time.unit
@@ -394,8 +397,8 @@ param.mard <- function(nwstats,
 
   p$modes <- 1
 
-  p$asm.B.rate <- nwstats$asm.B.rate
-  p$asm.W.rate <- nwstats$asm.W.rate
+  p$asm.B.rate <- nwstats$asm.B.rate * p$time.unit
+  p$asm.W.rate <- nwstats$asm.W.rate * p$time.unit
 
   p$nwstats <- NULL
 
