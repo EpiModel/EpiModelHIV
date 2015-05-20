@@ -52,23 +52,21 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
 \item{nwstats}{Target statistics for the network model. An object of class
 \code{nwstats} output from \code{\link{calc_nwstats.mard}}.}
 
-\item{last.neg.test.B.int}{Time range for last negative test for
-black men (default in days).}
+\item{last.neg.test.B.int}{Time range in days for last negative test for
+black men.}
 
-\item{mean.test.B.int}{Mean intertest interval for black MSM who test
-(default in days).}
+\item{mean.test.B.int}{Mean intertest interval in days for black MSM who test.}
 
-\item{last.neg.test.W.int}{Time range for last negative test for
-white men (default in days).}
+\item{last.neg.test.W.int}{Time range in days for last negative test for
+white men.}
 
-\item{mean.test.W.int}{Mean intertest interval for white MSM who test
-(default in days).}
+\item{mean.test.W.int}{Mean intertest interval in days for white MSM who test.}
 
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
 for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
-\item{test.window.int}{Length of the HIV test window period (default in days).}
+\item{test.window.int}{Length of the HIV test window period in days.}
 
 \item{tt.traj.B.prob}{Proportion of black MSM who enter one of four
 testing/treatment trajectories: never test or treat, test and never
@@ -98,32 +96,31 @@ re-initiate treatment.}
 not currently on treatment but who has been in the past will
 re-initiate treatment.}
 
-\item{max.time.off.tx.full.int}{Number of time steps off treatment for a full
-suppressor before onset of AIDS, including time before diagnosis
-(default in days).}
+\item{max.time.off.tx.full.int}{Number of days off treatment for a full
+suppressor before onset of AIDS, including time before diagnosis.}
 
-\item{max.time.on.tx.part.int}{Number of time steps on treatment for a
-partial suppressor beofre onset of AIDS (default in days).}
+\item{max.time.on.tx.part.int}{Number of days on treatment for a
+partial suppressor beofre onset of AIDS.}
 
-\item{max.time.off.tx.part.int}{Nnumber of time steps off treatment for a
+\item{max.time.off.tx.part.int}{Nnumber of days off treatment for a
 partial suppressor before onset of AIDS, including time before
-diagnosis (default in days).}
+diagnosis.}
 
-\item{vl.acute.rise.int}{Number of time steps to peak viremia during acute
-infection (default in days).}
+\item{vl.acute.rise.int}{Number of days to peak viremia during acute
+infection.}
 
 \item{vl.acute.peak}{Peak viral load (in log10 units) at the height of acute
 infection.}
 
-\item{vl.acute.fall.int}{Number of time steps from peak viremia to set-point
-viral load during the acute infection period (default in days).}
+\item{vl.acute.fall.int}{Number of days from peak viremia to set-point
+viral load during the acute infection period.}
 
 \item{vl.set.point}{Set point viral load (in log10 units).}
 
-\item{vl.aids.onset.int}{Number of time steps to AIDS for a treatment-naive
-patient (default in days).}
+\item{vl.aids.onset.int}{Number of days to AIDS for a treatment-naive
+patient.}
 
-\item{vl.aids.int}{Duration of AIDS stage infection (default in days).}
+\item{vl.aids.int}{Duration of AIDS stage infection in days.}
 
 \item{vl.fatal}{Viral load in AIDS at which death occurs.}
 
