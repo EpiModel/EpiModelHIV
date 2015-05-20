@@ -4,7 +4,7 @@
 #' @description Calculates the target statistics for the formation and dissolution
 #'              components of the network model to be estimated with \code{netest}.
 #'
-#' @param tUnit Time unit relative to 1 for daily.
+#' @param time.unit Time unit relative to 1 for daily.
 #' @param num.B Population size of black MSM.
 #' @param num.W Population size of white MSM.
 #' @param deg.mp.B Degree distribution matrix for main and casual partners for
@@ -65,7 +65,7 @@
 #'
 #' @export
 #'
-calc_nwstats.mard <- function(tUnit = 7,
+calc_nwstats.mard <- function(time.unit = 7,
                               num.B,
                               num.W,
                               deg.mp.B,
@@ -282,7 +282,7 @@ calc_nwstats.mard <- function(tUnit = 7,
   out$asm.B.rate <- asm.B.rate
   out$asm.W.rate <- asm.W.rate
 
-  out$tUnit <- tUnit
+  out$time.unit <- time.unit
   out$num.B <- num.B
   out$num.W <- num.W
 
@@ -331,7 +331,7 @@ base_nw.mard <- function(nwstats) {
   race <- sample(race)
 
   ager <- nwstats$ages
-  ages <- seq(min(ager), max(ager) + 1, 1 / (365 / nwstats$tUnit))
+  ages <- seq(min(ager), max(ager) + 1, 1 / (365 / nwstats$time.unit))
   age <- sample(ages, n, TRUE)
   sqrt.age <- sqrt(age)
 

@@ -48,7 +48,7 @@ verbose.mard <- function(x, type, s, at) {
         if (verbose.int > 0 && (at %% verbose.int == 0)) {
 
           nsteps <- x$control$nsteps
-          tunit <- x$param$tUnit
+          time.unit <- x$param$time.unit
           prev <- round(x$epi$i.num[at] / x$epi$num[at], 3)
           prev.B <- round(x$epi$i.B[at] / x$epi$num.B[at], 3)
           prev.W <- round(x$epi$i.W[at] / x$epi$num.W[at], 3)
@@ -57,9 +57,9 @@ verbose.mard <- function(x, type, s, at) {
           cat("\nEpidemic Simulation")
           cat("\n==============================")
           cat("\nTimestep: ", at, "/", nsteps, sep = "")
-          cat("\nDay: ", at * tunit, "/", nsteps * tunit, sep = "")
-          cat("\nYear: ", round((at * tunit) / 365, 1), "/",
-              round((nsteps * tunit) / 365, 1), sep = "")
+          cat("\nDay: ", at * time.unit, "/", nsteps * time.unit, sep = "")
+          cat("\nYear: ", round((at * time.unit) / 365, 1), "/",
+              round((nsteps * time.unit) / 365, 1), sep = "")
           cat("\n------------------------------")
           cat("\nTotal Pop Size:", x$epi$num[at])
           cat("\nBlack Pop Size:", x$epi$num.B[at])

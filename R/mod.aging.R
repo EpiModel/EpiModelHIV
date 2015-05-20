@@ -17,12 +17,12 @@
 #'
 aging.mard <- function(dat, at) {
 
-  tUnit <- dat$param$tUnit
+  time.unit <- dat$param$time.unit
 
   age <- dat$attr$age
   active <- dat$attr$active
 
-  age[active == 1] <- age[active == 1] + tUnit / 365
+  age[active == 1] <- age[active == 1] + time.unit / 365
 
   dat$attr$age <- age
   dat$attr$sqrt.age <- sqrt(age)

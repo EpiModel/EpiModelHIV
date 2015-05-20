@@ -358,7 +358,7 @@ param.mard <- function(nwstats,
   }
 
   ## Pull from nwstats
-  p$tUnit <- nwstats$tUnit
+  p$time.unit <- nwstats$time.unit
 
   p$role.B.prob <- nwstats$role.B.prob
   p$role.W.prob <- nwstats$role.W.prob

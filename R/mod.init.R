@@ -210,7 +210,7 @@ init_status.mard <- function(dat) {
   inf.stage <- rep(NA, num)
 
   time.sex.active <- pmax(1,
-                          round((365 / dat$param$tUnit) * age - (365 / dat$param$tUnit) *
+                          round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
                                   min(dat$init$ages), 0))
 
   vlar.int <- dat$param$vl.acute.rise.int
