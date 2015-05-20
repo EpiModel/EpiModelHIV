@@ -4,18 +4,21 @@
 \alias{param.mard}
 \title{Epidemic Model Parameters for MARDHAM Models}
 \usage{
-param.mard(nwstats, last.neg.test.B.int = round(301/7),
-  mean.test.B.int = round(301/7), last.neg.test.W.int = round(315/7),
-  mean.test.W.int = round(315/7), testing.pattern = "interval",
-  test.window.int = 3, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
-  tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
-  tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
+param.mard(nwstats, last.neg.test.B.int = round(301/time.unit),
+  mean.test.B.int = round(301/time.unit),
+  last.neg.test.W.int = round(315/time.unit),
+  mean.test.W.int = round(315/time.unit), testing.pattern = "interval",
+  test.window.int = round(21/time.unit), tt.traj.B.prob = c(0.077, 0, 0.356,
+  0.567), tt.traj.W.prob = c(0.052, 0, 0.331, 0.617),
+  tx.init.B.prob = 0.092, tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
   tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
-  tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = 520,
-  max.time.on.tx.part.int = 52 * 15, max.time.off.tx.part.int = 520,
-  vl.acute.rise.int = 3, vl.acute.peak = 6.886, vl.acute.fall.int = 3,
-  vl.set.point = 4.5, vl.aids.onset.int = 520, vl.aids.int = 52 * 2,
-  vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
+  tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = round(520 *
+  7/time.unit), max.time.on.tx.part.int = round(52 * 15 * 7/time.unit),
+  max.time.off.tx.part.int = round(520 * 7/time.unit),
+  vl.acute.rise.int = round(21/time.unit), vl.acute.peak = 6.886,
+  vl.acute.fall.int = round(21/time.unit), vl.set.point = 4.5,
+  vl.aids.onset.int = round(520 * 7/time.unit), vl.aids.int = round(52 * 2 *
+  7/time.unit), vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
   b.B.rate = 0.001, b.W.rate = 0.001, birth.age = 18, URAI.prob = 0.0082
@@ -30,9 +33,9 @@ param.mard(nwstats, last.neg.test.B.int = round(301/7),
   disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
   ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
   ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
-  base.ai.main.BB.rate = 1.19, base.ai.main.BW.rate = 1.79,
-  base.ai.main.WW.rate = 1.56, base.ai.pers.BB.rate = 0.75,
-  base.ai.pers.BW.rate = 1.13, base.ai.pers.WW.rate = 0.98,
+  base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.256,
+  base.ai.main.WW.rate = 0.223, base.ai.pers.BB.rate = 0.107,
+  base.ai.pers.BW.rate = 0.161, base.ai.pers.WW.rate = 0.14,
   ai.full.supp.main.rr = 1, ai.part.supp.main.rr = 1, ai.diag.main.rr = 1,
   ai.discl.main.rr = 1, ai.full.supp.pers.rr = 1,
   ai.part.supp.pers.rr = 1, ai.diag.pers.rr = 1, ai.discl.pers.rr = 1,
@@ -54,20 +57,22 @@ param.mard(nwstats, last.neg.test.B.int = round(301/7),
 \code{nwstats} output from \code{\link{calc_nwstats.mard}}.}
 
 \item{last.neg.test.B.int}{Time range for last negative test for
-black men.}
+black men (default in days).}
 
-\item{mean.test.B.int}{Mean intertest interval for black MSM who test.}
+\item{mean.test.B.int}{Mean intertest interval for black MSM who test
+(default in days).}
 
 \item{last.neg.test.W.int}{Time range for last negative test for
-white men.}
+white men (default in days).}
 
-\item{mean.test.W.int}{Mean intertest interval for white MSM who test}
+\item{mean.test.W.int}{Mean intertest interval for white MSM who test
+(default in days).}
 
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
 for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
-\item{test.window.int}{Length of the HIV test window period.}
+\item{test.window.int}{Length of the HIV test window period (default in days).}
 
 \item{tt.traj.B.prob}{Proportion of black MSM who enter one of four
 testing/treatment trajectories: never test or treat, test and never
@@ -98,30 +103,31 @@ not currently on treatment but who has been in the past will
 re-initiate treatment.}
 
 \item{max.time.off.tx.full.int}{Number of time steps off treatment for a full
-suppressor before onset of AIDS, including time before diagnosis.}
+suppressor before onset of AIDS, including time before diagnosis
+(default in days).}
 
 \item{max.time.on.tx.part.int}{Number of time steps on treatment for a
-partial suppressor beofre onset of AIDS.}
+partial suppressor beofre onset of AIDS (default in days).}
 
 \item{max.time.off.tx.part.int}{Nnumber of time steps off treatment for a
 partial suppressor before onset of AIDS, including time before
-diagnosis.}
+diagnosis (default in days).}
 
 \item{vl.acute.rise.int}{Number of time steps to peak viremia during acute
-infection.}
+infection (default in days).}
 
 \item{vl.acute.peak}{Peak viral load (in log10 units) at the height of acute
 infection.}
 
 \item{vl.acute.fall.int}{Number of time steps from peak viremia to set-point
-viral load during the acute infection period.}
+viral load during the acute infection period (default in days).}
 
 \item{vl.set.point}{Set point viral load (in log10 units).}
 
 \item{vl.aids.onset.int}{Number of time steps to AIDS for a treatment-naive
-patient.}
+patient (default in days).}
 
-\item{vl.aids.int}{Duration of AIDS stage infection.}
+\item{vl.aids.int}{Duration of AIDS stage infection (default in days).}
 
 \item{vl.fatal}{Viral load in AIDS at which death occurs.}
 
@@ -234,22 +240,22 @@ in the CCR5 mutation.}
 divided in determining their levels of one-off anal intercourse.}
 
 \item{base.ai.main.BB.rate}{Expected coital frequency in black-black main
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{base.ai.main.BW.rate}{Expected coital frequency in black-white main
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{base.ai.main.WW.rate}{Expected coital frequency in white-white main
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{base.ai.pers.BB.rate}{Expected coital frequency in black-black casual
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{base.ai.pers.BW.rate}{Expected coital frequency in black-white casual
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
-partnerships (acts per week).}
+partnerships (acts per day).}
 
 \item{ai.full.supp.main.rr}{Relative expected coital frequency in main
 partnerships after full suppression (value of 1 indicates no change).}

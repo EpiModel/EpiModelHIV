@@ -4,14 +4,14 @@
 \alias{calc_nwstats.mard}
 \title{Calculate Target Statistics for Network Model Estimation}
 \usage{
-calc_nwstats.mard(tUnit = 7, num.B, num.W, deg.mp.B, deg.mp.W, mdeg.inst.B,
-  mdeg.inst.W, prop.hom.mpi.B, prop.hom.mpi.W, balance = "mean",
+calc_nwstats.mard(time.unit = 7, num.B, num.W, deg.mp.B, deg.mp.W,
+  mdeg.inst.B, mdeg.inst.W, prop.hom.mpi.B, prop.hom.mpi.W, balance = "mean",
   sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW, age.method = "heterogeneous",
   diss.main, diss.pers, durs.main, durs.pers, ages, asm.B.rate, asm.W.rate,
   role.B.prob, role.W.prob)
 }
 \arguments{
-\item{tUnit}{Time unit relative to 1 for daily.}
+\item{time.unit}{Time unit relative to 1 for daily.}
 
 \item{num.B}{Population size of black MSM.}
 

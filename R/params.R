@@ -8,14 +8,16 @@
 #'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
 #' @param last.neg.test.B.int Time range for last negative test for
 #'        black men (default in days).
-#' @param mean.test.B.int Mean intertest interval for black MSM who test.
+#' @param mean.test.B.int Mean intertest interval for black MSM who test
+#'        (default in days).
 #' @param last.neg.test.W.int Time range for last negative test for
-#'        white men.
+#'        white men (default in days).
 #' @param mean.test.W.int Mean intertest interval for white MSM who test
+#'        (default in days).
 #' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
-#' @param test.window.int Length of the HIV test window period.
+#' @param test.window.int Length of the HIV test window period (default in days).
 #' @param tt.traj.B.prob Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
 #'        initiate treatment, test and treated with partial viral suppression,
@@ -37,22 +39,23 @@
 #'        not currently on treatment but who has been in the past will
 #'        re-initiate treatment.
 #' @param max.time.off.tx.full.int Number of time steps off treatment for a full
-#'        suppressor before onset of AIDS, including time before diagnosis.
+#'        suppressor before onset of AIDS, including time before diagnosis
+#'        (default in days).
 #' @param max.time.on.tx.part.int Number of time steps on treatment for a
-#'        partial suppressor beofre onset of AIDS.
+#'        partial suppressor beofre onset of AIDS (default in days).
 #' @param max.time.off.tx.part.int Nnumber of time steps off treatment for a
 #'        partial suppressor before onset of AIDS, including time before
-#'        diagnosis.
+#'        diagnosis (default in days).
 #' @param vl.acute.rise.int Number of time steps to peak viremia during acute
-#'        infection.
+#'        infection (default in days).
 #' @param vl.acute.peak Peak viral load (in log10 units) at the height of acute
 #'        infection.
 #' @param vl.acute.fall.int Number of time steps from peak viremia to set-point
-#'        viral load during the acute infection period.
+#'        viral load during the acute infection period (default in days).
 #' @param vl.set.point Set point viral load (in log10 units).
 #' @param vl.aids.onset.int Number of time steps to AIDS for a treatment-naive
-#'        patient.
-#' @param vl.aids.int Duration of AIDS stage infection.
+#'        patient (default in days).
+#' @param vl.aids.int Duration of AIDS stage infection (default in days).
 #' @param vl.fatal Viral load in AIDS at which death occurs.
 #' @param vl.full.supp Log10 viral load at full suppression on ART.
 #' @param vl.part.supp Log10 viral load at partial suppression on ART.
