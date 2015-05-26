@@ -158,7 +158,7 @@ calc_nwstats.mard <- function(time.unit = 7,
   exp.mort <- (mean(asm.B.rate[ages]) + mean(asm.W.rate[ages])) / 2
 
   coef.diss.m <- dissolution_coefs(dissolution = diss.main,
-                                   duration = durs.main,
+                                   duration = durs.main / time.unit,
                                    d.rate = exp.mort)
 
 
@@ -215,7 +215,7 @@ calc_nwstats.mard <- function(time.unit = 7,
 
   # Dissolution model
   coef.diss.p <- dissolution_coefs(dissolution = diss.pers,
-                                   duration = durs.pers,
+                                   duration = durs.pers / time.unit,
                                    d.rate = exp.mort)
 
 

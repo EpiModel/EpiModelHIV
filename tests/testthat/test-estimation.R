@@ -15,10 +15,10 @@ test_that("calc_nwstats.mard testing", {
                      byrow = TRUE, nrow = 2)
 
   mdeg.inst.B <- matrix(c(2.39, 3.27, 2.43,
-                          2.17, 1.85, 1.85) * time.unit/100,
+                          2.17, 1.85, 1.85) / 100,
                         byrow = TRUE, nrow = 2)
   mdeg.inst.W <- matrix(c(1.82, 1.62, 2.66,
-                          1.00, 2.23, 2.23) * time.unit/100,
+                          1.00, 2.23, 2.23) / 100,
                         byrow = TRUE, nrow = 2)
 
   prop.hom.mpi.B <- c(0.9484, 0.9019, 0.9085)
@@ -28,21 +28,21 @@ test_that("calc_nwstats.mard testing", {
   sqrt.adiff.BW <- c(0.454, 0.629, 0.585)
   sqrt.adiff.WW <- c(0.520, 0.632, 0.590)
 
-  durs.main <- c(421, 662, 963) / time.unit
-  durs.pers <- c(326, 344, 347) / time.unit
+  durs.main <- c(421, 662, 963)
+  durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  asm.B.rate <- c(rep(0, 17),
-              1 - (1 - c(rep(0.00159, 7),
-                         rep(0.00225, 10),
-                         rep(0.00348, 5))) ^ (1/(365/time.unit)),
-              1)
-
-  asm.W.rate <- c(rep(0, 17),
-              1 - (1 - c(rep(0.00103, 7),
-                         rep(0.00133, 10),
-                         rep(0.00214, 5))) ^ (1/(365/time.unit)),
-              1)
+  as.surv.B.rate <- c(rep(1, 17),
+                      (1 - c(rep(0.00159, 7),
+                             rep(0.00225, 10),
+                             rep(0.00348, 5))) ^ (1/365),
+                      0)
+  
+  as.surv.W.rate <- c(rep(1, 17),
+                      (1 - c(rep(0.00103, 7),
+                             rep(0.00133, 10),
+                             rep(0.00214, 5))) ^ (1/365),
+                      0)
 
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
@@ -67,8 +67,8 @@ test_that("calc_nwstats.mard testing", {
     durs.main = durs.main,
     durs.pers = durs.pers,
     ages = ages,
-    asm.B.rate = asm.B.rate,
-    asm.W.rate = asm.W.rate,
+    as.surv.B.rate = as.surv.B.rate,
+    as.surv.W.rate = as.surv.W.rate,
     role.B.prob = role.B.prob,
     role.W.prob = role.W.prob)
 
@@ -91,10 +91,10 @@ test_that("base.nw.mard tests", {
                      byrow = TRUE, nrow = 2)
 
   mdeg.inst.B <- matrix(c(2.39, 3.27, 2.43,
-                          2.17, 1.85, 1.85) * time.unit/100,
+                          2.17, 1.85, 1.85) / 100,
                         byrow = TRUE, nrow = 2)
   mdeg.inst.W <- matrix(c(1.82, 1.62, 2.66,
-                          1.00, 2.23, 2.23) * time.unit/100,
+                          1.00, 2.23, 2.23) / 100,
                         byrow = TRUE, nrow = 2)
 
   prop.hom.mpi.B <- c(0.9484, 0.9019, 0.9085)
@@ -104,21 +104,21 @@ test_that("base.nw.mard tests", {
   sqrt.adiff.BW <- c(0.454, 0.629, 0.585)
   sqrt.adiff.WW <- c(0.520, 0.632, 0.590)
 
-  durs.main <- c(421, 662, 963) / time.unit
-  durs.pers <- c(326, 344, 347) / time.unit
+  durs.main <- c(421, 662, 963)
+  durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  asm.B.rate <- c(rep(0, 17),
-              1 - (1 - c(rep(0.00159, 7),
-                         rep(0.00225, 10),
-                         rep(0.00348, 5))) ^ (1/(365/time.unit)),
-              1)
-
-  asm.W.rate <- c(rep(0, 17),
-              1 - (1 - c(rep(0.00103, 7),
-                         rep(0.00133, 10),
-                         rep(0.00214, 5))) ^ (1/(365/time.unit)),
-              1)
+  as.surv.B.rate <- c(rep(1, 17),
+                      (1 - c(rep(0.00159, 7),
+                             rep(0.00225, 10),
+                             rep(0.00348, 5))) ^ (1/365),
+                      0)
+  
+  as.surv.W.rate <- c(rep(1, 17),
+                      (1 - c(rep(0.00103, 7),
+                             rep(0.00133, 10),
+                             rep(0.00214, 5))) ^ (1/365),
+                      0)
 
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
