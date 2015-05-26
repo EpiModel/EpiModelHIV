@@ -68,9 +68,9 @@ acts.mard <- function(dat, at) {
       }
     }
     if (type == "inst") {
-      base.ai.BB.rate <- 1/7
-      base.ai.BW.rate <- 1/7
-      base.ai.WW.rate <- 1/7
+      base.ai.BB.rate <- 1
+      base.ai.BW.rate <- 1
+      base.ai.WW.rate <- 1
       ai.diag.rr <- 1
       ai.discl.rr <- 1
       ai.full.supp.rr <- 1
