@@ -32,17 +32,17 @@ test_that("calc_nwstats.mard testing", {
   durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  as.surv.B.rate <- c(rep(1, 17),
-                      (1 - c(rep(0.00159, 7),
+  asm.B.rate <- c(rep(1, 17),
+                  1 - (1 - c(rep(0.00159, 7),
                              rep(0.00225, 10),
-                             rep(0.00348, 5))) ^ (1/365),
-                      0)
-  
-  as.surv.W.rate <- c(rep(1, 17),
-                      (1 - c(rep(0.00103, 7),
+                             rep(0.00348, 5))) ^ (1/(365/time.unit)),
+                  1)
+
+  asm.W.rate <- c(rep(1, 17),
+                  1 - (1 - c(rep(0.00103, 7),
                              rep(0.00133, 10),
-                             rep(0.00214, 5))) ^ (1/365),
-                      0)
+                             rep(0.00214, 5))) ^ (1/(365/time.unit)),
+                  1)
 
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
@@ -67,8 +67,8 @@ test_that("calc_nwstats.mard testing", {
     durs.main = durs.main,
     durs.pers = durs.pers,
     ages = ages,
-    as.surv.B.rate = as.surv.B.rate,
-    as.surv.W.rate = as.surv.W.rate,
+    asm.B.rate = asm.B.rate,
+    asm.W.rate = asm.W.rate,
     role.B.prob = role.B.prob,
     role.W.prob = role.W.prob)
 
@@ -108,17 +108,17 @@ test_that("base.nw.mard tests", {
   durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  as.surv.B.rate <- c(rep(1, 17),
-                      (1 - c(rep(0.00159, 7),
+  asm.B.rate <- c(rep(1, 17),
+                  1 - (1 - c(rep(0.00159, 7),
                              rep(0.00225, 10),
-                             rep(0.00348, 5))) ^ (1/365),
-                      0)
-  
-  as.surv.W.rate <- c(rep(1, 17),
-                      (1 - c(rep(0.00103, 7),
+                             rep(0.00348, 5))) ^ (1/(365/time.unit)),
+                  1)
+
+  asm.W.rate <- c(rep(1, 17),
+                  1 - (1 - c(rep(0.00103, 7),
                              rep(0.00133, 10),
-                             rep(0.00214, 5))) ^ (1/365),
-                      0)
+                             rep(0.00214, 5))) ^ (1/(365/time.unit)),
+                  1)
 
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
