@@ -43,10 +43,10 @@
 #'        casual partnerships in days.
 #' @param ages Integer vector of ages in years that defines range of possible
 #'        initial ages in the population.
-#' @param as.surv.B.rate Vector of length 40 defining the age-specific
-#'        daily survival rate for persons within that age slot, for black MSM.
-#' @param as.surv.W.rate Vector of length 40 defining the age-specific
-#'        daily survival rate for persons within that age slot, for white MSM.
+#' @param asm.B.rate Vector of length 40 defining the age-specific
+#'        mortality rate for persons within that age slot, for black MSM.
+#' @param asm.W.rate Vector of length 40 defining the age-specific
+#'        mortality rate for persons within that age slot, for white MSM.
 #' @param role.B.prob Vector of length 3 for the probability of sexual role as
 #'        insertive, receptive, and versatile, for black MSM.
 #' @param role.W.prob Vector of length 3 for the probability of sexual role as
@@ -84,8 +84,8 @@ calc_nwstats.mard <- function(time.unit = 7,
                               durs.main,
                               durs.pers,
                               ages,
-                              as.surv.B.rate,
-                              as.surv.W.rate,
+                              asm.B.rate,
+                              asm.W.rate,
                               role.B.prob,
                               role.W.prob) {
 
@@ -103,10 +103,6 @@ calc_nwstats.mard <- function(time.unit = 7,
   # deg main nodal attribute
   deg.main.B <- apportion.lr(num.B, c("B0", "B1"), rowSums(deg.mp.B))
   deg.main.W <- apportion.lr(num.W, c("W0", "W1"), rowSums(deg.mp.W))
-
-  # Scale survival rates by time.unit and transform to mortality rates
-  asm.B.rate <- 1 - as.surv.B.rate ^ time.unit
-  asm.W.rate <- 1 - as.surv.W.rate ^ time.unit
 
   # Main partnerships -------------------------------------------------------
 
