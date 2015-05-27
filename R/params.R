@@ -360,18 +360,8 @@ param.mard <- function(nwstats,
   ## Pull from nwstats
   p$time.unit <- nwstats$time.unit
 
-  p$last.neg.test.B.int = round(last.neg.test.B.int / p$time.unit)
-  p$mean.test.B.int = round(mean.test.B.int / p$time.unit)
-  p$last.neg.test.W.int = round(last.neg.test.W.int / p$time.unit)
-  p$mean.test.W.int = round(mean.test.W.int / p$time.unit)
-  p$test.window.int = round(test.window.int / p$time.unit)
-  p$max.time.off.tx.full.int = round(max.time.off.tx.full.int / p$time.unit)
-  p$max.time.on.tx.part.int = round(max.time.on.tx.part.int / p$time.unit)
-  p$max.time.off.tx.part.int = round(max.time.off.tx.part.int / p$time.unit)
-  p$vl.acute.rise.int = round(vl.acute.rise.int / p$time.unit)
-  p$vl.acute.fall.int = round(vl.acute.fall.int / p$time.unit)
-  p$vl.aids.onset.int = round(vl.aids.onset.int / p$time.unit)
-  p$vl.aids.int = round(vl.aids.int / p$time.unit)
+  intvars <- grep(names(p), pattern = ".int", fixed = TRUE)
+  p[intvars] <- lapply(p[intvars], FUN = function(x) {round(x / p$time.unit)})
 
   p$b.B.rate = b.B.rate * p$time.unit
   p$b.W.rate = b.W.rate * p$time.unit
