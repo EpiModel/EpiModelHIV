@@ -32,13 +32,13 @@ test_that("calc_nwstats.mard testing", {
   durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  asm.B.rate <- c(rep(0, 17),
+  asmr.B <- c(rep(0, 17),
                   1 - (1 - c(rep(0.00159, 7),
                              rep(0.00225, 10),
                              rep(0.00348, 5))) ^ (1/(365/time.unit)),
                   1)
 
-  asm.W.rate <- c(rep(0, 17),
+  asmr.W <- c(rep(0, 17),
                   1 - (1 - c(rep(0.00103, 7),
                              rep(0.00133, 10),
                              rep(0.00214, 5))) ^ (1/(365/time.unit)),
@@ -67,8 +67,8 @@ test_that("calc_nwstats.mard testing", {
     durs.main = durs.main,
     durs.pers = durs.pers,
     ages = ages,
-    asm.B.rate = asm.B.rate,
-    asm.W.rate = asm.W.rate,
+    asmr.B = asmr.B,
+    asmr.W = asmr.W,
     role.B.prob = role.B.prob,
     role.W.prob = role.W.prob)
 
@@ -108,17 +108,17 @@ test_that("base.nw.mard tests", {
   durs.pers <- c(326, 344, 347)
 
   ages <- 18:39
-  asm.B.rate <- c(rep(1, 17),
-                  1 - (1 - c(rep(0.00159, 7),
-                             rep(0.00225, 10),
-                             rep(0.00348, 5))) ^ (1/(365/time.unit)),
-                  1)
+  asmr.B <- c(rep(0, 17),
+              1 - (1 - c(rep(0.00159, 7),
+                         rep(0.00225, 10),
+                         rep(0.00348, 5))) ^ (1/(365/time.unit)),
+              1)
 
-  asm.W.rate <- c(rep(1, 17),
-                  1 - (1 - c(rep(0.00103, 7),
-                             rep(0.00133, 10),
-                             rep(0.00214, 5))) ^ (1/(365/time.unit)),
-                  1)
+  asmr.W <- c(rep(0, 17),
+              1 - (1 - c(rep(0.00103, 7),
+                         rep(0.00133, 10),
+                         rep(0.00214, 5))) ^ (1/(365/time.unit)),
+              1)
 
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
@@ -143,8 +143,8 @@ test_that("base.nw.mard tests", {
     durs.main = durs.main,
     durs.pers = durs.pers,
     ages = ages,
-    asm.B.rate = asm.B.rate,
-    asm.W.rate = asm.W.rate,
+    asmr.B = asmr.B,
+    asmr.W = asmr.W,
     role.B.prob = role.B.prob,
     role.W.prob = role.W.prob)
 

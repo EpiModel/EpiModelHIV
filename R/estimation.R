@@ -43,9 +43,9 @@
 #'        casual partnerships in days.
 #' @param ages Integer vector of ages in years that defines range of possible
 #'        initial ages in the population.
-#' @param asm.B.rate Vector of length 40 defining the age-specific
+#' @param asmr.B Vector of length 40 defining the age-specific
 #'        mortality rate for persons within that age slot, for black MSM.
-#' @param asm.W.rate Vector of length 40 defining the age-specific
+#' @param asmr.W Vector of length 40 defining the age-specific
 #'        mortality rate for persons within that age slot, for white MSM.
 #' @param role.B.prob Vector of length 3 for the probability of sexual role as
 #'        insertive, receptive, and versatile, for black MSM.
@@ -84,8 +84,8 @@ calc_nwstats.mard <- function(time.unit = 7,
                               durs.main,
                               durs.pers,
                               ages,
-                              asm.B.rate,
-                              asm.W.rate,
+                              asmr.B,
+                              asmr.W,
                               role.B.prob,
                               role.W.prob) {
 
@@ -155,7 +155,7 @@ calc_nwstats.mard <- function(time.unit = 7,
 
 
   # Dissolution model
-  exp.mort <- (mean(asm.B.rate[ages]) + mean(asm.W.rate[ages])) / 2
+  exp.mort <- (mean(asmr.B[ages]) + mean(asmr.W[ages])) / 2
 
   coef.diss.m <- dissolution_coefs(dissolution = diss.main,
                                    duration = durs.main / time.unit,
@@ -279,8 +279,8 @@ calc_nwstats.mard <- function(time.unit = 7,
   out$coef.diss.p <- coef.diss.p
 
   out$ages <- ages
-  out$asm.B.rate <- asm.B.rate
-  out$asm.W.rate <- asm.W.rate
+  out$asmr.B <- asmr.B
+  out$asmr.W <- asmr.W
 
   out$time.unit <- time.unit
   out$num.B <- num.B

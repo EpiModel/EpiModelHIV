@@ -7,8 +7,8 @@
 calc_nwstats.mard(time.unit = 7, num.B, num.W, deg.mp.B, deg.mp.W,
   mdeg.inst.B, mdeg.inst.W, prop.hom.mpi.B, prop.hom.mpi.W, balance = "mean",
   sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW, age.method = "heterogeneous",
-  diss.main, diss.pers, durs.main, durs.pers, ages, asm.B.rate, asm.W.rate,
-  role.B.prob, role.W.prob)
+  diss.main, diss.pers, durs.main, durs.pers, ages, asmr.B, asmr.W, role.B.prob,
+  role.W.prob)
 }
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}
@@ -69,10 +69,10 @@ casual partnerships in days.}
 \item{ages}{Integer vector of ages in years that defines range of possible
 initial ages in the population.}
 
-\item{asm.B.rate}{Vector of length 40 defining the age-specific
+\item{asmr.B}{Vector of length 40 defining the age-specific
 mortality rate for persons within that age slot, for black MSM.}
 
-\item{asm.W.rate}{Vector of length 40 defining the age-specific
+\item{asmr.W}{Vector of length 40 defining the age-specific
 mortality rate for persons within that age slot, for white MSM.}
 
 \item{role.B.prob}{Vector of length 3 for the probability of sexual role as
