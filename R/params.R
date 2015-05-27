@@ -363,15 +363,8 @@ param.mard <- function(nwstats,
   intvars <- grep(names(p), pattern = ".int", fixed = TRUE)
   p[intvars] <- lapply(p[intvars], FUN = function(x) {round(x / p$time.unit)})
 
-  p$b.B.rate = b.B.rate * p$time.unit
-  p$b.W.rate = b.W.rate * p$time.unit
-
-  p$base.ai.main.BB.rate = base.ai.main.BB.rate * p$time.unit
-  p$base.ai.main.BW.rate = base.ai.main.BW.rate * p$time.unit
-  p$base.ai.main.WW.rate = base.ai.main.WW.rate * p$time.unit
-  p$base.ai.pers.BB.rate = base.ai.pers.BB.rate * p$time.unit
-  p$base.ai.pers.BW.rate = base.ai.pers.BW.rate * p$time.unit
-  p$base.ai.pers.WW.rate = base.ai.pers.WW.rate * p$time.unit
+  ratevars <- grep(names(p), pattern = ".rate", fixed = TRUE)
+  p[ratevars] <- lapply(p[ratevars], FUN = function(x) {x * p$time.unit})
 
   p$role.B.prob <- nwstats$role.B.prob
   p$role.W.prob <- nwstats$role.W.prob
