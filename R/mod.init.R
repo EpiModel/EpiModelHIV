@@ -36,6 +36,7 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$nw <- list()
   for (i in 1:3) {
     dat$nw[[i]] <- simulate(x[[i]]$fit)
+    dat$nw[[i]] <- remove_bad_roles(dat$nw[[i]])                                #### HERE
     if (i %in% 1:2) {
       dat$nw[[i]] <- activate.vertices(dat$nw[[i]], onset = 1, terminus = Inf)
       if (control$delete.nodes == TRUE) {
@@ -140,6 +141,30 @@ initialize.mard <- function(x, param, init, control, s) {
   class(dat) <- "dat"
   return(dat)
 
+}
+
+
+remove_bad_roles <- function(nw) {
+
+  el <- as.edgelist(nw)
+
+  rc <- get.vertex.attribute(nw, "role.class")
+  rc.el <- matrix(rc[el], ncol = 2)
+
+  rc.el.bad <- which((rc.el[, 1] == "R" & rc.el[, 2] == "R") |
+                     (rc.el[, 1] == "I" & rc.el[, 2] == "I"))
+
+  if (length(rc.el.bad) > 0) {
+    el.bad <- el[rc.el.bad, ]
+
+    eid <- rep(NA, nrow(el.bad))
+    for (i in 1:nrow(el.bad)) {
+      eid[i] <- get.edgeIDs(nw, v = el.bad[i, 1], alter = el.bad[i, 2])
+    }
+    nw <- delete.edges(nw, eid)
+  }
+
+  return(nw)
 }
 
 
