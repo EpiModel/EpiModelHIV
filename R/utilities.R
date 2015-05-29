@@ -36,3 +36,21 @@ apportion.lr <- function(vector.length,values,proportions,shuffled=F) {
 
   return(result)
 }
+
+# Create a list of all the input parameters to
+# param.mard, init.mard, control.mard
+assign.formals <- function(formal.args, dot.args){
+  p <- list()
+  formal.args[["..."]] <- NULL
+  for (arg in names(formal.args)) {
+    p[arg] <- list(get(arg))
+  }
+
+  names.dot.args <- names(dot.args)
+  if (length(dot.args) > 0) {
+    for (i in 1:length(dot.args)) {
+      p[[names.dot.args[i]]] <- dot.args[[i]]
+    }
+  }
+  p
+}
