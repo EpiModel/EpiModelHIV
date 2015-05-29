@@ -43,7 +43,7 @@ assign.formals <- function(formal.args, dot.args){
   p <- list()
   formal.args[["..."]] <- NULL
   for (arg in names(formal.args)) {
-    p[arg] <- list(get(arg))
+    p[arg] <- list(get(arg, pos = parent.frame()))
   }
 
   names.dot.args <- names(dot.args)
