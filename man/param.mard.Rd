@@ -46,7 +46,10 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   cond.discl.pers.beta = -0.85, cond.fsupp.inst.beta = 0,
   cond.psupp.inst.beta = 0, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
-  vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, ...)
+  vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
+  prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
+  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0.2,
+  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -361,6 +364,24 @@ two versatile men, they will engage in intra-event versatility
 \item{vv.iev.WW.prob}{Probability that in a white-white partnership of
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
+
+\item{prep.start}{}
+
+\item{prep.elig.model}{}
+
+\item{prep.efficacy}{}
+
+\item{prep.class.prob}{}
+
+\item{prep.class.effect}{}
+
+\item{prep.coverage}{}
+
+\item{prep.cov.method}{}
+
+\item{prep.cov.rate}{}
+
+\item{prep.rcomp}{}
 
 \item{...}{Additional arguments passed to the function.}
 }
