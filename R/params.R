@@ -520,7 +520,7 @@ control.mard <- function(simno = 1,
   p$save.transmat <- FALSE
 
   p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
-  p$user.mods <- grep(".FUN", names.dot.args, value = TRUE)
+  p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
   class(p) <- "control.mard"
   return(p)
