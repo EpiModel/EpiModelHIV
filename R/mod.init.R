@@ -92,6 +92,14 @@ initialize.mard <- function(x, param, init, control, s) {
   circ[ids.W] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
+  # PrEP Attributes
+  dat$attr$prepClass <- rep(NA, num)
+  dat$attr$prepElig <- rep(NA, num)
+  dat$attr$prepEligTime <- rep(NA, num)
+  dat$attr$prepStat <- rep(NA, num)
+  dat$attr$prepStartTime <- rep(NA, num)
+  dat$attr$prepEver <- rep(NA, num)
+
   # One-off AI class
   inst.ai.class <- rep(NA, num)
   ncl <- param$num.inst.ai.classes
