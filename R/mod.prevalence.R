@@ -36,6 +36,7 @@ prevalence.mard <- function(dat, at) {
   vl <- dat$attr$vl
   tt.traj <- dat$attr$tt.traj
   stage <- dat$attr$stage
+  prepStat <- dat$attr$prepStat
 
   nsteps <- dat$control$nsteps
 
@@ -120,6 +121,12 @@ prevalence.mard <- function(dat, at) {
     dat$epi$aids.yng <- dat$epi$aids.old <- rep(NA, nsteps)
     dat$epi$aids.B.yng <- dat$epi$aids.B.old <- rep(NA, nsteps)
     dat$epi$aids.W.yng <- dat$epi$aids.W.old <- rep(NA, nsteps)
+
+    dat$epi$prepCurr <- dat$epi$prepEver <-
+      dat$epi$prepCov <- dat$epi$prepStart <- rep(NA, nsteps)
+    dat$epi$incid.prep0 <- dat$epi$incid.prep1 <-
+      dat$epi$i.num.prep0 <- dat$epi$i.num.prep1 <-
+      dat$epi$i.prev.prep0 <- dat$epi$i.prev.prep1 <- rep(NA, nsteps)
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -404,6 +411,17 @@ prevalence.mard <- function(dat, at) {
                                 age < 30, na.rm = TRUE)
   dat$epi$aids.W.old[at] <- sum(active == 1 & stage == "D" & race == "W" &
                                 age >= 30, na.rm = TRUE)
+
+  dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
+  dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
+  dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 1) &
+                                   status == "i", na.rm = TRUE)
+  dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == "i",
+                                 na.rm = TRUE)
+  dat$epi$i.prev.prep0[at] <- dat$epi$i.num.prep0[at] /
+                              sum(active == 1 & (is.na(prepStat) | prepStat == 1),
+                                  na.rm = TRUE)
+  dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] / dat$epi$prepCurr[at]
 
   return(dat)
 }

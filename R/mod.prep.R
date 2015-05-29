@@ -66,8 +66,6 @@ prep.mard <- function(dat, at) {
   dat$attr$prepClass <- prepClass
 
   # Summary Statistics
-  dat$epi$prepCurr <- sum(prepStat == 1, na.rm = TRUE)
-  dat$epi$prepEver <- sum(prepEver == 1, na.rm = TRUE)
   dat$epi$prepCov[at] <- prepCov
   dat$epi$prepStart[at] <- length(idsStart)
 
