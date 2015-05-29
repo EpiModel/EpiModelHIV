@@ -220,6 +220,15 @@
 #' @param vv.iev.WW.prob Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
+#' @param prep.start
+#' @param prep.elig.model
+#' @param prep.efficacy
+#' @param prep.class.prob
+#' @param prep.class.effect
+#' @param prep.coverage
+#' @param prep.cov.method
+#' @param prep.cov.rate
+#' @param prep.rcomp
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -336,6 +345,16 @@ param.mard <- function(nwstats,
                        vv.iev.BB.prob = 0.42,
                        vv.iev.BW.prob = 0.56,
                        vv.iev.WW.prob = 0.49,
+
+                       prep.start = 1,
+                       prep.elig.model = "all",
+                       prep.efficacy = 0.92,
+                       prep.class.prob = c(0.50, 0.25, 0.25),
+                       prep.class.effect = c(0, 0.75, 0.90),
+                       prep.coverage = 0.20,
+                       prep.cov.method = "curr",
+                       prep.cov.rate = 1,
+                       prep.rcomp = 1,
                        ...) {
 
   p <- list()
