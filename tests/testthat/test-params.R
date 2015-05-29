@@ -75,7 +75,7 @@ test_that("assign.formals testing", {
   init <- init.mard(nwstats = st, prev.B = 0.3)
   control <- control.mard(nsteps = 10, new.control = 1)
 
-  expect_equal(param$last.neg.test.B.int, 200)
+  expect_equal(param$last.neg.test.B.int, round(200 / time.unit))
   expect_equal(init$prev.B, 0.3)
   expect_equal(control$nsteps, 10)
   expect_equal(control$new.control, 1)
