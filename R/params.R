@@ -357,19 +357,8 @@ param.mard <- function(nwstats,
                        prep.rcomp = 1,
                        ...) {
 
-  p <- list()
-  formal.args <- formals(sys.function())
-  formal.args[["..."]] <- NULL
-  for (arg in names(formal.args)) {
-    p[arg] <- list(get(arg))
-  }
-  dot.args <- list(...)
-  names.dot.args <- names(dot.args)
-  if (length(dot.args) > 0) {
-    for (i in 1:length(dot.args)) {
-      p[[names.dot.args[i]]] <- dot.args[[i]]
-    }
-  }
+  p <- get_args(formal.args = formals(sys.function()),
+                dot.args = list(...))
 
   if (!(testing.pattern %in% c("memoryless", "interval"))) {
     stop("testing.pattern must be \"memoryless\" or \"interval\" ",
@@ -431,19 +420,8 @@ init.mard <- function(nwstats,
                       init.prev.age.slope.W = 0.05 / 12,
                       ...) {
 
-  p <- list()
-  formal.args <- formals(sys.function())
-  formal.args[["..."]] <- NULL
-  for (arg in names(formal.args)) {
-    p[arg] <- list(get(arg))
-  }
-  dot.args <- list(...)
-  names.dot.args <- names(dot.args)
-  if (length(dot.args) > 0) {
-    for (i in 1:length(dot.args)) {
-      p[[names.dot.args[i]]] <- dot.args[[i]]
-    }
-  }
+  p <- get_args(formal.args = formals(sys.function()),
+                dot.args = list(...))
 
   p$num.B <- nwstats$num.B
   p$num.W <- nwstats$num.W
@@ -551,25 +529,15 @@ control.mard <- function(simno = 1,
                          verbose.int = 1,
                          ...) {
 
-  p <- list()
   formal.args <- formals(sys.function())
-  formal.args[["..."]] <- NULL
-  for (arg in names(formal.args)) {
-    p[arg] <- list(get(arg))
-  }
   dot.args <- list(...)
-  names.dot.args <- names(dot.args)
-  if (length(dot.args) > 0) {
-    for (i in 1:length(dot.args)) {
-      p[[names.dot.args[i]]] <- dot.args[[i]]
-    }
-  }
+  p <- get_args(formal.args, dot.args)
 
   p$skip.check <- TRUE
   p$save.transmat <- FALSE
 
   p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
-  p$user.mods <- grep(".FUN", names.dot.args, value = TRUE)
+  p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
   class(p) <- "control.mard"
   return(p)
