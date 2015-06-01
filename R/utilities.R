@@ -37,9 +37,18 @@ apportion.lr <- function(vector.length,values,proportions,shuffled=F) {
   return(result)
 }
 
-# Create a list of all the input parameters to
-# param.mard, init.mard, control.mard
-assign.formals <- function(formal.args, dot.args){
+#' @title Get Arguments from EpiModel Parameterization Functions
+#'
+#' @description Returns a list of argument names and values for use for parameter
+#'              processing functions.
+#'
+#' @param formal.args The output of \code{formals(sys.function())}.
+#' @param dot.args The output of \code{list(...)}.
+#'
+#' @keywords internal
+#' @export
+#'
+get_args <- function(formal.args, dot.args){
   p <- list()
   formal.args[["..."]] <- NULL
   for (arg in names(formal.args)) {
