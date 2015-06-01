@@ -457,6 +457,7 @@ init.mard <- function(nwstats,
 #' @param births.FUN Module function for births or entries into the population.
 #' @param test.FUN Module function for diagnostic disease testing.
 #' @param tx.FUN Module function for ART initiation and adherence.
+#' @param prep.FUN Module function for PrEP initiation and utilization.
 #' @param progress.FUN Module function for HIV disease progression.
 #' @param vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
@@ -507,6 +508,7 @@ control.mard <- function(simno = 1,
                          births.FUN = births.mard,
                          test.FUN = test.mard,
                          tx.FUN = tx.mard,
+                         prep.FUN = prep.mard,
                          progress.FUN = progress.mard,
                          vl.FUN = update_vl.mard,
                          aiclass.FUN = update_aiclass.mard,

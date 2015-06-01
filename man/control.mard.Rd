@@ -7,16 +7,16 @@
 control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 52 * 50,
   start = 1, initialize.FUN = initialize.mard, aging.FUN = aging.mard,
   deaths.FUN = deaths.mard, births.FUN = births.mard,
-  test.FUN = test.mard, tx.FUN = tx.mard, progress.FUN = progress.mard,
-  vl.FUN = update_vl.mard, aiclass.FUN = update_aiclass.mard,
-  roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
-  resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
-  acts.FUN = acts.mard, condoms.FUN = condoms.mard,
-  position.FUN = position.mard, trans.FUN = trans.mard,
-  getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
-  delete.nodes = TRUE, save.dal = FALSE, save.nwstats = TRUE,
-  save.network = FALSE, save.other = "attr", verbose = TRUE,
-  verbose.int = 1, ...)
+  test.FUN = test.mard, tx.FUN = tx.mard, prep.FUN = prep.mard,
+  progress.FUN = progress.mard, vl.FUN = update_vl.mard,
+  aiclass.FUN = update_aiclass.mard, roleclass.FUN = update_roleclass.mard,
+  edgescorr.FUN = edges_correct.mard, resimnets.FUN = simnet.mard,
+  disclose.FUN = disclose.mard, acts.FUN = acts.mard,
+  condoms.FUN = condoms.mard, position.FUN = position.mard,
+  trans.FUN = trans.mard, getprev.FUN = prevalence.mard,
+  verbose.FUN = verbose.mard, delete.nodes = TRUE, save.dal = FALSE,
+  save.nwstats = TRUE, save.network = FALSE, save.other = "attr",
+  verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -46,6 +46,8 @@ model.}
 \item{test.FUN}{Module function for diagnostic disease testing.}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
+
+\item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
 \item{progress.FUN}{Module function for HIV disease progression.}
 

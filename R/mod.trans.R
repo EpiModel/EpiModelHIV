@@ -62,15 +62,14 @@ trans.mard <- function(dat, at){
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
-
+browser()
   # Processes ---------------------------------------------------------------
 
   # Reorder by role: ins on the left, rec on the right,
   #                  with flippers represented twice
   disc.ip <- dal[dal$ins %in% c("P", "B"), ]
   disc.rp <- dal[dal$ins %in% c("N", "B"), c(2:1, 3:ncols)]
-  names(disc.ip)[1:2] <- c("i", "r")
-  names(disc.rp)[1:2] <- c("i", "r")
+  names(disc.ip)[1:2] <- c("i", "r"); names(disc.rp)[1:2] <- c("i", "r")
 
   # Transmission probability: insertive infected
   ip.vl <- vl[disc.ip[, 1]]
@@ -87,7 +86,8 @@ trans.mard <- function(dat, at){
   trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
   trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  # Transmission probability: receptive position
+
+  # Transmission probability: receptive infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
   rp.stage.time <- stage.time[disc.rp[, 2]]

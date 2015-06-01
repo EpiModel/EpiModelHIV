@@ -1,7 +1,7 @@
 
 #' @export
 prep.mard <- function(dat, at) {
-
+browser()
   ## Variables
   active <- dat$attr$active
   status <- dat$attr$status
