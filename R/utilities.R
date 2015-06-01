@@ -52,5 +52,5 @@ assign.formals <- function(formal.args, dot.args){
       p[[names.dot.args[i]]] <- dot.args[[i]]
     }
   }
-  p
+  return(p)
 }
