@@ -338,9 +338,8 @@ param.mard <- function(nwstats,
                        vv.iev.WW.prob = 0.49,
                        ...) {
 
-  formal.args <- formals(sys.function())
-  dot.args <- list(...)
-  p <- assign.formals(formal.args, dot.args)
+  p <- get_args(formal.args = formals(sys.function()),
+                dot.args = list(...))
 
   if (!(testing.pattern %in% c("memoryless", "interval"))) {
     stop("testing.pattern must be \"memoryless\" or \"interval\" ",
@@ -402,9 +401,8 @@ init.mard <- function(nwstats,
                       init.prev.age.slope.W = 0.05 / 12,
                       ...) {
 
-  formal.args <- formals(sys.function())
-  dot.args <- list(...)
-  p <- assign.formals(formal.args, dot.args)
+  p <- get_args(formal.args = formals(sys.function()),
+                dot.args = list(...))
 
   p$num.B <- nwstats$num.B
   p$num.W <- nwstats$num.W
@@ -514,7 +512,7 @@ control.mard <- function(simno = 1,
 
   formal.args <- formals(sys.function())
   dot.args <- list(...)
-  p <- assign.formals(formal.args, dot.args)
+  p <- get_args(formal.args, dot.args)
 
   p$skip.check <- TRUE
   p$save.transmat <- FALSE
