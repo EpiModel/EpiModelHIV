@@ -132,5 +132,3 @@ update_vl.mard <- function(dat, at) {
 
   return(dat)
 }
-
-
