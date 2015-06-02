@@ -205,12 +205,12 @@ trans.mard <- function(dat, at){
   dat$epi$incid[at] <- length(infected)
   dat$epi$incid.B[at] <- sum(race[infected] == "B")
   dat$epi$incid.W[at] <- sum(race[infected] == "W")
-  dat$epi$incid.y[at] <- sum(age[infected] < 30)
-  dat$epi$incid.o[at] <- sum(age[infected] >= 30)
-  dat$epi$incid.B.y[at] <- sum(race[infected] == "B" & age[infected] < 30)
-  dat$epi$incid.B.o[at] <- sum(race[infected] == "B" & age[infected] >= 30)
-  dat$epi$incid.W.y[at] <- sum(race[infected] == "W" & age[infected] < 30)
-  dat$epi$incid.W.o[at] <- sum(race[infected] == "W" & age[infected] >= 30)
+  dat$epi$incid.yng[at] <- sum(age[infected] < 30)
+  dat$epi$incid.old[at] <- sum(age[infected] >= 30)
+  dat$epi$incid.B.yng[at] <- sum(race[infected] == "B" & age[infected] < 30)
+  dat$epi$incid.B.old[at] <- sum(race[infected] == "B" & age[infected] >= 30)
+  dat$epi$incid.W.yng[at] <- sum(race[infected] == "W" & age[infected] < 30)
+  dat$epi$incid.W.old[at] <- sum(race[infected] == "W" & age[infected] >= 30)
 
   return(dat)
 }
