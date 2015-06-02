@@ -155,7 +155,7 @@ remove_bad_roles <- function(nw) {
                      (rc.el[, 1] == "I" & rc.el[, 2] == "I"))
 
   if (length(rc.el.bad) > 0) {
-    el.bad <- el[rc.el.bad, ]
+    el.bad <- el[rc.el.bad, , drop = FALSE]
 
     eid <- rep(NA, nrow(el.bad))
     for (i in 1:nrow(el.bad)) {
