@@ -365,23 +365,34 @@ two versatile men, they will engage in intra-event versatility
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
-\item{prep.start}{}
+\item{prep.start}{Time step at which the PrEP intervention should start.}
 
-\item{prep.elig.model}{}
+\item{prep.elig.model}{Modeling approach for determining who is eligible for
+PrEP. Current options are limited to: \code{"all"} for all persons who
+have never been on PrEP and are disease-susceptible.}
 
-\item{prep.efficacy}{}
+\item{prep.efficacy}{The per-contact efficacy of PrEP to prevent infection if
+used (parameter not currently used).}
 
-\item{prep.class.prob}{}
+\item{prep.class.prob}{The frequency of being in a low, medium, or high class
+of adherence to PrEP.}
 
-\item{prep.class.effect}{}
+\item{prep.class.effect}{The functional effectiveness of PrEP conditional on
+PrEP class.}
 
-\item{prep.coverage}{}
+\item{prep.coverage}{The proportion of the eligible population who are start
+PrEP once they become eligible.}
 
-\item{prep.cov.method}{}
+\item{prep.cov.method}{The method for calculating PrEP coverage, with options
+of \code{"curr"} to base the numerator on the number of people currently
+on PrEP and \code{"ever"} to base it on the number of people ever on
+PrEP.}
 
-\item{prep.cov.rate}{}
+\item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
+their eligibility, with 1 equal to instant start.}
 
-\item{prep.rcomp}{}
+\item{prep.rcomp}{The relative change in rate of UAI across all partnership
+types given current PrEP use, where 1 is no risk compensation.}
 
 \item{...}{Additional arguments passed to the function.}
 }

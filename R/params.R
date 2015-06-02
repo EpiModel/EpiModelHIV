@@ -220,15 +220,26 @@
 #' @param vv.iev.WW.prob Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
-#' @param prep.start
-#' @param prep.elig.model
-#' @param prep.efficacy
-#' @param prep.class.prob
-#' @param prep.class.effect
-#' @param prep.coverage
-#' @param prep.cov.method
-#' @param prep.cov.rate
-#' @param prep.rcomp
+#' @param prep.start Time step at which the PrEP intervention should start.
+#' @param prep.elig.model Modeling approach for determining who is eligible for
+#'        PrEP. Current options are limited to: \code{"all"} for all persons who
+#'        have never been on PrEP and are disease-susceptible.
+#' @param prep.efficacy The per-contact efficacy of PrEP to prevent infection if
+#'        used (parameter not currently used).
+#' @param prep.class.prob The frequency of being in a low, medium, or high class
+#'        of adherence to PrEP.
+#' @param prep.class.effect The functional effectiveness of PrEP conditional on
+#'        PrEP class.
+#' @param prep.coverage The proportion of the eligible population who are start
+#'        PrEP once they become eligible.
+#' @param prep.cov.method The method for calculating PrEP coverage, with options
+#'        of \code{"curr"} to base the numerator on the number of people currently
+#'        on PrEP and \code{"ever"} to base it on the number of people ever on
+#'        PrEP.
+#' @param prep.cov.rate The rate at which persons initiate PrEP conditional on
+#'        their eligibility, with 1 equal to instant start.
+#' @param prep.rcomp The relative change in rate of UAI across all partnership
+#'        types given current PrEP use, where 1 is no risk compensation.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
