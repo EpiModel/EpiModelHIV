@@ -390,7 +390,7 @@ param.mard <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- "param.mard"
+  class(p) <- c("param.mard", "param.net")
   return(p)
 }
 
@@ -430,7 +430,7 @@ init.mard <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- "init.mard"
+  class(p) <- c("init.mard", "init.net")
   return(p)
 }
 
@@ -541,6 +541,6 @@ control.mard <- function(simno = 1,
   p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  class(p) <- "control.mard"
+  class(p) <- c("control.mard", "control.net")
   return(p)
 }
