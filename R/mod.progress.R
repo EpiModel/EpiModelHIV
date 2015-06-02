@@ -46,8 +46,8 @@ progress.mard <- function(dat, at) {
   tx.status <- dat$attr$tx.status
 
   # Parameters
-  vl.acute.rise.dur <- dat$param$vl.acute.rise.dur
-  vl.acute.fall.dur <- dat$param$vl.acute.fall.dur
+  vl.acute.rise.int <- dat$param$vl.acute.rise.int
+  vl.acute.fall.int <- dat$param$vl.acute.fall.int
   vl.aids.onset <- dat$param$vl.aids.onset
   max.time.off.tx.part <- dat$param$max.time.off.tx.part
   max.time.on.tx.part <- dat$param$max.time.on.tx.part
@@ -61,13 +61,13 @@ progress.mard <- function(dat, at) {
   stage.time[active == 1] <- stage.time[active == 1] + 1
 
   # Change stage to Acute Falling
-  toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.dur + 1))
+  toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1))
   stage[toAF] <- "AF"
   stage.time[toAF] <- 1
 
   # Change stage to Chronic
-  toC <- which(active == 1 & time.since.inf == (vl.acute.rise.dur +
-                                                vl.acute.fall.dur + 1))
+  toC <- which(active == 1 & time.since.inf == (vl.acute.rise.int +
+                                                vl.acute.fall.int + 1))
   stage[toC] <- "C"
   stage.time[toC] <- 1
 
