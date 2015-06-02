@@ -7,7 +7,7 @@ browser()
   status <- dat$attr$status
   prepElig <- dat$attr$prepElig
   prepEligTime <- dat$attr$prepEligTime
-  prepStat <- dat$attr$preStat
+  prepStat <- dat$attr$prepStat
   prepStartTime <- dat$attr$prepStartTime
   prepEver <- dat$attr$prepEver
   prepClass <- dat$attr$prepClass
@@ -22,7 +22,7 @@ browser()
 
   ## Eligibility
   if (prep.elig.model == "all") {
-    idsElig <- which(active == 1 & status == "s" & is.na(prepElig))
+    idsElig <- which(active == 1 & status == 0 & is.na(prepElig))
   }
   prepElig[idsElig] <- 1
   prepEligTime[idsElig] <- at
@@ -55,7 +55,8 @@ browser()
     prepStat[idsStart] <- 1
     prepStartTime[idsStart] <- at
     prepEver[idsStart] <- 1
-    prepClass <- sample(c("l", "m", "h"), length(idsStart), TRUE, prep.class.prob)
+    prepClass[idsStart] <- sample(c("l", "m", "h"), length(idsStart),
+                                  TRUE, prep.class.prob)
   }
 
   dat$attr$prepElig <- prepElig
