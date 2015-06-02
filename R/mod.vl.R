@@ -42,12 +42,12 @@ update_vl.mard <- function(dat, at) {
   tx.status <- dat$attr$tx.status
 
   # Parameters
-  vlard <- dat$param$vl.acute.rise.dur
+  vlard <- dat$param$vl.acute.rise.int
   vlap <- dat$param$vl.acute.peak
-  vlafd <- dat$param$vl.acute.fall.dur
+  vlafd <- dat$param$vl.acute.fall.int
   vlsp <- dat$param$vl.set.point
   vldo <- dat$param$vl.aids.onset
-  vldd <- dat$param$vl.aids.dur
+  vldd <- dat$param$vl.aids.int
   vlf  <- dat$param$vl.fatal
   vl.full.supp <- dat$param$vl.full.supp
   full.supp.down.slope <- dat$param$full.supp.down.slope
