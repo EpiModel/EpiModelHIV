@@ -49,9 +49,9 @@ verbose.mard <- function(x, type, s, at) {
 
           nsteps <- x$control$nsteps
           time.unit <- x$param$time.unit
-          prev <- round(x$epi$i.num[at] / x$epi$num[at], 3)
-          prev.B <- round(x$epi$i.B[at] / x$epi$num.B[at], 3)
-          prev.W <- round(x$epi$i.W[at] / x$epi$num.W[at], 3)
+          prev <- round(x$epi$i.prev[at], 3)
+          prev.B <- round(x$epi$i.prev.B[at], 3)
+          prev.W <- round(x$epi$i.prev.W[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -68,8 +68,8 @@ verbose.mard <- function(x, type, s, at) {
           cat("\nCurr Incidence:", x$epi$incid[at])
           cat("\nCuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
           cat("\nTotal Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
-          cat("\nBlack Prevalence: ", x$epi$i.B[at], " (", prev.B, ")", sep = "")
-          cat("\nWhite Prevalence: ", x$epi$i.W[at], " (", prev.W, ")", sep = "")
+          cat("\nBlack Prevalence: ", x$epi$i.num.B[at], " (", prev.B, ")", sep = "")
+          cat("\nWhite Prevalence: ", x$epi$i.num.W[at], " (", prev.W, ")", sep = "")
           cat("\n==============================")
 
         }
