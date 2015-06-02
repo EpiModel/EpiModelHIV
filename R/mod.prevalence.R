@@ -414,7 +414,7 @@ prevalence.mard <- function(dat, at) {
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
   dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
-  dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 1) &
+  dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) &
                                    status == "i", na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == "i",
                                  na.rm = TRUE)

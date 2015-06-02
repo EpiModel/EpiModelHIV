@@ -42,6 +42,7 @@ prep.mard <- function(dat, at) {
 
   nStart <- max(0, min(nEligSt, round((prep.coverage - prepCov) *
                                              sum(prepElig == 1, na.rm = TRUE))))
+  idsStart <- NULL
   if (nStart > 0 & at >= prep.start) {
     if (prep.cov.rate >= 1) {
       idsStart <- ssample(idsEligSt, nStart)
