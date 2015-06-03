@@ -14,6 +14,7 @@ prep.mard <- function(dat, at) {
   ## Variables
   active <- dat$attr$active
   status <- dat$attr$status
+  diag.status <- dat$attr$diag.status
   prepElig <- dat$attr$prepElig
   prepEligTime <- dat$attr$prepEligTime
   prepStat <- dat$attr$prepStat
@@ -38,6 +39,8 @@ prep.mard <- function(dat, at) {
 
 
   ## Initiation
+
+  # Process
   if (prep.cov.method == "curr") {
     prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
   }
@@ -60,7 +63,7 @@ prep.mard <- function(dat, at) {
     }
   }
 
-  ## Attributes
+  # Attributes
   if (length(idsStart) > 0) {
     prepStat[idsStart] <- 1
     prepStartTime[idsStart] <- at
@@ -69,6 +72,23 @@ prep.mard <- function(dat, at) {
                                   TRUE, prep.class.prob)
   }
 
+
+  ## Stoppage
+
+  # Stop after diagnosis
+  idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
+
+  # Stop after death
+  idsStpDth <- which(active == 0 & prepStat == 1)
+
+  # Attributes
+  idsStp <- c(idsStpDx, idsStpDth)
+  if (length(idsStp) > 0) {
+    prepStat[idsStp] <- 0
+  }
+
+
+  ## Output
   dat$attr$prepElig <- prepElig
   dat$attr$prepEligTime <- prepEligTime
   dat$attr$prepStat <- prepStat
