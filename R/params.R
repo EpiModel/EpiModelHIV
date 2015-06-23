@@ -220,6 +220,26 @@
 #' @param vv.iev.WW.prob Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
+#' @param prep.start Time step at which the PrEP intervention should start.
+#' @param prep.elig.model Modeling approach for determining who is eligible for
+#'        PrEP. Current options are limited to: \code{"all"} for all persons who
+#'        have never been on PrEP and are disease-susceptible.
+#' @param prep.efficacy The per-contact efficacy of PrEP to prevent infection if
+#'        used (parameter not currently used).
+#' @param prep.class.prob The frequency of being in a low, medium, or high class
+#'        of adherence to PrEP.
+#' @param prep.class.effect The functional effectiveness of PrEP conditional on
+#'        PrEP class.
+#' @param prep.coverage The proportion of the eligible population who are start
+#'        PrEP once they become eligible.
+#' @param prep.cov.method The method for calculating PrEP coverage, with options
+#'        of \code{"curr"} to base the numerator on the number of people currently
+#'        on PrEP and \code{"ever"} to base it on the number of people ever on
+#'        PrEP.
+#' @param prep.cov.rate The rate at which persons initiate PrEP conditional on
+#'        their eligibility, with 1 equal to instant start.
+#' @param prep.rcomp The relative change in rate of UAI across all partnership
+#'        types given current PrEP use, where 1 is no risk compensation.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -336,6 +356,16 @@ param.mard <- function(nwstats,
                        vv.iev.BB.prob = 0.42,
                        vv.iev.BW.prob = 0.56,
                        vv.iev.WW.prob = 0.49,
+
+                       prep.start = 1,
+                       prep.elig.model = "all",
+                       prep.efficacy = 0.92,
+                       prep.class.prob = c(0.50, 0.25, 0.25),
+                       prep.class.effect = c(0, 0.75, 0.90),
+                       prep.coverage = 0,
+                       prep.cov.method = "curr",
+                       prep.cov.rate = 1,
+                       prep.rcomp = 1,
                        ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -371,7 +401,7 @@ param.mard <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- "param.mard"
+  class(p) <- c("param.mard", "param.net")
   return(p)
 }
 
@@ -411,7 +441,7 @@ init.mard <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- "init.mard"
+  class(p) <- c("init.mard", "init.net")
   return(p)
 }
 
@@ -438,6 +468,7 @@ init.mard <- function(nwstats,
 #' @param births.FUN Module function for births or entries into the population.
 #' @param test.FUN Module function for diagnostic disease testing.
 #' @param tx.FUN Module function for ART initiation and adherence.
+#' @param prep.FUN Module function for PrEP initiation and utilization.
 #' @param progress.FUN Module function for HIV disease progression.
 #' @param vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
@@ -488,6 +519,7 @@ control.mard <- function(simno = 1,
                          births.FUN = births.mard,
                          test.FUN = test.mard,
                          tx.FUN = tx.mard,
+                         prep.FUN = prep.mard,
                          progress.FUN = progress.mard,
                          vl.FUN = update_vl.mard,
                          aiclass.FUN = update_aiclass.mard,
@@ -520,6 +552,6 @@ control.mard <- function(simno = 1,
   p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  class(p) <- "control.mard"
+  class(p) <- c("control.mard", "control.net")
   return(p)
 }
