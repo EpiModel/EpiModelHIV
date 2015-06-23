@@ -48,7 +48,7 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
   prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
-  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0.2,
+  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1, ...)
 }
 \arguments{
