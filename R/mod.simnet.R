@@ -48,7 +48,7 @@ simnet.mard <- function(dat, at) {
   suppressWarnings(
     dat$nw$m <- simulate(dat$nw$m,
                          formation = nwparam.m$formation,
-                         dissolution = nwparam.m$dissolution,
+                         dissolution = nwparam.m$coef.diss$dissolution,
                          coef.form = nwparam.m$coef.form,
                          coef.diss = nwparam.m$coef.diss$coef.adj,
                          constraints = nwparam.m$constraints,
@@ -81,7 +81,7 @@ simnet.mard <- function(dat, at) {
   suppressWarnings(
     dat$nw$p <- simulate(dat$nw$p,
                          formation = nwparam.p$formation,
-                         dissolution = nwparam.p$dissolution,
+                         dissolution = nwparam.p$coef.diss$dissolution,
                          coef.form = nwparam.p$coef.form,
                          coef.diss = nwparam.p$coef.diss$coef.adj,
                          constraints = nwparam.p$constraints,
