@@ -452,10 +452,10 @@ init.mard <- function(nwstats,
 #'              \code{\link{netsim}}.
 #'
 #' @param simno Unique ID for the simulation run, used for file naming purposes
-#'        if used in conjunction with the \code{EpiModel.hpc} package.
+#'        if used in conjunction with the \code{EpiModelHPC} package.
 #' @param nsims Number of simulations.
 #' @param ncores Number of cores per run, if parallelization is used within the
-#'        \code{EpiModel.hpc} package.
+#'        \code{EpiModelHPC} package.
 #' @param nsteps Number of time steps per simulation.
 #' @param start Starting time step for simulation, with default to 1 to run new
 #'        simulation. This may also be set to 1 greater than the final time

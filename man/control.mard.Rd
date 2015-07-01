@@ -20,12 +20,12 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 52 * 50,
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
-if used in conjunction with the \code{EpiModel.hpc} package.}
+if used in conjunction with the \code{EpiModelHPC} package.}
 
 \item{nsims}{Number of simulations.}
 
 \item{ncores}{Number of cores per run, if parallelization is used within the
-\code{EpiModel.hpc} package.}
+\code{EpiModelHPC} package.}
 
 \item{nsteps}{Number of time steps per simulation.}
 
