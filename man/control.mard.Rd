@@ -4,7 +4,7 @@
 \alias{control.mard}
 \title{Epidemic Model Control Settings for MARDHAM Models}
 \usage{
-control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 52 * 50,
+control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   start = 1, initialize.FUN = initialize.mard, aging.FUN = aging.mard,
   deaths.FUN = deaths.mard, births.FUN = births.mard,
   test.FUN = test.mard, tx.FUN = tx.mard, prep.FUN = prep.mard,
