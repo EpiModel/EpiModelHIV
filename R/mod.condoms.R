@@ -73,7 +73,6 @@ condoms.mard <- function(dat, at) {
     }
 
 
-
     # Processes ---------------------------------------------------------------
 
     if (nrow(dal) > 0) {
@@ -88,7 +87,8 @@ condoms.mard <- function(dat, at) {
                  (num.B == 1) * cond.BW.prob +
                  (num.B == 0) * cond.WW.prob
 
-    logodds.cond <- log(cond.prob / (1 - cond.prob))
+    uai.prob <- 1 - cond.prob
+    uai.logodds <- log(uai.prob / (1 - uai.prob))
 
     pos.diag <- diag.status[dal[, 1]]
 
@@ -103,27 +103,27 @@ condoms.mard <- function(dat, at) {
 
     # Odds, Diagnosed
     isDx <- which(pos.diag == 1)
-    logodds.cond[isDx] <- logodds.cond[isDx] * (1 - diag.beta)
+    uai.logodds[isDx] <- uai.logodds[isDx] * (1 - diag.beta)
 
     # Odds, Disclosed
     isDisc <- which(discl == 1)
-    logodds.cond[isDisc] <- logodds.cond[isDisc] * (1 - discl.beta)
+    uai.logodds[isDisc] <- uai.logodds[isDisc] * (1 - discl.beta)
 
     # Odds, Tx Full Suppress Type
     isFS <- which(pos.tx == 1 & pos.tt.traj == "YF")
-    logodds.cond[isFS] <- logodds.cond[isFS] * (1 + fsupp.beta)
+    uai.logodds[isFS] <- uai.logodds[isFS] * (1 + fsupp.beta)
 
     # Odds, Tx Part Supress Type
     isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
-    logodds.cond[isPS] <- logodds.cond[isPS] * (1 + psupp.beta)
+    uai.logodds[isPS] <- uai.logodds[isPS] * (1 + psupp.beta)
 
-    old.cond.prob <- cond.prob
-    cond.prob <- exp(logodds.cond) / (1 + exp(logodds.cond))
+    old.uai.prob <- uai.prob
+    uai.prob <- exp(uai.logodds) / (1 + exp(uai.logodds))
 
-    cond.prob[is.na(cond.prob) & old.cond.prob == 0] <- 0
-    cond.prob[is.na(cond.prob) & old.cond.prob == 1] <- 1
+    uai.prob[is.na(uai.prob) & old.uai.prob == 0] <- 0
+    uai.prob[is.na(uai.prob) & old.uai.prob == 1] <- 1
 
-    uai <- rbinom(length(cond.prob), 1, 1 - cond.prob)
+    uai <- rbinom(n = length(uai.prob), size = 1, prob = uai.prob)
 
 
     # Output ------------------------------------------------------------------
