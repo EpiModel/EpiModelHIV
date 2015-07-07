@@ -5,10 +5,10 @@
 \title{Calculate Target Statistics for Network Model Estimation}
 \usage{
 calc_nwstats.mard(time.unit = 7, num.B, num.W, deg.mp.B, deg.mp.W,
-  mdeg.inst.B, mdeg.inst.W, prop.hom.mpi.B, prop.hom.mpi.W, balance = "mean",
-  sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW, age.method = "heterogeneous",
-  diss.main, diss.pers, durs.main, durs.pers, ages, asmr.B, asmr.W, role.B.prob,
-  role.W.prob)
+  mdeg.inst.B, mdeg.inst.W, qnts.B, qnts.W, prop.hom.mpi.B, prop.hom.mpi.W,
+  balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW,
+  age.method = "heterogeneous", diss.main, diss.pers, durs.main, durs.pers,
+  ages, asmr.B, asmr.W, role.B.prob, role.W.prob)
 }
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}
@@ -28,6 +28,10 @@ for black MSM.}
 
 \item{mdeg.inst.W}{Mean degree, or rate, of one-off partnerships per day
 for white MSM.}
+
+\item{qnts.B}{Means of one-off rates split into quintiles for white MSM.}
+
+\item{qnts.W}{Means of one-off rates split into quintiles for black MSM.}
 
 \item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, casual,
 and one-off partnerships in same race for black MSM.}

@@ -15,6 +15,8 @@
 #'        for black MSM.
 #' @param mdeg.inst.W Mean degree, or rate, of one-off partnerships per day
 #'        for white MSM.
+#' @param qnts.B Means of one-off rates split into quintiles for white MSM.
+#' @param qnts.W Means of one-off rates split into quintiles for black MSM.
 #' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, casual,
 #'        and one-off partnerships in same race for black MSM.
 #' @param prop.hom.mpi.W A vector of length 3 for the proportion of main, casual,
@@ -72,6 +74,8 @@ calc_nwstats.mard <- function(time.unit = 7,
                               deg.mp.W,
                               mdeg.inst.B,
                               mdeg.inst.W,
+                              qnts.B,
+                              qnts.W,
                               prop.hom.mpi.B,
                               prop.hom.mpi.W,
                               balance = "mean",
@@ -148,10 +152,7 @@ calc_nwstats.mard <- function(time.unit = 7,
   }
 
   # Compile target stats
-  stats.m <- c(edges.m,
-               edges.nodemix.m[2:3],
-               totdeg.m.by.dp[c(2:3, 5:6)],
-               sqrt.adiff.m)
+  stats.m <- c(edges.m, edges.nodemix.m[2:3], totdeg.m.by.dp[c(2:3, 5:6)], sqrt.adiff.m)
 
 
   # Dissolution model
@@ -182,8 +183,7 @@ calc_nwstats.mard <- function(time.unit = 7,
   edges.p.B2W <- totdeg.p.by.race[1] * (1 - prop.hom.mpi.B[2])
   edges.p.W2B <- totdeg.p.by.race[2] * (1 - prop.hom.mpi.W[2])
   edges.het.p <- switch(balance,
-                        black = edges.p.B2W,
-                        white = edges.p.W2B,
+                        black = edges.p.B2W, white = edges.p.W2B,
                         mean = (edges.p.B2W + edges.p.W2B) / 2)
 
   # Number of same-race partnerships
@@ -201,17 +201,13 @@ calc_nwstats.mard <- function(time.unit = 7,
   if (age.method == "homogeneous") {
     weighted.avg <- sum(edges.nodemix.p * c(sqrt.adiff.BB[2],
                                             sqrt.adiff.BW[2],
-                                            sqrt.adiff.WW[2])) /
-      sum(edges.nodemix.p)
+                                            sqrt.adiff.WW[2])) / sum(edges.nodemix.p)
     sqrt.adiff.p <- edges.nodemix.p * weighted.avg
   }
 
   # Compile target statistics
-  stats.p <- c(edges.p,
-               edges.nodemix.p[2:3],
-               totdeg.p.by.dm[c(2, 4)],
-               conc.p.by.race,
-               sqrt.adiff.p)
+  stats.p <- c(edges.p, edges.nodemix.p[2:3], totdeg.p.by.dm[c(2, 4)],
+               conc.p.by.race, sqrt.adiff.p)
 
   # Dissolution model
   coef.diss.p <- dissolution_coefs(dissolution = diss.pers,
@@ -226,6 +222,9 @@ calc_nwstats.mard <- function(time.unit = 7,
   num.inst.B <- num.B * deg.mp.B * mdeg.inst.B * time.unit
   num.inst.W <- num.W * deg.mp.W * mdeg.inst.W * time.unit
 
+  num.riskg.B <- (0.2*num.B) * qnts.B * time.unit
+  num.riskg.W <- (0.2*num.W) * qnts.W * time.unit
+
   # Number of instant partnerships per time step, by race
   totdeg.i.by.race <- c(sum(num.inst.B), sum(num.inst.W))
 
@@ -236,8 +235,7 @@ calc_nwstats.mard <- function(time.unit = 7,
   edges.i.B2W <- totdeg.i.by.race[1] * (1 - prop.hom.mpi.B[3])
   edges.i.W2B <- totdeg.i.by.race[2] * (1 - prop.hom.mpi.W[3])
   edges.het.i <- switch(balance,
-                        black = edges.i.B2W,
-                        white = edges.i.W2B,
+                        black = edges.i.B2W, white = edges.i.W2B,
                         mean = (edges.i.B2W + edges.i.W2B) / 2)
 
   # Number of same-race partnerships
@@ -256,17 +254,21 @@ calc_nwstats.mard <- function(time.unit = 7,
   if (age.method == "homogeneous") {
     weighted.avg <- sum(edges.nodemix.i * c(sqrt.adiff.BB[3],
                                             sqrt.adiff.BW[3],
-                                            sqrt.adiff.WW[3])) /
-      sum(edges.nodemix.i)
+                                            sqrt.adiff.WW[3])) / sum(edges.nodemix.i)
     sqrt.adiff.i <- edges.nodemix.i * weighted.avg
   }
 
   stats.i <- c(edges.i,
-               num.inst.B[-1],
-               num.inst.W,
-               edges.hom.i,
-               sqrt.adiff.i)
+               num.inst.B[-1], num.inst.W,
+               num.riskg.B[-3], num.riskg.W[-3],
+               edges.hom.i, sqrt.adiff.i)
 
+  #   formation.i <- ~edges +
+  #     nodefactor(c("deg.main", "deg.pers")) +
+  #     nodefactor(c("riskg", "race"), base = c(3, 8)) +
+  #     nodematch("race") +
+  #     absdiffnodemix("sqrt.age", "race") +
+  #     offset(nodematch("role.class", diff = TRUE, keep = 1:2))
 
   # Compile results ---------------------------------------------------------
   out <- list()
