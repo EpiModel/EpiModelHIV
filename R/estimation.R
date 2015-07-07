@@ -343,8 +343,14 @@ base_nw.mard <- function(nwstats) {
   role[race == "B"] <- role.B
   role[race == "W"] <- role.W
 
-  attr.names <- c("race", "sqrt.age", "role.class")
-  attr.values <- list(race, sqrt.age, role)
+  riskg.B <- sample(apportion.lr(num.B, 1:5, rep(0.2, 5)))
+  riskg.W <- sample(apportion.lr(num.W, 1:5, rep(0.2, 5)))
+  riskg <- rep(NA, n)
+  riskg[race == "B"] <- riskg.B
+  riskg[race == "W"] <- riskg.W
+
+  attr.names <- c("race", "riskg", "sqrt.age", "role.class")
+  attr.values <- list(race, riskg, sqrt.age, role)
   nw <- network::set.vertex.attribute(nw, attr.names, attr.values)
 
   return(nw)
