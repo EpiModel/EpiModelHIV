@@ -51,7 +51,7 @@ deaths.mard <- function(dat, at) {
                    dat$attr$vl >= dat$param$vl.fatal)
 
   dth.all <- NULL
-  dth.all <- c(dth.gen, dth.dis)
+  dth.all <- unique(c(dth.gen, dth.dis))
 
   if (length(dth.all) > 0) {
 
@@ -59,11 +59,8 @@ deaths.mard <- function(dat, at) {
     dat$attr$depart.time[dth.all] <- at
 
     for (i in 1:2) {
-      dat$nw[[i]] <- deactivate.vertices(dat$nw[[i]],
-                                         onset = at,
-                                         terminus = Inf,
-                                         v = dth.all,
-                                         deactivate.edges = TRUE)
+      dat$nw[[i]] <- deactivate.vertices(dat$nw[[i]], onset = at, terminus = Inf,
+                                         v = dth.all, deactivate.edges = TRUE)
     }
   }
 
