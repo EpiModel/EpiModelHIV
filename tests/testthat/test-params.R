@@ -13,12 +13,17 @@ test_that("assign.formals testing", {
                        0.233, 0.033, 0.020),
                      byrow = TRUE, nrow = 2)
 
-  mdeg.inst.B <- matrix(c(2.39, 3.27, 2.43,
-                          2.17, 1.85, 1.85) / 100,
+  # Revised rates
+  mdeg.inst.B <- matrix(c(0.010402, 0.012954, 0.011485,
+                          0.007912, 0.007424, 0.007424),
                         byrow = TRUE, nrow = 2)
-  mdeg.inst.W <- matrix(c(1.82, 1.62, 2.66,
-                          1.00, 2.23, 2.23) / 100,
+  mdeg.inst.W <- matrix(c(0.008186, 0.012017, 0.013024,
+                          0.008151, 0.008341, 0.008341),
                         byrow = TRUE, nrow = 2)
+
+  # Quintile distribution of overall AI rates
+  qnts.W <- c(0, 0.000450, 0.005102, 0.009680, 0.032970)
+  qnts.B <- c(0, 0.001457, 0.005536, 0.010516, 0.030226)
 
   prop.hom.mpi.B <- c(0.9484, 0.9019, 0.9085)
   prop.hom.mpi.W <- c(0.9154, 0.8509, 0.8944)
@@ -54,6 +59,8 @@ test_that("assign.formals testing", {
     deg.mp.W = deg.mp.W,
     mdeg.inst.B = mdeg.inst.B,
     mdeg.inst.W = mdeg.inst.W,
+    qnts.B = qnts.B,
+    qnts.W = qnts.W,
     prop.hom.mpi.B = prop.hom.mpi.B,
     prop.hom.mpi.W = prop.hom.mpi.W,
     balance = "mean",
