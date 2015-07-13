@@ -167,7 +167,7 @@ trans.mard <- function(dat, at){
 
   # Update attributes
 
-  infected <- NULL
+  infected <- infector <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
