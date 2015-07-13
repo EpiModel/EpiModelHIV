@@ -103,19 +103,19 @@ condoms.mard <- function(dat, at) {
 
     # Odds, Diagnosed
     isDx <- which(pos.diag == 1)
-    uai.logodds[isDx] <- uai.logodds[isDx] * (1 - diag.beta)
+    uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
 
     # Odds, Disclosed
     isDisc <- which(discl == 1)
-    uai.logodds[isDisc] <- uai.logodds[isDisc] * (1 - discl.beta)
+    uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta
 
     # Odds, Tx Full Suppress Type
     isFS <- which(pos.tx == 1 & pos.tt.traj == "YF")
-    uai.logodds[isFS] <- uai.logodds[isFS] * (1 + fsupp.beta)
+    uai.logodds[isFS] <- uai.logodds[isFS] + fsupp.beta
 
     # Odds, Tx Part Supress Type
     isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
-    uai.logodds[isPS] <- uai.logodds[isPS] * (1 + psupp.beta)
+    uai.logodds[isPS] <- uai.logodds[isPS] + psupp.beta
 
     old.uai.prob <- uai.prob
     uai.prob <- exp(uai.logodds) / (1 + exp(uai.logodds))
