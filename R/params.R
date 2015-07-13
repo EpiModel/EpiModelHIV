@@ -461,6 +461,8 @@ init.mard <- function(nwstats,
 #'        simulation. This may also be set to 1 greater than the final time
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
+#' @param resim.int Interval unit for resimulation of network, relative to the
+#'        base time unit in the model.
 #' @param initialize.FUN Module function to use for initialization of the epidemic
 #'        model.
 #' @param aging.FUN Module function for aging.
@@ -513,6 +515,7 @@ control.mard <- function(simno = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
+                         resim.int = 1,
                          initialize.FUN = initialize.mard,
                          aging.FUN = aging.mard,
                          deaths.FUN = deaths.mard,

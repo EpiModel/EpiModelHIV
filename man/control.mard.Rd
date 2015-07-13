@@ -5,18 +5,19 @@
 \title{Epidemic Model Control Settings for MARDHAM Models}
 \usage{
 control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize.mard, aging.FUN = aging.mard,
-  deaths.FUN = deaths.mard, births.FUN = births.mard,
-  test.FUN = test.mard, tx.FUN = tx.mard, prep.FUN = prep.mard,
-  progress.FUN = progress.mard, vl.FUN = update_vl.mard,
-  aiclass.FUN = update_aiclass.mard, roleclass.FUN = update_roleclass.mard,
-  edgescorr.FUN = edges_correct.mard, resimnets.FUN = simnet.mard,
-  disclose.FUN = disclose.mard, acts.FUN = acts.mard,
-  condoms.FUN = condoms.mard, position.FUN = position.mard,
-  trans.FUN = trans.mard, getprev.FUN = prevalence.mard,
-  verbose.FUN = verbose.mard, delete.nodes = TRUE, save.dal = FALSE,
-  save.nwstats = TRUE, save.network = FALSE, save.other = "attr",
-  verbose = TRUE, verbose.int = 1, ...)
+  start = 1, resim.int = 1, initialize.FUN = initialize.mard,
+  aging.FUN = aging.mard, deaths.FUN = deaths.mard,
+  births.FUN = births.mard, test.FUN = test.mard, tx.FUN = tx.mard,
+  prep.FUN = prep.mard, progress.FUN = progress.mard,
+  vl.FUN = update_vl.mard, aiclass.FUN = update_aiclass.mard,
+  roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
+  resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
+  acts.FUN = acts.mard, condoms.FUN = condoms.mard,
+  position.FUN = position.mard, trans.FUN = trans.mard,
+  getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
+  delete.nodes = TRUE, save.dal = FALSE, save.nwstats = TRUE,
+  save.network = FALSE, save.other = "attr", verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -33,6 +34,9 @@ if used in conjunction with the \code{EpiModelHPC} package.}
 simulation. This may also be set to 1 greater than the final time
 step of a previous simulation to resume the simulation with different
 parameters.}
+
+\item{resim.int}{Interval unit for resimulation of network, relative to the
+base time unit in the model.}
 
 \item{initialize.FUN}{Module function to use for initialization of the epidemic
 model.}
