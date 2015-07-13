@@ -16,8 +16,8 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   position.FUN = position.mard, trans.FUN = trans.mard,
   getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
   delete.nodes = TRUE, save.dal = FALSE, save.nwstats = TRUE,
-  save.network = FALSE, save.other = "attr", verbose = TRUE,
-  verbose.int = 1, ...)
+  save.network = FALSE, save.other = "attr", prevfull = FALSE,
+  verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -97,6 +97,9 @@ out at the end of simulation (necessary for restarting a simulation).}
 
 \item{save.other}{Character vector containing other list elements of \code{dat}
 to save.}
+
+\item{prevfull}{If \code{TRUE}, save extended summary statistics for prevalence
+and incidence (defined in the prevalence module).}
 
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}

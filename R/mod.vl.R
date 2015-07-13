@@ -28,7 +28,7 @@
 #'
 update_vl.mard <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Attributes
   inf.time.bp <- at - dat$attr$inf.time
@@ -64,7 +64,7 @@ update_vl.mard <- function(dat, at) {
                     (cum.time.on.tx / max.time.on.tx.part)
 
 
-  # Process -----------------------------------------------------------------
+  ## Process
 
   # 1. tx-naive men
   target <- which(active == 1 & status == 1 & cum.time.on.tx == 0)
@@ -127,7 +127,7 @@ update_vl.mard <- function(dat, at) {
   vl[target] <- new.vl
 
 
-  # Output ------------------------------------------------------------------
+  ## Output
   dat$attr$vl <- vl
 
   return(dat)

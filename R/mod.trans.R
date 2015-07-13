@@ -31,7 +31,7 @@
 #'
 trans.mard <- function(dat, at){
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Attributes
   vl <- dat$attr$vl
@@ -66,7 +66,7 @@ trans.mard <- function(dat, at){
   ncols <- dim(dal)[2]
 
 
-  # Processes ---------------------------------------------------------------
+  ## Processes
 
   ## Reorder by role: ins on the left, rec on the right,
   ##                  with flippers represented twice
@@ -163,7 +163,7 @@ trans.mard <- function(dat, at){
   trans.rp <- rbinom(length(trans.rp.prob), 1, trans.rp.prob)
 
 
-  # Output ------------------------------------------------------------------
+  ## Output
 
   # Update attributes
 
@@ -205,12 +205,14 @@ trans.mard <- function(dat, at){
   dat$epi$incid[at] <- length(infected)
   dat$epi$incid.B[at] <- sum(race[infected] == "B")
   dat$epi$incid.W[at] <- sum(race[infected] == "W")
-  dat$epi$incid.yng[at] <- sum(age[infected] < 30)
-  dat$epi$incid.old[at] <- sum(age[infected] >= 30)
-  dat$epi$incid.B.yng[at] <- sum(race[infected] == "B" & age[infected] < 30)
-  dat$epi$incid.B.old[at] <- sum(race[infected] == "B" & age[infected] >= 30)
-  dat$epi$incid.W.yng[at] <- sum(race[infected] == "W" & age[infected] < 30)
-  dat$epi$incid.W.old[at] <- sum(race[infected] == "W" & age[infected] >= 30)
+  if (dat$control$prevfull == TRUE) {
+    dat$epi$incid.yng[at] <- sum(age[infected] < 30)
+    dat$epi$incid.old[at] <- sum(age[infected] >= 30)
+    dat$epi$incid.B.yng[at] <- sum(race[infected] == "B" & age[infected] < 30)
+    dat$epi$incid.B.old[at] <- sum(race[infected] == "B" & age[infected] >= 30)
+    dat$epi$incid.W.yng[at] <- sum(race[infected] == "W" & age[infected] < 30)
+    dat$epi$incid.W.old[at] <- sum(race[infected] == "W" & age[infected] >= 30)
+  }
   dat$epi$incid.prep0[at] <- sum(prepStat[infected] == 0)
   dat$epi$incid.prep1[at] <- sum(prepStat[infected] == 1)
 

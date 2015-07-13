@@ -25,7 +25,7 @@
 #'
 tx.mard <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Attributes
   active <- dat$attr$active
@@ -46,7 +46,7 @@ tx.mard <- function(dat, at) {
   tx.reinit.W.prob <- dat$param$tx.reinit.W.prob
 
 
-  # Initiation --------------------------------------------------------------
+  ## Initiation
   tx.init.elig.B <- which(active == 1 & race == "B" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c("YP", "YF") & cum.time.on.tx == 0 &
@@ -67,7 +67,7 @@ tx.mard <- function(dat, at) {
   dat$attr$tx.init.time[tx.init] <- at
 
 
-  # Halting -----------------------------------------------------------------
+  ## Halting
   tx.halt.elig.B <- which(active == 1 & race == "B" & tx.status == 1)
   tx.halt.B <- tx.halt.elig.B[rbinom(length(tx.halt.elig.B), 1,
                                      tx.halt.B.prob) == 1]
@@ -79,7 +79,7 @@ tx.mard <- function(dat, at) {
   dat$attr$tx.status[tx.halt] <- 0
 
 
-  # Restarting --------------------------------------------------------------
+  ## Restarting
   tx.reinit.elig.B <- which(active == 1 & race == "B" & tx.status == 0 &
                             cum.time.on.tx > 0 & stage != "D")
   tx.reinit.B <- tx.reinit.elig.B[rbinom(length(tx.reinit.elig.B),
@@ -94,13 +94,12 @@ tx.mard <- function(dat, at) {
   dat$attr$tx.status[tx.reinit] <- 1
 
 
-  # Other output ------------------------------------------------------------
+  ## Other output
   idsAct <- which(active == 1)
   dat$attr$cum.time.on.tx[idsAct] <- dat$attr$cum.time.on.tx[idsAct] +
                                      ((dat$attr$tx.status[idsAct] == 1) %in% TRUE)
   dat$attr$cum.time.off.tx[idsAct] <- dat$attr$cum.time.off.tx[idsAct] +
                                      ((dat$attr$tx.status[idsAct] == 0) %in% TRUE)
-
 
   return(dat)
 }

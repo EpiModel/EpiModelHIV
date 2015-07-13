@@ -24,7 +24,7 @@
 #'
 position.mard <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   if (dat$control$save.dal == TRUE) {
     dal <- dat$temp$dal[[at]]
@@ -41,8 +41,7 @@ position.mard <- function(dat, at) {
   vv.iev.WW.prob <- dat$param$vv.iev.WW.prob
 
 
-  # Process -----------------------------------------------------------------
-
+  ## Process
   pos.role.class <- role.class[dal$pos]
   neg.role.class <- role.class[dal$neg]
 
@@ -70,7 +69,7 @@ position.mard <- function(dat, at) {
   dal$ins[vv.remaining[inspos == 0]] <- "N"
 
 
-  # Output ------------------------------------------------------------------
+  ## Output
   if (dat$control$save.dal == TRUE) {
     dat$temp$dal[[at]] <- dal
   } else {

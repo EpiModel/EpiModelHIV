@@ -69,24 +69,23 @@ deaths.mard <- function(dat, at) {
   dat$epi$dth.gen[at] <- length(dth.gen)
   dat$epi$dth.gen.B[at] <- length(deaths.B)
   dat$epi$dth.gen.W[at] <- length(deaths.W)
-  dat$epi$dth.gen.yng[at] <- sum(age[dth.all] < 30)
-  dat$epi$dth.gen.old[at] <- sum(age[dth.all] >= 30)
-  dat$epi$dth.gen.B.yng[at] <- sum(age[deaths.B] < 30)
-  dat$epi$dth.gen.B.old[at] <- sum(age[deaths.B] >= 30)
-  dat$epi$dth.gen.W.yng[at] <- sum(age[deaths.W] < 30)
-  dat$epi$dth.gen.W.old[at] <- sum(age[deaths.W] >= 30)
-
   dat$epi$dth.dis[at] <- length(dth.dis)
   dat$epi$dth.dis.B[at] <- sum(race[dth.dis] == "B")
   dat$epi$dth.dis.W[at] <- sum(race[dth.dis] == "W")
-  dat$epi$dth.dis.yng[at] <- sum(age[dth.dis] < 30)
-  dat$epi$dth.dis.old[at] <- sum(age[dth.dis] >= 30)
-  dat$epi$dth.dis.B.yng[at] <- sum(race[dth.dis] == "B" & age[dth.dis] < 30)
-  dat$epi$dth.dis.B.old[at] <- sum(race[dth.dis] == "B" & age[dth.dis] >= 30)
-  dat$epi$dth.dis.W.yng[at] <- sum(race[dth.dis] == "W" & age[dth.dis] < 30)
-  dat$epi$dth.dis.W.old[at] <- sum(race[dth.dis] == "W" & age[dth.dis] >= 30)
-
-  dat$epi$dth.all[at] <- length(dth.all)
+  if (dat$control$prevfull == TRUE) {
+    dat$epi$dth.gen.yng[at] <- sum(age[dth.all] < 30)
+    dat$epi$dth.gen.old[at] <- sum(age[dth.all] >= 30)
+    dat$epi$dth.gen.B.yng[at] <- sum(age[deaths.B] < 30)
+    dat$epi$dth.gen.B.old[at] <- sum(age[deaths.B] >= 30)
+    dat$epi$dth.gen.W.yng[at] <- sum(age[deaths.W] < 30)
+    dat$epi$dth.gen.W.old[at] <- sum(age[deaths.W] >= 30)
+    dat$epi$dth.dis.yng[at] <- sum(age[dth.dis] < 30)
+    dat$epi$dth.dis.old[at] <- sum(age[dth.dis] >= 30)
+    dat$epi$dth.dis.B.yng[at] <- sum(race[dth.dis] == "B" & age[dth.dis] < 30)
+    dat$epi$dth.dis.B.old[at] <- sum(race[dth.dis] == "B" & age[dth.dis] >= 30)
+    dat$epi$dth.dis.W.yng[at] <- sum(race[dth.dis] == "W" & age[dth.dis] < 30)
+    dat$epi$dth.dis.W.old[at] <- sum(race[dth.dis] == "W" & age[dth.dis] >= 30)
+  }
 
   return(dat)
 }

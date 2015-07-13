@@ -82,6 +82,9 @@ initialize.mard <- function(x, param, init, control, s) {
   age <- dat$attr$sqrt.age^2
   dat$attr$age <- age
 
+  # Risk group
+  dat$attr$riskg <- dat$nw[[3]] %v% "riskg"
+
   # Arrival and departure
   dat$attr$arrival.time <- rep(1, num)
   dat$attr$depart.time <- rep(NA, num)

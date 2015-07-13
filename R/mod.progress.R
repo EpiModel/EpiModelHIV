@@ -32,7 +32,7 @@
 #'
 progress.mard <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Attributes
   active <- dat$attr$active
@@ -55,7 +55,7 @@ progress.mard <- function(dat, at) {
   max.time.off.tx.full <- dat$param$max.time.off.tx.full
 
 
-  # Process -----------------------------------------------------------------
+  ## Process
 
   # Increment day
   stage.time[active == 1] <- stage.time[active == 1] + 1
@@ -91,8 +91,7 @@ progress.mard <- function(dat, at) {
   stage.time[isAIDS] <- 1
 
 
-  # Output ------------------------------------------------------------------
-
+  ## Output
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
 

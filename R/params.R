@@ -498,12 +498,13 @@ init.mard <- function(nwstats,
 #'        out at the end of simulation (necessary for restarting a simulation).
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
+#' @param prevfull If \code{TRUE}, save extended summary statistics for prevalence
+#'        and incidence (defined in the prevalence module).
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
 #'        if in interactive mode or text files if in batch mode.
 #' @param verbose.int Integer specifying the interval between time steps at which
 #'        progress is printed.
 #' @param ... Additional arguments passed to the function.
-#'
 #'
 #' @return
 #' A list object of class \code{control.mard}, which can be passed to the
@@ -541,6 +542,7 @@ control.mard <- function(simno = 1,
                          save.nwstats = TRUE,
                          save.network = FALSE,
                          save.other = "attr",
+                         prevfull = FALSE,
                          verbose = TRUE,
                          verbose.int = 1,
                          ...) {

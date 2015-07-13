@@ -23,7 +23,7 @@
 #'
 births.mard <- function(dat, at){
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
   b.B.rate <- dat$param$b.B.rate
   b.W.rate <- dat$param$b.W.rate
 
@@ -35,19 +35,19 @@ births.mard <- function(dat, at){
   currNwSize <- network.size(dat$nw$m)
 
 
-  # Process -----------------------------------------------------------------
+  ## Process
   nBirths.B <- rpois(1, b.B.rate * numB)
   nBirths.W <- rpois(1, b.W.rate * numW)
   nBirths <- nBirths.B + nBirths.W
 
 
-  # Update Attr -------------------------------------------------------------
+  ## Update Attr
   if (nBirths > 0) {
     dat <- setBirthAttr.mard(dat, at, nBirths.B, nBirths.W)
   }
 
 
-  # Update Networks ---------------------------------------------------------
+  ## Update Networks
   newIds <- NULL
   if (nBirths > 0) {
     newIds <- (currNwSize + 1):(currNwSize + nBirths)
@@ -58,6 +58,7 @@ births.mard <- function(dat, at){
     new.srage <- dat$attr$sqrt.age[newIds]
     new.rc <- dat$attr$role.class[newIds]
     new.degm <- new.degp <- paste0(new.race, 0)
+    new.riskg <- dat$attr$riskg[newIds]
 
     for (i in 1:3) {
       dat$nw[[i]] <- add.vertices.active(x = dat$nw[[i]], nv = nBirths,
@@ -85,28 +86,31 @@ births.mard <- function(dat, at){
     dat$nw$i <- set.vertex.attribute(x = dat$nw$i,
                                      attrname = c("race", "sqrt.age",
                                                   "role.class", "deg.pers",
-                                                  "deg.main"),
+                                                  "deg.main", "riskg"),
                                      value = list(race = new.race,
                                                   sqrt.age = new.srage,
                                                   role.class = new.rc,
                                                   deg.pers = new.degp,
-                                                  deg.main = new.degm),
+                                                  deg.main = new.degm,
+                                                  riskg = new.riskg),
                                      v = newIds)
   }
 
 
-  # Output ------------------------------------------------------------------
+  ## Output
   age <- dat$attr$age
   race <- dat$attr$race
   dat$epi$nBirths[at] <- nBirths
   dat$epi$nBirths.B[at] <- nBirths.B
   dat$epi$nBirths.W[at] <- nBirths.W
-  dat$epi$nBirths.y[at] <- sum(age[newIds] < 30)
-  dat$epi$nBirths.o[at] <- sum(age[newIds] >= 30)
-  dat$epi$nBirths.B.y[at] <- sum(race[newIds] == "B" & age[newIds] < 30)
-  dat$epi$nBirths.B.o[at] <- sum(race[newIds] == "B" & age[newIds] >= 30)
-  dat$epi$nBirths.W.y[at] <- sum(race[newIds] == "W" & age[newIds] < 30)
-  dat$epi$nBirths.W.o[at] <- sum(race[newIds] == "W" & age[newIds] >= 30)
+  if (dat$control$prevfull == TRUE) {
+    dat$epi$nBirths.yng[at] <- sum(age[newIds] < 30)
+    dat$epi$nBirths.old[at] <- sum(age[newIds] >= 30)
+    dat$epi$nBirths.B.yng[at] <- sum(race[newIds] == "B" & age[newIds] < 30)
+    dat$epi$nBirths.B.old[at] <- sum(race[newIds] == "B" & age[newIds] >= 30)
+    dat$epi$nBirths.W.yng[at] <- sum(race[newIds] == "W" & age[newIds] < 30)
+    dat$epi$nBirths.W.old[at] <- sum(race[newIds] == "W" & age[newIds] >= 30)
+  }
 
   return(dat)
 }
@@ -174,14 +178,14 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$ccr5[newIds[newB]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.B, replace = TRUE,
                                         prob = c(1 - sum(ccr5.B.prob),
-                                                 ccr5.B.prob[2],
-                                                 ccr5.B.prob[1]))
+                                                 ccr5.B.prob[2], ccr5.B.prob[1]))
   dat$attr$ccr5[newIds[newW]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.W, replace = TRUE,
                                         prob = c(1 - sum(ccr5.W.prob),
-                                                 ccr5.W.prob[2],
-                                                 ccr5.W.prob[1]))
+                                                 ccr5.W.prob[2], ccr5.W.prob[1]))
+
+  # One-off risk group
+  dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
 
   return(dat)
-
 }

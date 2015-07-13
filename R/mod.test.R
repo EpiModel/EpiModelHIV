@@ -20,7 +20,7 @@
 #'
 test.mard <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Attributes
   active <- dat$attr$active
@@ -37,7 +37,7 @@ test.mard <- function(dat, at) {
   twind.int <- dat$attr$test.window.int
 
 
-  # Process -----------------------------------------------------------------
+  ## Process
 
   if (testing.pattern == "memoryless") {
     elig.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
@@ -72,7 +72,7 @@ test.mard <- function(dat, at) {
   tst.neg <- c(tst.neg.B, tst.neg.W)
 
 
-  # Output ------------------------------------------------------------------
+  ## Output
 
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
