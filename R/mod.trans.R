@@ -205,6 +205,9 @@ trans.mard <- function(dat, at){
   dat$epi$incid[at] <- length(infected)
   dat$epi$incid.B[at] <- sum(race[infected] == "B")
   dat$epi$incid.W[at] <- sum(race[infected] == "W")
+  dat$epi$incid.acte[at] <- sum(stage[infector] %in% c("AR", "AF"))
+  dat$epi$incid.chrn[at] <- sum(stage[infector] == "C")
+  dat$epi$incid.aids[at] <- sum(stage[infector] == "D")
   if (dat$control$prevfull == TRUE) {
     dat$epi$incid.yng[at] <- sum(age[infected] < 30)
     dat$epi$incid.old[at] <- sum(age[infected] >= 30)
