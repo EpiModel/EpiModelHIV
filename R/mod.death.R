@@ -87,7 +87,6 @@ deaths.mard <- function(dat, at) {
   dat$epi$dth.dis.W.old[at] <- sum(race[dth.dis] == "W" & age[dth.dis] >= 30)
 
   dat$epi$dth.all[at] <- length(dth.all)
-  dat$temp$dth.all <- dth.all
 
   return(dat)
 }
