@@ -144,16 +144,16 @@ prevalence.mard <- function(dat, at) {
   dat$epi$i.prev[at] <- dat$epi$i.num[at] / dat$epi$num[at]
   dat$epi$i.prev.B[at] <- dat$epi$i.num.B[at] / dat$epi$num.B[at]
   dat$epi$i.prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
-  dat$epi$i.prev.rg1 <- sum(active == 1 & status == 1 & riskg == 1, na.rm = TRUE)/
-                        sum(active == 1 & riskg == 1, na.rm = TRUE)
-  dat$epi$i.prev.rg2 <- sum(active == 1 & status == 1 & riskg == 2, na.rm = TRUE)/
-                        sum(active == 1 & riskg == 2, na.rm = TRUE)
-  dat$epi$i.prev.rg3 <- sum(active == 1 & status == 1 & riskg == 3, na.rm = TRUE)/
-                        sum(active == 1 & riskg == 3, na.rm = TRUE)
-  dat$epi$i.prev.rg4 <- sum(active == 1 & status == 1 & riskg == 4, na.rm = TRUE)/
-                        sum(active == 1 & riskg == 4, na.rm = TRUE)
-  dat$epi$i.prev.rg5 <- sum(active == 1 & status == 1 & riskg == 5, na.rm = TRUE)/
-                        sum(active == 1 & riskg == 5, na.rm = TRUE)
+  dat$epi$i.prev.rg1[at] <- sum(active == 1 & status == 1 & riskg == 1, na.rm = TRUE)/
+                            sum(active == 1 & riskg == 1, na.rm = TRUE)
+  dat$epi$i.prev.rg2[at] <- sum(active == 1 & status == 1 & riskg == 2, na.rm = TRUE)/
+                            sum(active == 1 & riskg == 2, na.rm = TRUE)
+  dat$epi$i.prev.rg3[at] <- sum(active == 1 & status == 1 & riskg == 3, na.rm = TRUE)/
+                            sum(active == 1 & riskg == 3, na.rm = TRUE)
+  dat$epi$i.prev.rg4[at] <- sum(active == 1 & status == 1 & riskg == 4, na.rm = TRUE)/
+                            sum(active == 1 & riskg == 4, na.rm = TRUE)
+  dat$epi$i.prev.rg5[at] <- sum(active == 1 & status == 1 & riskg == 5, na.rm = TRUE)/
+                            sum(active == 1 & riskg == 5, na.rm = TRUE)
 
   dat$epi$tx.naive[at] <- sum(active == 1 & time.on.tx == 0, na.rm = TRUE)
   dat$epi$tx.naive.B[at] <- sum(active == 1 & time.on.tx == 0 & race == "B",
