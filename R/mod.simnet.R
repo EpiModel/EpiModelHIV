@@ -129,9 +129,7 @@ simnet.mard <- function(dat, at) {
 
   inst.formula <- update.formula(nwparam.i$formation, dat$nw$i ~ .)
   environment(inst.formula) <- environment()
-  dat$nw$i <- simulate(inst.formula,
-                       coef = nwparam.i$coef.form,
-                       constraints = nwparam.i$constraints)
+  dat$nw$i <- simulate(inst.formula, coef = nwparam.i$coef.form)
 
   stats <- data.frame(t(summary(inst.formula)))
   stats <- calc_meandegs(dat, at, stats, "inst")
