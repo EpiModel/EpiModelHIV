@@ -44,40 +44,82 @@ prevalence.mard <- function(dat, at) {
   rNA <- rep(NA, nsteps)
 
   if (at == 1) {
-    dat$epi$num <- dat$epi$num.B <- dat$epi$num.W <- rNA
-    dat$epi$i.num <- dat$epi$i.num.B <- dat$epi$i.num.W <- rNA
-    dat$epi$i.prev <- dat$epi$i.prev.B <- dat$epi$i.prev.W <- rNA
-    dat$epi$nBirths <- dat$epi$nBirths.B <- dat$epi$nBirths.W <- rNA
-    dat$epi$dth.gen <- dat$epi$dth.dis <- rNA
-    dat$epi$dth.gen.B <- dat$epi$dth.gen.W <- rNA
-    dat$epi$dth.dis.B <- dat$epi$dth.dis.W <- rNA
-    dat$epi$incid <- dat$epi$incid.B <- dat$epi$incid.W <- rNA
-    dat$epi$incid.acte <- dat$epi$incid.chrn <- dat$epi$incid.aids <- rNA
-    dat$epi$tx.naive <- dat$epi$tx.naive.B <- dat$epi$tx.naive.W <- rNA
-    dat$epi$tx.full.supp <- dat$epi$tx.full.supp.B <- dat$epi$tx.full.supp.W <- rNA
-    dat$epi$acute <- dat$epi$acute.B <- dat$epi$acute.W <- rNA
-    dat$epi$chronic <- dat$epi$chronic.B <- dat$epi$chronic.W <- rNA
-    dat$epi$aids <- dat$epi$aids.B <- dat$epi$aids.W <- rNA
-    dat$epi$i.prev.rg1 <- dat$epi$i.prev.rg2 <- dat$epi$i.prev.rg3 <-
-      dat$epi$i.prev.rg4 <- dat$epi$i.prev.rg5 <- rNA
+    dat$epi$num <- rNA
+    dat$epi$num.B <- rNA
+    dat$epi$num.W <- rNA
+    dat$epi$i.num <- rNA
+    dat$epi$i.num.B <- rNA
+    dat$epi$i.num.W <- rNA
+    dat$epi$i.prev <- rNA
+    dat$epi$i.prev.B <- rNA
+    dat$epi$i.prev.W <- rNA
+    dat$epi$nBirths <- rNA
+    dat$epi$nBirths.B <- rNA
+    dat$epi$nBirths.W <- rNA
+    dat$epi$dth.gen <- rNA
+    dat$epi$dth.dis <- rNA
+    dat$epi$dth.gen.B <- rNA
+    dat$epi$dth.gen.W <- rNA
+    dat$epi$dth.dis.B <- rNA
+    dat$epi$dth.dis.W <- rNA
+    dat$epi$incid <- rNA
+    dat$epi$incid.B <- rNA
+    dat$epi$incid.W <- rNA
+    dat$epi$incid.acte <- rNA
+    dat$epi$incid.chrn <- rNA
+    dat$epi$incid.aids <- rNA
+    dat$epi$tx.naive <- rNA
+    dat$epi$tx.naive.B <- rNA
+    dat$epi$tx.naive.W <- rNA
+    dat$epi$tx.full.supp <- rNA
+    dat$epi$tx.full.supp.B <- rNA
+    dat$epi$tx.full.supp.W <- rNA
+    dat$epi$acute <- rNA
+    dat$epi$acute.B <- rNA
+    dat$epi$acute.W <- rNA
+    dat$epi$chronic <- rNA
+    dat$epi$chronic.B <- rNA
+    dat$epi$chronic.W <- rNA
+    dat$epi$aids <- rNA
+    dat$epi$aids.B <- rNA
+    dat$epi$aids.W <- rNA
+    dat$epi$i.prev.rg1 <- rNA
+    dat$epi$i.prev.rg2 <- rNA
+    dat$epi$i.prev.rg3 <- rNA
+    dat$epi$i.prev.rg4 <- rNA
+    dat$epi$i.prev.rg5 <- rNA
 
     if (prevfull == TRUE) {
-      dat$epi$undiag <- dat$epi$undiag.B <- dat$epi$undiag.W <- rNA
-      dat$epi$diag <- dat$epi$diag.B <- dat$epi$diag.W <- rNA
-      dat$epi$tx.part.supp <- dat$epi$tx.part.supp.B <-
-        dat$epi$tx.part.supp.W <- rNA
-      dat$epi$tx.influx.full <- dat$epi$tx.influx.full.B <-
-        dat$epi$tx.influx.full.W <- rNA
-      dat$epi$tx.influx.part <- dat$epi$tx.influx.part.B <-
-        dat$epi$tx.influx.part.W <- rNA
-      dat$epi$off.tx <- dat$epi$off.tx.B <- dat$epi$off.tx.W <- rNA
+      dat$epi$undiag <- rNA
+      dat$epi$undiag.B <- rNA
+      dat$epi$undiag.W <- rNA
+      dat$epi$diag <- rNA
+      dat$epi$diag.B <- rNA
+      dat$epi$diag.W <- rNA
+      dat$epi$tx.part.supp <- rNA
+      dat$epi$tx.part.supp.B <- rNA
+      dat$epi$tx.part.supp.W <- rNA
+      dat$epi$tx.influx.full <- rNA
+      dat$epi$tx.influx.full.B <- rNA
+      dat$epi$tx.influx.full.W <- rNA
+      dat$epi$tx.influx.part <- rNA
+      dat$epi$tx.influx.part.B <- rNA
+      dat$epi$tx.influx.part.W <- rNA
+      dat$epi$off.tx <- rNA
+      dat$epi$off.tx.B <- rNA
+      dat$epi$off.tx.W <- rNA
     }
 
-    dat$epi$prepCurr <- dat$epi$prepEver <-
-      dat$epi$prepCov <- dat$epi$prepStart <- rNA
-    dat$epi$incid.prep0 <- dat$epi$incid.prep1 <-
-      dat$epi$i.num.prep0 <- dat$epi$i.num.prep1 <-
-      dat$epi$i.prev.prep0 <- dat$epi$i.prev.prep1 <- rNA
+    dat$epi$prepCurr <-
+    dat$epi$prepEver <-
+    dat$epi$prepCov <-
+    dat$epi$prepStart <- rNA
+    dat$epi$incid.prep0 <-
+    dat$epi$incid.prep1 <-
+    dat$epi$i.num.prep0 <-
+    dat$epi$i.num.prep1 <-
+    dat$epi$i.prev.prep0 <-
+    dat$epi$i.prev.prep1 <- rNA
   }
 
 
