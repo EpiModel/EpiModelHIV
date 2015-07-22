@@ -108,6 +108,9 @@ prevalence.mard <- function(dat, at) {
       dat$epi$off.tx <- rNA
       dat$epi$off.tx.B <- rNA
       dat$epi$off.tx.W <- rNA
+      dat$epi$tx.init.inc <- rNA
+      dat$epi$tx.halt.inc <- rNA
+      dat$epi$tx.resm.inc <- rNA
     }
 
     dat$epi$prepCurr <-
