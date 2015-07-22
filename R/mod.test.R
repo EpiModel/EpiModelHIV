@@ -34,7 +34,7 @@ test.mard <- function(dat, at) {
   testing.pattern <- dat$param$testing.pattern
   mean.test.B.int <- dat$param$mean.test.B.int
   mean.test.W.int <- dat$param$mean.test.W.int
-  twind.int <- dat$attr$test.window.int
+  twind.int <- dat$param$test.window.int
 
 
   ## Process
@@ -42,11 +42,11 @@ test.mard <- function(dat, at) {
   if (testing.pattern == "memoryless") {
     elig.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    testing.B <- elig.B[rbinom(length(elig.B), 1, 1 / mean.test.B.int) == 1]
+    tst.B <- elig.B[rbinom(length(elig.B), 1, 1 / mean.test.B.int) == 1]
 
     elig.W <- which(active == 1 & race == "W" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    testing.W <- elig.W[rbinom(length(elig.W), 1, 1 / mean.test.W.int) == 1]
+    tst.W <- elig.W[rbinom(length(elig.W), 1, 1 / mean.test.W.int) == 1]
   }
 
   if (testing.pattern == "interval") {
