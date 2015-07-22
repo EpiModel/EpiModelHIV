@@ -111,17 +111,19 @@ prevalence.mard <- function(dat, at) {
       dat$epi$tx.init.inc <- rNA
       dat$epi$tx.halt.inc <- rNA
       dat$epi$tx.resm.inc <- rNA
+      dat$epi$tst.W.inc <- rNA
+      dat$epi$tst.B.inc <- rNA
     }
 
-    dat$epi$prepCurr <-
-    dat$epi$prepEver <-
-    dat$epi$prepCov <-
+    dat$epi$prepCurr <- rNA
+    dat$epi$prepEver <- rNA
+    dat$epi$prepCov <- rNA
     dat$epi$prepStart <- rNA
-    dat$epi$incid.prep0 <-
-    dat$epi$incid.prep1 <-
-    dat$epi$i.num.prep0 <-
-    dat$epi$i.num.prep1 <-
-    dat$epi$i.prev.prep0 <-
+    dat$epi$incid.prep0 <- rNA
+    dat$epi$incid.prep1 <- rNA
+    dat$epi$i.num.prep0 <- rNA
+    dat$epi$i.num.prep1 <- rNA
+    dat$epi$i.prev.prep0 <- rNA
     dat$epi$i.prev.prep1 <- rNA
   }
 
