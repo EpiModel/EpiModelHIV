@@ -27,7 +27,6 @@ prevalence.mard <- function(dat, at) {
   active <- dat$attr$active
   race <- dat$attr$race
   status <- dat$attr$status
-  age <- dat$attr$age
   diag.status <- dat$attr$diag.status
   tx.status <- dat$attr$tx.status
   time.on.tx <- dat$attr$cum.time.on.tx
@@ -149,97 +148,75 @@ prevalence.mard <- function(dat, at) {
                             sum(active == 1 & riskg == 5, na.rm = TRUE)
 
   dat$epi$tx.naive[at] <- sum(active == 1 & time.on.tx == 0, na.rm = TRUE)
-  dat$epi$tx.naive.B[at] <- sum(active == 1 & time.on.tx == 0 & race == "B",
-                                na.rm = TRUE)
-  dat$epi$tx.naive.W[at] <- sum(active == 1 & time.on.tx == 0 & race == "W",
-                                na.rm = TRUE)
+  dat$epi$tx.naive.B[at] <- sum(active == 1 & time.on.tx == 0 & race == "B", na.rm = TRUE)
+  dat$epi$tx.naive.W[at] <- sum(active == 1 & time.on.tx == 0 & race == "W", na.rm = TRUE)
   dat$epi$tx.full.supp[at] <- sum(active == 1 & tx.status == 1 &
-                                    vl %in% vl.full.supp, na.rm = TRUE)
+                                  vl %in% vl.full.supp, na.rm = TRUE)
   dat$epi$tx.full.supp.B[at] <- sum(active == 1 & tx.status == 1 &
-                                      vl %in% vl.full.supp & race == "B",
-                                    na.rm = TRUE)
+                                    vl %in% vl.full.supp & race == "B", na.rm = TRUE)
   dat$epi$tx.full.supp.W[at] <- sum(active == 1 & tx.status == 1 &
-                                      vl %in% vl.full.supp & race == "W",
-                                    na.rm = TRUE)
+                                    vl %in% vl.full.supp & race == "W", na.rm = TRUE)
   dat$epi$acute[at] <- sum(active == 1 & stage %in% c("AR", "AF"), na.rm = TRUE)
-  dat$epi$acute.B[at] <- sum(active == 1 & stage %in% c("AR", "AF") & race == "B",
-                             na.rm = TRUE)
-  dat$epi$acute.W[at] <- sum(active == 1 & stage %in% c("AR", "AF") & race == "W",
-                             na.rm = TRUE)
+  dat$epi$acute.B[at] <- sum(active == 1 & stage %in% c("AR", "AF") & race == "B", na.rm = TRUE)
+  dat$epi$acute.W[at] <- sum(active == 1 & stage %in% c("AR", "AF") & race == "W", na.rm = TRUE)
   dat$epi$chronic[at] <- sum(active == 1 & stage == "C", na.rm = TRUE)
-  dat$epi$chronic.B[at] <- sum(active == 1 & stage == "C" & race == "B",
-                               na.rm = TRUE)
-  dat$epi$chronic.W[at] <- sum(active == 1 & stage == "C" & race == "W",
-                               na.rm = TRUE)
+  dat$epi$chronic.B[at] <- sum(active == 1 & stage == "C" & race == "B", na.rm = TRUE)
+  dat$epi$chronic.W[at] <- sum(active == 1 & stage == "C" & race == "W", na.rm = TRUE)
   dat$epi$aids[at] <- sum(active == 1 & stage == "D", na.rm = TRUE)
-  dat$epi$aids.B[at] <- sum(active == 1 & stage == "D" & race == "B",
-                            na.rm = TRUE)
-  dat$epi$aids.W[at] <- sum(active == 1 & stage == "D" & race == "W",
-                            na.rm = TRUE)
+  dat$epi$aids.B[at] <- sum(active == 1 & stage == "D" & race == "B", na.rm = TRUE)
+  dat$epi$aids.W[at] <- sum(active == 1 & stage == "D" & race == "W", na.rm = TRUE)
 
 
   if (prevfull == TRUE) {
-    dat$epi$undiag[at] <- sum(active == 1 & status == 1 & diag.status == 0,
-                              na.rm = TRUE)
+    dat$epi$undiag[at] <- sum(active == 1 & status == 1 & diag.status == 0, na.rm = TRUE)
     dat$epi$undiag.B[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                  race == "B", na.rm = TRUE)
-    dat$epi$undiag.W[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                  race == "W", na.rm = TRUE)
-    dat$epi$diag[at] <- sum(active == 1 & status == 1 & diag.status == 1,
-                            na.rm = TRUE)
-    dat$epi$diag.B[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
                                 race == "B", na.rm = TRUE)
-    dat$epi$diag.W[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
+    dat$epi$undiag.W[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
                                 race == "W", na.rm = TRUE)
+    dat$epi$diag[at] <- sum(active == 1 & status == 1 & diag.status == 1, na.rm = TRUE)
+    dat$epi$diag.B[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
+                              race == "B", na.rm = TRUE)
+    dat$epi$diag.W[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
+                              race == "W", na.rm = TRUE)
     dat$epi$tx.part.supp[at] <- sum(active == 1 & tx.status == 1 &
-                                      vl %in% vl.part.supp, na.rm = TRUE)
+                                    vl %in% vl.part.supp, na.rm = TRUE)
     dat$epi$tx.part.supp.B[at] <- sum(active == 1 & tx.status == 1 &
-                                        vl %in% vl.part.supp & race == "B",
-                                      na.rm = TRUE)
+                                      vl %in% vl.part.supp & race == "B", na.rm = TRUE)
     dat$epi$tx.part.supp.W[at] <- sum(active == 1 & tx.status == 1 &
-                                        vl %in% vl.part.supp & race == "W",
-                                      na.rm = TRUE)
+                                      vl %in% vl.part.supp & race == "W", na.rm = TRUE)
     dat$epi$tx.influx.full[at] <- sum(active == 1 & tx.status == 1 &
-                                        !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                        tt.traj == "YF", na.rm = TRUE)
+                                      !(vl %in% c(vl.full.supp, vl.part.supp)) &
+                                      tt.traj == "YF", na.rm = TRUE)
     dat$epi$tx.influx.full.B[at] <- sum(active == 1 & tx.status == 1 &
-                                          !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                          tt.traj == "YF" & race == "B",
-                                        na.rm = TRUE)
-    dat$epi$tx.influx.full.W[at] <- sum(active == 1 & tx.status == 1 &
-                                          !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                          tt.traj == "YF" & race == "W",
-                                        na.rm = TRUE)
-    dat$epi$tx.influx.part[at] <- sum(active == 1 & tx.status == 1 &
                                         !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                        tt.traj == "YP", na.rm = TRUE)
+                                        tt.traj == "YF" & race == "B", na.rm = TRUE)
+    dat$epi$tx.influx.full.W[at] <- sum(active == 1 & tx.status == 1 &
+                                        !(vl %in% c(vl.full.supp, vl.part.supp)) &
+                                        tt.traj == "YF" & race == "W", na.rm = TRUE)
+    dat$epi$tx.influx.part[at] <- sum(active == 1 & tx.status == 1 &
+                                      !(vl %in% c(vl.full.supp, vl.part.supp)) &
+                                      tt.traj == "YP", na.rm = TRUE)
     dat$epi$tx.influx.part.B[at] <- sum(active == 1 & tx.status == 1 &
-                                          !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                          tt.traj == "YP" & race == "B",
-                                        na.rm = TRUE)
+                                        !(vl %in% c(vl.full.supp, vl.part.supp)) &
+                                        tt.traj == "YP" & race == "B", na.rm = TRUE)
     dat$epi$tx.influx.part.W[at] <- sum(active == 1 & tx.status == 1 &
-                                          !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                          tt.traj == "YP" & race == "W",
-                                        na.rm = TRUE)
+                                        !(vl %in% c(vl.full.supp, vl.part.supp)) &
+                                        tt.traj == "YP" & race == "W", na.rm = TRUE)
 
-    dat$epi$off.tx[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0,
-                              na.rm = TRUE)
+    dat$epi$off.tx[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0, na.rm = TRUE)
     dat$epi$off.tx.B[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                  race == "B", na.rm = TRUE)
+                                race == "B", na.rm = TRUE)
     dat$epi$off.tx.W[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                  race == "W", na.rm = TRUE)
+                                race == "W", na.rm = TRUE)
   }
-
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
   dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) &
-                                   status == 1, na.rm = TRUE)
-  dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == 1,
-                                 na.rm = TRUE)
+                                 status == 1, na.rm = TRUE)
+  dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == 1, na.rm = TRUE)
   dat$epi$i.prev.prep0[at] <- dat$epi$i.num.prep0[at] /
-                              sum(active == 1 & (is.na(prepStat) | prepStat == 0),
-                                  na.rm = TRUE)
+                              sum(active == 1 & (is.na(prepStat) | prepStat == 0), na.rm = TRUE)
   if (at == 1) {
     dat$epi$i.prev.prep1[1] <- 0
   } else {
