@@ -62,69 +62,15 @@ prevalence.mard <- function(dat, at) {
       dat$epi$i.prev.rg4 <- dat$epi$i.prev.rg5 <- rNA
 
     if (prevfull == TRUE) {
-      dat$epi$num.yng <- dat$epi$num.old <- rNA
-      dat$epi$num.B.yng <- dat$epi$num.B.old <- rNA
-      dat$epi$num.W.yng <- dat$epi$num.W.old <- rNA
-      dat$epi$i.num.yng <- dat$epi$i.num.old <- rNA
-      dat$epi$i.num.B.yng <- dat$epi$i.num.B.old <- rNA
-      dat$epi$i.num.W.yng <- dat$epi$i.num.W.old <- rNA
-      dat$epi$i.prev.yng <- dat$epi$i.prev.old <- rNA
-      dat$epi$i.prev.B.yng <- dat$epi$i.prev.B.old <- rNA
-      dat$epi$i.prev.W.yng <- dat$epi$i.prev.W.old <- rNA
-      dat$epi$nBirths.yng <- dat$epi$nBirths.old <- rNA
-      dat$epi$nBirths.B.yng <- dat$epi$nBirths.B.old <- rNA
-      dat$epi$nBirths.W.yng <- dat$epi$nBirths.w.old <- rNA
-      dat$epi$dth.gen.yng <- dat$epi$dth.gen.old <- rNA
-      dat$epi$dth.gen.B.yng <- dat$epi$dth.gen.B.old <- rNA
-      dat$epi$dth.gen.W.yng <- dat$epi$dth.gen.W.old <- rNA
-      dat$epi$dth.dis.yng <- dat$epi$dth.dis.old <- rNA
-      dat$epi$dth.dis.B.yng <- dat$epi$dth.dis.B.old <- rNA
-      dat$epi$dth.dis.W.yng <- dat$epi$dth.dis.W.old <- rNA
-      dat$epi$incid.yng <- dat$epi$incid.old <- rNA
-      dat$epi$incid.B.yng <- dat$epi$incid.B.old <-  rNA
-      dat$epi$incid.W.yng <- dat$epi$incid.W.old <-  rNA
       dat$epi$undiag <- dat$epi$undiag.B <- dat$epi$undiag.W <- rNA
-      dat$epi$undiag.yng <- dat$epi$undiag.old <- rNA
-      dat$epi$undiag.B.yng <- dat$epi$undiag.B.old <- rNA
-      dat$epi$undiag.W.yng <- dat$epi$undiag.W.old <- rNA
       dat$epi$diag <- dat$epi$diag.B <- dat$epi$diag.W <- rNA
-      dat$epi$diag.yng <- dat$epi$diag.old <- rNA
-      dat$epi$diag.B.yng <- dat$epi$diag.B.old <- rNA
-      dat$epi$diag.W.yng <- dat$epi$diag.W.old <- rNA
-      dat$epi$tx.naive.yng <- dat$epi$tx.naive.old <- rNA
-      dat$epi$tx.naive.B.yng <- dat$epi$tx.naive.B.old <- rNA
-      dat$epi$tx.naive.W.yng <- dat$epi$tx.naive.W.old <- rNA
-      dat$epi$tx.full.supp.yng <- dat$epi$tx.full.supp.old <- rNA
-      dat$epi$tx.full.supp.B.yng <- dat$epi$tx.full.supp.B.old <- rNA
-      dat$epi$tx.full.supp.W.yng <- dat$epi$tx.full.supp.W.old <- rNA
       dat$epi$tx.part.supp <- dat$epi$tx.part.supp.B <-
         dat$epi$tx.part.supp.W <- rNA
-      dat$epi$tx.part.supp.yng <- dat$epi$tx.part.supp.old <- rNA
-      dat$epi$tx.part.supp.B.yng <- dat$epi$tx.part.supp.B.old <- rNA
-      dat$epi$tx.part.supp.W.yng <- dat$epi$tx.part.supp.W.old <- rNA
       dat$epi$tx.influx.full <- dat$epi$tx.influx.full.B <-
         dat$epi$tx.influx.full.W <- rNA
-      dat$epi$tx.influx.full.yng <- dat$epi$tx.influx.full.old <- rNA
-      dat$epi$tx.influx.full.B.yng <- dat$epi$tx.influx.full.B.old <- rNA
-      dat$epi$tx.influx.full.W.yng <- dat$epi$tx.influx.full.W.old <- rNA
       dat$epi$tx.influx.part <- dat$epi$tx.influx.part.B <-
         dat$epi$tx.influx.part.W <- rNA
-      dat$epi$tx.influx.part.yng <- dat$epi$tx.influx.part.old <- rNA
-      dat$epi$tx.influx.part.B.yng <- dat$epi$tx.influx.part.B.old <- rNA
-      dat$epi$tx.influx.part.W.yng <- dat$epi$tx.influx.part.W.old <- rNA
       dat$epi$off.tx <- dat$epi$off.tx.B <- dat$epi$off.tx.W <- rNA
-      dat$epi$off.tx.yng <- dat$epi$off.tx.old <- rNA
-      dat$epi$off.tx.B.yng <- dat$epi$off.tx.B.old <- rNA
-      dat$epi$off.tx.W.yng <- dat$epi$off.tx.W.old <- rNA
-      dat$epi$acute.yng <- dat$epi$acute.old <- rNA
-      dat$epi$acute.B.yng <- dat$epi$acute.B.old <- rNA
-      dat$epi$acute.W.yng <- dat$epi$acute.W.old <- rNA
-      dat$epi$chronic.yng <- dat$epi$chronic.old <- rNA
-      dat$epi$chronic.B.yng <- dat$epi$chronic.B.old <- rNA
-      dat$epi$chronic.W.yng <- dat$epi$chronic.W.old <- rNA
-      dat$epi$aids.yng <- dat$epi$aids.old <- rNA
-      dat$epi$aids.B.yng <- dat$epi$aids.B.old <- rNA
-      dat$epi$aids.W.yng <- dat$epi$aids.W.old <- rNA
     }
 
     dat$epi$prepCurr <- dat$epi$prepEver <-
@@ -186,88 +132,18 @@ prevalence.mard <- function(dat, at) {
 
 
   if (prevfull == TRUE) {
-    dat$epi$num.yng[at] <- sum(active == 1 & age < 30, na.rm = TRUE)
-    dat$epi$num.old[at] <- sum(active == 1 & age >= 30, na.rm = TRUE)
-    dat$epi$num.B.yng[at] <- sum(active == 1 & race == "B" & age < 30, na.rm = TRUE)
-    dat$epi$num.B.old[at] <- sum(active == 1 & race == "B" & age >= 30, na.rm = TRUE)
-    dat$epi$num.W.yng[at] <- sum(active == 1 & race == "W" & age < 30, na.rm = TRUE)
-    dat$epi$num.W.old[at] <- sum(active == 1 & race == "W" & age >= 30, na.rm = TRUE)
-    dat$epi$i.num.yng[at] <- sum(active == 1 & status == 1 & age < 30, na.rm = TRUE)
-    dat$epi$i.num.old[at] <- sum(active == 1 & status == 1 & age >= 30, na.rm = TRUE)
-    dat$epi$i.num.B.yng[at] <- sum(active == 1 & status == 1 & race == "B" &
-                                     age < 30, na.rm = TRUE)
-    dat$epi$i.num.B.old[at] <- sum(active == 1 & status == 1 & race == "B" &
-                                     age >= 30, na.rm = TRUE)
-    dat$epi$i.num.W.yng[at] <- sum(active == 1 & status == 1 & race == "W" &
-                                     age < 30, na.rm = TRUE)
-    dat$epi$i.num.W.old[at] <- sum(active == 1 & status == 1 & race == "W" &
-                                     age >= 30, na.rm = TRUE)
-    dat$epi$i.prev.yng[at] <- dat$epi$i.num.yng[at] / dat$epi$num.yng[at]
-    dat$epi$i.prev.old[at] <- dat$epi$i.num.old[at] / dat$epi$num.old[at]
-    dat$epi$i.prev.B.yng[at] <- dat$epi$i.num.B.yng[at] / dat$epi$num.B.yng[at]
-    dat$epi$i.prev.B.old[at] <- dat$epi$i.num.B.old[at] / dat$epi$num.B.old[at]
-    dat$epi$i.prev.W.yng[at] <- dat$epi$i.num.W.yng[at] / dat$epi$num.W.yng[at]
-    dat$epi$i.prev.W.old[at] <- dat$epi$i.num.W.old[at] / dat$epi$num.W.old[at]
     dat$epi$undiag[at] <- sum(active == 1 & status == 1 & diag.status == 0,
                               na.rm = TRUE)
     dat$epi$undiag.B[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
                                   race == "B", na.rm = TRUE)
     dat$epi$undiag.W[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
                                   race == "W", na.rm = TRUE)
-    dat$epi$undiag.yng[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                    age < 30, na.rm = TRUE)
-    dat$epi$undiag.old[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                    age >= 30, na.rm = TRUE)
-    dat$epi$undiag.B.yng[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                      race == "B" & age < 30, na.rm = TRUE)
-    dat$epi$undiag.B.old[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                      race == "B" & age >= 30, na.rm = TRUE)
-    dat$epi$undiag.W.yng[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                      race == "W" & age < 30, na.rm = TRUE)
-    dat$epi$undiag.W.old[at] <- sum(active == 1 & status == 1 & diag.status == 0 &
-                                      race == "W" & age >= 30, na.rm = TRUE)
     dat$epi$diag[at] <- sum(active == 1 & status == 1 & diag.status == 1,
                             na.rm = TRUE)
     dat$epi$diag.B[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
                                 race == "B", na.rm = TRUE)
     dat$epi$diag.W[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
                                 race == "W", na.rm = TRUE)
-    dat$epi$diag.yng[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                  age < 30, na.rm = TRUE)
-    dat$epi$diag.old[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                  age >= 30, na.rm = TRUE)
-    dat$epi$diag.B.yng[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                    race == "B" & age < 30, na.rm = TRUE)
-    dat$epi$diag.B.old[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                    race == "B" & age >= 30, na.rm = TRUE)
-    dat$epi$diag.W.yng[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                    race == "W" & age < 30, na.rm = TRUE)
-    dat$epi$diag.W.old[at] <- sum(active == 1 & status == 1 & diag.status == 1 &
-                                    race == "W" & age >= 30, na.rm = TRUE)
-    dat$epi$tx.naive.yng[at] <- sum(active == 1 & time.on.tx == 0 & age < 30,
-                                    na.rm = TRUE)
-    dat$epi$tx.naive.old[at] <- sum(active == 1 & time.on.tx == 0 & age >= 30,
-                                    na.rm = TRUE)
-    dat$epi$tx.naive.B.yng[at] <- sum(active == 1 & time.on.tx == 0 & race == "B" &
-                                        age < 30, na.rm = TRUE)
-    dat$epi$tx.naive.B.old[at] <- sum(active == 1 & time.on.tx == 0 & race == "B" &
-                                        age >= 30, na.rm = TRUE)
-    dat$epi$tx.naive.W.yng[at] <- sum(active == 1 & time.on.tx == 0 & race == "W" &
-                                        age < 30, na.rm = TRUE)
-    dat$epi$tx.naive.W.old[at] <- sum(active == 1 & time.on.tx == 0 & race == "W" &
-                                        age >= 30, na.rm = TRUE)
-    dat$epi$tx.full.supp.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                          vl %in% vl.full.supp & age < 30,
-                                        na.rm = TRUE)
-    dat$epi$tx.full.supp.old[at] <- sum(active == 1 & tx.status == 1 &
-                                          vl %in% vl.full.supp & age >= 30,
-                                        na.rm = TRUE)
-    dat$epi$tx.full.supp.B.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.full.supp & race == "B" &
-                                            age < 30, na.rm = TRUE)
-    dat$epi$tx.full.supp.B.old[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.full.supp & race == "B" &
-                                            age >= 30, na.rm = TRUE)
     dat$epi$tx.part.supp[at] <- sum(active == 1 & tx.status == 1 &
                                       vl %in% vl.part.supp, na.rm = TRUE)
     dat$epi$tx.part.supp.B[at] <- sum(active == 1 & tx.status == 1 &
@@ -276,24 +152,6 @@ prevalence.mard <- function(dat, at) {
     dat$epi$tx.part.supp.W[at] <- sum(active == 1 & tx.status == 1 &
                                         vl %in% vl.part.supp & race == "W",
                                       na.rm = TRUE)
-    dat$epi$tx.part.supp.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                          vl %in% vl.part.supp & age < 30,
-                                        na.rm = TRUE)
-    dat$epi$tx.part.supp.old[at] <- sum(active == 1 & tx.status == 1 &
-                                          vl %in% vl.part.supp & age >= 30,
-                                        na.rm = TRUE)
-    dat$epi$tx.part.supp.B.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.part.supp & race == "B" &
-                                            age < 30, na.rm = TRUE)
-    dat$epi$tx.part.supp.B.old[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.part.supp & race == "B" &
-                                            age >= 30, na.rm = TRUE)
-    dat$epi$tx.part.supp.W.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.part.supp & race == "W" &
-                                            age < 30, na.rm = TRUE)
-    dat$epi$tx.part.supp.W.old[at] <- sum(active == 1 & tx.status == 1 &
-                                            vl %in% vl.part.supp & race == "W" &
-                                            age >= 30, na.rm = TRUE)
     dat$epi$tx.influx.full[at] <- sum(active == 1 & tx.status == 1 &
                                         !(vl %in% c(vl.full.supp, vl.part.supp)) &
                                         tt.traj == "YF", na.rm = TRUE)
@@ -305,30 +163,6 @@ prevalence.mard <- function(dat, at) {
                                           !(vl %in% c(vl.full.supp, vl.part.supp)) &
                                           tt.traj == "YF" & race == "W",
                                         na.rm = TRUE)
-    dat$epi$tx.influx.full.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                            !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                            tt.traj == "YF" & age < 30,
-                                          na.rm = TRUE)
-    dat$epi$tx.influx.full.old[at] <- sum(active == 1 & tx.status == 1 &
-                                            !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                            tt.traj == "YF" & age >= 30,
-                                          na.rm = TRUE)
-    dat$epi$tx.influx.full.B.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YF" & race == "B" &
-                                              age < 30, na.rm = TRUE)
-    dat$epi$tx.influx.full.B.old[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YF" & race == "B" &
-                                              age >= 30, na.rm = TRUE)
-    dat$epi$tx.influx.full.W.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YF" & race == "W" &
-                                              age < 30, na.rm = TRUE)
-    dat$epi$tx.influx.full.W.old[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YF" & race == "W" &
-                                              age >= 30, na.rm = TRUE)
     dat$epi$tx.influx.part[at] <- sum(active == 1 & tx.status == 1 &
                                         !(vl %in% c(vl.full.supp, vl.part.supp)) &
                                         tt.traj == "YP", na.rm = TRUE)
@@ -340,30 +174,6 @@ prevalence.mard <- function(dat, at) {
                                           !(vl %in% c(vl.full.supp, vl.part.supp)) &
                                           tt.traj == "YP" & race == "W",
                                         na.rm = TRUE)
-    dat$epi$tx.influx.part.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                            !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                            tt.traj == "YP" & age < 30,
-                                          na.rm = TRUE)
-    dat$epi$tx.influx.part.old[at] <- sum(active == 1 & tx.status == 1 &
-                                            !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                            tt.traj == "YP" & age >= 30,
-                                          na.rm = TRUE)
-    dat$epi$tx.influx.part.B.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YP" & race == "B" &
-                                              age < 30, na.rm = TRUE)
-    dat$epi$tx.influx.part.B.old[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YP" & race == "B" &
-                                              age >= 30, na.rm = TRUE)
-    dat$epi$tx.influx.part.W.yng[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YP" & race == "W" &
-                                              age < 30, na.rm = TRUE)
-    dat$epi$tx.influx.part.W.old[at] <- sum(active == 1 & tx.status == 1 &
-                                              !(vl %in% c(vl.full.supp, vl.part.supp)) &
-                                              tt.traj == "YP" & race == "W" &
-                                              age >= 30, na.rm = TRUE)
 
     dat$epi$off.tx[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0,
                               na.rm = TRUE)
@@ -371,55 +181,6 @@ prevalence.mard <- function(dat, at) {
                                   race == "B", na.rm = TRUE)
     dat$epi$off.tx.W[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
                                   race == "W", na.rm = TRUE)
-    dat$epi$off.tx.yng[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                    age < 30, na.rm = TRUE)
-    dat$epi$off.tx.old[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                    age >= 30, na.rm = TRUE)
-    dat$epi$off.tx.B.yng[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                      race == "B" & age < 30, na.rm = TRUE)
-    dat$epi$off.tx.B.old[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                      race == "B" & age >= 30, na.rm = TRUE)
-    dat$epi$off.tx.W.yng[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                      race == "W" & age < 30, na.rm = TRUE)
-    dat$epi$off.tx.W.old[at] <- sum(active == 1 & tx.status == 0 & time.on.tx > 0 &
-                                      race == "W" & age >= 30, na.rm = TRUE)
-    dat$epi$acute.yng[at] <- sum(active == 1 & stage %in% c("AR", "AF") & age < 30,
-                                 na.rm = TRUE)
-    dat$epi$acute.old[at] <- sum(active == 1 & stage %in% c("AR", "AF") & age >= 30,
-                                 na.rm = TRUE)
-    dat$epi$acute.B.yng[at] <- sum(active == 1 & stage %in% c("AR", "AF") &
-                                     race == "B" & age < 30, na.rm = TRUE)
-    dat$epi$acute.B.old[at] <- sum(active == 1 & stage %in% c("AR", "AF") &
-                                     race == "B" & age >= 30, na.rm = TRUE)
-    dat$epi$acute.W.yng[at] <- sum(active == 1 & stage %in% c("AR", "AF") &
-                                     race == "W" & age < 30, na.rm = TRUE)
-    dat$epi$acute.W.old[at] <- sum(active == 1 & stage %in% c("AR", "AF") &
-                                     race == "W" & age >= 30, na.rm = TRUE)
-    dat$epi$chronic.yng[at] <- sum(active == 1 & stage == "C" & age < 30,
-                                   na.rm = TRUE)
-    dat$epi$chronic.old[at] <- sum(active == 1 & stage == "C" & age >= 30,
-                                   na.rm = TRUE)
-    dat$epi$chronic.B.yng[at] <- sum(active == 1 & stage == "C" & race == "B" &
-                                       age < 30, na.rm = TRUE)
-    dat$epi$chronic.B.old[at] <- sum(active == 1 & stage == "C" & race == "B" &
-                                       age >= 30, na.rm = TRUE)
-    dat$epi$chronic.W.yng[at] <- sum(active == 1 & stage == "C" & race == "W" &
-                                       age < 30, na.rm = TRUE)
-    dat$epi$chronic.W.old[at] <- sum(active == 1 & stage == "C" & race == "W" &
-                                       age >= 30, na.rm = TRUE)
-    dat$epi$aids.yng[at] <- sum(active == 1 & stage == "D" & age < 30,
-                                na.rm = TRUE)
-    dat$epi$aids.old[at] <- sum(active == 1 & stage == "D" & age >= 30,
-                                na.rm = TRUE)
-    dat$epi$aids.B.yng[at] <- sum(active == 1 & stage == "D" & race == "B" &
-                                    age < 30, na.rm = TRUE)
-    dat$epi$aids.B.old[at] <- sum(active == 1 & stage == "D" & race == "B" &
-                                    age >= 30, na.rm = TRUE)
-    dat$epi$aids.W.yng[at] <- sum(active == 1 & stage == "D" & race == "W" &
-                                    age < 30, na.rm = TRUE)
-    dat$epi$aids.W.old[at] <- sum(active == 1 & stage == "D" & race == "W" &
-                                    age >= 30, na.rm = TRUE)
-
   }
 
 

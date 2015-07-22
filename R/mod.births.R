@@ -98,19 +98,9 @@ births.mard <- function(dat, at){
 
 
   ## Output
-  age <- dat$attr$age
-  race <- dat$attr$race
   dat$epi$nBirths[at] <- nBirths
   dat$epi$nBirths.B[at] <- nBirths.B
   dat$epi$nBirths.W[at] <- nBirths.W
-  if (dat$control$prevfull == TRUE) {
-    dat$epi$nBirths.yng[at] <- sum(age[newIds] < 30)
-    dat$epi$nBirths.old[at] <- sum(age[newIds] >= 30)
-    dat$epi$nBirths.B.yng[at] <- sum(race[newIds] == "B" & age[newIds] < 30)
-    dat$epi$nBirths.B.old[at] <- sum(race[newIds] == "B" & age[newIds] >= 30)
-    dat$epi$nBirths.W.yng[at] <- sum(race[newIds] == "W" & age[newIds] < 30)
-    dat$epi$nBirths.W.old[at] <- sum(race[newIds] == "W" & age[newIds] >= 30)
-  }
 
   return(dat)
 }
