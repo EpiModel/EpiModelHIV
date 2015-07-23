@@ -24,18 +24,23 @@
 births.mard <- function(dat, at){
 
   # Variables ---------------------------------------------------------------
+
+  # Parameters
   b.B.rate <- dat$param$b.B.rate
   b.W.rate <- dat$param$b.W.rate
-
-  active <- dat$attr$active
-  race <- dat$attr$race
-  numB <- sum(race == "B")
-  numW <- sum(race == "W")
-
-  currNwSize <- network.size(dat$nw$m)
+  b.method <- dat$param$b.method
 
 
   # Process -----------------------------------------------------------------
+  if (b.method == "fixed") {
+    numB <- dat$epi$num.B[1]
+    numW <- dat$epi$num.W[1]
+  }
+  if (b.method == "varying") {
+    numB <- dat$epi$num.B[at - 1]
+    numW <- dat$epi$num.W[at - 1]
+  }
+
   nBirths.B <- rpois(1, b.B.rate * numB)
   nBirths.W <- rpois(1, b.W.rate * numW)
   nBirths <- nBirths.B + nBirths.W
@@ -48,6 +53,7 @@ births.mard <- function(dat, at){
 
 
   # Update Networks ---------------------------------------------------------
+  currNwSize <- network.size(dat$nw$m)
   newIds <- NULL
   if (nBirths > 0) {
     newIds <- (currNwSize + 1):(currNwSize + nBirths)

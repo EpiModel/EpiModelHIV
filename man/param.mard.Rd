@@ -18,17 +18,18 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   vl.full.supp = 1.5, vl.part.supp = 3.5, full.supp.down.slope = 0.25,
   full.supp.up.slope = 0.25, part.supp.down.slope = 0.25,
   part.supp.up.slope = 0.25, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
-  birth.age = 18, URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 * 1.09,
-  acute.rr = 4, circ.rr = 0.4, condom.rr = 0.25,
-  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
-  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
-  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
-  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
-  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
-  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
-  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
-  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
-  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
+  UIAI.prob = 0.0031 * 1.09, acute.rr = 4, circ.rr = 0.4,
+  condom.rr = 0.25, disc.outset.main.B.prob = 0.685,
+  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
+  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
+  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
+  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
+  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
+  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
+  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
+  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
+  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 1.19/7, base.ai.main.BW.rate = 1.79/7,
   base.ai.main.WW.rate = 1.56/7, base.ai.pers.BB.rate = 0.75/7,
   base.ai.pers.BW.rate = 1.13/7, base.ai.pers.WW.rate = 0.98/7,
@@ -151,6 +152,11 @@ viral load rises per time step from treatment halting until expected value.}
 \item{b.W.rate}{Rate at which white MSM enter the population.}
 
 \item{birth.age}{Age (in years) of new arrivals.}
+
+\item{b.method}{Method for calculating the number of expected births at each
+time step, with \code{"fixed"} based on the number of persons at the
+initial time step and \code{"varying"} based on the current time step.
+The former method is compatible with \code{mardham1}.}
 
 \item{URAI.prob}{Probability of transmission for a man having unprotected
 receptive anal intercourse with an infected man at set point viral
