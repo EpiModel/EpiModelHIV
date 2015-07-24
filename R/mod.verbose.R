@@ -34,13 +34,19 @@ verbose.mard <- function(x, type, s, at) {
           if (x$control$verbose.int > 0 && (at %% x$control$verbose.int == 0)) {
             simno <- x$control$simno
             currsim <- x$control$currsim
-            df <- data.frame(simno = simno, currsim = currsim, at = at,
-                             popsize = x$epi$num[at], prev = x$epi$i.num[at])
             if (file.exists("verb/") == FALSE) {
               dir.create("verb/")
             }
             fn <- paste0("verb/sim", simno, ".s", currsim, ".txt")
-            write.table(t(df), file = fn, col.names = FALSE)
+            cat("SIMNO ", paste(simno, currsim, sep = "."),
+                "\n====================",
+                "\nTime: ", Sys.time(),
+                "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
+                "\nPop Size: ", x$epi$num[at],
+                "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
+                "\nWht Prev: ", round(x$epi$i.num.W[at] / x$epi$num.W[at], 3),
+                "\nBlk Prev: ", round(x$epi$i.num.B[at] / x$epi$num.B[at], 3),
+                "\n", sep = "", file = fn)
           }
         }
       } else {
