@@ -15,8 +15,10 @@
 #'        for black MSM.
 #' @param mdeg.inst.W Mean degree, or rate, of one-off partnerships per day
 #'        for white MSM.
-#' @param qnts.B Means of one-off rates split into quintiles for white MSM.
-#' @param qnts.W Means of one-off rates split into quintiles for black MSM.
+#' @param qnts.B Means of one-off rates split into quintiles for white MSM. Use
+#'        \code{NA} to ignore these quantiles in the target statistics.
+#' @param qnts.W Means of one-off rates split into quintiles for black MSM. Use
+#'        \code{NA} to ignore these quantiles in the target statistics.
 #' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, casual,
 #'        and one-off partnerships in same race for black MSM.
 #' @param prop.hom.mpi.W A vector of length 3 for the proportion of main, casual,
@@ -222,8 +224,10 @@ calc_nwstats.mard <- function(time.unit = 7,
   num.inst.B <- num.B * deg.mp.B * mdeg.inst.B * time.unit
   num.inst.W <- num.W * deg.mp.W * mdeg.inst.W * time.unit
 
-  num.riskg.B <- (0.2*num.B) * qnts.B * time.unit
-  num.riskg.W <- (0.2*num.W) * qnts.W * time.unit
+  if (!is.na(qnts.B) & !is.na(qnts.W)) {
+    num.riskg.B <- (0.2*num.B) * qnts.B * time.unit
+    num.riskg.W <- (0.2*num.W) * qnts.W * time.unit
+  }
 
   # Number of instant partnerships per time step, by race
   totdeg.i.by.race <- c(sum(num.inst.B), sum(num.inst.W))
@@ -258,17 +262,18 @@ calc_nwstats.mard <- function(time.unit = 7,
     sqrt.adiff.i <- edges.nodemix.i * weighted.avg
   }
 
-  stats.i <- c(edges.i,
-               num.inst.B[-1], num.inst.W,
-               num.riskg.B[-3], num.riskg.W[-3],
-               edges.hom.i, sqrt.adiff.i)
 
-  #   formation.i <- ~edges +
-  #     nodefactor(c("deg.main", "deg.pers")) +
-  #     nodefactor(c("riskg", "race"), base = c(3, 8)) +
-  #     nodematch("race") +
-  #     absdiffnodemix("sqrt.age", "race") +
-  #     offset(nodematch("role.class", diff = TRUE, keep = 1:2))
+  if (!is.na(qnts.B) & !is.na(qnts.W)) {
+    stats.i <- c(edges.i,
+                 num.inst.B[-1], num.inst.W,
+                 num.riskg.B[-3], num.riskg.W[-3],
+                 edges.hom.i, sqrt.adiff.i)
+  } else {
+    stats.i <- c(edges.i,
+                 num.inst.B[-1], num.inst.W,
+                 edges.hom.i, sqrt.adiff.i)
+  }
+
 
   # Compile results ---------------------------------------------------------
   out <- list()

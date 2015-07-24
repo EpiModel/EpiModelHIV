@@ -29,9 +29,11 @@ for black MSM.}
 \item{mdeg.inst.W}{Mean degree, or rate, of one-off partnerships per day
 for white MSM.}
 
-\item{qnts.B}{Means of one-off rates split into quintiles for white MSM.}
+\item{qnts.B}{Means of one-off rates split into quintiles for white MSM. Use
+\code{NA} to ignore these quantiles in the target statistics.}
 
-\item{qnts.W}{Means of one-off rates split into quintiles for black MSM.}
+\item{qnts.W}{Means of one-off rates split into quintiles for black MSM. Use
+\code{NA} to ignore these quantiles in the target statistics.}
 
 \item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, casual,
 and one-off partnerships in same race for black MSM.}
