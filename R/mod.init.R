@@ -686,6 +686,9 @@ reinit.mard <- function(x, param, init, control, s) {
 
   dat <- list()
   dat$nw <- x$network[[s]]
+  for (i in 1:2) {
+    dat$nw[[i]] <- network.extract(dat$nw[[i]], at = x$last.ts)
+  }
   dat$param <- param
   dat$param$modes <- 1
   dat$control <- control
