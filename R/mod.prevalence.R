@@ -67,6 +67,9 @@ prevalence.mard <- function(dat, at) {
     dat$epi$incid.acte <- rNA
     dat$epi$incid.chrn <- rNA
     dat$epi$incid.aids <- rNA
+    dat$epi$incid.main <- rNA
+    dat$epi$incid.casl <- rNA
+    dat$epi$incid.inst <- rNA
     dat$epi$tx.naive <- rNA
     dat$epi$tx.naive.B <- rNA
     dat$epi$tx.naive.W <- rNA

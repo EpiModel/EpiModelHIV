@@ -143,7 +143,6 @@ trans.mard <- function(dat, at){
   isAcute <- which(rp.stage %in% c("AR", "AF"))
   trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
-
   ## Bound range of PATP
   trans.ip.prob <- pmin(trans.ip.prob, 1)
   trans.rp.prob <- pmin(trans.rp.prob, 1)
@@ -157,7 +156,7 @@ trans.mard <- function(dat, at){
 
   # Update attributes
 
-  infected <- infector <- NULL
+  infected <- infector <- inf.type <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
@@ -198,6 +197,9 @@ trans.mard <- function(dat, at){
   dat$epi$incid.acte[at] <- sum(stage[infector] %in% c("AR", "AF"))
   dat$epi$incid.chrn[at] <- sum(stage[infector] == "C")
   dat$epi$incid.aids[at] <- sum(stage[infector] == "D")
+  dat$epi$incid.main[at] <- sum(inf.type == "M")
+  dat$epi$incid.casl[at] <- sum(inf.type == "P")
+  dat$epi$incid.inst[at] <- sum(inf.type == "I")
   dat$epi$incid.prep0[at] <- sum(prepStat[infected] == 0)
   dat$epi$incid.prep1[at] <- sum(prepStat[infected] == 1)
 
