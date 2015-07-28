@@ -36,13 +36,11 @@ trans.mard <- function(dat, at){
   # Attributes
   vl <- dat$attr$vl
   stage <- dat$attr$stage
-  stage.time <- dat$attr$stage.time
   ccr5 <- dat$attr$ccr5
   circ <- dat$attr$circ
   diag.status <- dat$attr$diag.status
   tx.status <- dat$attr$tx.status
   race <- dat$attr$race
-  age <- dat$attr$age
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
 
@@ -50,7 +48,6 @@ trans.mard <- function(dat, at){
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
   acute.rr <- dat$param$acute.rr
-  vl.acute.fall.int <- dat$param$vl.acute.fall.int
   condom.rr <- dat$param$condom.rr
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
@@ -80,7 +77,6 @@ trans.mard <- function(dat, at){
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
   ip.stage <- stage[disc.ip[, 1]]
-  ip.stage.time <- stage.time[disc.ip[, 1]]
 
   # Attributes of susceptible
   ip.ccr5 <- ccr5[disc.ip[, 2]]
@@ -88,13 +84,7 @@ trans.mard <- function(dat, at){
   ip.prepcl <- prepClass[disc.ip[, 2]]
 
   # Base TP from VL
-  trans.ip.prob <- URAI.prob * 2.45 ^ (ip.vl - 4.5)
-
-  # Acute-stage multipliers
-  trans.ip.prob[ip.stage == "AR"] <- trans.ip.prob[ip.stage == "AR"] * acute.rr
-  trans.ip.prob[ip.stage == "AF"] <- trans.ip.prob[ip.stage == "AF"] *
-    (1 + (acute.rr - 1) * (vl.acute.fall.int - ip.stage.time[ip.stage == "AF"]) /
-                                 vl.acute.fall.int)
+  trans.ip.prob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Condom use
   trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * condom.rr
@@ -105,11 +95,15 @@ trans.mard <- function(dat, at){
 
   # PrEP
   trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "l")] <-
-    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "l")] * (1 - pce[1])
+            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "l")] * (1 - pce[1])
   trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "m")] <-
-    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "m")] * (1 - pce[2])
+            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "m")] * (1 - pce[2])
   trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "h")] <-
-    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "h")] * (1 - pce[3])
+            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "h")] * (1 - pce[3])
+
+  # Acute-stage multipliers
+  isAcute <- which(ip.stage %in% c("AR", "AF"))
+  trans.ip.prob[isAcute] <- trans.ip.prob[isAcute] * acute.rr
 
 
   ## PATP: Receptive Man Infected (Column 2)
@@ -117,7 +111,6 @@ trans.mard <- function(dat, at){
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
-  rp.stage.time <- stage.time[disc.rp[, 2]]
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
@@ -126,13 +119,7 @@ trans.mard <- function(dat, at){
   rp.prepcl <- prepClass[disc.rp[, 1]]
 
   # Base TP from VL
-  trans.rp.prob <- UIAI.prob * 2.45 ^ (rp.vl - 4.5)
-
-  # Acute-stage multipliers
-  trans.rp.prob[rp.stage == "AR"] <- trans.rp.prob[rp.stage == "AR"] * acute.rr
-  trans.rp.prob[rp.stage == "AF"] <- trans.rp.prob[rp.stage == "AF"] *
-    (1 + (acute.rr - 1) * (vl.acute.fall.int - rp.stage.time[rp.stage == "AF"] ) /
-                                 vl.acute.fall.int)
+  trans.rp.prob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Circumcision
   trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.rr
@@ -146,17 +133,20 @@ trans.mard <- function(dat, at){
 
   # PrEP
   trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "l")] <-
-    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "l")] * (1 - pce[1])
+            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "l")] * (1 - pce[1])
   trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "m")] <-
-    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "m")] * (1 - pce[2])
+            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "m")] * (1 - pce[2])
   trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "h")] <-
-    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "h")] * (1 - pce[3])
+            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "h")] * (1 - pce[3])
+
+  # Acute-stage multipliers
+  isAcute <- which(rp.stage %in% c("AR", "AF"))
+  trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
 
-  ## Check range of PATP
-  stopifnot(min(trans.ip.prob) >= 0, max(trans.ip.prob) <= 1,
-            min(trans.rp.prob) >= 0, max(trans.rp.prob) <= 1)
-
+  ## Bound range of PATP
+  trans.ip.prob <- pmin(trans.ip.prob, 1)
+  trans.rp.prob <- pmin(trans.rp.prob, 1)
 
   ## Bernoulli transmission events
   trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
