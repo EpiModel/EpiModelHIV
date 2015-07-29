@@ -40,13 +40,12 @@ verbose.mard <- function(x, type, s, at) {
             fn <- paste0("verb/sim", simno, ".s", currsim, ".txt")
             cat("SIMNO ", paste(simno, currsim, sep = "."),
                 "\n====================",
-                "\nTime: ", Sys.time(),
                 "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
                 "\nPop Size: ", x$epi$num[at],
                 "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
                 "\nWht Prev: ", round(x$epi$i.num.W[at] / x$epi$num.W[at], 3),
                 "\nBlk Prev: ", round(x$epi$i.num.B[at] / x$epi$num.B[at], 3),
-                "\n", sep = "", file = fn)
+                "\n\n", sep = "", file = fn)
           }
         }
       } else {
