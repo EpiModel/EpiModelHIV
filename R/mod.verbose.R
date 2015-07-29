@@ -41,6 +41,7 @@ verbose.mard <- function(x, type, s, at) {
             cat("SIMNO ", paste(simno, currsim, sep = "."),
                 "\n====================",
                 "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
+                "\nTpTS: ", round(mean(x$epi$timer), 1),
                 "\nPop Size: ", x$epi$num[at],
                 "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
                 "\nWht Prev: ", round(x$epi$i.num.W[at] / x$epi$num.W[at], 3),
