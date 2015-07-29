@@ -143,9 +143,14 @@ trans.mard <- function(dat, at){
   isAcute <- which(rp.stage %in% c("AR", "AF"))
   trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
+
   ## Bound range of PATP
   trans.ip.prob <- pmin(trans.ip.prob, 1)
   trans.rp.prob <- pmin(trans.rp.prob, 1)
+
+  ## Save to DAL
+  disc.ip$prob <- trans.ip.prob
+  disc.rp$prob <- trans.rp.prob
 
   ## Bernoulli transmission events
   trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
@@ -202,6 +207,22 @@ trans.mard <- function(dat, at){
   dat$epi$incid.inst[at] <- sum(inf.type == "I")
   dat$epi$incid.prep0[at] <- sum(prepStat[infected] == 0)
   dat$epi$incid.prep1[at] <- sum(prepStat[infected] == 1)
+
+  dat$epi$acts[at] <- nrow(disc.ip) + nrow(disc.rp)
+  dat$epi$acts.B[at] <- sum(disc.ip$uai[race[disc.ip$r] == "B"] %in% 0:1) +
+                        sum(disc.rp$uai[race[disc.ip$i] == "B"] %in% 0:1)
+  dat$epi$acts.W[at] <- sum(disc.ip$uai[race[disc.ip$r] == "W"] %in% 0:1) +
+                        sum(disc.rp$uai[race[disc.ip$i] == "W"] %in% 0:1)
+  dat$epi$patp[at] <- mean(c(disc.ip$prob, disc.rp$prob))
+  dat$epi$patp.B[at] <- mean(c(disc.ip$prob[race[disc.ip$r] == "B"],
+                               disc.rp$prob[race[disc.rp$i] == "B"]))
+  dat$epi$patp.W[at] <- mean(c(disc.ip$prob[race[disc.ip$r] == "W"],
+                               disc.rp$prob[race[disc.rp$i] == "W"]))
+  dat$epi$prob.uai[at] <- mean(c(disc.ip$uai, disc.rp$uai))
+  dat$epi$prob.uai.B[at] <- mean(c(disc.ip$uai[race[disc.ip$r] == "B"],
+                                   disc.rp$uai[race[disc.rp$i] == "B"]))
+  dat$epi$prob.uai.W[at] <- mean(c(disc.ip$uai[race[disc.ip$r] == "W"],
+                                   disc.rp$uai[race[disc.rp$i] == "W"]))
 
   return(dat)
 }

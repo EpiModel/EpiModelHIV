@@ -90,6 +90,15 @@ prevalence.mard <- function(dat, at) {
     dat$epi$i.prev.rg3 <- rNA
     dat$epi$i.prev.rg4 <- rNA
     dat$epi$i.prev.rg5 <- rNA
+    dat$epi$acts <- rNA
+    dat$epi$acts.B <- rNA
+    dat$epi$acts.W <- rNA
+    dat$epi$patp <- rNA
+    dat$epi$patp.B <- rNA
+    dat$epi$patp.W <- rNA
+    dat$epi$prob.uai <- rNA
+    dat$epi$prob.uai.B <- rNA
+    dat$epi$prob.uai.W <- rNA
 
     if (prevfull == TRUE) {
       dat$epi$undiag <- rNA
