@@ -164,6 +164,8 @@
 #' @param ai.discl.pers.rr Relative expected coital frequency in casual
 #'        partnerships associated after disclosure of disease diagnosis (value
 #'        of 1 indicates no change).
+#' @param ai.scale General relative scaler for all act rates for model
+#'        calibration.
 #' @param cond.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
 #' @param cond.main.BW.prob Probability of condom use in a black-white main
@@ -334,6 +336,7 @@ param.mard <- function(nwstats,
                        ai.part.supp.pers.rr = 1,
                        ai.diag.pers.rr = 1,
                        ai.discl.pers.rr = 1,
+                       ai.scale = 1,
 
                        cond.main.BB.prob = 0.38,
                        cond.main.BW.prob = 0.10,

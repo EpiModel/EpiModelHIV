@@ -26,6 +26,7 @@ acts.mard <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
     # Variables ---------------------------------------------------------------
+    ai.scale <- dat$param$ai.scale
 
     # Attributes
     active <- dat$attr$active
@@ -35,6 +36,7 @@ acts.mard <- function(dat, at) {
     diag.status <- dat$attr$diag.status
     tx.status <- dat$attr$tx.status
     tt.traj <- dat$attr$tt.traj
+
 
     # Parameters
     if (type == "main") {
@@ -75,7 +77,11 @@ acts.mard <- function(dat, at) {
       ai.discl.rr <- 1
       ai.full.supp.rr <- 1
       ai.part.supp.rr <- 1
-      fixed <- TRUE
+      if (ai.scale != 1) {
+        fixed <- FALSE
+      } else {
+        fixed <- TRUE
+      }
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
 
@@ -86,7 +92,7 @@ acts.mard <- function(dat, at) {
     disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
     disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
 
-
+if (type == "inst") browser()
     if (nrow(disc.el) > 0) {
 
       ai.rate <- rep(NA, dim(disc.el)[1])
@@ -96,8 +102,9 @@ acts.mard <- function(dat, at) {
       num.B <- (race.1 == "B") + (race.2 == "B")
 
       ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                (num.B == 1) * base.ai.BW.rate +
-                (num.B == 0) * base.ai.WW.rate
+                 (num.B == 1) * base.ai.BW.rate +
+                 (num.B == 0) * base.ai.WW.rate
+      ai.rate <- ai.rate * ai.scale
 
       pos.diag <- diag.status[disc.el[, 1]]
       pos.tx    <- tx.status[disc.el[, 1]]

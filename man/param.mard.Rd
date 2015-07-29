@@ -36,7 +36,7 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   ai.full.supp.main.rr = 1, ai.part.supp.main.rr = 1, ai.diag.main.rr = 1,
   ai.discl.main.rr = 1, ai.full.supp.pers.rr = 1,
   ai.part.supp.pers.rr = 1, ai.diag.pers.rr = 1, ai.discl.pers.rr = 1,
-  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  ai.scale = 1, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
   cond.main.WW.prob = 0.15, cond.pers.BB.prob = 0.39,
   cond.pers.BW.prob = 0.11, cond.pers.WW.prob = 0.16,
   cond.inst.BB.prob = 0.49, cond.inst.BW.prob = 0.15,
@@ -286,6 +286,9 @@ partnerships after diagnosis (value of 1 indicates no change).}
 \item{ai.discl.pers.rr}{Relative expected coital frequency in casual
 partnerships associated after disclosure of disease diagnosis (value
 of 1 indicates no change).}
+
+\item{ai.scale}{General relative scaler for all act rates for model
+calibration.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}
