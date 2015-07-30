@@ -92,7 +92,6 @@ acts.mard <- function(dat, at) {
     disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
     disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
 
-if (type == "inst") browser()
     if (nrow(disc.el) > 0) {
 
       ai.rate <- rep(NA, dim(disc.el)[1])
