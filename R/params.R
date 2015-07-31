@@ -184,6 +184,12 @@
 #'        partnership.
 #' @param cond.inst.WW.prob Probability of condom use in a white-white one-off
 #'        partnership.
+#' @param cond.rr.BB Condom probability scaler for black-black partnerships for
+#'        model calibration purposes.
+#' @param cond.rr.BW Condom probability scaler for black-white partnerships for
+#'        model calibration purposes.
+#' @param cond.rr.WW Condom probability scaler for white-white partnerships for
+#'        model calibration purposes.
 #' @param cond.fsupp.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected is fully suppressed.
 #' @param cond.psupp.main.beta Beta multiplier for the log odds of using a
@@ -347,6 +353,9 @@ param.mard <- function(nwstats,
                        cond.inst.BB.prob = 0.49,
                        cond.inst.BW.prob = 0.15,
                        cond.inst.WW.prob = 0.22,
+                       cond.rr.BB = 1,
+                       cond.rr.BW = 1,
+                       cond.rr.WW = 1,
 
                        cond.fsupp.main.beta = 0.0,
                        cond.psupp.main.beta = 0.0,

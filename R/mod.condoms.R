@@ -35,6 +35,10 @@ condoms.mard <- function(dat, at) {
     tt.traj <- dat$attr$tt.traj
 
     # Parameters and data
+    cond.rr.BB <- dat$param$cond.rr.BB
+    cond.rr.BW <- dat$param$cond.rr.BW
+    cond.rr.WW <- dat$param$cond.rr.WW
+
     if (dat$control$save.dal == TRUE) {
       dal <- dat$temp$dal[[at]]
     } else {
@@ -83,9 +87,9 @@ condoms.mard <- function(dat, at) {
     race.2 <- race[dal[, 2]]
     num.B <- (race.1 == "B") + (race.2 == "B")
 
-    cond.prob <- (num.B == 2) * cond.BB.prob +
-                 (num.B == 1) * cond.BW.prob +
-                 (num.B == 0) * cond.WW.prob
+    cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
+                 (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
+                 (num.B == 0) * (cond.WW.prob * cond.rr.WW)
 
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))

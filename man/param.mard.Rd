@@ -40,17 +40,18 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   cond.main.WW.prob = 0.15, cond.pers.BB.prob = 0.39,
   cond.pers.BW.prob = 0.11, cond.pers.WW.prob = 0.16,
   cond.inst.BB.prob = 0.49, cond.inst.BW.prob = 0.15,
-  cond.inst.WW.prob = 0.22, cond.fsupp.main.beta = 0,
-  cond.psupp.main.beta = 0, cond.diag.main.beta = -0.67,
-  cond.discl.main.beta = -0.85, cond.fsupp.pers.beta = 0,
-  cond.psupp.pers.beta = 0, cond.diag.pers.beta = -0.67,
-  cond.discl.pers.beta = -0.85, cond.fsupp.inst.beta = 0,
-  cond.psupp.inst.beta = 0, cond.diag.inst.beta = -0.67,
-  cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
-  vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
-  prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
-  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
-  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1, ...)
+  cond.inst.WW.prob = 0.22, cond.rr.BB = 1, cond.rr.BW = 1,
+  cond.rr.WW = 1, cond.fsupp.main.beta = 0, cond.psupp.main.beta = 0,
+  cond.diag.main.beta = -0.67, cond.discl.main.beta = -0.85,
+  cond.fsupp.pers.beta = 0, cond.psupp.pers.beta = 0,
+  cond.diag.pers.beta = -0.67, cond.discl.pers.beta = -0.85,
+  cond.fsupp.inst.beta = 0, cond.psupp.inst.beta = 0,
+  cond.diag.inst.beta = -0.67, cond.discl.inst.beta = -0.85,
+  vv.iev.BB.prob = 0.42, vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49,
+  prep.start = 1, prep.elig.model = "all", prep.efficacy = 0.92,
+  prep.class.prob = c(0.5, 0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9),
+  prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
+  prep.rcomp = 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -316,6 +317,15 @@ partnership.}
 
 \item{cond.inst.WW.prob}{Probability of condom use in a white-white one-off
 partnership.}
+
+\item{cond.rr.BB}{Condom probability scaler for black-black partnerships for
+model calibration purposes.}
+
+\item{cond.rr.BW}{Condom probability scaler for black-white partnerships for
+model calibration purposes.}
+
+\item{cond.rr.WW}{Condom probability scaler for white-white partnerships for
+model calibration purposes.}
 
 \item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected is fully suppressed.}
