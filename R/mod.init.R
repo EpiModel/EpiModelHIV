@@ -191,7 +191,7 @@ init_status.mard <- function(dat) {
 
   # Infection Status
   nInfB <- round(dat$init$prev.B * num.B)
-  nInfW <- round(dat$init$prev.B * num.W)
+  nInfW <- round(dat$init$prev.W * num.W)
 
   # Age-based infection probability
   probInfCrB <- age[ids.B] * dat$init$init.prev.age.slope.B
