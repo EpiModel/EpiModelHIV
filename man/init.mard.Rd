@@ -4,7 +4,7 @@
 \alias{init.mard}
 \title{Epidemic Model Initial Conditions for MARDHAM Models}
 \usage{
-init.mard(nwstats, prev.B = 0.275, prev.W = 0.275,
+init.mard(nwstats, prev.B = 0.15, prev.W = 0.15,
   init.prev.age.slope.B = 0.05/12, init.prev.age.slope.W = 0.05/12, ...)
 }
 \arguments{
