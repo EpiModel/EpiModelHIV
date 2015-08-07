@@ -53,6 +53,7 @@ test_that("assign.formals testing", {
 
   st <- calc_nwstats.mard(
     time.unit = time.unit,
+    method = 2,
     num.B = num.B,
     num.W = num.W,
     deg.mp.B = deg.mp.B,
@@ -67,7 +68,6 @@ test_that("assign.formals testing", {
     sqrt.adiff.BB = sqrt.adiff.BB,
     sqrt.adiff.WW = sqrt.adiff.WW,
     sqrt.adiff.BW = sqrt.adiff.BW,
-    age.method = "heterogeneous",
     diss.main = ~offset(edges) + offset(nodemix("race", base = 1)),
     diss.pers = ~offset(edges) + offset(nodemix("race", base = 1)),
     durs.main = durs.main,
