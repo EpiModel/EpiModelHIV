@@ -301,7 +301,7 @@ param.mard <- function(nwstats,
 
                        URAI.prob = 0.0082 * 1.09,
                        UIAI.prob = 0.0031 * 1.09,
-                       acute.rr = 4,
+                       acute.rr = 6,
                        circ.rr = 0.4,
                        condom.rr = 0.25,
 
