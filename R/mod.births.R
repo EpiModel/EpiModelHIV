@@ -64,7 +64,11 @@ births.mard <- function(dat, at){
     new.race <- dat$attr$race[newIds]
     new.srage <- dat$attr$sqrt.age[newIds]
     new.rc <- dat$attr$role.class[newIds]
-    new.degm <- new.degp <- paste0(new.race, 0)
+    if (is.character(dat$nw$m %v% "deg.pers")) {
+      new.degm <- new.degp <- paste0(new.race, 0)
+    } else {
+      new.degm <- new.degp <- 0
+    }
     new.riskg <- dat$attr$riskg[newIds]
 
     for (i in 1:3) {

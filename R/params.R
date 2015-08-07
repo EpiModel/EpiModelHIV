@@ -411,6 +411,7 @@ param.mard <- function(nwstats,
                                   0, 0, 1),
                                 nrow = 3)
 
+  p$method <- nwstats$method
   p$modes <- 1
 
   p$asmr.B <- nwstats$asmr.B

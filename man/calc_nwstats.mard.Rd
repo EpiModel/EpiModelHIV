@@ -4,14 +4,18 @@
 \alias{calc_nwstats.mard}
 \title{Calculate Target Statistics for Network Model Estimation}
 \usage{
-calc_nwstats.mard(time.unit = 7, num.B, num.W, deg.mp.B, deg.mp.W,
-  mdeg.inst.B, mdeg.inst.W, qnts.B, qnts.W, prop.hom.mpi.B, prop.hom.mpi.W,
-  balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW,
-  age.method = "heterogeneous", diss.main, diss.pers, durs.main, durs.pers,
-  ages, asmr.B, asmr.W, role.B.prob, role.W.prob)
+calc_nwstats.mard(time.unit = 7, method = 2, num.B, num.W, deg.mp.B,
+  deg.mp.W, mdeg.inst.B, mdeg.inst.W, qnts.B, qnts.W, prop.hom.mpi.B,
+  prop.hom.mpi.W, balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW,
+  sqrt.adiff.BW, diss.main, diss.pers, durs.main, durs.pers, ages, asmr.B,
+  asmr.W, role.B.prob, role.W.prob)
 }
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}
+
+\item{method}{Method for calculating target statistics by race, with options of
+\code{2} for preserving race-specific statistics and \code{1} for
+averaging over the statistics and dropping the race-specific terms.}
 
 \item{num.B}{Population size of black MSM.}
 
@@ -57,10 +61,6 @@ partnerships.}
 \item{sqrt.adiff.BW}{Vector of length 3 with the mean absolute differences
 in the square root of ages in main, casual, and one-off black-white
 partnerships.}
-
-\item{age.method}{Method for calculating the square root of age differences,
-with \code{"heterogeneous"} using the individual \code{sqrt.adiff.XX}
-values and \code{"homogeneous"} using a weighted average.}
 
 \item{diss.main}{Dissolution model formula for main partnerships.}
 

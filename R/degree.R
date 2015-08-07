@@ -52,8 +52,10 @@ assign_degree <- function(nw, deg.type, nwstats) {
   deg.B <- apportion.lr(nB, 0:(num.degrees.B - 1), dist.B, shuffled = TRUE)
   deg.W <- apportion.lr(nW, 0:(num.degrees.W - 1), dist.W, shuffled = TRUE)
 
-  deg.B <- paste0("B", deg.B)
-  deg.W <- paste0("W", deg.W)
+  if (nwstats$method == 2) {
+    deg.B <- paste0("B", deg.B)
+    deg.W <- paste0("W", deg.W)
+  }
 
   nw <- set.vertex.attribute(nw, attrname = attr.name, value = deg.B, v = vB)
   nw <- set.vertex.attribute(nw, attrname = attr.name, value = deg.W, v = vW)
@@ -100,10 +102,12 @@ update_degree <- function(nw, nw.source, deg.type, at) {
     attr.name <- "deg.pers"
   }
 
-  race <- get.vertex.attribute(nw, "race")
-  deg.dist <- summary(nw.source ~ sociality(base = 0), at = at)
-  race.deg.dist <- paste0(race, deg.dist)
+  deg.dist <- as.numeric(summary(nw.source ~ sociality(base = 0), at = at))
+  if (is.character(nw %v% attr.name)) {
+    race <- get.vertex.attribute(nw, "race")
+    deg.dist <- paste0(race, deg.dist)
+  }
 
-  nw <- set.vertex.attribute(nw, attr.name, race.deg.dist)
+  nw <- set.vertex.attribute(nw, attr.name, deg.dist)
   return(nw)
 }
