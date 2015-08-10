@@ -479,6 +479,10 @@ init.mard <- function(nwstats,
 #'        simulation. This may also be set to 1 greater than the final time
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
+#' @param resume.method Method for restarting simulations, with options of either
+#'        \code{"resume"} to continue the full simulation from previous data, or
+#'        \code{"new"} to truncate summary statistics and other data to the final
+#'        step.
 #' @param resim.int Interval unit for resimulation of network, relative to the
 #'        base time unit in the model.
 #' @param initialize.FUN Module function to use for initialization of the epidemic
@@ -534,6 +538,7 @@ control.mard <- function(simno = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
+                         restart.method = "resume",
                          resim.int = 1,
                          initialize.FUN = initialize.mard,
                          aging.FUN = aging.mard,
