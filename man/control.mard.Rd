@@ -5,19 +5,19 @@
 \title{Epidemic Model Control Settings for MARDHAM Models}
 \usage{
 control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, restart.method = "resume", resim.int = 1,
-  initialize.FUN = initialize.mard, aging.FUN = aging.mard,
-  deaths.FUN = deaths.mard, births.FUN = births.mard,
-  test.FUN = test.mard, tx.FUN = tx.mard, prep.FUN = prep.mard,
-  progress.FUN = progress.mard, vl.FUN = update_vl.mard,
-  aiclass.FUN = update_aiclass.mard, roleclass.FUN = update_roleclass.mard,
-  edgescorr.FUN = edges_correct.mard, resimnets.FUN = simnet.mard,
-  disclose.FUN = disclose.mard, acts.FUN = acts.mard,
-  condoms.FUN = condoms.mard, position.FUN = position.mard,
-  trans.FUN = trans.mard, getprev.FUN = prevalence.mard,
-  verbose.FUN = verbose.mard, delete.nodes = TRUE, save.dal = FALSE,
-  save.nwstats = TRUE, save.network = FALSE, save.other = "attr",
-  prevfull = FALSE, verbose = TRUE, verbose.int = 1, ...)
+  start = 1, resim.int = 1, initialize.FUN = initialize.mard,
+  aging.FUN = aging.mard, deaths.FUN = deaths.mard,
+  births.FUN = births.mard, test.FUN = test.mard, tx.FUN = tx.mard,
+  prep.FUN = prep.mard, progress.FUN = progress.mard,
+  vl.FUN = update_vl.mard, aiclass.FUN = update_aiclass.mard,
+  roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
+  resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
+  acts.FUN = acts.mard, condoms.FUN = condoms.mard,
+  position.FUN = position.mard, trans.FUN = trans.mard,
+  getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
+  delete.nodes = TRUE, save.dal = FALSE, save.nwstats = TRUE,
+  save.network = FALSE, save.other = "attr", prevfull = FALSE,
+  verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -108,11 +108,6 @@ if in interactive mode or text files if in batch mode.}
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{resume.method}{Method for restarting simulations, with options of either
-\code{"resume"} to continue the full simulation from previous data, or
-\code{"new"} to truncate summary statistics and other data to the final
-step.}
 }
 \value{
 A list object of class \code{control.mard}, which can be passed to the
