@@ -684,7 +684,7 @@ reinit.mard <- function(x, param, init, control, s) {
     stop("x must contain temp to restart simulation", call. = FALSE)
   }
 
-  if (!is.null(control$currsim)) {
+  if (!is.null(control$currsim) & length(x$network) > 1) {
     s <- control$currsim
   }
 
@@ -699,6 +699,7 @@ reinit.mard <- function(x, param, init, control, s) {
   dat$param$modes <- 1
   dat$control <- control
   dat$nwparam <- x$nwparam
+
   dat$epi <- sapply(x$epi, function(var) var[s])
   names(dat$epi) <- names(x$epi)
   dat$attr <- x$attr[[s]]
