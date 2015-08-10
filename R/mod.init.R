@@ -684,6 +684,10 @@ reinit.mard <- function(x, param, init, control, s) {
     stop("x must contain temp to restart simulation", call. = FALSE)
   }
 
+  if (!is.null(control$currsim)) {
+    s <- control$currsim
+  }
+
   dat <- list()
   dat$nw <- x$network[[s]]
   if (!is.null(x$last.ts)) {
