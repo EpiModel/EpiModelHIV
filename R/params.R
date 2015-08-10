@@ -575,6 +575,14 @@ control.mard <- function(simno = 1,
   p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
+  if (!restart.method %in% c("resume", "new")) {
+    stop("restart.method must be either resume or new", call. = FALSE)
+  }
+
+  if (start > nsteps) {
+    stop("start must be less than nsteps for restarted simulations", call. = FALSE)
+  }
+
   class(p) <- c("control.mard", "control.net")
   return(p)
 }
