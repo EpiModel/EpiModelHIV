@@ -102,9 +102,9 @@ tx.mard <- function(dat, at) {
                                      ((dat$attr$tx.status[idsAct] == 0) %in% TRUE)
 
   ## Summary statistics
-  dat$epi$tx.init.inc <- length(tx.init)
-  dat$epi$tx.halt.inc <- length(tx.halt)
-  dat$epi$tx.resm.inc <- length(tx.reinit)
+  dat$epi$tx.init.inc[at] <- length(tx.init)
+  dat$epi$tx.halt.inc[at] <- length(tx.halt)
+  dat$epi$tx.resm.inc[at] <- length(tx.reinit)
 
   return(dat)
 }

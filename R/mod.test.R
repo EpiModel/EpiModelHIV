@@ -80,8 +80,8 @@ test.mard <- function(dat, at) {
   dat$attr$diag.time[tst.pos] <- at
 
   ## Summary statistics
-  dat$epi$tst.W.inc <- length(tst.W)
-  dat$epi$tst.B.inc <- length(tst.B)
+  dat$epi$tst.W.inc[at] <- length(tst.W)
+  dat$epi$tst.B.inc[at] <- length(tst.B)
 
 
   return(dat)
