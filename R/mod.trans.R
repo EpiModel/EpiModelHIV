@@ -54,11 +54,7 @@ trans.mard <- function(dat, at){
   pce <- dat$param$prep.class.effect
 
   # Data
-  if (dat$control$save.dal == TRUE) {
-    dal <- dat$temp$dal[[at]]
-  } else {
-    dal <- dat$temp$dal
-  }
+  dal <- dat$temp$dal
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 

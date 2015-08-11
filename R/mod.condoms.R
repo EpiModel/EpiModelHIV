@@ -39,11 +39,7 @@ condoms.mard <- function(dat, at) {
     cond.rr.BW <- dat$param$cond.rr.BW
     cond.rr.WW <- dat$param$cond.rr.WW
 
-    if (dat$control$save.dal == TRUE) {
-      dal <- dat$temp$dal[[at]]
-    } else {
-      dal <- dat$temp$dal
-    }
+    dal <- dat$temp$dal
 
     if (type == "main") {
       cond.BB.prob <- dat$param$cond.main.BB.prob
@@ -131,29 +127,15 @@ condoms.mard <- function(dat, at) {
 
 
     # Output ------------------------------------------------------------------
-
-    if (dat$control$save.dal == TRUE) {
-      if (type == "main") {
-        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "M"] <- uai
-      }
-      if (type == "pers") {
-        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "P"] <- uai
-      }
-      if (type == "inst") {
-        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "I"] <- uai
-      }
-    } else {
-      if (type == "main") {
-        dat$temp$dal$uai[dat$temp$dal$type == "M"] <- uai
-      }
-      if (type == "pers") {
-        dat$temp$dal$uai[dat$temp$dal$type == "P"] <- uai
-      }
-      if (type == "inst") {
-        dat$temp$dal$uai[dat$temp$dal$type == "I"] <- uai
-      }
+    if (type == "main") {
+      dat$temp$dal$uai[dat$temp$dal$type == "M"] <- uai
     }
-
+    if (type == "pers") {
+      dat$temp$dal$uai[dat$temp$dal$type == "P"] <- uai
+    }
+    if (type == "inst") {
+      dat$temp$dal$uai[dat$temp$dal$type == "I"] <- uai
+    }
 
   }
 

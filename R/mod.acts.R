@@ -106,7 +106,7 @@ acts.mard <- function(dat, at) {
       ai.rate <- ai.rate * ai.scale
 
       pos.diag <- diag.status[disc.el[, 1]]
-      pos.tx    <- tx.status[disc.el[, 1]]
+      pos.tx <- tx.status[disc.el[, 1]]
       pos.tt.traj <- tt.traj[disc.el[, 1]]
 
       dlist <- dat$temp$discl.list
@@ -118,9 +118,9 @@ acts.mard <- function(dat, at) {
       ai.rate[pos.diag == 1] <- ai.rate[pos.diag == 1] * ai.diag.rr
       ai.rate[disclosed == TRUE] <- ai.rate[disclosed == TRUE] * ai.discl.rr
       ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] *
-                                                   ai.full.supp.rr
+                                                    ai.full.supp.rr
       ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] *
-                                                   ai.part.supp.rr
+                                                    ai.part.supp.rr
 
       if (fixed == FALSE) {
         ai <- rpois(length(ai.rate), ai.rate)
@@ -132,30 +132,16 @@ acts.mard <- function(dat, at) {
         result <- data.frame(pos = rep(disc.el[, 1], ai),
                              neg = rep(disc.el[, 2], ai),
                              type = toupper(substr(type, 1, 1)),
-                             uai = NA,
-                             ins = NA,
-                             stringsAsFactors = FALSE)
+                             uai = NA, ins = NA, stringsAsFactors = FALSE)
       } else {
-        result <- data.frame(pos = NULL,
-                             neg = NULL,
-                             type = NULL,
-                             uai = NULL,
-                             ins = NULL,
-                             stringsAsFactors = FALSE)
+        result <- data.frame(pos = NULL, neg = NULL, type = NULL,
+                             uai = NULL, ins = NULL, stringsAsFactors = FALSE)
       }
 
       if (type == "main") {
-        if (dat$control$save.dal == TRUE) {
-          dat$temp$dal[[at]] <- result
-        } else {
-          dat$temp$dal <- result
-        }
+        dat$temp$dal <- result
       } else {
-        if (dat$control$save.dal == TRUE) {
-          dat$temp$dal[[at]] <- rbind(dat$temp$dal[[at]], result)
-        } else {
-          dat$temp$dal <- rbind(dat$temp$dal, result)
-        }
+        dat$temp$dal <- rbind(dat$temp$dal, result)
       }
 
     }

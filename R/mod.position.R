@@ -25,12 +25,7 @@
 position.mard <- function(dat, at) {
 
   ## Variables
-
-  if (dat$control$save.dal == TRUE) {
-    dal <- dat$temp$dal[[at]]
-  } else {
-    dal <- dat$temp$dal
-  }
+  dal <- dat$temp$dal
 
   role.class <- dat$attr$role.class
   ins.quot <- dat$attr$ins.quot
@@ -70,13 +65,7 @@ position.mard <- function(dat, at) {
 
 
   ## Output
-  if (dat$control$save.dal == TRUE) {
-    dat$temp$dal[[at]] <- dal
-  } else {
-    dat$temp$dal <- dal
-  }
-
-
+  dat$temp$dal <- dal
 
   return(dat)
 }

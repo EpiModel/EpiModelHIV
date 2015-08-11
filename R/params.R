@@ -509,8 +509,6 @@ init.mard <- function(nwstats,
 #'        external text files.
 #' @param delete.nodes If \code{TRUE}, dead nodes will be removed from the network
 #'        object and only active nodes will be retained.
-#' @param save.dal If \code{TRUE}, the discordant act list will be saved at each time
-#'        step, otherwise it will be discarded.
 #' @param save.nwstats If \code{TRUE}, the network statistics will be saved.
 #' @param save.network If \code{TRUE}, the \code{network} objects will be saved
 #'        out at the end of simulation (necessary for restarting a simulation).
@@ -556,7 +554,6 @@ control.mard <- function(simno = 1,
                          getprev.FUN = prevalence.mard,
                          verbose.FUN = verbose.mard,
                          delete.nodes = TRUE,
-                         save.dal = FALSE,
                          save.nwstats = TRUE,
                          save.network = FALSE,
                          save.other = "attr",

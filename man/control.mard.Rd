@@ -15,9 +15,9 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   acts.FUN = acts.mard, condoms.FUN = condoms.mard,
   position.FUN = position.mard, trans.FUN = trans.mard,
   getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
-  delete.nodes = TRUE, save.dal = FALSE, save.nwstats = TRUE,
-  save.network = FALSE, save.other = "attr", prevfull = FALSE,
-  verbose = TRUE, verbose.int = 1, ...)
+  delete.nodes = TRUE, save.nwstats = TRUE, save.network = FALSE,
+  save.other = "attr", prevfull = FALSE, verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -86,9 +86,6 @@ external text files.}
 
 \item{delete.nodes}{If \code{TRUE}, dead nodes will be removed from the network
 object and only active nodes will be retained.}
-
-\item{save.dal}{If \code{TRUE}, the discordant act list will be saved at each time
-step, otherwise it will be discarded.}
 
 \item{save.nwstats}{If \code{TRUE}, the network statistics will be saved.}
 

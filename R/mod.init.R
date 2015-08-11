@@ -140,9 +140,6 @@ initialize.mard <- function(x, param, init, control, s) {
   # Prevalence Tracking -----------------------------------------------------
 
   dat$temp$dal <- list()
-  if (dat$control$save.dal == TRUE) {
-    dat$temp$dal[[1]] <- list()
-  }
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- as.data.frame(matrix(NA, 0, 4))
   names(dat$temp$discl.list) <- c("pos", "neg", "discl.time", "discl.type")
@@ -151,7 +148,6 @@ initialize.mard <- function(x, param, init, control, s) {
 
   class(dat) <- "dat"
   return(dat)
-
 }
 
 
