@@ -45,8 +45,6 @@ acts.mard <- function(dat, at) {
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
       ai.diag.rr <- dat$param$ai.diag.main.rr
       ai.discl.rr <- dat$param$ai.discl.main.rr
-      ai.full.supp.rr <- dat$param$ai.full.supp.main.rr
-      ai.part.supp.rr <- dat$param$ai.part.supp.main.rr
       fixed <- FALSE
       el <- get.dyads.active(dat$nw$m, at = at)
     }
@@ -56,8 +54,6 @@ acts.mard <- function(dat, at) {
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
       ai.diag.rr <- dat$param$ai.diag.pers.rr
       ai.discl.rr <- dat$param$ai.discl.pers.rr
-      ai.full.supp.rr <- dat$param$ai.full.supp.pers.rr
-      ai.part.supp.rr <- dat$param$ai.part.supp.pers.rr
       fixed <- FALSE
       el <- get.dyads.active(dat$nw$p, at = at)
     }
@@ -67,8 +63,6 @@ acts.mard <- function(dat, at) {
       base.ai.WW.rate <- 1
       ai.diag.rr <- 1
       ai.discl.rr <- 1
-      ai.full.supp.rr <- 1
-      ai.part.supp.rr <- 1
       fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
@@ -92,23 +86,6 @@ acts.mard <- function(dat, at) {
                  (num.B == 1) * base.ai.BW.rate +
                  (num.B == 0) * base.ai.WW.rate
       ai.rate <- ai.rate * ai.scale
-
-      pos.diag <- diag.status[disc.el[, 1]]
-      pos.tx <- tx.status[disc.el[, 1]]
-      pos.tt.traj <- tt.traj[disc.el[, 1]]
-
-      dlist <- dat$temp$discl.list
-      disclosed <- sapply(1:nrow(disc.el), function(x) {
-        length(intersect(which(uid[disc.el[x, 1]] == dlist$pos),
-                         which(uid[disc.el[x, 2]] == dlist$neg))) != 0
-      })
-
-      ai.rate[pos.diag == 1] <- ai.rate[pos.diag == 1] * ai.diag.rr
-      ai.rate[disclosed == TRUE] <- ai.rate[disclosed == TRUE] * ai.discl.rr
-      ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] *
-                                                    ai.full.supp.rr
-      ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] *
-                                                    ai.part.supp.rr
 
       if (fixed == FALSE) {
         ai <- rpois(length(ai.rate), ai.rate)
