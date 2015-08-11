@@ -28,7 +28,6 @@ condoms.mard <- function(dat, at) {
 
     # Attributes
     uid <- dat$attr$uid
-    status <- dat$attr$status
     diag.status <- dat$attr$diag.status
     race <- dat$attr$race
     tx.status <- dat$attr$tx.status
@@ -47,8 +46,6 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.main.WW.prob
       diag.beta <- dat$param$cond.diag.main.beta
       discl.beta <- dat$param$cond.discl.main.beta
-      fsupp.beta <- dat$param$cond.fsupp.main.beta
-      psupp.beta <- dat$param$cond.psupp.main.beta
       dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
@@ -57,8 +54,6 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.pers.WW.prob
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
-      fsupp.beta <- dat$param$cond.fsupp.pers.beta
-      psupp.beta <- dat$param$cond.psupp.pers.beta
       dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
@@ -67,8 +62,6 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.inst.WW.prob
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
-      fsupp.beta <- dat$param$cond.fsupp.inst.beta
-      psupp.beta <- dat$param$cond.psupp.inst.beta
       dal <- dal[dal$type == "I", ]
     }
 
@@ -95,11 +88,8 @@ condoms.mard <- function(dat, at) {
     dlist <- dat$temp$discl.list
     discl <- sapply(1:nrow(dal), function(x) {
       sum(dlist$pos == uid[dal[x, 1]] &
-            dlist$neg == uid[dal[x, 2]]) > 0
+          dlist$neg == uid[dal[x, 2]]) > 0
     })
-
-    pos.tx <- tx.status[dal[, 1]]
-    pos.tt.traj <- tt.traj[dal[, 1]]
 
     # Odds, Diagnosed
     isDx <- which(pos.diag == 1)
@@ -108,14 +98,6 @@ condoms.mard <- function(dat, at) {
     # Odds, Disclosed
     isDisc <- which(discl == 1)
     uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta
-
-    # Odds, Tx Full Suppress Type
-    isFS <- which(pos.tx == 1 & pos.tt.traj == "YF")
-    uai.logodds[isFS] <- uai.logodds[isFS] + fsupp.beta
-
-    # Odds, Tx Part Supress Type
-    isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
-    uai.logodds[isPS] <- uai.logodds[isPS] + psupp.beta
 
     old.uai.prob <- uai.prob
     uai.prob <- exp(uai.logodds) / (1 + exp(uai.logodds))
@@ -141,4 +123,3 @@ condoms.mard <- function(dat, at) {
 
   return(dat)
 }
-
