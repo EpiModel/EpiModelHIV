@@ -57,47 +57,55 @@ acts.mard <- function(dat, at) {
     }
 
     ## Processes ##
+
     # Construct discordant edgelist
-    disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
-    disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
+    el <- as.data.frame(el)
+    names(el) <- c("p1", "p2")
+    st1 <- status[el$p1]
+    st2 <- status[el$p2]
+    disc <- abs(st1 - st2) == 1
+    el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
+    el$st1 <- status[el$p1]
+    el$st2 <- status[el$p2]
 
-    if (nrow(disc.el) > 0) {
+    if (nrow(el) > 0) {
 
-      ai.rate <- rep(NA, dim(disc.el)[1])
-
-      race.1 <- race[disc.el[, 1]]
-      race.2 <- race[disc.el[, 2]]
-      num.B <- (race.1 == "B") + (race.2 == "B")
-
+      # Base AI rates
+      ai.rate <- rep(NA, nrow(el))
+      race.p1 <- race[el$p1]
+      race.p2 <- race[el$p2]
+      num.B <- (race.p1 == "B") + (race.p2 == "B")
       ai.rate <- (num.B == 2) * base.ai.BB.rate +
                  (num.B == 1) * base.ai.BW.rate +
                  (num.B == 0) * base.ai.WW.rate
       ai.rate <- ai.rate * ai.scale
 
+      # Final act number
       if (fixed == FALSE) {
         ai <- rpois(length(ai.rate), ai.rate)
       } else {
         ai <- round(ai.rate)
       }
 
-      if (sum(ai) > 0) {
-        result <- data.frame(pos = rep(disc.el[, 1], ai),
-                             neg = rep(disc.el[, 2], ai),
-                             type = toupper(substr(type, 1, 1)),
-                             uai = NA, ins = NA, stringsAsFactors = FALSE)
-      } else {
-        result <- data.frame(pos = NULL, neg = NULL, type = NULL,
-                             uai = NULL, ins = NULL, stringsAsFactors = FALSE)
-      }
+      # Full edge list
+      el$ai <- ai
+      el$type <- toupper(substr(type, 1, 1))
+
+      # Discordant act list
+      dal <- el[(st1 - st2) == 1, c(1, 2, 5)]
+      dal <- data.frame(pos = rep(dal$p1, dal$ai), neg = rep(dal$p2, dal$ai),
+                        type = toupper(substr(type, 1, 1)), uai = NA, ins = NA)
 
       if (type == "main") {
-        dat$temp$dal <- result
+        dat$temp$dal <- dal
+        dat$temp$el <- el
       } else {
-        dat$temp$dal <- rbind(dat$temp$dal, result)
+        dat$temp$dal <- rbind(dat$temp$dal, dal)
+        dat$temp$el <- rbind(dat$temp$el, el)
       }
-
     }
-  }
+
+  } # loop over type end
 
   return(dat)
 }
