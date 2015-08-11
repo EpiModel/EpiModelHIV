@@ -24,9 +24,9 @@ for (at in max(2, control$start):control$nsteps) {
 }
 
 
-at <- 6
-# dat <- initialize.mard(est, param, init, control, s = 1)
-dat <- reinit.mard(sim, param, init, control, s = 1)
+at <- 2
+dat <- initialize.mard(est, param, init, control, s = 1)
+# dat <- reinit.mard(sim, param, init, control, s = 1)
 dat <- aging.mard(dat, at)
 dat <- deaths.mard(dat, at)
 dat <- births.mard(dat, at)

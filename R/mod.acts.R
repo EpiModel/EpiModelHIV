@@ -48,11 +48,7 @@ acts.mard <- function(dat, at) {
       ai.full.supp.rr <- dat$param$ai.full.supp.main.rr
       ai.part.supp.rr <- dat$param$ai.part.supp.main.rr
       fixed <- FALSE
-      if (dat$control$delete.nodes == TRUE) {
-        el <- matrix(as.edgelist(dat$nw$m), ncol = 2)
-      } else {
-        el <- get.dyads.active(dat$nw$m, at = at)
-      }
+      el <- get.dyads.active(dat$nw$m, at = at)
     }
     if (type == "pers") {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
@@ -63,11 +59,7 @@ acts.mard <- function(dat, at) {
       ai.full.supp.rr <- dat$param$ai.full.supp.pers.rr
       ai.part.supp.rr <- dat$param$ai.part.supp.pers.rr
       fixed <- FALSE
-      if (dat$control$delete.nodes == TRUE) {
-        el <- matrix(as.edgelist(dat$nw$p), ncol = 2)
-      } else {
-        el <- get.dyads.active(dat$nw$p, at = at)
-      }
+      el <- get.dyads.active(dat$nw$p, at = at)
     }
     if (type == "inst") {
       base.ai.BB.rate <- 1
@@ -77,11 +69,7 @@ acts.mard <- function(dat, at) {
       ai.discl.rr <- 1
       ai.full.supp.rr <- 1
       ai.part.supp.rr <- 1
-      if (ai.scale != 1) {
-        fixed <- FALSE
-      } else {
-        fixed <- TRUE
-      }
+      fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
 
