@@ -32,26 +32,20 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
   ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
-  base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.full.supp.main.rr = 1, ai.part.supp.main.rr = 1, ai.diag.main.rr = 1,
-  ai.discl.main.rr = 1, ai.full.supp.pers.rr = 1,
-  ai.part.supp.pers.rr = 1, ai.diag.pers.rr = 1, ai.discl.pers.rr = 1,
-  ai.scale = 1, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14, ai.scale = 1,
+  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
   cond.main.WW.prob = 0.15, cond.pers.BB.prob = 0.39,
   cond.pers.BW.prob = 0.11, cond.pers.WW.prob = 0.16,
   cond.inst.BB.prob = 0.49, cond.inst.BW.prob = 0.15,
   cond.inst.WW.prob = 0.22, cond.rr.BB = 1, cond.rr.BW = 1,
-  cond.rr.WW = 1, cond.fsupp.main.beta = 0, cond.psupp.main.beta = 0,
-  cond.diag.main.beta = -0.67, cond.discl.main.beta = -0.85,
-  cond.fsupp.pers.beta = 0, cond.psupp.pers.beta = 0,
-  cond.diag.pers.beta = -0.67, cond.discl.pers.beta = -0.85,
-  cond.fsupp.inst.beta = 0, cond.psupp.inst.beta = 0,
-  cond.diag.inst.beta = -0.67, cond.discl.inst.beta = -0.85,
-  vv.iev.BB.prob = 0.42, vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49,
-  prep.start = 1, prep.elig.model = "all", prep.efficacy = 0.92,
-  prep.class.prob = c(0.5, 0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9),
-  prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
-  prep.rcomp = 1, ...)
+  cond.rr.WW = 1, cond.diag.main.beta = -0.67,
+  cond.discl.main.beta = -0.85, cond.diag.pers.beta = -0.67,
+  cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
+  cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
+  vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
+  prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
+  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
+  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -260,34 +254,6 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.full.supp.main.rr}{Relative expected coital frequency in main
-partnerships after full suppression (value of 1 indicates no change).}
-
-\item{ai.part.supp.main.rr}{Relative expected coital frequency in main
-partnerships after partial suppression (value of 1 indicates no
-change).}
-
-\item{ai.diag.main.rr}{Relative expected coital frequency in main
-partnerships after disease diagnosis (value of 1 indicates no change).}
-
-\item{ai.discl.main.rr}{Relative expected coital frequency in main
-partnerships after disclosure of disease diagnosis (value of 1
-indicates no change).}
-
-\item{ai.full.supp.pers.rr}{Relative expected coital frequency in casual
-partnerships after full suppression (value of 1 indicates no change).}
-
-\item{ai.part.supp.pers.rr}{Relative expected coital frequency in casual
-partnerships after partial suppression (value of 1 indicates no
-change).}
-
-\item{ai.diag.pers.rr}{Relative expected coital frequency in casual
-partnerships after diagnosis (value of 1 indicates no change).}
-
-\item{ai.discl.pers.rr}{Relative expected coital frequency in casual
-partnerships associated after disclosure of disease diagnosis (value
-of 1 indicates no change).}
-
 \item{ai.scale}{General relative scaler for all act rates for model
 calibration.}
 
@@ -327,26 +293,12 @@ model calibration purposes.}
 \item{cond.rr.WW}{Condom probability scaler for white-white partnerships for
 model calibration purposes.}
 
-\item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
-condom in a main partnership if the HIV-infected is fully suppressed.}
-
-\item{cond.psupp.main.beta}{Beta multiplier for the log odds of using a
-condom in a main partnership if the HIV-infected is partially suppressed.}
-
 \item{cond.diag.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected man has been
 diagnosed.}
 
 \item{cond.discl.main.beta}{Beta multiplier for the log odds of using a
 condom in a main partnership if the HIV-infected man has disclosed.}
-
-\item{cond.fsupp.pers.beta}{Beta multiplier for the log odds of using a
-condom in a casual partnership if the HIV-infected man is fully
-suppressed.}
-
-\item{cond.psupp.pers.beta}{Beta multiplier for the log odds of using a
-condom in a casual partnership if the HIV-infected man is partially
-suppressed.}
 
 \item{cond.diag.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man has been
@@ -355,14 +307,6 @@ diagnosed.}
 \item{cond.discl.pers.beta}{Beta multiplier for the log odds of using a
 condom in a casual partnership if the HIV-infected man has disclosed
 his status.}
-
-\item{cond.fsupp.inst.beta}{Beta multiplier for the log odds of using a
-condom in a one-off partnership if the HIV-infected man is fully
-suppressed.}
-
-\item{cond.psupp.inst.beta}{Beta multiplier for the log odds of using a
-condom in a one-off partnership if the HIV-infected man is partially
-suppressed.}
 
 \item{cond.diag.inst.beta}{Beta multiplier for the log odds of using a
 condom in a one-off partnership if the HIV-infected man has been
@@ -414,6 +358,56 @@ their eligibility, with 1 equal to instant start.}
 types given current PrEP use, where 1 is no risk compensation.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{ai.full.supp.main.rr}{Relative expected coital frequency in main
+partnerships after full suppression (value of 1 indicates no change).}
+
+\item{ai.part.supp.main.rr}{Relative expected coital frequency in main
+partnerships after partial suppression (value of 1 indicates no
+change).}
+
+\item{ai.diag.main.rr}{Relative expected coital frequency in main
+partnerships after disease diagnosis (value of 1 indicates no change).}
+
+\item{ai.discl.main.rr}{Relative expected coital frequency in main
+partnerships after disclosure of disease diagnosis (value of 1
+indicates no change).}
+
+\item{ai.full.supp.pers.rr}{Relative expected coital frequency in casual
+partnerships after full suppression (value of 1 indicates no change).}
+
+\item{ai.part.supp.pers.rr}{Relative expected coital frequency in casual
+partnerships after partial suppression (value of 1 indicates no
+change).}
+
+\item{ai.diag.pers.rr}{Relative expected coital frequency in casual
+partnerships after diagnosis (value of 1 indicates no change).}
+
+\item{ai.discl.pers.rr}{Relative expected coital frequency in casual
+partnerships associated after disclosure of disease diagnosis (value
+of 1 indicates no change).}
+
+\item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
+condom in a main partnership if the HIV-infected is fully suppressed.}
+
+\item{cond.psupp.main.beta}{Beta multiplier for the log odds of using a
+condom in a main partnership if the HIV-infected is partially suppressed.}
+
+\item{cond.fsupp.pers.beta}{Beta multiplier for the log odds of using a
+condom in a casual partnership if the HIV-infected man is fully
+suppressed.}
+
+\item{cond.psupp.pers.beta}{Beta multiplier for the log odds of using a
+condom in a casual partnership if the HIV-infected man is partially
+suppressed.}
+
+\item{cond.fsupp.inst.beta}{Beta multiplier for the log odds of using a
+condom in a one-off partnership if the HIV-infected man is fully
+suppressed.}
+
+\item{cond.psupp.inst.beta}{Beta multiplier for the log odds of using a
+condom in a one-off partnership if the HIV-infected man is partially
+suppressed.}
 }
 \value{
 A list object of class \code{param.mard}, which can be passed to
