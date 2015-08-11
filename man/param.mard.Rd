@@ -358,56 +358,6 @@ their eligibility, with 1 equal to instant start.}
 types given current PrEP use, where 1 is no risk compensation.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{ai.full.supp.main.rr}{Relative expected coital frequency in main
-partnerships after full suppression (value of 1 indicates no change).}
-
-\item{ai.part.supp.main.rr}{Relative expected coital frequency in main
-partnerships after partial suppression (value of 1 indicates no
-change).}
-
-\item{ai.diag.main.rr}{Relative expected coital frequency in main
-partnerships after disease diagnosis (value of 1 indicates no change).}
-
-\item{ai.discl.main.rr}{Relative expected coital frequency in main
-partnerships after disclosure of disease diagnosis (value of 1
-indicates no change).}
-
-\item{ai.full.supp.pers.rr}{Relative expected coital frequency in casual
-partnerships after full suppression (value of 1 indicates no change).}
-
-\item{ai.part.supp.pers.rr}{Relative expected coital frequency in casual
-partnerships after partial suppression (value of 1 indicates no
-change).}
-
-\item{ai.diag.pers.rr}{Relative expected coital frequency in casual
-partnerships after diagnosis (value of 1 indicates no change).}
-
-\item{ai.discl.pers.rr}{Relative expected coital frequency in casual
-partnerships associated after disclosure of disease diagnosis (value
-of 1 indicates no change).}
-
-\item{cond.fsupp.main.beta}{Beta multiplier for the log odds of using a
-condom in a main partnership if the HIV-infected is fully suppressed.}
-
-\item{cond.psupp.main.beta}{Beta multiplier for the log odds of using a
-condom in a main partnership if the HIV-infected is partially suppressed.}
-
-\item{cond.fsupp.pers.beta}{Beta multiplier for the log odds of using a
-condom in a casual partnership if the HIV-infected man is fully
-suppressed.}
-
-\item{cond.psupp.pers.beta}{Beta multiplier for the log odds of using a
-condom in a casual partnership if the HIV-infected man is partially
-suppressed.}
-
-\item{cond.fsupp.inst.beta}{Beta multiplier for the log odds of using a
-condom in a one-off partnership if the HIV-infected man is fully
-suppressed.}
-
-\item{cond.psupp.inst.beta}{Beta multiplier for the log odds of using a
-condom in a one-off partnership if the HIV-infected man is partially
-suppressed.}
 }
 \value{
 A list object of class \code{param.mard}, which can be passed to

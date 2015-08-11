@@ -144,26 +144,6 @@
 #'        partnerships (acts per day).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per day).
-#' @param ai.full.supp.main.rr Relative expected coital frequency in main
-#'        partnerships after full suppression (value of 1 indicates no change).
-#' @param ai.part.supp.main.rr Relative expected coital frequency in main
-#'        partnerships after partial suppression (value of 1 indicates no
-#'        change).
-#' @param ai.diag.main.rr Relative expected coital frequency in main
-#'        partnerships after disease diagnosis (value of 1 indicates no change).
-#' @param ai.discl.main.rr Relative expected coital frequency in main
-#'        partnerships after disclosure of disease diagnosis (value of 1
-#'        indicates no change).
-#' @param ai.full.supp.pers.rr Relative expected coital frequency in casual
-#'        partnerships after full suppression (value of 1 indicates no change).
-#' @param ai.part.supp.pers.rr Relative expected coital frequency in casual
-#'        partnerships after partial suppression (value of 1 indicates no
-#'        change).
-#' @param ai.diag.pers.rr Relative expected coital frequency in casual
-#'        partnerships after diagnosis (value of 1 indicates no change).
-#' @param ai.discl.pers.rr Relative expected coital frequency in casual
-#'        partnerships associated after disclosure of disease diagnosis (value
-#'        of 1 indicates no change).
 #' @param ai.scale General relative scaler for all act rates for model
 #'        calibration.
 #' @param cond.main.BB.prob Probability of condom use in a black-black main
@@ -190,33 +170,17 @@
 #'        model calibration purposes.
 #' @param cond.rr.WW Condom probability scaler for white-white partnerships for
 #'        model calibration purposes.
-#' @param cond.fsupp.main.beta Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV-infected is fully suppressed.
-#' @param cond.psupp.main.beta Beta multiplier for the log odds of using a
-#'        condom in a main partnership if the HIV-infected is partially suppressed.
 #' @param cond.diag.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected man has been
 #'        diagnosed.
 #' @param cond.discl.main.beta Beta multiplier for the log odds of using a
 #'        condom in a main partnership if the HIV-infected man has disclosed.
-#' @param cond.fsupp.pers.beta Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV-infected man is fully
-#'        suppressed.
-#' @param cond.psupp.pers.beta Beta multiplier for the log odds of using a
-#'        condom in a casual partnership if the HIV-infected man is partially
-#'        suppressed.
 #' @param cond.diag.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man has been
 #'        diagnosed.
 #' @param cond.discl.pers.beta Beta multiplier for the log odds of using a
 #'        condom in a casual partnership if the HIV-infected man has disclosed
 #'        his status.
-#' @param cond.fsupp.inst.beta Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV-infected man is fully
-#'        suppressed.
-#' @param cond.psupp.inst.beta Beta multiplier for the log odds of using a
-#'        condom in a one-off partnership if the HIV-infected man is partially
-#'        suppressed.
 #' @param cond.diag.inst.beta Beta multiplier for the log odds of using a
 #'        condom in a one-off partnership if the HIV-infected man has been
 #'        diagnosed.
