@@ -25,26 +25,19 @@
 acts.mard <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
-    # Variables ---------------------------------------------------------------
-    ai.scale <- dat$param$ai.scale
+
+    ## Variables ##
 
     # Attributes
-    active <- dat$attr$active
-    uid <- dat$attr$uid
     status <- dat$attr$status
     race <- dat$attr$race
-    diag.status <- dat$attr$diag.status
-    tx.status <- dat$attr$tx.status
-    tt.traj <- dat$attr$tt.traj
-
 
     # Parameters
+    ai.scale <- dat$param$ai.scale
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
-      ai.diag.rr <- dat$param$ai.diag.main.rr
-      ai.discl.rr <- dat$param$ai.discl.main.rr
       fixed <- FALSE
       el <- get.dyads.active(dat$nw$m, at = at)
     }
@@ -52,8 +45,6 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
-      ai.diag.rr <- dat$param$ai.diag.pers.rr
-      ai.discl.rr <- dat$param$ai.discl.pers.rr
       fixed <- FALSE
       el <- get.dyads.active(dat$nw$p, at = at)
     }
@@ -61,15 +52,11 @@ acts.mard <- function(dat, at) {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
-      ai.diag.rr <- 1
-      ai.discl.rr <- 1
       fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
       el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
 
-
-    # Processes ---------------------------------------------------------------
-
+    ## Processes ##
     # Construct discordant edgelist
     disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
     disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
