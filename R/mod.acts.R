@@ -58,7 +58,7 @@ acts.mard <- function(dat, at) {
 
     ## Processes ##
 
-    # Construct discordant edgelist
+    # Construct edgelist
     el <- as.data.frame(el)
     names(el) <- c("p1", "p2")
     st1 <- status[el$p1]
@@ -88,19 +88,13 @@ acts.mard <- function(dat, at) {
       }
 
       # Full edge list
+      el$type <- type
       el$ai <- ai
-      el$type <- toupper(substr(type, 1, 1))
-
-      # Discordant act list
-      dal <- el[(st1 - st2) == 1, c(1, 2, 5)]
-      dal <- data.frame(pos = rep(dal$p1, dal$ai), neg = rep(dal$p2, dal$ai),
-                        type = toupper(substr(type, 1, 1)), uai = NA, ins = NA)
+      el$uai <- NA
 
       if (type == "main") {
-        dat$temp$dal <- dal
         dat$temp$el <- el
       } else {
-        dat$temp$dal <- rbind(dat$temp$dal, dal)
         dat$temp$el <- rbind(dat$temp$el, el)
       }
     }
