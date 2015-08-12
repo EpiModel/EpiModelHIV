@@ -101,5 +101,8 @@ acts.mard <- function(dat, at) {
 
   } # loop over type end
 
+  # Remove inactive edges from el
+  dat$temp$el <- dat$temp$el[-which(dat$temp$el$ai == 0), ]
+
   return(dat)
 }

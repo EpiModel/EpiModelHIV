@@ -44,7 +44,7 @@ position.mard <- function(dat, at) {
   el$p1ins[el$rc1 == "I"] <- el$ai[el$rc1 == "I"]
   el$p1ins[el$rc1 == "V" & el$rc2 == "R"] <- el$ai[el$rc1 == "V" & el$rc2 == "R"]
 
-  vv <- which(el$rc1 == "V" & el$rc2 == "V" & el$ai > 0)
+  vv <- which(el$rc1 == "V" & el$rc2 == "V")
   vv.race.combo <- paste0(race[el$p1[vv]], race[el$p2[vv]])
   vv.race.combo[vv.race.combo == "WB"] <- "BW"
   vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.BB.prob +
