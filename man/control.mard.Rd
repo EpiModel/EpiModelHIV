@@ -12,8 +12,8 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   vl.FUN = update_vl.mard, aiclass.FUN = update_aiclass.mard,
   roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
   resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
-  acts.FUN = acts.mard, position.FUN = position.mard,
-  condoms.FUN = condoms.mard, trans.FUN = trans.mard,
+  acts.FUN = acts.mard, condoms.FUN = condoms.mard,
+  position.FUN = position.mard, trans.FUN = trans.mard,
   getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
   delete.nodes = TRUE, save.nwstats = TRUE, save.network = FALSE,
   save.other = "attr", prevfull = FALSE, verbose = TRUE,
@@ -72,9 +72,9 @@ step.}
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
 
-\item{position.FUN}{Module function to simulate sexual position within acts.}
-
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
+
+\item{position.FUN}{Module function to simulate sexual position within acts.}
 
 \item{trans.FUN}{Module function to stochastically simulate disease transmission
 over acts given individual and dyadic attributes.}
