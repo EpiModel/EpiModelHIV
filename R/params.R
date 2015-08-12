@@ -450,8 +450,8 @@ init.mard <- function(nwstats,
 #' @param disclose.FUN Module function for HIV status disclosure.
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
-#' @param condoms.FUN Module function to simulate condom use within acts.
 #' @param position.FUN Module function to simulate sexual position within acts.
+#' @param condoms.FUN Module function to simulate condom use within acts.
 #' @param trans.FUN Module function to stochastically simulate disease transmission
 #'        over acts given individual and dyadic attributes.
 #' @param getprev.FUN Module function to calculate prevalence summary statistics.
@@ -498,8 +498,8 @@ control.mard <- function(simno = 1,
                          resimnets.FUN = simnet.mard,
                          disclose.FUN = disclose.mard,
                          acts.FUN = acts.mard,
-                         condoms.FUN = condoms.mard,
                          position.FUN = position.mard,
+                         condoms.FUN = condoms.mard,
                          trans.FUN = trans.mard,
                          getprev.FUN = prevalence.mard,
                          verbose.FUN = verbose.mard,
