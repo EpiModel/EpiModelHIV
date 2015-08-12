@@ -198,9 +198,9 @@ trans.mard <- function(dat, at){
   dat$epi$incid.acte[at] <- sum(stage[infector] %in% c("AR", "AF"))
   dat$epi$incid.chrn[at] <- sum(stage[infector] == "C")
   dat$epi$incid.aids[at] <- sum(stage[infector] == "D")
-  dat$epi$incid.main[at] <- sum(inf.type == "M")
-  dat$epi$incid.casl[at] <- sum(inf.type == "P")
-  dat$epi$incid.inst[at] <- sum(inf.type == "I")
+  dat$epi$incid.main[at] <- sum(inf.type == "main")
+  dat$epi$incid.casl[at] <- sum(inf.type == "pers")
+  dat$epi$incid.inst[at] <- sum(inf.type == "inst")
   dat$epi$incid.prep0[at] <- sum(prepStat[infected] == 0)
   dat$epi$incid.prep1[at] <- sum(prepStat[infected] == 1)
 
