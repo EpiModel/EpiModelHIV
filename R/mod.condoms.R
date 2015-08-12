@@ -109,8 +109,9 @@ condoms.mard <- function(dat, at) {
   } # end ptype loop
 
   # Construct discordant act list
-  del <- dat$temp$el[which((dat$temp$el$st1 - dat$temp$el$st2) == 1), c(1:2, 6:7)]
-  dal <- data.frame(pos = rep(del$p1, del$ai), neg = rep(del$p2, del$ai))
+  del <- dat$temp$el[which((dat$temp$el$st1 - dat$temp$el$st2) == 1), c(1:2, 5:7)]
+  dal <- data.frame(pos = rep(del$p1, del$ai), neg = rep(del$p2, del$ai),
+                    type = rep(del$type, del$ai))
   uai.vec <- do.call("c", lapply(1:length(del$ai),
                                  function(x) rep(1:0, c(del$uai[x],
                                                         del$ai[x] - del$uai[x]))))
