@@ -25,7 +25,7 @@
 position.mard <- function(dat, at) {
 
   ## Variables
-  dal <- dat$temp$dal
+  el <- dat$temp$el
 
   role.class <- dat$attr$role.class
   ins.quot <- dat$attr$ins.quot
@@ -37,35 +37,33 @@ position.mard <- function(dat, at) {
 
 
   ## Process
-  pos.role.class <- role.class[dal$pos]
-  neg.role.class <- role.class[dal$neg]
+  el$rc1 <- role.class[el$p1]
+  el$rc2 <- role.class[el$p2]
 
-  dal$ins <- NA
-  dal$ins[pos.role.class == "I"] <- "P"
-  dal$ins[pos.role.class == "R"] <- "N"
-  dal$ins[neg.role.class == "I"] <- "N"
-  dal$ins[neg.role.class == "R"] <- "P"
+  el$p1ins <- 0
+  el$p1ins[el$rc1 == "I"] <- el$ai[el$rc1 == "I"]
+  el$p1ins[el$rc1 == "V" & el$rc2 == "R"] <- el$ai[el$rc1 == "V" & el$rc2 == "R"]
 
-  vv <- which(pos.role.class == "V" & neg.role.class == "V")
-  vv.race.combo <- paste0(race[dal$pos[vv]], race[dal$neg[vv]])
+  vv <- which(el$rc1 == "V" & el$rc2 == "V" & el$ai > 0)
+  vv.race.combo <- paste0(race[el$p1[vv]], race[el$p2[vv]])
   vv.race.combo[vv.race.combo == "WB"] <- "BW"
   vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.BB.prob +
                  (vv.race.combo == "BW") * vv.iev.BW.prob +
                  (vv.race.combo == "WW") * vv.iev.WW.prob
 
-  iev <- rbinom(length(vv), 1, vv.iev.prob)
-  dal$ins[vv[iev == 1]] <- "B"
+  iev <- rbinom(length(vv), el$ai[vv], vv.iev.prob)
+  el$ai[vv[which(iev > 0)]] <- el$ai[vv[which(iev > 0)]] + iev[which(iev > 0)]
+  el$p1ins[vv[which(iev > 0)]] <- rbinom(sum(iev > 0), el$ai[vv[which(iev > 0)]], 0.5)
+
   vv.remaining <- vv[iev == 0]
 
-  inspos.prob <- ins.quot[dal$pos[vv.remaining]] /
-                 (ins.quot[dal$pos[vv.remaining]] + ins.quot[dal$neg[vv.remaining]])
-  inspos <- rbinom(length(vv.remaining), 1, inspos.prob)
-  dal$ins[vv.remaining[inspos == 1]] <- "P"
-  dal$ins[vv.remaining[inspos == 0]] <- "N"
-
+  p1.prob <- ins.quot[el$p1[vv.remaining]] /
+             (ins.quot[el$p1[vv.remaining]] + ins.quot[el$p2[vv.remaining]])
+  p1insall <- rbinom(length(vv.remaining), 1, p1.prob)
+  el$p1ins[vv.remaining[p1insall == 1]] <- el$ai[vv.remaining[p1insall == 1]]
 
   ## Output
-  dat$temp$dal <- dal
+  dat$temp$el <- el
 
   return(dat)
 }
