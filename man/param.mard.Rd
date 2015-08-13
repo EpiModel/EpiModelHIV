@@ -4,8 +4,8 @@
 \alias{param.mard}
 \title{Epidemic Model Parameters for MARDHAM Models}
 \usage{
-param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
-  last.neg.test.W.int = 315, mean.test.W.int = 315,
+param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
+  last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
   testing.pattern = "interval", test.window.int = 21,
   tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
   0.331, 0.617), tx.init.B.prob = 0.092, tx.init.W.prob = 0.127,
@@ -51,13 +51,16 @@ param.mard(nwstats, last.neg.test.B.int = 301, mean.test.B.int = 301,
 \item{nwstats}{Target statistics for the network model. An object of class
 \code{nwstats} output from \code{\link{calc_nwstats.mard}}.}
 
+\item{race.method}{Number of races in the model, with options of 1 or 2. If
+1, then race-specific parameters will be averaged.}
+
 \item{last.neg.test.B.int}{Time range in days for last negative test for
 black men.}
 
-\item{mean.test.B.int}{Mean intertest interval in days for black MSM who test.}
-
 \item{last.neg.test.W.int}{Time range in days for last negative test for
 white men.}
+
+\item{mean.test.B.int}{Mean intertest interval in days for black MSM who test.}
 
 \item{mean.test.W.int}{Mean intertest interval in days for white MSM who test.}
 
