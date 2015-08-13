@@ -103,6 +103,17 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepEver <- rep(NA, num)
 
+  dat$attr$uai.last <- rep(NA, num)
+  dat$attr$uai.main <- rep(NA, num)
+  dat$attr$uai.casl.last <- rep(NA, num)
+  dat$attr$uai.inst.last <- rep(NA, num)
+  dat$attr$uai.nmain.last <- rep(NA, num)
+  dat$attr$uai.sd <- rep(NA, num)
+  dat$attr$uai.sd.main <- rep(NA, num)
+  dat$attr$uai.sd.casl <- rep(NA, num)
+  dat$attr$uai.sd.inst <- rep(NA, num)
+  dat$attr$uai.sd.nmain <- rep(NA, num)
+
   # One-off AI class
   inst.ai.class <- rep(NA, num)
   ncl <- param$num.inst.ai.classes

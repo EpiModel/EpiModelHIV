@@ -451,6 +451,8 @@ init.mard <- function(nwstats,
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
 #' @param condoms.FUN Module function to simulate condom use within acts.
+#' @param riskhist.FUN Module function to calculate risk history for uninfected
+#'        persons in the population.
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param trans.FUN Module function to stochastically simulate disease transmission
 #'        over acts given individual and dyadic attributes.
@@ -499,6 +501,7 @@ control.mard <- function(simno = 1,
                          disclose.FUN = disclose.mard,
                          acts.FUN = acts.mard,
                          condoms.FUN = condoms.mard,
+                         riskhist.FUN = riskhist.mard,
                          position.FUN = position.mard,
                          trans.FUN = trans.mard,
                          getprev.FUN = prevalence.mard,

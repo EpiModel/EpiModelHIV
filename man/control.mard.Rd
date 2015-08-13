@@ -13,11 +13,11 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
   resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
   acts.FUN = acts.mard, condoms.FUN = condoms.mard,
-  position.FUN = position.mard, trans.FUN = trans.mard,
-  getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
-  delete.nodes = TRUE, save.nwstats = TRUE, save.network = FALSE,
-  save.other = "attr", prevfull = FALSE, verbose = TRUE,
-  verbose.int = 1, ...)
+  riskhist.FUN = riskhist.mard, position.FUN = position.mard,
+  trans.FUN = trans.mard, getprev.FUN = prevalence.mard,
+  verbose.FUN = verbose.mard, delete.nodes = TRUE, save.nwstats = TRUE,
+  save.network = FALSE, save.other = "attr", prevfull = FALSE,
+  verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -73,6 +73,9 @@ step.}
 partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
+
+\item{riskhist.FUN}{Module function to calculate risk history for uninfected
+persons in the population.}
 
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 
