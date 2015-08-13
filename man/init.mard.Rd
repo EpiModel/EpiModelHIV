@@ -4,8 +4,7 @@
 \alias{init.mard}
 \title{Epidemic Model Initial Conditions for MARDHAM Models}
 \usage{
-init.mard(nwstats, prev.B = 0.15, prev.W = 0.15,
-  init.prev.age.slope.B = 0.05/12, init.prev.age.slope.W = 0.05/12, ...)
+init.mard(nwstats, prev.B = 0.15, prev.W = 0.15, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -14,10 +13,6 @@ init.mard(nwstats, prev.B = 0.15, prev.W = 0.15,
 \item{prev.B}{Initial disease prevalence among black MSM.}
 
 \item{prev.W}{Initial disease prevalence among white MSM.}
-
-\item{init.prev.age.slope.B}{Slope of initial prevalence by age for black MSM.}
-
-\item{init.prev.age.slope.W}{Slope of initial prevalence by age for white MSM.}
 
 \item{...}{Additional arguments passed to function.}
 }

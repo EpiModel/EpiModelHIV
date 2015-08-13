@@ -383,8 +383,6 @@ param.mard <- function(nwstats,
 #'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
 #' @param prev.B Initial disease prevalence among black MSM.
 #' @param prev.W Initial disease prevalence among white MSM.
-#' @param init.prev.age.slope.B Slope of initial prevalence by age for black MSM.
-#' @param init.prev.age.slope.W Slope of initial prevalence by age for white MSM.
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
@@ -392,12 +390,7 @@ param.mard <- function(nwstats,
 #' function \code{\link{netsim}}.
 #'
 #' @export
-init.mard <- function(nwstats,
-                      prev.B = 0.15,
-                      prev.W = 0.15,
-                      init.prev.age.slope.B = 0.05 / 12,
-                      init.prev.age.slope.W = 0.05 / 12,
-                      ...) {
+init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
                 dot.args = list(...))
@@ -406,6 +399,9 @@ init.mard <- function(nwstats,
   p$num.W <- nwstats$num.W
 
   p$ages <- nwstats$ages
+
+  p$init.prev.age.slope.B <- prev.B / 12
+  p$init.prev.age.slope.W <- prev.W / 12
 
   p$nwstats <- NULL
 
