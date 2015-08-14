@@ -154,18 +154,24 @@
 #'        partnership.
 #' @param cond.main.WW.prob Probability of condom use in a white-white main
 #'        partnership.
-#' @param cond.pers.BB.prob Probability of condom use in a black-black casual
-#'        partnership.
-#' @param cond.pers.BW.prob Probability of condom use in a black-white casual
-#'        partnership.
-#' @param cond.pers.WW.prob Probability of condom use in a white-white casual
-#'        partnership.
-#' @param cond.inst.BB.prob Probability of condom use in a black-black one-off
-#'        partnership.
-#' @param cond.inst.BW.prob Probability of condom use in a black-white one-off
-#'        partnership.
-#' @param cond.inst.WW.prob Probability of condom use in a white-white one-off
-#'        partnership.
+#' @param cond.pers.always.prob Fraction of men in casual partnerships who always
+#'        use condoms in those partnerships.
+#' @param cond.pers.BB.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a black-black casual partnerships.
+#' @param cond.pers.BW.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a black-white casual partnerships.
+#' @param cond.pers.WW.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a white-white casual partnerships.
+#' @param cond.inst.always.prob Fraction of men in instant partnerships who always
+#'        use condoms in those partnerships.
+#' @param cond.inst.BB.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a black-black one-off partnerships.
+#' @param cond.inst.BW.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a black-white one-off partnerships.
+#' @param cond.inst.WW.prob Of men who are not consistent condom users, per-act
+#'        probability of condom use in a white-white one-off partnerships.
+#' @param cond.always.prob.corr Correlation coefficient for probability of always
+#'        using condoms in both casual and one-off
 #' @param cond.rr.BB Condom probability scaler for black-black partnerships for
 #'        model calibration purposes.
 #' @param cond.rr.BW Condom probability scaler for black-white partnerships for
@@ -306,16 +312,18 @@ param.mard <- function(nwstats,
                        cond.main.BB.prob = 0.38,
                        cond.main.BW.prob = 0.10,
                        cond.main.WW.prob = 0.15,
-                       cond.pers.BB.prob = 0.39,
-                       cond.pers.BW.prob = 0.11,
-                       cond.pers.WW.prob = 0.16,
-                       cond.inst.BB.prob = 0.49,
-                       cond.inst.BW.prob = 0.15,
-                       cond.inst.WW.prob = 0.22,
+                       cond.pers.always.prob = 0.38,
+                       cond.pers.BB.prob = 0.26,
+                       cond.pers.BW.prob = 0.26,
+                       cond.pers.WW.prob = 0.26,
+                       cond.inst.always.prob = 0.55,
+                       cond.inst.BB.prob = 0.27,
+                       cond.inst.BW.prob = 0.27,
+                       cond.inst.WW.prob = 0.27,
+                       cond.always.prob.corr = 0.5,
                        cond.rr.BB = 1,
                        cond.rr.BW = 1,
                        cond.rr.WW = 1,
-
                        cond.diag.main.beta = -0.67,
                        cond.discl.main.beta = -0.85,
                        cond.diag.pers.beta = -0.67,

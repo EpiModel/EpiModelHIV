@@ -34,11 +34,12 @@ param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14, ai.scale = 1,
   cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
-  cond.main.WW.prob = 0.15, cond.pers.BB.prob = 0.39,
-  cond.pers.BW.prob = 0.11, cond.pers.WW.prob = 0.16,
-  cond.inst.BB.prob = 0.49, cond.inst.BW.prob = 0.15,
-  cond.inst.WW.prob = 0.22, cond.rr.BB = 1, cond.rr.BW = 1,
-  cond.rr.WW = 1, cond.diag.main.beta = -0.67,
+  cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.38,
+  cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
+  cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.55,
+  cond.inst.BB.prob = 0.27, cond.inst.BW.prob = 0.27,
+  cond.inst.WW.prob = 0.27, cond.always.prob.corr = 0.5, cond.rr.BB = 1,
+  cond.rr.BW = 1, cond.rr.WW = 1, cond.diag.main.beta = -0.67,
   cond.discl.main.beta = -0.85, cond.diag.pers.beta = -0.67,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
@@ -269,23 +270,32 @@ partnership.}
 \item{cond.main.WW.prob}{Probability of condom use in a white-white main
 partnership.}
 
-\item{cond.pers.BB.prob}{Probability of condom use in a black-black casual
-partnership.}
+\item{cond.pers.always.prob}{Fraction of men in casual partnerships who always
+use condoms in those partnerships.}
 
-\item{cond.pers.BW.prob}{Probability of condom use in a black-white casual
-partnership.}
+\item{cond.pers.BB.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a black-black casual partnerships.}
 
-\item{cond.pers.WW.prob}{Probability of condom use in a white-white casual
-partnership.}
+\item{cond.pers.BW.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a black-white casual partnerships.}
 
-\item{cond.inst.BB.prob}{Probability of condom use in a black-black one-off
-partnership.}
+\item{cond.pers.WW.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a white-white casual partnerships.}
 
-\item{cond.inst.BW.prob}{Probability of condom use in a black-white one-off
-partnership.}
+\item{cond.inst.always.prob}{Fraction of men in instant partnerships who always
+use condoms in those partnerships.}
 
-\item{cond.inst.WW.prob}{Probability of condom use in a white-white one-off
-partnership.}
+\item{cond.inst.BB.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a black-black one-off partnerships.}
+
+\item{cond.inst.BW.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a black-white one-off partnerships.}
+
+\item{cond.inst.WW.prob}{Of men who are not consistent condom users, per-act
+probability of condom use in a white-white one-off partnerships.}
+
+\item{cond.always.prob.corr}{Correlation coefficient for probability of always
+using condoms in both casual and one-off}
 
 \item{cond.rr.BB}{Condom probability scaler for black-black partnerships for
 model calibration purposes.}
