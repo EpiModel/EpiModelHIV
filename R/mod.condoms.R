@@ -42,6 +42,7 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.main.WW.prob
       diag.beta <- dat$param$cond.diag.main.beta
       discl.beta <- dat$param$cond.discl.main.beta
+      cond.always <- NULL
     }
     if (type == "pers") {
       cond.BB.prob <- dat$param$cond.pers.BB.prob
@@ -49,6 +50,7 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.pers.WW.prob
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
+      cond.always <- dat$attr$cond.always.pers
     }
     if (type == "inst") {
       cond.BB.prob <- dat$param$cond.inst.BB.prob
@@ -56,6 +58,7 @@ condoms.mard <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.inst.WW.prob
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
+      cond.always <- dat$attr$cond.always.inst
     }
 
     el <- dat$temp$el
@@ -101,14 +104,26 @@ condoms.mard <- function(dat, at) {
     uai.prob[is.na(uai.prob) & old.uai.prob == 0] <- 0
     uai.prob[is.na(uai.prob) & old.uai.prob == 1] <- 1
 
-    elt$uai <- rbinom(nrow(elt), elt$ai, uai.prob)
+    # UAI group
+    if (type %in% c("pers", "inst")) {
+      ca1 <- cond.always[elt$p1]
+      ca2 <- cond.always[elt$p2]
+      uai.prob <- ifelse(ca1 == 1 | ca2 == 1, 0, uai.prob)
+      if (type == "pers") {
+        dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
+      } else {
+        dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
+      }
+    }
 
+    elt$uai <- rbinom(nrow(elt), elt$ai, uai.prob)
 
     ## Output ##
     dat$temp$el[dat$temp$el$type == type, ] <- elt
+
   } # end ptype loop
 
-  # Construct discordant act list
+  ## Construct discordant act list
   del <- dat$temp$el[which((dat$temp$el$st1 - dat$temp$el$st2) == 1), c(1:2, 5:7)]
   dal <- data.frame(pos = rep(del$p1, del$ai), neg = rep(del$p2, del$ai),
                     type = rep(del$type, del$ai))

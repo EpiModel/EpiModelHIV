@@ -137,6 +137,9 @@ prevalence.mard <- function(dat, at) {
     dat$epi$i.prev.prep0 <- rNA
     dat$epi$i.prev.prep1 <- rNA
 
+    dat$epi$cprob.always.pers <- rNA
+    dat$epi$cprob.always.inst <- rNA
+
     dat$epi$timer <- rNA
   }
 
