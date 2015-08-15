@@ -58,4 +58,5 @@ riskhist.mard <- function(dat, at) {
   dat$attr$uai.sd.inst[uai.serodis.inst] <- at
   dat$attr$uai.sd.nmain[uai.serodis.nmain] <- at
 
+  return(dat)
 }
