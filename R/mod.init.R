@@ -90,7 +90,7 @@ initialize.mard <- function(x, param, init, control, s) {
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
   uai.always <- rmvbin(num, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
-  dat$attr$cond.always.casl <- uai.always[, 1]
+  dat$attr$cond.always.pers <- uai.always[, 1]
   dat$attr$cond.always.inst <- uai.always[, 2]
 
   # Arrival and departure

@@ -195,7 +195,7 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
   uai.always <- rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
-  dat$attr$cond.always.casl[newIds] <- uai.always[, 1]
+  dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
   return(dat)
