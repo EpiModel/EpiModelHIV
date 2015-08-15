@@ -156,9 +156,11 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
 
+  # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
 
+  # Role
   dat$attr$role.class[newIds[newB]] <- sample(c("I", "R", "V"),
                                               nBirths.B, replace = TRUE,
                                               prob = dat$param$role.B.prob)
@@ -187,6 +189,14 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
+
+  # UAI group
+  p1 <- dat$param$cond.pers.always.prob
+  p2 <- dat$param$cond.inst.always.prob
+  rho <- dat$param$cond.always.prob.corr
+  uai.always <- rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  dat$attr$cond.always.casl[newIds] <- uai.always[, 1]
+  dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
   return(dat)
 }
