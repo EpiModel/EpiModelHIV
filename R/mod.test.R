@@ -30,23 +30,29 @@ test.mard <- function(dat, at) {
   status <- dat$attr$status
   inf.time <- dat$attr$inf.time
 
+  prepStat <- dat$attr$prepStat
+  prep.tst.int <- dat$param$prep.tst.int
+
   # Parameters
   testing.pattern <- dat$param$testing.pattern
   mean.test.B.int <- dat$param$mean.test.B.int
   mean.test.W.int <- dat$param$mean.test.W.int
   twind.int <- dat$param$test.window.int
 
-
   ## Process
 
   if (testing.pattern == "memoryless") {
     elig.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    tst.B <- elig.B[rbinom(length(elig.B), 1, 1 / mean.test.B.int) == 1]
+    rates.B <- rep(1/mean.test.B.int, length(elig.B))
+    rates.B[which(prepStat[elig.B] == 1)] <- 1/prep.tst.int
+    tst.B <- elig.B[rbinom(length(elig.B), 1, rates.B) == 1]
 
     elig.W <- which(active == 1 & race == "W" & tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)))
-    tst.W <- elig.W[rbinom(length(elig.W), 1, 1 / mean.test.W.int) == 1]
+    rates.W <- rep(1/mean.test.W.int, length(elig.W))
+    rates.W[which(prepStat[elig.W] == 1)] <- 1/prep.tst.int
+    tst.W <- elig.W[rbinom(length(elig.W), 1, rates.W) == 1]
   }
 
   if (testing.pattern == "interval") {
@@ -54,12 +60,21 @@ test.mard <- function(dat, at) {
     tsincelntst <- at - dat$attr$last.neg.test
     tsincelntst[is.na(tsincelntst)] <- at - dat$attr$arrival.time[is.na(tsincelntst)]
 
-    tst.B <- which(active == 1 & race == "B" & tt.traj != "NN" &
-                   (diag.status == 0 | is.na(diag.status)) &
-                   tsincelntst >= mean.test.B.int)
-    tst.W <- which(active == 1 & race == "W" & tt.traj != "NN" &
-                   (diag.status == 0 | is.na(diag.status)) &
-                   tsincelntst >= mean.test.W.int)
+    tst.B.nprep <- which(active == 1 & race == "B" & tt.traj != "NN" &
+                         (diag.status == 0 | is.na(diag.status)) &
+                         tsincelntst >= mean.test.B.int)
+    tst.B.prep <- which(active == 1 & race == "B" & tt.traj != "NN" &
+                        (diag.status == 0 | is.na(diag.status)) &
+                        prepStat == 1 & tsincelntst >= prep.tst.int)
+    tst.B <- c(tst.B.nprep, tst.B.prep)
+
+    tst.W.nprep <- which(active == 1 & race == "W" & tt.traj != "NN" &
+                         (diag.status == 0 | is.na(diag.status)) &
+                         tsincelntst >= mean.test.W.int)
+    tst.W.prep <- which(active == 1 & race == "W" & tt.traj != "NN" &
+                        (diag.status == 0 | is.na(diag.status)) &
+                        prepStat == 1 & tsincelntst >= prep.tst.int)
+    tst.W <- c(tst.W.nprep, tst.W.prep)
   }
 
   tst.pos.B <- tst.B[status[tst.B] == 1 & inf.time[tst.B] <= at - twind.int]
