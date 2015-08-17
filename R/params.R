@@ -357,35 +357,11 @@ param.mard <- function(nwstats,
           call. = FALSE)
   }
 
-  ## Pull from nwstats
-  p$time.unit <- nwstats$time.unit
-
-  intvars <- grep(names(p), pattern = ".int", fixed = TRUE)
-  p[intvars] <- lapply(p[intvars], FUN = function(x) {round(x / p$time.unit)})
-
-  ratevars <- grep(names(p), pattern = ".rate", fixed = TRUE)
-  p[ratevars] <- lapply(p[ratevars], FUN = function(x) {x * p$time.unit})
-
-  p$role.B.prob <- nwstats$role.B.prob
-  p$role.W.prob <- nwstats$role.W.prob
-
-  p$inst.trans.matrix <- matrix(1, nrow = 1)
-  p$role.trans.matrix <- matrix(c(1, 0, 0,
-                                  0, 1, 0,
-                                  0, 0, 1),
-                                nrow = 3)
-
-  p$method <- nwstats$method
-  p$modes <- 1
-
-  p$asmr.B <- nwstats$asmr.B
-  p$asmr.W <- nwstats$asmr.W
-
   if (race.method == 1) {
-    p$last.neg.test.B.int = (last.neg.test.B.int + p$last.neg.test.W.int)/2
-    p$last.neg.test.W.int = (last.neg.test.B.int + p$last.neg.test.W.int)/2
-    p$mean.test.W.int = (mean.test.W.int + mean.test.B.int)/2
+    p$last.neg.test.B.int = (last.neg.test.B.int + last.neg.test.W.int)/2
+    p$last.neg.test.W.int = (last.neg.test.B.int + last.neg.test.W.int)/2
     p$mean.test.B.int = (mean.test.W.int + mean.test.B.int)/2
+    p$mean.test.W.int = (mean.test.W.int + mean.test.B.int)/2
     p$tt.traj.B.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
     p$tt.traj.W.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
     p$tx.init.B.prob = (tx.init.B.prob + tx.init.W.prob)/2
@@ -429,6 +405,29 @@ param.mard <- function(nwstats,
     p$vv.iev.BW.prob = (vv.iev.BB.prob + vv.iev.BW.prob + vv.iev.WW.prob)/3
     p$vv.iev.WW.prob = (vv.iev.BB.prob + vv.iev.BW.prob + vv.iev.WW.prob)/3
   }
+
+  p$time.unit <- nwstats$time.unit
+
+  intvars <- grep(names(p), pattern = ".int", fixed = TRUE)
+  p[intvars] <- lapply(p[intvars], FUN = function(x) round(x / p$time.unit))
+
+  ratevars <- grep(names(p), pattern = ".rate", fixed = TRUE)
+  p[ratevars] <- lapply(p[ratevars], FUN = function(x) x * p$time.unit)
+
+  p$role.B.prob <- nwstats$role.B.prob
+  p$role.W.prob <- nwstats$role.W.prob
+
+  p$inst.trans.matrix <- matrix(1, nrow = 1)
+  p$role.trans.matrix <- matrix(c(1, 0, 0,
+                                  0, 1, 0,
+                                  0, 0, 1),
+                                nrow = 3)
+
+  p$method <- nwstats$method
+  p$modes <- 1
+
+  p$asmr.B <- nwstats$asmr.B
+  p$asmr.W <- nwstats$asmr.W
 
   p$nwstats <- NULL
 
