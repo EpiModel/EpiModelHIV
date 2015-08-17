@@ -224,6 +224,8 @@
 #'        their eligibility, with 1 equal to instant start.
 #' @param prep.rcomp The relative change in rate of UAI across all partnership
 #'        types given current PrEP use, where 1 is no risk compensation.
+#' @param prep.tst.int Testing interval for those who are actively on PrEP. This
+#'        overrides the mean testing interval parameters.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -344,6 +346,7 @@ param.mard <- function(nwstats,
                        prep.cov.method = "curr",
                        prep.cov.rate = 1,
                        prep.rcomp = 1,
+                       prep.tst.int = 90,
                        ...) {
 
   p <- get_args(formal.args = formals(sys.function()),

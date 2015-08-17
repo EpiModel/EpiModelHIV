@@ -46,7 +46,8 @@ param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
   prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
   0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
-  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1, ...)
+  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1,
+  prep.tst.int = 90, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -369,6 +370,9 @@ their eligibility, with 1 equal to instant start.}
 
 \item{prep.rcomp}{The relative change in rate of UAI across all partnership
 types given current PrEP use, where 1 is no risk compensation.}
+
+\item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
+overrides the mean testing interval parameters.}
 
 \item{...}{Additional arguments passed to the function.}
 }
