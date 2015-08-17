@@ -26,6 +26,9 @@ position.mard <- function(dat, at) {
 
   ## Variables
   dal <- dat$temp$dal
+  if (nrow(dal) == 0) {
+    return(dat)
+  }
 
   role.class <- dat$attr$role.class
   ins.quot <- dat$attr$ins.quot

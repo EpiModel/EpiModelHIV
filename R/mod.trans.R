@@ -58,6 +58,10 @@ trans.mard <- function(dat, at){
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
+  if (nrow(dal) == 0) {
+    return(dat)
+  }
+
 
   ## Processes
 
