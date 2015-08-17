@@ -47,7 +47,7 @@ param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.elig.model = "all", prep.efficacy = 0.92, prep.class.prob = c(0.5,
   0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1,
-  prep.tst.int = 90, ...)
+  prep.tst.int = 90, prep.risk.int = 182, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -373,6 +373,8 @@ types given current PrEP use, where 1 is no risk compensation.}
 
 \item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
 overrides the mean testing interval parameters.}
+
+\item{prep.risk.int}{Time window for assessment of risk eligibility for PrEP.}
 
 \item{...}{Additional arguments passed to the function.}
 }

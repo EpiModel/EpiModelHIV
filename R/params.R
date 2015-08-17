@@ -226,6 +226,7 @@
 #'        types given current PrEP use, where 1 is no risk compensation.
 #' @param prep.tst.int Testing interval for those who are actively on PrEP. This
 #'        overrides the mean testing interval parameters.
+#' @param prep.risk.int Time window for assessment of risk eligibility for PrEP.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -347,6 +348,7 @@ param.mard <- function(nwstats,
                        prep.cov.rate = 1,
                        prep.rcomp = 1,
                        prep.tst.int = 90,
+                       prep.risk.int = 182,
                        ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
