@@ -198,5 +198,12 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
+
+  # Risk history matrices
+  for (i in 1:length(dat$riskh)) {
+    dat$riskh[[i]] <- rbind(dat$riskh[[i]],
+                            matrix(NA, ncol = ncol(dat$riskh[[i]]), nrow = nBirths))
+  }
+
   return(dat)
 }
