@@ -111,16 +111,20 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepEver <- rep(NA, num)
 
-  dat$attr$uai.last <- rep(NA, num)
-  dat$attr$uai.main <- rep(NA, num)
-  dat$attr$uai.casl.last <- rep(NA, num)
-  dat$attr$uai.inst.last <- rep(NA, num)
-  dat$attr$uai.nmain.last <- rep(NA, num)
-  dat$attr$uai.sd <- rep(NA, num)
-  dat$attr$uai.sd.main <- rep(NA, num)
-  dat$attr$uai.sd.casl <- rep(NA, num)
-  dat$attr$uai.sd.inst <- rep(NA, num)
-  dat$attr$uai.sd.nmain <- rep(NA, num)
+
+  # Risk history lists
+  nc <- ceiling(dat$param$prep.risk.int)
+  dat$riskh <- list()
+  dat$riskh$mdeg <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$pdeg <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$ideg <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai.main <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai.nmain <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai.sd <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai.sd.main <- matrix(NA, ncol = nc, nrow = num)
+  dat$riskh$uai.sd.nmain <- matrix(NA, ncol = nc, nrow = num)
+
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
