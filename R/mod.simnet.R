@@ -124,6 +124,10 @@ simnet.mard <- function(dat, at) {
     }
     dat$nw$i <- delete.vertices(dat$nw$i, vid = inactive)
     dat$attr <- EpiModel::deleteAttr(dat$attr, inactive)
+
+    for (i in 1:length(dat$riskh)) {
+      dat$riskh[[i]] <- dat$riskh[[i]][-inactive, ]
+    }
   }
 
   # Stop checks for consistency in nw / attr sizes
@@ -147,10 +151,8 @@ simnet.mard <- function(dat, at) {
     dat$stats$nwstats$i <- rbind(dat$stats$nwstats$i, stats)
   }
 
-
   return(dat)
 }
-
 
 
 calc_meandegs <- function(dat, at, stats, type) {
