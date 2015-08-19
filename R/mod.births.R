@@ -200,6 +200,7 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
 
   # PrEP
   dat$attr$prepEver[newIds] <- 0
+  dat$attr$prepStat[newIds] <- 0
 
   # Risk history matrices
   for (i in 1:length(dat$riskh)) {

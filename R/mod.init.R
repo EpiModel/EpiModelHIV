@@ -106,9 +106,7 @@ initialize.mard <- function(x, param, init, control, s) {
   # PrEP Attributes
   dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepElig <- rep(NA, num)
-  dat$attr$prepEligTime <- rep(NA, num)
-  dat$attr$prepStat <- rep(NA, num)
-  dat$attr$prepStartTime <- rep(NA, num)
+  dat$attr$prepStat <- rep(0, num)
   dat$attr$prepEver <- rep(0, num)
 
 
@@ -231,9 +229,9 @@ init_status.mard <- function(dat) {
 
   # Treatment trajectory
   tt.traj <- rep(NA, num)
-  tt.traj[ids.B] <- sample(apportion.lr(num.B, c("NN", "YN", "YP", "YF"),
+  tt.traj[ids.B] <- sample(apportion_lr(num.B, c("NN", "YN", "YP", "YF"),
                                         dat$param$tt.traj.B.prob))
-  tt.traj[ids.W] <- sample(apportion.lr(num.W, c("NN", "YN", "YP", "YF"),
+  tt.traj[ids.W] <- sample(apportion_lr(num.W, c("NN", "YN", "YP", "YF"),
                                         dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
 
