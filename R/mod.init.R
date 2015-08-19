@@ -113,9 +113,8 @@ initialize.mard <- function(x, param, init, control, s) {
   # Risk history lists
   nc <- ceiling(dat$param$prep.risk.int)
   dat$riskh <- list()
-  rh.names <- c("ai",
-                "ai.mono2.nt.3mo", "ai.mono2.nt.6mo",
-                "ai.mono1.nt.3mo", "ai.mono1.nt.6mo",
+  rh.names <- c("uai.mono2.nt.3mo", "uai.mono2.nt.6mo",
+                "uai.mono1.nt.3mo", "uai.mono1.nt.6mo",
                 "uai.nonmonog", "uai.nmain",
                 "ai.sd.mc", "uai.sd.mc")
   for (i in 1:length(rh.names)) {
