@@ -43,79 +43,75 @@ riskhist.mard <- function(dat, at) {
                      which(uid[el2$p2[x]] == dlist$neg))) != 0
   })
 
-
   ## Preconditions ##
 
-  # Any AI
-  ai.any <- unique(c(el2$p1[el2$st1 == 0 & el2$ai > 0], el2$p2[el2$uai > 0]))
-  dat$riskh$ai[, pri] <- 0
-  dat$riskh$ai[ai.any, pri] <- 1
+  # Any UAI
+  uai.any <- unique(c(el2$p1[el2$uai > 0], el2$p2[el2$uai > 0]))
 
-  # Monogamous partnerships: 1 sided
+  # Monogamous partnerships: 1-sided
   tot.deg <- main.deg + casl.deg + inst.deg
-  ai.mono1 <- intersect(which(tot.deg == 1), ai.any)
+  uai.mono1 <- intersect(which(tot.deg == 1), uai.any)
 
-  # Monogamous partnerships: 2 sided
+  # Monogamous partnerships: 2-sided
   mono.2s <- rep(NA, nrow(el2))
   for (i in 1:nrow(el2)) {
     mono.2s[i] <- tot.deg[el2$p1[i]] == 1 & tot.deg[el2$p2[i]] == 1
   }
   ai.mono2 <- sort(unname(do.call("c", c(el2[mono.2s, 1:2]))))
+  uai.mono2 <- intersect(ai.mono2, uai.any)
 
-  # "negative" partnerships
-  tneg <- unique(c(el2$p1[which((el2$st1 - el2$st2) == 0)],
-                   el2$p2[which((el2$st1 - el2$st2) == 0)]))
-  diag.status <- dat$attr$diag.status
-  fneg <- unique(c(el2$p1[which(diag.status[el2$p1] == 0)],
-                  el2$p2[which(diag.status[el2$p1] == 0)]))
+  # "Negative" partnerships
+  tneg <- unique(c(el2$p1[el2$st1 == 0], el2$p2[el2$st1 == 0]))
+  dx <- dat$attr$diag.status
+  fneg <- unique(c(el2$p1[which(dx[el2$p1] == 0)], el2$p2[which(dx[el2$p1] == 0)]))
   all.neg <- c(tneg, fneg)
   since.test <- at - dat$attr$last.neg.test
 
 
-  ## Condition 1a: 2 Sided Monogamous "negative" partnership,
+  ## Condition 1a: UAI in 2-sided monogamous "negative" partnership,
   ##               partner not tested in past 3, 6 months
-  ai.mono2.neg <- intersect(ai.mono2, all.neg)
+  uai.mono2.neg <- intersect(uai.mono2, all.neg)
 
-  part.id2 <- rep(NA, length(ai.mono2.neg))
-  for (i in 1:length(ai.mono2.neg)) {
-    mono.d2 <- el2[el2$p1 == ai.mono2.neg[i] | el2$p2 == ai.mono2.neg[i], ]
-    part.id2[i] <- ifelse(mono.d2$p1 == ai.mono2.neg[i], mono.d2$p2, mono.d2$p1)
+  part.id2 <- rep(NA, length(uai.mono2.neg))
+  for (i in 1:length(uai.mono2.neg)) {
+    mono.d2 <- el2[el2$p1 == uai.mono2.neg[i] | el2$p2 == uai.mono2.neg[i], ]
+    part.id2[i] <- ifelse(mono.d2$p1 == uai.mono2.neg[i], mono.d2$p2, mono.d2$p1)
   }
 
   not.tested.3mo <- since.test[part.id2] > (90/dat$param$time.unit)
-  part.not.tested.3mo <- ai.mono2.neg[which(not.tested.3mo == TRUE)]
-  dat$riskh$ai.mono2.nt.3mo[, pri] <- 0
-  dat$riskh$ai.mono2.nt.3mo[part.not.tested.3mo, pri] <- 1
+  part.not.tested.3mo <- uai.mono2.neg[which(not.tested.3mo == TRUE)]
+  dat$riskh$uai.mono2.nt.3mo[, pri] <- 0
+  dat$riskh$uai.mono2.nt.3mo[part.not.tested.3mo, pri] <- 1
 
   not.tested.6mo <- since.test[part.id2] > (180/dat$param$time.unit)
-  part.not.tested.6mo <- ai.mono2.neg[which(not.tested.6mo == TRUE)]
-  dat$riskh$ai.mono2.nt.6mo[, pri] <- 0
-  dat$riskh$ai.mono2.nt.6mo[part.not.tested.6mo, pri] <- 1
+  part.not.tested.6mo <- uai.mono2.neg[which(not.tested.6mo == TRUE)]
+  dat$riskh$uai.mono2.nt.6mo[, pri] <- 0
+  dat$riskh$uai.mono2.nt.6mo[part.not.tested.6mo, pri] <- 1
 
 
-  ## Condition 1b: 1 Sided Monogamous "negative" partnership,
+  ## Condition 1b: UAI in 1-sided "monogamous" "negative" partnership,
   ##               partner not tested in past 3, 6 months
-  ai.mono1.neg <- intersect(ai.mono1, all.neg)
+  uai.mono1.neg <- intersect(uai.mono1, all.neg)
 
-  part.id1 <- rep(NA, length(ai.mono1.neg))
-  for (i in 1:length(ai.mono1.neg)) {
-    mono.d1 <- el2[el2$p1 == ai.mono1.neg[i] | el2$p2 == ai.mono1.neg[i], ]
-    part.id1[i] <- ifelse(mono.d1$p1 == ai.mono1.neg[i], mono.d1$p2, mono.d1$p1)
+  part.id1 <- rep(NA, length(uai.mono1.neg))
+  for (i in 1:length(uai.mono1.neg)) {
+    mono.d1 <- el2[el2$p1 == uai.mono1.neg[i] | el2$p2 == uai.mono1.neg[i], ]
+    part.id1[i] <- ifelse(mono.d1$p1 == uai.mono1.neg[i], mono.d1$p2, mono.d1$p1)
   }
 
   not.tested.3mo <- since.test[part.id1] > (90/dat$param$time.unit)
-  part.not.tested.3mo <- ai.mono1.neg[which(not.tested.3mo == TRUE)]
-  dat$riskh$ai.mono1.nt.3mo[, pri] <- 0
-  dat$riskh$ai.mono1.nt.3mo[part.not.tested.3mo, pri] <- 1
+  part.not.tested.3mo <- uai.mono1.neg[which(not.tested.3mo == TRUE)]
+  dat$riskh$uai.mono1.nt.3mo[, pri] <- 0
+  dat$riskh$uai.mono1.nt.3mo[part.not.tested.3mo, pri] <- 1
 
   not.tested.6mo <- since.test[part.id1] > (180/dat$param$time.unit)
-  part.not.tested.6mo <- ai.mono1.neg[which(not.tested.6mo == TRUE)]
-  dat$riskh$ai.mono1.nt.6mo[, pri] <- 0
-  dat$riskh$ai.mono1.nt.6mo[part.not.tested.6mo, pri] <- 1
+  part.not.tested.6mo <- uai.mono1.neg[which(not.tested.6mo == TRUE)]
+  dat$riskh$uai.mono1.nt.6mo[, pri] <- 0
+  dat$riskh$uai.mono1.nt.6mo[part.not.tested.6mo, pri] <- 1
 
 
   ## Condition 2a: UAI in non-monogamous partnerships
-  idsConc <- intersect(which(tot.deg > 1), ai.any)
+  idsConc <- intersect(which(tot.deg > 1), uai.any)
   multUai <- rep(NA, length(idsConc))
   for (i in 1:length(idsConc)) {
     uai.d <- el2[el2$p1 == idsConc[i] | el2$p2 == idsConc[i], "uai"]
