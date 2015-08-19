@@ -93,20 +93,20 @@ calc_nwstats.mard <- function(time.unit = 7, method = 2,
 
   # deg.pers nodal attribute
   if (method == 2) {
-    deg.pers.B <- apportion.lr(num.B, c("B0", "B1", "B2"), colSums(deg.mp.B))
-    deg.pers.W <- apportion.lr(num.W, c("W0", "W1", "W2"), colSums(deg.mp.W))
+    deg.pers.B <- apportion_lr(num.B, c("B0", "B1", "B2"), colSums(deg.mp.B))
+    deg.pers.W <- apportion_lr(num.W, c("W0", "W1", "W2"), colSums(deg.mp.W))
   }
   if (method == 1) {
-    deg.pers <- apportion.lr(num, 0:2, colSums(deg.mp.W))
+    deg.pers <- apportion_lr(num, 0:2, colSums(deg.mp.W))
   }
 
   # deg main nodal attribute
   if (method == 2) {
-    deg.main.B <- apportion.lr(num.B, c("B0", "B1"), rowSums(deg.mp.B))
-    deg.main.W <- apportion.lr(num.W, c("W0", "W1"), rowSums(deg.mp.W))
+    deg.main.B <- apportion_lr(num.B, c("B0", "B1"), rowSums(deg.mp.B))
+    deg.main.W <- apportion_lr(num.W, c("W0", "W1"), rowSums(deg.mp.W))
   }
   if (method == 1) {
-    deg.main <- apportion.lr(num, 0:1, rowSums(deg.mp.W))
+    deg.main <- apportion_lr(num, 0:1, rowSums(deg.mp.W))
   }
 
 
@@ -391,14 +391,14 @@ base_nw.mard <- function(nwstats) {
   age <- sample(ages, n, TRUE)
   sqrt.age <- sqrt(age)
 
-  role.B <- sample(apportion.lr(num.B, c("I", "R", "V"), nwstats$role.B.prob))
-  role.W <- sample(apportion.lr(num.W, c("I", "R", "V"), nwstats$role.W.prob))
+  role.B <- sample(apportion_lr(num.B, c("I", "R", "V"), nwstats$role.B.prob))
+  role.W <- sample(apportion_lr(num.W, c("I", "R", "V"), nwstats$role.W.prob))
   role <- rep(NA, n)
   role[race == "B"] <- role.B
   role[race == "W"] <- role.W
 
-  riskg.B <- sample(apportion.lr(num.B, 1:5, rep(0.2, 5)))
-  riskg.W <- sample(apportion.lr(num.W, 1:5, rep(0.2, 5)))
+  riskg.B <- sample(apportion_lr(num.B, 1:5, rep(0.2, 5)))
+  riskg.W <- sample(apportion_lr(num.W, 1:5, rep(0.2, 5)))
   riskg <- rep(NA, n)
   riskg[race == "B"] <- riskg.B
   riskg[race == "W"] <- riskg.W

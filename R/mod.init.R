@@ -99,8 +99,8 @@ initialize.mard <- function(x, param, init, control, s) {
 
   # Circumcision
   circ <- rep(NA, num)
-  circ[ids.B] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.B.prob))
-  circ[ids.W] <- sample(apportion.lr(num.B, 0:1, 1 - param$circ.W.prob))
+  circ[ids.B] <- sample(apportion_lr(num.B, 0:1, 1 - param$circ.B.prob))
+  circ[ids.W] <- sample(apportion_lr(num.B, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
   # PrEP Attributes
@@ -128,8 +128,8 @@ initialize.mard <- function(x, param, init, control, s) {
   # One-off AI class
   inst.ai.class <- rep(NA, num)
   ncl <- param$num.inst.ai.classes
-  inst.ai.class[ids.B] <- sample(apportion.lr(num.B, 1:ncl, rep(1 / ncl, ncl)))
-  inst.ai.class[ids.W] <- sample(apportion.lr(num.W, 1:ncl, rep(1 / ncl, ncl)))
+  inst.ai.class[ids.B] <- sample(apportion_lr(num.B, 1:ncl, rep(1 / ncl, ncl)))
+  inst.ai.class[ids.W] <- sample(apportion_lr(num.W, 1:ncl, rep(1 / ncl, ncl)))
   dat$attr$inst.ai.class <- inst.ai.class
 
   # Role class

@@ -49,8 +49,8 @@ assign_degree <- function(nw, deg.type, nwstats) {
   num.degrees.B <- length(dist.B)
   num.degrees.W <- length(dist.W)
 
-  deg.B <- apportion.lr(nB, 0:(num.degrees.B - 1), dist.B, shuffled = TRUE)
-  deg.W <- apportion.lr(nW, 0:(num.degrees.W - 1), dist.W, shuffled = TRUE)
+  deg.B <- apportion_lr(nB, 0:(num.degrees.B - 1), dist.B, shuffled = TRUE)
+  deg.W <- apportion_lr(nW, 0:(num.degrees.W - 1), dist.W, shuffled = TRUE)
 
   if (nwstats$method == 2) {
     deg.B <- paste0("B", deg.B)
