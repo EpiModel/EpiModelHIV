@@ -1,6 +1,20 @@
 
-# Apportion a vector with the least-remainder method
-apportion.lr <- function(vector.length,values,proportions,shuffled=F) {
+#' @title Apportion Least-Remainder Method
+#'
+#' @description Apportions a vector of values given a specified frequency
+#'              distribution of those values such that the length of the output
+#'              is robust to rounding and other instabilities.
+#'
+#' @param vector.length Length for the output vector.
+#' @param values Values for the output vector.
+#' @param proportions Proportion distribution with one number for each value. This
+#'        must sum to 1.
+#' @param shuffled If \code{TRUE}, randomly shuffle the order of the vector.
+#'
+#' @export
+#'
+apportion_lr <- function(vector.length, values,
+                         proportions, shuffled = FALSE) {
 
   if (vector.length != round(vector.length)) {
     stop("argument vector.length must be a positive integer")
