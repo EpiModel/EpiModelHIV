@@ -84,8 +84,8 @@ riskhist.mard <- function(dat, at) {
 
   not.tested.3mo <- since.test[part.id2] > (90/dat$param$time.unit)
   part.not.tested.3mo <- ai.mono2.neg[which(not.tested.3mo == TRUE)]
-  dat$riskh$ai.mono1.nt.3mo[, pri] <- 0
-  dat$riskh$ai.mono1.nt.3mo[part.not.tested.3mo, pri] <- 1
+  dat$riskh$ai.mono2.nt.3mo[, pri] <- 0
+  dat$riskh$ai.mono2.nt.3mo[part.not.tested.3mo, pri] <- 1
 
   not.tested.6mo <- since.test[part.id2] > (180/dat$param$time.unit)
   part.not.tested.6mo <- ai.mono2.neg[which(not.tested.6mo == TRUE)]
