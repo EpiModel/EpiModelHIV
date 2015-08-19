@@ -339,7 +339,7 @@ param.mard <- function(nwstats,
                        vv.iev.WW.prob = 0.49,
 
                        prep.start = 1,
-                       prep.elig.model = "all",
+                       prep.elig.model = "base",
                        prep.efficacy = 0.92,
                        prep.class.prob = c(0.50, 0.25, 0.25),
                        prep.class.effect = c(0, 0.75, 0.90),
