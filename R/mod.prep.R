@@ -31,9 +31,12 @@ prep.mard <- function(dat, at) {
 
 
   ## Eligibility
-  if (prep.elig.model == "all") {
-    idsElig <- which(active == 1 & status == 0 & is.na(prepElig))
+  base.elig <- which(active == 1 & status == 0 & is.na(prepStartTime))
+  if (prep.elig.model == "base") {
+    idsElig <- base.elig
   }
+
+
   prepElig[idsElig] <- 1
   prepEligTime[idsElig] <- at
 
@@ -98,6 +101,7 @@ prep.mard <- function(dat, at) {
 
   # Summary Statistics
   dat$epi$prepCov[at] <- prepCov
+  dat$epi$prepElig[at] <- length(idsElig)
   dat$epi$prepStart[at] <- length(idsStart)
 
   return(dat)

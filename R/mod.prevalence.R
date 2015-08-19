@@ -129,6 +129,7 @@ prevalence.mard <- function(dat, at) {
     dat$epi$prepCurr <- rNA
     dat$epi$prepEver <- rNA
     dat$epi$prepCov <- rNA
+    dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
     dat$epi$incid.prep0 <- rNA
     dat$epi$incid.prep1 <- rNA
