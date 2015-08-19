@@ -35,6 +35,38 @@ prep.mard <- function(dat, at) {
   if (prep.elig.model == "base") {
     idsElig <- base.elig
   }
+  if (prep.elig.model == "ai.mono2.nt.3mo") {
+    mat <- dat$riskh$ai.mono2.nt.3mo
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "ai.mono2.nt.6mo") {
+    mat <- dat$riskh$ai.mono2.nt.6mo
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "ai.mono1.nt.3mo") {
+    mat <- dat$riskh$ai.mono1.nt.3mo
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "ai.mono1.nt.6mo") {
+    mat <- dat$riskh$ai.mono1.nt.6mo
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "uai.nonmonog") {
+    mat <- dat$riskh$uai.nonmonog
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "uai.nmain") {
+    mat <- dat$riskh$uai.nmain
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "ai.sd.mc") {
+    mat <- dat$riskh$ai.sd.mc
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
+  if (prep.elig.model == "uai.sd.mc") {
+    mat <- dat$riskh$uai.sd.mc
+    idsElig <- intersect(which(rowSums(mat) > 0), base.elig)
+  }
 
 
   prepElig[idsElig] <- 1
