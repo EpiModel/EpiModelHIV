@@ -89,7 +89,7 @@ initialize.mard <- function(x, param, init, control, s) {
   p1 <- dat$param$cond.pers.always.prob
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
-  uai.always <- rmvbin(num, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  uai.always <- bindata::rmvbin(num, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
   dat$attr$cond.always.pers <- uai.always[, 1]
   dat$attr$cond.always.inst <- uai.always[, 2]
 
@@ -611,8 +611,6 @@ init_ccr5 <- function(dat) {
   num.B <- dat$init$num.B
   num.W <- dat$init$num.W
   num <- num.B + num.W
-  ids.B <- which(dat$attr$race == "B")
-  ids.W <- which(dat$attr$race == "W")
   race <- dat$attr$race
   status <- dat$attr$status
 
