@@ -115,15 +115,14 @@ initialize.mard <- function(x, param, init, control, s) {
   # Risk history lists
   nc <- ceiling(dat$param$prep.risk.int)
   dat$riskh <- list()
-  dat$riskh$mdeg <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$pdeg <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$ideg <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai.main <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai.nmain <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai.sd <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai.sd.main <- matrix(NA, ncol = nc, nrow = num)
-  dat$riskh$uai.sd.nmain <- matrix(NA, ncol = nc, nrow = num)
+  rh.names <- c("ai",
+                "ai.mono2.nt.3mo", "ai.mono2.nt.6mo",
+                "ai.mono1.nt.3mo", "ai.mono1.nt.6mo",
+                "uai.nonmonog", "uai.nmain",
+                "ai.sd.mc", "uai.sd.mc")
+  for (i in 1:length(rh.names)) {
+    dat$riskh[[rh.names[i]]] <- matrix(NA, ncol = nc, nrow = num)
+  }
 
 
   # One-off AI class
