@@ -122,8 +122,8 @@ riskhist.mard <- function(dat, at) {
     multUai[i] <- length(uai.d) > 1 & all(uai.d > 0)
   }
   uai.nonmonog <- idsConc[which(multUai == TRUE)]
-  dat$risk$uai.nonmonog[, pri] <- 0
-  dat$risk$uai.nonmonog[uai.nonmonog, pri] <- 1
+  dat$riskh$uai.nonmonog[, pri] <- 0
+  dat$riskh$uai.nonmonog[uai.nonmonog, pri] <- 1
 
 
   ## Condition 2b: UAI in non-main partnerships
