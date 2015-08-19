@@ -32,7 +32,6 @@ prep.mard <- function(dat, at) {
   prep.class.prob <- dat$param$prep.class.prob
   prep.risk.reassess <- dat$param$prep.risk.reassess
 
-# browser()
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
@@ -98,8 +97,11 @@ prep.mard <- function(dat, at) {
   if (length(idsStart) > 0) {
     prepStat[idsStart] <- 1
     prepEver[idsStart] <- 1
-    prepClass[idsStart] <- sample(c("l", "m", "h"), length(idsStart),
-                                  TRUE, prep.class.prob)
+
+    # PrEP class is fixed over PrEP cycles
+    needPC <- which(is.na(prepClass[idsStart]))
+    prepClass[idsStart[needPC]] <- sample(x = c("l", "m", "h"), size = length(needPC),
+                                          replace = TRUE, prob = prep.class.prob)
   }
 
 
