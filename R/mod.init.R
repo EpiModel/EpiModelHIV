@@ -109,7 +109,7 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$attr$prepEligTime <- rep(NA, num)
   dat$attr$prepStat <- rep(NA, num)
   dat$attr$prepStartTime <- rep(NA, num)
-  dat$attr$prepEver <- rep(NA, num)
+  dat$attr$prepEver <- rep(0, num)
 
 
   # Risk history lists
