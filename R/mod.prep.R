@@ -44,9 +44,37 @@ prep.mard <- function(dat, at) {
 
   # Core eligiblity scenarios
   if (prep.elig.model != "base") {
-    mat <- dat$riskh[[prep.elig.model]]
-    idsEligStart <- intersect(which(rowSums(mat) > 0), idsEligStart)
-    idsEligStop <- intersect(which(rowSums(mat) == 0), idsEligStop)
+    if (substr(prep.elig.model, 1, 3) == "cdc") {
+      if (prep.elig.model == "cdc1") {
+        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
+        mat.c2 <- dat$riskh$uai.nonmonog
+        mat.c3 <- dat$riskh$ai.sd.mc
+      } else if (prep.elig.model == "cdc2") {
+        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$ai.sd.mc
+      } else if (prep.elig.model == "cdc3") {
+        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$ai.sd.mc
+      } else if (prep.elig.model == "cdc4") {
+        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$uai.sd.mc
+      }
+      idsEligStart <- intersect(which(rowSums(mat.c1) > 0 |
+                                      rowSums(mat.c2) > 0 |
+                                      rowSums(mat.c3) > 0),
+                                idsEligStart)
+      idsEligStop <- intersect(which(rowSums(mat.c1) == 0 &
+                                     rowSums(mat.c2) == 0 &
+                                     rowSums(mat.c3) == 0),
+                                idsEligStop)
+    } else {
+      mat <- dat$riskh[[prep.elig.model]]
+      idsEligStart <- intersect(which(rowSums(mat) > 0), idsEligStart)
+      idsEligStop <- intersect(which(rowSums(mat) == 0), idsEligStop)
+    }
   }
 
   prepElig[idsEligStart] <- 1
