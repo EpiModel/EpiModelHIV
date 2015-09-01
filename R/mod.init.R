@@ -715,6 +715,10 @@ reinit.mard <- function(x, param, init, control, s) {
   dat$stats$nwstats <- x$stats$nwstats[[s]]
   dat$temp <- x$temp[[s]]
 
+  if (!is.null(sim$riskh)) {
+    dat$riskh <- x$riskh[[s]]
+  }
+
   class(dat) <- "dat"
 
   return(dat)
