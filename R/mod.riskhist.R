@@ -25,6 +25,15 @@ riskhist.mard <- function(dat, at) {
 
   ## Truncate riskh matrices
   for (i in 1:length(dat$riskh)) {
+    nc <- ncol(dat$riskh[[i]])
+    if (pri < ncol(dat$riskh[[i]])) {
+      dat$riskh[[i]] <- dat$riskh[[i]][, (nc - pri + 1):nc]
+    }
+    if (pri > nc) {
+      nr <- nrow(dat$riskh[[i]])
+      dat$riskh[[i]] <- cbind(matrix(NA, ncol = (pri - nc), nrow = nr),
+                              dat$riskh[[i]])
+    }
     dat$riskh[[i]] <- dat$riskh[[i]][, -1]
     dat$riskh[[i]] <- cbind(dat$riskh[[i]], rep(NA, nrow(dat$riskh[[i]])))
   }
