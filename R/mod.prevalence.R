@@ -46,6 +46,7 @@ prevalence.mard <- function(dat, at) {
     dat$epi$num <- rNA
     dat$epi$num.B <- rNA
     dat$epi$num.W <- rNA
+    dat$epi$s.num <- rNA
     dat$epi$i.num <- rNA
     dat$epi$i.num.B <- rNA
     dat$epi$i.num.W <- rNA
@@ -148,6 +149,7 @@ prevalence.mard <- function(dat, at) {
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
   dat$epi$num.B[at] <- sum(active == 1 & race == "B", na.rm = TRUE)
   dat$epi$num.W[at] <- sum(active == 1 & race == "W", na.rm = TRUE)
+  dat$epi$s.num[at] <- sum(active == 1 & status == 0, na.rm = TRUE)
   dat$epi$i.num[at] <- sum(active == 1 & status == 1, na.rm = TRUE)
   dat$epi$i.num.B[at] <- sum(active == 1 & status == 1 & race == "B", na.rm = TRUE)
   dat$epi$i.num.W[at] <- sum(active == 1 & status == 1 & race == "W", na.rm = TRUE)
@@ -229,6 +231,7 @@ prevalence.mard <- function(dat, at) {
   }
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
+  dat$epi$prepElig[at] <- sum(active == 1 & dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) &
                                  status == 1, na.rm = TRUE)

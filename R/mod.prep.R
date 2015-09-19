@@ -144,7 +144,6 @@ prep.mard <- function(dat, at) {
 
   # Summary Statistics
   dat$epi$prepCov[at] <- prepCov
-  dat$epi$prepElig[at] <- length(idsEligStart)
   dat$epi$prepStart[at] <- length(idsStart)
 
   return(dat)
