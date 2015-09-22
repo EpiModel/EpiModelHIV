@@ -18,7 +18,7 @@
 #'
 #' @name mardham2-package
 #' @aliases mardham2
-#' @import EpiModel network networkDynamic tergm ergm bindata
+#' @import EpiModel EpiModelHPC network networkDynamic tergm ergm bindata
 #' @docType package
 #' @keywords package
 #' @useDynLib mardham2
