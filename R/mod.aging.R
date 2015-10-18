@@ -27,9 +27,5 @@ aging.mard <- function(dat, at) {
   dat$attr$age <- age
   dat$attr$sqrt.age <- sqrt(age)
 
-  for (i in seq_along(dat$nw)) {
-    dat$nw[[i]] <- set.vertex.attribute(dat$nw[[i]], "sqrt.age", sqrt(age))
-  }
-
   return(dat)
 }
