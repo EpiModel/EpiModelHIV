@@ -142,7 +142,6 @@ prevalence.mard <- function(dat, at) {
     dat$epi$cprob.always.pers <- rNA
     dat$epi$cprob.always.inst <- rNA
 
-    dat$epi$timer <- rNA
   }
 
 
@@ -244,9 +243,6 @@ prevalence.mard <- function(dat, at) {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] /
                                 sum(active == 1 & prepStat == 1, na.rm = TRUE)
   }
-
-  # sytem timer
-  dat$epi$timer[at] <- proc.time()[3] - dat$epi$timer[at]
 
   return(dat)
 }

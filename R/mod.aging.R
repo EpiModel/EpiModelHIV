@@ -17,9 +17,6 @@
 #'
 aging.mard <- function(dat, at) {
 
-  # system timer
-  dat$epi$timer[at] <- proc.time()[3]
-
   time.unit <- dat$param$time.unit
 
   age <- dat$attr$age
