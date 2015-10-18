@@ -493,8 +493,6 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #'        simulation. This may also be set to 1 greater than the final time
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
-#' @param resim.int Interval unit for resimulation of network, relative to the
-#'        base time unit in the model.
 #' @param initialize.FUN Module function to use for initialization of the epidemic
 #'        model.
 #' @param aging.FUN Module function for aging.
@@ -509,7 +507,8 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param roleclass.FUN Module function for transitions in sexual roles.
 #' @param edgescorr.FUN Module function for the edges coefficient adjustment
 #'        to preserve mean degree under varying population sizes.
-#' @param resimnets.FUN Module function for network resimulation at each time
+#' @param updatenwp.FUN Module function for updating network statistics.
+#' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
 #' @param acts.FUN Module function to simulate the number of sexual acts within
@@ -546,7 +545,6 @@ control.mard <- function(simno = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
-                         resim.int = 1,
                          initialize.FUN = initialize.mard,
                          aging.FUN = aging.mard,
                          deaths.FUN = deaths.mard,
@@ -559,7 +557,8 @@ control.mard <- function(simno = 1,
                          aiclass.FUN = update_aiclass.mard,
                          roleclass.FUN = update_roleclass.mard,
                          edgescorr.FUN = edges_correct.mard,
-                         resimnets.FUN = simnet.mard,
+                         updatenwp.FUN = updatenwp.mard,
+                         resim_nets.FUN = simnet.mard,
                          disclose.FUN = disclose.mard,
                          acts.FUN = acts.mard,
                          condoms.FUN = condoms.mard,

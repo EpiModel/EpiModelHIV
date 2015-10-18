@@ -22,8 +22,7 @@
 #' resimulated with the \code{simulate.formula} function in the \code{ergm}
 #' package.
 #'
-#' The module also deletes inactive nodes on all three networks depending on the
-#' value of the \code{delete.nodes} control setting. For the main and casual
+#' For the main and casual
 #' network, this involves extracting the \code{networkDynamic} object at the
 #' current time point after the resimulation has occurre (dead nodes have already
 #' been deactivated in \code{\link{deaths.mard}} so that they will not be allowed
@@ -42,33 +41,28 @@
 #'
 simnet.mard <- function(dat, at) {
 
-  resim.int <- dat$control$resim.int
-
   # Main network ------------------------------------------------------------
+  nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
-  if (at %% resim.int == 0) {
-    nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
+  suppressWarnings(
+    dat$nw$m <- simulate(dat$nw$m,
+                         formation = nwparam.m$formation,
+                         dissolution = nwparam.m$coef.diss$dissolution,
+                         coef.form = nwparam.m$coef.form,
+                         coef.diss = nwparam.m$coef.diss$coef.adj,
+                         constraints = nwparam.m$constraints,
+                         time.start = at,
+                         time.slices = 1,
+                         time.offset = 0,
+                         monitor = "all",
+                         output = "networkDynamic"))
 
-    suppressWarnings(
-      dat$nw$m <- simulate(dat$nw$m,
-                           formation = nwparam.m$formation,
-                           dissolution = nwparam.m$coef.diss$dissolution,
-                           coef.form = nwparam.m$coef.form,
-                           coef.diss = nwparam.m$coef.diss$coef.adj,
-                           constraints = nwparam.m$constraints,
-                           time.start = at,
-                           time.slices = 1 * resim.int,
-                           time.offset = 0,
-                           monitor = "all",
-                           output = "networkDynamic"))
-
-    stats <- tail(as.data.frame(attributes(dat$nw$m)$stats), 1 * resim.int)
-    stats <- calc_meandegs(dat, at, stats, "main")  ## Fix this for resim.int > 1
-    if (at == 2) {
-      dat$stats$nwstats$m <- stats
-    } else {
-      dat$stats$nwstats$m <- rbind(dat$stats$nwstats$m, stats)
-    }
+  stats <- tail(as.data.frame(attributes(dat$nw$m)$stats), 1)
+  stats <- calc_meandegs(dat, at, stats, "main")
+  if (at == 2) {
+    dat$stats$nwstats$m <- stats
+  } else {
+    dat$stats$nwstats$m <- rbind(dat$stats$nwstats$m, stats)
   }
 
   dat$nw$p <- update_degree(dat$nw$p, dat$nw$m, deg.type = "main", at = at)
@@ -81,29 +75,27 @@ simnet.mard <- function(dat, at) {
 
 
   # Casual network ----------------------------------------------------------
-  if (at %% resim.int == 0) {
-    nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
+  nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
 
-    suppressWarnings(
-      dat$nw$p <- simulate(dat$nw$p,
-                           formation = nwparam.p$formation,
-                           dissolution = nwparam.p$coef.diss$dissolution,
-                           coef.form = nwparam.p$coef.form,
-                           coef.diss = nwparam.p$coef.diss$coef.adj,
-                           constraints = nwparam.p$constraints,
-                           time.start = at,
-                           time.slices = 1 * resim.int,
-                           time.offset = 0,
-                           monitor = "all",
-                           output = "networkDynamic"))
+  suppressWarnings(
+    dat$nw$p <- simulate(dat$nw$p,
+                         formation = nwparam.p$formation,
+                         dissolution = nwparam.p$coef.diss$dissolution,
+                         coef.form = nwparam.p$coef.form,
+                         coef.diss = nwparam.p$coef.diss$coef.adj,
+                         constraints = nwparam.p$constraints,
+                         time.start = at,
+                         time.slices = 1,
+                         time.offset = 0,
+                         monitor = "all",
+                         output = "networkDynamic"))
 
-    stats <- tail(as.data.frame(attributes(dat$nw$p)$stats), 1 * resim.int)
-    stats <- calc_meandegs(dat, at, stats, "pers") ## Fix this for resim.int > 1
-    if (at == 2) {
-      dat$stats$nwstats$p <- stats
-    } else {
-      dat$stats$nwstats$p <- rbind(dat$stats$nwstats$p, stats)
-    }
+  stats <- tail(as.data.frame(attributes(dat$nw$p)$stats), 1)
+  stats <- calc_meandegs(dat, at, stats, "pers")
+  if (at == 2) {
+    dat$stats$nwstats$p <- stats
+  } else {
+    dat$stats$nwstats$p <- rbind(dat$stats$nwstats$p, stats)
   }
 
   dat$nw$m <- update_degree(dat$nw$m, dat$nw$p, deg.type = "pers", at = at)
