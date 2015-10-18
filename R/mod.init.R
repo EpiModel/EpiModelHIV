@@ -39,9 +39,7 @@ initialize.mard <- function(x, param, init, control, s) {
     dat$nw[[i]] <- remove_bad_roles(dat$nw[[i]])
     if (i %in% 1:2) {
       dat$nw[[i]] <- activate.vertices(dat$nw[[i]], onset = 1, terminus = Inf)
-      if (control$delete.nodes == TRUE) {
-        dat$nw[[i]] <- network.extract(dat$nw[[i]], at = 1)
-      }
+      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = 1)
     }
   }
   names(dat$nw) <- c("m", "p", "i")

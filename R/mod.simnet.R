@@ -117,17 +117,13 @@ simnet.mard <- function(dat, at) {
 
   # Delete nodes ------------------------------------------------------------
   inactive <- which(dat$attr$active == 0)
-  if (dat$control$delete.nodes == TRUE && ((at %% resim.int) == (resim.int - 1))
-      && length(inactive) > 0) {
-    for (i in 1:2) {
-      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = at)
-    }
-    dat$nw$i <- delete.vertices(dat$nw$i, vid = inactive)
-    dat$attr <- EpiModel::deleteAttr(dat$attr, inactive)
-
-    for (i in 1:length(dat$riskh)) {
-      dat$riskh[[i]] <- dat$riskh[[i]][-inactive, ]
-    }
+  for (i in 1:2) {
+    dat$nw[[i]] <- network.extract(dat$nw[[i]], at = at)
+  }
+  dat$nw$i <- delete.vertices(dat$nw$i, vid = inactive)
+  dat$attr <- EpiModel::deleteAttr(dat$attr, inactive)
+  for (i in 1:length(dat$riskh)) {
+    dat$riskh[[i]] <- dat$riskh[[i]][-inactive, ]
   }
 
   # Stop checks for consistency in nw / attr sizes

@@ -67,11 +67,7 @@ disclose.mard <- function(dat, at){
     # Processes --------------------------------------------------------------
 
     # Check for discordant rels
-    if (dat$control$delete.nodes == TRUE) {
-      el <- matrix(as.edgelist(net), ncol = 2)
-    } else {
-      el <- get.dyads.active(net, at = at)
-    }
+    el <- matrix(as.edgelist(net), ncol = 2)
 
     posneg <- el[which(status[el[, 1]] - status[el[, 2]] == 1), , drop = FALSE]
     negpos <- el[which(status[el[, 2]] - status[el[, 1]] == 1), , drop = FALSE]
