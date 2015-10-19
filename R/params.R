@@ -527,8 +527,6 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #'        out at the end of simulation (necessary for restarting a simulation).
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
-#' @param prevfull If \code{TRUE}, save extended summary statistics for prevalence
-#'        and incidence (defined in the prevalence module).
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
 #'        if in interactive mode or text files if in batch mode.
 #' @param verbose.int Integer specifying the interval between time steps at which
@@ -567,10 +565,9 @@ control.mard <- function(simno = 1,
                          trans.FUN = trans.mard,
                          getprev.FUN = prevalence.mard,
                          verbose.FUN = verbose.mard,
-                         save.nwstats = TRUE,
+                         save.nwstats = FALSE,
                          save.network = FALSE,
-                         save.other = "attr",
-                         prevfull = FALSE,
+                         save.other = NULL,
                          verbose = TRUE,
                          verbose.int = 1,
                          ...) {
