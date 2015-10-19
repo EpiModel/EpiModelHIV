@@ -43,14 +43,8 @@ prevalence.mard <- function(dat, at) {
     dat$epi$i.prev.B <- rNA
     dat$epi$i.prev.W <- rNA
     dat$epi$nBirths <- rNA
-    dat$epi$nBirths.B <- rNA
-    dat$epi$nBirths.W <- rNA
     dat$epi$dth.gen <- rNA
     dat$epi$dth.dis <- rNA
-    dat$epi$dth.gen.B <- rNA
-    dat$epi$dth.gen.W <- rNA
-    dat$epi$dth.dis.B <- rNA
-    dat$epi$dth.dis.W <- rNA
     dat$epi$incid <- rNA
     dat$epi$incid.B <- rNA
     dat$epi$incid.W <- rNA
