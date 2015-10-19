@@ -20,7 +20,7 @@
 #'
 initialize.mard <- function(x, param, init, control, s) {
 
-  # Master data list --------------------------------------------------------
+  # Master data list
   dat <- list()
   dat$param <- param
   dat$init <- init
@@ -32,17 +32,26 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$temp <- list()
   dat$epi <- list()
 
-  # Network simulation ------------------------------------------------------
-  dat$nw <- list()
+  ## Network simulation ##
+  nw <- list()
   for (i in 1:3) {
-    dat$nw[[i]] <- simulate(x[[i]]$fit)
-    dat$nw[[i]] <- remove_bad_roles(dat$nw[[i]])
-    if (i %in% 1:2) {
-      dat$nw[[i]] <- activate.vertices(dat$nw[[i]], onset = 1, terminus = Inf)
-      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = 1)
-    }
+    nw[[i]] <- simulate(x[[i]]$fit)
+    nw[[i]] <- mardham2:::remove_bad_roles(nw[[i]])
   }
-  names(dat$nw) <- c("m", "p", "i")
+
+  ## ergm_prep here
+  dat$el <- list()
+  dat$p <- list()
+  for (i in 1:3) {
+    dat$el[[i]] <- as.edgelist(nw[[i]])
+    attributes(dat$el[[i]])$vnames <- NULL
+    p <- tergmLite::ergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+                              x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p$model.form$formula <- NULL
+    p$model.diss$formula <- NULL
+    dat$p[[i]] <- p
+  }
+
 
   # Network parameters
   dat$nwparam <- list()
@@ -51,20 +60,15 @@ initialize.mard <- function(x, param, init, control, s) {
   }
 
 
-  # Nodal attributes --------------------------------------------------------
+  ## Nodal attributes ##
 
   # Degree terms
-  deg.pers <- x[[1]]$fit$network %v% "deg.pers"
-  deg.main <- x[[2]]$fit$network %v% "deg.main"
-  dat$nw$m <- set.vertex.attribute(dat$nw$m, "deg.pers", deg.pers)
-  dat$nw$p <- set.vertex.attribute(dat$nw$p, "deg.main", deg.main)
-  dat$nw$i <- set.vertex.attribute(dat$nw$i, "deg.main", deg.main)
-  dat$nw$i <- set.vertex.attribute(dat$nw$i, "deg.pers", deg.pers)
+  dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
+  dat$attr$deg.main <- get.vertex.attribute(x[[2]]$fit$network, "deg.main")
 
 
   # Race
-  race <- dat$nw[[1]] %v% "race"
-  dat$attr$race <- race
+  dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
   num.B <- dat$init$num.B
   num.W <- dat$init$num.W
   num <- num.B + num.W
@@ -76,12 +80,11 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$temp$max.uid <- num
 
   # Age
-  dat$attr$sqrt.age <- dat$nw[[1]] %v% "sqrt.age"
-  age <- dat$attr$sqrt.age^2
-  dat$attr$age <- age
+  dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "sqrt.age")
+  dat$attr$age <- dat$attr$sqrt.age^2
 
   # Risk group
-  dat$attr$riskg <- dat$nw[[3]] %v% "riskg"
+  dat$attr$riskg <- get.vertex.attribute(nw[[3]], "riskg")
 
   # UAI group
   p1 <- dat$param$cond.pers.always.prob
@@ -93,7 +96,6 @@ initialize.mard <- function(x, param, init, control, s) {
 
   # Arrival and departure
   dat$attr$arrival.time <- rep(1, num)
-  dat$attr$depart.time <- rep(NA, num)
 
   # Circumcision
   circ <- rep(NA, num)
@@ -128,7 +130,7 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$attr$inst.ai.class <- inst.ai.class
 
   # Role class
-  role.class <- dat$nw[[1]] %v% "role.class"
+  role.class <- get.vertex.attribute(nw[[1]], "role.class")
   dat$attr$role.class <- role.class
 
   # Ins.quot
@@ -145,13 +147,11 @@ initialize.mard <- function(x, param, init, control, s) {
   dat <- init_ccr5(dat)
 
 
-  # Network statistics ------------------------------------------------------
-
+  # Network statistics
   dat$stats$nwstats <- list()
 
 
-  # Prevalence Tracking -----------------------------------------------------
-
+  # Prevalence Tracking
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- as.data.frame(matrix(NA, 0, 4))
   names(dat$temp$discl.list) <- c("pos", "neg", "discl.time", "discl.type")
@@ -161,6 +161,7 @@ initialize.mard <- function(x, param, init, control, s) {
   class(dat) <- "dat"
   return(dat)
 }
+
 
 
 remove_bad_roles <- function(nw) {
@@ -695,6 +696,7 @@ reinit.mard <- function(x, param, init, control, s) {
   }
 
   dat <- list()
+  stop("fix this")
   dat$nw <- x$network[[s]]
   if (!is.null(x$last.ts)) {
     for (i in 1:2) {
