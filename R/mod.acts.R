@@ -39,21 +39,21 @@ acts.mard <- function(dat, at) {
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
       fixed <- FALSE
-      el <- get.dyads.active(dat$nw$m, at = at)
+      el <- dat$el[[1]]
     }
     if (type == "pers") {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
       fixed <- FALSE
-      el <- get.dyads.active(dat$nw$p, at = at)
+      el <- dat$el[[2]]
     }
     if (type == "inst") {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
       fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
-      el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
+      el <- dat$el[[3]]
     }
 
     ## Processes ##
