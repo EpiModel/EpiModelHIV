@@ -75,11 +75,10 @@ disclose.mard <- function(dat, at){
 
     # Check for not already disclosed
     discl.list <- dat$temp$discl.list
-    notdiscl <- sapply(1:nrow(disc.el), function(x) {
-                       length(intersect(
-                         which(uid[disc.el[x, 1]] == discl.list$pos),
-                         which(uid[disc.el[x, 2]] == discl.list$neg))) == 0
-                       })
+    cdl <- paste(discl.list[, 1], discl.list[, 2], sep = "")
+    disc.cdl <- paste(uid[disc.el[, 1]], uid[disc.el[, 2]], sep = "")
+    notdiscl <- !(disc.cdl %in% cdl)
+
 
     # data frame of non-disclosed pairs
     nd <- disc.el[notdiscl, , drop = FALSE]
