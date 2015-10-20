@@ -507,7 +507,6 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param roleclass.FUN Module function for transitions in sexual roles.
 #' @param edgescorr.FUN Module function for the edges coefficient adjustment
 #'        to preserve mean degree under varying population sizes.
-#' @param updatenwp.FUN Module function for updating network statistics.
 #' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
@@ -555,7 +554,6 @@ control.mard <- function(simno = 1,
                          aiclass.FUN = NULL,
                          roleclass.FUN = NULL,
                          edgescorr.FUN = edges_correct.mard,
-                         updatenwp.FUN = updatenwp.mard,
                          resim_nets.FUN = simnet.mard,
                          disclose.FUN = disclose.mard,
                          acts.FUN = acts.mard,
