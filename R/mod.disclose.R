@@ -41,7 +41,7 @@ disclose.mard <- function(dat, at){
       disc.outset.W.prob <- dat$param$disc.outset.main.W.prob
       disc.at.diag.W.prob <- dat$param$disc.at.diag.main.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.main.W.prob
-      net <- dat$nw$m
+      el <- dat$el[[1]]
       discl.type <- "M"
     }
 
@@ -52,14 +52,14 @@ disclose.mard <- function(dat, at){
       disc.outset.W.prob <- dat$param$disc.outset.pers.W.prob
       disc.at.diag.W.prob <- dat$param$disc.at.diag.pers.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.pers.W.prob
-      net <- dat$nw$p
+      el <- dat$el[[2]]
       discl.type <- "P"
     }
 
     if (type == "inst") {
       disc.inst.B.prob <- dat$param$disc.inst.B.prob
       disc.inst.W.prob <- dat$param$disc.inst.W.prob
-      net <- dat$nw$i
+      el <- dat$el[[3]]
       discl.type <- "I"
     }
 
@@ -67,8 +67,6 @@ disclose.mard <- function(dat, at){
     # Processes --------------------------------------------------------------
 
     # Check for discordant rels
-    el <- matrix(as.edgelist(net), ncol = 2)
-
     posneg <- el[which(status[el[, 1]] - status[el[, 2]] == 1), , drop = FALSE]
     negpos <- el[which(status[el[, 2]] - status[el[, 1]] == 1), , drop = FALSE]
     disc.el <- rbind(posneg, negpos[, 2:1])
@@ -153,5 +151,4 @@ disclose.mard <- function(dat, at){
   }
 
   return(dat)
-
 }
