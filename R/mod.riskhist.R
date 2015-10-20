@@ -40,9 +40,17 @@ riskhist.mard <- function(dat, at) {
 
 
   ## Degree ##
-  main.deg <- as.numeric(summary(dat$nw$m ~ sociality(base = 0), at = at))
-  casl.deg <- as.numeric(summary(dat$nw$p ~ sociality(base = 0), at = at))
-  inst.deg <- as.numeric(summary(dat$nw$i ~ sociality(base = 0), at = at))
+  n <- attributes(dat$el[[1]])$n
+  main.deg <- casl.deg <- inst.deg <- rep(0, n)
+
+  tab.main <- table(dat$el[[1]])
+  main.deg[as.numeric(names(tab.main))] <- as.vector(tab.main)
+
+  tab.casl <- table(dat$el[[2]])
+  casl.deg[as.numeric(names(tab.casl))] <- as.vector(tab.casl)
+
+  tab.inst <- table(dat$el[[3]])
+  inst.deg[as.numeric(names(tab.inst))] <- as.vector(tab.inst)
 
 
   ## Disclosure
