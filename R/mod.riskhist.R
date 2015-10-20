@@ -85,13 +85,7 @@ riskhist.mard <- function(dat, at) {
   ## Condition 1a: UAI in 2-sided monogamous "negative" partnership,
   ##               partner not tested in past 3, 6 months
   uai.mono2.neg <- intersect(uai.mono2, all.neg)
-
-  part.id2 <- rep(NA, length(uai.mono2.neg))
-  for (i in 1:length(uai.mono2.neg)) {
-    mono.d2 <- el2[el2$p1 == uai.mono2.neg[i] | el2$p2 == uai.mono2.neg[i], ]
-    part.id2[i] <- ifelse(mono.d2$p1 == uai.mono2.neg[i], mono.d2$p2, mono.d2$p1)
-  }
-
+  part.id2 <- c(el2[el2$p1 %in% uai.mono2.neg, 2], el2[el2$p2 %in% uai.mono2.neg, 1])
   not.tested.3mo <- since.test[part.id2] > (90/dat$param$time.unit)
   part.not.tested.3mo <- uai.mono2.neg[which(not.tested.3mo == TRUE)]
   dat$riskh$uai.mono2.nt.3mo[, pri] <- 0
