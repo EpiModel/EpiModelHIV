@@ -128,16 +128,26 @@ riskhist.mard <- function(dat, at) {
 
 
   ## Condition 3a: AI within known serodiscordant partnerships
-  ai.sd.mc <- el$p2[discl == TRUE & el2$ai > 0 & el2$type %in% c("main", "pers")]
+  el2.cond3 <- el2[el2$st1 == 1 & el2$ai > 0 & el2$type %in% c("main", "pers"), ]
+
+  # Disclosure
+  dlist <- dat$temp$discl.list
+  discl <- sapply(1:nrow(el2.cond3), function(x) {
+    length(intersect(which(uid[el2.cond3$p1[x]] == dlist$pos),
+                     which(uid[el2.cond3$p2[x]] == dlist$neg))) != 0
+  })
+
+  # browser()
+
+  ai.sd.mc <- el2.cond3$p2[discl == TRUE]
   dat$riskh$ai.sd.mc[, pri] <- 0
   dat$riskh$ai.sd.mc[ai.sd.mc, pri] <- 1
 
 
   ## Condition 3b: UAI within known serodiscordant partnerships
-  uai.sd.mc <- el$p2[discl == TRUE & el2$uai > 0 & el2$type %in% c("main", "pers")]
+  uai.sd.mc <- el2.cond3$p2[discl == TRUE & el2.cond3$uai > 0]
   dat$riskh$uai.sd.mc[, pri] <- 0
   dat$riskh$uai.sd.mc[uai.sd.mc, pri] <- 1
-
 
   return(dat)
 }
