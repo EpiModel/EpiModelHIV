@@ -87,10 +87,10 @@ condoms.mard <- function(dat, at) {
     isDiscord <- which((elt$st1 - elt$st2) == 1)
     delt <- elt[isDiscord, ]
     dlist <- dat$temp$discl.list
-    discl.disc <- sapply(1:nrow(delt), function(x) {
-      length(intersect(which(uid[delt$p1[x]] == dlist$pos),
-                       which(uid[delt$p2[x]] == dlist$neg))) != 0
-    })
+    cdl <- paste(dlist[, 1], dlist[, 2], sep = "")
+    disc.cdl <- paste(uid[delt[, 1]], uid[delt[, 2]], sep = "")
+    discl.disc <- disc.cdl %in% cdl
+
     discl <- rep(NA, nrow(elt))
     discl[isDiscord] <- discl.disc
 
