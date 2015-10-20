@@ -37,7 +37,7 @@ riskhist.mard <- function(dat, at) {
     dat$riskh[[i]] <- dat$riskh[[i]][, -1]
     dat$riskh[[i]] <- cbind(dat$riskh[[i]], rep(NA, nrow(dat$riskh[[i]])))
   }
-
+  # 33 ms
 
   ## Degree ##
   n <- attributes(dat$el[[1]])$n
@@ -51,14 +51,8 @@ riskhist.mard <- function(dat, at) {
 
   tab.inst <- table(dat$el[[3]])
   inst.deg[as.numeric(names(tab.inst))] <- as.vector(tab.inst)
+  # ~25 ms
 
-
-  ## Disclosure
-  dlist <- dat$temp$discl.list
-  discl <- sapply(1:nrow(el2), function(x) {
-    length(intersect(which(uid[el2$p1[x]] == dlist$pos),
-                     which(uid[el2$p2[x]] == dlist$neg))) != 0
-  })
 
   ## Preconditions ##
 
@@ -131,13 +125,10 @@ riskhist.mard <- function(dat, at) {
   el2.cond3 <- el2[el2$st1 == 1 & el2$ai > 0 & el2$type %in% c("main", "pers"), ]
 
   # Disclosure
-  dlist <- dat$temp$discl.list
-  discl <- sapply(1:nrow(el2.cond3), function(x) {
-    length(intersect(which(uid[el2.cond3$p1[x]] == dlist$pos),
-                     which(uid[el2.cond3$p2[x]] == dlist$neg))) != 0
-  })
-
-  # browser()
+  dlist <- dat$temp$discl.list[, 1:2]
+  cdl <- paste(dlist$pos, dlist$neg, sep = "")
+  el2.cdl <- paste(uid[el2.cond3[, 1]], uid[el2.cond3[, 2]], sep = "")
+  discl <- el2.cdl %in% cdl
 
   ai.sd.mc <- el2.cond3$p2[discl == TRUE]
   dat$riskh$ai.sd.mc[, pri] <- 0
