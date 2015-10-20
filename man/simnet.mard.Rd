@@ -38,8 +38,7 @@ function in the \code{tergm} package, whereas the one-off network is
 resimulated with the \code{simulate.formula} function in the \code{ergm}
 package.
 
-The module also deletes inactive nodes on all three networks depending on the
-value of the \code{delete.nodes} control setting. For the main and casual
+For the main and casual
 network, this involves extracting the \code{networkDynamic} object at the
 current time point after the resimulation has occurre (dead nodes have already
 been deactivated in \code{\link{deaths.mard}} so that they will not be allowed

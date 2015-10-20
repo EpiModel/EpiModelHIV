@@ -5,18 +5,17 @@
 \title{Epidemic Model Control Settings for MARDHAM Models}
 \usage{
 control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, resim.int = 1, initialize.FUN = initialize.mard,
-  aging.FUN = aging.mard, deaths.FUN = deaths.mard,
-  births.FUN = births.mard, test.FUN = test.mard, tx.FUN = tx.mard,
-  prep.FUN = prep.mard, progress.FUN = progress.mard,
-  vl.FUN = update_vl.mard, aiclass.FUN = update_aiclass.mard,
-  roleclass.FUN = update_roleclass.mard, edgescorr.FUN = edges_correct.mard,
-  resimnets.FUN = simnet.mard, disclose.FUN = disclose.mard,
-  acts.FUN = acts.mard, condoms.FUN = condoms.mard,
-  riskhist.FUN = riskhist.mard, position.FUN = position.mard,
-  trans.FUN = trans.mard, getprev.FUN = prevalence.mard,
-  verbose.FUN = verbose.mard, delete.nodes = TRUE, save.nwstats = TRUE,
-  save.network = FALSE, save.other = "attr", prevfull = FALSE,
+  start = 1, initialize.FUN = initialize.mard, aging.FUN = aging.mard,
+  deaths.FUN = deaths.mard, births.FUN = births.mard,
+  test.FUN = test.mard, tx.FUN = tx.mard, prep.FUN = prep.mard,
+  progress.FUN = progress.mard, vl.FUN = update_vl.mard,
+  aiclass.FUN = NULL, roleclass.FUN = NULL,
+  edgescorr.FUN = edges_correct.mard, resim_nets.FUN = simnet.mard,
+  disclose.FUN = disclose.mard, acts.FUN = acts.mard,
+  condoms.FUN = condoms.mard, riskhist.FUN = riskhist.mard,
+  position.FUN = position.mard, trans.FUN = trans.mard,
+  getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
+  save.nwstats = FALSE, save.network = FALSE, save.other = NULL,
   verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
@@ -34,9 +33,6 @@ if used in conjunction with the \code{EpiModelHPC} package.}
 simulation. This may also be set to 1 greater than the final time
 step of a previous simulation to resume the simulation with different
 parameters.}
-
-\item{resim.int}{Interval unit for resimulation of network, relative to the
-base time unit in the model.}
 
 \item{initialize.FUN}{Module function to use for initialization of the epidemic
 model.}
@@ -64,7 +60,7 @@ model.}
 \item{edgescorr.FUN}{Module function for the edges coefficient adjustment
 to preserve mean degree under varying population sizes.}
 
-\item{resimnets.FUN}{Module function for network resimulation at each time
+\item{resim_nets.FUN}{Module function for network resimulation at each time
 step.}
 
 \item{disclose.FUN}{Module function for HIV status disclosure.}
@@ -87,9 +83,6 @@ over acts given individual and dyadic attributes.}
 \item{verbose.FUN}{Module function to print model progress to the console or
 external text files.}
 
-\item{delete.nodes}{If \code{TRUE}, dead nodes will be removed from the network
-object and only active nodes will be retained.}
-
 \item{save.nwstats}{If \code{TRUE}, the network statistics will be saved.}
 
 \item{save.network}{If \code{TRUE}, the \code{network} objects will be saved
@@ -97,9 +90,6 @@ out at the end of simulation (necessary for restarting a simulation).}
 
 \item{save.other}{Character vector containing other list elements of \code{dat}
 to save.}
-
-\item{prevfull}{If \code{TRUE}, save extended summary statistics for prevalence
-and incidence (defined in the prevalence module).}
 
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}
