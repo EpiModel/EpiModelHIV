@@ -113,13 +113,9 @@ riskhist.mard <- function(dat, at) {
 
 
   ## Condition 2a: UAI in non-monogamous partnerships
-  idsConc <- intersect(which(tot.deg > 1), uai.any)
-  multUai <- rep(NA, length(idsConc))
-  for (i in 1:length(idsConc)) {
-    uai.d <- el2[el2$p1 == idsConc[i] | el2$p2 == idsConc[i], "uai"]
-    multUai[i] <- length(uai.d) > 1 & all(uai.d > 0)
-  }
-  uai.nonmonog <- idsConc[which(multUai == TRUE)]
+  el2.uai <- el2[el2$uai > 0, ]
+  vec <- c(el2.uai[, 1], el2.uai[, 2])
+  uai.nonmonog <- unique(vec[duplicated(vec)])
   dat$riskh$uai.nonmonog[, pri] <- 0
   dat$riskh$uai.nonmonog[uai.nonmonog, pri] <- 1
 
