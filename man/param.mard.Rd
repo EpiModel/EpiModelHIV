@@ -44,10 +44,11 @@ param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
-  prep.elig.model = "base", prep.efficacy = 0.92, prep.class.prob = c(0.5,
-  0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9), prep.coverage = 0,
-  prep.cov.method = "curr", prep.cov.rate = 1, prep.rcomp = 1,
-  prep.tst.int = 90, prep.risk.int = 182, prep.risk.reassess = FALSE, ...)
+  riskh.start = 1, prep.elig.model = "base", prep.efficacy = 0.92,
+  prep.class.prob = c(0.5, 0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9),
+  prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
+  prep.rcomp = 1, prep.tst.int = 90, prep.risk.int = 182,
+  prep.risk.reassess = FALSE, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -343,6 +344,8 @@ two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
 \item{prep.start}{Time step at which the PrEP intervention should start.}
+
+\item{riskh.start}{Time step at which to start tracking risk history.}
 
 \item{prep.elig.model}{Modeling approach for determining who is eligible for
 PrEP. Current options are limited to: \code{"all"} for all persons who

@@ -11,6 +11,10 @@
 #'
 riskhist.mard <- function(dat, at) {
 
+  if (at < dat$param$riskh.start) {
+    return(dat)
+  }
+
   ## Attributes
   uid <- dat$attr$uid
 
