@@ -70,10 +70,7 @@ riskhist.mard <- function(dat, at) {
   uai.mono1 <- intersect(which(tot.deg == 1), uai.any)
 
   # Monogamous partnerships: 2-sided
-  mono.2s <- rep(NA, nrow(el2))
-  for (i in 1:nrow(el2)) {
-    mono.2s[i] <- tot.deg[el2$p1[i]] == 1 & tot.deg[el2$p2[i]] == 1
-  }
+  mono.2s <- tot.deg[el2$p1] == 1 & tot.deg[el2$p2] == 1
   ai.mono2 <- sort(unname(do.call("c", c(el2[mono.2s, 1:2]))))
   uai.mono2 <- intersect(ai.mono2, uai.any)
 
