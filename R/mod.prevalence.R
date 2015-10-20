@@ -46,24 +46,24 @@ prevalence.mard <- function(dat, at) {
     dat$epi$dth.gen <- rNA
     dat$epi$dth.dis <- rNA
     dat$epi$incid <- rNA
-    dat$epi$incid.B <- rNA
-    dat$epi$incid.W <- rNA
-    dat$epi$incid.acte <- rNA
-    dat$epi$incid.chrn <- rNA
-    dat$epi$incid.aids <- rNA
-    dat$epi$incid.main <- rNA
-    dat$epi$incid.casl <- rNA
-    dat$epi$incid.inst <- rNA
+    # dat$epi$incid.B <- rNA
+    # dat$epi$incid.W <- rNA
+    # dat$epi$incid.acte <- rNA
+    # dat$epi$incid.chrn <- rNA
+    # dat$epi$incid.aids <- rNA
+    # dat$epi$incid.main <- rNA
+    # dat$epi$incid.casl <- rNA
+    # dat$epi$incid.inst <- rNA
 
-    dat$epi$acts <- rNA
-    dat$epi$acts.B <- rNA
-    dat$epi$acts.W <- rNA
-    dat$epi$patp <- rNA
-    dat$epi$patp.B <- rNA
-    dat$epi$patp.W <- rNA
-    dat$epi$prob.uai <- rNA
-    dat$epi$prob.uai.B <- rNA
-    dat$epi$prob.uai.W <- rNA
+    # dat$epi$acts <- rNA
+    # dat$epi$acts.B <- rNA
+    # dat$epi$acts.W <- rNA
+    # dat$epi$patp <- rNA
+    # dat$epi$patp.B <- rNA
+    # dat$epi$patp.W <- rNA
+    # dat$epi$prob.uai <- rNA
+    # dat$epi$prob.uai.B <- rNA
+    # dat$epi$prob.uai.W <- rNA
 
     dat$epi$prepCurr <- rNA
     dat$epi$prepEver <- rNA
@@ -74,12 +74,9 @@ prevalence.mard <- function(dat, at) {
     dat$epi$incid.prep1 <- rNA
     dat$epi$i.num.prep0 <- rNA
     dat$epi$i.num.prep1 <- rNA
-    dat$epi$i.prev.prep0 <- rNA
-    dat$epi$i.prev.prep1 <- rNA
 
     dat$epi$cprob.always.pers <- rNA
     dat$epi$cprob.always.inst <- rNA
-
   }
 
 
