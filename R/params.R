@@ -577,7 +577,10 @@ control.mard <- function(simno = 1,
   p$skip.check <- TRUE
   p$save.transmat <- FALSE
 
-  p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
+  bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
+  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))),
+                                  USE.NAMES = FALSE) == TRUE)]
+  p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
   class(p) <- c("control.mard", "control.net")
