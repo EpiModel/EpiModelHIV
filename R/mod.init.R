@@ -153,8 +153,8 @@ initialize.mard <- function(x, param, init, control, s) {
 
   # Prevalence Tracking
   dat$temp$deg.dists <- list()
-  dat$temp$discl.list <- as.data.frame(matrix(NA, 0, 4))
-  names(dat$temp$discl.list) <- c("pos", "neg", "discl.time", "discl.type")
+  dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
+  colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
 
   dat <- prevalence.mard(dat, at = 1)
 
