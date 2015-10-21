@@ -42,7 +42,7 @@ disclose.mard <- function(dat, at){
       disc.at.diag.W.prob <- dat$param$disc.at.diag.main.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.main.W.prob
       el <- dat$el[[1]]
-      discl.type <- "M"
+      discl.type <- 1
     }
 
     if (type == "pers") {
@@ -53,14 +53,14 @@ disclose.mard <- function(dat, at){
       disc.at.diag.W.prob <- dat$param$disc.at.diag.pers.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.pers.W.prob
       el <- dat$el[[2]]
-      discl.type <- "P"
+      discl.type <- 2
     }
 
     if (type == "inst") {
       disc.inst.B.prob <- dat$param$disc.inst.B.prob
       disc.inst.W.prob <- dat$param$disc.inst.W.prob
       el <- dat$el[[3]]
-      discl.type <- "I"
+      discl.type <- 3
     }
 
 
@@ -70,8 +70,9 @@ disclose.mard <- function(dat, at){
     posneg <- el[which(status[el[, 1]] - status[el[, 2]] == 1), , drop = FALSE]
     negpos <- el[which(status[el[, 2]] - status[el[, 1]] == 1), , drop = FALSE]
     disc.el <- rbind(posneg, negpos[, 2:1])
-    disc.el <- as.data.frame(disc.el)
-    names(disc.el) <- c("pos", "neg")
+    # disc.el <- as.data.frame(disc.el)
+    # names(disc.el) <- c("pos", "neg")
+
 
     # Check for not already disclosed
     discl.list <- dat$temp$discl.list
@@ -93,46 +94,34 @@ disclose.mard <- function(dat, at){
     if (nrow(nd.dx) > 0) {
 
       # Split by race of pos node
-      nd.dx$pos.race <- race[nd.dx[, 1]]
+      pos.race <- race[nd.dx[, 1]]
 
       if (type %in% c("main", "pers")) {
 
         # Check that rel is new
         # new.edges matrix is expressed in uid, so need to transform nd.dx
         new.edges <- dat$temp$new.edges
-        nd.dx$new.rel <- ((uid[nd.dx[, 1]] * 1e12 + uid[nd.dx[, 2]]) %in%
-                            (new.edges[, 1] * 1e12 + new.edges[, 2])) |
-                         ((uid[nd.dx[, 2]] * 1e12 + uid[nd.dx[, 1]]) %in%
-                            (new.edges[, 1] * 1e12 + new.edges[, 2]))
+        new.rel <- ((uid[nd.dx[, 1]] * 1e12 + uid[nd.dx[, 2]]) %in% (new.edges[, 1] * 1e12 + new.edges[, 2])) |
+                   ((uid[nd.dx[, 2]] * 1e12 + uid[nd.dx[, 1]]) %in% (new.edges[, 1] * 1e12 + new.edges[, 2]))
 
         # Check if diag is new
-        nd.dx$new.dx <- diag.time[nd.dx[, 1]] == at
+        new.dx <- diag.time[nd.dx[, 1]] == at
 
         # Assign disclosure probs
         dl.prob <- vector("numeric", length = nrow(nd.dx))
-        dl.prob[nd.dx$pos.race == "B" &
-                nd.dx$new.rel == TRUE] <- disc.outset.B.prob
-        dl.prob[nd.dx$pos.race == "B" &
-                nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == TRUE] <- disc.at.diag.B.prob
-        dl.prob[nd.dx$pos.race == "B" &
-                nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == FALSE] <- disc.post.diag.B.prob
+        dl.prob[pos.race == "B" & new.rel == TRUE] <- disc.outset.B.prob
+        dl.prob[pos.race == "B" & new.rel == FALSE & new.dx == TRUE] <- disc.at.diag.B.prob
+        dl.prob[pos.race == "B" & new.rel == FALSE & new.dx == FALSE] <- disc.post.diag.B.prob
 
-        dl.prob[nd.dx$pos.race == "W" &
-                nd.dx$new.rel == TRUE] <- disc.outset.W.prob
-        dl.prob[nd.dx$pos.race == "W" &
-                nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == TRUE] <- disc.at.diag.W.prob
-        dl.prob[nd.dx$pos.race == "W" &
-                nd.dx$new.rel == FALSE &
-                nd.dx$new.dx == FALSE] <- disc.post.diag.W.prob
+        dl.prob[pos.race == "W" & new.rel == TRUE] <- disc.outset.W.prob
+        dl.prob[pos.race == "W" & new.rel == FALSE & new.dx == TRUE] <- disc.at.diag.W.prob
+        dl.prob[pos.race == "W" & new.rel == FALSE & new.dx == FALSE] <- disc.post.diag.W.prob
       }
 
       if (type == "inst") {
         dl.prob <- vector("numeric", length = nrow(nd.dx))
-        dl.prob[nd.dx$pos.race == "B"] <- disc.inst.B.prob
-        dl.prob[nd.dx$pos.race == "W"] <- disc.inst.W.prob
+        dl.prob[pos.race == "B"] <- disc.inst.B.prob
+        dl.prob[pos.race == "W"] <- disc.inst.W.prob
       }
 
       # Determine disclosers
@@ -140,11 +129,11 @@ disclose.mard <- function(dat, at){
 
       # Write output
       if (length(discl) > 0) {
-        discl.df <- data.frame(pos = uid[nd.dx[discl, 1]],
-                               neg = uid[nd.dx[discl, 2]],
-                               discl.time = at,
-                               discl.type = discl.type)
-        dat$temp$discl.list <- rbind(dat$temp$discl.list, discl.df)
+        discl.mat <- cbind(pos = uid[nd.dx[discl, 1]],
+                           neg = uid[nd.dx[discl, 2]],
+                           discl.time = at,
+                           discl.type = discl.type)
+        dat$temp$discl.list <- rbind(dat$temp$discl.list, discl.mat)
       }
     }
   }
