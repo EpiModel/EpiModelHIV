@@ -70,9 +70,9 @@ disclose.mard <- function(dat, at){
 
     # Check for not already disclosed
     discl.list <- dat$temp$discl.list
-    cdl <- paste(discl.list[, 1], discl.list[, 2], sep = "")
-    disc.cdl <- paste(uid[disc.el[, 1]], uid[disc.el[, 2]], sep = "")
-    notdiscl <- !(disc.cdl %in% cdl)
+    disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
+    discord.cdl <- uid[disc.el[, 1]] * 1e7 + uid[disc.el[, 2]]
+    notdiscl <- !(discord.cdl %in% disclose.cdl)
 
 
     # data frame of non-disclosed pairs
@@ -95,8 +95,8 @@ disclose.mard <- function(dat, at){
         # Check that rel is new
         # new.edges matrix is expressed in uid, so need to transform nd.dx
         new.edges <- dat$temp$new.edges
-        new.rel <- ((uid[nd.dx[, 1]] * 1e12 + uid[nd.dx[, 2]]) %in% (new.edges[, 1] * 1e12 + new.edges[, 2])) |
-                   ((uid[nd.dx[, 2]] * 1e12 + uid[nd.dx[, 1]]) %in% (new.edges[, 1] * 1e12 + new.edges[, 2]))
+        new.rel <- ((uid[nd.dx[, 1]] * 1e7 + uid[nd.dx[, 2]]) %in% (new.edges[, 1] * 1e7 + new.edges[, 2])) |
+                   ((uid[nd.dx[, 2]] * 1e7 + uid[nd.dx[, 1]]) %in% (new.edges[, 1] * 1e7 + new.edges[, 2]))
 
         # Check if diag is new
         new.dx <- diag.time[nd.dx[, 1]] == at
