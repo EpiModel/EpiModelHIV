@@ -15,8 +15,8 @@ control.mard(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   condoms.FUN = condoms.mard, riskhist.FUN = riskhist.mard,
   position.FUN = position.mard, trans.FUN = trans.mard,
   getprev.FUN = prevalence.mard, verbose.FUN = verbose.mard,
-  save.nwstats = FALSE, save.network = FALSE, save.other = NULL,
-  verbose = TRUE, verbose.int = 1, ...)
+  prune.discl.list = TRUE, save.nwstats = FALSE, save.network = FALSE,
+  save.other = NULL, verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -82,6 +82,8 @@ over acts given individual and dyadic attributes.}
 
 \item{verbose.FUN}{Module function to print model progress to the console or
 external text files.}
+
+\item{prune.discl.list}{}
 
 \item{save.nwstats}{If \code{TRUE}, the network statistics will be saved.}
 

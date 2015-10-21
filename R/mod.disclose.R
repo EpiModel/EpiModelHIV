@@ -131,5 +131,13 @@ disclose.mard <- function(dat, at){
     }
   }
 
+  if (at > 2 & dat$control$prune.discl.list == TRUE) {
+    discl.list <- dat$temp$discl.list
+    master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
+    m <- which(match(discl.list[, 1] * 1e7 + discl.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
+               match(discl.list[, 2] * 1e7 + discl.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
+    dat$temp$discl.list <- discl.list[m, ]
+  }
+
   return(dat)
 }
