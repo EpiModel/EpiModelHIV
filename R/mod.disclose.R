@@ -42,7 +42,6 @@ disclose.mard <- function(dat, at){
       disc.at.diag.W.prob <- dat$param$disc.at.diag.main.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.main.W.prob
       el <- dat$el[[1]]
-      discl.type <- 1
     }
 
     if (type == "pers") {
@@ -53,14 +52,12 @@ disclose.mard <- function(dat, at){
       disc.at.diag.W.prob <- dat$param$disc.at.diag.pers.W.prob
       disc.post.diag.W.prob <- dat$param$disc.post.diag.pers.W.prob
       el <- dat$el[[2]]
-      discl.type <- 2
     }
 
     if (type == "inst") {
       disc.inst.B.prob <- dat$param$disc.inst.B.prob
       disc.inst.W.prob <- dat$param$disc.inst.W.prob
       el <- dat$el[[3]]
-      discl.type <- 3
     }
 
 
@@ -70,9 +67,6 @@ disclose.mard <- function(dat, at){
     posneg <- el[which(status[el[, 1]] - status[el[, 2]] == 1), , drop = FALSE]
     negpos <- el[which(status[el[, 2]] - status[el[, 1]] == 1), , drop = FALSE]
     disc.el <- rbind(posneg, negpos[, 2:1])
-    # disc.el <- as.data.frame(disc.el)
-    # names(disc.el) <- c("pos", "neg")
-
 
     # Check for not already disclosed
     discl.list <- dat$temp$discl.list
@@ -131,8 +125,7 @@ disclose.mard <- function(dat, at){
       if (length(discl) > 0) {
         discl.mat <- cbind(pos = uid[nd.dx[discl, 1]],
                            neg = uid[nd.dx[discl, 2]],
-                           discl.time = at,
-                           discl.type = discl.type)
+                           discl.time = at)
         dat$temp$discl.list <- rbind(dat$temp$discl.list, discl.mat)
       }
     }
