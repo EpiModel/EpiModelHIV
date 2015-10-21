@@ -67,9 +67,10 @@ trans.mard <- function(dat, at){
 
   ## Reorder by role: ins on the left, rec on the right,
   ##                  with flippers represented twice
-  disc.ip <- dal[dal$ins %in% c("P", "B"), ]
-  disc.rp <- dal[dal$ins %in% c("N", "B"), c(2:1, 3:ncols)]
-  names(disc.ip)[1:2] <- c("i", "r"); names(disc.rp)[1:2] <- c("i", "r")
+  disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
+  disc.rp <- dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
+  colnames(disc.ip)[1:2] <- c("i", "r")
+  colnames(disc.rp)[1:2] <- c("i", "r")
 
 
   ## PATP: Insertive Man Infected (Column 1)
@@ -87,7 +88,7 @@ trans.mard <- function(dat, at){
   trans.ip.prob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Condom use
-  trans.ip.prob[disc.ip$uai == 0] <- trans.ip.prob[disc.ip$uai == 0] * condom.rr
+  trans.ip.prob[disc.ip[, "uai"] == 0] <- trans.ip.prob[disc.ip[, "uai"] == 0] * condom.rr
 
   # CCR5
   trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
@@ -125,7 +126,7 @@ trans.mard <- function(dat, at){
   trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.rr
 
   # Condom use
-  trans.rp.prob[disc.rp$uai == 0] <- trans.rp.prob[disc.rp$uai == 0] * condom.rr
+  trans.rp.prob[disc.rp[, "uai"] == 0] <- trans.rp.prob[disc.rp[, "uai"] == 0] * condom.rr
 
   # CCR5
   trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0
@@ -149,8 +150,8 @@ trans.mard <- function(dat, at){
   trans.rp.prob <- pmin(trans.rp.prob, 1)
 
   ## Save to DAL
-  disc.ip$prob <- trans.ip.prob
-  disc.rp$prob <- trans.rp.prob
+  # disc.ip$prob <- trans.ip.prob
+  # disc.rp$prob <- trans.rp.prob
 
   ## Bernoulli transmission events
   trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
@@ -169,8 +170,8 @@ trans.mard <- function(dat, at){
     infector <- c(disc.ip[trans.ip == 1, 1],
                   disc.rp[trans.rp == 1, 2])
     inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
-    inf.type <- c(disc.ip[trans.ip == 1, "type"],
-                  disc.rp[trans.rp == 1, "type"])
+    inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
+                  disc.rp[trans.rp == 1, "ptype"])
 
     inf.stage <- stage[infector]
     inf.diag <- diag.status[infector]
