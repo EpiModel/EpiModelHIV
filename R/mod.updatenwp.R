@@ -7,12 +7,12 @@ updatenwp.mard <- function(dat, network) {
 
   p <- dat$p[[network]]
 
-  mf <- p$model.form
-  md <- p$model.diss
-  mhf <- p$MHproposal.form
-  mhd <- p$MHproposal.diss
-
   if (network == 1) {
+
+    mf <- p$model.form
+    md <- p$model.diss
+    mhf <- p$MHproposal.form
+    mhd <- p$MHproposal.diss
 
     ## Update model.form ##
 
@@ -70,9 +70,17 @@ updatenwp.mard <- function(dat, network) {
     ## Update MHproposal.diss ##
     mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
 
+    dat$p[[network]] <- list(model.form = mf, model.diss = md,
+                             MHproposal.form = mhf, MHproposal.diss = mhd)
+
   }
 
   if (network == 2) {
+
+    mf <- p$model.form
+    md <- p$model.diss
+    mhf <- p$MHproposal.form
+    mhd <- p$MHproposal.diss
 
     ## Update model.form ##
 
@@ -133,9 +141,15 @@ updatenwp.mard <- function(dat, network) {
     ## Update MHproposal.diss ##
     mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
 
+    dat$p[[network]] <- list(model.form = mf, model.diss = md,
+                             MHproposal.form = mhf, MHproposal.diss = mhd)
+
   }
 
   if (network == 3) {
+
+    mf <- p$model.form
+    mhf <- p$MHproposal
 
     ## Update model.form ##
 
@@ -193,20 +207,11 @@ updatenwp.mard <- function(dat, network) {
     ## combined maxval ##
     mf$maxval[1] <- maxdyads
 
-    ## Update model.diss ##
-    md$terms[[1]]$maxval <- maxdyads
-    md$maxval <- maxdyads
-
-    ## Update MHproposal.form ##
+    ## Update MHproposal ##
     # no changes
 
-    ## Update MHproposal.diss ##
-    # no changes
-
+    dat$p[[network]] <- list(model.form = mf, MHproposal = mhf)
   }
-
-  dat$p[[network]] <- list(model.form = mf, model.diss = md,
-                           MHproposal.form = mhf, MHproposal.diss = mhd)
 
   return(dat)
 }

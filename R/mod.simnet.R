@@ -51,6 +51,7 @@ simnet.mard <- function(dat, at) {
                                              coef.diss = nwparam.m$coef.diss$coef.adj,
                                              save.changes = TRUE)
 
+
   dat$temp$new.edges <- NULL
   if (at == 2) {
     new.edges.m <- matrix(dat$el[[1]], ncol = 2)
@@ -85,10 +86,9 @@ simnet.mard <- function(dat, at) {
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
   dat <- updatenwp.mard(dat, network = 3)
 
-  dat$el[[3]] <- tergmLite::simulate_network(p = dat$p[[3]],
-                                             el = dat$el[[3]],
-                                             coef.form = nwparam.i$coef.form,
-                                             coef.diss = nwparam.i$coef.diss$coef.adj)
+  dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
+                                          el = dat$el[[3]],
+                                          coef = nwparam.i$coef.form)
 
   return(dat)
 }

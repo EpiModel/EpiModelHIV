@@ -42,15 +42,20 @@ initialize.mard <- function(x, param, init, control, s) {
   ## ergm_prep here
   dat$el <- list()
   dat$p <- list()
-  for (i in 1:3) {
+  for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::ergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                              x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
   }
+  dat$el[[3]] <- as.edgelist(nw[[3]])
+  attributes(dat$el[[3]])$vnames <- NULL
+  p <- tergmLite::ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
+  p$model.form$formula <- NULL
+  dat$p[[3]] <- p
 
 
   # Network parameters
