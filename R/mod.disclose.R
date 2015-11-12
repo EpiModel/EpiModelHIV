@@ -95,8 +95,10 @@ disclose.mard <- function(dat, at){
         # Check that rel is new
         # new.edges matrix is expressed in uid, so need to transform nd.dx
         new.edges <- dat$temp$new.edges
-        new.rel <- ((uid[nd.dx[, 1]] * 1e7 + uid[nd.dx[, 2]]) %in% (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-                   ((uid[nd.dx[, 2]] * 1e7 + uid[nd.dx[, 1]]) %in% (new.edges[, 1] * 1e7 + new.edges[, 2]))
+        new.rel <- ((uid[nd.dx[, 1]] * 1e7 + uid[nd.dx[, 2]]) %in%
+                      (new.edges[, 1] * 1e7 + new.edges[, 2])) |
+                   ((uid[nd.dx[, 2]] * 1e7 + uid[nd.dx[, 1]]) %in%
+                      (new.edges[, 1] * 1e7 + new.edges[, 2]))
 
         # Check if diag is new
         new.dx <- diag.time[nd.dx[, 1]] == at
@@ -134,8 +136,10 @@ disclose.mard <- function(dat, at){
   if (at > 2 & dat$control$prune.discl.list == TRUE) {
     discl.list <- dat$temp$discl.list
     master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-    m <- which(match(discl.list[, 1] * 1e7 + discl.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-               match(discl.list[, 2] * 1e7 + discl.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
+    m <- which(match(discl.list[, 1] * 1e7 + discl.list[, 2],
+                     uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
+               match(discl.list[, 2] * 1e7 + discl.list[, 1],
+                     uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
     dat$temp$discl.list <- discl.list[m, ]
   }
 

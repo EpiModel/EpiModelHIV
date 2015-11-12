@@ -523,7 +523,8 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param getprev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
-#' @param prune.discl.list
+#' @param prune.discl.list If \code{TRUE}, remove any dissolved edges from the
+#'        disclosure list.
 #' @param save.nwstats If \code{TRUE}, the network statistics will be saved.
 #' @param save.network If \code{TRUE}, the \code{network} objects will be saved
 #'        out at the end of simulation (necessary for restarting a simulation).
