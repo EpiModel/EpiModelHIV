@@ -54,24 +54,23 @@ deaths.mard <- function(dat, at) {
   dth.all <- unique(c(dth.gen, dth.dis))
 
   if (length(dth.all) > 0) {
-
     dat$attr$active[dth.all] <- 0
-    dat$attr$depart.time[dth.all] <- at
-
-    for (i in 1:2) {
-      dat$nw[[i]] <- deactivate.vertices(dat$nw[[i]], onset = at, terminus = Inf,
-                                         v = dth.all, deactivate.edges = TRUE)
+    for (i in 1:3) {
+      dat$el[[i]] <- tergmLite::delete_vertices(dat$el[[i]], dth.all)
+    }
+    dat$attr <- deleteAttr(dat$attr, dth.all)
+    if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
+      stop("mismatch between el and attr length in death mod")
+    }
+    for (i in 1:length(dat$riskh)) {
+      dat$riskh[[i]] <- dat$riskh[[i]][-dth.all, ]
     }
   }
 
 
   ## Summary Output
   dat$epi$dth.gen[at] <- length(dth.gen)
-  dat$epi$dth.gen.B[at] <- length(deaths.B)
-  dat$epi$dth.gen.W[at] <- length(deaths.W)
   dat$epi$dth.dis[at] <- length(dth.dis)
-  dat$epi$dth.dis.B[at] <- sum(race[dth.dis] == "B")
-  dat$epi$dth.dis.W[at] <- sum(race[dth.dis] == "W")
 
   return(dat)
 }

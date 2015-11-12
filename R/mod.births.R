@@ -23,7 +23,7 @@
 #'
 births.mard <- function(dat, at){
 
-  # Variables ---------------------------------------------------------------
+  ## Variables
 
   # Parameters
   b.B.rate <- dat$param$b.B.rate
@@ -31,7 +31,7 @@ births.mard <- function(dat, at){
   b.method <- dat$param$b.method
 
 
-  # Process -----------------------------------------------------------------
+  ## Process
   if (b.method == "fixed") {
     numB <- dat$epi$num.B[1]
     numW <- dat$epi$num.W[1]
@@ -52,66 +52,16 @@ births.mard <- function(dat, at){
   }
 
 
-  # Update Networks ---------------------------------------------------------
-  currNwSize <- network.size(dat$nw$m)
-
-  newIds <- NULL
+  # Update Networks
   if (nBirths > 0) {
-    newIds <- (currNwSize + 1):(currNwSize + nBirths)
-
-    stopifnot(unique(sapply(dat$attr, length)) == (currNwSize + nBirths))
-
-    new.race <- dat$attr$race[newIds]
-    new.srage <- dat$attr$sqrt.age[newIds]
-    new.rc <- dat$attr$role.class[newIds]
-    if (is.character(dat$nw$m %v% "deg.pers")) {
-      new.degm <- new.degp <- paste0(new.race, 0)
-    } else {
-      new.degm <- new.degp <- 0
-    }
-    new.riskg <- dat$attr$riskg[newIds]
-
     for (i in 1:3) {
-      dat$nw[[i]] <- add.vertices.active(x = dat$nw[[i]], nv = nBirths,
-                                         onset = at, terminus = Inf)
+      dat$el[[i]] <- add_vertices(dat$el[[i]], nBirths)
     }
-
-    dat$nw$m <- set.vertex.attribute(x = dat$nw$m,
-                                     attrname = c("race", "sqrt.age",
-                                                  "role.class", "deg.pers"),
-                                     value = list(race = new.race,
-                                                  sqrt.age = new.srage,
-                                                  role.class = new.rc,
-                                                  deg.pers = new.degp),
-                                     v = newIds)
-
-    dat$nw$p <- set.vertex.attribute(x = dat$nw$p,
-                                     attrname = c("race", "sqrt.age",
-                                                  "role.class", "deg.main"),
-                                     value = list(race = new.race,
-                                                  sqrt.age = new.srage,
-                                                  role.class = new.rc,
-                                                  deg.main = new.degm),
-                                     v = newIds)
-
-    dat$nw$i <- set.vertex.attribute(x = dat$nw$i,
-                                     attrname = c("race", "sqrt.age",
-                                                  "role.class", "deg.pers",
-                                                  "deg.main", "riskg"),
-                                     value = list(race = new.race,
-                                                  sqrt.age = new.srage,
-                                                  role.class = new.rc,
-                                                  deg.pers = new.degp,
-                                                  deg.main = new.degm,
-                                                  riskg = new.riskg),
-                                     v = newIds)
   }
 
 
   ## Output
   dat$epi$nBirths[at] <- nBirths
-  dat$epi$nBirths.B[at] <- nBirths.B
-  dat$epi$nBirths.W[at] <- nBirths.W
 
   return(dat)
 }
@@ -186,6 +136,11 @@ setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
                                         nBirths.W, replace = TRUE,
                                         prob = c(1 - sum(ccr5.W.prob),
                                                  ccr5.W.prob[2], ccr5.W.prob[1]))
+
+
+  # Degree
+  dat$attr$deg.main[newIds] <- 0
+  dat$attr$deg.pers[newIds] <- 0
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)

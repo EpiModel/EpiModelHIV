@@ -22,8 +22,7 @@
 #' resimulated with the \code{simulate.formula} function in the \code{ergm}
 #' package.
 #'
-#' The module also deletes inactive nodes on all three networks depending on the
-#' value of the \code{delete.nodes} control setting. For the main and casual
+#' For the main and casual
 #' network, this involves extracting the \code{networkDynamic} object at the
 #' current time point after the resimulation has occurre (dead nodes have already
 #' been deactivated in \code{\link{deaths.mard}} so that they will not be allowed
@@ -42,144 +41,54 @@
 #'
 simnet.mard <- function(dat, at) {
 
-  resim.int <- dat$control$resim.int
+  ## Main network
+  nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
+  dat <- updatenwp.mard(dat, network = 1)
 
-  # Main network ------------------------------------------------------------
+  dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
+                                             el = dat$el[[1]],
+                                             coef.form = nwparam.m$coef.form,
+                                             coef.diss = nwparam.m$coef.diss$coef.adj,
+                                             save.changes = TRUE)
 
-  if (at %% resim.int == 0) {
-    nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
-    suppressWarnings(
-      dat$nw$m <- simulate(dat$nw$m,
-                           formation = nwparam.m$formation,
-                           dissolution = nwparam.m$coef.diss$dissolution,
-                           coef.form = nwparam.m$coef.form,
-                           coef.diss = nwparam.m$coef.diss$coef.adj,
-                           constraints = nwparam.m$constraints,
-                           time.start = at,
-                           time.slices = 1 * resim.int,
-                           time.offset = 0,
-                           monitor = "all",
-                           output = "networkDynamic"))
-
-    stats <- tail(as.data.frame(attributes(dat$nw$m)$stats), 1 * resim.int)
-    stats <- calc_meandegs(dat, at, stats, "main")  ## Fix this for resim.int > 1
-    if (at == 2) {
-      dat$stats$nwstats$m <- stats
-    } else {
-      dat$stats$nwstats$m <- rbind(dat$stats$nwstats$m, stats)
-    }
-  }
-
-  dat$nw$p <- update_degree(dat$nw$p, dat$nw$m, deg.type = "main", at = at)
-  dat$nw$i <- update_degree(dat$nw$i, dat$nw$m, deg.type = "main", at = at)
-
-  asdf <- as.data.frame(dat$nw$m)
   dat$temp$new.edges <- NULL
-  new.edges.m <- as.matrix(asdf[asdf$onset == at, c("tail", "head")], ncol = 2)[, 2:1]
+  if (at == 2) {
+    new.edges.m <- matrix(dat$el[[1]], ncol = 2)
+  } else {
+    new.edges.m <- attributes(dat$el[[1]])$changes
+    new.edges.m <- new.edges.m[new.edges.m[, "to"] == 1, 1:2, drop = FALSE]
+  }
   dat$temp$new.edges <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
 
 
-  # Casual network ----------------------------------------------------------
-  if (at %% resim.int == 0) {
-    nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
+  ## Casual network
+  nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
+  dat <- updatenwp.mard(dat, network = 2)
 
-    suppressWarnings(
-      dat$nw$p <- simulate(dat$nw$p,
-                           formation = nwparam.p$formation,
-                           dissolution = nwparam.p$coef.diss$dissolution,
-                           coef.form = nwparam.p$coef.form,
-                           coef.diss = nwparam.p$coef.diss$coef.adj,
-                           constraints = nwparam.p$constraints,
-                           time.start = at,
-                           time.slices = 1 * resim.int,
-                           time.offset = 0,
-                           monitor = "all",
-                           output = "networkDynamic"))
+  dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
+                                             el = dat$el[[2]],
+                                             coef.form = nwparam.p$coef.form,
+                                             coef.diss = nwparam.p$coef.diss$coef.adj,
+                                             save.changes = TRUE)
 
-    stats <- tail(as.data.frame(attributes(dat$nw$p)$stats), 1 * resim.int)
-    stats <- calc_meandegs(dat, at, stats, "pers") ## Fix this for resim.int > 1
-    if (at == 2) {
-      dat$stats$nwstats$p <- stats
-    } else {
-      dat$stats$nwstats$p <- rbind(dat$stats$nwstats$p, stats)
-    }
+  if (at == 2) {
+    new.edges.p <- matrix(dat$el[[2]], ncol = 2)
+  } else {
+    new.edges.p <- attributes(dat$el[[2]])$changes
+    new.edges.p <- new.edges.p[new.edges.p[, "to"] == 1, 1:2, drop = FALSE]
   }
-
-  dat$nw$m <- update_degree(dat$nw$m, dat$nw$p, deg.type = "pers", at = at)
-  dat$nw$i <- update_degree(dat$nw$i, dat$nw$p, deg.type = "pers", at = at)
-
-  asdf <- as.data.frame(dat$nw$p)
-  new.edges.p <- as.matrix(asdf[asdf$onset == at, c("tail", "head")], ncol = 2)[, 2:1]
   dat$temp$new.edges <- rbind(dat$temp$new.edges,
                               matrix(dat$attr$uid[new.edges.p], ncol = 2))
 
 
-  # Delete nodes ------------------------------------------------------------
-  inactive <- which(dat$attr$active == 0)
-  if (dat$control$delete.nodes == TRUE && ((at %% resim.int) == (resim.int - 1))
-      && length(inactive) > 0) {
-    for (i in 1:2) {
-      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = at)
-    }
-    dat$nw$i <- delete.vertices(dat$nw$i, vid = inactive)
-    dat$attr <- EpiModel::deleteAttr(dat$attr, inactive)
-
-    for (i in 1:length(dat$riskh)) {
-      dat$riskh[[i]] <- dat$riskh[[i]][-inactive, ]
-    }
-  }
-
-  # Stop checks for consistency in nw / attr sizes
-  stopifnot(length(unique(sapply(dat$nw, function(x) x$gal$n))) == 1)
-  stopifnot(length(unique(sapply(dat$attr, length))) == 1)
-  stopifnot(length(dat$attr[[1]]) == dat$nw$m$gal$n)
-
-
-  # Instant network ---------------------------------------------------------
+  ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
+  dat <- updatenwp.mard(dat, network = 3)
 
-  inst.formula <- update.formula(nwparam.i$formation, dat$nw$i ~ .)
-  environment(inst.formula) <- environment()
-  dat$nw$i <- simulate(inst.formula, coef = nwparam.i$coef.form)
-
-  stats <- data.frame(t(summary(inst.formula)))
-  stats <- calc_meandegs(dat, at, stats, "inst")
-  if (at == 2) {
-    dat$stats$nwstats$i <- stats
-  } else {
-    dat$stats$nwstats$i <- rbind(dat$stats$nwstats$i, stats)
-  }
+  dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
+                                          el = dat$el[[3]],
+                                          coef = nwparam.i$coef.form)
 
   return(dat)
-}
-
-
-calc_meandegs <- function(dat, at, stats, type) {
-
-  if (type == "main") {
-    nf.m <- summary(dat$nw$m ~ nodefactor("race", base = 0), at = at)
-    md.MB <- unname(round(nf.m[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
-    md.MW <- unname(round(nf.m[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
-    stats$md.MB <- md.MB
-    stats$md.MW <- md.MW
-  }
-
-  if (type == "pers") {
-    nf.p <- summary(dat$nw$p ~ nodefactor("race", base = 0), at = at)
-    md.PB <- unname(round(nf.p[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
-    md.PW <- unname(round(nf.p[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
-    stats$md.PB <- md.PB
-    stats$md.PW <- md.PW
-  }
-
-  if (type == "inst") {
-    nf.i <- summary(dat$nw$i ~ nodefactor("race", base = 0))
-    md.IB <- unname(round(nf.i[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
-    md.IW <- unname(round(nf.i[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
-    stats$md.IB <- md.IB
-    stats$md.IW <- md.IW
-  }
-
-  return(stats)
 }

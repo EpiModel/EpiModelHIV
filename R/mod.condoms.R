@@ -43,6 +43,7 @@ condoms.mard <- function(dat, at) {
       diag.beta <- dat$param$cond.diag.main.beta
       discl.beta <- dat$param$cond.discl.main.beta
       cond.always <- NULL
+      ptype <- 1
     }
     if (type == "pers") {
       cond.BB.prob <- dat$param$cond.pers.BB.prob
@@ -51,6 +52,7 @@ condoms.mard <- function(dat, at) {
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
       cond.always <- dat$attr$cond.always.pers
+      ptype <- 2
     }
     if (type == "inst") {
       cond.BB.prob <- dat$param$cond.inst.BB.prob
@@ -59,16 +61,17 @@ condoms.mard <- function(dat, at) {
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
       cond.always <- dat$attr$cond.always.inst
+      ptype <- 3
     }
 
     el <- dat$temp$el
-    elt <- el[el$type == type, ]
+    elt <- el[el[, "ptype"] == ptype, ]
 
     ## Process ##
 
     # Base condom probs
-    race.p1 <- race[elt$p1]
-    race.p2 <- race[elt$p2]
+    race.p1 <- race[elt[, 1]]
+    race.p2 <- race[elt[, 2]]
     num.B <- (race.p1 == "B") + (race.p2 == "B")
     cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
                  (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
@@ -79,18 +82,18 @@ condoms.mard <- function(dat, at) {
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
     # Diagnosis modifier
-    pos.diag <- diag.status[elt$p1]
+    pos.diag <- diag.status[elt[, 1]]
     isDx <- which(pos.diag == 1)
     uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
 
     # Disclosure modifier
-    isDiscord <- which((elt$st1 - elt$st2) == 1)
+    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
     delt <- elt[isDiscord, ]
-    dlist <- dat$temp$discl.list
-    discl.disc <- sapply(1:nrow(delt), function(x) {
-      length(intersect(which(uid[delt$p1[x]] == dlist$pos),
-                       which(uid[delt$p2[x]] == dlist$neg))) != 0
-    })
+    discl.list <- dat$temp$discl.list
+    disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
+    delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
+    discl.disc <- (delt.cdl %in% disclose.cdl)
+
     discl <- rep(NA, nrow(elt))
     discl[isDiscord] <- discl.disc
 
@@ -106,8 +109,8 @@ condoms.mard <- function(dat, at) {
 
     # UAI group
     if (type %in% c("pers", "inst")) {
-      ca1 <- cond.always[elt$p1]
-      ca2 <- cond.always[elt$p2]
+      ca1 <- cond.always[elt[, 1]]
+      ca2 <- cond.always[elt[, 2]]
       uai.prob <- ifelse(ca1 == 1 | ca2 == 1, 0, uai.prob)
       if (type == "pers") {
         dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
@@ -116,26 +119,33 @@ condoms.mard <- function(dat, at) {
       }
     }
 
-    elt$uai <- rbinom(nrow(elt), elt$ai, uai.prob)
+    ai.vec <- elt[, "ai"]
+    pos <- rep(elt[, "p1"], ai.vec)
+    neg <- rep(elt[, "p2"], ai.vec)
+    ptype <- rep(elt[, "ptype"], ai.vec)
+
+    uai.prob.peract <- rep(uai.prob, ai.vec)
+    uai <- rbinom(length(pos), 1, uai.prob.peract)
+
+    if (type == "main") {
+      pid <- rep(1:length(ai.vec), ai.vec)
+      al <- cbind(pos, neg, ptype, uai, pid)
+    } else {
+      pid <- rep(max(al[, "pid"]) + (1:length(ai.vec)), ai.vec)
+      tmp.al <- cbind(pos, neg, ptype, uai, pid)
+      al <- rbind(al, tmp.al)
+    }
 
     ## Output ##
-    dat$temp$el[dat$temp$el$type == type, ] <- elt
+    # dat$temp$el[dat$temp$el[, "ptype"] == ptype, ] <- elt
 
   } # end ptype loop
 
   ## Construct discordant act list
-  del <- dat$temp$el[which((dat$temp$el$st1 - dat$temp$el$st2) == 1), c(1:2, 5:7)]
-  dal <- data.frame(pos = rep(del$p1, del$ai), neg = rep(del$p2, del$ai),
-                    type = rep(del$type, del$ai))
-  dal$uai <- rep(NA, nrow(dal))
-  if (nrow(dal) > 0) {
-    uai.vec <- do.call("c", lapply(1:length(del$ai),
-                                   function(x) rep(1:0, c(del$uai[x],
-                                                          del$ai[x] - del$uai[x]))))
-    dal$uai <- uai.vec
-  }
+  # del <- dat$temp$el[which((dat$temp$el[, "st1"] - dat$temp$el[, "st2"] == 1)), c(1:2, 5:7)]
 
-  dat$temp$dal <- dal
+
+  dat$temp$al <- al
 
   return(dat)
 }

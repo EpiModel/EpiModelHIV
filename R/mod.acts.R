@@ -39,41 +39,43 @@ acts.mard <- function(dat, at) {
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
       fixed <- FALSE
-      el <- get.dyads.active(dat$nw$m, at = at)
+      ptype <- 1
+      el <- dat$el[[1]]
     }
     if (type == "pers") {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
       fixed <- FALSE
-      el <- get.dyads.active(dat$nw$p, at = at)
+      ptype <- 2
+      el <- dat$el[[2]]
     }
     if (type == "inst") {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
       fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
-      el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
+      ptype <- 3
+      el <- dat$el[[3]]
     }
 
     ## Processes ##
 
     # Construct edgelist
-    el <- as.data.frame(el)
-    names(el) <- c("p1", "p2")
-    st1 <- status[el$p1]
-    st2 <- status[el$p2]
+
+    st1 <- status[el[, 1]]
+    st2 <- status[el[, 2]]
     disc <- abs(st1 - st2) == 1
     el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
-    el$st1 <- status[el$p1]
-    el$st2 <- status[el$p2]
+    el <- cbind(el, status[el[, 1]], status[el[, 2]])
+    colnames(el) <- c("p1", "p2", "st1", "st2")
 
     if (nrow(el) > 0) {
 
       # Base AI rates
       ai.rate <- rep(NA, nrow(el))
-      race.p1 <- race[el$p1]
-      race.p2 <- race[el$p2]
+      race.p1 <- race[el[, 1]]
+      race.p2 <- race[el[, 2]]
       num.B <- (race.p1 == "B") + (race.p2 == "B")
       ai.rate <- (num.B == 2) * base.ai.BB.rate +
                  (num.B == 1) * base.ai.BW.rate +
@@ -88,9 +90,8 @@ acts.mard <- function(dat, at) {
       }
 
       # Full edge list
-      el$type <- type
-      el$ai <- ai
-      el$uai <- NA
+      el <- cbind(el, ptype, ai)
+      colnames(el)[5:6] <- c("ptype", "ai")
 
       if (type == "main") {
         dat$temp$el <- el
@@ -102,7 +103,7 @@ acts.mard <- function(dat, at) {
   } # loop over type end
 
   # Remove inactive edges from el
-  dat$temp$el <- dat$temp$el[-which(dat$temp$el$ai == 0), ]
+  dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
   return(dat)
 }

@@ -205,6 +205,7 @@
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
 #' @param prep.start Time step at which the PrEP intervention should start.
+#' @param riskh.start Time step at which to start tracking risk history.
 #' @param prep.elig.model Modeling approach for determining who is eligible for
 #'        PrEP. Current options are limited to: \code{"all"} for all persons who
 #'        have never been on PrEP and are disease-susceptible.
@@ -342,6 +343,7 @@ param.mard <- function(nwstats,
                        vv.iev.WW.prob = 0.49,
 
                        prep.start = 1,
+                       riskh.start = 1,
                        prep.elig.model = "base",
                        prep.efficacy = 0.92,
                        prep.class.prob = c(0.50, 0.25, 0.25),
@@ -493,8 +495,6 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #'        simulation. This may also be set to 1 greater than the final time
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
-#' @param resim.int Interval unit for resimulation of network, relative to the
-#'        base time unit in the model.
 #' @param initialize.FUN Module function to use for initialization of the epidemic
 #'        model.
 #' @param aging.FUN Module function for aging.
@@ -509,7 +509,7 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param roleclass.FUN Module function for transitions in sexual roles.
 #' @param edgescorr.FUN Module function for the edges coefficient adjustment
 #'        to preserve mean degree under varying population sizes.
-#' @param resimnets.FUN Module function for network resimulation at each time
+#' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
 #' @param acts.FUN Module function to simulate the number of sexual acts within
@@ -523,15 +523,12 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param getprev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
-#' @param delete.nodes If \code{TRUE}, dead nodes will be removed from the network
-#'        object and only active nodes will be retained.
+#' @param prune.discl.list
 #' @param save.nwstats If \code{TRUE}, the network statistics will be saved.
 #' @param save.network If \code{TRUE}, the \code{network} objects will be saved
 #'        out at the end of simulation (necessary for restarting a simulation).
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
-#' @param prevfull If \code{TRUE}, save extended summary statistics for prevalence
-#'        and incidence (defined in the prevalence module).
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
 #'        if in interactive mode or text files if in batch mode.
 #' @param verbose.int Integer specifying the interval between time steps at which
@@ -548,7 +545,6 @@ control.mard <- function(simno = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
-                         resim.int = 1,
                          initialize.FUN = initialize.mard,
                          aging.FUN = aging.mard,
                          deaths.FUN = deaths.mard,
@@ -558,10 +554,10 @@ control.mard <- function(simno = 1,
                          prep.FUN = prep.mard,
                          progress.FUN = progress.mard,
                          vl.FUN = update_vl.mard,
-                         aiclass.FUN = update_aiclass.mard,
-                         roleclass.FUN = update_roleclass.mard,
+                         aiclass.FUN = NULL,
+                         roleclass.FUN = NULL,
                          edgescorr.FUN = edges_correct.mard,
-                         resimnets.FUN = simnet.mard,
+                         resim_nets.FUN = simnet.mard,
                          disclose.FUN = disclose.mard,
                          acts.FUN = acts.mard,
                          condoms.FUN = condoms.mard,
@@ -570,11 +566,10 @@ control.mard <- function(simno = 1,
                          trans.FUN = trans.mard,
                          getprev.FUN = prevalence.mard,
                          verbose.FUN = verbose.mard,
-                         delete.nodes = TRUE,
-                         save.nwstats = TRUE,
+                         prune.discl.list = TRUE,
+                         save.nwstats = FALSE,
                          save.network = FALSE,
-                         save.other = "attr",
-                         prevfull = FALSE,
+                         save.other = NULL,
                          verbose = TRUE,
                          verbose.int = 1,
                          ...) {
@@ -586,7 +581,10 @@ control.mard <- function(simno = 1,
   p$skip.check <- TRUE
   p$save.transmat <- FALSE
 
-  p$bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
+  bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
+  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))),
+                                  USE.NAMES = FALSE) == TRUE)]
+  p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
   class(p) <- c("control.mard", "control.net")
