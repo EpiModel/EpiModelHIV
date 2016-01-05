@@ -83,6 +83,9 @@ over acts given individual and dyadic attributes.}
 \item{verbose.FUN}{Module function to print model progress to the console or
 external text files.}
 
+\item{prune.discl.list}{If \code{TRUE}, remove any dissolved edges from the
+disclosure list.}
+
 \item{save.nwstats}{If \code{TRUE}, the network statistics will be saved.}
 
 \item{save.network}{If \code{TRUE}, the \code{network} objects will be saved
