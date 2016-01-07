@@ -44,11 +44,11 @@ param.mard(nwstats, race.method = 1, last.neg.test.B.int = 301,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = 1,
-  riskh.start = 1, prep.elig.model = "base", prep.efficacy = 0.92,
-  prep.class.prob = c(0.5, 0.25, 0.25), prep.class.effect = c(0, 0.75, 0.9),
+  riskh.start = 1, prep.elig.model = "base", prep.class.prob = c(0.5,
+  0.25, 0.25), prep.class.hr = c(0.211, 0.07, 0.1, 0.619),
   prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
   prep.rcomp = 1, prep.tst.int = 90, prep.risk.int = 182,
-  prep.risk.reassess = FALSE, ...)
+  prep.risk.reassess = TRUE, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -351,14 +351,11 @@ two versatile men, they will engage in intra-event versatility
 PrEP. Current options are limited to: \code{"all"} for all persons who
 have never been on PrEP and are disease-susceptible.}
 
-\item{prep.efficacy}{The per-contact efficacy of PrEP to prevent infection if
-used (parameter not currently used).}
+\item{prep.class.prob}{The probability of adherence class in non-adherent,
+low adherence, medium adherence, or high adherence groups (from Liu).}
 
-\item{prep.class.prob}{The frequency of being in a low, medium, or high class
-of adherence to PrEP.}
-
-\item{prep.class.effect}{The functional effectiveness of PrEP conditional on
-PrEP class.}
+\item{prep.class.hr}{The hazard ratio for infection per act associated with each
+level of adherence (from Grant).}
 
 \item{prep.coverage}{The proportion of the eligible population who are start
 PrEP once they become eligible.}

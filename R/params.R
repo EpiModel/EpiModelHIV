@@ -209,12 +209,10 @@
 #' @param prep.elig.model Modeling approach for determining who is eligible for
 #'        PrEP. Current options are limited to: \code{"all"} for all persons who
 #'        have never been on PrEP and are disease-susceptible.
-#' @param prep.efficacy The per-contact efficacy of PrEP to prevent infection if
-#'        used (parameter not currently used).
-#' @param prep.class.prob The frequency of being in a low, medium, or high class
-#'        of adherence to PrEP.
-#' @param prep.class.effect The functional effectiveness of PrEP conditional on
-#'        PrEP class.
+#' @param prep.class.prob The probability of adherence class in non-adherent,
+#'        low adherence, medium adherence, or high adherence groups (from Liu).
+#' @param prep.class.hr The hazard ratio for infection per act associated with each
+#'        level of adherence (from Grant).
 #' @param prep.coverage The proportion of the eligible population who are start
 #'        PrEP once they become eligible.
 #' @param prep.cov.method The method for calculating PrEP coverage, with options
@@ -345,16 +343,15 @@ param.mard <- function(nwstats,
                        prep.start = 1,
                        riskh.start = 1,
                        prep.elig.model = "base",
-                       prep.efficacy = 0.92,
                        prep.class.prob = c(0.50, 0.25, 0.25),
-                       prep.class.effect = c(0, 0.75, 0.90),
+                       prep.class.hr = c(0.211, 0.07, 0.1, 0.619),
                        prep.coverage = 0,
                        prep.cov.method = "curr",
                        prep.cov.rate = 1,
                        prep.rcomp = 1,
                        prep.tst.int = 90,
                        prep.risk.int = 182,
-                       prep.risk.reassess = FALSE,
+                       prep.risk.reassess = TRUE,
                        ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
