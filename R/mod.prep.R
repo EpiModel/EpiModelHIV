@@ -129,7 +129,7 @@ prep.mard <- function(dat, at) {
 
     # PrEP class is fixed over PrEP cycles
     needPC <- which(is.na(prepClass[idsStart]))
-    prepClass[idsStart[needPC]] <- sample(x = c("l", "m", "h"), size = length(needPC),
+    prepClass[idsStart[needPC]] <- sample(x = 0:3, size = length(needPC),
                                           replace = TRUE, prob = prep.class.prob)
   }
 
