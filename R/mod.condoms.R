@@ -136,14 +136,7 @@ condoms.mard <- function(dat, at) {
       al <- rbind(al, tmp.al)
     }
 
-    ## Output ##
-    # dat$temp$el[dat$temp$el[, "ptype"] == ptype, ] <- elt
-
   } # end ptype loop
-
-  ## Construct discordant act list
-  # del <- dat$temp$el[which((dat$temp$el[, "st1"] - dat$temp$el[, "st2"] == 1)), c(1:2, 5:7)]
-
 
   dat$temp$al <- al
 
