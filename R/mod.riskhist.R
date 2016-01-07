@@ -21,8 +21,10 @@ riskhist.mard <- function(dat, at) {
   ## Parameters
   pri <- ceiling(dat$param$prep.risk.int)
 
-  ## Edgelist
-  el <- dat$temp$el
+  ## Edgelist, adds uai summation per partnership from act list
+  al <- dat$temp$al
+  uai <- as.numeric(by(al[, "uai"], al[, "pid"], sum))
+  el <- as.data.frame(cbind(dat$temp$el, uai))
 
   # Remove concordant positive edges
   el2 <- el[el$st2 == 0, ]
@@ -41,7 +43,6 @@ riskhist.mard <- function(dat, at) {
     dat$riskh[[i]] <- dat$riskh[[i]][, -1]
     dat$riskh[[i]] <- cbind(dat$riskh[[i]], rep(NA, nrow(dat$riskh[[i]])))
   }
-  # 33 ms
 
   ## Degree ##
   n <- attributes(dat$el[[1]])$n
@@ -55,13 +56,13 @@ riskhist.mard <- function(dat, at) {
 
   tab.inst <- table(dat$el[[3]])
   inst.deg[as.numeric(names(tab.inst))] <- as.vector(tab.inst)
-  # ~25 ms
 
 
   ## Preconditions ##
 
   # Any UAI
-  uai.any <- unique(c(el2$p1[el2$uai > 0], el2$p2[el2$uai > 0]))
+  uai.any <- unique(c(el2$p1[el2$uai > 0],
+                      el2$p2[el2$uai > 0]))
 
   # Monogamous partnerships: 1-sided
   tot.deg <- main.deg + casl.deg + inst.deg
@@ -119,20 +120,20 @@ riskhist.mard <- function(dat, at) {
 
 
   ## Condition 2b: UAI in non-main partnerships
-  uai.nmain <- unique(c(el2$p1[el2$st1 == 0 & el2$uai > 0 & el2$type %in% c("pers", "inst")],
-                        el2$p2[el2$uai > 0 & el2$type %in% c("pers", "inst")]))
+  uai.nmain <- unique(c(el2$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
+                        el2$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
   dat$riskh$uai.nmain[, pri] <- 0
   dat$riskh$uai.nmain[uai.nmain, pri] <- 1
 
 
   ## Condition 3a: AI within known serodiscordant partnerships
-  el2.cond3 <- el2[el2$st1 == 1 & el2$ai > 0 & el2$type %in% c("main", "pers"), ]
+  el2.cond3 <- el2[el2$st1 == 1 & el2$ptype %in% 1:2, ]
 
   # Disclosure
-  dlist <- dat$temp$discl.list[, 1:2]
-  cdl <- paste(dlist$pos, dlist$neg, sep = "")
-  el2.cdl <- paste(uid[el2.cond3[, 1]], uid[el2.cond3[, 2]], sep = "")
-  discl <- el2.cdl %in% cdl
+  discl.list <- dat$temp$discl.list
+  disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
+  delt.cdl <- uid[el2.cond3[, 1]] * 1e7 + uid[el2.cond3[, 2]]
+  discl <- (delt.cdl %in% disclose.cdl)
 
   ai.sd.mc <- el2.cond3$p2[discl == TRUE]
   dat$riskh$ai.sd.mc[, pri] <- 0
