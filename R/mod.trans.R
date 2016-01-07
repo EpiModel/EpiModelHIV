@@ -51,7 +51,7 @@ trans.mard <- function(dat, at){
   condom.rr <- dat$param$condom.rr
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
-  pce <- dat$param$prep.class.effect
+  prep.hr <- dat$param$prep.class.hr
 
   # Data
   dal <- dat$temp$dal
@@ -95,12 +95,14 @@ trans.mard <- function(dat, at){
   trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
   # PrEP
-  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "l")] <-
-            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "l")] * (1 - pce[1])
-  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "m")] <-
-            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "m")] * (1 - pce[2])
-  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "h")] <-
-            trans.ip.prob[which(ip.prep == 1 & ip.prepcl == "h")] * (1 - pce[3])
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] <-
+                trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] * prep.hr[1]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] <-
+                trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] * prep.hr[2]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] <-
+                trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] * prep.hr[3]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] <-
+                trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
   isAcute <- which(ip.stage %in% c("AR", "AF"))
@@ -133,12 +135,14 @@ trans.mard <- function(dat, at){
   trans.rp.prob[rp.ccr5 == "DW"] <- trans.rp.prob[rp.ccr5 == "DW"] * ccr5.heteroz.rr
 
   # PrEP
-  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "l")] <-
-            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "l")] * (1 - pce[1])
-  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "m")] <-
-            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "m")] * (1 - pce[2])
-  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "h")] <-
-            trans.rp.prob[which(rp.prep == 1 & rp.prepcl == "h")] * (1 - pce[3])
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] <-
+                trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] * prep.hr[1]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] <-
+                trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] * prep.hr[2]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] <-
+                trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] * prep.hr[3]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] <-
+                trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
   isAcute <- which(rp.stage %in% c("AR", "AF"))
