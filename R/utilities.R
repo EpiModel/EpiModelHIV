@@ -77,3 +77,30 @@ get_args <- function(formal.args, dot.args){
   }
   return(p)
 }
+
+
+#' @title Proportionally Reallocate PrEP Adherence Class Probability
+#'
+#' @description Shifts probabilities from the high-adherence category to the lower
+#'              three adherence categories while maintaining the proportional
+#'              distribution of those lower categories.
+#'
+#' @param in.pcp Input vector of length four for the \code{prep.class.prob}
+#'        parameter.
+#' @param reall The pure percentage points to shift from the high adherence
+#'        group to the lower three groups.
+#'
+#' @export
+#'
+reallocate_pcp <- function(in.pcp = c(0.211, 0.07, 0.1, 0.619), reall = 0) {
+
+  dist <- in.pcp[1]/sum(in.pcp[1:3])
+  dist[2] <- in.pcp[2]/sum(in.pcp[1:3])
+  dist[3] <- in.pcp[3]/sum(in.pcp[1:3])
+
+  out.pcp <- rep(NA, 4)
+  out.pcp[1:3] <- in.pcp[1:3] - (dist * reall)
+  out.pcp[4] <- 1 - sum(out.pcp[1:3])
+
+  return(out.pcp)
+}
