@@ -686,14 +686,10 @@ init_ccr5 <- function(dat) {
 #'
 reinit.mard <- function(x, param, init, control, s) {
 
-  if (is.null(x$network)) {
-    stop("x must contain network to restart simulation", call. = FALSE)
-  }
-  if (is.null(x$attr)) {
-    stop("x must contain attr to restart simulation", call. = FALSE)
-  }
-  if (is.null(x$temp)) {
-    stop("x must contain temp to restart simulation", call. = FALSE)
+  if (any(c("param", "control", "nwparam", "epi", "attr", "temp",
+    "riskh", "el", "p") %in% names(x)) == FALSE) {
+    stop("x must contain the following elements for restarting: param control",
+         "nwparam epi attr temp riskh el p", call. = FALSE)
   }
 
   if (!is.null(control$currsim) & length(x$network) > 1) {
@@ -701,13 +697,7 @@ reinit.mard <- function(x, param, init, control, s) {
   }
 
   dat <- list()
-  stop("fix this")
-  dat$nw <- x$network[[s]]
-  if (!is.null(x$last.ts)) {
-    for (i in 1:2) {
-      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = x$last.ts)
-    }
-  }
+
   dat$param <- param
   dat$param$modes <- 1
   dat$control <- control
@@ -715,9 +705,19 @@ reinit.mard <- function(x, param, init, control, s) {
 
   dat$epi <- sapply(x$epi, function(var) var[s])
   names(dat$epi) <- names(x$epi)
+
+  dat$el <- x$el[[s]]
+  dat$p <- x$p[[s]]
+
   dat$attr <- x$attr[[s]]
-  dat$stats <- list()
-  dat$stats$nwstats <- x$stats$nwstats[[s]]
+
+  if (!is.null(x$stats)) {
+    dat$stats <- list()
+    if (!is.null(x$stats$nwstats)) {
+      dat$stats$nwstats <- x$stats$nwstats[[s]]
+    }
+  }
+
   dat$temp <- x$temp[[s]]
 
   if (!is.null(x$riskh)) {
@@ -725,6 +725,5 @@ reinit.mard <- function(x, param, init, control, s) {
   }
 
   class(dat) <- "dat"
-
   return(dat)
 }
