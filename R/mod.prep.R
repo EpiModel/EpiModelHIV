@@ -63,18 +63,18 @@ prep.mard <- function(dat, at) {
         mat.c2 <- dat$riskh$uai.nmain
         mat.c3 <- dat$riskh$uai.sd.mc
       }
-      idsEligStart <- intersect(which(rowSums(mat.c1) > 0 |
-                                      rowSums(mat.c2) > 0 |
-                                      rowSums(mat.c3) > 0),
+      idsEligStart <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
+                                      rowSums(mat.c2, na.rm = TRUE) > 0 |
+                                      rowSums(mat.c3, na.rm = TRUE) > 0),
                                 idsEligStart)
-      idsEligStop <- intersect(which(rowSums(mat.c1) == 0 &
-                                     rowSums(mat.c2) == 0 &
-                                     rowSums(mat.c3) == 0),
+      idsEligStop <- intersect(which(rowSums(mat.c1, na.rm = TRUE) == 0 &
+                                     rowSums(mat.c2, na.rm = TRUE) == 0 &
+                                     rowSums(mat.c3, na.rm = TRUE) == 0),
                                 idsEligStop)
     } else {
       mat <- dat$riskh[[prep.elig.model]]
-      idsEligStart <- intersect(which(rowSums(mat) > 0), idsEligStart)
-      idsEligStop <- intersect(which(rowSums(mat) == 0), idsEligStop)
+      idsEligStart <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart)
+      idsEligStop <- intersect(which(rowSums(mat, na.rm = TRUE) == 0), idsEligStop)
     }
   }
 
