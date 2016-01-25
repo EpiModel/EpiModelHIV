@@ -1,18 +1,13 @@
-Package: mardham2
-Version: 0.5
-Date: 2015-10-18
+Package: EpiModelHIVmsm
+Version: 1.0
+Date: 2016-01-25
 Type: Package
-Title: Modeling Approaches to Racial Disparities in HIV in Atlanta MSM in
-    EpiModel
+Title: EpiModel for HIV Transmission among MSM
 Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "sjenness@uw.edu"),
              person("Emily", "Beylerian", role = "aut", email = "ebey@uw.edu"),
              person("Steven M.", "Goodreau", role=c("aut"), email="goodeau@uw.edu"))
-Maintainer: Samuel M. Jenness <sjenness@uw.edu>
-Description: EpiModel version of MARDHAM stochastic network modeling project
-    for modeling HIV-1 transmission dynamics among young men who have sex with men
-    (MSM) in Atlanta. This translates and updates the original MARDHAM software
-    into EpiModel modules for greater flexibility and efficiency, and then adds
-    additional features like pre-exposure prophylaxis (PrEP).
+Maintainer: Samuel M. Jenness <samuel.m.jenness@emory.edu>
+Description: EpiModel extensions to model HIV transmission dynamics among men who have sex with men.
 License: GPL-2
 Depends:
     R (>= 3.2.0),
