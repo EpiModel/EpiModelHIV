@@ -62,7 +62,7 @@ test.msm <- function(dat, at) {
 
     tst.B.nprep <- which(active == 1 & race == "B" & tt.traj != "NN" &
                          (diag.status == 0 | is.na(diag.status)) &
-                         tsincelntst >= mean.test.B.int)
+                         tsincelntst >= (2 * mean.test.B.int))
     tst.B.prep <- which(active == 1 & race == "B" & tt.traj != "NN" &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 1 & tsincelntst >= prep.tst.int)
@@ -70,7 +70,7 @@ test.msm <- function(dat, at) {
 
     tst.W.nprep <- which(active == 1 & race == "W" & tt.traj != "NN" &
                          (diag.status == 0 | is.na(diag.status)) &
-                         tsincelntst >= mean.test.W.int)
+                         tsincelntst >= (2 * mean.test.W.int))
     tst.W.prep <- which(active == 1 & race == "W" & tt.traj != "NN" &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 1 & tsincelntst >= prep.tst.int)
