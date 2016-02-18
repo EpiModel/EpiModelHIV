@@ -241,7 +241,7 @@ param.msm <- function(nwstats,
                        last.neg.test.W.int = 315,
                        mean.test.B.int = 301,
                        mean.test.W.int = 315,
-                       testing.pattern = "interval",
+                       testing.pattern = "memoryless",
                        test.window.int = 21,
 
                        tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
