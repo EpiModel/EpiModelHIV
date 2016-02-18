@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{control.msm}
 \alias{control.msm}
-\title{Epidemic Model Control Settings for MARDHAM Models}
+\title{Epidemic Model Control Settings}
 \usage{
 control.msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize.msm, aging.FUN = aging.msm,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{init.msm}
 \alias{init.msm}
-\title{Epidemic Model Initial Conditions for MARDHAM Models}
+\title{Epidemic Model Initial Conditions}
 \usage{
 init.msm(nwstats, prev.B = 0.15, prev.W = 0.15, ...)
 }

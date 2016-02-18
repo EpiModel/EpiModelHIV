@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{param.msm}
 \alias{param.msm}
-\title{Epidemic Model Parameters for EpiModelHIVmsm Models}
+\title{Epidemic Model Parameters}
 \usage{
 param.msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
@@ -156,8 +156,7 @@ viral load rises per time step from treatment halting until expected value.}
 
 \item{b.method}{Method for calculating the number of expected births at each
 time step, with \code{"fixed"} based on the number of persons at the
-initial time step and \code{"varying"} based on the current time step.
-The former method is compatible with \code{mardham1}.}
+initial time step and \code{"varying"} based on the current time step.}
 
 \item{URAI.prob}{Probability of transmission for a man having unprotected
 receptive anal intercourse with an infected man at set point viral

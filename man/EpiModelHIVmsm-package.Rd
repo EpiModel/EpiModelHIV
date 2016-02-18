@@ -16,11 +16,8 @@
 }
 }
 \details{
-EpiModel version of MARDHAM stochastic network modeling project for
-modeling HIV-1 transmission dynamics among young men who have sex with men (MSM)
-in Atlanta. This translates and updates the original MARDHAM software
-into EpiModel modules for greater flexibility and efficiency, and then
-adds additional features like pre-exposure prophylaxis (PrEP).
+EpiModel version of stochastic network modeling project for
+modeling HIV-1 transmission dynamics among young men who have sex with men (MSM).
 }
 \keyword{package}
 

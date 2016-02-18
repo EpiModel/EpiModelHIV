@@ -1,5 +1,5 @@
 
-#' @title Epidemic Model Parameters for EpiModelHIVmsm Models
+#' @title Epidemic Model Parameters
 #'
 #' @description Sets the epidemic parameters for stochastic network models
 #'              simulated with \code{\link{netsim}} for EpiModelHIVmsm
@@ -75,7 +75,6 @@
 #' @param b.method Method for calculating the number of expected births at each
 #'        time step, with \code{"fixed"} based on the number of persons at the
 #'        initial time step and \code{"varying"} based on the current time step.
-#'        The former method is compatible with \code{mardham1}.
 #' @param URAI.prob Probability of transmission for a man having unprotected
 #'        receptive anal intercourse with an infected man at set point viral
 #'        load.
@@ -441,7 +440,7 @@ param.msm <- function(nwstats,
 }
 
 
-#' @title Epidemic Model Initial Conditions for MARDHAM Models
+#' @title Epidemic Model Initial Conditions
 #'
 #' @description Sets the initial conditions for a stochastic epidemic models
 #'              simulated with \code{\link{netsim}}.
@@ -477,7 +476,7 @@ init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 }
 
 
-#' @title Epidemic Model Control Settings for MARDHAM Models
+#' @title Epidemic Model Control Settings
 #'
 #' @description Sets the controls for stochastic network models simulated with
 #'              \code{\link{netsim}}.
