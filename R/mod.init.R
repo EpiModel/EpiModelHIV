@@ -36,7 +36,7 @@ initialize.msm <- function(x, param, init, control, s) {
   nw <- list()
   for (i in 1:3) {
     nw[[i]] <- simulate(x[[i]]$fit)
-    nw[[i]] <- EpiModelHIVmsm:::remove_bad_roles(nw[[i]])
+    nw[[i]] <- remove_bad_roles(nw[[i]])
   }
 
   ## ergm_prep here
