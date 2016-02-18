@@ -4,7 +4,7 @@
 #' @description This module calculates demographic, transmission, and clinical
 #'              statistics at each time step within the simulation.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' Summary statistic calculations are of two broad forms: prevalence and
@@ -21,7 +21,7 @@
 #' @keywords module
 #' @export
 #'
-prevalence.mard <- function(dat, at) {
+prevalence.msm <- function(dat, at) {
 
   active <- dat$attr$active
   race <- dat$attr$race
@@ -110,7 +110,7 @@ prevalence.mard <- function(dat, at) {
 }
 
 
-prev.full.mard <- function(dat, at) {
+prev.full.msm <- function(dat, at) {
 
   active <- dat$attr$active
   race <- dat$attr$race

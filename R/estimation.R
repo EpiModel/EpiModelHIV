@@ -63,13 +63,13 @@
 #' calculated externally to the package in a setup scenario file.
 #'
 #' @seealso
-#' Network statistics calculated here are entered into \code{\link{base_nw.mard}}
+#' Network statistics calculated here are entered into \code{\link{base_nw.msm}}
 #' to construct the base network, and then into the parameters in
-#' \code{\link{param.mard}}.
+#' \code{\link{param.msm}}.
 #'
 #' @export
 #'
-calc_nwstats.mard <- function(time.unit = 7, method = 2,
+calc_nwstats.msm <- function(time.unit = 7, method = 2,
                               num.B, num.W, deg.mp.B, deg.mp.W,
                               mdeg.inst.B, mdeg.inst.W,
                               qnts.B, qnts.W,
@@ -359,10 +359,10 @@ calc_nwstats.mard <- function(time.unit = 7, method = 2,
 #'              \code{netest}.
 #'
 #' @param nwstats An object of class \code{nwstats}, as output from
-#'        \code{\link{calc_nwstats.mard}}.
+#'        \code{\link{calc_nwstats.msm}}.
 #'
 #' @details
-#' This function takes the output of \code{\link{calc_nwstats.mard}} and constructs
+#' This function takes the output of \code{\link{calc_nwstats.msm}} and constructs
 #' an empty network with the necessary attributes for race, square root of age,
 #' and sexual role class. This base network is used for all three network
 #' estimations.
@@ -373,7 +373,7 @@ calc_nwstats.mard <- function(time.unit = 7, method = 2,
 #'
 #' @export
 #'
-base_nw.mard <- function(nwstats) {
+base_nw.msm <- function(nwstats) {
 
   num.B <- nwstats$num.B
   num.W <- nwstats$num.W

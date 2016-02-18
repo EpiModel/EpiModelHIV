@@ -4,7 +4,7 @@
 #' @description Module function for setting the number of sexual acts on the
 #'              discordant edgelist.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' The number of acts at each time step is specified as a function of the race of
@@ -22,7 +22,7 @@
 #' @keywords module
 #' @export
 #'
-acts.mard <- function(dat, at) {
+acts.msm <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
 

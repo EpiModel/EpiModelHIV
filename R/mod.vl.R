@@ -3,7 +3,7 @@
 #'
 #' @description Module function for updating HIV viral load.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' HIV viral load varies over time as a function of time since infection and ART
@@ -26,7 +26,7 @@
 #' @keywords module
 #' @export
 #'
-update_vl.mard <- function(dat, at) {
+update_vl.msm <- function(dat, at) {
 
   ## Variables
 

@@ -4,11 +4,11 @@
 #' @description Module function for implementation and uptake of pre-exposure
 #'              prophylaxis (PrEP) to prevent HIV infection.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @export
 #'
-prep.mard <- function(dat, at) {
+prep.msm <- function(dat, at) {
 
   if (at < dat$param$prep.start) {
     return(dat)

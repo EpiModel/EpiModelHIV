@@ -1,6 +1,6 @@
 
 #' @export
-updatenwp.mard <- function(dat, network) {
+updatenwp.msm <- function(dat, network) {
 
   n <- attributes(dat$el[[1]])$n
   maxdyads <- choose(n, 2)

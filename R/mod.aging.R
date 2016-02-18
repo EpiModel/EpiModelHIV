@@ -15,7 +15,7 @@
 #' @keywords module
 #' @export
 #'
-aging.mard <- function(dat, at) {
+aging.msm <- function(dat, at) {
 
   time.unit <- dat$param$time.unit
 

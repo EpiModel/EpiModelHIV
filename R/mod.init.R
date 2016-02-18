@@ -6,9 +6,9 @@
 #'              simulates disease status and other attributes.
 #'
 #' @param x An \code{EpiModel} object of class \code{\link{netest}}.
-#' @param param An \code{EpiModel} object of class \code{\link{param.mard}}.
-#' @param init An \code{EpiModel} object of class \code{\link{init.mard}}.
-#' @param control An \code{EpiModel} object of class \code{\link{control.mard}}.
+#' @param param An \code{EpiModel} object of class \code{\link{param.msm}}.
+#' @param init An \code{EpiModel} object of class \code{\link{init.msm}}.
+#' @param control An \code{EpiModel} object of class \code{\link{control.msm}}.
 #' @param s Simulation number, used for restarting dependent simulations.
 #'
 #' @return
@@ -18,7 +18,7 @@
 #' @export
 #' @keywords module
 #'
-initialize.mard <- function(x, param, init, control, s) {
+initialize.msm <- function(x, param, init, control, s) {
 
   # Master data list
   dat <- list()
@@ -146,7 +146,7 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$attr$ins.quot <- ins.quot
 
   # HIV-related attributes
-  dat <- init_status.mard(dat)
+  dat <- init_status.msm(dat)
 
   # CCR5
   dat <- init_ccr5(dat)
@@ -161,7 +161,7 @@ initialize.mard <- function(x, param, init, control, s) {
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
 
-  dat <- prevalence.mard(dat, at = 1)
+  dat <- prevalence.msm(dat, at = 1)
 
   class(dat) <- "dat"
   return(dat)
@@ -193,7 +193,7 @@ remove_bad_roles <- function(nw) {
 }
 
 
-init_status.mard <- function(dat) {
+init_status.msm <- function(dat) {
 
   num.B <- dat$init$num.B
   num.W <- dat$init$num.W
@@ -675,7 +675,7 @@ init_ccr5 <- function(dat) {
 #'              specified time step given an input \code{netsim} object.
 #'
 #' @param x An \code{EpiModel} object of class \code{\link{netsim}}.
-#' @inheritParams initialize.mard
+#' @inheritParams initialize.msm
 #'
 #' @return
 #' This function resets the data elements on the \code{dat} master data object
@@ -684,7 +684,7 @@ init_ccr5 <- function(dat) {
 #' @export
 #' @keywords module
 #'
-reinit.mard <- function(x, param, init, control, s) {
+reinit.msm <- function(x, param, init, control, s) {
 
   if (any(c("param", "control", "nwparam", "epi", "attr", "temp",
     "riskh", "el", "p") %in% names(x)) == FALSE) {

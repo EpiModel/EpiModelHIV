@@ -4,7 +4,7 @@
 #' @description Module function for births or entries into the sexually active
 #'              population.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' New population members are added based on expected numbers of entries among
@@ -21,7 +21,7 @@
 #' @keywords module
 #' @export
 #'
-births.mard <- function(dat, at){
+births.msm <- function(dat, at){
 
   ## Variables
 
@@ -48,7 +48,7 @@ births.mard <- function(dat, at){
 
   ## Update Attr
   if (nBirths > 0) {
-    dat <- setBirthAttr.mard(dat, at, nBirths.B, nBirths.W)
+    dat <- setBirthAttr.msm(dat, at, nBirths.B, nBirths.W)
   }
 
 
@@ -67,7 +67,7 @@ births.mard <- function(dat, at){
 }
 
 
-setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
+setBirthAttr.msm <- function(dat, at, nBirths.B, nBirths.W) {
 
   nBirths <- nBirths.B + nBirths.W
 

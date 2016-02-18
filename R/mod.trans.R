@@ -4,7 +4,7 @@
 #' @description Stochastically simulates disease transmission given the current
 #'              state of the discordand edgelist.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' This is the final substantive function that occurs within the time loop at
@@ -29,7 +29,7 @@
 #' @keywords module
 #' @export
 #'
-trans.mard <- function(dat, at){
+trans.msm <- function(dat, at){
 
   ## Variables
 

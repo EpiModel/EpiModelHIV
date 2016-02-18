@@ -1,11 +1,11 @@
 
-#' @title Epidemic Model Parameters for MARDHAM Models
+#' @title Epidemic Model Parameters for EpiModelHIVmsm Models
 #'
 #' @description Sets the epidemic parameters for stochastic network models
-#'              simulated with \code{\link{netsim}} for MARDHAM.
+#'              simulated with \code{\link{netsim}} for EpiModelHIVmsm
 #'
 #' @param nwstats Target statistics for the network model. An object of class
-#'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
+#'        \code{nwstats} output from \code{\link{calc_nwstats.msm}}.
 #' @param race.method Number of races in the model, with options of 1 or 2. If
 #'        1, then race-specific parameters will be averaged.
 #' @param last.neg.test.B.int Time range in days for last negative test for
@@ -232,11 +232,11 @@
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
-#' A list object of class \code{param.mard}, which can be passed to
+#' A list object of class \code{param.msm}, which can be passed to
 #' EpiModel function \code{netsim}.
 #'
 #' @export
-param.mard <- function(nwstats,
+param.msm <- function(nwstats,
                        race.method = 1,
                        last.neg.test.B.int = 301,
                        last.neg.test.W.int = 315,
@@ -436,7 +436,7 @@ param.mard <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- c("param.mard", "param.net")
+  class(p) <- c("param.msm", "param.net")
   return(p)
 }
 
@@ -447,17 +447,17 @@ param.mard <- function(nwstats,
 #'              simulated with \code{\link{netsim}}.
 #'
 #' @param nwstats Target statistics for the network model. An object of class
-#'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
+#'        \code{nwstats} output from \code{\link{calc_nwstats.msm}}.
 #' @param prev.B Initial disease prevalence among black MSM.
 #' @param prev.W Initial disease prevalence among white MSM.
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
-#' A list object of class \code{init.mard}, which can be passed to EpiModel
+#' A list object of class \code{init.msm}, which can be passed to EpiModel
 #' function \code{\link{netsim}}.
 #'
 #' @export
-init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
+init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
                 dot.args = list(...))
@@ -472,7 +472,7 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 
   p$nwstats <- NULL
 
-  class(p) <- c("init.mard", "init.net")
+  class(p) <- c("init.msm", "init.net")
   return(p)
 }
 
@@ -522,8 +522,6 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #'        external text files.
 #' @param prune.discl.list If \code{TRUE}, remove any dissolved edges from the
 #'        disclosure list.
-#' @param save.nwstats If \code{TRUE}, the network statistics will be saved.
-#' @param save.network If \code{TRUE}, the \code{network} objects will be saved
 #'        out at the end of simulation (necessary for restarting a simulation).
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
@@ -534,39 +532,37 @@ init.mard <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
-#' A list object of class \code{control.mard}, which can be passed to the
+#' A list object of class \code{control.msm}, which can be passed to the
 #' EpiModel function \code{netsim}.
 #'
 #' @export
-control.mard <- function(simno = 1,
+control.msm <- function(simno = 1,
                          nsims = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
-                         initialize.FUN = initialize.mard,
-                         aging.FUN = aging.mard,
-                         deaths.FUN = deaths.mard,
-                         births.FUN = births.mard,
-                         test.FUN = test.mard,
-                         tx.FUN = tx.mard,
-                         prep.FUN = prep.mard,
-                         progress.FUN = progress.mard,
-                         vl.FUN = update_vl.mard,
+                         initialize.FUN = initialize.msm,
+                         aging.FUN = aging.msm,
+                         deaths.FUN = deaths.msm,
+                         births.FUN = births.msm,
+                         test.FUN = test.msm,
+                         tx.FUN = tx.msm,
+                         prep.FUN = prep.msm,
+                         progress.FUN = progress.msm,
+                         vl.FUN = update_vl.msm,
                          aiclass.FUN = NULL,
                          roleclass.FUN = NULL,
-                         edgescorr.FUN = edges_correct.mard,
-                         resim_nets.FUN = simnet.mard,
-                         disclose.FUN = disclose.mard,
-                         acts.FUN = acts.mard,
-                         condoms.FUN = condoms.mard,
-                         riskhist.FUN = riskhist.mard,
-                         position.FUN = position.mard,
-                         trans.FUN = trans.mard,
-                         getprev.FUN = prevalence.mard,
-                         verbose.FUN = verbose.mard,
+                         edgescorr.FUN = edges_correct.msm,
+                         resim_nets.FUN = simnet.msm,
+                         disclose.FUN = disclose.msm,
+                         acts.FUN = acts.msm,
+                         condoms.FUN = condoms.msm,
+                         riskhist.FUN = riskhist.msm,
+                         position.FUN = position.msm,
+                         trans.FUN = trans.msm,
+                         getprev.FUN = prevalence.msm,
+                         verbose.FUN = verbose.msm,
                          prune.discl.list = TRUE,
-                         save.nwstats = FALSE,
-                         save.network = FALSE,
                          save.other = NULL,
                          verbose = TRUE,
                          verbose.int = 1,
@@ -585,6 +581,9 @@ control.mard <- function(simno = 1,
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  class(p) <- c("control.mard", "control.net")
+  p$save.network = FALSE
+  p$save.nwstats = FALSE
+  
+  class(p) <- c("control.msm", "control.net")
   return(p)
 }

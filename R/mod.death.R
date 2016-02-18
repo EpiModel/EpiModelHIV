@@ -4,7 +4,7 @@
 #' @description Module function for simulting both general and disease-related
 #'              deaths among population members.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging.msm
 #'
 #' @details
 #' Deaths are divided into two categories: general deaths, for which demographic
@@ -19,13 +19,13 @@
 #' This function returns the updated \code{dat} object accounting for deaths.
 #' The deaths are deactivated from the main and casual networks, as those are in
 #' \code{networkDynamic} class objects; dead nodes are not deleted from the
-#' instant network until the \code{\link{simnet.mard}} module for bookkeeping
+#' instant network until the \code{\link{simnet.msm}} module for bookkeeping
 #' purposes.
 #'
 #' @keywords module
 #' @export
 #'
-deaths.mard <- function(dat, at) {
+deaths.msm <- function(dat, at) {
 
   ## General deaths
   age <- floor(dat$attr$age)
