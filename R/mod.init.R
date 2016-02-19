@@ -168,7 +168,7 @@ initialize.msm <- function(x, param, init, control, s) {
 }
 
 
-
+#' @export
 remove_bad_roles <- function(nw) {
 
   el <- as.edgelist(nw)
@@ -192,7 +192,7 @@ remove_bad_roles <- function(nw) {
   return(nw)
 }
 
-
+#' @export
 init_status.msm <- function(dat) {
 
   num.B <- dat$init$num.B
@@ -608,7 +608,7 @@ init_status.msm <- function(dat) {
 
 }
 
-
+#' @export
 init_ccr5 <- function(dat) {
 
   num.B <- dat$init$num.B

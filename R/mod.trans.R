@@ -202,30 +202,7 @@ trans.msm <- function(dat, at){
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-  # dat$epi$incid.B[at] <- sum(race[infected] == "B")
-  # dat$epi$incid.W[at] <- sum(race[infected] == "W")
-  # dat$epi$incid.acte[at] <- sum(stage[infector] %in% c("AR", "AF"))
-  # dat$epi$incid.chrn[at] <- sum(stage[infector] == "C")
-  # dat$epi$incid.aids[at] <- sum(stage[infector] == "D")
-  # dat$epi$incid.main[at] <- sum(inf.type == "main")
-  # dat$epi$incid.casl[at] <- sum(inf.type == "pers")
-  # dat$epi$incid.inst[at] <- sum(inf.type == "inst")
 
-  # dat$epi$acts[at] <- nrow(disc.ip) + nrow(disc.rp)
-  # dat$epi$acts.B[at] <- sum(disc.ip$uai[race[disc.ip$r] == "B"] %in% 0:1) +
-  #                       sum(disc.rp$uai[race[disc.ip$i] == "B"] %in% 0:1)
-  # dat$epi$acts.W[at] <- sum(disc.ip$uai[race[disc.ip$r] == "W"] %in% 0:1) +
-  #                       sum(disc.rp$uai[race[disc.ip$i] == "W"] %in% 0:1)
-  # dat$epi$patp[at] <- mean(c(disc.ip$prob, disc.rp$prob))
-  # dat$epi$patp.B[at] <- mean(c(disc.ip$prob[race[disc.ip$r] == "B"],
-  #                              disc.rp$prob[race[disc.rp$i] == "B"]))
-  # dat$epi$patp.W[at] <- mean(c(disc.ip$prob[race[disc.ip$r] == "W"],
-  #                              disc.rp$prob[race[disc.rp$i] == "W"]))
-  # dat$epi$prob.uai[at] <- mean(c(disc.ip$uai, disc.rp$uai))
-  # dat$epi$prob.uai.B[at] <- mean(c(disc.ip$uai[race[disc.ip$r] == "B"],
-  #                                  disc.rp$uai[race[disc.rp$i] == "B"]))
-  # dat$epi$prob.uai.W[at] <- mean(c(disc.ip$uai[race[disc.ip$r] == "W"],
-  #                                  disc.rp$uai[race[disc.rp$i] == "W"]))
 
   return(dat)
 }
