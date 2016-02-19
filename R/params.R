@@ -516,7 +516,7 @@ init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param trans.FUN Module function to stochastically simulate disease transmission
 #'        over acts given individual and dyadic attributes.
-#' @param getprev.FUN Module function to calculate prevalence summary statistics.
+#' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
 #' @param prune.discl.list If \code{TRUE}, remove any dissolved edges from the
@@ -559,7 +559,7 @@ control.msm <- function(simno = 1,
                          riskhist.FUN = riskhist.msm,
                          position.FUN = position.msm,
                          trans.FUN = trans.msm,
-                         getprev.FUN = prevalence.msm,
+                         prev.FUN = prevalence.msm,
                          verbose.FUN = verbose.msm,
                          prune.discl.list = TRUE,
                          save.other = NULL,

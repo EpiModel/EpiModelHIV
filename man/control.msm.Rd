@@ -13,7 +13,7 @@ control.msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   disclose.FUN = disclose.msm, acts.FUN = acts.msm,
   condoms.FUN = condoms.msm, riskhist.FUN = riskhist.msm,
   position.FUN = position.msm, trans.FUN = trans.msm,
-  getprev.FUN = prevalence.msm, verbose.FUN = verbose.msm,
+  prev.FUN = prevalence.msm, verbose.FUN = verbose.msm,
   prune.discl.list = TRUE, save.other = NULL, verbose = TRUE,
   verbose.int = 1, ...)
 }
@@ -77,7 +77,7 @@ persons in the population.}
 \item{trans.FUN}{Module function to stochastically simulate disease transmission
 over acts given individual and dyadic attributes.}
 
-\item{getprev.FUN}{Module function to calculate prevalence summary statistics.}
+\item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 
 \item{verbose.FUN}{Module function to print model progress to the console or
 external text files.}
