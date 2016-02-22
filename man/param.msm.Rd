@@ -47,8 +47,7 @@ param.msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   riskh.start = 1, prep.elig.model = "base", prep.class.prob = c(0.211,
   0.07, 0.1, 0.619), prep.class.hr = c(1, 0.69, 0.19, 0.05),
   prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
-  prep.rcomp = 1, prep.tst.int = 90, prep.risk.int = 182,
-  prep.risk.reassess = TRUE, ...)
+  prep.tst.int = 90, prep.risk.int = 182, prep.risk.reassess = TRUE, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -366,9 +365,6 @@ PrEP.}
 
 \item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
 their eligibility, with 1 equal to instant start.}
-
-\item{prep.rcomp}{The relative change in rate of UAI across all partnership
-types given current PrEP use, where 1 is no risk compensation.}
 
 \item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
 overrides the mean testing interval parameters.}

@@ -220,8 +220,6 @@
 #'        PrEP.
 #' @param prep.cov.rate The rate at which persons initiate PrEP conditional on
 #'        their eligibility, with 1 equal to instant start.
-#' @param prep.rcomp The relative change in rate of UAI across all partnership
-#'        types given current PrEP use, where 1 is no risk compensation.
 #' @param prep.tst.int Testing interval for those who are actively on PrEP. This
 #'        overrides the mean testing interval parameters.
 #' @param prep.risk.int Time window for assessment of risk eligibility for PrEP
@@ -347,7 +345,6 @@ param.msm <- function(nwstats,
                        prep.coverage = 0,
                        prep.cov.method = "curr",
                        prep.cov.rate = 1,
-                       prep.rcomp = 1,
                        prep.tst.int = 90,
                        prep.risk.int = 182,
                        prep.risk.reassess = TRUE,
