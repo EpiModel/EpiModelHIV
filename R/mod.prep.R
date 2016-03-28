@@ -22,12 +22,10 @@ prep.msm <- function(dat, at) {
 
   prepElig <- dat$attr$prepElig
   prepStat <- dat$attr$prepStat
-  prepEver <- dat$attr$prepEver
   prepClass <- dat$attr$prepClass
 
   prep.elig.model <- dat$param$prep.elig.model
   prep.coverage <- dat$param$prep.coverage
-  prep.cov.method <- dat$param$prep.cov.method
   prep.cov.rate <- dat$param$prep.cov.rate
   prep.class.prob <- dat$param$prep.class.prob
   prep.risk.reassess <- dat$param$prep.risk.reassess
@@ -100,12 +98,7 @@ prep.msm <- function(dat, at) {
 
   ## Initiation ----------------------------------------------------------------
 
-  if (prep.cov.method == "curr") {
-    prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
-  }
-  if (prep.cov.method == "ever") {
-    prepCov <- sum(prepEver == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
-  }
+  prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
   prepCov <- ifelse(is.nan(prepCov), 0, prepCov)
 
   idsEligSt <- which(prepElig == 1)
@@ -125,7 +118,6 @@ prep.msm <- function(dat, at) {
   # Attributes
   if (length(idsStart) > 0) {
     prepStat[idsStart] <- 1
-    prepEver[idsStart] <- 1
 
     # PrEP class is fixed over PrEP cycles
     needPC <- which(is.na(prepClass[idsStart]))
@@ -139,7 +131,6 @@ prep.msm <- function(dat, at) {
   # Attributes
   dat$attr$prepElig <- prepElig
   dat$attr$prepStat <- prepStat
-  dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
 
   # Summary Statistics

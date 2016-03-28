@@ -66,7 +66,6 @@ prevalence.msm <- function(dat, at) {
     # dat$epi$prob.uai.W <- rNA
 
     dat$epi$prepCurr <- rNA
-    dat$epi$prepEver <- rNA
     dat$epi$prepCov <- rNA
     dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
@@ -93,7 +92,6 @@ prevalence.msm <- function(dat, at) {
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(active == 1 & dat$attr$prepElig == 1, na.rm = TRUE)
-  dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) &
                                  status == 1, na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == 1, na.rm = TRUE)
@@ -213,7 +211,6 @@ prev.full.msm <- function(dat, at) {
     dat$epi$tst.B.inc <- rNA
 
     dat$epi$prepCurr <- rNA
-    dat$epi$prepEver <- rNA
     dat$epi$prepCov <- rNA
     dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
@@ -313,7 +310,6 @@ prev.full.msm <- function(dat, at) {
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(active == 1 & dat$attr$prepElig == 1, na.rm = TRUE)
-  dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) &
                                    status == 1, na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(active == 1 & prepStat == 1 & status == 1, na.rm = TRUE)

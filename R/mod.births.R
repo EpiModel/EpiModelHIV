@@ -154,7 +154,6 @@ setBirthAttr.msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
   # PrEP
-  dat$attr$prepEver[newIds] <- 0
   dat$attr$prepStat[newIds] <- 0
 
   # Risk history matrices
