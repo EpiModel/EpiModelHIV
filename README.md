@@ -3,6 +3,8 @@ An R package for simulating HIV transmission dynamics among men who have sex wit
 
 You can install this package directly in R using `devtools`:
 ```
+devtools::install_github("statnet/EpiModelHPC")
+devtools::install_github("statnet/tergmLite")
 devtools::install_github("statnet/EpiModelHIVmsm")
 ```
 
