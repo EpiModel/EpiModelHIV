@@ -11,18 +11,19 @@ Description: EpiModel extensions to model HIV transmission dynamics among men wh
 License: GPL-2
 Depends:
     R (>= 3.2.0),
-    EpiModel (>= 1.2.0),
+    EpiModel,
     EpiModelHPC
 Imports:
     bindata,
-    network (>= 1.11.3),
-    networkDynamic (>= 0.7.1),
-    ergm (>= 3.2.4),
-    tergm (>= 3.2.4),
+    network,
+    networkDynamic,
+    ergm,
+    tergm,
     tergmLite
 Suggests:
     knitr,
     testthat
+Remotes: statnet/tergmLite, statnet/EpiModelHPC
 VignetteBuilder: knitr
 LinkingTo: ergm
 RoxygenNote: 5.0.1

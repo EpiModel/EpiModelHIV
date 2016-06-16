@@ -1,5 +1,16 @@
 
+#' @title Update Network Data Structure and Parameters
+#'
+#' @description Updates the internal data structure containing the main data
+#'              passed into the TERGM resimulation algorithm. This step is
+#'              necessary with the new tergmLite approach.
+#'
+#' @param dat Data object created in initialization module.
+#' @param network Integer value for network number
+#'
 #' @export
+#' @keywords module
+#'
 updatenwp.msm <- function(dat, network) {
 
   n <- attributes(dat$el[[1]])$n

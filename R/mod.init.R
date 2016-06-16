@@ -166,7 +166,17 @@ initialize.msm <- function(x, param, init, control, s) {
 }
 
 
+#' @title Removes any sexual partnerships prohibited by sexual role mixing 
+#'
+#' @description Due to occassional issues in ERGM fitting, it is possible to
+#'              have initial simulations in which there are pairings between
+#'              exclusively insertive/insertive or receptive/receptive.
+#'
+#' @param nw An object of class \code{network}.
+#'
 #' @export
+#' @keywords initiation utility
+#'
 remove_bad_roles <- function(nw) {
 
   el <- as.edgelist(nw)
@@ -190,7 +200,17 @@ remove_bad_roles <- function(nw) {
   return(nw)
 }
 
+#' @title Initialize the HIV status of persons in the network
+#'
+#' @description Sets the initial individual-level disease status of persons 
+#'              in the network, as well as disease-related attributes for
+#'              infected persons.
+#'
+#' @param dat Data object created in initialization module.
+#'
 #' @export
+#' @keywords initiation utility
+#'
 init_status.msm <- function(dat) {
 
   num.B <- dat$init$num.B
@@ -606,7 +626,18 @@ init_status.msm <- function(dat) {
 
 }
 
+
+#' @title Sets the CCR5 genetic status of persons 
+#'
+#' @description Initializes the CCR5-delta-32 genetic allele of the men in the
+#'              population, based on parameters defining the probability
+#'              distribution.
+#'
+#' @param dat Data object created in initialization module.
+#'
 #' @export
+#' @keywords initiation utility
+#'
 init_ccr5 <- function(dat) {
 
   num.B <- dat$init$num.B

@@ -69,15 +69,31 @@
 #'
 #' @export
 #'
-calc_nwstats.msm <- function(time.unit = 7, method = 2,
-                              num.B, num.W, deg.mp.B, deg.mp.W,
-                              mdeg.inst.B, mdeg.inst.W,
-                              qnts.B, qnts.W,
-                              prop.hom.mpi.B, prop.hom.mpi.W, balance = "mean",
-                              sqrt.adiff.BB, sqrt.adiff.WW, sqrt.adiff.BW,
-                              diss.main, diss.pers, durs.main, durs.pers,
-                              ages, asmr.B, asmr.W,
-                              role.B.prob, role.W.prob) {
+calc_nwstats.msm <- function(time.unit = 7, 
+                             method = 2,
+                             num.B,
+                             num.W, 
+                             deg.mp.B, 
+                             deg.mp.W,
+                             mdeg.inst.B, 
+                             mdeg.inst.W,
+                             qnts.B, 
+                             qnts.W,
+                             prop.hom.mpi.B, 
+                             prop.hom.mpi.W, 
+                             balance = "mean",
+                             sqrt.adiff.BB, 
+                             sqrt.adiff.WW, 
+                             sqrt.adiff.BW,
+                             diss.main, 
+                             diss.pers, 
+                             durs.main, 
+                             durs.pers,
+                             ages, 
+                             asmr.B, 
+                             asmr.W,
+                             role.B.prob, 
+                             role.W.prob) {
 
   if (sum(deg.mp.B) != 1) {
     stop("deg.mp.B must sum to 1.")
