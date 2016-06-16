@@ -1,11 +1,11 @@
 Package: EpiModelHIVmsm
-Version: 1.0
-Date: 2016-01-25
+Version: 1.0.0
+Date: 2016-06-25
 Type: Package
 Title: EpiModel for HIV Transmission among MSM
-Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "sjenness@uw.edu"),
-             person("Emily", "Beylerian", role = "aut", email = "ebey@uw.edu"),
-             person("Steven M.", "Goodreau", role=c("aut"), email="goodeau@uw.edu"))
+Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "samuel.m.jenness@emory.edu"),
+             person("Steven M.", "Goodreau", role="aut", email="goodeau@uw.edu"),
+             person("Emily", "Beylerian", role = "ctb", email = "ebey@uw.edu"))
 Maintainer: Samuel M. Jenness <samuel.m.jenness@emory.edu>
 Description: EpiModel extensions to model HIV transmission dynamics among men who have sex with men.
 License: GPL-2
