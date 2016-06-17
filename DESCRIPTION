@@ -23,7 +23,6 @@ Imports:
 Suggests:
     knitr,
     testthat
-Remotes: statnet/tergmLite, statnet/EpiModelHPC
 VignetteBuilder: knitr
 LinkingTo: ergm
 RoxygenNote: 5.0.1
