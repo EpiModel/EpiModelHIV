@@ -51,7 +51,7 @@ test_that("assign.formals testing", {
   role.B.prob <- c(0.242, 0.321, 0.437)
   role.W.prob <- c(0.228, 0.228, 0.544)
 
-  st <- calc_nwstats.msm(
+  st <- calc_nwstats_msm(
     time.unit = time.unit,
     method = 2,
     num.B = num.B,
@@ -78,8 +78,8 @@ test_that("assign.formals testing", {
     role.B.prob = role.B.prob,
     role.W.prob = role.W.prob)
 
-  param <- param.msm(nwstats = st, last.neg.test.B.int = 200)
-  init <- init.msm(nwstats = st, prev.B = 0.3)
-  control <- control.msm(nsteps = 10, new.control = 1)
+  param <- param_msm(nwstats = st, last.neg.test.B.int = 200)
+  init <- init_msm(nwstats = st, prev.B = 0.3)
+  control <- control_msm(nsteps = 10, new.control = 1)
 
 })
