@@ -21,7 +21,7 @@
 #' @keywords module
 #' @export
 #'
-verbose.msm <- function(x, type, s, at) {
+verbose_msm <- function(x, type, s, at) {
 
   if (type == "startup") {
 

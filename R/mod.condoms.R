@@ -4,7 +4,7 @@
 #' @description Module function stochastically simulates potential condom use
 #'              for each act on the discordant edgelist.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' For each act on the discordant edgelist, condom use is stochastically simulated
@@ -20,7 +20,7 @@
 #' @keywords module
 #' @export
 #'
-condoms.msm <- function(dat, at) {
+condoms_msm <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
 

@@ -4,7 +4,7 @@
 #' @description Module function for disclosure of HIV status to partners given
 #'              non-disclosure in the past.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' Persons who are infected may disclose their status to partners at three
@@ -20,7 +20,7 @@
 #' @keywords module
 #' @export
 #'
-disclose.msm <- function(dat, at){
+disclose_msm <- function(dat, at){
 
   for (type in c("main", "pers", "inst")) {
 

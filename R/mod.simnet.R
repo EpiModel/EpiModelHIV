@@ -4,7 +4,7 @@
 #' @description Module function for resimulating the main, casual, and one-off
 #'              networks for one time step.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' The three networks must be simulated for one time step at a time because of
@@ -15,7 +15,7 @@
 #' necessary functions, calculates and stores the network statistics in an
 #' external data frame, updates the cross-network degree statistics using
 #' \code{\link{update_degree}}, and calculates which edges on the newly
-#' simulated network are new (needed for \code{\link{disclose.msm}} module).
+#' simulated network are new (needed for \code{\link{disclose_msm}} module).
 #'
 #' The main and causal networks are resimulated using the \code{simulate.network}
 #' function in the \code{tergm} package, whereas the one-off network is
@@ -25,7 +25,7 @@
 #' For the main and casual
 #' network, this involves extracting the \code{networkDynamic} object at the
 #' current time point after the resimulation has occurre (dead nodes have already
-#' been deactivated in \code{\link{deaths.msm}} so that they will not be allowed
+#' been deactivated in \code{\link{deaths_msm}} so that they will not be allowed
 #' to form partnerships). For the one-off network, this involves deleting the
 #' vertices before the resimulation. This approach for deleting nodes is needed
 #' given the book-keeping of calculating the new edges list.
@@ -39,11 +39,11 @@
 #' @keywords module
 #' @export
 #'
-simnet.msm <- function(dat, at) {
+simnet_msm <- function(dat, at) {
 
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
-  dat <- updatenwp.msm(dat, network = 1)
+  dat <- updatenwp_msm(dat, network = 1)
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
@@ -64,7 +64,7 @@ simnet.msm <- function(dat, at) {
 
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
-  dat <- updatenwp.msm(dat, network = 2)
+  dat <- updatenwp_msm(dat, network = 2)
 
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -84,7 +84,7 @@ simnet.msm <- function(dat, at) {
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
-  dat <- updatenwp.msm(dat, network = 3)
+  dat <- updatenwp_msm(dat, network = 3)
 
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],

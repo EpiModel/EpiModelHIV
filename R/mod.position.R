@@ -4,7 +4,7 @@
 #' @description Module function for establishing sexual role or position in each
 #'              act on the discordant edgelist.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' The sexual role within each act is determined by each nodes "role identity"
@@ -22,7 +22,7 @@
 #' @keywords module
 #' @export
 #'
-position.msm <- function(dat, at) {
+position_msm <- function(dat, at) {
 
   ## Variables
   al <- dat$temp$al

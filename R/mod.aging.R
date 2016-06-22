@@ -15,7 +15,7 @@
 #' @keywords module
 #' @export
 #'
-aging.msm <- function(dat, at) {
+aging_msm <- function(dat, at) {
 
   time.unit <- dat$param$time.unit
 

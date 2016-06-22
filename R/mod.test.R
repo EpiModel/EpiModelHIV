@@ -3,7 +3,7 @@
 #'
 #' @description Module function for HIV diagnostic testing of infected persons.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' This testing module supports two testing parameterizations, input via the
@@ -18,7 +18,7 @@
 #' @keywords module
 #' @export
 #'
-test.msm <- function(dat, at) {
+test_msm <- function(dat, at) {
 
   ## Variables
 

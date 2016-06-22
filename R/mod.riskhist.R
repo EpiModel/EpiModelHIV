@@ -4,12 +4,12 @@
 #' @description Module function to track the risk history of uninfected persons
 #'              for purpose of intervention targeting.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @keywords module
 #' @export
 #'
-riskhist.msm <- function(dat, at) {
+riskhist_msm <- function(dat, at) {
 
   if (at < dat$param$riskh.start) {
     return(dat)

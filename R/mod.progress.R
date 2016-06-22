@@ -4,7 +4,7 @@
 #' @description Module function for HIV disease progression through acute, chronic
 #'              and AIDS stages.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' HIV disease is divided into four stages: acute rising, acute falling, chronic
@@ -30,7 +30,7 @@
 #' @keywords module
 #' @export
 #'
-progress.msm <- function(dat, at) {
+progress_msm <- function(dat, at) {
 
   ## Variables
 

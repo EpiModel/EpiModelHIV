@@ -5,7 +5,7 @@
 #'              simulated with \code{\link{netsim}} for EpiModelHIVmsm
 #'
 #' @param nwstats Target statistics for the network model. An object of class
-#'        \code{nwstats} output from \code{\link{calc_nwstats.msm}}.
+#'        \code{nwstats} output from \code{\link{calc_nwstats_msm}}.
 #' @param race.method Number of races in the model, with options of 1 or 2. If
 #'        1, then race-specific parameters will be averaged.
 #' @param last.neg.test.B.int Time range in days for last negative test for
@@ -229,11 +229,11 @@
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
-#' A list object of class \code{param.msm}, which can be passed to
+#' A list object of class \code{param_msm}, which can be passed to
 #' EpiModel function \code{netsim}.
 #'
 #' @export
-param.msm <- function(nwstats,
+param_msm <- function(nwstats,
                        race.method = 1,
                        last.neg.test.B.int = 301,
                        last.neg.test.W.int = 315,
@@ -432,7 +432,7 @@ param.msm <- function(nwstats,
 
   p$nwstats <- NULL
 
-  class(p) <- c("param.msm", "param.net")
+  class(p) <- "param.net"
   return(p)
 }
 
@@ -443,17 +443,17 @@ param.msm <- function(nwstats,
 #'              simulated with \code{\link{netsim}}.
 #'
 #' @param nwstats Target statistics for the network model. An object of class
-#'        \code{nwstats} output from \code{\link{calc_nwstats.msm}}.
+#'        \code{nwstats} output from \code{\link{calc_nwstats_msm}}.
 #' @param prev.B Initial disease prevalence among black MSM.
 #' @param prev.W Initial disease prevalence among white MSM.
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
-#' A list object of class \code{init.msm}, which can be passed to EpiModel
+#' A list object of class \code{init_msm}, which can be passed to EpiModel
 #' function \code{\link{netsim}}.
 #'
 #' @export
-init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
+init_msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
                 dot.args = list(...))
@@ -468,7 +468,7 @@ init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 
   p$nwstats <- NULL
 
-  class(p) <- c("init.msm", "init.net")
+  class(p) <- "init.net"
   return(p)
 }
 
@@ -528,36 +528,36 @@ init.msm <- function(nwstats, prev.B = 0.15, prev.W = 0.15, ...) {
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
-#' A list object of class \code{control.msm}, which can be passed to the
+#' A list object of class \code{control_msm}, which can be passed to the
 #' EpiModel function \code{netsim}.
 #'
 #' @export
-control.msm <- function(simno = 1,
+control_msm <- function(simno = 1,
                          nsims = 1,
                          ncores = 1,
                          nsteps = 100,
                          start = 1,
-                         initialize.FUN = initialize.msm,
-                         aging.FUN = aging.msm,
-                         deaths.FUN = deaths.msm,
-                         births.FUN = births.msm,
-                         test.FUN = test.msm,
-                         tx.FUN = tx.msm,
-                         prep.FUN = prep.msm,
-                         progress.FUN = progress.msm,
-                         vl.FUN = update_vl.msm,
+                         initialize.FUN = initialize_msm,
+                         aging.FUN = aging_msm,
+                         deaths.FUN = deaths_msm,
+                         births.FUN = births_msm,
+                         test.FUN = test_msm,
+                         tx.FUN = tx_msm,
+                         prep.FUN = prep_msm,
+                         progress.FUN = progress_msm,
+                         vl.FUN = update_vl_msm,
                          aiclass.FUN = NULL,
                          roleclass.FUN = NULL,
-                         edgescorr.FUN = edges_correct.msm,
-                         resim_nets.FUN = simnet.msm,
-                         disclose.FUN = disclose.msm,
-                         acts.FUN = acts.msm,
-                         condoms.FUN = condoms.msm,
-                         riskhist.FUN = riskhist.msm,
-                         position.FUN = position.msm,
-                         trans.FUN = trans.msm,
-                         prev.FUN = prevalence.msm,
-                         verbose.FUN = verbose.msm,
+                         edgescorr.FUN = edges_correct_msm,
+                         resim_nets.FUN = simnet_msm,
+                         disclose.FUN = disclose_msm,
+                         acts.FUN = acts_msm,
+                         condoms.FUN = condoms_msm,
+                         riskhist.FUN = riskhist_msm,
+                         position.FUN = position_msm,
+                         trans.FUN = trans_msm,
+                         prev.FUN = prevalence_msm,
+                         verbose.FUN = verbose_msm,
                          prune.discl.list = TRUE,
                          save.other = NULL,
                          verbose = TRUE,
@@ -580,6 +580,6 @@ control.msm <- function(simno = 1,
   p$save.network = FALSE
   p$save.nwstats = FALSE
   
-  class(p) <- c("control.msm", "control.net")
+  class(p) <- "control.net"
   return(p)
 }

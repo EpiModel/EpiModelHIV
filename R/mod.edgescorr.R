@@ -4,7 +4,7 @@
 #' @description Adjusts the edges coefficients in a dynamic network model
 #'              to preserve the mean degree.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' In HIV/STI modeling, there is typically an assumption that changes in
@@ -27,7 +27,7 @@
 #' @keywords module
 #' @export
 #'
-edges_correct.msm <- function(dat, at) {
+edges_correct_msm <- function(dat, at) {
 
   old.num <- dat$epi$num[at - 1]
   new.num <- sum(dat$attr$active == 1, na.rm = TRUE)

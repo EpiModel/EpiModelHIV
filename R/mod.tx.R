@@ -4,7 +4,7 @@
 #' @description Module function for anti-retroviral treatment initiation and
 #'              adherence over time.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @details
 #' Persons enter into the simulation with one of four ART "patterns": never
@@ -23,7 +23,7 @@
 #' @keywords module
 #' @export
 #'
-tx.msm <- function(dat, at) {
+tx_msm <- function(dat, at) {
 
   ## Variables
 

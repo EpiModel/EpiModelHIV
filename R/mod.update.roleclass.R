@@ -4,7 +4,7 @@
 #' @description Module function for updating act class in main and casual
 #'              partnerships based on probabilities of transition.
 #'
-#' @inheritParams aging.msm
+#' @inheritParams aging_msm
 #'
 #' @return
 #' This function updates the individual-level attribute \code{role.class} on
@@ -13,7 +13,7 @@
 #' @keywords module
 #' @export
 #'
-update_roleclass.msm <- function(dat, at) {
+update_roleclass_msm <- function(dat, at) {
 
   role.trans.matrix <- dat$param$role.trans.matrix
   if (sum(colSums(role.trans.matrix) != 1) > 0) {

@@ -11,7 +11,7 @@
 #' @export
 #' @keywords module
 #'
-updatenwp.msm <- function(dat, network) {
+updatenwp_msm <- function(dat, network) {
 
   n <- attributes(dat$el[[1]])$n
   maxdyads <- choose(n, 2)
