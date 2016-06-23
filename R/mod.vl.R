@@ -26,7 +26,7 @@
 #' @keywords module
 #' @export
 #'
-update_vl_msm <- function(dat, at) {
+vl_msm <- function(dat, at) {
 
   ## Variables
 
