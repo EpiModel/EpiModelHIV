@@ -6,41 +6,14 @@
 #'
 #' @inheritParams aging_msm
 #'
-#' @details
-#' The three networks must be simulated for one time step at a time because of
-#' the underlying changes to the node set. Nodes have been added and removed due
-#' to births and deaths, and vertex attributes of nodes may have changed. For
-#' each of the three networks in the epidemic simulation, this module pulls the
-#' relevant network model coefficients, resimulates the network with the
-#' necessary functions, calculates and stores the network statistics in an
-#' external data frame, updates the cross-network degree statistics using
-#' \code{\link{update_degree}}, and calculates which edges on the newly
-#' simulated network are new (needed for \code{\link{disclose_msm}} module).
-#'
-#' The main and causal networks are resimulated using the \code{simulate.network}
-#' function in the \code{tergm} package, whereas the one-off network is
-#' resimulated with the \code{simulate.formula} function in the \code{ergm}
-#' package.
-#'
-#' For the main and casual
-#' network, this involves extracting the \code{networkDynamic} object at the
-#' current time point after the resimulation has occurre (dead nodes have already
-#' been deactivated in \code{\link{deaths_msm}} so that they will not be allowed
-#' to form partnerships). For the one-off network, this involves deleting the
-#' vertices before the resimulation. This approach for deleting nodes is needed
-#' given the book-keeping of calculating the new edges list.
-#'
-#' @return
-#' The three network objects on \code{dat$nw} are returned with newly simulated
-#' edges, and potentially reduced node sets. The network statistics on
-#' \code{dat$nw} are updated, and the newly formed edge list in
-#' \code{dat$temp$new.edges} is also updated.
-#'
 #' @keywords module
 #' @export
 #'
 simnet_msm <- function(dat, at) {
 
+  ## Edges correction
+  dat <- edges_correct_msm(dat, at)
+  
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
   dat <- updatenwp_msm(dat, network = 1)
@@ -90,5 +63,329 @@ simnet_msm <- function(dat, at) {
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
 
+  return(dat)
+}
+
+
+#' @title Adjustment for the Edges Coefficient with Changing Network Size
+#'
+#' @description Adjusts the edges coefficients in a dynamic network model
+#'              to preserve the mean degree.
+#'
+#' @inheritParams aging_msm
+#'
+#' @details
+#' In HIV/STI modeling, there is typically an assumption that changes in
+#' population size do not affect one's number of partners, specified as the
+#' mean degree for network models. A person would not have 10 times the number
+#' of partners should he move from a city 10 times as large. This module uses
+#' the adjustment of Krivitsky et al. to adjust the edges coefficients on the
+#' three network models to account for varying population size in order to
+#' preserve that mean degree.
+#'
+#' @return
+#' The network model parameters stored in \code{dat$nwparam} are updated for
+#' each of the three network models.
+#'
+#' @references
+#' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
+#' composition effects in exponential-family random graph models." Statistical
+#' Methodology. 2011; 8.4: 319-339.
+#'
+#' @export
+#'
+edges_correct_msm <- function(dat, at) {
+  
+  old.num <- dat$epi$num[at - 1]
+  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
+  adjust <- log(old.num) - log(new.num)
+  
+  coef.form.m <- get_nwparam(dat, network = 1)$coef.form
+  coef.form.m[1] <- coef.form.m[1] + adjust
+  dat$nwparam[[1]]$coef.form <- coef.form.m
+  
+  coef.form.p <- get_nwparam(dat, network = 2)$coef.form
+  coef.form.p[1] <- coef.form.p[1] + adjust
+  dat$nwparam[[2]]$coef.form <- coef.form.p
+  
+  coef.form.i <- get_nwparam(dat, network = 3)$coef.form
+  coef.form.i[1] <- coef.form.i[1] + adjust
+  dat$nwparam[[3]]$coef.form <- coef.form.i
+  
+  return(dat)
+}
+
+
+#' @title Update Network Data Structure and Parameters
+#'
+#' @description Updates the internal data structure containing the main data
+#'              passed into the TERGM resimulation algorithm. This step is
+#'              necessary with the new tergmLite approach.
+#'
+#' @param dat Data object created in initialization module.
+#' @param network Integer value for network number
+#'
+#' @export
+#' @keywords module
+#'
+updatenwp_msm <- function(dat, network) {
+  
+  n <- attributes(dat$el[[1]])$n
+  maxdyads <- choose(n, 2)
+  
+  p <- dat$p[[network]]
+  
+  if (network == 1) {
+    
+    mf <- p$model.form
+    md <- p$model.diss
+    mhf <- p$MHproposal.form
+    mhd <- p$MHproposal.diss
+    
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.pers.1",
+                                    "nodefactor.deg.pers.2",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+    
+    ## Update model.form ##
+    
+    # edges
+    mf$terms[[1]]$maxval <- maxdyads
+    
+    # nodefactor("deg.pers")
+    deg.pers <- rep(0, n)
+    tab.pers <- table(dat$el[[2]])
+    deg.pers[as.numeric(names(tab.pers))] <- as.vector(tab.pers)
+    dat$attr$deg.pers <- deg.pers
+    
+    nodecov <- dat$attr$deg.pers
+    u <- sort(unique(nodecov))
+    u <- u[-1] # remove base values here
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
+    
+    # absdiff("sqrt.age")
+    nodecov <- dat$attr$sqrt.age
+    power <- 1
+    inputs <- c(power, nodecov)
+    mf$terms[[3]]$inputs <- c(0, length(mf$terms[[3]]$coef.names),
+                              length(inputs), inputs)
+    
+    # nodematch("role.class)
+    nodecov <- dat$attr$role.class
+    u <- sort(unique(nodecov))
+    u <- u[1:2] # keep = 1:2
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    dontmatch <- nodecov == (length(u) + 1)
+    nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
+    
+    ## combined maxval ##
+    mf$maxval[1] <- maxdyads
+    
+    
+    ## Update model.diss ##
+    md$terms[[1]]$maxval <- maxdyads
+    md$maxval <- maxdyads
+    
+    ## Update MHproposal.form ##
+    mhf$arguments$constraints$bd$attribs <-
+           matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
+    mhf$arguments$constraints$bd$maxout <-
+            matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
+    mhf$arguments$constraints$bd$maxin <- matrix(rep(n - 1, n), ncol = 1)
+    mhf$arguments$constraints$bd$minout <-
+           mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
+    
+    ## Update MHproposal.diss ##
+    mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
+    
+    dat$p[[network]] <- list(model.form = mf, model.diss = md,
+                             MHproposal.form = mhf, MHproposal.diss = mhd)
+    
+  }
+  
+  if (network == 2) {
+    
+    mf <- p$model.form
+    md <- p$model.diss
+    mhf <- p$MHproposal.form
+    mhd <- p$MHproposal.diss
+    
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.main.1",
+                                    "concurrent",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+    
+    
+    ## Update model.form ##
+    
+    # edges
+    mf$terms[[1]]$maxval <- maxdyads
+    
+    # nodefactor("deg.main")
+    deg.main <- rep(0, n)
+    tab.main <- table(dat$el[[1]])
+    deg.main[as.numeric(names(tab.main))] <- as.vector(tab.main)
+    dat$attr$deg.main <- deg.main
+    
+    nodecov <- dat$attr$deg.main
+    u <- sort(unique(nodecov))
+    u <- u[-1] # remove base values here
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
+    
+    # concurrent
+    mf$terms[[3]]$maxval <- n
+    
+    # absdiff("sqrt.age")
+    nodecov <- dat$attr$sqrt.age
+    power <- 1
+    inputs <- c(power, nodecov)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
+    
+    # nodematch("role.class)
+    nodecov <- dat$attr$role.class
+    u <- sort(unique(nodecov))
+    u <- u[1:2] # keep = 1:2
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    dontmatch <- nodecov == (length(u) + 1)
+    nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names),
+                              length(inputs), inputs)
+    
+    ## combined maxval ##
+    mf$maxval[1] <- maxdyads
+    mf$maxval[3] <- n
+    
+    ## Update model.diss ##
+    md$terms[[1]]$maxval <- maxdyads
+    md$maxval <- maxdyads
+    
+    ## Update MHproposal.form ##
+    mhf$arguments$constraints$bd$attribs <-
+           matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
+    mhf$arguments$constraints$bd$maxout <-
+            matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
+    mhf$arguments$constraints$bd$maxin <- matrix(rep(n - 1, n), ncol = 1)
+    mhf$arguments$constraints$bd$minout <-
+           mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
+    
+    ## Update MHproposal.diss ##
+    mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
+    
+    dat$p[[network]] <- list(model.form = mf, model.diss = md,
+                             MHproposal.form = mhf, MHproposal.diss = mhd)
+    
+  }
+  
+  if (network == 3) {
+    
+    mf <- p$model.form
+    mhf <- p$MHproposal
+    
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.main.deg.pers.0.1",
+                                    "nodefactor.deg.main.deg.pers.0.2",
+                                    "nodefactor.deg.main.deg.pers.1.0",
+                                    "nodefactor.deg.main.deg.pers.1.1",
+                                    "nodefactor.deg.main.deg.pers.1.2",
+                                    "nodefactor.riskg.1",
+                                    "nodefactor.riskg.2",
+                                    "nodefactor.riskg.4",
+                                    "nodefactor.riskg.5",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+    
+    
+    ## Update model.form ##
+    
+    # edges
+    mf$terms[[1]]$maxval <- maxdyads
+    
+    # nodefactor(c("deg.main", "deg.pers"))
+    deg.main <- rep(0, n)
+    tab.main <- table(dat$el[[1]])
+    deg.main[as.numeric(names(tab.main))] <- as.vector(tab.main)
+    dat$attr$deg.main <- deg.main
+    
+    deg.pers <- rep(0, n)
+    tab.pers <- table(dat$el[[2]])
+    deg.pers[as.numeric(names(tab.pers))] <- as.vector(tab.pers)
+    dat$attr$deg.pers <- deg.pers
+    
+    nodecov <- do.call(paste, c(sapply(c("deg.main", "deg.pers"),
+                                       function(oneattr) dat$attr[[oneattr]],
+                                       simplify = FALSE), sep = "."))
+    u <- sort(unique(nodecov))
+    u <- u[-1] # remove base values here
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
+    
+    
+    # nodefactor("riskg", base = 3)
+    nodecov <- dat$attr$riskg
+    u <- sort(unique(nodecov))
+    u <- u[-3] # remove base values here
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[3]]$inputs <- c(length(ui), length(mf$terms[[3]]$coef.names),
+                              length(inputs), inputs)
+    
+    # absdiff("sqrt.age")
+    nodecov <- dat$attr$sqrt.age
+    power <- 1
+    inputs <- c(power, nodecov)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
+    
+    # nodematch("role.class)
+    nodecov <- dat$attr$role.class
+    u <- sort(unique(nodecov))
+    u <- u[1:2] # keep = 1:2
+    nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+    dontmatch <- nodecov == (length(u) + 1)
+    nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
+    ui <- seq(along = u)
+    inputs <- c(ui, nodecov)
+    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names),
+                              length(inputs), inputs)
+    
+    ## combined maxval ##
+    mf$maxval[1] <- maxdyads
+    
+    ## Update MHproposal ##
+    # no changes
+    
+    dat$p[[network]] <- list(model.form = mf, MHproposal = mhf)
+  }
+  
   return(dat)
 }

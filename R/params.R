@@ -503,8 +503,6 @@ init_msm <- function(nwstats,
 #' @param vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
 #' @param roleclass.FUN Module function for transitions in sexual roles.
-#' @param edgescorr.FUN Module function for the edges coefficient adjustment
-#'        to preserve mean degree under varying population sizes.
 #' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
@@ -551,7 +549,6 @@ control_msm <- function(simno = 1,
                         vl.FUN = vl_msm,
                         aiclass.FUN = NULL,
                         roleclass.FUN = NULL,
-                        edgescorr.FUN = edges_correct_msm,
                         resim_nets.FUN = simnet_msm,
                         disclose.FUN = disclose_msm,
                         acts.FUN = acts_msm,

@@ -9,13 +9,13 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   deaths.FUN = deaths_msm, births.FUN = births_msm, test.FUN = test_msm,
   tx.FUN = tx_msm, prep.FUN = prep_msm, progress.FUN = progress_msm,
   vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
-  edgescorr.FUN = edges_correct_msm, resim_nets.FUN = simnet_msm,
-  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
-  position.FUN = position_msm, trans.FUN = trans_msm,
-  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
-  prune.discl.list = TRUE, save.other = c("attr", "temp", "riskh", "el",
-  "p"), verbose = TRUE, verbose.int = 1, ...)
+  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
+  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
+  riskhist.FUN = riskhist_msm, position.FUN = position_msm,
+  trans.FUN = trans_msm, prev.FUN = prevalence_msm,
+  verbose.FUN = verbose_msm, prune.discl.list = TRUE,
+  save.other = c("attr", "temp", "riskh", "el", "p"), verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -55,9 +55,6 @@ model.}
 \item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
 
 \item{roleclass.FUN}{Module function for transitions in sexual roles.}
-
-\item{edgescorr.FUN}{Module function for the edges coefficient adjustment
-to preserve mean degree under varying population sizes.}
 
 \item{resim_nets.FUN}{Module function for network resimulation at each time
 step.}

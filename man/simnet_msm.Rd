@@ -12,39 +12,9 @@ individual-level attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
-\value{
-The three network objects on \code{dat$nw} are returned with newly simulated
-edges, and potentially reduced node sets. The network statistics on
-\code{dat$nw} are updated, and the newly formed edge list in
-\code{dat$temp$new.edges} is also updated.
-}
 \description{
 Module function for resimulating the main, casual, and one-off
              networks for one time step.
-}
-\details{
-The three networks must be simulated for one time step at a time because of
-the underlying changes to the node set. Nodes have been added and removed due
-to births and deaths, and vertex attributes of nodes may have changed. For
-each of the three networks in the epidemic simulation, this module pulls the
-relevant network model coefficients, resimulates the network with the
-necessary functions, calculates and stores the network statistics in an
-external data frame, updates the cross-network degree statistics using
-\code{\link{update_degree}}, and calculates which edges on the newly
-simulated network are new (needed for \code{\link{disclose_msm}} module).
-
-The main and causal networks are resimulated using the \code{simulate.network}
-function in the \code{tergm} package, whereas the one-off network is
-resimulated with the \code{simulate.formula} function in the \code{ergm}
-package.
-
-For the main and casual
-network, this involves extracting the \code{networkDynamic} object at the
-current time point after the resimulation has occurre (dead nodes have already
-been deactivated in \code{\link{deaths_msm}} so that they will not be allowed
-to form partnerships). For the one-off network, this involves deleting the
-vertices before the resimulation. This approach for deleting nodes is needed
-given the book-keeping of calculating the new edges list.
 }
 \keyword{module}
 
