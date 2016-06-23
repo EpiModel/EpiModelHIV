@@ -562,7 +562,7 @@ control_msm <- function(simno = 1,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         prune.discl.list = TRUE,
-                        save.other = NULL,
+                        save.other = c("attr", "temp", "riskh", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {
