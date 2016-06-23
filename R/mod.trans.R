@@ -108,7 +108,7 @@ trans_msm <- function(dat, at){
   
   # Retransformation to probability
   ip.tprob <- exp(ip.tlo)/(1+exp(ip.tlo))
-  stopifnot(ip.trob >= 0, ip.tprob <= 1)
+  stopifnot(ip.tprob >= 0, ip.tprob <= 1)
   
   
   # PATP: Receptive Man Infected (Col 2) --------------------------------
@@ -153,7 +153,7 @@ trans_msm <- function(dat, at){
 
   # Retransformation to probability
   rp.tprob <- exp(rp.tlo)/(1+exp(rp.tlo))
-  stopifnot(rp.trob >= 0, rp.tprob <= 1)
+  stopifnot(rp.tprob >= 0, rp.tprob <= 1)
 
   # Transmission --------------------------------------------------------
 
