@@ -31,7 +31,7 @@
 #'
 trans_msm <- function(dat, at){
 
-  ## Variables
+  # Variables -----------------------------------------------------------
 
   # Attributes
   vl <- dat$attr$vl
@@ -62,9 +62,6 @@ trans_msm <- function(dat, at){
     return(dat)
   }
 
-
-  ## Processes
-
   ## Reorder by role: ins on the left, rec on the right,
   ##                  with flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
@@ -73,7 +70,7 @@ trans_msm <- function(dat, at){
   colnames(disc.rp)[1:2] <- c("i", "r")
 
 
-  ## PATP: Insertive Man Infected (Column 1)
+  # PATP: Insertive Man Infected (Col 1) --------------------------------
 
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
@@ -153,16 +150,14 @@ trans_msm <- function(dat, at){
   trans.ip.prob <- pmin(trans.ip.prob, 1)
   trans.rp.prob <- pmin(trans.rp.prob, 1)
 
-  ## Save to DAL
-  # disc.ip$prob <- trans.ip.prob
-  # disc.rp$prob <- trans.rp.prob
+  # Transmission --------------------------------------------------------
 
   ## Bernoulli transmission events
   trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
   trans.rp <- rbinom(length(trans.rp.prob), 1, trans.rp.prob)
 
 
-  ## Output
+  # Output --------------------------------------------------------------
 
   # Update attributes
 
