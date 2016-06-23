@@ -25,6 +25,15 @@ updatenwp_msm <- function(dat, network) {
     mhf <- p$MHproposal.form
     mhd <- p$MHproposal.diss
 
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.pers.1",
+                                    "nodefactor.deg.pers.2",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+
     ## Update model.form ##
 
     # edges
@@ -42,13 +51,15 @@ updatenwp_msm <- function(dat, network) {
     nodecov <- match(nodecov, u, nomatch = length(u) + 1)
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names), length(inputs), inputs)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
 
     # absdiff("sqrt.age")
     nodecov <- dat$attr$sqrt.age
     power <- 1
     inputs <- c(power, nodecov)
-    mf$terms[[3]]$inputs <- c(0, length(mf$terms[[3]]$coef.names), length(inputs), inputs)
+    mf$terms[[3]]$inputs <- c(0, length(mf$terms[[3]]$coef.names),
+                              length(inputs), inputs)
 
     # nodematch("role.class)
     nodecov <- dat$attr$role.class
@@ -59,7 +70,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names), length(inputs), inputs)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
 
     ## combined maxval ##
     mf$maxval[1] <- maxdyads
@@ -71,12 +83,12 @@ updatenwp_msm <- function(dat, network) {
 
     ## Update MHproposal.form ##
     mhf$arguments$constraints$bd$attribs <-
-      matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
+           matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
     mhf$arguments$constraints$bd$maxout <-
-      matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
+            matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
     mhf$arguments$constraints$bd$maxin <- matrix(rep(n - 1, n), ncol = 1)
     mhf$arguments$constraints$bd$minout <-
-      mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
+           mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
 
     ## Update MHproposal.diss ##
     mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
@@ -92,6 +104,16 @@ updatenwp_msm <- function(dat, network) {
     md <- p$model.diss
     mhf <- p$MHproposal.form
     mhd <- p$MHproposal.diss
+
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.main.1",
+                                    "concurrent",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+
 
     ## Update model.form ##
 
@@ -110,7 +132,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov <- match(nodecov, u, nomatch = length(u) + 1)
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names), length(inputs), inputs)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
 
     # concurrent
     mf$terms[[3]]$maxval <- n
@@ -119,7 +142,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov <- dat$attr$sqrt.age
     power <- 1
     inputs <- c(power, nodecov)
-    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names), length(inputs), inputs)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
 
     # nodematch("role.class)
     nodecov <- dat$attr$role.class
@@ -130,7 +154,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names), length(inputs), inputs)
+    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names),
+                              length(inputs), inputs)
 
     ## combined maxval ##
     mf$maxval[1] <- maxdyads
@@ -142,12 +167,12 @@ updatenwp_msm <- function(dat, network) {
 
     ## Update MHproposal.form ##
     mhf$arguments$constraints$bd$attribs <-
-      matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
+           matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
     mhf$arguments$constraints$bd$maxout <-
-      matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
+            matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
     mhf$arguments$constraints$bd$maxin <- matrix(rep(n - 1, n), ncol = 1)
     mhf$arguments$constraints$bd$minout <-
-      mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
+           mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
 
     ## Update MHproposal.diss ##
     mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
@@ -161,6 +186,23 @@ updatenwp_msm <- function(dat, network) {
 
     mf <- p$model.form
     mhf <- p$MHproposal
+
+    if (!identical(mf$coef.names, c("edges",
+                                    "nodefactor.deg.main.deg.pers.0.1",
+                                    "nodefactor.deg.main.deg.pers.0.2",
+                                    "nodefactor.deg.main.deg.pers.1.0",
+                                    "nodefactor.deg.main.deg.pers.1.1",
+                                    "nodefactor.deg.main.deg.pers.1.2",
+                                    "nodefactor.riskg.1",
+                                    "nodefactor.riskg.2",
+                                    "nodefactor.riskg.4",
+                                    "nodefactor.riskg.5",
+                                    "absdiff.sqrt.age",
+                                    "nodematch.role.class.I",
+                                    "nodematch.role.class.R"))) {
+      stop("updatenwp_msm will not currently work with this formula, contact SJ")
+    }
+
 
     ## Update model.form ##
 
@@ -186,7 +228,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov <- match(nodecov, u, nomatch = length(u) + 1)
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names), length(inputs), inputs)
+    mf$terms[[2]]$inputs <- c(length(ui), length(mf$terms[[2]]$coef.names),
+                              length(inputs), inputs)
 
 
     # nodefactor("riskg", base = 3)
@@ -196,13 +239,15 @@ updatenwp_msm <- function(dat, network) {
     nodecov <- match(nodecov, u, nomatch = length(u) + 1)
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[3]]$inputs <- c(length(ui), length(mf$terms[[3]]$coef.names), length(inputs), inputs)
+    mf$terms[[3]]$inputs <- c(length(ui), length(mf$terms[[3]]$coef.names),
+                              length(inputs), inputs)
 
     # absdiff("sqrt.age")
     nodecov <- dat$attr$sqrt.age
     power <- 1
     inputs <- c(power, nodecov)
-    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names), length(inputs), inputs)
+    mf$terms[[4]]$inputs <- c(0, length(mf$terms[[4]]$coef.names),
+                              length(inputs), inputs)
 
     # nodematch("role.class)
     nodecov <- dat$attr$role.class
@@ -213,7 +258,8 @@ updatenwp_msm <- function(dat, network) {
     nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
     ui <- seq(along = u)
     inputs <- c(ui, nodecov)
-    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names), length(inputs), inputs)
+    mf$terms[[5]]$inputs <- c(0, length(mf$terms[[5]]$coef.names),
+                              length(inputs), inputs)
 
     ## combined maxval ##
     mf$maxval[1] <- maxdyads
