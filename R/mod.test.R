@@ -21,7 +21,7 @@
 test_msm <- function(dat, at) {
 
   ## Variables
-  
+
   # Attributes
   active <- dat$attr$active
   diag.status <- dat$attr$diag.status
@@ -29,21 +29,21 @@ test_msm <- function(dat, at) {
   tt.traj <- dat$attr$tt.traj
   status <- dat$attr$status
   inf.time <- dat$attr$inf.time
-  
+
   prepStat <- dat$attr$prepStat
   prep.tst.int <- dat$param$prep.tst.int
-  
+
   # Parameters
   testing.pattern <- dat$param$testing.pattern
   mean.test.B.int <- dat$param$mean.test.B.int
   mean.test.W.int <- dat$param$mean.test.W.int
   twind.int <- dat$param$test.window.int
-  
+
   tsincelntst <- at - dat$attr$last.neg.test
   tsincelntst[is.na(tsincelntst)] <- at - dat$attr$arrival.time[is.na(tsincelntst)]
-  
+
   ## Process
-  
+
   if (testing.pattern == "memoryless") {
     elig.B <- which(active == 1 &
                     race == "B" &
@@ -52,7 +52,7 @@ test_msm <- function(dat, at) {
                     prepStat == 0)
     rates.B <- rep(1/mean.test.B.int, length(elig.B))
     tst.B <- elig.B[rbinom(length(elig.B), 1, rates.B) == 1]
-    
+
     elig.W <- which(active == 1 &
                     race == "W" &
                     tt.traj != "NN" &
@@ -62,7 +62,7 @@ test_msm <- function(dat, at) {
     tst.W <- elig.W[rbinom(length(elig.W), 1, rates.W) == 1]
     tst.nprep <- c(tst.B, tst.W)
   }
-  
+
   if (testing.pattern == "interval") {
     tst.B <- which(active == 1 &
                    race == "B" &
@@ -70,7 +70,7 @@ test_msm <- function(dat, at) {
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.B.int) &
                    prepStat == 0)
-    
+
     tst.W <- which(active == 1 &
                    race == "W" &
                    tt.traj != "NN" &
@@ -79,22 +79,56 @@ test_msm <- function(dat, at) {
                    prepStat == 0)
     tst.nprep <- c(tst.B, tst.W)
   }
-  
+
   # PrEP testing
   tst.prep <- which(active == 1 &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 1 &
                     tsincelntst >= prep.tst.int)
-  
+
   tst.all <- c(tst.nprep, tst.prep)
-  
+
   tst.pos <- tst.all[status[tst.all] == 1 & inf.time[tst.all] <= at - twind.int]
   tst.neg <- setdiff(tst.all, tst.pos)
-  
+
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
-  
+
   return(dat)
 }
+
+
+#' @title HIV Diagnosis Module
+#'
+#' @description Module function for simulating HIV diagnosis after infection,
+#'              currently based on diagnosis at treatment initiation.
+#'
+#' @inheritParams aging_het
+#'
+#' @export
+#'
+dx_het <- function(dat, at) {
+
+  # Variables ---------------------------------------------------------------
+  active <- dat$attr$active
+  status <- dat$attr$status
+  txCD4min <- dat$attr$txCD4min
+  cd4Count <- dat$attr$cd4Count
+  dxStat <- dat$attr$dxStat
+
+  # Process -----------------------------------------------------------------
+  tested <- which(active == 1 & status == 1 & dxStat == 0 & cd4Count <= txCD4min)
+
+
+  # Results -----------------------------------------------------------------
+  if (length(tested) > 0) {
+    dat$attr$dxStat[tested] <- 1
+    dat$attr$txStat[tested] <- 0
+    dat$attr$dxTime[tested] <- at
+  }
+
+  return(dat)
+}
+

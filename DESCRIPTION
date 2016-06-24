@@ -1,8 +1,8 @@
-Package: EpiModelHIVmsm
+Package: EpiModelHIV
 Version: 1.0.0
 Date: 2016-06-25
 Type: Package
-Title: EpiModel for HIV Transmission among MSM
+Title: EpiModel for HIV Transmission among MSM and Heterosexuals
 Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "samuel.m.jenness@emory.edu"),
              person("Steven M.", "Goodreau", role="aut", email="goodeau@uw.edu"),
              person("Emily", "Beylerian", role = "ctb", email = "ebey@uw.edu"))
@@ -12,14 +12,14 @@ License: GPL-2
 Depends:
     R (>= 3.2.0),
     EpiModel,
-    EpiModelHPC
+    EpiModelHPC,
+    ergm (>= 3.5),
+    tergm,
+    tergmLite
 Imports:
     bindata,
     network,
-    networkDynamic,
-    ergm,
-    tergm,
-    tergmLite
+    networkDynamic
 Suggests:
     knitr,
     testthat

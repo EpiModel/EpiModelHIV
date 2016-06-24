@@ -10,7 +10,7 @@ init_status_msm(dat)
 \item{dat}{Data object created in initialization module.}
 }
 \description{
-Sets the initial individual-level disease status of persons 
+Sets the initial individual-level disease status of persons
              in the network, as well as disease-related attributes for
              infected persons.
 }

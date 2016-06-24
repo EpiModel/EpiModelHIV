@@ -1,4 +1,7 @@
 
+
+# MSM -----------------------------------------------------------------
+
 #' @title Calculate Target Statistics for Network Model Estimation
 #'
 #' @description Calculates the target statistics for the formation and dissolution
@@ -69,30 +72,30 @@
 #'
 #' @export
 #'
-calc_nwstats_msm <- function(time.unit = 7, 
+calc_nwstats_msm <- function(time.unit = 7,
                              method = 2,
                              num.B,
-                             num.W, 
-                             deg.mp.B, 
+                             num.W,
+                             deg.mp.B,
                              deg.mp.W,
-                             mdeg.inst.B, 
+                             mdeg.inst.B,
                              mdeg.inst.W,
-                             qnts.B, 
+                             qnts.B,
                              qnts.W,
-                             prop.hom.mpi.B, 
-                             prop.hom.mpi.W, 
+                             prop.hom.mpi.B,
+                             prop.hom.mpi.W,
                              balance = "mean",
-                             sqrt.adiff.BB, 
-                             sqrt.adiff.WW, 
+                             sqrt.adiff.BB,
+                             sqrt.adiff.WW,
                              sqrt.adiff.BW,
-                             diss.main, 
-                             diss.pers, 
-                             durs.main, 
+                             diss.main,
+                             diss.pers,
+                             durs.main,
                              durs.pers,
-                             ages, 
-                             asmr.B, 
+                             ages,
+                             asmr.B,
                              asmr.W,
-                             role.B.prob, 
+                             role.B.prob,
                              role.W.prob) {
 
   if (sum(deg.mp.B) != 1) {
@@ -448,11 +451,11 @@ base_nw_msm <- function(nwstats) {
 #' @export
 #'
 assign_degree <- function(nw, deg.type, nwstats) {
-  
+
   if (!("network" %in% class(nw))) {
     stop("nw must be of class network")
   }
-  
+
   if (deg.type == "main") {
     attr.name <- "deg.main"
     dist.B <- rowSums(nwstats$deg.mp.B)
@@ -463,30 +466,87 @@ assign_degree <- function(nw, deg.type, nwstats) {
     dist.B <- colSums(nwstats$deg.mp.B)
     dist.W <- colSums(nwstats$deg.mp.W)
   }
-  
+
   if (sum(dist.B) != 1 || sum(dist.W) != 1) {
     stop("One of the degree distributions do not sum to 1")
   }
-  
+
   race <- get.vertex.attribute(nw, "race")
   vB <- which(race == "B")
   vW <- which(race == "W")
   nB <- length(vB)
   nW <- length(vW)
-  
+
   num.degrees.B <- length(dist.B)
   num.degrees.W <- length(dist.W)
-  
+
   deg.B <- apportion_lr(nB, 0:(num.degrees.B - 1), dist.B, shuffled = TRUE)
   deg.W <- apportion_lr(nW, 0:(num.degrees.W - 1), dist.W, shuffled = TRUE)
-  
+
   if (nwstats$method == 2) {
     deg.B <- paste0("B", deg.B)
     deg.W <- paste0("W", deg.W)
   }
-  
+
   nw <- set.vertex.attribute(nw, attrname = attr.name, value = deg.B, v = vB)
   nw <- set.vertex.attribute(nw, attrname = attr.name, value = deg.W, v = vW)
-  
+
   return(nw)
+}
+
+
+# Het -----------------------------------------------------------------
+
+#' @title Calculate Network Statistics
+#'
+#' @description This function calculates the target statistics for the formation
+#'              and dissolution models estimated in \code{netest}.
+#'
+#' @param n Population size.
+#' @param meandeg Mean degree.
+#' @param prop.male Percent of the population that is male.
+#' @param start.prev Starting HIV prevalence in the population.
+#' @param part.dur Mean duration of partnerships.
+#' @param time.unit Time unit used, relative to days.
+#'
+#' @export
+#'
+make_nw_het <- function(n = 10000,
+                        meandeg = 0.8,
+                        prop.male = 0.5,
+                        start.prev = 0.05,
+                        part.dur = 1000,
+                        time.unit = 7) {
+
+  nMale <- round(n * prop.male)
+
+  male <- rep(0, n)
+  male[sample(1:n, nMale)] <- 1
+
+  # Set vertex attributes
+  nw <- network.initialize(n = n, directed = FALSE)
+  nw <- set.vertex.attribute(nw, attrname = "male", value = male)
+
+  # Formation Model
+  formation <- ~edges + offset(nodematch("male"))
+
+  # Target stats
+  edges.ts <- meandeg * (n/2)
+
+  stats <- edges.ts
+
+  # Dissolution model
+  dissolution <- ~offset(edges)
+  dur <- part.dur/time.unit
+  d.rate <- time.unit * (((1 - start.prev) * 1/(55 - 18)/365) + (start.prev * 1/12/365))
+  coef.diss <- dissolution_coefs(dissolution, duration = dur, d.rate = d.rate)
+
+  out <- list()
+  out$nw <- nw
+  out$time.unit <- time.unit
+  out$formation <- formation
+  out$stats <- stats
+  out$coef.diss <- coef.diss
+
+  return(out)
 }
