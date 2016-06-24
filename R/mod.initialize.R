@@ -815,16 +815,16 @@ initialize_het <- function(x, param, init, control, s) {
   dat$attr$active <- rep(1, n)
   dat$attr$entTime <- rep(1, n)
 
-  dat <- initStatus(dat)
+  dat <- initStatus_het(dat)
 
   age <- rep(NA, n)
   age[dat$attr$male == 0] <- sample(init$ages.feml, sum(dat$attr$male == 0), TRUE)
   age[dat$attr$male == 1] <- sample(init$ages.male, sum(dat$attr$male == 1), TRUE)
   dat$attr$age <- age
 
-  dat <- initInfTime(dat)
-  dat <- initDx(dat)
-  dat <- initTx(dat)
+  dat <- initInfTime_het(dat)
+  dat <- initDx_het(dat)
+  dat <- initTx_het(dat)
 
   # Circumcision
   male <- dat$attr$male
@@ -891,7 +891,7 @@ reinit_het <- function(x, param, init, control, s) {
 }
 
 
-initStatus <- function(dat) {
+initStatus_het <- function(dat) {
 
   ## Variables
   i.prev.male <- dat$init$i.prev.male
@@ -915,7 +915,7 @@ initStatus <- function(dat) {
 }
 
 
-initInfTime <- function(dat) {
+initInfTime_het <- function(dat) {
 
   status <- dat$attr$status
   n <- length(status)
@@ -955,7 +955,7 @@ initInfTime <- function(dat) {
 }
 
 
-initDx <- function(dat) {
+initDx_het <- function(dat) {
 
   n <- sum(dat$attr$active == 1)
   status <- dat$attr$status
@@ -972,7 +972,7 @@ initDx <- function(dat) {
 }
 
 
-initTx <- function(dat) {
+initTx_het <- function(dat) {
 
   ## Variables
   status <- dat$attr$status
