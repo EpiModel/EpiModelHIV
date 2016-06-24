@@ -1,4 +1,6 @@
 
+# MSM -----------------------------------------------------------------
+
 #' @title Transmission Module
 #'
 #' @description Stochastically simulates disease transmission given the current
@@ -40,7 +42,6 @@ trans_msm <- function(dat, at){
   circ <- dat$attr$circ
   diag.status <- dat$attr$diag.status
   tx.status <- dat$attr$tx.status
-  race <- dat$attr$race
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
 
@@ -139,7 +140,7 @@ trans_msm <- function(dat, at){
   # CCR5
   rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
   rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] +
-    log(ccr5.heteroz.rr/(1-ccr5.heteroz.rr))
+                             log(ccr5.heteroz.rr/(1-ccr5.heteroz.rr))
 
   # PrEP, cycle through 4 adherence classes
   for (i in 1:4) {
@@ -213,14 +214,15 @@ trans_msm <- function(dat, at){
 
 #' @title Infection Module
 #'
-#' @description Module function to simulate transmission over an active discordant
-#'              edgelist.
+#' @description Module function to simulate transmission over an active
+#'              discordant edgelist.
 #'
 #' @inheritParams aging_het
 #'
 #' @export
+#' @keywords module het
 #'
-infect_het <- function(dat, at) {
+trans_het <- function(dat, at) {
 
   ## Discordant Edgelist
   del <- discord_edgelist_het(dat, at)
@@ -231,12 +233,87 @@ infect_het <- function(dat, at) {
   if (!is.null(del)) {
 
     ## Acts
-    del <- acts(dat, del, at)
+    nedges <- length(del[[1]])
+
+    act.rate.early <- dat$param$act.rate.early
+    act.rate.late <- dat$param$act.rate.late
+    act.rate.cd4 <- dat$param$act.rate.cd4
+
+    cd4Count <- dat$attr$cd4Count[del$inf]
+
+    isLate <- which(cd4Count < act.rate.cd4)
+
+    rates <- rep(act.rate.early, nedges)
+    rates[isLate] <- act.rate.late
+
+
+    # Process
+    act.rand <- dat$param$acts.rand
+    if (act.rand == TRUE) {
+      numActs <- rpois(nedges, rates)
+    } else {
+      numActs <- rates
+    }
+
+    cond.prob <- dat$param$cond.prob
+    cond.prob <- rep(cond.prob, nedges)
+
+    del$numActs <- numActs
+
+    if (act.rand == TRUE) {
+      del$protActs <- rbinom(nedges, rpois(nedges, numActs), cond.prob)
+    } else {
+      del$protActs <- numActs * cond.prob
+    }
+
+    del$protActs <- pmin(numActs, del$protActs)
+    del$unprotActs <- numActs - del$protActs
+
+    stopifnot(all(del$unprotActs >= 0))
+
 
     ## Transmission
-    dat <- trans(dat, del, at)
-    del <- dat$del
-    dat$del <- NULL
+
+    # Base transmission probability
+    vlLevel <- dat$attr$vlLevel[del$inf]
+    males <- dat$attr$male[del$sus]
+    ages <- dat$attr$age[del$sus]
+    circs <- dat$attr$circStat[del$sus]
+    prop.male <- dat$epi$propMale[at - 1]
+    base.tprob <- hughes_tp(vlLevel, males, ages, circs, prop.male)
+
+    # Acute and aids stage multipliers
+    acute.stage.mult <- dat$param$acute.stage.mult
+    aids.stage.mult <- dat$param$aids.stage.mult
+
+    isAcute <- which(at - dat$attr$infTime[del$inf] <
+                       (dat$param$vl.acute.topeak + dat$param$vl.acute.toset))
+    isAIDS <- which(dat$attr$cd4Count[del$inf] < 200)
+
+    base.tprob[isAcute] <- base.tprob[isAcute] * acute.stage.mult
+    base.tprob[isAIDS] <- base.tprob[isAIDS] * aids.stage.mult
+
+
+    # Condoms
+    # Probability as a mixture function of protected and unprotected acts
+    cond.eff <- dat$param$cond.eff
+    prob.stasis.protacts <- (1 - base.tprob*(1 - cond.eff)) ^ del$protActs
+    prob.stasis.unptacts <- (1 - base.tprob) ^ del$unprotActs
+    prob.stasis <- prob.stasis.protacts * prob.stasis.unptacts
+    finl.tprob <- 1 - prob.stasis
+
+    # Transmission
+    del$base.tprob <- base.tprob
+    del$finl.tprob <- finl.tprob
+
+    stopifnot(length(unique(sapply(del, length))) == 1)
+
+    # Random transmission given final trans prob
+    idsTrans <- which(rbinom(nedges, 1, del$finl.tprob) == 1)
+
+    # Subset discord edgelist to transmissions
+    del <- keep.attr(del, idsTrans)
+
 
     ## Update Nodal Attr
     idsInf <- unique(del$sus)
@@ -314,104 +391,6 @@ discord_edgelist_het <- function(dat, at) {
   }
 
   return(del)
-}
-
-
-acts <- function(dat, del, at) {
-
-  # Variables
-  nedges <- length(del[[1]])
-
-  act.rate.early <- dat$param$act.rate.early
-  act.rate.late <- dat$param$act.rate.late
-  act.rate.cd4 <- dat$param$act.rate.cd4
-
-  cd4Count <- dat$attr$cd4Count[del$inf]
-
-  isLate <- which(cd4Count < act.rate.cd4)
-
-  rates <- rep(act.rate.early, nedges)
-  rates[isLate] <- act.rate.late
-
-
-  # Process
-  act.rand <- dat$param$acts.rand
-  if (act.rand == TRUE) {
-    numActs <- rpois(nedges, rates)
-  } else {
-    numActs <- rates
-  }
-
-  cond.prob <- dat$param$cond.prob
-  cond.prob <- rep(cond.prob, nedges)
-
-  del$numActs <- numActs
-
-  if (act.rand == TRUE) {
-    del$protActs <- rbinom(nedges, rpois(nedges, numActs), cond.prob)
-  } else {
-    del$protActs <- numActs * cond.prob
-  }
-
-  del$protActs <- pmin(numActs, del$protActs)
-  del$unprotActs <- numActs - del$protActs
-
-  stopifnot(all(del$unprotActs >= 0))
-
-  return(del)
-}
-
-
-trans <- function(dat, del, at) {
-
-  nedges <- length(del[[1]])
-  if (nedges == 0) {
-    return(del)
-  }
-
-  # Base transmission probability
-  vlLevel <- dat$attr$vlLevel[del$inf]
-  males <- dat$attr$male[del$sus]
-  ages <- dat$attr$age[del$sus]
-  circs <- dat$attr$circStat[del$sus]
-  prop.male <- dat$epi$propMale[at - 1]
-  base.tprob <- hughes_tp(vlLevel, males, ages, circs, prop.male)
-
-  # Acute and aids stage multipliers
-  acute.stage.mult <- dat$param$acute.stage.mult
-  aids.stage.mult <- dat$param$aids.stage.mult
-
-  isAcute <- which(at - dat$attr$infTime[del$inf] <
-                     (dat$param$vl.acute.topeak + dat$param$vl.acute.toset))
-  isAIDS <- which(dat$attr$cd4Count[del$inf] < 200)
-
-  base.tprob[isAcute] <- base.tprob[isAcute] * acute.stage.mult
-  base.tprob[isAIDS] <- base.tprob[isAIDS] * aids.stage.mult
-
-
-  # Condoms
-  # Probability as a mixture function of protected and unprotected acts
-  cond.eff <- dat$param$cond.eff
-  prob.stasis.protacts <- (1 - base.tprob*(1 - cond.eff)) ^ del$protActs
-  prob.stasis.unptacts <- (1 - base.tprob) ^ del$unprotActs
-  prob.stasis <- prob.stasis.protacts * prob.stasis.unptacts
-  finl.tprob <- 1 - prob.stasis
-
-  # Transmission
-  del$base.tprob <- base.tprob
-  del$finl.tprob <- finl.tprob
-
-  stopifnot(length(unique(sapply(del, length))) == 1)
-
-  # Random transmission given final trans prob
-  idsTrans <- which(rbinom(nedges, 1, del$finl.tprob) == 1)
-
-  # Subset discord edgelist to transmissions
-  del <- keep.attr(del, idsTrans)
-
-  dat$del <- del
-
-  return(dat)
 }
 
 

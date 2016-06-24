@@ -10,7 +10,7 @@ control_het(simno = 1, nsteps = 100, start = 1, nsims = 1, ncores = 1,
   aging.FUN = aging_het, cd4.FUN = cd4_het, vl.FUN = vl_het,
   dx.FUN = dx_het, tx.FUN = tx_het, deaths.FUN = deaths_het,
   births.FUN = births_het, resim_nets.FUN = simnet_het,
-  infection.FUN = infect_het, prev.FUN = prevalence_het,
+  trans.FUN = trans_het, prev.FUN = prevalence_het,
   verbose.FUN = verbose_het, module.order = NULL, save.nwstats = FALSE,
   save.other = c("el", "attr"), verbose = TRUE, verbose.int = 1,
   skip.check = TRUE, ...)
@@ -49,7 +49,7 @@ or \code{"mpi"} for multi-node MPI threads.}
 
 \item{resim_nets.FUN}{Module to resimulate the network at each time step.}
 
-\item{infection.FUN}{Module to simulate disease infection.}
+\item{trans.FUN}{Module to simulate disease infection.}
 
 \item{prev.FUN}{Module to calculate disease prevalence at each time step,
 with the default function of \code{\link{prevalence_het}}.}

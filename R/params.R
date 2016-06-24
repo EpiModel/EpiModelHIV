@@ -864,7 +864,7 @@ init_het <- function(i.prev.male = 0.05,
 #' @param deaths.FUN Module to simulate death or exit.
 #' @param births.FUN Module to simulate births or entries.
 #' @param resim_nets.FUN Module to resimulate the network at each time step.
-#' @param infection.FUN Module to simulate disease infection.
+#' @param trans.FUN Module to simulate disease infection.
 #' @param prev.FUN Module to calculate disease prevalence at each time step,
 #'        with the default function of \code{\link{prevalence_het}}.
 #' @param verbose.FUN Module to print simulation progress to screen, with the
@@ -903,7 +903,7 @@ control_het <- function(simno = 1,
                         deaths.FUN = deaths_het,
                         births.FUN = births_het,
                         resim_nets.FUN = simnet_het,
-                        infection.FUN = infect_het,
+                        trans.FUN = trans_het,
                         prev.FUN = prevalence_het,
                         verbose.FUN = verbose_het,
                         module.order = NULL,
@@ -940,5 +940,3 @@ control_het <- function(simno = 1,
   class(p) <- "control.net"
   return(p)
 }
-
-
