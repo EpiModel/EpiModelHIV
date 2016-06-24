@@ -1,20 +1,33 @@
-# EpiModelHIVmsm
-An R package for simulating HIV transmission dynamics among men who have sex with men, as an extension to the network-based epidemic modeling software, [EpiModel](http://epimodel.org).
+# EpiModelHIV
+An R package for simulating HIV transmission dynamics among men who have sex with men and heterosexual populations, developed as an extension to our general network-based epidemic modeling platform, [EpiModel](http://epimodel.org).
 
-You can install this package directly in R using `devtools`:
+You can install `EpiModelHIV` in R using `devtools`:
 ```
-devtools::install_github("statnet/EpiModelHPC")
+install.packages("EpiModel", dependencies = TRUE)
 devtools::install_github("statnet/tergmLite")
-devtools::install_github("statnet/EpiModelHIVmsm")
+devtools::install_github("statnet/EpiModelHIV")
 ```
+
+Documentation on using this software package is forthcoming, although limited function documentation is provided within the package and available with the `help(package = "EpiModelHIV")` command.
 
 ## Authors
-[Samuel M. Jenness](http://samueljenness.org/), Assistant Professor, Department of Epidemiology, Rollins School of Public Health, Emory University
-
-[Steven M. Goodreau](http://faculty.washington.edu/goodreau/), Associate Professor, Department of Anthropology, University of Washington
+<table>
+  <tr>
+    <td><a href="http://samueljenness.org/" target="_blank">Samuel M. Jenness</a></th>
+    <td>Department of Epidemiology</th>
+    <td>Emory University</th>
+  </tr>
+  <tr>
+    <td><a href="http://faculty.washington.edu/goodreau/" target="_blank">Steven M. Goodreau</a></td>
+    <td>Department of Anthropology</td>
+    <td>University of Washington</td>
+  </tr>
+</table>
 
 ## Citations
 
-`EpiModelHIVmsm` has been used in the following scientific articles published or in press:
+`EpiModelHIV` has been used in the following scientific articles published or in press:
 
-> Jenness SM, Goodreau SM, Rosenberg E, Beylerian EN, Hoover KW, Smith DK, Sullivan P. Impact of CDC’s HIV Preexposure Prophylaxis Guidelines among MSM in the United States. In Press, Journal of Infectious Diseases.
+1. Jenness SM, Goodreau SM, Morris M, Cassels S. Effectiveness of Combination Packages for HIV-1 Prevention in Sub-Saharan Africa Depends on Partnership Network Structure. Sexually Transmitted Infections. Epub ahead of print. DOI: 10.1136/sextrans-2015-052476. [LINK](http://sti.bmj.com/content/early/2016/06/09/sextrans-2015-052476.abstract)
+
+2. Jenness SM, Goodreau SM, Rosenberg E, Beylerian EN, Hoover KW, Smith DK, Sullivan P. Impact of CDC’s HIV Preexposure Prophylaxis Guidelines among MSM in the United States. In Press, Journal of Infectious Diseases.
