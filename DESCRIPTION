@@ -2,12 +2,14 @@ Package: EpiModelHIV
 Version: 1.0.0
 Date: 2016-06-25
 Type: Package
-Title: EpiModel for HIV Transmission among MSM and Heterosexuals
+Title: Epidemic Modeling of HIV Transmission among MSM and Heterosexual Populations
 Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "samuel.m.jenness@emory.edu"),
              person("Steven M.", "Goodreau", role="aut", email="goodeau@uw.edu"),
              person("Emily", "Beylerian", role = "ctb", email = "ebey@uw.edu"))
 Maintainer: Samuel M. Jenness <samuel.m.jenness@emory.edu>
-Description: EpiModel extensions to model HIV transmission dynamics among men who have sex with men.
+Description: EpiModelHIV provides extensions to our general EpiModel package to allow for simulating HIV transmission
+  dynamics among two populations: men who have sex with men (MSM) in the United States and heterosexual adults in
+  sub-Saharan Africa.
 License: GPL-2
 Depends:
     R (>= 3.2.0),

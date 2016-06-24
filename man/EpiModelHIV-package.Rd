@@ -16,9 +16,10 @@
 }
 }
 \details{
-EpiModel version of stochastic network modeling project for
-modeling HIV-1 transmission dynamics among men who have sex with men (MSM),
-and heterosexual populations.
+EpiModelHIV provides extensions to our general EpiModel package to allow
+for simulating HIV transmission dynamics among two populations: men who
+have sex with men (MSM) in the United States and heterosexual adults in
+sub-Saharan Africa.
 }
 \keyword{package}
 
