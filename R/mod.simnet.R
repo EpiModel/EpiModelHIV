@@ -1,4 +1,6 @@
 
+# MSM -----------------------------------------------------------------
+
 #' @title Network Resimulation Module
 #'
 #' @description Module function for resimulating the main, casual, and one-off
@@ -504,7 +506,6 @@ update_nwp_het <- function(dat) {
 #' composition effects in exponential-family random graph models." Statistical
 #' Methodology. 2011; 8.4: 319-339.
 #'
-#' @keywords module
 #' @export
 #'
 edges_correct_het <- function(dat, at) {
