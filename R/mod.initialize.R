@@ -1,5 +1,4 @@
 
-
 # MSM -----------------------------------------------------------------
 
 #' @title Initialization Module
@@ -39,7 +38,7 @@ initialize_msm <- function(x, param, init, control, s) {
   nw <- list()
   for (i in 1:3) {
     nw[[i]] <- simulate(x[[i]]$fit)
-    nw[[i]] <- remove_bad_roles(nw[[i]])
+    nw[[i]] <- remove_bad_roles_msm(nw[[i]])
   }
 
   ## ergm_prep here
@@ -150,7 +149,7 @@ initialize_msm <- function(x, param, init, control, s) {
   dat <- init_status_msm(dat)
 
   # CCR5
-  dat <- init_ccr5(dat)
+  dat <- init_ccr5_msm(dat)
 
 
   # Network statistics
@@ -180,7 +179,7 @@ initialize_msm <- function(x, param, init, control, s) {
 #' @export
 #' @keywords initiation utility
 #'
-remove_bad_roles <- function(nw) {
+remove_bad_roles_msm <- function(nw) {
 
   el <- as.edgelist(nw)
 
@@ -202,6 +201,7 @@ remove_bad_roles <- function(nw) {
 
   return(nw)
 }
+
 
 #' @title Initialize the HIV status of persons in the network
 #'
@@ -309,14 +309,13 @@ init_status_msm <- function(dat) {
   stage[selected[time.since.inf > vl.acute.int & time.since.inf <= vldo.int]] <- "C"
   stage[selected[time.since.inf > vldo.int]] <- "D"
 
-  stage.time[selected][stage[selected] == "AR"] <-
-    time.since.inf[stage[selected] == "AR"]
-  stage.time[selected][stage[selected] == "AF"] <-
-    time.since.inf[stage[selected] == "AF"] - vlar.int
-  stage.time[selected][stage[selected] == "C"] <-
-    time.since.inf[stage[selected] == "C"] - vl.acute.int
-  stage.time[selected][stage[selected] == "D"] <-
-    time.since.inf[stage[selected] == "D"] - vldo.int
+  stage.time[selected][stage[selected] == "AR"] <- time.since.inf[stage[selected] == "AR"]
+  stage.time[selected][stage[selected] == "AF"] <- time.since.inf[stage[selected] == "AF"] -
+                                                   vlar.int
+  stage.time[selected][stage[selected] == "C"] <- time.since.inf[stage[selected] == "C"] -
+                                                  vl.acute.int
+  stage.time[selected][stage[selected] == "D"] <- time.since.inf[stage[selected] == "D"] -
+                                                  vldo.int
 
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
@@ -641,7 +640,7 @@ init_status_msm <- function(dat) {
 #' @export
 #' @keywords initiation utility
 #'
-init_ccr5 <- function(dat) {
+init_ccr5_msm <- function(dat) {
 
   num.B <- dat$init$num.B
   num.W <- dat$init$num.W
