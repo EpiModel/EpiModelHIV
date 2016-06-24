@@ -18,7 +18,7 @@
 #' @name EpiModelHIV-package
 #' @aliases EpiModelHIV
 #' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
-#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate
+#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom
 #' @docType package
 #' @keywords package
 #' @useDynLib EpiModelHIV

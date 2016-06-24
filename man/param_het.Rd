@@ -113,7 +113,7 @@ mortality is governed by \code{di.cd4.rate}.}
 \description{
 Sets the simulation parameters for the stochastic
              network model of HIV-1 Infection among Heterosexuals in
-             Sub-Saharan Africa for the \code{EpiModelHIVhet} package.
+             Sub-Saharan Africa for the \code{EpiModelHIV} package.
 }
 \details{
 This function sets the parameters for the models.

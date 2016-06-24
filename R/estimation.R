@@ -447,7 +447,6 @@ base_nw_msm <- function(nwstats) {
 #' target network given a bivariate degree mixing matrix of main, casual, and
 #' one-partnerships contained in the \code{nwstats} data.
 #'
-#' @seealso \code{\link{update_degree}}
 #' @export
 #'
 assign_degree <- function(nw, deg.type, nwstats) {

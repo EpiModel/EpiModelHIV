@@ -25,7 +25,4 @@ This function assigns the degree of other networks as a vertex attribute on the
 target network given a bivariate degree mixing matrix of main, casual, and
 one-partnerships contained in the \code{nwstats} data.
 }
-\seealso{
-\code{\link{update_degree}}
-}
 

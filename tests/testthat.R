@@ -1,4 +1,4 @@
 library(testthat)
-library(EpiModelHIVmsm)
+library(EpiModelHIV)
 
-test_check("EpiModelHIVmsm")
+test_check("EpiModelHIV")

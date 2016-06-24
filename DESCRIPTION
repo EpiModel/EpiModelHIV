@@ -28,3 +28,4 @@ Suggests:
 VignetteBuilder: knitr
 LinkingTo: ergm
 RoxygenNote: 5.0.1
+LazyData: true

@@ -5,7 +5,7 @@
 #' @title Epidemic Model Parameters
 #'
 #' @description Sets the epidemic parameters for stochastic network models
-#'              simulated with \code{\link{netsim}} for EpiModelHIVmsm
+#'              simulated with \code{\link{netsim}} for EpiModelHIV
 #'
 #' @param nwstats Target statistics for the network model. An object of class
 #'        \code{nwstats} output from \code{\link{calc_nwstats_msm}}.
@@ -597,7 +597,7 @@ control_msm <- function(simno = 1,
 #'
 #' @description Sets the simulation parameters for the stochastic
 #'              network model of HIV-1 Infection among Heterosexuals in
-#'              Sub-Saharan Africa for the \code{EpiModelHIVhet} package.
+#'              Sub-Saharan Africa for the \code{EpiModelHIV} package.
 #'
 #' @param time.unit Unit of time relative to one day.
 #'
@@ -732,7 +732,7 @@ param_het <- function(time.unit = 7,
 
 
   ## Death rate transformations
-  ltGhana <- EpiModelHIVhet::ltGhana
+  ltGhana <- EpiModelHIV::ltGhana
   ds.rates <- ltGhana[ltGhana$year == 2011, ]
   ds.rates$mrate <- ds.rates$mrate / 365
   if (is.numeric(ds.exit.age)) {

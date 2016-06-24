@@ -255,14 +255,13 @@ setBirthAttr_het <- function(dat, at, nBirths) {
   dat$attr$age[newIds] <- rep(18, nBirths)
 
   # Circumcision
-  circStat <- dat$attr$circStat
   entTime <- dat$attr$entTime
 
-  idsNewMale <- which(male == 1 & entTime == at)
+  idsNewMale <- which(dat$attr$male == 1 & entTime == at)
 
   if (length(idsNewMale) > 0) {
     age <- dat$attr$age[idsNewMale]
-    newCirc <- rbinom(length(idsNewMale), 1, circ.prob.birth)
+    newCirc <- rbinom(length(idsNewMale), 1, dat$param$circ.prob.birth)
     isCirc <- which(newCirc == 1)
 
     newCircTime <- rep(NA, length(idsNewMale))

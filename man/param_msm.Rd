@@ -383,6 +383,6 @@ EpiModel function \code{netsim}.
 }
 \description{
 Sets the epidemic parameters for stochastic network models
-             simulated with \code{\link{netsim}} for EpiModelHIVmsm
+             simulated with \code{\link{netsim}} for EpiModelHIV
 }
 
