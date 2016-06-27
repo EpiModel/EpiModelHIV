@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module function for simulating HIV diagnosis after infection,
              currently based on diagnosis at treatment initiation.
 }
+\keyword{het}
+\keyword{module}
 

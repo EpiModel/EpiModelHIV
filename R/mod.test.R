@@ -7,7 +7,7 @@
 #'
 #' @details
 #' This testing module supports two testing parameterizations, input via the
-#' \code{testing.pattern} parameter: memoryless for stochastc and
+#' \code{testing.pattern} parameter: memoryless for stochastic and
 #' geometrically-distributed waiting times to test (constant hazard); and interval
 #' for deterministic tested after defined waiting time intervals.
 #'
@@ -15,7 +15,8 @@
 #' This function returns the \code{dat} object with updated \code{last.neg.test},
 #' \code{diag.status} and \code{diag.time} attributes.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 test_msm <- function(dat, at) {
@@ -106,6 +107,8 @@ test_msm <- function(dat, at) {
 #'              currently based on diagnosis at treatment initiation.
 #'
 #' @inheritParams aging_het
+#' 
+#' @keywords module het
 #'
 #' @export
 #'

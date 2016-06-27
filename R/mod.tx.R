@@ -20,7 +20,8 @@
 #' This function returns the \code{dat} object with updated \code{tx.status},
 #' \code{tx.init.time}, \code{cum.time.on.tx}, \code{cum.time.off.tx} attributes.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 tx_msm <- function(dat, at) {
@@ -117,7 +118,9 @@ tx_msm <- function(dat, at) {
 #'              including adherence and non-adherence to ART.
 #'
 #' @inheritParams aging_het
-#'
+#' 
+#' @keywords module het
+#' 
 #' @export
 #'
 tx_het <- function(dat, at) {

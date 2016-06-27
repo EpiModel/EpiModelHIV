@@ -6,7 +6,8 @@
 #'
 #' @inheritParams aging_msm
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 riskhist_msm <- function(dat, at) {

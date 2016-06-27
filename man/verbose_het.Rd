@@ -28,5 +28,6 @@ non-interactive, batch mode these are saved onto \code{.txt} files in a
 \code{verb/} subdirectory. This subdirectory will be created if it does not
 exist.
 }
+\keyword{het}
 \keyword{module}
 

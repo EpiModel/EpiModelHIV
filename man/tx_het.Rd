@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module function for simulating HIV therapy after diagnosis,
              including adherence and non-adherence to ART.
 }
+\keyword{het}
+\keyword{module}
 

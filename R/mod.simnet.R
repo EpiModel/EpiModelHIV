@@ -8,7 +8,8 @@
 #'
 #' @inheritParams aging_msm
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 simnet_msm <- function(dat, at) {
@@ -93,7 +94,9 @@ simnet_msm <- function(dat, at) {
 #' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
 #' composition effects in exponential-family random graph models." Statistical
 #' Methodology. 2011; 8.4: 319-339.
-#'
+#' 
+#' @keywords module msm
+#' 
 #' @export
 #'
 edges_correct_msm <- function(dat, at) {
@@ -127,8 +130,10 @@ edges_correct_msm <- function(dat, at) {
 #' @param dat Data object created in initialization module.
 #' @param network Integer value for network number
 #'
+#' @keywords module msm
+#'
 #' @export
-#' @keywords module
+#' 
 #'
 updatenwp_msm <- function(dat, network) {
 
@@ -405,6 +410,8 @@ updatenwp_msm <- function(dat, network) {
 #'
 #' @inheritParams aging_het
 #'
+#' @keywords module het
+#'  
 #' @export
 #'
 simnet_het <- function(dat, at) {
@@ -505,6 +512,8 @@ update_nwp_het <- function(dat) {
 #' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
 #' composition effects in exponential-family random graph models." Statistical
 #' Methodology. 2011; 8.4: 319-339.
+#' 
+#' @keywords module het
 #'
 #' @export
 #'
