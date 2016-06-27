@@ -18,4 +18,5 @@ individual-level attributes, and summary statistics.}
 Assigns vertex attributes to incoming nodes at birth/entry into
              the network.
 }
+\keyword{het}
 

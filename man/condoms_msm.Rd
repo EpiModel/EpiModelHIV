@@ -28,4 +28,5 @@ disease, disclosure of status, and full or partial HIV viral suppression
 given HIV anti-retroviral therapy.
 }
 \keyword{module}
+\keyword{msm}
 

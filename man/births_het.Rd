@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module for simulating births/entries into the population, including
              initialization of attributes for incoming nodes.
 }
+\keyword{het}
+\keyword{module}
 

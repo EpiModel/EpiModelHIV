@@ -5,6 +5,8 @@
 #'              disease dynamics and in the presence of ART.
 #'
 #' @inheritParams aging_het
+#' 
+#' @keywords module het
 #'
 #' @export
 #'
