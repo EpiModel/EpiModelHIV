@@ -24,4 +24,5 @@ make_nw_het(n = 10000, meandeg = 0.8, prop.male = 0.5,
 This function calculates the target statistics for the formation
              and dissolution models estimated in \code{netest}.
 }
+\keyword{het}
 
