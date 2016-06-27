@@ -23,7 +23,8 @@
 #' @return
 #' This function returns the \code{dat} object with updated \code{vl} attribute.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 vl_msm <- function(dat, at) {
@@ -142,6 +143,8 @@ vl_msm <- function(dat, at) {
 #'
 #' @inheritParams aging_het
 #'
+#' @keywords module het
+#'  
 #' @export
 #'
 vl_het <- function(dat, at) {

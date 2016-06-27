@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module function for simulating progression of HIV viral load in
              natural disease dynamics and in the presence of ART.
 }
+\keyword{het}
+\keyword{module}
 
