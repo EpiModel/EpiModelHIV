@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 This module ages all active nodes in the population by one time
              unit at each time step.
 }
+\keyword{het}
+\keyword{module}
 
