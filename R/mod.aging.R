@@ -12,7 +12,7 @@
 #' \code{age} and \code{sqrt.age}. The \code{sqrt.age} vertex attribute is also
 #' updated on the three networks.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 aging_msm <- function(dat, at) {
