@@ -18,7 +18,8 @@
 #' This function returns the \code{dat} object with an updated summary of current
 #' attributes stored in \code{dat$epi}.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 prevalence_msm <- function(dat, at) {
@@ -99,6 +100,8 @@ prevalence_msm <- function(dat, at) {
 #'
 #' @inheritParams aging_het
 #'
+#' @keywords module het
+#' 
 #' @export
 #'
 prevalence_het <- function(dat, at) {

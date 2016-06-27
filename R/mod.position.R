@@ -19,7 +19,8 @@
 #' attribute for values of whether the infected node is insertive or the
 #' susceptible node is insertive for that act.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 position_msm <- function(dat, at) {

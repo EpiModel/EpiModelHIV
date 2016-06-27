@@ -15,5 +15,6 @@ Due to occassional issues in ERGM fitting, it is possible to
              exclusively insertive/insertive or receptive/receptive.
 }
 \keyword{initiation}
+\keyword{msm}
 \keyword{utility}
 

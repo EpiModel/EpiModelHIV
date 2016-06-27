@@ -5,6 +5,8 @@
 #'              prophylaxis (PrEP) to prevent HIV infection.
 #'
 #' @inheritParams aging_msm
+#' 
+#' @keywords module msm
 #'
 #' @export
 #'
