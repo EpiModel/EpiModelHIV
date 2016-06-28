@@ -4,16 +4,17 @@
 \alias{sourceDir}
 \title{Source All Files in a Directory}
 \usage{
-sourceDir(path, trace = TRUE, ...)
+sourceDir(path, verbose = TRUE, ...)
 }
 \arguments{
 \item{path}{Directory of files to source.}
 
-\item{trace}{Print names of sourced files to console.}
+\item{verbose}{Print names of sourced files to console.}
 
 \item{...}{Additional arguments passed to \code{source}.}
 }
 \description{
-Loops over all files in a directory to source them to the Global Environment.
+Loops over all files in a directory to source them to the
+             Global Environment.
 }
 
