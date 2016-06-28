@@ -142,7 +142,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$deg.main[newIds] <- 0
   dat$attr$deg.pers[newIds] <- 0
 
-  # One-off irsk group
+  # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
 
   # UAI group
