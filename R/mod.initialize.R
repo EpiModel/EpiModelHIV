@@ -18,7 +18,7 @@
 #' for demographics and disease-related variables.
 #'
 #' @export
-#' @keywords module
+#' @keywords module msm
 #'
 initialize_msm <- function(x, param, init, control, s) {
 
@@ -177,7 +177,7 @@ initialize_msm <- function(x, param, init, control, s) {
 #' @param nw An object of class \code{network}.
 #'
 #' @export
-#' @keywords initiation utility
+#' @keywords initiation utility msm
 #'
 remove_bad_roles_msm <- function(nw) {
 
@@ -212,7 +212,7 @@ remove_bad_roles_msm <- function(nw) {
 #' @param dat Data object created in initialization module.
 #'
 #' @export
-#' @keywords initiation utility
+#' @keywords initiation utility msm
 #'
 init_status_msm <- function(dat) {
 
@@ -638,7 +638,7 @@ init_status_msm <- function(dat) {
 #' @param dat Data object created in initialization module.
 #'
 #' @export
-#' @keywords initiation utility
+#' @keywords initiation utility msm
 #'
 init_ccr5_msm <- function(dat) {
 
@@ -713,7 +713,7 @@ init_ccr5_msm <- function(dat) {
 #' in the needed ways for the time loop to function.
 #'
 #' @export
-#' @keywords module
+#' @keywords module msm
 #'
 reinit_msm <- function(x, param, init, control, s) {
 
@@ -779,6 +779,8 @@ reinit_msm <- function(x, param, init, control, s) {
 #' @return
 #' This function returns the updated \code{dat} object with the initialized values
 #' for demographics and disease-related variables.
+#' 
+#' @keywords module het
 #'
 #' @export
 #'
@@ -868,6 +870,8 @@ initialize_het <- function(x, param, init, control, s) {
 #' This function returns the updated \code{dat} object with the initialized values
 #' for demographics and disease-related variables.
 #'
+#' @keywords module het
+#' 
 #' @export
 #'
 reinit_het <- function(x, param, init, control, s) {

@@ -235,6 +235,8 @@
 #' A list object of class \code{param_msm}, which can be passed to
 #' EpiModel function \code{netsim}.
 #'
+#' @keywords msm
+#'
 #' @export
 param_msm <- function(nwstats,
                       race.method = 1,
@@ -455,6 +457,8 @@ param_msm <- function(nwstats,
 #' A list object of class \code{init_msm}, which can be passed to EpiModel
 #' function \code{\link{netsim}}.
 #'
+#' @keywords msm
+#' 
 #' @export
 init_msm <- function(nwstats,
                      prev.B = 0.15,
@@ -534,6 +538,8 @@ init_msm <- function(nwstats,
 #' @return
 #' A list object of class \code{control_msm}, which can be passed to the
 #' EpiModel function \code{netsim}.
+#'
+#' @keywords msm
 #'
 #' @export
 control_msm <- function(simno = 1,
@@ -662,6 +668,8 @@ control_msm <- function(simno = 1,
 #' @param ... additional arguments to be passed into model.
 #'
 #' @details This function sets the parameters for the models.
+#' 
+#' @keywords het
 #'
 #' @export
 #'
@@ -803,6 +811,8 @@ param_het <- function(time.unit = 7,
 #' @param ... additional arguments to be passed into model.
 #'
 #' @details This function sets the initial conditions for the models.
+#' 
+#' @keywords het
 #'
 #' @export
 #'
@@ -885,6 +895,8 @@ init_het <- function(i.prev.male = 0.05,
 #' @param ... Additional arguments passed to the function.
 #'
 #' @details This function sets the parameters for the models.
+#' 
+#' @keywords het
 #'
 #' @export
 #'

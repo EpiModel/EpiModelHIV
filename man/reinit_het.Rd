@@ -26,4 +26,6 @@ This function reinitializes the master \code{dat} object on which
              data are stored, simulates the initial state of the network, and
              simulates disease status and other attributes.
 }
+\keyword{het}
+\keyword{module}
 

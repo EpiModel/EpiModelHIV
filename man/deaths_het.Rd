@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module for simulating deaths among susceptible and infected
              persons within the population.
 }
+\keyword{het}
+\keyword{module}
 

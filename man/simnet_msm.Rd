@@ -17,4 +17,5 @@ Module function for resimulating the main, casual, and one-off
              networks for one time step.
 }
 \keyword{module}
+\keyword{msm}
 

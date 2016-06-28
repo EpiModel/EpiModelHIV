@@ -28,7 +28,8 @@
 #' disease incidence overall, and by race and age groups are calculated and
 #' stored on \code{dat$epi}.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 trans_msm <- function(dat, at){
@@ -219,8 +220,10 @@ trans_msm <- function(dat, at){
 #'
 #' @inheritParams aging_het
 #'
-#' @export
 #' @keywords module het
+#' 
+#' @export
+#' 
 #'
 trans_het <- function(dat, at) {
 

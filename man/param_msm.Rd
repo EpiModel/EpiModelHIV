@@ -385,4 +385,5 @@ EpiModel function \code{netsim}.
 Sets the epidemic parameters for stochastic network models
              simulated with \code{\link{netsim}} for EpiModelHIV
 }
+\keyword{msm}
 

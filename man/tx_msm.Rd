@@ -31,4 +31,5 @@ initiation, non-adherence, and restarting are all stochastically simulated
 based on binomial statistical models.
 }
 \keyword{module}
+\keyword{msm}
 

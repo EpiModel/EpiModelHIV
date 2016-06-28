@@ -10,7 +10,8 @@
 #' This function updates the individual-level attribute \code{role.class} on
 #' \code{dat$attr}.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 update_roleclass_msm <- function(dat, at) {

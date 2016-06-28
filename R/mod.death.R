@@ -22,7 +22,7 @@
 #' instant network until the \code{\link{simnet_msm}} module for bookkeeping
 #' purposes.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 deaths_msm <- function(dat, at) {
@@ -84,6 +84,8 @@ deaths_msm <- function(dat, at) {
 #'
 #' @inheritParams aging_het
 #'
+#' @keywords module het
+#' 
 #' @export
 #'
 deaths_het <- function(dat, at) {

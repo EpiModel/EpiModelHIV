@@ -17,4 +17,6 @@ Module function to resimulate the dynamic network forward one
              time step conditional on current network structure and vertex
              attributes.
 }
+\keyword{het}
+\keyword{module}
 

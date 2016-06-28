@@ -37,4 +37,5 @@ simulating by drawing from a binomial distribution for each act conditional
 on the per-act probability.
 }
 \keyword{module}
+\keyword{msm}
 

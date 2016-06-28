@@ -4,7 +4,7 @@
 \name{EpiModelHIV-package}
 \alias{EpiModelHIV}
 \alias{EpiModelHIV-package}
-\title{HIV Transmission Dynamics among MSM}
+\title{HIV Transmission Dynamics among MSM and Heterosexuals}
 \description{
 \tabular{ll}{
    Package: \tab EpiModelHIV\cr
@@ -21,5 +21,7 @@ for simulating HIV transmission dynamics among two populations: men who
 have sex with men (MSM) in the United States and heterosexual adults in
 sub-Saharan Africa.
 }
+\keyword{het}
+\keyword{msm}
 \keyword{package}
 

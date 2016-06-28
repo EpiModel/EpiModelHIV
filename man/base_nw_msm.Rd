@@ -24,4 +24,5 @@ estimations.
 The final vertex attributes on the network for cross-network degree are
 calculated and set on the network with \code{\link{assign_degree}}.
 }
+\keyword{msm}
 

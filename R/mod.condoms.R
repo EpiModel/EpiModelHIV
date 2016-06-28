@@ -17,7 +17,7 @@
 #' Updates the discordant edgelist with a \code{uai} variable indicating whether
 #' condoms were used in that act.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 condoms_msm <- function(dat, at) {

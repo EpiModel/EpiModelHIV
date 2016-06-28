@@ -1,4 +1,4 @@
-#' HIV Transmission Dynamics among MSM
+#' HIV Transmission Dynamics among MSM and Heterosexuals
 #'
 #' \tabular{ll}{
 #'    Package: \tab EpiModelHIV\cr
@@ -20,7 +20,7 @@
 #' @import EpiModel network networkDynamic tergmLite tergm ergm bindata
 #' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom
 #' @docType package
-#' @keywords package
+#' @keywords package msm het
 #' @useDynLib EpiModelHIV
 #'
 NULL

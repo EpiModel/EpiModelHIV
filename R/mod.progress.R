@@ -27,7 +27,8 @@
 #' This function returns the \code{dat} object after updating the disease stage
 #' of infected individuals.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 progress_msm <- function(dat, at) {

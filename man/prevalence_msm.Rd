@@ -29,4 +29,5 @@ infections or deaths) are calculated within the modules as they depend on
 vectors that are not stored external to the module.
 }
 \keyword{module}
+\keyword{msm}
 

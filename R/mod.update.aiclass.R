@@ -10,7 +10,8 @@
 #' This function updates the individual-level attribute \code{inst.ai.class} on
 #' \code{dat$attr}.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 update_aiclass_msm <- function(dat, at) {

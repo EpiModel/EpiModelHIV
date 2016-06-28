@@ -21,4 +21,5 @@ Module function for updating act class in main and casual
              partnerships based on probabilities of transition.
 }
 \keyword{module}
+\keyword{msm}
 

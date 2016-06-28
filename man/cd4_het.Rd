@@ -16,4 +16,6 @@ individual-level attributes, and summary statistics.}
 Module function for simulating progression of CD4 in natural
              disease dynamics and in the presence of ART.
 }
+\keyword{het}
+\keyword{module}
 

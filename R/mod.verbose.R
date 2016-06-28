@@ -18,7 +18,8 @@
 #' \code{verb/} subdirectory. This subdirectory will be created if it does not
 #' exist.
 #'
-#' @keywords module
+#' @keywords module msm
+#' 
 #' @export
 #'
 verbose_msm <- function(x, type, s, at) {
@@ -105,7 +106,8 @@ verbose_msm <- function(x, type, s, at) {
 #' \code{verb/} subdirectory. This subdirectory will be created if it does not
 #' exist.
 #'
-#' @keywords module
+#' @keywords module het
+#' 
 #' @export
 #'
 verbose_het <- function(x, type, s, at) {

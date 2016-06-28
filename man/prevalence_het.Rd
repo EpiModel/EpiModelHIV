@@ -17,4 +17,6 @@ Module function to calculate and store summary statistics for
              disease prevalence, demographics, and other epidemiological
              outcomes.
 }
+\keyword{het}
+\keyword{module}
 

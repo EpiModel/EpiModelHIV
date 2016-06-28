@@ -21,9 +21,10 @@ Module function for HIV diagnostic testing of infected persons.
 }
 \details{
 This testing module supports two testing parameterizations, input via the
-\code{testing.pattern} parameter: memoryless for stochastc and
+\code{testing.pattern} parameter: memoryless for stochastic and
 geometrically-distributed waiting times to test (constant hazard); and interval
 for deterministic tested after defined waiting time intervals.
 }
 \keyword{module}
+\keyword{msm}
 

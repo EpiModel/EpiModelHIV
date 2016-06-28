@@ -17,4 +17,5 @@ Updates the internal data structure containing the main data
              necessary with the new tergmLite approach.
 }
 \keyword{module}
+\keyword{msm}
 

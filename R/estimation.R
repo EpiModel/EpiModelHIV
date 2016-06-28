@@ -64,6 +64,8 @@
 #' formationa and dissolution models for the network model estimation to be
 #' conducted with \code{\link{netest}}. The inputs inputs for this function are
 #' calculated externally to the package in a setup scenario file.
+#' 
+#' @keywords msm
 #'
 #' @seealso
 #' Network statistics calculated here are entered into \code{\link{base_nw_msm}}
@@ -390,6 +392,7 @@ calc_nwstats_msm <- function(time.unit = 7,
 #' The final vertex attributes on the network for cross-network degree are
 #' calculated and set on the network with \code{\link{assign_degree}}.
 #'
+#' @keywords msm
 #' @export
 #'
 base_nw_msm <- function(nwstats) {
@@ -447,6 +450,7 @@ base_nw_msm <- function(nwstats) {
 #' target network given a bivariate degree mixing matrix of main, casual, and
 #' one-partnerships contained in the \code{nwstats} data.
 #'
+#' @keywords msm
 #' @export
 #'
 assign_degree <- function(nw, deg.type, nwstats) {
@@ -508,6 +512,7 @@ assign_degree <- function(nw, deg.type, nwstats) {
 #' @param part.dur Mean duration of partnerships.
 #' @param time.unit Time unit used, relative to days.
 #'
+#' @keywords het
 #' @export
 #'
 make_nw_het <- function(n = 10000,

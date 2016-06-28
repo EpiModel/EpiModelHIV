@@ -19,7 +19,7 @@
 #' list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
 #' discordant pair repeated the number of times they have AI.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 acts_msm <- function(dat, at) {

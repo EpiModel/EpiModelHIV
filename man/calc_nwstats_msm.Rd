@@ -102,4 +102,5 @@ Network statistics calculated here are entered into \code{\link{base_nw_msm}}
 to construct the base network, and then into the parameters in
 \code{\link{param_msm}}.
 }
+\keyword{msm}
 

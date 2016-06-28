@@ -17,7 +17,7 @@
 #' This function returns the \code{dat} object with the updated disclosure list,
 #' on \code{temp$discl.list}.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 disclose_msm <- function(dat, at){

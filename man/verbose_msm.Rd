@@ -29,4 +29,5 @@ non-interactive, batch mode these are saved onto \code{.txt} files in a
 exist.
 }
 \keyword{module}
+\keyword{msm}
 

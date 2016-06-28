@@ -28,4 +28,5 @@ infected; or post diagnosis for one recently infected. The rates of disclosure
 vary at these three points, and also by the partnership type.
 }
 \keyword{module}
+\keyword{msm}
 

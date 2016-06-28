@@ -18,7 +18,7 @@
 #' This function updates the \code{attr} list with new attributes for each new
 #' population member, and the \code{nw} objects with new vertices.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 births_msm <- function(dat, at){
@@ -174,6 +174,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 #'
 #' @inheritParams aging_het
 #'
+#' @keywords module het
+#' 
 #' @export
 #'
 births_het <- function(dat, at) {
@@ -232,8 +234,11 @@ births_het <- function(dat, at) {
 #' @inheritParams births_het
 #' @param nBirths Number of new births as determined by \code{\link{births_het}}.
 #'
+#' @keywords het
+#' 
 #' @export
-#'
+#' 
+#' 
 setBirthAttr_het <- function(dat, at, nBirths) {
 
   # Set attributes for new births to NA

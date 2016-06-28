@@ -12,7 +12,7 @@
 #' \code{age} and \code{sqrt.age}. The \code{sqrt.age} vertex attribute is also
 #' updated on the three networks.
 #'
-#' @keywords module
+#' @keywords module msm
 #' @export
 #'
 aging_msm <- function(dat, at) {
@@ -39,7 +39,8 @@ aging_msm <- function(dat, at) {
 #' @param dat Master data list object of class \code{dat} containing networks,
 #'        individual-level attributes, and summary statistics.
 #' @param at Current time step.
-#'
+#' 
+#' @keywords module het
 #' @export
 #'
 aging_het <- function(dat, at) {
