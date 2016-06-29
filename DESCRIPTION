@@ -13,7 +13,7 @@ Description: EpiModelHIV provides extensions to our general EpiModel package to 
 License: GPL-2
 Depends:
     R (>= 3.2.0),
-    EpiModel,
+    EpiModel (>= 1.2.7),
     ergm (>= 3.5),
     tergm,
     tergmLite
