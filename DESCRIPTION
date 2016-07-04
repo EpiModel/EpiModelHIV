@@ -20,11 +20,13 @@ Depends:
 Imports:
     bindata,
     network,
-    networkDynamic
+    networkDynamic,
+    Rcpp
 Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
-LinkingTo: ergm
+LinkingTo: ergm,
+    Rcpp
 RoxygenNote: 5.0.1
 LazyData: true

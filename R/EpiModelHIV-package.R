@@ -17,10 +17,14 @@
 #'
 #' @name EpiModelHIV-package
 #' @aliases EpiModelHIV
+#'
 #' @import EpiModel network networkDynamic tergmLite tergm ergm bindata
 #' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom
+#' @importFrom Rcpp sourceCpp
+#'
+#' @useDynLib EpiModelHIV
+#'
 #' @docType package
 #' @keywords package msm het
-#' @useDynLib EpiModelHIV
 #'
 NULL
