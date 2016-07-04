@@ -22,8 +22,8 @@ List aging_msm(List dat, int at) {
   List attr = dat["attr"];
   List param = dat["param"];
 
-  DoubleVector age = attr["age"];
-  double tUnit = param["time.unit"];
+  DoubleVector age = as<DoubleVector>(attr["age"]);
+  double tUnit = as<int>(param["time.unit"]);
 
   DoubleVector nage = age + (tUnit/365);
 
@@ -53,8 +53,8 @@ List aging_het(List dat, int at) {
   List attr = dat["attr"];
   List param = dat["param"];
 
-  DoubleVector age = attr["age"];
-  double tUnit = param["time.unit"];
+  DoubleVector age = as<DoubleVector>(attr["age"]);
+  double tUnit = as<int>(param["time.unit"]);
 
   DoubleVector nage = age + (tUnit/365);
 
@@ -63,6 +63,4 @@ List aging_het(List dat, int at) {
 
   return dat;
 }
-
-
 
