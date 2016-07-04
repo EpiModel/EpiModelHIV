@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 //' @title Aging Module
 //'
-//' @description Module for aging over time for active nodes in the population.
+//' @description Module for aging over time for nodes in the population.
 //'
 //' @param dat Master data list object of class \code{dat} containing networks,
 //'        individual-level attributes, and summary statistics.
@@ -38,7 +38,7 @@ List aging_msm(List dat, int at) {
 
 //' @title Aging Module
 //'
-//' @description This module ages all active nodes in the population by one time
+//' @description This module ages all nodes in the population by one time
 //'              unit at each time step.
 //'
 //' @param dat Master data list object of class \code{dat} containing networks,
@@ -63,3 +63,6 @@ List aging_het(List dat, int at) {
 
   return dat;
 }
+
+
+
