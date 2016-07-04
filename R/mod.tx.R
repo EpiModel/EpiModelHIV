@@ -21,7 +21,7 @@
 #' \code{tx.init.time}, \code{cum.time.on.tx}, \code{cum.time.off.tx} attributes.
 #'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 tx_msm <- function(dat, at) {
@@ -29,7 +29,6 @@ tx_msm <- function(dat, at) {
   ## Variables
 
   # Attributes
-  active <- dat$attr$active
   race <- dat$attr$race
   status <- dat$attr$status
   tx.status <- dat$attr$tx.status
@@ -48,14 +47,14 @@ tx_msm <- function(dat, at) {
 
 
   ## Initiation
-  tx.init.elig.B <- which(active == 1 & race == "B" & status == 1 &
+  tx.init.elig.B <- which(race == "B" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c("YP", "YF") & cum.time.on.tx == 0 &
                           stage != "D")
   tx.init.B <- tx.init.elig.B[rbinom(length(tx.init.elig.B), 1,
                                      tx.init.B.prob) == 1]
 
-  tx.init.elig.W <- which(active == 1 & race == "W" & status == 1 &
+  tx.init.elig.W <- which(race == "W" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c("YP", "YF") & cum.time.on.tx == 0 &
                           stage != "D")
@@ -69,11 +68,11 @@ tx_msm <- function(dat, at) {
 
 
   ## Halting
-  tx.halt.elig.B <- which(active == 1 & race == "B" & tx.status == 1)
+  tx.halt.elig.B <- which(race == "B" & tx.status == 1)
   tx.halt.B <- tx.halt.elig.B[rbinom(length(tx.halt.elig.B), 1,
                                      tx.halt.B.prob) == 1]
 
-  tx.halt.elig.W <- which(active == 1 & race == "W" & tx.status == 1)
+  tx.halt.elig.W <- which(race == "W" & tx.status == 1)
   tx.halt.W <- tx.halt.elig.W[rbinom(length(tx.halt.elig.W),
                                      1, tx.halt.W.prob) == 1]
   tx.halt <- c(tx.halt.B, tx.halt.W)
@@ -81,12 +80,12 @@ tx_msm <- function(dat, at) {
 
 
   ## Restarting
-  tx.reinit.elig.B <- which(active == 1 & race == "B" & tx.status == 0 &
+  tx.reinit.elig.B <- which(race == "B" & tx.status == 0 &
                             cum.time.on.tx > 0 & stage != "D")
   tx.reinit.B <- tx.reinit.elig.B[rbinom(length(tx.reinit.elig.B),
                                          1, tx.reinit.B.prob) == 1]
 
-  tx.reinit.elig.W <- which(active == 1 & race == "W" & tx.status == 0 &
+  tx.reinit.elig.W <- which(race == "W" & tx.status == 0 &
                             cum.time.on.tx > 0 & stage != "D")
   tx.reinit.W <- tx.reinit.elig.W[rbinom(length(tx.reinit.elig.W),
                                          1, tx.reinit.W.prob) == 1]
@@ -96,11 +95,10 @@ tx_msm <- function(dat, at) {
 
 
   ## Other output
-  idsAct <- which(active == 1)
-  dat$attr$cum.time.on.tx[idsAct] <- dat$attr$cum.time.on.tx[idsAct] +
-                                     ((dat$attr$tx.status[idsAct] == 1) %in% TRUE)
-  dat$attr$cum.time.off.tx[idsAct] <- dat$attr$cum.time.off.tx[idsAct] +
-                                     ((dat$attr$tx.status[idsAct] == 0) %in% TRUE)
+  dat$attr$cum.time.on.tx <- dat$attr$cum.time.on.tx +
+                             ((dat$attr$tx.status == 1) %in% TRUE)
+  dat$attr$cum.time.off.tx <- dat$attr$cum.time.off.tx +
+                              ((dat$attr$tx.status == 0) %in% TRUE)
 
   ## Summary statistics
   dat$epi$tx.init.inc[at] <- length(tx.init)
@@ -111,22 +109,20 @@ tx_msm <- function(dat, at) {
 }
 
 
-
 #' @title HIV Anti-Retroviral Treatment Module
 #'
 #' @description Module function for simulating HIV therapy after diagnosis,
 #'              including adherence and non-adherence to ART.
 #'
 #' @inheritParams aging_het
-#' 
+#'
 #' @keywords module het
-#' 
+#'
 #' @export
 #'
 tx_het <- function(dat, at) {
 
   # Variables ---------------------------------------------------------------
-  active <- dat$attr$active
   dxStat <- dat$attr$dxStat
   txStat <- dat$attr$txStat
   txStartTime <- dat$attr$txStartTime
@@ -147,14 +143,14 @@ tx_het <- function(dat, at) {
   # Start tx for tx naive ---------------------------------------------------
 
   ## Calculate tx coverage
-  allElig <- which(active == 1 & (cd4Count < tx.elig.cd4 | !is.na(txStartTime)))
+  allElig <- which((cd4Count < tx.elig.cd4 | !is.na(txStartTime)))
   txCov <- sum(!is.na(txStartTime[allElig]))/length(allElig)
   if (is.nan(txCov)) {
     txCov <- 0
   }
 
-  idsElig <- which(active == 1 & dxStat == 1 & txStat == 0 &
-                     is.na(txStartTime) & cd4Count < tx.elig.cd4)
+  idsElig <- which(dxStat == 1 & txStat == 0 &
+                   is.na(txStartTime) & cd4Count < tx.elig.cd4)
   nElig <- length(idsElig)
   idsTx <- NULL
 
@@ -189,7 +185,7 @@ tx_het <- function(dat, at) {
 
   # Stop tx -----------------------------------------------------------------
   idsStop <- NULL
-  idsEligStop <- which(active == 1 & dat$attr$txStat == 1 & txType == 0)
+  idsEligStop <- which(dat$attr$txStat == 1 & txType == 0)
   nEligStop <- length(idsEligStop)
   if (nEligStop > 0) {
     vecStop <- which(rbinom(nEligStop, 1, (1 - tx.adhere.part)) == 1)
@@ -203,7 +199,7 @@ tx_het <- function(dat, at) {
 
   # Restart tx --------------------------------------------------------------
   idsRest <- NULL
-  idsEligRest <- which(active == 1 & dat$attr$txStat == 0 & txStops > 0)
+  idsEligRest <- which(dat$attr$txStat == 0 & txStops > 0)
   nEligRest <- length(idsEligRest)
   if (nEligRest > 0) {
     vecRes <- which(rbinom(nEligRest, 1, tx.adhere.part) == 1)

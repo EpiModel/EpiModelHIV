@@ -30,14 +30,13 @@ deaths_msm <- function(dat, at) {
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
-  active <- dat$attr$active
 
-  alive.B <- which(active == 1 & race == "B")
+  alive.B <- which(race == "B")
   age.B <- age[alive.B]
   death.B.prob <- dat$param$asmr.B[age.B]
   deaths.B <- alive.B[rbinom(length(death.B.prob), 1, death.B.prob) == 1]
 
-  alive.W <- which(active == 1 & race == "W")
+  alive.W <- which(race == "W")
   age.W <- age[alive.W]
   death.W.prob <- dat$param$asmr.W[age.W]
   deaths.W <- alive.W[rbinom(length(death.W.prob), 1, death.W.prob) == 1]
@@ -46,8 +45,7 @@ deaths_msm <- function(dat, at) {
 
 
   ## Disease deaths
-  dth.dis <- which(dat$attr$active == 1 &
-                   dat$attr$stage == "D" &
+  dth.dis <- which(dat$attr$stage == "D" &
                    dat$attr$vl >= dat$param$vl.fatal)
 
   dth.all <- NULL
@@ -85,7 +83,7 @@ deaths_msm <- function(dat, at) {
 #' @inheritParams aging_het
 #'
 #' @keywords module het
-#' 
+#'
 #' @export
 #'
 deaths_het <- function(dat, at) {
@@ -93,7 +91,6 @@ deaths_het <- function(dat, at) {
   ### 1. Susceptible Deaths ###
 
   ## Variables
-  active <- dat$attr$active
   male <- dat$attr$male
   age <- dat$attr$age
   cd4Count <- dat$attr$cd4Count
@@ -102,9 +99,9 @@ deaths_het <- function(dat, at) {
   ds.exit.age <- dat$param$ds.exit.age
 
   ## Eligible are: active uninf, pre-death infected, unhealthy old
-  idsEligSus <- which(active == 1 & (is.na(cd4Count) |
-                                       cd4Count > di.cd4.aids |
-                                       (cd4Count <= di.cd4.aids & age > ds.exit.age)))
+  idsEligSus <- which((is.na(cd4Count) |
+                       cd4Count > di.cd4.aids |
+                       (cd4Count <= di.cd4.aids & age > ds.exit.age)))
   nEligSus <- length(idsEligSus)
 
   # Set age-sex specific rates
@@ -152,7 +149,7 @@ deaths_het <- function(dat, at) {
     }
   }
 
-  idsDeathsDet <- which(active == 1 & cd4Count <= 0)
+  idsDeathsDet <- which(cd4Count <= 0)
   if (length(idsDeathsDet) > 0) {
     idsDeathsInf <- c(idsDeathsInf, idsDeathsDet)
     nDeathsInf <- nDeathsInf + length(idsDeathsDet)

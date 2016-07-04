@@ -16,7 +16,7 @@
 #' \code{diag.status} and \code{diag.time} attributes.
 #'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 test_msm <- function(dat, at) {
@@ -24,7 +24,6 @@ test_msm <- function(dat, at) {
   ## Variables
 
   # Attributes
-  active <- dat$attr$active
   diag.status <- dat$attr$diag.status
   race <- dat$attr$race
   tt.traj <- dat$attr$tt.traj
@@ -46,16 +45,14 @@ test_msm <- function(dat, at) {
   ## Process
 
   if (testing.pattern == "memoryless") {
-    elig.B <- which(active == 1 &
-                    race == "B" &
+    elig.B <- which(race == "B" &
                     tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
     rates.B <- rep(1/mean.test.B.int, length(elig.B))
     tst.B <- elig.B[rbinom(length(elig.B), 1, rates.B) == 1]
 
-    elig.W <- which(active == 1 &
-                    race == "W" &
+    elig.W <- which(race == "W" &
                     tt.traj != "NN" &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
@@ -65,15 +62,13 @@ test_msm <- function(dat, at) {
   }
 
   if (testing.pattern == "interval") {
-    tst.B <- which(active == 1 &
-                   race == "B" &
+    tst.B <- which(race == "B" &
                    tt.traj != "NN" &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.B.int) &
                    prepStat == 0)
 
-    tst.W <- which(active == 1 &
-                   race == "W" &
+    tst.W <- which(race == "W" &
                    tt.traj != "NN" &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.W.int) &
@@ -82,8 +77,7 @@ test_msm <- function(dat, at) {
   }
 
   # PrEP testing
-  tst.prep <- which(active == 1 &
-                    (diag.status == 0 | is.na(diag.status)) &
+  tst.prep <- which((diag.status == 0 | is.na(diag.status)) &
                     prepStat == 1 &
                     tsincelntst >= prep.tst.int)
 
@@ -107,25 +101,24 @@ test_msm <- function(dat, at) {
 #'              currently based on diagnosis at treatment initiation.
 #'
 #' @inheritParams aging_het
-#' 
+#'
 #' @keywords module het
 #'
 #' @export
 #'
 dx_het <- function(dat, at) {
 
-  # Variables ---------------------------------------------------------------
-  active <- dat$attr$active
+  # Variables
   status <- dat$attr$status
   txCD4min <- dat$attr$txCD4min
   cd4Count <- dat$attr$cd4Count
   dxStat <- dat$attr$dxStat
 
-  # Process -----------------------------------------------------------------
-  tested <- which(active == 1 & status == 1 & dxStat == 0 & cd4Count <= txCD4min)
+  # Process
+  tested <- which(status == 1 & dxStat == 0 & cd4Count <= txCD4min)
 
 
-  # Results -----------------------------------------------------------------
+  # Results
   if (length(tested) > 0) {
     dat$attr$dxStat[tested] <- 1
     dat$attr$txStat[tested] <- 0

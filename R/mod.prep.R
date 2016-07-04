@@ -5,7 +5,7 @@
 #'              prophylaxis (PrEP) to prevent HIV infection.
 #'
 #' @inheritParams aging_msm
-#' 
+#'
 #' @keywords module msm
 #'
 #' @export
@@ -17,7 +17,6 @@ prep_msm <- function(dat, at) {
   }
 
   ## Variables
-  active <- dat$attr$active
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
@@ -36,11 +35,11 @@ prep_msm <- function(dat, at) {
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
+  idsEligStart <- which(status == 0 & prepStat == 0 & lnt == at)
 
   idsEligStop <- NULL
   if (prep.risk.reassess == TRUE) {
-    idsEligStop <- which(active == 1 & prepStat == 1 & lnt == at)
+    idsEligStop <- which(prepStat == 1 & lnt == at)
   }
 
   # Core eligiblity scenarios
@@ -85,16 +84,13 @@ prep_msm <- function(dat, at) {
   ## Stoppage ------------------------------------------------------------------
 
   # Diagnosis
-  idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
-
-  # Death
-  idsStpDth <- which(active == 0 & prepStat == 1)
+  idsStpDx <- which(prepStat == 1 & diag.status == 1)
 
   # Transition to ineligibility
   idsStpInelig <- idsEligStop
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpDth, idsStpInelig)
+  idsStp <- c(idsStpDx, idsStpInelig)
   prepStat[idsStp] <- 0
 
 

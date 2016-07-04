@@ -29,7 +29,7 @@
 #' stored on \code{dat$epi}.
 #'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 trans_msm <- function(dat, at){
@@ -221,9 +221,9 @@ trans_msm <- function(dat, at){
 #' @inheritParams aging_het
 #'
 #' @keywords module het
-#' 
+#'
 #' @export
-#' 
+#'
 #'
 trans_het <- function(dat, at) {
 
@@ -362,9 +362,8 @@ trans_het <- function(dat, at) {
 discord_edgelist_het <- function(dat, at) {
 
   status <- dat$attr$status
-  active <- dat$attr$active
 
-  idsInft <- which(active == 1 & status == 1)
+  idsInft <- which(status == 1)
   nInft <- length(idsInft)
 
   del <- NULL

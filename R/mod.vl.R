@@ -24,7 +24,7 @@
 #' This function returns the \code{dat} object with updated \code{vl} attribute.
 #'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 vl_msm <- function(dat, at) {
@@ -33,10 +33,9 @@ vl_msm <- function(dat, at) {
 
   # Attributes
   inf.time.bp <- at - dat$attr$inf.time
-  cum.time.off.tx <- dat$attr$cum.time.off.tx
+  # cum.time.off.tx <- dat$attr$cum.time.off.tx
   cum.time.on.tx <- dat$attr$cum.time.on.tx
   status <- dat$attr$status
-  active <- dat$attr$active
   tt.traj <- dat$attr$tt.traj
   stage <- dat$attr$stage
   vl <- dat$attr$vl
@@ -56,19 +55,19 @@ vl_msm <- function(dat, at) {
   part.supp.down.slope <- dat$param$part.supp.down.slope
   full.supp.up.slope <- dat$param$full.supp.up.slope
   part.supp.up.slope <- dat$param$part.supp.up.slope
-  max.time.off.tx.part <- dat$param$max.time.off.tx.part
-  max.time.on.tx.part <- dat$param$max.time.on.tx.part
+  # max.time.off.tx.part <- dat$param$max.time.off.tx.part
+  # max.time.on.tx.part <- dat$param$max.time.on.tx.part
 
   # Calculations
   vlds <- (vlf - vlsp) / vldd
-  part.tx.score <-  (cum.time.off.tx / max.time.off.tx.part) +
-                    (cum.time.on.tx / max.time.on.tx.part)
+  # part.tx.score <-  (cum.time.off.tx / max.time.off.tx.part) +
+  #                   (cum.time.on.tx / max.time.on.tx.part)
 
 
   ## Process
 
   # 1. tx-naive men
-  target <- which(active == 1 & status == 1 & cum.time.on.tx == 0)
+  target <- which(status == 1 & cum.time.on.tx == 0)
   inf.time.bp.tn <- inf.time.bp[target]
   new.vl <- (inf.time.bp.tn <= vlard) * (vlap * inf.time.bp.tn / vlard) +
             (inf.time.bp.tn > vlard) * (inf.time.bp.tn <= vlard + vlafd) *
@@ -78,26 +77,26 @@ vl_msm <- function(dat, at) {
   vl[target] <- new.vl
 
   # 2. men on tx, tt.traj=full, not yet escaped
-  target <- which(active == 1 & tx.status == 1 & tt.traj == "YF" & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == "YF" & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - full.supp.down.slope, vl.full.supp)
   vl[target] <- new.vl
 
   # 3. men on tx, tt.traj=part, not yet escaped
-  target <- which(active == 1 & tx.status == 1 & tt.traj == "YP" & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == "YP" & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - part.supp.down.slope, vl.part.supp)
   vl[target] <- new.vl
 
   # 4. men off tx, not naive, tt.traj=full, not yet escaped
-  target <- which(active == 1 & tx.status == 0 & tt.traj == "YF" &
+  target <- which(tx.status == 0 & tt.traj == "YF" &
                   cum.time.on.tx > 0 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + full.supp.up.slope, vlsp)
   vl[target] <- new.vl
 
   # 5. men off tx, not naive, tt.traj=part, not yet escaped
-  target <- which(active == 1 & tx.status == 0 & tt.traj == "YP" &
+  target <- which(tx.status == 0 & tt.traj == "YP" &
                   cum.time.on.tx > 0 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + part.supp.up.slope, vlsp)
@@ -107,21 +106,21 @@ vl_msm <- function(dat, at) {
   # Doesn't exist.
 
   # 7. men on tx, tt.traj=part, escaped
-  target <- which(active == 1 & tx.status == 1 &
+  target <- which(tx.status == 1 &
                   tt.traj == "YP" & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 8. men off tx, tt.traj=full, and escaped
-  target <- which(active == 1 & tx.status == 0 & tt.traj == "YF" &
+  target <- which(tx.status == 0 & tt.traj == "YF" &
                   cum.time.on.tx > 0 & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 9. men off tx, tt.traj=part, and escaped
-  target <- which(active == 1 & tx.status == 0 & tt.traj == "YP" &
+  target <- which(tx.status == 0 & tt.traj == "YP" &
                   cum.time.on.tx > 0 & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
@@ -144,25 +143,24 @@ vl_msm <- function(dat, at) {
 #' @inheritParams aging_het
 #'
 #' @keywords module het
-#'  
+#'
 #' @export
 #'
 vl_het <- function(dat, at) {
 
   ## Common variables
-  active <- dat$attr$active
   status <- dat$attr$status
   infTime <- dat$attr$infTime
 
 
   # Assign base VL ----------------------------------------------------------
   if (is.null(dat$attr$vlLevel)) {
-    dat$attr$vlLevel <- rep(NA, sum(active == 1))
-    dat$attr$vlSlope <- rep(NA, sum(active == 1))
+    dat$attr$vlLevel <- rep(NA, length(status))
+    dat$attr$vlSlope <- rep(NA, length(status))
   }
   vlLevel <- dat$attr$vlLevel
 
-  idsEligAsn <- which(active == 1 & status == 1 & is.na(vlLevel))
+  idsEligAsn <- which(status == 1 & is.na(vlLevel))
   if (length(idsEligAsn) > 0) {
     vlLevel[idsEligAsn] <- expected_vl(male = dat$attr$male[idsEligAsn],
                                        age = dat$attr$age[idsEligAsn],
@@ -173,8 +171,8 @@ vl_het <- function(dat, at) {
 
   # Update natural VL -------------------------------------------------------
   txStartTime <- dat$attr$txStartTime
-  idsEligUpd <- which(active == 1 & status == 1 &
-                        infTime < at & is.na(txStartTime))
+  idsEligUpd <- which(status == 1 &
+                      infTime < at & is.na(txStartTime))
 
   if (length(idsEligUpd) > 0) {
     vlLevel[idsEligUpd] <- expected_vl(male = dat$attr$male[idsEligUpd],
@@ -185,7 +183,7 @@ vl_het <- function(dat, at) {
 
   # VL decline with ART -----------------------------------------------------
   txStat <- dat$attr$txStat
-  idsEligTx <- which(active == 1 & status == 1 & infTime < at & txStat == 1)
+  idsEligTx <- which(status == 1 & infTime < at & txStat == 1)
   if (length(idsEligTx) > 0) {
     tx.vlsupp.time <- dat$param$tx.vlsupp.time
     tx.vlsupp.level <- dat$param$tx.vlsupp.level
@@ -205,8 +203,8 @@ vl_het <- function(dat, at) {
 
 
   # VL rebound post ART -----------------------------------------------------
-  idsEligNoTx <- which(active == 1 & status == 1 &
-                         txStat == 0 & !is.na(txStartTime))
+  idsEligNoTx <- which(status == 1 &
+                       txStat == 0 & !is.na(txStartTime))
   if (length(idsEligNoTx) > 0) {
     tx.vlsupp.time <- dat$param$tx.vlsupp.time
 

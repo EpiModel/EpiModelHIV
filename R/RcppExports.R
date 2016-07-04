@@ -3,7 +3,7 @@
 
 #' @title Aging Module
 #'
-#' @description Module for aging over time for active nodes in the population.
+#' @description Module for aging over time for nodes in the population.
 #'
 #' @param dat Master data list object of class \code{dat} containing networks,
 #'        individual-level attributes, and summary statistics.
@@ -22,7 +22,7 @@ aging_msm <- function(dat, at) {
 
 #' @title Aging Module
 #'
-#' @description This module ages all active nodes in the population by one time
+#' @description This module ages all nodes in the population by one time
 #'              unit at each time step.
 #'
 #' @param dat Master data list object of class \code{dat} containing networks,

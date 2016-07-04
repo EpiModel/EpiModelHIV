@@ -105,7 +105,6 @@ prevalence_msm <- function(dat, at) {
 prevalence_het <- function(dat, at) {
 
   status <- dat$attr$status
-  active <- dat$attr$active
   male <- dat$attr$male
   age <- dat$attr$age
 
@@ -135,31 +134,28 @@ prevalence_het <- function(dat, at) {
     dat$epi$ds.flow <- dat$epi$di.flow <- rNA
   }
 
-  dat$epi$i.num[at] <- sum(active == 1 & status == 1, na.rm = TRUE)
-  dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
+  dat$epi$i.num[at] <- sum(status == 1, na.rm = TRUE)
+  dat$epi$num[at] <- length(status)
 
-  dat$epi$i.num.male[at] <- sum(active == 1 & status == 1 & male == 1, na.rm = TRUE)
-  dat$epi$i.num.feml[at] <- sum(active == 1 & status == 1 & male == 0, na.rm = TRUE)
-  dat$epi$i.prev.male[at] <- sum(active == 1 & status == 1 & male == 1, na.rm = TRUE) /
-    sum(active == 1 & male == 1, na.rm = TRUE)
-  dat$epi$i.prev.feml[at] <- sum(active == 1 & status == 1 & male == 0, na.rm = TRUE) /
-    sum(active == 1 & male == 0, na.rm = TRUE)
+  dat$epi$i.num.male[at] <- sum(status == 1 & male == 1, na.rm = TRUE)
+  dat$epi$i.num.feml[at] <- sum(status == 1 & male == 0, na.rm = TRUE)
+  dat$epi$i.prev.male[at] <- sum(status == 1 & male == 1, na.rm = TRUE) /
+    sum(male == 1, na.rm = TRUE)
+  dat$epi$i.prev.feml[at] <- sum(status == 1 & male == 0, na.rm = TRUE) /
+    sum(male == 0, na.rm = TRUE)
 
-  dat$epi$num.male[at] <- sum(active == 1 & male == 1, na.rm = TRUE)
-  dat$epi$num.feml[at] <- sum(active == 1 & male == 0, na.rm = TRUE)
-  dat$epi$meanAge[at] <- mean(age[active == 1], na.rm = TRUE)
-  dat$epi$propMale[at] <- mean(male[active == 1], na.rm = TRUE)
+  dat$epi$num.male[at] <- sum(male == 1, na.rm = TRUE)
+  dat$epi$num.feml[at] <- sum(male == 0, na.rm = TRUE)
+  dat$epi$meanAge[at] <- mean(age, na.rm = TRUE)
+  dat$epi$propMale[at] <- mean(male, na.rm = TRUE)
 
   return(dat)
 }
 
 
 whichVlSupp <- function(attr, param) {
-
-  which(attr$active == 1 &
-          attr$status == 1 &
-          attr$vlLevel <= log10(50) &
-          (attr$age - attr$ageInf) * (365 / param$time.unit) >
-          (param$vl.acute.topeak + param$vl.acute.toset))
-
+  which(attr$status == 1 &
+        attr$vlLevel <= log10(50) &
+        (attr$age - attr$ageInf) * (365 / param$time.unit) >
+        (param$vl.acute.topeak + param$vl.acute.toset))
 }

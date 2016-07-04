@@ -5,25 +5,24 @@
 #'              disease dynamics and in the presence of ART.
 #'
 #' @inheritParams aging_het
-#' 
+#'
 #' @keywords module het
 #'
 #' @export
 #'
 cd4_het <- function(dat, at) {
 
-  active <- dat$attr$active
   status <- dat$attr$status
   time.unit <- dat$param$time.unit
 
   if (is.null(dat$attr$cd4Count)) {
-    dat$attr$cd4Count <- rep(NA, sum(active == 1))
+    dat$attr$cd4Count <- rep(NA, length(status))
   }
   cd4Count <- dat$attr$cd4Count
 
 
   # Assign CD4 for newly infected -------------------------------------------
-  idsAsn <- which(active == 1 & status == 1 & is.na(cd4Count))
+  idsAsn <- which(status == 1 & is.na(cd4Count))
   if (length(idsAsn) > 0) {
     cd4Count[idsAsn] <- expected_cd4(method = "assign",
                                      male = dat$attr$male[idsAsn],
@@ -37,7 +36,7 @@ cd4_het <- function(dat, at) {
   txStartTime <- dat$attr$txStartTime
   infTime <- dat$attr$infTime
 
-  idsUpd <- which(active == 1 & status == 1 & infTime < at & is.na(txStartTime))
+  idsUpd <- which(status == 1 & infTime < at & is.na(txStartTime))
   idsUpd <- setdiff(idsUpd, idsAsn)
 
   if (length(idsUpd) > 0) {
@@ -56,8 +55,8 @@ cd4_het <- function(dat, at) {
   tx.cd4.recrat.feml <- dat$param$tx.cd4.recrat.feml
   tx.cd4.recrat.male <- dat$param$tx.cd4.recrat.male
 
-  idsTxFeml <- which(active == 1 & status == 1 & male == 0 & txStat == 1)
-  idsTxMale <- which(active == 1 & status == 1 & male == 1 & txStat == 1)
+  idsTxFeml <- which(status == 1 & male == 0 & txStat == 1)
+  idsTxMale <- which(status == 1 & male == 1 & txStat == 1)
 
   if (length(idsTxFeml) > 0) {
     cd4Cap <- expected_cd4(method = "assign", male = 0, age = 25, ageInf = 25)
@@ -73,9 +72,9 @@ cd4_het <- function(dat, at) {
   tx.cd4.decrat.feml <- dat$param$tx.cd4.decrat.feml
   tx.cd4.decrat.male <- dat$param$tx.cd4.decrat.male
 
-  idsNoTxFeml <- which(active == 1 & status == 1 & male == 0 &
+  idsNoTxFeml <- which(status == 1 & male == 0 &
                          !is.na(txStartTime) & txStat == 0)
-  idsNoTxMale <- which(active == 1 & status == 1 & male == 1 &
+  idsNoTxMale <- which(status == 1 & male == 1 &
                          !is.na(txStartTime) & txStat == 0)
   if (length(idsNoTxFeml) > 0) {
     cd4Count[idsNoTxFeml] <- pmax(cd4Count[idsNoTxFeml] - tx.cd4.decrat.feml, 0)
