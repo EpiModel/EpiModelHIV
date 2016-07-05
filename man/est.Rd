@@ -3,7 +3,7 @@
 \docType{data}
 \name{est}
 \alias{est}
-\title{Fitted Network Models for 200 Person Network}
+\title{Fitted Network Models for 10000 Person Network}
 \format{A list with three elements.}
 \description{
 A dataset containing a list of three outputs from \code{netest}, one for each
