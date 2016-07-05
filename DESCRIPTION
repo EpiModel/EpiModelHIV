@@ -21,7 +21,8 @@ Imports:
     bindata,
     network,
     networkDynamic,
-    Rcpp
+    Rcpp,
+    dplyr
 Suggests:
     knitr,
     testthat
