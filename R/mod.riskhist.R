@@ -23,8 +23,9 @@ riskhist_msm <- function(dat, at) {
   pri <- ceiling(dat$param$prep.risk.int)
 
   ## Edgelist, adds uai summation per partnership from act list
-  al <- dat$temp$al
-  uai <- as.numeric(by(al[, "uai"], al[, "pid"], sum))
+  al <- as.data.frame(dat$temp$al)
+  by_pid <- group_by(al, pid)
+  uai <- summarise(by_pid, uai = sum(uai))[, 2]
   el <- as.data.frame(cbind(dat$temp$el, uai))
 
   # Remove concordant positive edges
