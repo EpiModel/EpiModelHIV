@@ -43,10 +43,6 @@ prep_msm <- function(dat, at) {
   }
 
   twind <- at - dat$param$prep.risk.int
-  idsEligStart <- intersect(which(ind1 >= twind | ind2 >= twind |
-                                    ind3 >= twind | ind4 >= twind),
-                            idsEligStart)
-
 
   # Core eligiblity scenarios
   if (prep.elig.model != "base") {
