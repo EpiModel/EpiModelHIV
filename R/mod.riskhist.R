@@ -20,7 +20,6 @@ riskhist_msm <- function(dat, at) {
   uid <- dat$attr$uid
 
   ## Parameters
-  pri <- ceiling(dat$param$prep.risk.int)
 
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
@@ -124,7 +123,7 @@ riskhist_msm <- function(dat, at) {
 
   ## Condition 3b: UAI within known serodiscordant partnerships
   uai.sd.mc <- el2.cond3$p2[discl == TRUE & el2.cond3$uai > 0]
-  dat$attr$uai.sd.mc[uai.sd.mc, pri] <- at
+  dat$attr$uai.sd.mc[uai.sd.mc] <- at
 
   return(dat)
 }
