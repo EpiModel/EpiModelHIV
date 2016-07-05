@@ -206,7 +206,6 @@
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
 #' @param prep.start Time step at which the PrEP intervention should start.
-#' @param riskh.start Time step at which to start tracking risk history.
 #' @param prep.elig.model Modeling approach for determining who is eligible for
 #'        PrEP. Current options are limited to: \code{"all"} for all persons who
 #'        have never been on PrEP and are disease-susceptible.
@@ -342,7 +341,6 @@ param_msm <- function(nwstats,
                       vv.iev.WW.prob = 0.49,
 
                       prep.start = 1,
-                      riskh.start = 1,
                       prep.elig.model = "base",
                       prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
                       prep.class.hr = c(1, 0.69, 0.19, 0.05),
@@ -427,6 +425,14 @@ param_msm <- function(nwstats,
                                   0, 1, 0,
                                   0, 0, 1),
                                 nrow = 3)
+
+  if (prep.coverage > 0) {
+    p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  } else {
+    p$riskh.start <- Inf
+    p$prep.start <- Inf
+  }
+
 
   p$method <- nwstats$method
   p$modes <- 1
