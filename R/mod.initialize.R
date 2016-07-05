@@ -115,18 +115,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepElig <- rep(NA, num)
   dat$attr$prepStat <- rep(0, num)
 
-  # Risk history lists
-  nc <- ceiling(dat$param$prep.risk.int)
-  dat$riskh <- list()
-  rh.names <- c("uai.mono2.nt.3mo", "uai.mono2.nt.6mo",
-                "uai.mono1.nt.3mo", "uai.mono1.nt.6mo",
-                "uai.nonmonog", "uai.nmain",
-                "ai.sd.mc", "uai.sd.mc")
-  for (i in 1:length(rh.names)) {
-    dat$riskh[[rh.names[i]]] <- matrix(NA, ncol = nc, nrow = num)
-  }
-
-
   # One-off AI class
   inst.ai.class <- rep(NA, num)
   ncl <- param$num.inst.ai.classes
@@ -718,9 +706,9 @@ init_ccr5_msm <- function(dat) {
 reinit_msm <- function(x, param, init, control, s) {
 
   if (any(c("param", "control", "nwparam", "epi", "attr", "temp",
-    "riskh", "el", "p") %in% names(x)) == FALSE) {
+    "el", "p") %in% names(x)) == FALSE) {
     stop("x must contain the following elements for restarting: param control",
-         "nwparam epi attr temp riskh el p", call. = FALSE)
+         "nwparam epi attr temp el p", call. = FALSE)
   }
 
   if (!is.null(control$currsim) & length(x$network) > 1) {
@@ -751,10 +739,6 @@ reinit_msm <- function(x, param, init, control, s) {
 
   dat$temp <- x$temp[[s]]
 
-  if (!is.null(x$riskh)) {
-    dat$riskh <- x$riskh[[s]]
-  }
-
   class(dat) <- "dat"
   return(dat)
 }
@@ -779,7 +763,7 @@ reinit_msm <- function(x, param, init, control, s) {
 #' @return
 #' This function returns the updated \code{dat} object with the initialized values
 #' for demographics and disease-related variables.
-#' 
+#'
 #' @keywords module het
 #'
 #' @export
@@ -871,7 +855,7 @@ initialize_het <- function(x, param, init, control, s) {
 #' for demographics and disease-related variables.
 #'
 #' @keywords module het
-#' 
+#'
 #' @export
 #'
 reinit_het <- function(x, param, init, control, s) {

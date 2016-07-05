@@ -42,38 +42,44 @@ prep_msm <- function(dat, at) {
     idsEligStop <- which(prepStat == 1 & lnt == at)
   }
 
+  twind <- at - dat$param$prep.risk.int
+  idsEligStart <- intersect(which(ind1 >= twind | ind2 >= twind |
+                                    ind3 >= twind | ind4 >= twind),
+                            idsEligStart)
+
+
   # Core eligiblity scenarios
   if (prep.elig.model != "base") {
     if (substr(prep.elig.model, 1, 3) == "cdc") {
       if (prep.elig.model == "cdc1") {
-        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
-        mat.c2 <- dat$riskh$uai.nonmonog
-        mat.c3 <- dat$riskh$ai.sd.mc
+        c1 <- dat$attr$uai.mono2.nt.6mo
+        c2 <- dat$attr$uai.nonmonog
+        c3 <- dat$attr$ai.sd.mc
       } else if (prep.elig.model == "cdc2") {
-        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
-        mat.c2 <- dat$riskh$uai.nmain
-        mat.c3 <- dat$riskh$ai.sd.mc
+        c1 <- dat$attr$uai.mono2.nt.6mo
+        c2 <- dat$attr$uai.nmain
+        c3 <- dat$attr$ai.sd.mc
       } else if (prep.elig.model == "cdc3") {
-        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
-        mat.c2 <- dat$riskh$uai.nmain
-        mat.c3 <- dat$riskh$ai.sd.mc
+        c1 <- dat$attr$uai.mono1.nt.6mo
+        c2 <- dat$attr$uai.nmain
+        c3 <- dat$attr$ai.sd.mc
       } else if (prep.elig.model == "cdc4") {
-        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
-        mat.c2 <- dat$riskh$uai.nmain
-        mat.c3 <- dat$riskh$uai.sd.mc
+        c1 <- dat$attr$uai.mono1.nt.6mo
+        c2 <- dat$attr$uai.nmain
+        c3 <- dat$attr$uai.sd.mc
       }
-      idsEligStart <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
-                                      rowSums(mat.c2, na.rm = TRUE) > 0 |
-                                      rowSums(mat.c3, na.rm = TRUE) > 0),
+      idsEligStart <- intersect(which(c1 >= twind |
+                                      c2 >= twind |
+                                      c3 >= twind),
                                 idsEligStart)
-      idsEligStop <- intersect(which(rowSums(mat.c1, na.rm = TRUE) == 0 &
-                                     rowSums(mat.c2, na.rm = TRUE) == 0 &
-                                     rowSums(mat.c3, na.rm = TRUE) == 0),
+      idsEligStop <- intersect(which(c1 < twind &
+                                     c2 < twind &
+                                     c3 < twind),
                                 idsEligStop)
     } else {
-      mat <- dat$riskh[[prep.elig.model]]
-      idsEligStart <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart)
-      idsEligStop <- intersect(which(rowSums(mat, na.rm = TRUE) == 0), idsEligStop)
+      c1 <- dat$attr[[prep.elig.model]]
+      idsEligStart <- intersect(which(c1 >= twind), idsEligStart)
+      idsEligStop <- intersect(which(c1 < twind), idsEligStop)
     }
   }
 

@@ -1,5 +1,4 @@
 
-
 # MSM -----------------------------------------------------------------
 
 #' @title Epidemic Model Parameters
@@ -458,7 +457,7 @@ param_msm <- function(nwstats,
 #' function \code{\link{netsim}}.
 #'
 #' @keywords msm
-#' 
+#'
 #' @export
 init_msm <- function(nwstats,
                      prev.B = 0.15,
@@ -568,7 +567,7 @@ control_msm <- function(simno = 1,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         prune.discl.list = TRUE,
-                        save.other = c("attr", "temp", "riskh", "el", "p"),
+                        save.other = c("attr", "temp", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {
@@ -668,7 +667,7 @@ control_msm <- function(simno = 1,
 #' @param ... additional arguments to be passed into model.
 #'
 #' @details This function sets the parameters for the models.
-#' 
+#'
 #' @keywords het
 #'
 #' @export
@@ -811,7 +810,7 @@ param_het <- function(time.unit = 7,
 #' @param ... additional arguments to be passed into model.
 #'
 #' @details This function sets the initial conditions for the models.
-#' 
+#'
 #' @keywords het
 #'
 #' @export
@@ -895,7 +894,7 @@ init_het <- function(i.prev.male = 0.05,
 #' @param ... Additional arguments passed to the function.
 #'
 #' @details This function sets the parameters for the models.
-#' 
+#'
 #' @keywords het
 #'
 #' @export

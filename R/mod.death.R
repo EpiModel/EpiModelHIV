@@ -60,9 +60,6 @@ deaths_msm <- function(dat, at) {
     if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
       stop("mismatch between el and attr length in death mod")
     }
-    for (i in 1:length(dat$riskh)) {
-      dat$riskh[[i]] <- dat$riskh[[i]][-dth.all, ]
-    }
   }
 
 

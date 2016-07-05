@@ -156,12 +156,6 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   # PrEP
   dat$attr$prepStat[newIds] <- 0
 
-  # Risk history matrices
-  for (i in 1:length(dat$riskh)) {
-    dat$riskh[[i]] <- rbind(dat$riskh[[i]],
-                            matrix(NA, ncol = ncol(dat$riskh[[i]]), nrow = nBirths))
-  }
-
   return(dat)
 }
 
@@ -175,7 +169,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 #' @inheritParams aging_het
 #'
 #' @keywords module het
-#' 
+#'
 #' @export
 #'
 births_het <- function(dat, at) {
@@ -235,10 +229,10 @@ births_het <- function(dat, at) {
 #' @param nBirths Number of new births as determined by \code{\link{births_het}}.
 #'
 #' @keywords het
-#' 
+#'
 #' @export
-#' 
-#' 
+#'
+#'
 setBirthAttr_het <- function(dat, at, nBirths) {
 
   # Set attributes for new births to NA
