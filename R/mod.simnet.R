@@ -9,7 +9,7 @@
 #' @inheritParams aging_msm
 #'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 simnet_msm <- function(dat, at) {
@@ -21,11 +21,14 @@ simnet_msm <- function(dat, at) {
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
   dat <- updatenwp_msm(dat, network = 1)
 
+
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
                                              coef.form = nwparam.m$coef.form,
                                              coef.diss = nwparam.m$coef.diss$coef.adj,
                                              save.changes = TRUE)
+
+
 
 
   dat$temp$new.edges <- NULL
@@ -94,9 +97,9 @@ simnet_msm <- function(dat, at) {
 #' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
 #' composition effects in exponential-family random graph models." Statistical
 #' Methodology. 2011; 8.4: 319-339.
-#' 
+#'
 #' @keywords module msm
-#' 
+#'
 #' @export
 #'
 edges_correct_msm <- function(dat, at) {
@@ -133,7 +136,7 @@ edges_correct_msm <- function(dat, at) {
 #' @keywords module msm
 #'
 #' @export
-#' 
+#'
 #'
 updatenwp_msm <- function(dat, network) {
 
@@ -164,10 +167,7 @@ updatenwp_msm <- function(dat, network) {
     mf$terms[[1]]$maxval <- maxdyads
 
     # nodefactor("deg.pers")
-    deg.pers <- rep(0, n)
-    tab.pers <- table(dat$el[[2]])
-    deg.pers[as.numeric(names(tab.pers))] <- as.vector(tab.pers)
-    dat$attr$deg.pers <- deg.pers
+    dat$attr$deg.pers <- get_degree(dat$el[[2]])
 
     nodecov <- dat$attr$deg.pers
     u <- sort(unique(nodecov))
@@ -245,10 +245,7 @@ updatenwp_msm <- function(dat, network) {
     mf$terms[[1]]$maxval <- maxdyads
 
     # nodefactor("deg.main")
-    deg.main <- rep(0, n)
-    tab.main <- table(dat$el[[1]])
-    deg.main[as.numeric(names(tab.main))] <- as.vector(tab.main)
-    dat$attr$deg.main <- deg.main
+    dat$attr$deg.main <- get_degree(dat$el[[1]])
 
     nodecov <- dat$attr$deg.main
     u <- sort(unique(nodecov))
@@ -334,15 +331,8 @@ updatenwp_msm <- function(dat, network) {
     mf$terms[[1]]$maxval <- maxdyads
 
     # nodefactor(c("deg.main", "deg.pers"))
-    deg.main <- rep(0, n)
-    tab.main <- table(dat$el[[1]])
-    deg.main[as.numeric(names(tab.main))] <- as.vector(tab.main)
-    dat$attr$deg.main <- deg.main
-
-    deg.pers <- rep(0, n)
-    tab.pers <- table(dat$el[[2]])
-    deg.pers[as.numeric(names(tab.pers))] <- as.vector(tab.pers)
-    dat$attr$deg.pers <- deg.pers
+    # current main degree already written in last conditional block
+    dat$attr$deg.pers <- get_degree(dat$el[[2]])
 
     nodecov <- do.call(paste, c(sapply(c("deg.main", "deg.pers"),
                                        function(oneattr) dat$attr[[oneattr]],
@@ -411,7 +401,7 @@ updatenwp_msm <- function(dat, network) {
 #' @inheritParams aging_het
 #'
 #' @keywords module het
-#'  
+#'
 #' @export
 #'
 simnet_het <- function(dat, at) {
@@ -512,7 +502,7 @@ update_nwp_het <- function(dat) {
 #' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
 #' composition effects in exponential-family random graph models." Statistical
 #' Methodology. 2011; 8.4: 319-339.
-#' 
+#'
 #' @keywords module het
 #'
 #' @export
