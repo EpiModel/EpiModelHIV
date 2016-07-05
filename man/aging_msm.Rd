@@ -18,7 +18,7 @@ This function returns \code{dat} after updating the nodal attribute
 updated on the three networks.
 }
 \description{
-Module for aging over time for active nodes in the population.
+Module for aging over time for nodes in the population.
 }
 \keyword{module}
 \keyword{msm}

@@ -13,7 +13,7 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \description{
-This module ages all active nodes in the population by one time
+This module ages all nodes in the population by one time
              unit at each time step.
 }
 \keyword{het}
