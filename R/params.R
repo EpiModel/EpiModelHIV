@@ -281,7 +281,7 @@ param_msm <- function(nwstats,
                       UIAI.prob = 0.0031 * 1.09,
                       acute.rr = 6,
                       circ.rr = 0.4,
-                      condom.rr = 0.25,
+                      condom.rr = 0.295,
 
                       disc.outset.main.B.prob = 0.685,
                       disc.outset.main.W.prob = 0.889,
