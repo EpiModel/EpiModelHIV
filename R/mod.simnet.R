@@ -69,6 +69,31 @@ simnet_msm <- function(dat, at) {
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
 
+  if (dat$control$save.nwstats == TRUE) {
+    dat <- calc_resim_nwstats(dat, at)
+  }
+
+  return(dat)
+}
+
+
+calc_resim_nwstats <- function(dat, at) {
+
+  for (nw in 1:3) {
+    n <- attr(dat$el[[nw]], "n")
+    edges <- nrow(dat$el[[nw]])
+    meandeg <- round(edges / n, 3)
+    concurrent <- round(mean(get_degree(dat$el[[nw]]) > 1), 3)
+    mat <- matrix(c(edges, meandeg, concurrent), ncol = 3, nrow = 1)
+    if (at == 2) {
+      dat$stats$nwstats[[nw]] <- mat
+      colnames(dat$stats$nwstats[[nw]]) <- c("edges", "meand", "conc")
+    }
+    if (at > 2) {
+      dat$stats$nwstats[[nw]] <- rbind(dat$stats$nwstats[[nw]], mat)
+    }
+  }
+
   return(dat)
 }
 

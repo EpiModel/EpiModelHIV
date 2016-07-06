@@ -529,6 +529,8 @@ init_msm <- function(nwstats,
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
+#' @param save.nwstats Calculate and save network statistics as defined in the
+#'        \code{simnet} modules.
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
@@ -569,6 +571,7 @@ control_msm <- function(simno = 1,
                         trans.FUN = trans_msm,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
+                        save.nwstats = FALSE,
                         save.other = c("attr", "temp", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,
@@ -588,7 +591,6 @@ control_msm <- function(simno = 1,
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
   p$save.network = FALSE
-  p$save.nwstats = FALSE
 
   class(p) <- "control.net"
   return(p)

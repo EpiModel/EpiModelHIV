@@ -149,6 +149,12 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
 
+  if (control$save.nwstats == TRUE) {
+    dat$stats <- list()
+    dat$stats$nwstats <- list()
+
+  }
+
   dat <- prevalence_msm(dat, at = 1)
 
   class(dat) <- "dat"
