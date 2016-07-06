@@ -529,9 +529,6 @@ init_msm <- function(nwstats,
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
-#' @param prune.discl.list If \code{TRUE}, remove any dissolved edges from the
-#'        disclosure list.
-#'        out at the end of simulation (necessary for restarting a simulation).
 #' @param save.other Character vector containing other list elements of \code{dat}
 #'        to save.
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
@@ -572,7 +569,6 @@ control_msm <- function(simno = 1,
                         trans.FUN = trans_msm,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
-                        prune.discl.list = TRUE,
                         save.other = c("attr", "temp", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,

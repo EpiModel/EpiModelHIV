@@ -133,7 +133,7 @@ disclose_msm <- function(dat, at){
     }
   }
 
-  if (at > 2 & dat$control$prune.discl.list == TRUE) {
+  if (at > 2) {
     discl.list <- dat$temp$discl.list
     master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
     m <- which(match(discl.list[, 1] * 1e7 + discl.list[, 2],
