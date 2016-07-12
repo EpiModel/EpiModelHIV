@@ -252,6 +252,10 @@ init_status_msm <- function(dat) {
   tt.traj[ids.W] <- sample(apportion_lr(num.W, c("NN", "YN", "YP", "YF"),
                                         dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
+  tt.traj[ids.B] <- sample(apportion_lr(num.B, c(1, 2, 3, 4),
+                                        dat$param$tt.traj.B.prob))
+  tt.traj[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4),
+                                        dat$param$tt.traj.W.prob))
 
 
   ## Infection-related attributes
