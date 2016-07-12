@@ -1,3 +1,26 @@
+rm(list=ls())
+suppressMessages(library("EpiModelHIV"))
+sourceDir("R/")
+
+data(est)
+data(st)
+est
+st
+param <- param_msm(nwstats = st, 
+                   ai.scale = 1.323,
+                   prep.coverage = 0)
+init <- init_msm(nwstats = st, 
+                 prev.B = 0.253, 
+                 prev.W = 0.253)
+control <- control_msm(simno = 0.253, 
+                       nsteps = 52,
+                       nsims = 5, 
+                       ncores = 1, 
+                       save.nwstats = TRUE,
+                       verbose.int = 1)
+sim <- netsim(est, param, init, control)
+
+
 
 at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
