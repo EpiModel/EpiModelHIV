@@ -1,30 +1,10 @@
 context("Numeric attributes for C++ code")
 
-rm(list=ls())
-devtools::install_github("statnet/EpiModelHIV")
-suppressMessages(library("EpiModelHIV"))
-sourceDir("R/")
+test_that("Numeric for treatment trajectory", {
+    expect_equal(sum(sim$attr$tt.traj.W.prob), 1)
+    expect_error(sum(sim$attr$tt.traj.B.prob) != 1, "Proportion of men in treatment categories must sum to 1")
+})
 
-data(est)
-data(st)
-est
-st
-param <- param_msm(nwstats = st, 
-                   ai.scale = 1.323,
-                   prep.coverage = 0)
-init <- init_msm(nwstats = st, 
-                 prev.B = 0.253, 
-                 prev.W = 0.253)
-control <- control_msm(simno = 0.253, 
-                       nsteps = 52,
-                       nsims = 1, 
-                       ncores = 1, 
-                       save.nwstats = TRUE,
-                       verbose.int = 1)
-sim <- netsim(est, param, init, control)
-
-
-test_that("Numeric for ", {
-    
-    NULL
+test_that("Numeric for disease stage", {
+    expect_true(all(!(is.na(sim$attr$inf.stage)) %in% c(1, 2, 3, 4)))
 })
