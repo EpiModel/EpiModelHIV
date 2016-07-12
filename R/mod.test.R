@@ -46,14 +46,14 @@ test_msm <- function(dat, at) {
 
   if (testing.pattern == "memoryless") {
     elig.B <- which(race == "B" &
-                    tt.traj != "NN" &
+                    tt.traj != 1 &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
     rates.B <- rep(1/mean.test.B.int, length(elig.B))
     tst.B <- elig.B[rbinom(length(elig.B), 1, rates.B) == 1]
 
     elig.W <- which(race == "W" &
-                    tt.traj != "NN" &
+                    tt.traj != 1 &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
     rates.W <- rep(1/mean.test.W.int, length(elig.W))
@@ -63,13 +63,13 @@ test_msm <- function(dat, at) {
 
   if (testing.pattern == "interval") {
     tst.B <- which(race == "B" &
-                   tt.traj != "NN" &
+                   tt.traj != 1 &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.B.int) &
                    prepStat == 0)
 
     tst.W <- which(race == "W" &
-                   tt.traj != "NN" &
+                   tt.traj != 1 &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.W.int) &
                    prepStat == 0)

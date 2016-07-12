@@ -29,11 +29,11 @@ an established set-point HIV viral load.
 The time spent in chronic stage infection, and thus the time from infection to
 AIDS, depends on ART history. For ART-naive persons, time to AIDS is established
 by the \code{vl.aids.onset} parameter. For persons ever on ART who fall into
-the partially suppressed category (the \code{tt.traj} attribute is \code{"YP"}),
+the partially suppressed category (the \code{tt.traj} attribute is \code{3}),
 time to AIDS depends on the sum of two ratios: time on treatment over maximum
 time on treatment plus time off treatment over maximum time off treatment.
 For persons ever on ART who fall into the fully suppressed cateogry
-(\code{tt.traj="YF"}), time to AIDS depends on whether the cumulative time
+(\code{tt.traj=4}), time to AIDS depends on whether the cumulative time
 off treatment exceeds a time threshold specified in the \code{max.time.off.tx.full}
 parameter.
 }

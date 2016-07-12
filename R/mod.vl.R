@@ -12,8 +12,8 @@
 #' chronic stage infection. VL again rises during AIDS stage disease until the
 #' point of death.
 #'
-#' For persons who have ever initated treatment (\code{tt.traj} is \code{"YP"} or
-#' \code{"YF"}), VL changes depending on current ART use in that time step.
+#' For persons who have ever initated treatment (\code{tt.traj} is \code{3} or
+#' \code{4}), VL changes depending on current ART use in that time step.
 #' Current use is associated with a reduction in VL, with the rates of decline
 #' and nadirs dependent on partial or full suppression levels. Current
 #' non-adherence is associated with an equal level of increase to VL. All persons
@@ -77,26 +77,26 @@ vl_msm <- function(dat, at) {
   vl[target] <- new.vl
 
   # 2. men on tx, tt.traj=full, not yet escaped
-  target <- which(tx.status == 1 & tt.traj == "YF" & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == 4 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - full.supp.down.slope, vl.full.supp)
   vl[target] <- new.vl
 
   # 3. men on tx, tt.traj=part, not yet escaped
-  target <- which(tx.status == 1 & tt.traj == "YP" & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == 3 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - part.supp.down.slope, vl.part.supp)
   vl[target] <- new.vl
 
   # 4. men off tx, not naive, tt.traj=full, not yet escaped
-  target <- which(tx.status == 0 & tt.traj == "YF" &
+  target <- which(tx.status == 0 & tt.traj == 4 &
                   cum.time.on.tx > 0 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + full.supp.up.slope, vlsp)
   vl[target] <- new.vl
 
   # 5. men off tx, not naive, tt.traj=part, not yet escaped
-  target <- which(tx.status == 0 & tt.traj == "YP" &
+  target <- which(tx.status == 0 & tt.traj == 3 &
                   cum.time.on.tx > 0 & stage != "D")
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + part.supp.up.slope, vlsp)
@@ -107,20 +107,20 @@ vl_msm <- function(dat, at) {
 
   # 7. men on tx, tt.traj=part, escaped
   target <- which(tx.status == 1 &
-                  tt.traj == "YP" & stage == "D")
+                  tt.traj == 3 & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 8. men off tx, tt.traj=full, and escaped
-  target <- which(tx.status == 0 & tt.traj == "YF" &
+  target <- which(tx.status == 0 & tt.traj == 4 &
                   cum.time.on.tx > 0 & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 9. men off tx, tt.traj=part, and escaped
-  target <- which(tx.status == 0 & tt.traj == "YP" &
+  target <- which(tx.status == 0 & tt.traj == 3 &
                   cum.time.on.tx > 0 & stage == "D")
   current.vl <- vl[target]
   new.vl <- current.vl + vlds

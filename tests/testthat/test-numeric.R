@@ -21,7 +21,6 @@ control <- control_msm(simno = 0.253,
                        ncores = 1, 
                        save.nwstats = TRUE,
                        verbose.int = 1)
-debug(EpiModelHIV:::init_status_msm)
 sim <- netsim(est, param, init, control)
 
 

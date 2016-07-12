@@ -247,15 +247,13 @@ init_status_msm <- function(dat) {
 
   # Treatment trajectory
   tt.traj <- rep(NA, num)
-  tt.traj[ids.B] <- sample(apportion_lr(num.B, c("NN", "YN", "YP", "YF"),
-                                        dat$param$tt.traj.B.prob))
-  tt.traj[ids.W] <- sample(apportion_lr(num.W, c("NN", "YN", "YP", "YF"),
-                                        dat$param$tt.traj.W.prob))
-  dat$attr$tt.traj <- tt.traj
+
   tt.traj[ids.B] <- sample(apportion_lr(num.B, c(1, 2, 3, 4),
                                         dat$param$tt.traj.B.prob))
   tt.traj[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4),
                                         dat$param$tt.traj.W.prob))
+  dat$attr$tt.traj <- tt.traj
+
 
 
   ## Infection-related attributes
@@ -294,7 +292,7 @@ init_status_msm <- function(dat) {
 
 
   ### Non-treater type: tester and non-tester
-  selected <- which(status == 1 & tt.traj %in% c("NN", "YN"))
+  selected <- which(status == 1 & tt.traj %in% c(1, 2))
   max.inf.time <- pmin(time.sex.active[selected], vldo.int + vl.aids.int)
   time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
   inf.time[selected] <- 1 - time.since.inf
@@ -321,10 +319,10 @@ init_status_msm <- function(dat) {
                   (time.since.inf > vlar.int + vlaf.int) * (time.since.inf <= vldo.int) * (vlsp) +
                   (time.since.inf > vldo.int) * (vlsp + (time.since.inf - vldo.int) * vlds)
 
-  selected <- which(status == 1 & tt.traj == "NN")
+  selected <- which(status == 1 & tt.traj == 1)
   diag.status[selected] <- 0
 
-  selected <- which(status == 1 & tt.traj == "YN")
+  selected <- which(status == 1 & tt.traj == 2)
 
   # Time to next test
   if (dat$param$testing.pattern == "interval") {
@@ -401,7 +399,7 @@ init_status_msm <- function(dat) {
   stage.time.W <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.W, 1:vl.aids.int)
 
   # Vl for Blacks
-  selected <- which(status == 1 & tt.traj == "YF" & race == "B")
+  selected <- which(status == 1 & tt.traj == 4 & race == "B")
   max.inf.time <- pmin(time.sex.active[selected], max.possible.inf.time.B)
   time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
   inf.time[selected] <- 1 - time.since.inf
@@ -423,7 +421,7 @@ init_status_msm <- function(dat) {
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
 
   # VL for Whites
-  selected <- which(status == 1 & tt.traj == "YF" & race == "W")
+  selected <- which(status == 1 & tt.traj == 4 & race == "W")
   max.inf.time <- pmin(time.sex.active[selected], max.possible.inf.time.W)
   time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
   inf.time[selected] <- 1 - time.since.inf
@@ -445,7 +443,7 @@ init_status_msm <- function(dat) {
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
 
   # Diagnosis
-  selected <- which(status == 1 & tt.traj == "YF")
+  selected <- which(status == 1 & tt.traj == 4)
   if (dat$param$testing.pattern == "interval") {
     ttntest <- ceiling(runif(length(selected),
                              min = 0,
@@ -518,7 +516,7 @@ init_status_msm <- function(dat) {
   stage.time.W <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.W, 1:vl.aids.int)
 
   # VL for Blacks
-  selected <- which(status == 1 & tt.traj == "YP" & race == "B")
+  selected <- which(status == 1 & tt.traj == 3 & race == "B")
   max.inf.time <- pmin(time.sex.active[selected], max.possible.inf.time.B)
   time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
   inf.time[selected] <- 1 - time.since.inf
@@ -540,7 +538,7 @@ init_status_msm <- function(dat) {
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
 
   # VL for Whites
-  selected <- which(status == 1 & tt.traj == "YP" & race == "W")
+  selected <- which(status == 1 & tt.traj == 3 & race == "W")
   max.inf.time <- pmin(time.sex.active[selected], max.possible.inf.time.W)
   time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
   inf.time[selected] <- 1 - time.since.inf
@@ -562,7 +560,7 @@ init_status_msm <- function(dat) {
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
 
   # Implement diagnosis for both
-  selected <- which(status == 1 & tt.traj == "YP")
+  selected <- which(status == 1 & tt.traj == 3)
   if (dat$param$testing.pattern == "interval") {
     ttntest <- ceiling(runif(length(selected),
                              min = 0,
@@ -587,7 +585,7 @@ init_status_msm <- function(dat) {
 
 
   # Last neg test before present for negatives
-  selected <- which(status == 0 & tt.traj %in% c("YN", "YP", "YF"))
+  selected <- which(status == 0 & tt.traj %in% c(2, 3, 4))
 
   if (dat$param$testing.pattern == "interval") {
     tslt <- ceiling(runif(length(selected),
