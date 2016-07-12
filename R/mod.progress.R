@@ -63,32 +63,32 @@ progress_msm <- function(dat, at) {
 
   # Change stage to Acute Falling
   toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1))
-  stage[toAF] <- "AF"
+  stage[toAF] <- 2
   stage.time[toAF] <- 1
 
   # Change stage to Chronic
   toC <- which(active == 1 & time.since.inf == (vl.acute.rise.int +
                                                 vl.acute.fall.int + 1))
-  stage[toC] <- "C"
+  stage[toC] <- 3
   stage.time[toC] <- 1
 
   # Change stage to AIDS
   aids.tx.naive <- which(active == 1 & status == 1 & cum.time.on.tx == 0 &
-                         (time.since.inf >= vl.aids.onset) & stage != "D")
+                         (time.since.inf >= vl.aids.onset) & stage != 4)
 
   part.tx.score <- (cum.time.off.tx / max.time.off.tx.part) +
                    (cum.time.on.tx / max.time.on.tx.part)
 
   aids.part.escape <- which(active == 1 & cum.time.on.tx > 0 & tt.traj == 3 &
-                            stage == "C" & part.tx.score >= 1 & stage != "D")
+                            stage == 3 & part.tx.score >= 1 & stage != 4)
 
   aids.off.tx.full.escape <- which(active == 1 & tx.status == 0 & tt.traj == 4 &
                                    cum.time.on.tx > 0 &
                                    cum.time.off.tx >= max.time.off.tx.full &
-                                   stage != "D")
+                                   stage != 4)
 
   isAIDS <- c(aids.tx.naive, aids.part.escape, aids.off.tx.full.escape)
-  stage[isAIDS] <- "D"
+  stage[isAIDS] <- 4
   stage.time[isAIDS] <- 1
 
 

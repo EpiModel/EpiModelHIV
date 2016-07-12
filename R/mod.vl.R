@@ -77,27 +77,27 @@ vl_msm <- function(dat, at) {
   vl[target] <- new.vl
 
   # 2. men on tx, tt.traj=full, not yet escaped
-  target <- which(tx.status == 1 & tt.traj == 4 & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == 4 & stage != 4)
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - full.supp.down.slope, vl.full.supp)
   vl[target] <- new.vl
 
   # 3. men on tx, tt.traj=part, not yet escaped
-  target <- which(tx.status == 1 & tt.traj == 3 & stage != "D")
+  target <- which(tx.status == 1 & tt.traj == 3 & stage != 4)
   current.vl <- vl[target]
   new.vl <- pmax(current.vl - part.supp.down.slope, vl.part.supp)
   vl[target] <- new.vl
 
   # 4. men off tx, not naive, tt.traj=full, not yet escaped
   target <- which(tx.status == 0 & tt.traj == 4 &
-                  cum.time.on.tx > 0 & stage != "D")
+                  cum.time.on.tx > 0 & stage != 4)
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + full.supp.up.slope, vlsp)
   vl[target] <- new.vl
 
   # 5. men off tx, not naive, tt.traj=part, not yet escaped
   target <- which(tx.status == 0 & tt.traj == 3 &
-                  cum.time.on.tx > 0 & stage != "D")
+                  cum.time.on.tx > 0 & stage != 4)
   current.vl <- vl[target]
   new.vl <- pmin(current.vl + part.supp.up.slope, vlsp)
   vl[target] <- new.vl
@@ -107,21 +107,21 @@ vl_msm <- function(dat, at) {
 
   # 7. men on tx, tt.traj=part, escaped
   target <- which(tx.status == 1 &
-                  tt.traj == 3 & stage == "D")
+                  tt.traj == 3 & stage == 4)
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 8. men off tx, tt.traj=full, and escaped
   target <- which(tx.status == 0 & tt.traj == 4 &
-                  cum.time.on.tx > 0 & stage == "D")
+                  cum.time.on.tx > 0 & stage == 4)
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl
 
   # 9. men off tx, tt.traj=part, and escaped
   target <- which(tx.status == 0 & tt.traj == 3 &
-                  cum.time.on.tx > 0 & stage == "D")
+                  cum.time.on.tx > 0 & stage == 4)
   current.vl <- vl[target]
   new.vl <- current.vl + vlds
   vl[target] <- new.vl

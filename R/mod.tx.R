@@ -50,14 +50,14 @@ tx_msm <- function(dat, at) {
   tx.init.elig.B <- which(race == "B" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c(3, 4) & cum.time.on.tx == 0 &
-                          stage != "D")
+                          stage != 4)
   tx.init.B <- tx.init.elig.B[rbinom(length(tx.init.elig.B), 1,
                                      tx.init.B.prob) == 1]
 
   tx.init.elig.W <- which(race == "W" & status == 1 &
                           tx.status == 0 & diag.status == 1 &
                           tt.traj %in% c(3, 4) & cum.time.on.tx == 0 &
-                          stage != "D")
+                          stage != 4)
   tx.init.W <- tx.init.elig.W[rbinom(length(tx.init.elig.W), 1,
                                      tx.init.W.prob) == 1]
 
@@ -81,12 +81,12 @@ tx_msm <- function(dat, at) {
 
   ## Restarting
   tx.reinit.elig.B <- which(race == "B" & tx.status == 0 &
-                            cum.time.on.tx > 0 & stage != "D")
+                            cum.time.on.tx > 0 & stage != 4)
   tx.reinit.B <- tx.reinit.elig.B[rbinom(length(tx.reinit.elig.B),
                                          1, tx.reinit.B.prob) == 1]
 
   tx.reinit.elig.W <- which(race == "W" & tx.status == 0 &
-                            cum.time.on.tx > 0 & stage != "D")
+                            cum.time.on.tx > 0 & stage != 4)
   tx.reinit.W <- tx.reinit.elig.W[rbinom(length(tx.reinit.elig.W),
                                          1, tx.reinit.W.prob) == 1]
 

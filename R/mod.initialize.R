@@ -300,17 +300,17 @@ init_status_msm <- function(dat) {
   cum.time.on.tx[selected] <- 0
   cum.time.off.tx[selected] <- time.since.inf
 
-  stage[selected[time.since.inf <= vlar.int]] <- "AR"
-  stage[selected[time.since.inf > vlar.int & time.since.inf <= vl.acute.int]] <- "AF"
-  stage[selected[time.since.inf > vl.acute.int & time.since.inf <= vldo.int]] <- "C"
-  stage[selected[time.since.inf > vldo.int]] <- "D"
+  stage[selected[time.since.inf <= vlar.int]] <- 1
+  stage[selected[time.since.inf > vlar.int & time.since.inf <= vl.acute.int]] <- 2
+  stage[selected[time.since.inf > vl.acute.int & time.since.inf <= vldo.int]] <- 3
+  stage[selected[time.since.inf > vldo.int]] <- 4
 
-  stage.time[selected][stage[selected] == "AR"] <- time.since.inf[stage[selected] == "AR"]
-  stage.time[selected][stage[selected] == "AF"] <- time.since.inf[stage[selected] == "AF"] -
+  stage.time[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1]
+  stage.time[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] -
                                                    vlar.int
-  stage.time[selected][stage[selected] == "C"] <- time.since.inf[stage[selected] == "C"] -
+  stage.time[selected][stage[selected] == 3] <- time.since.inf[stage[selected] == 3] -
                                                   vl.acute.int
-  stage.time[selected][stage[selected] == "D"] <- time.since.inf[stage[selected] == "D"] -
+  stage.time[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] -
                                                   vldo.int
 
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
@@ -372,7 +372,7 @@ init_status_msm <- function(dat) {
                           ncol = 2))
   max.possible.inf.time.B <- nrow(offon.B)
   offon.B[, 2] <- (1:max.possible.inf.time.B) - offon.B[, 1]
-  stage.B <- rep(c("AR", "AF", "C", "D"), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
+  stage.B <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
   # Stage for Whites
@@ -395,7 +395,7 @@ init_status_msm <- function(dat) {
                           ncol = 2))
   max.possible.inf.time.W <- nrow(offon.W)
   offon.W[, 2] <- (1:max.possible.inf.time.W) - offon.W[, 1]
-  stage.W <- rep(c("AR", "AF", "C", "D"), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
+  stage.W <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
   stage.time.W <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.W, 1:vl.aids.int)
 
   # Vl for Blacks
@@ -408,8 +408,8 @@ init_status_msm <- function(dat) {
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == "C" & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == "C" & cum.time.on.tx[selected] > 0),
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
+    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
            1, prop.time.on.tx.B)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
@@ -430,8 +430,8 @@ init_status_msm <- function(dat) {
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == "C" & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == "C" & cum.time.on.tx[selected] > 0),
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
+    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
            1, prop.time.on.tx.W)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
@@ -488,7 +488,7 @@ init_status_msm <- function(dat) {
                           ncol = 2))
   max.possible.inf.time.B <- nrow(offon.B)
   offon.B[, 2] <- (1:max.possible.inf.time.B) - offon.B[, 1]
-  stage.B <- rep(c("AR", "AF", "C", "D"), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
+  stage.B <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
   prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
@@ -512,7 +512,7 @@ init_status_msm <- function(dat) {
                           ncol = 2))
   max.possible.inf.time.W <- nrow(offon.W)
   offon.W[, 2] <- (1:max.possible.inf.time.W) - offon.W[, 1]
-  stage.W <- rep(c("AR", "AF", "C", "D"), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
+  stage.W <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
   stage.time.W <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.W, 1:vl.aids.int)
 
   # VL for Blacks
@@ -525,8 +525,8 @@ init_status_msm <- function(dat) {
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == "C" & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == "C" & cum.time.on.tx[selected] > 0),
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
+    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
            1, prop.time.on.tx.B)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
@@ -547,8 +547,8 @@ init_status_msm <- function(dat) {
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == "C" & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == "C" & cum.time.on.tx[selected] > 0),
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
+    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
            1, prop.time.on.tx.W)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
