@@ -15,11 +15,11 @@
 #' The time spent in chronic stage infection, and thus the time from infection to
 #' AIDS, depends on ART history. For ART-naive persons, time to AIDS is established
 #' by the \code{vl.aids.onset} parameter. For persons ever on ART who fall into
-#' the partially suppressed category (the \code{tt.traj} attribute is \code{"YP"}),
+#' the partially suppressed category (the \code{tt.traj} attribute is \code{3}),
 #' time to AIDS depends on the sum of two ratios: time on treatment over maximum
 #' time on treatment plus time off treatment over maximum time off treatment.
 #' For persons ever on ART who fall into the fully suppressed cateogry
-#' (\code{tt.traj="YF"}), time to AIDS depends on whether the cumulative time
+#' (\code{tt.traj=4}), time to AIDS depends on whether the cumulative time
 #' off treatment exceeds a time threshold specified in the \code{max.time.off.tx.full}
 #' parameter.
 #'
@@ -63,32 +63,32 @@ progress_msm <- function(dat, at) {
 
   # Change stage to Acute Falling
   toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1))
-  stage[toAF] <- "AF"
+  stage[toAF] <- 2
   stage.time[toAF] <- 1
 
   # Change stage to Chronic
   toC <- which(active == 1 & time.since.inf == (vl.acute.rise.int +
                                                 vl.acute.fall.int + 1))
-  stage[toC] <- "C"
+  stage[toC] <- 3
   stage.time[toC] <- 1
 
   # Change stage to AIDS
   aids.tx.naive <- which(active == 1 & status == 1 & cum.time.on.tx == 0 &
-                         (time.since.inf >= vl.aids.onset) & stage != "D")
+                         (time.since.inf >= vl.aids.onset) & stage != 4)
 
   part.tx.score <- (cum.time.off.tx / max.time.off.tx.part) +
                    (cum.time.on.tx / max.time.on.tx.part)
 
-  aids.part.escape <- which(active == 1 & cum.time.on.tx > 0 & tt.traj == "YP" &
-                            stage == "C" & part.tx.score >= 1 & stage != "D")
+  aids.part.escape <- which(active == 1 & cum.time.on.tx > 0 & tt.traj == 3 &
+                            stage == 3 & part.tx.score >= 1 & stage != 4)
 
-  aids.off.tx.full.escape <- which(active == 1 & tx.status == 0 & tt.traj == "YF" &
+  aids.off.tx.full.escape <- which(active == 1 & tx.status == 0 & tt.traj == 4 &
                                    cum.time.on.tx > 0 &
                                    cum.time.off.tx >= max.time.off.tx.full &
-                                   stage != "D")
+                                   stage != 4)
 
   isAIDS <- c(aids.tx.naive, aids.part.escape, aids.off.tx.full.escape)
-  stage[isAIDS] <- "D"
+  stage[isAIDS] <- 4
   stage.time[isAIDS] <- 1
 
 

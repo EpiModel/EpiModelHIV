@@ -45,7 +45,7 @@ deaths_msm <- function(dat, at) {
 
 
   ## Disease deaths
-  dth.dis <- which(dat$attr$stage == "D" &
+  dth.dis <- which(dat$attr$stage == 4 &
                    dat$attr$vl >= dat$param$vl.fatal)
 
   dth.all <- NULL
