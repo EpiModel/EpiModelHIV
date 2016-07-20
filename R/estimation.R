@@ -64,7 +64,7 @@
 #' formationa and dissolution models for the network model estimation to be
 #' conducted with \code{\link{netest}}. The inputs inputs for this function are
 #' calculated externally to the package in a setup scenario file.
-#' 
+#'
 #' @keywords msm
 #'
 #' @seealso
@@ -470,8 +470,12 @@ assign_degree <- function(nw, deg.type, nwstats) {
     dist.W <- colSums(nwstats$deg.mp.W)
   }
 
-  if (sum(dist.B) != 1 || sum(dist.W) != 1) {
-    stop("One of the degree distributions do not sum to 1")
+  if (!isTRUE(all.equal(sum(colSums(deg.mp.B)), 1, tolerance = 5e-6))) {
+    stop("B degree distributions do not sum to 1")
+  }
+
+  if (!isTRUE(all.equal(sum(colSums(deg.mp.W)), 1, tolerance = 5e-6))) {
+    stop("W degree distributions do not sum to 1")
   }
 
   race <- get.vertex.attribute(nw, "race")
