@@ -29,8 +29,6 @@ simnet_msm <- function(dat, at) {
                                              save.changes = TRUE)
 
 
-
-
   dat$temp$new.edges <- NULL
   if (at == 2) {
     new.edges.m <- matrix(dat$el[[1]], ncol = 2)
