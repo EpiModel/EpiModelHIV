@@ -719,8 +719,8 @@ reinit_msm <- function(x, param, init, control, s) {
          "nwparam epi attr temp el p", call. = FALSE)
   }
 
-  if (!is.null(control$currsim) & length(x$network) > 1) {
-    s <- control$currsim
+  if (length(x$el) == 1) {
+    s <- 1
   }
 
   dat <- list()
