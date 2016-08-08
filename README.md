@@ -41,9 +41,9 @@ This Github repository `EpiModelHIV` and the R package within it were previously
 
 ## Literature
 
-`EpiModelHIV` has been used in the following scientific articles published or in press:
+`EpiModelHIV` has been used in the following scientific articles:
 
-1. Jenness SM, Goodreau SM, Morris M, Cassels S. Effectiveness of Combination Packages for HIV-1 Prevention in Sub-Saharan Africa Depends on Partnership Network Structure. Sexually Transmitted Infections. Epub ahead of print. DOI: 10.1136/sextrans-2015-052476. [LINK](http://sti.bmj.com/content/early/2016/06/09/sextrans-2015-052476.abstract)
+1. Jenness SM, Goodreau SM, Morris M, Cassels S. Effectiveness of Combination Packages for HIV-1 Prevention in Sub-Saharan Africa Depends on Partnership Network Structure. _Sexually Transmitted Infections._ [DOI: 10.1136/sextrans-2015-052476.](http://sti.bmj.com/content/early/2016/06/09/sextrans-2015-052476.abstract)
 
-2. Jenness SM, Goodreau SM, Rosenberg E, Beylerian EN, Hoover KW, Smith DK, Sullivan P. Impact of CDC’s HIV Preexposure Prophylaxis Guidelines among MSM in the United States. In Press, Journal of Infectious Diseases.
+2. Jenness SM, Goodreau SM, Rosenberg E, Beylerian EN, Hoover KW, Smith DK, Sullivan P. Impact of CDC’s HIV Preexposure Prophylaxis Guidelines among MSM in the United States. _Journal of Infectious Diseases._ [DOI: 10.1093/infdis/jiw223.](http://jid.oxfordjournals.org/content/early/2016/07/12/infdis.jiw223.full)
 
