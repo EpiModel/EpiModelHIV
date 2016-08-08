@@ -6,9 +6,5 @@ warnings_are_errors: true
 
 notifications:
   email:
-  on_success: never
-on_failure: change
-
-env:
-  - global:
-  - NOT_CRAN=true
+    on_success: never
+    on_failure: change
