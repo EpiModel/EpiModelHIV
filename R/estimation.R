@@ -470,11 +470,11 @@ assign_degree <- function(nw, deg.type, nwstats) {
     dist.W <- colSums(nwstats$deg.mp.W)
   }
 
-  if (!isTRUE(all.equal(sum(colSums(deg.mp.B)), 1, tolerance = 5e-6))) {
+  if (!isTRUE(all.equal(sum(colSums(nwstats$deg.mp.B)), 1, tolerance = 5e-6))) {
     stop("B degree distributions do not sum to 1")
   }
 
-  if (!isTRUE(all.equal(sum(colSums(deg.mp.W)), 1, tolerance = 5e-6))) {
+  if (!isTRUE(all.equal(sum(colSums(nwstats$deg.mp.W)), 1, tolerance = 5e-6))) {
     stop("W degree distributions do not sum to 1")
   }
 
