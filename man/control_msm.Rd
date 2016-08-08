@@ -14,7 +14,7 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   riskhist.FUN = riskhist_msm, position.FUN = position_msm,
   trans.FUN = trans_msm, prev.FUN = prevalence_msm,
   verbose.FUN = verbose_msm, save.nwstats = FALSE, save.other = c("attr",
-  "temp", "el", "p"), verbose = TRUE, verbose.int = 1, ...)
+  "temp", "riskh", "el", "p"), verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes

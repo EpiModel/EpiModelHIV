@@ -227,6 +227,17 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
+#' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
+#'        compensation, 0.5 is a 50% reduction in the probability of condom use
+#'        per act, and 1 is a complete cessation of condom use following PrEP
+#'        initiation.
+#' @param rcomp.adh.groups PrEP adherence groups for whom risk compensation
+#'        occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+#'        low adherence, medium adherence, and high adherence to PrEP.
+#' @param rcomp.main.only Logical, if risk compensation is limited to main
+#'        partnerships only, versus all partnerships.
+#' @param rcomp.discl.only Logical, if risk compensation is limited known-discordant
+#'        partnerships only, versus all partnerships.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -350,6 +361,11 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+
+                      rcomp.prob = 0,
+                      rcomp.adh.groups = 0:4,
+                      rcomp.main.only = FALSE,
+                      rcomp.discl.only = FALSE,
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -461,8 +477,8 @@ param_msm <- function(nwstats,
 #'
 #' @export
 init_msm <- function(nwstats,
-                     prev.B = 0.15,
-                     prev.W = 0.15,
+                     prev.B = 0.253,
+                     prev.W = 0.253,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -567,7 +583,7 @@ control_msm <- function(simno = 1,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         save.nwstats = FALSE,
-                        save.other = c("attr", "temp", "el", "p"),
+                        save.other = c("attr", "temp", "riskh", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {

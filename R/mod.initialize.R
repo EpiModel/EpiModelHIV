@@ -38,10 +38,10 @@ initialize_msm <- function(x, param, init, control, s) {
   nw <- list()
   for (i in 1:3) {
     nw[[i]] <- simulate(x[[i]]$fit)
-    nw[[i]] <- remove_bad_roles_msm(nw[[i]])
+    nw[[i]] <- EpiModelHIVmsm:::remove_bad_roles(nw[[i]])
   }
 
-  ## ergm_prep here
+  ## Build initial edgelists
   dat$el <- list()
   dat$p <- list()
   for (i in 1:2) {
@@ -114,6 +114,19 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepElig <- rep(NA, num)
   dat$attr$prepStat <- rep(0, num)
+  dat$attr$prepEver <- rep(0, num)
+
+  # Risk history lists
+  nc <- ceiling(dat$param$prep.risk.int)
+  dat$riskh <- list()
+  rh.names <- c("uai.mono2.nt.3mo", "uai.mono2.nt.6mo",
+                "uai.mono1.nt.3mo", "uai.mono1.nt.6mo",
+                "uai.nonmonog", "uai.nmain",
+                "ai.sd.mc", "uai.sd.mc")
+  for (i in 1:length(rh.names)) {
+    dat$riskh[[rh.names[i]]] <- matrix(NA, ncol = nc, nrow = num)
+  }
+
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -148,12 +161,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
-
-  if (control$save.nwstats == TRUE) {
-    dat$stats <- list()
-    dat$stats$nwstats <- list()
-
-  }
 
   dat <- prevalence_msm(dat, at = 1)
 

@@ -34,7 +34,7 @@
 #'
 trans_msm <- function(dat, at){
 
-  # Variables -----------------------------------------------------------
+  ## Variables
 
   # Attributes
   vl <- dat$attr$vl
@@ -64,6 +64,9 @@ trans_msm <- function(dat, at){
     return(dat)
   }
 
+
+  ## Processes
+
   ## Reorder by role: ins on the left, rec on the right,
   ##                  with flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
@@ -72,7 +75,7 @@ trans_msm <- function(dat, at){
   colnames(disc.rp)[1:2] <- c("i", "r")
 
 
-  # PATP: Insertive Man Infected (Col 1) --------------------------------
+  ## PATP: Insertive Man Infected (Column 1)
 
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
@@ -84,35 +87,33 @@ trans_msm <- function(dat, at){
   ip.prepcl <- prepClass[disc.ip[, 2]]
 
   # Base TP from VL
-  ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
-
-  # Transform to log odds
-  ip.tlo <- log(ip.tprob/(1-ip.tprob))
+  trans.ip.prob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Condom use
-  not.UAI <- which(disc.ip[, "uai"] == 0)
-  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr)
+  trans.ip.prob[disc.ip[, "uai"] == 0] <- trans.ip.prob[disc.ip[, "uai"] == 0] * condom.rr
 
   # CCR5
-  ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
-  ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
+  trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
+  trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
-    ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] * prep.hr[1]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] * prep.hr[2]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] * prep.hr[3]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
-  isAcute <- which(ip.stage %in% c(1, 2))
-  ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
+  isAcute <- which(ip.stage %in% c("AR", "AF"))
+  trans.ip.prob[isAcute] <- trans.ip.prob[isAcute] * acute.rr
 
-  # Retransformation to probability
-  ip.tprob <- plogis(ip.tlo)
-  stopifnot(ip.tprob >= 0, ip.tprob <= 1)
+  ## TODO: multiplier for prevalent STI infection
+  ## Need to do this twice, given differentials in multipliers
 
-
-  # PATP: Receptive Man Infected (Col 2) --------------------------------
+  ## PATP: Receptive Man Infected (Column 2)
 
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
@@ -125,44 +126,46 @@ trans_msm <- function(dat, at){
   rp.prepcl <- prepClass[disc.rp[, 1]]
 
   # Base TP from VL
-  rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
-
-  # Transform to log odds
-  rp.tlo <- log(rp.tprob/(1-rp.tprob))
+  trans.rp.prob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Circumcision
-  rp.tlo[rp.circ == 1] <- rp.tlo[rp.circ == 1] + log(circ.rr)
+  trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.rr
 
   # Condom use
-  not.UAI <- which(disc.rp[, "uai"] == 0)
-  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr)
+  trans.rp.prob[disc.rp[, "uai"] == 0] <- trans.rp.prob[disc.rp[, "uai"] == 0] * condom.rr
 
   # CCR5
-  rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
-  rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
+  trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0
+  trans.rp.prob[rp.ccr5 == "DW"] <- trans.rp.prob[rp.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
-    rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] * prep.hr[1]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] * prep.hr[2]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] * prep.hr[3]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
-  isAcute <- which(rp.stage %in% c(1, 2))
-  rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
+  isAcute <- which(rp.stage %in% c("AR", "AF"))
+  trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
-  # Retransformation to probability
-  rp.tprob <- plogis(rp.tlo)
-  stopifnot(rp.tprob >= 0, rp.tprob <= 1)
+  ## TODO: multiplier for prevalent STI infection
+  ## Need to do this twice, given differentials in multipliers
 
-  # Transmission --------------------------------------------------------
+  ## Bound range of PATP
+  trans.ip.prob <- pmin(trans.ip.prob, 1)
+  trans.rp.prob <- pmin(trans.rp.prob, 1)
+
 
   ## Bernoulli transmission events
-  trans.ip <- rbinom(length(ip.tprob), 1, ip.tprob)
-  trans.rp <- rbinom(length(rp.tprob), 1, rp.tprob)
+  trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
+  trans.rp <- rbinom(length(trans.rp.prob), 1, trans.rp.prob)
 
 
-  # Output --------------------------------------------------------------
+  ## Output
 
   # Update attributes
 
@@ -184,7 +187,7 @@ trans_msm <- function(dat, at){
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
     dat$attr$vl[infected] <- 0
-    dat$attr$stage[infected] <- 1
+    dat$attr$stage[infected] <- "AR"
     dat$attr$stage.time[infected] <- 0
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
@@ -203,6 +206,19 @@ trans_msm <- function(dat, at){
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
+  dat$epi$incid.cai[at] <- sum(trans.ip[disc.ip[, "uai"] == 0]) +
+    sum(trans.rp[disc.rp[, "uai"] == 0])
+  dat$epi$incid.uai[at] <- sum(trans.ip[disc.ip[, "uai"] == 1]) +
+    sum(trans.rp[disc.rp[, "uai"] == 1])
+  dat$epi$incid.cai.perc[at] <- dat$epi$incid.cai[at] / dat$epi$incid[at]
+
+  if (at >= dat$param$prep.start) {
+    dat$epi$mean.trans[at] <- mean(c(trans.ip.prob, trans.rp.prob))
+    dat$epi$mean.trans.prep[at] <- mean(c(trans.ip.prob[which(ip.prep == 1)],
+                                          trans.rp.prob[which(rp.prep == 1)]))
+    dat$epi$mean.trans.nprep[at] <- mean(c(trans.ip.prob[which(ip.prep == 0)],
+                                           trans.rp.prob[which(rp.prep == 0)]))
+  }
 
   return(dat)
 }

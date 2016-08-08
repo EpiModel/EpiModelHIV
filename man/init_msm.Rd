@@ -4,7 +4,7 @@
 \alias{init_msm}
 \title{Epidemic Model Initial Conditions}
 \usage{
-init_msm(nwstats, prev.B = 0.15, prev.W = 0.15, ...)
+init_msm(nwstats, prev.B = 0.253, prev.W = 0.253, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class

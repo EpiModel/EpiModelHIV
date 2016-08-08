@@ -20,30 +20,43 @@ riskhist_msm <- function(dat, at) {
   uid <- dat$attr$uid
 
   ## Parameters
+  pri <- ceiling(dat$param$prep.risk.int)
 
   ## Edgelist, adds uai summation per partnership from act list
-  pid <- NULL # For R CMD Check
-  al <- as.data.frame(dat$temp$al)
-  by_pid <- group_by(al, pid)
-  uai <- summarise(by_pid, uai = sum(uai))[, 2]
+  al <- dat$temp$al
+  uai <- as.numeric(by(al[, "uai"], al[, "pid"], sum))
   el <- as.data.frame(cbind(dat$temp$el, uai))
 
   # Remove concordant positive edges
   el2 <- el[el$st2 == 0, ]
 
-  if (is.null(dat$attr$uai.mono2.nt.3mo)) {
-    dat$attr$uai.mono2.nt.3mo <- rep(NA, length(uid))
-    dat$attr$uai.mono1.nt.3mo <- rep(NA, length(uid))
-    dat$attr$uai.nonmonog <- rep(NA, length(uid))
-    dat$attr$uai.nmain <- rep(NA, length(uid))
-    dat$attr$ai.sd.mc <- rep(NA, length(uid))
-    dat$attr$uai.sd.mc <- rep(NA, length(uid))
+  ## Truncate riskh matrices
+  for (i in 1:length(dat$riskh)) {
+    nc <- ncol(dat$riskh[[i]])
+    if (pri < ncol(dat$riskh[[i]])) {
+      dat$riskh[[i]] <- dat$riskh[[i]][, (nc - pri + 1):nc]
+    }
+    if (pri > nc) {
+      nr <- nrow(dat$riskh[[i]])
+      dat$riskh[[i]] <- cbind(matrix(NA, ncol = (pri - nc), nrow = nr),
+                              dat$riskh[[i]])
+    }
+    dat$riskh[[i]] <- dat$riskh[[i]][, -1]
+    dat$riskh[[i]] <- cbind(dat$riskh[[i]], rep(NA, nrow(dat$riskh[[i]])))
   }
 
   ## Degree ##
-  main.deg <- get_degree(dat$el[[1]])
-  casl.deg <- get_degree(dat$el[[2]])
-  inst.deg <- get_degree(dat$el[[3]])
+  n <- attributes(dat$el[[1]])$n
+  main.deg <- casl.deg <- inst.deg <- rep(0, n)
+
+  tab.main <- table(dat$el[[1]])
+  main.deg[as.numeric(names(tab.main))] <- as.vector(tab.main)
+
+  tab.casl <- table(dat$el[[2]])
+  casl.deg[as.numeric(names(tab.casl))] <- as.vector(tab.casl)
+
+  tab.inst <- table(dat$el[[3]])
+  inst.deg[as.numeric(names(tab.inst))] <- as.vector(tab.inst)
 
 
   ## Preconditions ##
@@ -75,11 +88,13 @@ riskhist_msm <- function(dat, at) {
   part.id2 <- c(el2[el2$p1 %in% uai.mono2.neg, 2], el2[el2$p2 %in% uai.mono2.neg, 1])
   not.tested.3mo <- since.test[part.id2] > (90/dat$param$time.unit)
   part.not.tested.3mo <- uai.mono2.neg[which(not.tested.3mo == TRUE)]
-  dat$attr$uai.mono2.nt.3mo[part.not.tested.3mo] <- at
+  dat$riskh$uai.mono2.nt.3mo[, pri] <- 0
+  dat$riskh$uai.mono2.nt.3mo[part.not.tested.3mo, pri] <- 1
 
   not.tested.6mo <- since.test[part.id2] > (180/dat$param$time.unit)
   part.not.tested.6mo <- uai.mono2.neg[which(not.tested.6mo == TRUE)]
-  dat$attr$uai.mono2.nt.6mo[part.not.tested.6mo] <- at
+  dat$riskh$uai.mono2.nt.6mo[, pri] <- 0
+  dat$riskh$uai.mono2.nt.6mo[part.not.tested.6mo, pri] <- 1
 
 
   ## Condition 1b: UAI in 1-sided "monogamous" "negative" partnership,
@@ -88,24 +103,28 @@ riskhist_msm <- function(dat, at) {
   part.id1 <- c(el2[el2$p1 %in% uai.mono1.neg, 2], el2[el2$p2 %in% uai.mono1.neg, 1])
   not.tested.3mo <- since.test[part.id1] > (90/dat$param$time.unit)
   part.not.tested.3mo <- uai.mono1.neg[which(not.tested.3mo == TRUE)]
-  dat$attr$uai.mono1.nt.3mo[part.not.tested.3mo] <- at
+  dat$riskh$uai.mono1.nt.3mo[, pri] <- 0
+  dat$riskh$uai.mono1.nt.3mo[part.not.tested.3mo, pri] <- 1
 
   not.tested.6mo <- since.test[part.id1] > (180/dat$param$time.unit)
   part.not.tested.6mo <- uai.mono1.neg[which(not.tested.6mo == TRUE)]
-  dat$attr$uai.mono1.nt.6mo[part.not.tested.6mo] <- at
+  dat$riskh$uai.mono1.nt.6mo[, pri] <- 0
+  dat$riskh$uai.mono1.nt.6mo[part.not.tested.6mo, pri] <- 1
 
 
   ## Condition 2a: UAI in non-monogamous partnerships
   el2.uai <- el2[el2$uai > 0, ]
   vec <- c(el2.uai[, 1], el2.uai[, 2])
   uai.nonmonog <- unique(vec[duplicated(vec)])
-  dat$attr$uai.nonmonog[uai.nonmonog] <- at
+  dat$riskh$uai.nonmonog[, pri] <- 0
+  dat$riskh$uai.nonmonog[uai.nonmonog, pri] <- 1
 
 
   ## Condition 2b: UAI in non-main partnerships
   uai.nmain <- unique(c(el2$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
                         el2$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
-  dat$attr$uai.nmain[uai.nmain] <- at
+  dat$riskh$uai.nmain[, pri] <- 0
+  dat$riskh$uai.nmain[uai.nmain, pri] <- 1
 
 
   ## Condition 3a: AI within known serodiscordant partnerships
@@ -118,12 +137,14 @@ riskhist_msm <- function(dat, at) {
   discl <- (delt.cdl %in% disclose.cdl)
 
   ai.sd.mc <- el2.cond3$p2[discl == TRUE]
-  dat$attr$ai.sd.mc[ai.sd.mc] <- at
+  dat$riskh$ai.sd.mc[, pri] <- 0
+  dat$riskh$ai.sd.mc[ai.sd.mc, pri] <- 1
 
 
   ## Condition 3b: UAI within known serodiscordant partnerships
   uai.sd.mc <- el2.cond3$p2[discl == TRUE & el2.cond3$uai > 0]
-  dat$attr$uai.sd.mc[uai.sd.mc] <- at
+  dat$riskh$uai.sd.mc[, pri] <- 0
+  dat$riskh$uai.sd.mc[uai.sd.mc, pri] <- 1
 
   return(dat)
 }

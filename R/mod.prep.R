@@ -17,16 +17,19 @@ prep_msm <- function(dat, at) {
   }
 
   ## Variables
+  active <- dat$attr$active
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
 
   prepElig <- dat$attr$prepElig
   prepStat <- dat$attr$prepStat
+  prepEver <- dat$attr$prepEver
   prepClass <- dat$attr$prepClass
 
   prep.elig.model <- dat$param$prep.elig.model
   prep.coverage <- dat$param$prep.coverage
+  prep.cov.method <- dat$param$prep.cov.method
   prep.cov.rate <- dat$param$prep.cov.rate
   prep.class.prob <- dat$param$prep.class.prob
   prep.risk.reassess <- dat$param$prep.risk.reassess
@@ -35,47 +38,45 @@ prep_msm <- function(dat, at) {
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart <- which(status == 0 & prepStat == 0 & lnt == at)
+  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
 
   idsEligStop <- NULL
   if (prep.risk.reassess == TRUE) {
-    idsEligStop <- which(prepStat == 1 & lnt == at)
+    idsEligStop <- which(active == 1 & prepStat == 1 & lnt == at)
   }
-
-  twind <- at - dat$param$prep.risk.int
 
   # Core eligiblity scenarios
   if (prep.elig.model != "base") {
     if (substr(prep.elig.model, 1, 3) == "cdc") {
       if (prep.elig.model == "cdc1") {
-        c1 <- dat$attr$uai.mono2.nt.6mo
-        c2 <- dat$attr$uai.nonmonog
-        c3 <- dat$attr$ai.sd.mc
+        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
+        mat.c2 <- dat$riskh$uai.nonmonog
+        mat.c3 <- dat$riskh$ai.sd.mc
       } else if (prep.elig.model == "cdc2") {
-        c1 <- dat$attr$uai.mono2.nt.6mo
-        c2 <- dat$attr$uai.nmain
-        c3 <- dat$attr$ai.sd.mc
+        mat.c1 <- dat$riskh$uai.mono2.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$ai.sd.mc
       } else if (prep.elig.model == "cdc3") {
-        c1 <- dat$attr$uai.mono1.nt.6mo
-        c2 <- dat$attr$uai.nmain
-        c3 <- dat$attr$ai.sd.mc
+        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$ai.sd.mc
       } else if (prep.elig.model == "cdc4") {
-        c1 <- dat$attr$uai.mono1.nt.6mo
-        c2 <- dat$attr$uai.nmain
-        c3 <- dat$attr$uai.sd.mc
+        mat.c1 <- dat$riskh$uai.mono1.nt.6mo
+        mat.c2 <- dat$riskh$uai.nmain
+        mat.c3 <- dat$riskh$uai.sd.mc
       }
-      idsEligStart <- intersect(which(c1 >= twind |
-                                      c2 >= twind |
-                                      c3 >= twind),
+      idsEligStart <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
+                                        rowSums(mat.c2, na.rm = TRUE) > 0 |
+                                        rowSums(mat.c3, na.rm = TRUE) > 0),
                                 idsEligStart)
-      idsEligStop <- intersect(which(c1 < twind &
-                                     c2 < twind &
-                                     c3 < twind),
-                                idsEligStop)
+      idsEligStop <- intersect(which(rowSums(mat.c1, na.rm = TRUE) == 0 &
+                                       rowSums(mat.c2, na.rm = TRUE) == 0 &
+                                       rowSums(mat.c3, na.rm = TRUE) == 0),
+                               idsEligStop)
     } else {
-      c1 <- dat$attr[[prep.elig.model]]
-      idsEligStart <- intersect(which(c1 >= twind), idsEligStart)
-      idsEligStop <- intersect(which(c1 < twind), idsEligStop)
+      mat <- dat$riskh[[prep.elig.model]]
+      idsEligStart <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart)
+      idsEligStop <- intersect(which(rowSums(mat, na.rm = TRUE) == 0), idsEligStop)
     }
   }
 
@@ -86,26 +87,34 @@ prep_msm <- function(dat, at) {
   ## Stoppage ------------------------------------------------------------------
 
   # Diagnosis
-  idsStpDx <- which(prepStat == 1 & diag.status == 1)
+  idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
+
+  # Death
+  idsStpDth <- which(active == 0 & prepStat == 1)
 
   # Transition to ineligibility
   idsStpInelig <- idsEligStop
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpInelig)
+  idsStp <- c(idsStpDx, idsStpDth, idsStpInelig)
   prepStat[idsStp] <- 0
 
 
   ## Initiation ----------------------------------------------------------------
 
-  prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
+  if (prep.cov.method == "curr") {
+    prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
+  }
+  if (prep.cov.method == "ever") {
+    prepCov <- sum(prepEver == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
+  }
   prepCov <- ifelse(is.nan(prepCov), 0, prepCov)
 
   idsEligSt <- which(prepElig == 1)
   nEligSt <- length(idsEligSt)
 
   nStart <- max(0, min(nEligSt, round((prep.coverage - prepCov) *
-                                             sum(prepElig == 1, na.rm = TRUE))))
+                                        sum(prepElig == 1, na.rm = TRUE))))
   idsStart <- NULL
   if (nStart > 0) {
     if (prep.cov.rate >= 1) {
@@ -118,6 +127,7 @@ prep_msm <- function(dat, at) {
   # Attributes
   if (length(idsStart) > 0) {
     prepStat[idsStart] <- 1
+    prepEver[idsStart] <- 1
 
     # PrEP class is fixed over PrEP cycles
     needPC <- which(is.na(prepClass[idsStart]))
@@ -131,6 +141,7 @@ prep_msm <- function(dat, at) {
   # Attributes
   dat$attr$prepElig <- prepElig
   dat$attr$prepStat <- prepStat
+  dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
 
   # Summary Statistics

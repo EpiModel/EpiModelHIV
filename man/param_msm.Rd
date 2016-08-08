@@ -47,7 +47,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
   prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
-  prep.risk.int = 182, prep.risk.reassess = TRUE, ...)
+  prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
+  rcomp.adh.groups = 0:4, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -372,6 +374,21 @@ in days.}
 
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
+
+\item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
+compensation, 0.5 is a 50% reduction in the probability of condom use
+per act, and 1 is a complete cessation of condom use following PrEP
+initiation.}
+
+\item{rcomp.adh.groups}{PrEP adherence groups for whom risk compensation
+occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+low adherence, medium adherence, and high adherence to PrEP.}
+
+\item{rcomp.main.only}{Logical, if risk compensation is limited to main
+partnerships only, versus all partnerships.}
+
+\item{rcomp.discl.only}{Logical, if risk compensation is limited known-discordant
+partnerships only, versus all partnerships.}
 
 \item{...}{Additional arguments passed to the function.}
 }
