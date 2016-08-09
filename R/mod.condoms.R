@@ -22,14 +22,24 @@
 #'
 condoms_msm <- function(dat, at) {
 
+  # Attributes
+  uid <- dat$attr$uid
+  diag.status <- dat$attr$diag.status
+  race <- dat$attr$race
+  prepStat <- dat$attr$prepStat
+  prepClass <- dat$attr$prepClass
+
+  # Parameters
+  rcomp.prob <- dat$param$rcomp.prob
+  rcomp.adh.groups <- dat$param$rcomp.adh.groups
+  rcomp.main.only <- dat$param$rcomp.main.only
+  rcomp.discl.only <- dat$param$rcomp.discl.only
+
+  el <- dat$temp$el
+
   for (type in c("main", "pers", "inst")) {
 
     ## Variables ##
-
-    # Attributes
-    uid <- dat$attr$uid
-    diag.status <- dat$attr$diag.status
-    race <- dat$attr$race
 
     # Parameters
     cond.rr.BB <- dat$param$cond.rr.BB
@@ -64,7 +74,6 @@ condoms_msm <- function(dat, at) {
       ptype <- 3
     }
 
-    el <- dat$temp$el
     elt <- el[el[, "ptype"] == ptype, ]
 
     ## Process ##
@@ -76,6 +85,7 @@ condoms_msm <- function(dat, at) {
     cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
                  (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
                  (num.B == 0) * (cond.WW.prob * cond.rr.WW)
+
 
     # Transform to UAI logit
     uai.prob <- 1 - cond.prob
@@ -113,32 +123,56 @@ condoms_msm <- function(dat, at) {
       ca2 <- cond.always[elt[, 2]]
       uai.prob <- ifelse(ca1 == 1 | ca2 == 1, 0, uai.prob)
       if (type == "pers") {
-        dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
+        dat$epi$cprob.always.pers <- NULL
+        # dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
       } else {
-        dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
+        dat$epi$cprob.always.inst <- NULL
+        # dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
       }
     }
 
+    # PrEP Status (risk compensation)
+    if (rcomp.prob > 0) {
+
+      idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
+                       (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+
+      if (rcomp.main.only == TRUE & ptype > 1) {
+        idsRC <- NULL
+      }
+      if (rcomp.discl.only == TRUE) {
+        idsRC <- intersect(idsRC, isDisc)
+      }
+      uai.prob[idsRC] <- 1 - (1 - uai.prob[idsRC]) * (1 - rcomp.prob)
+    }
+
     ai.vec <- elt[, "ai"]
-    pos <- rep(elt[, "p1"], ai.vec)
-    neg <- rep(elt[, "p2"], ai.vec)
+    p1 <- rep(elt[, "p1"], ai.vec)
+    p2 <- rep(elt[, "p2"], ai.vec)
     ptype <- rep(elt[, "ptype"], ai.vec)
 
     uai.prob.peract <- rep(uai.prob, ai.vec)
-    uai <- rbinom(length(pos), 1, uai.prob.peract)
+    uai <- rbinom(length(p1), 1, uai.prob.peract)
 
     if (type == "main") {
       pid <- rep(1:length(ai.vec), ai.vec)
-      al <- cbind(pos, neg, ptype, uai, pid)
+      al <- cbind(p1, p2, ptype, uai, pid)
     } else {
       pid <- rep(max(al[, "pid"]) + (1:length(ai.vec)), ai.vec)
-      tmp.al <- cbind(pos, neg, ptype, uai, pid)
+      tmp.al <- cbind(p1, p2, ptype, uai, pid)
       al <- rbind(al, tmp.al)
     }
 
   } # end ptype loop
 
   dat$temp$al <- al
+
+  if (at == 2) {
+    dat$epi$ai.events <- rep(NA, 2)
+    dat$epi$uai.events <- rep(NA, 2)
+  }
+  dat$epi$ai.events[at] <- nrow(al)
+  dat$epi$uai.events[at] <- sum(al[, "uai"])
 
   return(dat)
 }
