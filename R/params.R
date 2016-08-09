@@ -243,34 +243,34 @@
 #'
 #' @param rgc.tprob Probability of rectal gonorrhea infection per act.
 #' @param ugc.tprob Probability of urethral gonorrhea infection per act.
-#' @param rct.tprob Probability of rectal chylamdia infection per act.
-#' @param uct.tprob Probability of urethral chylamdia infection per act.
+#' @param rct.tprob Probability of rectal chlamydia infection per act.
+#' @param uct.tprob Probability of urethral chlamydia infection per act.
 #' @param rgc.sympt.prob Probability of symptoms given infection with rectal
 #'        gonorrhea.
 #' @param ugc.sympt.prob Probability of symptoms given infection with urethral
 #'        gonorrhea.
 #' @param rct.sympt.prob Probability of symptoms given infection with rectal
-#'        chylamdia.
+#'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
-#'        chylamdia.
+#'        chlamydia.
 #' @param rgc.dur.asympt Average duration in weeks of asymptomatic rectal gonorrhea.
 #' @param ugc.dur.asympt Average duration in weeks of asymptomatic urethral gonorrhea.
 #' @param gc.dur.tx Average duration in weeks of treated gonorrhea (both sites).
 #' @param gc.dur.ntx Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
-#' @param rct.dur.asympt Average in weeks duration of asymptomatic rectal chylamdia.
-#' @param uct.dur.asympt Average in weeks duration of asymptomatic urethral chylamdia.
-#' @param ct.dur.tx Average in weeks duration of treated chylamdia (both sites).
-#' @param ct.dur.ntx Average in weeks duration of untreated, symptomatic chylamdia (both sites).
+#' @param rct.dur.asympt Average in weeks duration of asymptomatic rectal chlamydia.
+#' @param uct.dur.asympt Average in weeks duration of asymptomatic urethral chlamydia.
+#' @param ct.dur.tx Average in weeks duration of treated chlamydia (both sites).
+#' @param ct.dur.ntx Average in weeks duration of untreated, symptomatic chlamydia (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
 #' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
 #'        infection with gonorrhea.
 #' @param ct.prob.cease Probability of ceasing sexual activity during symptomatic
-#'        infection with chylamdia.
+#'        infection with chlamydia.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
-#' @param ct.sympt.prob.tx Probability of treatment for symptomatic chylamdia.
+#' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
 #' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
-#' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chylamdia.
+#' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chlamydia.
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -280,10 +280,10 @@
 #'        a condom used by the insertive partner.
 #' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
 #' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
-#' @param hiv.rct.rr Relative risk of HIV infection given current rectal chylamdia.
-#' @param hiv.uct.rr Relative risk of HIV infection given current urethral chylamdia.
+#' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia.
+#' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia.
 #' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
-#'        given dual infection with both gonorrhea and chylamdia.
+#'        given dual infection with both gonorrhea and chlamydia.
 #'
 #' @param ... Additional arguments passed to the function.
 #'
@@ -555,6 +555,10 @@ param_msm <- function(nwstats,
 #'        \code{nwstats} output from \code{\link{calc_nwstats_msm}}.
 #' @param prev.B Initial disease prevalence among black MSM.
 #' @param prev.W Initial disease prevalence among white MSM.
+#' @param prev.ugc Initial prevalence of urethral gonorrhea.
+#' @param prev.rgc Initial prevalence of rectal gonorrhea.
+#' @param prev.uct Initial prevalence of urethral chlamydia.
+#' @param prev.rct Initial prevalence of rectal chlamydia.
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
@@ -565,8 +569,12 @@ param_msm <- function(nwstats,
 #'
 #' @export
 init_msm <- function(nwstats,
-                     prev.B = 0.15,
-                     prev.W = 0.15,
+                     prev.B = 0.253,
+                     prev.W = 0.253,
+                     prev.ugc = 0.01,
+                     prev.rgc = 0.05,
+                     prev.uct = 0.01,
+                     prev.rct = 0.05,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),

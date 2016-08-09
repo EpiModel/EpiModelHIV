@@ -406,9 +406,9 @@ partnerships only, versus all partnerships.}
 
 \item{ugc.tprob}{Probability of urethral gonorrhea infection per act.}
 
-\item{rct.tprob}{Probability of rectal chylamdia infection per act.}
+\item{rct.tprob}{Probability of rectal chlamydia infection per act.}
 
-\item{uct.tprob}{Probability of urethral chylamdia infection per act.}
+\item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
 \item{rgc.sympt.prob}{Probability of symptoms given infection with rectal
 gonorrhea.}
@@ -417,10 +417,10 @@ gonorrhea.}
 gonorrhea.}
 
 \item{rct.sympt.prob}{Probability of symptoms given infection with rectal
-chylamdia.}
+chlamydia.}
 
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
-chylamdia.}
+chlamydia.}
 
 \item{rgc.dur.asympt}{Average duration in weeks of asymptomatic rectal gonorrhea.}
 
@@ -431,28 +431,28 @@ chylamdia.}
 \item{gc.dur.ntx}{Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 
-\item{rct.dur.asympt}{Average in weeks duration of asymptomatic rectal chylamdia.}
+\item{rct.dur.asympt}{Average in weeks duration of asymptomatic rectal chlamydia.}
 
-\item{uct.dur.asympt}{Average in weeks duration of asymptomatic urethral chylamdia.}
+\item{uct.dur.asympt}{Average in weeks duration of asymptomatic urethral chlamydia.}
 
-\item{ct.dur.tx}{Average in weeks duration of treated chylamdia (both sites).}
+\item{ct.dur.tx}{Average in weeks duration of treated chlamydia (both sites).}
 
-\item{ct.dur.ntx}{Average in weeks duration of untreated, symptomatic chylamdia (both sites).
+\item{ct.dur.ntx}{Average in weeks duration of untreated, symptomatic chlamydia (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 
 \item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
 infection with gonorrhea.}
 
 \item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with chylamdia.}
+infection with chlamydia.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 
-\item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chylamdia.}
+\item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
 
 \item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
 
-\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chylamdia.}
+\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 
@@ -469,12 +469,12 @@ a condom used by the insertive partner.}
 
 \item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral gonorrhea.}
 
-\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chylamdia.}
+\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chlamydia.}
 
-\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chylamdia.}
+\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chlamydia.}
 
 \item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
-given dual infection with both gonorrhea and chylamdia.}
+given dual infection with both gonorrhea and chlamydia.}
 
 \item{...}{Additional arguments passed to the function.}
 }

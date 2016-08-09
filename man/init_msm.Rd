@@ -4,7 +4,8 @@
 \alias{init_msm}
 \title{Epidemic Model Initial Conditions}
 \usage{
-init_msm(nwstats, prev.B = 0.15, prev.W = 0.15, ...)
+init_msm(nwstats, prev.B = 0.253, prev.W = 0.253, prev.ugc = 0.01,
+  prev.rgc = 0.05, prev.uct = 0.01, prev.rct = 0.05, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -13,6 +14,14 @@ init_msm(nwstats, prev.B = 0.15, prev.W = 0.15, ...)
 \item{prev.B}{Initial disease prevalence among black MSM.}
 
 \item{prev.W}{Initial disease prevalence among white MSM.}
+
+\item{prev.ugc}{Initial prevalence of urethral gonorrhea.}
+
+\item{prev.rgc}{Initial prevalence of rectal gonorrhea.}
+
+\item{prev.uct}{Initial prevalence of urethral chlamydia.}
+
+\item{prev.rct}{Initial prevalence of rectal chlamydia.}
 
 \item{...}{Additional arguments passed to function.}
 }
