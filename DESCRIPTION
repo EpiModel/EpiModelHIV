@@ -14,6 +14,7 @@ License: GPL-2
 Depends:
     R (>= 3.2.0),
     EpiModel (>= 1.2.7),
+    EpiModelHPC (>= 1.3.0),
     ergm (>= 3.5),
     tergm,
     tergmLite
