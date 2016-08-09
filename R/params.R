@@ -643,8 +643,6 @@ init_msm <- function(nwstats,
 #'        external text files.
 #' @param save.nwstats Calculate and save network statistics as defined in the
 #'        \code{simnet} modules.
-#' @param save.other Character vector containing other list elements of \code{dat}
-#'        to save.
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
 #'        if in interactive mode or text files if in batch mode.
 #' @param verbose.int Integer specifying the interval between time steps at which
@@ -687,7 +685,6 @@ control_msm <- function(simno = 1,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         save.nwstats = FALSE,
-                        save.other = c("attr", "temp", "el", "p"),
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {
@@ -704,6 +701,8 @@ control_msm <- function(simno = 1,
                                   USE.NAMES = FALSE) == TRUE)]
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
+
+  p$save.other = c("attr", "temp", "el", "p")
 
   p$save.network = FALSE
 
