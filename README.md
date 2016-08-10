@@ -23,19 +23,13 @@ Documentation on using this software package is forthcoming, although limited fu
 ### Note on Repository and Package Name
 This Github repository `EpiModelHIV` and the R package within it were previously named `EpiModelHIVmsm`. On 6/24/2016, we merged that MSM package with our `EpiModelHIVhet` (HIV models for heterosexuals) into this combined repository and package. All scripts from those separate packages should still function with this current version after changing the input to `library`. 
 
-## Authors
-<table>
-  <tr>
-    <td><a href="http://samueljenness.org/" target="_blank">Samuel M. Jenness</a></th>
-    <td>Department of Epidemiology</th>
-    <td>Emory University</th>
-  </tr>
-  <tr>
-    <td><a href="http://faculty.washington.edu/goodreau/" target="_blank">Steven M. Goodreau</a></td>
-    <td>Department of Anthropology</td>
-    <td>University of Washington</td>
-  </tr>
-</table>
+## Software Development Team
+
+Author                                                        | Department                 | Institution
+------------------------------------------------------------- | -------------------------- | ------------------------
+[Samuel M. Jenness](http://samueljenness.org/)                | Department of Epidemiology | Emory University
+[Steven M. Goodreau](http://faculty.washington.edu/goodreau/) | Department of Anthropology | University of Washington
+
 
 ## Literature
 
