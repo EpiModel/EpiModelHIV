@@ -25,6 +25,11 @@ in the needed ways for the time loop to function.
 This function reinitializes an epidemic model to restart at a
              specified time step given an input \code{netsim} object.
 }
+\details{
+Currently, the necessary components that must be on \code{x} for a simulation
+to be restarted must be: param, control, nwparam, epi, attr, temp, el, p.
+TODO: describe this more.
+}
 \keyword{module}
 \keyword{msm}
 

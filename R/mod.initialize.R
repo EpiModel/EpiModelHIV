@@ -760,6 +760,11 @@ init_ccr5_msm <- function(dat) {
 #' @param x An \code{EpiModel} object of class \code{\link{netsim}}.
 #' @inheritParams initialize_msm
 #'
+#' @details
+#' Currently, the necessary components that must be on \code{x} for a simulation
+#' to be restarted must be: param, control, nwparam, epi, attr, temp, el, p.
+#' TODO: describe this more.
+#'
 #' @return
 #' This function resets the data elements on the \code{dat} master data object
 #' in the needed ways for the time loop to function.
@@ -769,10 +774,11 @@ init_ccr5_msm <- function(dat) {
 #'
 reinit_msm <- function(x, param, init, control, s) {
 
-  if (any(c("param", "control", "nwparam", "epi", "attr", "temp",
-    "el", "p") %in% names(x)) == FALSE) {
-    stop("x must contain the following elements for restarting: param control",
-         "nwparam epi attr temp el p", call. = FALSE)
+  need.for.reinit <- c("param", "control", "nwparam", "epi", "attr", "temp", "el", "p")
+  if (!all(need.for.reinit %in% names(x))) {
+    stop("x must contain the following elements for restarting: ",
+         "param, control, nwparam, epi, attr, temp, el, p",
+         call. = FALSE)
   }
 
   if (length(x$el) == 1) {
