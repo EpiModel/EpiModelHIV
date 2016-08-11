@@ -28,6 +28,7 @@ prep_msm <- function(dat, at) {
   prepClass <- dat$attr$prepClass
   prepLastRisk <- dat$attr$prepLastRisk
   prepStartTime <- dat$attr$prepStartTime
+  prepLastStiScreen <- dat$attr$prepLastStiScreen
 
   # Parameters
 
@@ -78,6 +79,7 @@ prep_msm <- function(dat, at) {
   prepStat[idsStp] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
+  prepLastStiScreen[idsStp] <- NA
 
 
   ## Initiation ----------------------------------------------------------------
@@ -120,6 +122,7 @@ prep_msm <- function(dat, at) {
   dat$attr$prepStartTime <- prepStartTime
   dat$attr$prepClass <- prepClass
   dat$attr$prepLastRisk <- prepLastRisk
+  dat$attr$prepLastStiScreen <- prepLastStiScreen
 
   # Summary Statistics
   dat$epi$prepCov[at] <- prepCov
