@@ -539,7 +539,8 @@ sti_tx <- function(dat, at) {
                                       dat$attr$rCT.infTime < at &
                                       is.na(dat$attr$rCT.tx)))
   idsUCT_prep_tx <- intersect(idsSTI_screen,
-                              which(dat$attr$uCT == 1 & dat$attr$uCT.infTime < at &
+                              which(dat$attr$uCT == 1 &
+                                      dat$attr$uCT.infTime < at &
                                       is.na(dat$attr$uCT.tx)))
 
   txRGC_prep <- idsRGC_prep_tx[which(rbinom(length(idsRGC_prep_tx), 1,
