@@ -150,16 +150,25 @@ prevalence_msm <- function(dat, at) {
 
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200
-  dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at]/ sum(rGC == 0 & uGC == 0, na.rm = TRUE)) * 5200
+  dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at] /
+                             (sum(rGC == 0, na.rm = TRUE) +
+                                sum(uGC == 0, na.rm = TRUE))) * 5200
 
   dat$epi$ir100.rct[at] <- (dat$epi$incid.rct[at] / sum(rCT == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.uct[at] <- (dat$epi$incid.uct[at] / sum(uCT == 0, na.rm = TRUE)) * 5200
-  dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at]/ sum(rCT == 0 & uCT == 0, na.rm = TRUE)) * 5200
+  dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at] /
+                             (sum(rCT == 0, na.rm = TRUE) +
+                                sum(uCT == 0, na.rm = TRUE))) * 5200
 
-  dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 | rCT ==1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
-  dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at])/ sum(rCT == 0 & uCT == 0 & rGC == 0 & uGC == 0, na.rm = TRUE)) * 5200
-  
-  
+  dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
+                                rCT ==1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
+  dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at]) /
+                              (sum(rGC == 0, na.rm = TRUE) +
+                                 sum(uGC == 0, na.rm = TRUE) +
+                                 sum(rCT == 0, na.rm = TRUE) +
+                                 sum(uCT == 0, na.rm = TRUE))) * 5200
+
+
   return(dat)
 }
 
