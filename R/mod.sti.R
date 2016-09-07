@@ -145,6 +145,8 @@ sti_trans <- function(dat, at) {
   # GC infection by partnership type
   inf.type.gc <- NULL
   if (sum(trans_ugc, trans_rgc) > 0) {
+      transAL_ugc <- al[allActs_ugc[trans_ugc == 1],  , drop = FALSE]
+      transAL_rgc <- al[allActs_rgc[trans_rgc == 1],  , drop = FALSE]
       inf.type.gc <- c(transAL_ugc[, "ptype"],
                        transAL_rgc[, "ptype"])
   }
@@ -216,6 +218,8 @@ sti_trans <- function(dat, at) {
   # CT infection by partnership type
   inf.type.ct <- NULL
   if (sum(trans_uct, trans_rct) > 0) {
+      transAL_uct <- al[allActs_uct[trans_uct == 1],  , drop = FALSE]
+      transAL_rct <- al[allActs_rct[trans_rct == 1],  , drop = FALSE]
       inf.type.ct <- c(transAL_uct[, "ptype"],
                        transAL_rct[, "ptype"])
   }
