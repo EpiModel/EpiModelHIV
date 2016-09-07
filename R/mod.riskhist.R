@@ -34,6 +34,8 @@ riskhist_msm <- function(dat, at) {
   if (is.null(dat$attr$uai.mono2.nt.3mo)) {
     dat$attr$uai.mono2.nt.3mo <- rep(NA, length(uid))
     dat$attr$uai.mono1.nt.3mo <- rep(NA, length(uid))
+    dat$attr$uai.mono2.nt.6mo <- rep(NA, length(uid))
+    dat$attr$uai.mono1.nt.6mo <- rep(NA, length(uid))
     dat$attr$uai.nonmonog <- rep(NA, length(uid))
     dat$attr$uai.nmain <- rep(NA, length(uid))
     dat$attr$ai.sd.mc <- rep(NA, length(uid))
