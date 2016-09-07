@@ -142,7 +142,14 @@ sti_trans <- function(dat, at) {
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
   uGC.timesInf[idsInf_ugc] <- uGC.timesInf[idsInf_ugc] + 1
 
-
+  # GC infection by partnership type
+  inf.type.gc <- NULL
+  if (sum(trans_ugc, trans_rgc) > 0) {
+      inf.type.gc <- c(transAL_ugc[, "ptype"],
+                       transAL_rgc[, "ptype"])
+  }
+  
+  
   # Rectal CT -----------------------------------------------------------
 
   # Requires: uCT in insertive man, and no rCT in receptive man
@@ -206,6 +213,13 @@ sti_trans <- function(dat, at) {
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
 
+  # CT infection by partnership type
+  inf.type.ct <- NULL
+  if (sum(trans_uct, trans_rct) > 0) {
+      inf.type.ct <- c(transAL_uct[, "ptype"],
+                       transAL_rct[, "ptype"])
+  }
+  
 
   # Set activity cessation attribute for newly infected -----------------
 
@@ -258,6 +272,15 @@ sti_trans <- function(dat, at) {
   dat$epi$incid.rct[at] <- length(idsInf_rct)
   dat$epi$incid.uct[at] <- length(idsInf_uct)
   dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
+  
+  dat$epi$trans.main.gc[at] <- sum(inf.type.gc == 1)
+  dat$epi$trans.casl.gc[at] <- sum(inf.type.gc == 2)
+  dat$epi$trans.inst.gc[at] <- sum(inf.type.gc == 3)
+  
+  dat$epi$trans.main.ct[at] <- sum(inf.type.ct == 1)
+  dat$epi$trans.casl.ct[at] <- sum(inf.type.ct == 2)
+  dat$epi$trans.inst.ct[at] <- sum(inf.type.ct == 3)
+  
 
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
