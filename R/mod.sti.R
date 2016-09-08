@@ -470,12 +470,16 @@ sti_tx <- function(dat, at) {
   }
 
   # symptomatic gc treatment
-  idsRGC_tx_sympt <- which(dat$attr$rGC == 1 & dat$attr$rGC.infTime < at &
-                             dat$attr$rGC.sympt == 1 & is.na(dat$attr$rGC.tx) &
-                             dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsUGC_tx_sympt <- which(dat$attr$uGC == 1 & dat$attr$uGC.infTime < at &
-                             dat$attr$uGC.sympt == 1 & is.na(dat$attr$uGC.tx) &
-                             dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsRGC_tx_sympt <- which(dat$attr$rGC == 1 &
+                           dat$attr$rGC.infTime < at &
+                           dat$attr$rGC.sympt == 1 &
+                           is.na(dat$attr$rGC.tx) &
+                           dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsUGC_tx_sympt <- which(dat$attr$uGC == 1 &
+                           dat$attr$uGC.infTime < at &
+                           dat$attr$uGC.sympt == 1 &
+                           is.na(dat$attr$uGC.tx) &
+                           dat$attr$prepStat %in% prep.stand.tx.grp)
   idsGC_tx_sympt <- c(idsRGC_tx_sympt, idsUGC_tx_sympt)
 
   txGC_sympt <- idsGC_tx_sympt[which(rbinom(length(idsGC_tx_sympt), 1,
@@ -484,12 +488,16 @@ sti_tx <- function(dat, at) {
   txUGC_sympt <- intersect(idsUGC_tx_sympt, txGC_sympt)
 
   # asymptomatic gc treatment
-  idsRGC_tx_asympt <- which(dat$attr$rGC == 1 & dat$attr$rGC.infTime < at &
-                              dat$attr$rGC.sympt == 0 & is.na(dat$attr$rGC.tx) &
-                              dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsUGC_tx_asympt <- which(dat$attr$uGC == 1 & dat$attr$uGC.infTime < at &
-                              dat$attr$uGC.sympt == 0 & is.na(dat$attr$uGC.tx) &
-                              dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsRGC_tx_asympt <- which(dat$attr$rGC == 1 &
+                            dat$attr$rGC.infTime < at &
+                            dat$attr$rGC.sympt == 0 &
+                            is.na(dat$attr$rGC.tx) &
+                            dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsUGC_tx_asympt <- which(dat$attr$uGC == 1 &
+                            dat$attr$uGC.infTime < at &
+                            dat$attr$uGC.sympt == 0 &
+                            is.na(dat$attr$uGC.tx) &
+                            dat$attr$prepStat %in% prep.stand.tx.grp)
   idsGC_tx_asympt <- c(idsRGC_tx_asympt, idsUGC_tx_asympt)
 
   txGC_asympt <- idsGC_tx_asympt[which(rbinom(length(idsGC_tx_asympt), 1,
@@ -506,12 +514,16 @@ sti_tx <- function(dat, at) {
 
 
   # symptomatic ct treatment
-  idsRCT_tx_sympt <- which(dat$attr$rCT == 1 & dat$attr$rCT.infTime < at &
-                             dat$attr$rCT.sympt == 1 & is.na(dat$attr$rCT.tx) &
-                             dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsUCT_tx_sympt <- which(dat$attr$uCT == 1 & dat$attr$uCT.infTime < at &
-                             dat$attr$uCT.sympt == 1 & is.na(dat$attr$uCT.tx) &
-                             dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsRCT_tx_sympt <- which(dat$attr$rCT == 1 &
+                           dat$attr$rCT.infTime < at &
+                           dat$attr$rCT.sympt == 1 &
+                           is.na(dat$attr$rCT.tx) &
+                           dat$attr$prepStat %in% prep.stand.tx.grp)
+  idsUCT_tx_sympt <- which(dat$attr$uCT == 1 &
+                           dat$attr$uCT.infTime < at &
+                           dat$attr$uCT.sympt == 1 &
+                           is.na(dat$attr$uCT.tx) &
+                           dat$attr$prepStat %in% prep.stand.tx.grp)
   idsCT_tx_sympt <- c(idsRCT_tx_sympt, idsUCT_tx_sympt)
 
   txCT_sympt <- idsCT_tx_sympt[which(rbinom(length(idsCT_tx_sympt), 1,
@@ -520,12 +532,16 @@ sti_tx <- function(dat, at) {
   txUCT_sympt <- intersect(idsUCT_tx_sympt, txCT_sympt)
 
   # asymptomatic ct treatment
-  idsRCT_tx_asympt <- which(dat$attr$rCT == 1 & dat$attr$rCT.infTime < at &
-                              dat$attr$rCT.sympt == 0 & is.na(dat$attr$rCT.tx) &
-                              dat$attr$prepStat == 0)
-  idsUCT_tx_asympt <- which(dat$attr$uCT == 1 & dat$attr$uCT.infTime < at &
-                              dat$attr$uCT.sympt == 0 & is.na(dat$attr$uCT.tx) &
-                              dat$attr$prepStat == 0)
+  idsRCT_tx_asympt <- which(dat$attr$rCT == 1 &
+                            dat$attr$rCT.infTime < at &
+                            dat$attr$rCT.sympt == 0 &
+                            is.na(dat$attr$rCT.tx) &
+                            dat$attr$prepStat == 0)
+  idsUCT_tx_asympt <- which(dat$attr$uCT == 1 &
+                            dat$attr$uCT.infTime < at &
+                            dat$attr$uCT.sympt == 0 &
+                            is.na(dat$attr$uCT.tx) &
+                            dat$attr$prepStat == 0)
   idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)
 
   txCT_asympt <- idsCT_tx_asympt[which(rbinom(length(idsCT_tx_asympt), 1,
@@ -546,22 +562,24 @@ sti_tx <- function(dat, at) {
 
   dat$attr$prepLastStiScreen[idsSTI_screen] <- at
 
+  ## TODO: current approach does not allow for fixed prep-specific non-treatment
+  ##       attribute, where the prep.sti.prob.tx parameter < 1 (default)
   idsRGC_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$rGC == 1 &
                                       dat$attr$rGC.infTime < at &
-                                      is.na(dat$attr$rGC.tx)))
+                                      (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0)))
   idsUGC_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$uGC == 1 &
                                       dat$attr$uGC.infTime < at &
-                                      is.na(dat$attr$uGC.tx)))
+                                      (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0)))
   idsRCT_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$rCT == 1 &
                                       dat$attr$rCT.infTime < at &
-                                      is.na(dat$attr$rCT.tx)))
+                                      (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0)))
   idsUCT_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$uCT == 1 &
                                       dat$attr$uCT.infTime < at &
-                                      is.na(dat$attr$uCT.tx)))
+                                      (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0)))
 
   txRGC_prep <- idsRGC_prep_tx[which(rbinom(length(idsRGC_prep_tx), 1,
                                             prep.sti.prob.tx) == 1)]
