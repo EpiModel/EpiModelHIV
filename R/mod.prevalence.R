@@ -104,7 +104,15 @@ prevalence_msm <- function(dat, at) {
     dat$epi$trans.main <- rNA
     dat$epi$trans.casl <- rNA
     dat$epi$trans.inst <- rNA
-
+    
+    dat$epi$trans.main.gc <- rNA
+    dat$epi$trans.casl.gc <- rNA
+    dat$epi$trans.inst.gc <- rNA
+    
+    dat$epi$trans.main.ct <- rNA
+    dat$epi$trans.casl.ct <- rNA
+    dat$epi$trans.inst.ct <- rNA
+    
     dat$epi$txGC <- rNA
     dat$epi$txCT <- rNA
   }
