@@ -631,23 +631,33 @@ sti_tx <- function(dat, at) {
     dat$epi$prop.rGC.tx <- rep(NA, length(dat$epi$num))
     dat$epi$prop.rCT.tx <- rep(NA, length(dat$epi$num))
   }
-  dat$epi$prop.GC.asympt.tx[at] <-
+  prop.GC.asympt.tx <-
     length(union(intersect(txRGC, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC, which(dat$attr$uGC.sympt == 0)))) /
     length(union(union(idsRGC_tx_asympt,
                        intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0))),
                  union(idsUGC_tx_asympt,
                        intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)))))
-  dat$epi$prop.CT.asympt.tx[at] <-
+  prop.GC.asympt.tx <- ifelse(is.nan(prop.GC.asympt.tx), 0, prop.GC.asympt.tx)
+  dat$epi$prop.GC.asympt.tx[at] <- prop.GC.asympt.tx
+
+  prop.CT.asympt.tx <-
     length(union(intersect(txRCT, which(dat$attr$rCT.sympt == 0)),
                  intersect(txUCT, which(dat$attr$uCT.sympt == 0)))) /
     length(union(union(idsRCT_tx_asympt,
                        intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0))),
                  union(idsUCT_tx_asympt,
                        intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))))
+  prop.CT.asympt.tx <- ifelse(is.nan(prop.CT.asympt.tx), 0, prop.CT.asympt.tx)
+  dat$epi$prop.CT.asympt.tx[at] <- prop.CT.asympt.tx
 
-  dat$epi$prop.rGC.tx[at] <- length(txRGC) / length(union(idsRGC_tx, idsRGC_prep_tx))
-  dat$epi$prop.rCT.tx[at] <- length(txRCT) / length(union(idsRCT_tx, idsRCT_prep_tx))
+  prop.rGC.tx <- length(txRGC) / length(union(idsRGC_tx, idsRGC_prep_tx))
+  prop.rGC.tx <- ifelse(is.nan(prop.rGC.tx), 0, prop.rGC.tx)
+  dat$epi$prop.rGC.tx[at] <- prop.rGC.tx
+
+  prop.rCT.tx <- length(txRCT) / length(union(idsRCT_tx, idsRCT_prep_tx))
+  prop.rCT.tx <- ifelse(is.nan(prop.rCT.tx), 0, prop.rCT.tx)
+  dat$epi$prop.rCT.tx[at] <- prop.rCT.tx
 
   return(dat)
 }
