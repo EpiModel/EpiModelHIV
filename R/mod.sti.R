@@ -596,6 +596,7 @@ sti_tx <- function(dat, at) {
   txUCT <- c(txUCT, txUCT_prep)
 
 
+
   # update attributes
   dat$attr$rGC.tx[c(idsRGC_tx, idsRGC_prep_tx)] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
@@ -623,6 +624,30 @@ sti_tx <- function(dat, at) {
   }
   dat$epi$txGC[at] <- length(txRGC) + length(txUGC)
   dat$epi$txCT[at] <- length(txRCT) + length(txUCT)
+
+  if (is.null(dat$epi$prop.GC.asympt.tx)) {
+    dat$epi$prop.GC.asympt.tx <- rep(NA, length(dat$epi$num))
+    dat$epi$prop.CT.asympt.tx <- rep(NA, length(dat$epi$num))
+    dat$epi$prop.rGC.tx <- rep(NA, length(dat$epi$num))
+    dat$epi$prop.rCT.tx <- rep(NA, length(dat$epi$num))
+  }
+  dat$epi$prop.GC.asympt.tx[at] <-
+    length(union(intersect(txRGC, which(dat$attr$rGC.sympt == 0)),
+                 intersect(txUGC, which(dat$attr$uGC.sympt == 0)))) /
+    length(union(union(idsRGC_tx_asympt,
+                       intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0))),
+                 union(idsUGC_tx_asympt,
+                       intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)))))
+  dat$epi$prop.CT.asympt.tx[at] <-
+    length(union(intersect(txRCT, which(dat$attr$rCT.sympt == 0)),
+                 intersect(txUCT, which(dat$attr$uCT.sympt == 0)))) /
+    length(union(union(idsRCT_tx_asympt,
+                       intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0))),
+                 union(idsUCT_tx_asympt,
+                       intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))))
+
+  dat$epi$prop.rGC.tx[at] <- length(txRGC) / length(union(idsRGC_tx, idsRGC_prep_tx))
+  dat$epi$prop.rCT.tx[at] <- length(txRCT) / length(union(idsRCT_tx, idsRCT_prep_tx))
 
   return(dat)
 }
