@@ -210,30 +210,30 @@ trans_msm <- function(dat, at){
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
-  trans.main[at] <- sum(inf.type == 1, na.rm = TRUE) / length(infected)
-  trans.casl[at] <- sum(inf.type == 2, na.rm = TRUE) / length(infected)
-  trans.inst[at] <- sum(inf.type == 3, na.rm = TRUE) / length(infected)
+  dat$epi$trans.main[at] <- sum(inf.type == 1, na.rm = TRUE) / length(infected)
+  dat$epi$trans.casl[at] <- sum(inf.type == 2, na.rm = TRUE) / length(infected)
+  dat$epi$trans.inst[at] <- sum(inf.type == 3, na.rm = TRUE) / length(infected)
 
-  trans.recpt.sus[at] <- sum(inf.role == 0, na.rm = TRUE) / length(infected)
-  trans.inst.sus[at] <- sum(inf.role == 1, na.rm = TRUE) / length(infected)
+  dat$epi$trans.recpt.sus[at] <- sum(inf.role == 0, na.rm = TRUE) / length(infected)
+  dat$epi$trans.inst.sus[at] <- sum(inf.role == 1, na.rm = TRUE) / length(infected)
 
-  trans.stage.act[at] <- sum(inf.stage %in% 1:2, na.rm = TRUE) / length(infected)
-  trans.stage.chr[at] <- sum(inf.stage == 3, na.rm = TRUE) / length(infected)
-  trans.stage.aids[at] <- sum(inf.stage == 4, na.rm = TRUE) / length(infected)
+  dat$epi$trans.stage.act[at] <- sum(inf.stage %in% 1:2, na.rm = TRUE) / length(infected)
+  dat$epi$trans.stage.chr[at] <- sum(inf.stage == 3, na.rm = TRUE) / length(infected)
+  dat$epi$trans.stage.aids[at] <- sum(inf.stage == 4, na.rm = TRUE) / length(infected)
 
-  trans.condoms[at] <- sum(inf.condoms == 1, na.rm = TRUE) / length(infected)
+  dat$epi$trans.condoms[at] <- sum(inf.condoms == 1, na.rm = TRUE) / length(infected)
 
-  trans.undx[at] <- sum(inf.diag == 0, na.rm = TRUE) / length(infected)
-  trans.notinitiated[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx == 0, na.rm = TRUE) /
-                        length(infected)
+  dat$epi$trans.undx[at] <- sum(inf.diag == 0, na.rm = TRUE) / length(infected)
+  dat$epi$trans.notinitiated[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx == 0, na.rm = TRUE) /
+                            length(infected)
 
-  trans.notretained[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
-                             inf.vl >= 4.5, na.rm = TRUE) / length(infected)
+  dat$epi$trans.notretained[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                               inf.vl >= 4.5, na.rm = TRUE) / length(infected)
 
-  trans.partsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
-                         inf.vl < 4.5 & inf.vl > 1.5, na.rm = TRUE) / length(infected)
-  trans.fullsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
-                         inf.vl =< 1.5, na.rm = TRUE) / length(infected)
+  dat$epi$trans.partsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                           inf.vl < 4.5 & inf.vl > 1.5, na.rm = TRUE) / length(infected)
+  dat$epi$trans.fullsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                           inf.vl <= 1.5, na.rm = TRUE) / length(infected)
 
   return(dat)
 }
