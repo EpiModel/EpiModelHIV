@@ -59,8 +59,29 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$cprob.always.pers <- rNA
     dat$epi$cprob.always.inst <- rNA
-  }
 
+    # new stats
+    dat$epi$trans.main <- rNA
+    dat$epi$trans.casl <- rNA
+    dat$epi$trans.inst <- rNA
+
+    dat$epi$trans.recpt.sus <- rNA
+    dat$epi$trans.inst.sus <- rNA
+
+    dat$epi$trans.stage.act <- rNA
+    dat$epi$trans.stage.chr <- rNA
+    dat$epi$trans.stage.aids <- rNA
+
+    dat$epi$trans.condoms <- rNA
+
+    dat$epi$trans.undx <- rNA
+    dat$epi$trans.notinitiated <- rNA
+
+    dat$epi$trans.notretained <- rNA
+
+    dat$epi$trans.partsup <- rNA
+    dat$epi$trans.fullsup <- rNA
+  }
 
   dat$epi$num[at] <- length(status)
   dat$epi$num.B[at] <- sum(race == "B", na.rm = TRUE)

@@ -177,9 +177,16 @@ trans_msm <- function(dat, at){
     inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
                   disc.rp[trans.rp == 1, "ptype"])
 
+    inf.condoms <- 1 - c(disc.ip[trans.ip == 1, "uai"],
+                         disc.ip[trans.ip == 1, "uai"])
+
     inf.stage <- stage[infector]
     inf.diag <- diag.status[infector]
     inf.tx <- tx.status[infector]
+
+    inf.cum.time.on.tx <- dat$attr$cum.time.on.tx[infector]
+    inf.vl <- vl[infector]
+
 
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
@@ -203,6 +210,30 @@ trans_msm <- function(dat, at){
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
+  trans.main[at] <- sum(inf.type == 1, na.rm = TRUE) / length(infected)
+  trans.casl[at] <- sum(inf.type == 2, na.rm = TRUE) / length(infected)
+  trans.inst[at] <- sum(inf.type == 3, na.rm = TRUE) / length(infected)
+
+  trans.recpt.sus[at] <- sum(inf.role == 0, na.rm = TRUE) / length(infected)
+  trans.inst.sus[at] <- sum(inf.role == 1, na.rm = TRUE) / length(infected)
+
+  trans.stage.act[at] <- sum(inf.stage %in% 1:2, na.rm = TRUE) / length(infected)
+  trans.stage.chr[at] <- sum(inf.stage == 3, na.rm = TRUE) / length(infected)
+  trans.stage.aids[at] <- sum(inf.stage == 4, na.rm = TRUE) / length(infected)
+
+  trans.condoms[at] <- sum(inf.condoms == 1, na.rm = TRUE) / length(infected)
+
+  trans.undx[at] <- sum(inf.diag == 0, na.rm = TRUE) / length(infected)
+  trans.notinitiated[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx == 0, na.rm = TRUE) /
+                        length(infected)
+
+  trans.notretained[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                             inf.vl >= 4.5, na.rm = TRUE) / length(infected)
+
+  trans.partsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                         inf.vl < 4.5 & inf.vl > 1.5, na.rm = TRUE) / length(infected)
+  trans.fullsup[at] <- sum(inf.diag == 1 & inf.cum.time.on.tx > 0 &
+                         inf.vl =< 1.5, na.rm = TRUE) / length(infected)
 
   return(dat)
 }
