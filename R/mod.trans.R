@@ -166,7 +166,8 @@ trans_msm <- function(dat, at){
 
   # Update attributes
 
-  infected <- infector <- inf.type <- NULL
+  infected <- infector <- inf.type <- inf.role <- inf.stage <- inf.condoms <-
+    inf.diag <- inf.cum.time.on.tx <- inf.vl <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
