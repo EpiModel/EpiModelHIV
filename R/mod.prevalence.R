@@ -96,6 +96,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ir100.uct <- rNA
     dat$epi$ir100.ct <- rNA
 
+    dat$epi$ir100.sti <- rNA
+    dat$epi$incid.gcct.prep <- rNA
+
     dat$epi$recov.rgc <- rNA
     dat$epi$recov.ugc <- rNA
     dat$epi$recov.rct <- rNA
@@ -168,6 +171,11 @@ prevalence_msm <- function(dat, at) {
                                  sum(rCT == 0, na.rm = TRUE) +
                                  sum(uCT == 0, na.rm = TRUE))) * 5200
 
+  dat$epi$ir100.sti.prep[at] <- (dat$epi$incid.gcct.prep[at] /
+                                  (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) +
+                                   sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
+                                   sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
+                                   sum(uCT == 0 & prepStat == 1, na.rm = TRUE))) * 5200
 
   return(dat)
 }

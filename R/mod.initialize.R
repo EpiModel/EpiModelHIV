@@ -170,6 +170,7 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$uGC.timesInf[uGC == 1] <- 1
 
   dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
+  dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
   dat$attr$GC.cease <- rep(NA, num)
 
   # Initialize CT infection at both sites
@@ -196,7 +197,9 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$uCT.timesInf[uCT == 1] <- 1
 
   dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
+  dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
   dat$attr$CT.cease <- rep(NA, num)
+
 
   # CCR5
   dat <- init_ccr5_msm(dat)

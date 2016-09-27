@@ -259,6 +259,10 @@ sti_trans <- function(dat, at) {
   dat$epi$incid.uct[at] <- length(idsInf_uct)
   dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
 
+  dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
+                                                    idsInf_rct, idsInf_uct)),
+                                           which(dat$attr$prepStat == 1)))
+
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
             all(!is.na(rGC.sympt[rGC == 1])),
@@ -652,48 +656,57 @@ sti_tx <- function(dat, at) {
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1) & dat$attr$uCT == 1)] <- 1
 
+  txRGC_all <- union(txRGC, txRGC_prep)
+  txUGC_all <- union(txUGC, txUGC_prep)
+  txRCT_all <- union(txRCT, txRCT_prep)
+  txUCT_all <- union(txUCT, txUCT_prep)
+
 
   # summary stats
-  if (is.null(dat$epi$txGC)) {
-    dat$epi$txGC <- rep(NA, length(dat$epi$num))
-    dat$epi$txCT <- rep(NA, length(dat$epi$num))
+  if (is.null(dat$epi$num.asympt.tx)) {
+    dat$epi$num.asympt.tx <- rep(NA, length(dat$epi$num))
+    dat$epi$num.asympt.cases <- rep(NA, length(dat$epi$num))
+    dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$epi$num))
+    dat$epi$num.asympt.cases.prep <- rep(NA, length(dat$epi$num))
+    dat$epi$num.rect.tx <- rep(NA, length(dat$epi$num))
+    dat$epi$num.rect.cases <- rep(NA, length(dat$epi$num))
+    dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$num))
+    dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$num))
   }
-  dat$epi$txGC[at] <- length(txRGC) + length(txUGC)
-  dat$epi$txCT[at] <- length(txRCT) + length(txUCT)
 
-  if (is.null(dat$epi$prop.GC.asympt.tx)) {
-    dat$epi$prop.GC.asympt.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$prop.CT.asympt.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$prop.rGC.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$prop.rCT.tx <- rep(NA, length(dat$epi$num))
-  }
-  prop.GC.asympt.tx <-
-    length(union(intersect(txRGC, which(dat$attr$rGC.sympt == 0)),
-                 intersect(txUGC, which(dat$attr$uGC.sympt == 0)))) /
-    length(union(union(idsRGC_tx_asympt,
-                       intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0))),
-                 union(idsUGC_tx_asympt,
-                       intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)))))
-  prop.GC.asympt.tx <- ifelse(is.nan(prop.GC.asympt.tx), 0, prop.GC.asympt.tx)
-  dat$epi$prop.GC.asympt.tx[at] <- prop.GC.asympt.tx
+  asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
+                 intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
+                 intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
+                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)))
+  dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
+  asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
+                    idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
+                    idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
+                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
+  dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
 
-  prop.CT.asympt.tx <-
-    length(union(intersect(txRCT, which(dat$attr$rCT.sympt == 0)),
-                 intersect(txUCT, which(dat$attr$uCT.sympt == 0)))) /
-    length(union(union(idsRCT_tx_asympt,
-                       intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0))),
-                 union(idsUCT_tx_asympt,
-                       intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))))
-  prop.CT.asympt.tx <- ifelse(is.nan(prop.CT.asympt.tx), 0, prop.CT.asympt.tx)
-  dat$epi$prop.CT.asympt.tx[at] <- prop.CT.asympt.tx
 
-  prop.rGC.tx <- length(txRGC) / length(union(idsRGC_tx, idsRGC_prep_tx))
-  prop.rGC.tx <- ifelse(is.nan(prop.rGC.tx), 0, prop.rGC.tx)
-  dat$epi$prop.rGC.tx[at] <- prop.rGC.tx
+  asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
+                      intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
+                      intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
+                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)))
+  dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
+  asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
+                         intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
+                         intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
+                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
+  dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
 
-  prop.rCT.tx <- length(txRCT) / length(union(idsRCT_tx, idsRCT_prep_tx))
-  prop.rCT.tx <- ifelse(is.nan(prop.rCT.tx), 0, prop.rCT.tx)
-  dat$epi$prop.rCT.tx[at] <- prop.rCT.tx
+
+  rect.tx <- c(txRGC_all, txRCT_all)
+  dat$epi$num.rect.tx[at] <- length(unique(rect.tx))
+  rect.cases <- c(idsRGC_tx, idsRGC_prep_tx, idsRCT_tx, idsRCT_prep_tx)
+  dat$epi$num.rect.cases[at] <- length(unique(rect.cases))
+
+  rect.tx.prep <- c(txRGC_prep, txRCT_prep)
+  dat$epi$num.rect.tx.prep[at] <- length(unique(rect.tx.prep))
+  rect.cases.prep <- c(idsRGC_prep_tx, idsRCT_prep_tx)
+  dat$epi$num.rect.cases.prep[at] <- length(unique(rect.cases.prep))
 
   return(dat)
 }
