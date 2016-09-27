@@ -296,7 +296,8 @@ sti_trans <- function(dat, at) {
 #'
 sti_recov <- function(dat, at) {
 
-  # Parameters
+  # Parameters ----------------------------------------------------------
+
   rgc.dur.asympt <- dat$param$rgc.dur.asympt
   ugc.dur.asympt <- dat$param$ugc.dur.asympt
   gc.dur.tx <- dat$param$gc.dur.tx
@@ -308,46 +309,57 @@ sti_recov <- function(dat, at) {
   ct.dur.ntx <- dat$param$ct.dur.ntx
 
 
-  # GC recovery
+  # GC Recovery ---------------------------------------------------------
+
+  # Asymptomatic untreated
   idsRGC_asympt_ntx <- which(dat$attr$rGC == 1 &
                              dat$attr$rGC.infTime < at &
                              dat$attr$rGC.sympt == 0 &
-                             (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0))
+                             (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
+                             (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0))
   idsUGC_asympt_ntx <- which(dat$attr$uGC == 1 &
                              dat$attr$uGC.infTime < at &
                              dat$attr$uGC.sympt == 0 &
-                             (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0))
+                             (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
+                             (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
+
+  recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1,
+                                                        1/rgc.dur.asympt) == 1)]
+  recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1,
+                                                        1/ugc.dur.asympt) == 1)]
+
+  # Symptomatic untreated
   idsRGC_sympt_ntx <- which(dat$attr$rGC == 1 &
                             dat$attr$rGC.infTime < at &
                             dat$attr$rGC.sympt == 1 &
-                            (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0))
+                            (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
+                            (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0))
   idsUGC_sympt_ntx <- which(dat$attr$uGC == 1 &
                             dat$attr$uGC.infTime < at &
                             dat$attr$uGC.sympt == 1 &
-                            (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0))
-  idsRGC_tx <- which(dat$attr$rGC == 1 &
-                     dat$attr$rGC.infTime < at &
-                     dat$attr$rGC.tx == 1)
-  idsUGC_tx <- which(dat$attr$uGC == 1 &
-                     dat$attr$uGC.infTime < at &
-                     dat$attr$uGC.tx == 1)
+                            (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
+                            (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
 
-  recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1,
-                                                 1/rgc.dur.asympt) == 1)]
-  recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1,
-                                                 1/ugc.dur.asympt) == 1)]
-
+  # If parameter is null, uses recovery rate of asytomatic untreated
   if (!is.null(gc.dur.ntx)) {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                 1/gc.dur.ntx) == 1)]
+                                                        1/gc.dur.ntx) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                 1/gc.dur.ntx) == 1)]
+                                                        1/gc.dur.ntx) == 1)]
   } else {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                 1/rgc.dur.asympt) == 1)]
+                                                        1/rgc.dur.asympt) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                 1/ugc.dur.asympt) == 1)]
+                                                        1/ugc.dur.asympt) == 1)]
   }
+
+  # Treated (asymptomatic and symptomatic)
+  idsRGC_tx <- which(dat$attr$rGC == 1 &
+                     dat$attr$rGC.infTime < at &
+                     (dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1))
+  idsUGC_tx <- which(dat$attr$uGC == 1 &
+                     dat$attr$uGC.infTime < at &
+                     (dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1))
 
   recovRGC_tx <- idsRGC_tx[which(rbinom(length(idsRGC_tx), 1,
                                         1/gc.dur.tx) == 1)]
@@ -361,59 +373,74 @@ sti_recov <- function(dat, at) {
   dat$attr$rGC.sympt[recovRGC] <- NA
   dat$attr$rGC.infTime[recovRGC] <- NA
   dat$attr$rGC.tx[recovRGC] <- NA
+  dat$attr$rGC.tx.prep[recovRGC] <- NA
 
   dat$attr$uGC[recovUGC] <- 0
   dat$attr$uGC.sympt[recovUGC] <- NA
   dat$attr$uGC.infTime[recovUGC] <- NA
   dat$attr$uGC.tx[recovUGC] <- NA
+  dat$attr$uGC.tx.prep[recovUGC] <- NA
 
   dat$attr$GC.cease[c(recovRGC, recovUGC)] <- NA
 
-  # CT recovery
+
+
+  # CT Recovery ---------------------------------------------------------
+
+  # Asymptomatic untreated
   idsRCT_asympt_ntx <- which(dat$attr$rCT == 1 &
                              dat$attr$rCT.infTime < at &
                              dat$attr$rCT.sympt == 0 &
-                             (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0))
+                             (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
+                             (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0))
   idsUCT_asympt_ntx <- which(dat$attr$uCT == 1 &
                              dat$attr$uCT.infTime < at &
                              dat$attr$uCT.sympt == 0 &
-                             (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0))
+                             (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
+                             (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
+
+  recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx),
+                                                        1, 1/rct.dur.asympt) == 1)]
+  recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx),
+                                                        1, 1/uct.dur.asympt) == 1)]
+
+  # Symptomatic untreated
   idsRCT_sympt_ntx <- which(dat$attr$rCT == 1 &
                             dat$attr$rCT.infTime < at &
                             dat$attr$rCT.sympt == 1 &
-                            (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0))
+                            (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
+                            (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0))
   idsUCT_sympt_ntx <- which(dat$attr$uCT == 1 &
                             dat$attr$uCT.infTime < at &
                             dat$attr$uCT.sympt == 1 &
-                            (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0))
-  idsRCT_tx <- which(dat$attr$rCT == 1 &
-                     dat$attr$rCT.infTime < at &
-                     dat$attr$rCT.tx == 1)
-  idsUCT_tx <- which(dat$attr$uCT == 1 &
-                     dat$attr$uCT.infTime < at &
-                     dat$attr$uCT.tx == 1)
-
-  recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx),
-                                                 1, 1/rct.dur.asympt) == 1)]
-  recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx),
-                                                 1, 1/uct.dur.asympt) == 1)]
+                            (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
+                            (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
 
   if (!is.null(ct.dur.ntx)) {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                            1, 1/ct.dur.ntx) == 1)]
+                                                        1, 1/ct.dur.ntx) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                            1, 1/ct.dur.ntx) == 1)]
+                                                        1, 1/ct.dur.ntx) == 1)]
   } else {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                            1, 1/rct.dur.asympt) == 1)]
+                                                        1, 1/rct.dur.asympt) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                            1, 1/uct.dur.asympt) == 1)]
+                                                        1, 1/uct.dur.asympt) == 1)]
   }
+
+  # Treated (asymptomatic and symptomatic)
+  idsRCT_tx <- which(dat$attr$rCT == 1 &
+                     dat$attr$rCT.infTime < at &
+                     (dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1))
+  idsUCT_tx <- which(dat$attr$uCT == 1 &
+                     dat$attr$uCT.infTime < at &
+                     (dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1))
 
   recovRCT_tx <- idsRCT_tx[which(rbinom(length(idsRCT_tx),
                                         1, 1/ct.dur.tx) == 1)]
   recovUCT_tx <- idsUCT_tx[which(rbinom(length(idsUCT_tx),
                                         1, 1/ct.dur.tx) == 1)]
+
 
   recovRCT <- c(recovRCT_asympt_ntx, recovRCT_sympt_ntx, recovRCT_tx)
   recovUCT <- c(recovUCT_asympt_ntx, recovUCT_sympt_ntx, recovUCT_tx)
@@ -422,19 +449,21 @@ sti_recov <- function(dat, at) {
   dat$attr$rCT.sympt[recovRCT] <- NA
   dat$attr$rCT.infTime[recovRCT] <- NA
   dat$attr$rCT.tx[recovRCT] <- NA
+  dat$attr$rCT.tx.prep[recovRCT] <- NA
 
   dat$attr$uCT[recovUCT] <- 0
   dat$attr$uCT.sympt[recovUCT] <- NA
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
+  dat$attr$uCT.tx.prep[recovUCT] <- NA
 
   dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
 
   # Summary stats
-  dat$epi$recov.rgc[at] <- length(recovRGC)
-  dat$epi$recov.ugc[at] <- length(recovUGC)
-  dat$epi$recov.rct[at] <- length(recovRCT)
-  dat$epi$recov.uct[at] <- length(recovUCT)
+  dat$epi$recov.rgc[at] <- length(unique(recovRGC))
+  dat$epi$recov.ugc[at] <- length(unique(recovUGC))
+  dat$epi$recov.rct[at] <- length(unique(recovRCT))
+  dat$epi$recov.uct[at] <- length(unique(recovUCT))
 
   return(dat)
 }
@@ -562,24 +591,23 @@ sti_tx <- function(dat, at) {
 
   dat$attr$prepLastStiScreen[idsSTI_screen] <- at
 
-  ## TODO: current approach does not allow for fixed prep-specific non-treatment
-  ##       attribute, where the prep.sti.prob.tx parameter < 1 (default)
+
   idsRGC_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$rGC == 1 &
                                       dat$attr$rGC.infTime < at &
-                                      (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0)))
+                                      is.na(dat$attr$rGC.tx.prep)))
   idsUGC_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$uGC == 1 &
                                       dat$attr$uGC.infTime < at &
-                                      (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0)))
+                                      is.na(dat$attr$uGC.tx.prep)))
   idsRCT_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$rCT == 1 &
                                       dat$attr$rCT.infTime < at &
-                                      (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0)))
+                                      is.na(dat$attr$rCT.tx.prep)))
   idsUCT_prep_tx <- intersect(idsSTI_screen,
                               which(dat$attr$uCT == 1 &
                                       dat$attr$uCT.infTime < at &
-                                      (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0)))
+                                      is.na(dat$attr$uCT.tx.prep)))
 
   txRGC_prep <- idsRGC_prep_tx[which(rbinom(length(idsRGC_prep_tx), 1,
                                             prep.sti.prob.tx) == 1)]
@@ -590,32 +618,40 @@ sti_tx <- function(dat, at) {
   txUCT_prep <- idsUCT_prep_tx[which(rbinom(length(idsUCT_prep_tx), 1,
                                             prep.sti.prob.tx) == 1)]
 
-  txRGC <- c(txRGC, txRGC_prep)
-  txUGC <- c(txUGC, txUGC_prep)
-  txRCT <- c(txRCT, txRCT_prep)
-  txUCT <- c(txUCT, txUCT_prep)
-
-
 
   # update attributes
-  dat$attr$rGC.tx[c(idsRGC_tx, idsRGC_prep_tx)] <- 0
+  dat$attr$rGC.tx[idsRGC_tx] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
 
-  dat$attr$uGC.tx[c(idsUGC_tx, idsUGC_prep_tx)] <- 0
+  dat$attr$uGC.tx[idsUGC_tx] <- 0
   dat$attr$uGC.tx[txUGC] <- 1
 
-  dat$attr$rCT.tx[c(idsRCT_tx, idsRCT_prep_tx)] <- 0
+  dat$attr$rCT.tx[idsRCT_tx] <- 0
   dat$attr$rCT.tx[txRCT] <- 1
 
-  dat$attr$uCT.tx[c(idsUCT_tx, idsUCT_prep_tx)] <- 0
+  dat$attr$uCT.tx[idsUCT_tx] <- 0
   dat$attr$uCT.tx[txUCT] <- 1
 
-  # add tx at other site
-  dat$attr$rGC.tx[which(dat$attr$uGC.tx == 1 & dat$attr$rGC == 1)] <- 1
-  dat$attr$uGC.tx[which(dat$attr$rGC.tx == 1 & dat$attr$uGC == 1)] <- 1
+  dat$attr$rGC.tx.prep[idsRGC_prep_tx] <- 0
+  dat$attr$rGC.tx.prep[txRGC_prep] <- 1
 
-  dat$attr$rCT.tx[which(dat$attr$uCT.tx == 1 & dat$attr$rCT == 1)] <- 1
-  dat$attr$uCT.tx[which(dat$attr$rCT.tx == 1 & dat$attr$uCT == 1)] <- 1
+  dat$attr$uGC.tx.prep[idsUGC_prep_tx] <- 0
+  dat$attr$uGC.tx.prep[txUGC_prep] <- 1
+
+  dat$attr$rCT.tx.prep[idsRCT_prep_tx] <- 0
+  dat$attr$rCT.tx.prep[txRCT_prep] <- 1
+
+  dat$attr$uCT.tx.prep[idsUCT_prep_tx] <- 0
+  dat$attr$uCT.tx.prep[txUCT_prep] <- 1
+
+
+  # add tx at other site
+  dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1) & dat$attr$rGC == 1)] <- 1
+  dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1) & dat$attr$uGC == 1)] <- 1
+
+  dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1) & dat$attr$rCT == 1)] <- 1
+  dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1) & dat$attr$uCT == 1)] <- 1
+
 
   # summary stats
   if (is.null(dat$epi$txGC)) {
