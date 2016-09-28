@@ -20,7 +20,6 @@
 #'
 #' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
 #' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
-#' @importFrom Rcpp sourceCpp
 #' @importFrom dplyr group_by summarise
 #'
 #' @useDynLib EpiModelHIV
