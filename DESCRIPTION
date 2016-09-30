@@ -22,13 +22,11 @@ Imports:
     bindata,
     network,
     networkDynamic,
-    Rcpp,
     dplyr
 Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
-LinkingTo: ergm,
-    Rcpp
+LinkingTo: ergm
 RoxygenNote: 5.0.1
 LazyData: true
