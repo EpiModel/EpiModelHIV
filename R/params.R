@@ -307,8 +307,8 @@ param_msm <- function(nwstats,
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
                       
-                      #tt.traj.syph.B.prob = c(0.077, 0.000, 0.356, 0.567),
-                      #tt.traj.syph.W.prob = c(0.052, 0.000, 0.331, 0.617),
+                      stage.syph.B.prob = c(0.10, 0.20, 0.20, 0.25, 0.15, 0.10),
+                      stage.syph.W.prob = c(0.10, 0.20, 0.20, 0.25, 0.15, 0.10),
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -340,6 +340,7 @@ param_msm <- function(nwstats,
                       earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
                       latelat.syph.int = 9*365,
                       tert.syph.int = 30*365,
+                      immune.syph.dur = 5*365,
                       
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
@@ -433,14 +434,20 @@ param_msm <- function(nwstats,
                       syph.tprob = 0.0014,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
+                      syph.immune.rr = 0,
                       
                       rgc.sympt.prob = 0.076975,
                       ugc.sympt.prob = 0.824368,
                       rct.sympt.prob = 0.103517,
                       uct.sympt.prob = 0.885045,
                       
-                      syph.sympt.prob = 0.59,
-                      
+                      syph.incub.sympt.prob = 0,
+                      syph.prim.sympt.prob = 0.50,
+                      syph.seco.sympt.prob = 0.85,
+                      syph.earlat.sympt.prob = 0,
+                      syph.latelat.sympt.prob = 0,
+                      syph.tert.sympt.prob = 0,
+
                       rgc.dur.asympt = 34.93723,
                       ugc.dur.asympt = 36.48328,
                       gc.dur.tx = 2,
@@ -451,7 +458,7 @@ param_msm <- function(nwstats,
                       ct.dur.tx = 2,
                       ct.dur.ntx = NULL,
 
-                      syph.early.dur.tx = 3,
+                      syph.early.dur.tx = 2,
                       syph.late.dur.tx = 15,
                       
                       gc.prob.cease = 0,
@@ -462,20 +469,30 @@ param_msm <- function(nwstats,
                       ct.sympt.prob.tx = 0.85,
                       gc.asympt.prob.tx = 0,
                       ct.asympt.prob.tx = 0,
+                      
+                      syph.prim.sympt.prob.tx = 0,
+                      syph.prim.asympt.prob.tx = 0,
+                      syph.seco.sympt.prob.tx = 0,
+                      syph.seco.asympt.prob.tx = 0,
+                      syph.earlat.prob.tx = 0,
+                      syph.latelat.prob.tx = 0,
+                      syph.tert.sympt.prob.tx = 0,
+                      syph.tert.asympt.prob.tx = 0,
 
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
 
                       sti.cond.rr = 0.3,
+                      syph.cond.rr = 0.1,
 
                       hiv.rgc.rr = 2.644584,
                       hiv.ugc.rr = 1.69434,
                       hiv.rct.rr = 2.644584,
                       hiv.uct.rr = 1.69434,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 1,
-                      syph.hiv.rr = 2.0,
+                      hiv.syph.rr = 1.0,
+                      syph.hiv.rr = 1.0,
                       
                       ...) {
 
@@ -494,6 +511,8 @@ param_msm <- function(nwstats,
     p$mean.test.W.int = (mean.test.W.int + mean.test.B.int)/2
     p$tt.traj.B.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
     p$tt.traj.W.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
+    p$stage.syph.B.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
+    p$stage.syph.W.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
     p$tx.init.B.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.init.W.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.halt.B.prob = (tx.halt.B.prob + tx.halt.W.prob)/2
