@@ -62,6 +62,8 @@ trans_msm <- function(dat, at) {
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
   hiv.rct.rr <- dat$param$hiv.rct.rr
   hiv.dual.rr <- dat$param$hiv.dual.rr
+  hiv.syph.rr <- dat$param$hiv.syph.rr
+  syph.hiv.rr <- dat$param$syph.hiv.rr
 
 
   # Data

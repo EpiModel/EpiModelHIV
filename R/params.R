@@ -306,6 +306,9 @@ param_msm <- function(nwstats,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
+                      
+                      #tt.traj.syph.B.prob = c(0.077, 0.000, 0.356, 0.567),
+                      #tt.traj.syph.W.prob = c(0.052, 0.000, 0.331, 0.617),
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -330,7 +333,14 @@ param_msm <- function(nwstats,
                       full.supp.up.slope = 0.25,
                       part.supp.down.slope = 0.25,
                       part.supp.up.slope = 0.25,
-
+                      
+                      incu.syph.int = 27,
+                      prim.syph.int = 90,
+                      seco.syph.int = 120,
+                      earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
+                      latelat.syph.int = 9*365,
+                      tert.syph.int = 30*365,
+                      
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
                       birth.age = 18,
@@ -420,11 +430,17 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
+                      syph.tprob = 0.0014,
+                      syph.earlat.rr = 0.5,
+                      syph.late.rr = 0,
+                      
                       rgc.sympt.prob = 0.076975,
                       ugc.sympt.prob = 0.824368,
                       rct.sympt.prob = 0.103517,
                       uct.sympt.prob = 0.885045,
-
+                      
+                      syph.sympt.prob = 0.59,
+                      
                       rgc.dur.asympt = 34.93723,
                       ugc.dur.asympt = 36.48328,
                       gc.dur.tx = 2,
@@ -435,8 +451,12 @@ param_msm <- function(nwstats,
                       ct.dur.tx = 2,
                       ct.dur.ntx = NULL,
 
+                      syph.early.dur.tx = 3,
+                      syph.late.dur.tx = 15,
+                      
                       gc.prob.cease = 0,
                       ct.prob.cease = 0,
+                      syph.prob.cease = 0,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,
@@ -454,6 +474,9 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.644584,
                       hiv.uct.rr = 1.69434,
                       hiv.dual.rr = 0.2,
+                      hiv.syph.rr = 1,
+                      syph.hiv.rr = 2.0,
+                      
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -559,6 +582,8 @@ param_msm <- function(nwstats,
 #' @param prev.rgc Initial prevalence of rectal gonorrhea.
 #' @param prev.uct Initial prevalence of urethral chlamydia.
 #' @param prev.rct Initial prevalence of rectal chlamydia.
+#' @param prev.syph.B Initial prevalence of syphilis among black MSM
+#' @param prev.syph.W Initial prevalence of syphilis among white MSM
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
@@ -575,6 +600,8 @@ init_msm <- function(nwstats,
                      prev.rgc = 0.005,
                      prev.uct = 0.013,
                      prev.rct = 0.013,
+                     prev.syph.B = 0.04,
+                     prev.syph.W = 0.04,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -587,6 +614,9 @@ init_msm <- function(nwstats,
 
   p$init.prev.age.slope.B <- prev.B / 12
   p$init.prev.age.slope.W <- prev.W / 12
+  
+  p$init.prev.syph.age.slope.B <- prev.syph.B / 12
+  p$init.prev.syph.age.slope.W <- prev.syph.W / 12
 
   p$nwstats <- NULL
 

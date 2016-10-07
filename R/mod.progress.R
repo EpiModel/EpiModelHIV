@@ -98,3 +98,109 @@ progress_msm <- function(dat, at) {
 
   return(dat)
 }
+
+#' @title Disease Progression Module
+#'
+#' @description Module function for Syphilis disease progression through multiple
+#'              stages.
+#'
+#' @inheritParams aging_msm
+#'
+#' @details
+#' Syphilis disease is divided into multiple stages: incubating, primary, secondary,
+#' early latent, late latent, tertiary, and remission. 
+#'
+#' The time spent in chronic stage infection, and thus the time from infection to
+#' AIDS, depends on ART history. For ART-naive persons, time to AIDS is established
+#' by the \code{vl.aids.onset} parameter. For persons ever on ART who fall into
+#' the partially suppressed category (the \code{tt.traj} attribute is \code{3}),
+#' time to AIDS depends on the sum of two ratios: time on treatment over maximum
+#' time on treatment plus time off treatment over maximum time off treatment.
+#' For persons ever on ART who fall into the fully suppressed cateogry
+#' (\code{tt.traj=4}), time to AIDS depends on whether the cumulative time
+#' off treatment exceeds a time threshold specified in the \code{max.time.off.tx.full}
+#' parameter.
+#'
+#' @return
+#' This function returns the \code{dat} object after updating the disease stage
+#' of infected individuals.
+#'
+#' @keywords module msm syphilis
+#' 
+#' @export
+#'
+progress_syph_msm <- function(dat, at) {
+    
+    ## Variables
+    
+    # Attributes
+    active <- dat$attr$active
+    syphstatus <- dat$attr$syphstatus
+    time.since.inf.syph <- at - dat$attr$syph.infTime
+    #cum.time.on.tx.syph <- dat$attr$cum.time.on.tx
+    #cum.time.off.tx.syph <- dat$attr$cum.time.off.tx
+    stage.syph <- dat$attr$stage.syph
+    stage.time.syph <- dat$attr$stage.time.syph
+    tt.traj.syph <- dat$attr$tt.traj.syph
+    tx.status.syph <- dat$attr$tx.status.syph
+    
+    # Parameters
+    incu.syph.int <- dat$param$incu.syph.int
+    prim.syph.int <- dat$param$prim.syph.int
+    seco.syph.int <- dat$param$seco.syph.int
+    earlat.syph.int <- dat$param$earlat.syph.int
+    latelat.syph.int <- dat$param$latelat.syph.int
+    tert.syph.int <- dat$param$tert.syph.int
+    
+    #max.time.off.tx.part <- dat$param$max.time.off.tx.part
+    #max.time.on.tx.part <- dat$param$max.time.on.tx.part
+    #max.time.off.tx.full <- dat$param$max.time.off.tx.full
+    
+    
+    ## Process
+    
+    # Increment day
+    stage.time.syph[active == 1] <- stage.time.syph[active == 1] + 1
+    
+    # Change stage to Primary
+    toPrim <- which(active == 1 & time.since.inf.syph == (incu.syph.int + 1))
+    stage.syph[toPrim] <- 2
+    stage.time.syph[toPrim] <- 1
+    
+    # Change stage to Secondary
+    toSeco <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+                                                           prim.syph.int + 1))
+    stage.syph[toSeco] <- 3
+    stage.time.syph[toSeco] <- 1
+    
+    # Change stage to Early Latent
+    toEarLat <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+                                                              prim.syph.int +
+                                                                seco.syph.int + 1))
+    stage.syph[toEarLat] <- 4
+    stage.time.syph[toEarLat] <- 1
+    
+    # Change stage to Late Latent
+    toLateLat <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+                                                                prim.syph.int +
+                                                                seco.syph.int + 
+                                                                earlat.syph.int + 1))
+    stage.syph[toLateLat] <- 5
+    stage.time.syph[toLateLat] <- 1
+    
+    # Change stage to Tertiary
+    toTert <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+                                                                 prim.syph.int +
+                                                                 seco.syph.int + 
+                                                                 earlat.syph.int +
+                                                                 latelat.syph.int + 1))
+    stage.syph[toTert] <- 6
+    stage.time.syph[toTert] <- 1
+    
+    
+    ## Output
+    dat$attr$stage.syph <- stage.syph
+    dat$attr$stage.time.syph <- stage.time.syph
+    
+    return(dat)
+}
