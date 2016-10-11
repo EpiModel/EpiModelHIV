@@ -30,7 +30,6 @@ sti_trans <- function(dat, at) {
   ugc.sympt.prob <- dat$param$ugc.sympt.prob
   rct.sympt.prob <- dat$param$rct.sympt.prob
   uct.sympt.prob <- dat$param$uct.sympt.prob
-  syph.sympt.prob <- dat$param$syph.sympt.prob
   
   # Relative risk of infection given condom use during act
   sti.cond.rr <- dat$param$sti.cond.rr
@@ -64,7 +63,7 @@ sti_trans <- function(dat, at) {
   uGC[newBirths] <- uGC.timesInf[newBirths] <- 0
   rCT[newBirths] <- rCT.timesInf[newBirths] <- 0
   uCT[newBirths] <- uCT.timesInf[newBirths] <- 0
-  syphstatus[newBirths] <- syphstatu.timesInf[newBirths] <- 0
+  syphstatus[newBirths] <- syphstatus[newBirths] <- 0
 
   # Infection time
   rGC.infTime <- dat$attr$rGC.infTime
@@ -78,7 +77,6 @@ sti_trans <- function(dat, at) {
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
-  syph.sympt <- dat$attr$syph.sympt
 
   # Men who cease sexual activity during symptomatic infection
   GC.cease <- dat$attr$GC.cease
@@ -296,7 +294,7 @@ sti_trans <- function(dat, at) {
   rp.syph.tprob <- plogis(rp.syph.tlo)
   stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
   
-  # Late stage multiplier (not log odds b/c log 0 = undefined
+  # Late stage multiplier (not log odds b/c log 0 = undefined)
   islate <- which(rp.stage.syph %in% c(5, 6))
   rp.syph.tprob[islate] <- rp.syph.tprob[islate] + log(syph.late.rr)
   
@@ -328,7 +326,6 @@ sti_trans <- function(dat, at) {
       dat$attr$stage.time.syph[infected.syph] <- 0
       #dat$attr$diag.status.syph[infected.syph] <- 0
       #dat$attr$tx.status.syph[infected.syph] <- 0
-      #syph.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
       syph.timesInf[infected.syph] <- syph.timesInf[infected.syph] + 1
       dat$attr$inf.role.syph[infected.syph] <- inf.role.syph
       dat$attr$inf.type.syph[infected.syph] <- inf.type.syph
@@ -355,11 +352,11 @@ sti_trans <- function(dat, at) {
 
   
   # Symptomatic syphilis
-  syphilis.sympt <- which(is.na(syph.cease) & (syph.sympt == 1))
-  idssyph.cease <- CT.sympt[which(rbinom(length(syphilis.sympt),
-                                       1, syph.prob.cease) == 1)]
-  CT.cease[CT.sympt] <- 0
-  CT.cease[idsCT.cease] <- 1
+  #syphilis.sympt <- which(is.na(syph.cease) & (syph.sympt == 1))
+  #idssyph.cease <- CT.sympt[which(rbinom(length(syphilis.sympt),
+  #                                     1, syph.prob.cease) == 1)]
+  #CT.cease[CT.sympt] <- 0
+  #CT.cease[idsCT.cease] <- 1
 
   # Output --------------------------------------------------------------
 
@@ -613,19 +610,17 @@ sti_recov <- function(dat, at) {
   
   # Syphilis Recovery -------------------------------------------------
  
-  # Spontaneous recovery during early stages
-  
-  # Symptomatic vs. asymptomatic
+  # Spontaneous untreated recovery during early stages (symptomatic or asymptomatic)
   
   # Treated (asymptomatic and symptomatic)
   idssyph_early_tx <- which(dat$attr$syphstatus == 1 &
                             dat$attr$stage.syph %in% c(1, 2, 3, 4) &
                             dat$attr$syph.infTime < at &
-                            (dat$attr$syph.tx == 1 )) #| dat$attr$syph.tx.prep == 1))
+                            (dat$attr$syph.tx == 1 | dat$attr$syph.tx.prep == 1))
   idssyph_late_tx <- which(dat$attr$syphstatus == 1 &
                             dat$attr$stage.syph %in% c(5, 6) &
                             dat$attr$syph.infTime < at &
-                            (dat$attr$syph.tx == 1 )) #| dat$attr$syph.tx.prep == 1))                    
+                            (dat$attr$syph.tx == 1 | dat$attr$syph.tx.prep == 1))                    
                       
   # Move early stage treated to recovered 
   recovsyph_early_tx <- idssyph_early_tx[which(rbinom(length(idssyph_early_tx), 1,
@@ -636,7 +631,7 @@ sti_recov <- function(dat, at) {
                                                       1/syph.late.dur.tx) == 1)]
   
   # All recovered in at
-  recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx, idssyph_lose_immune)
+  recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
   
   # Change stage to immune (will last 5 years)
   toimmune <- which(recovsyph_late_tx)
@@ -644,7 +639,11 @@ sti_recov <- function(dat, at) {
   
   # Update attributes
   dat$attr$syphstatus[recovsyph] <- 0
-  dat$attr$syph.sympt[recovsyph] <- NA
+  dat$attr$stage.prim.sympt[recovsyph] <- NA
+  dat$attr$stage.seco.sympt[recovsyph] <- NA
+  dat$attr$stage.earlat.sympt[recovsyph] <- NA
+  dat$attr$stage.latelat.sympt[recovsyph] <- NA
+  dat$attr$stage.tert.sympt[recovsyph] <- NA
   dat$attr$syph.infTime[recovsyph] <- NA
   dat$attr$syph.tx[recovsyph] <- NA
   dat$attr$syph.tx.prep[recovsyph] <- NA
@@ -666,7 +665,7 @@ sti_recov <- function(dat, at) {
 
 #' @title STI Treatment Module
 #'
-#' @description Stochastically simulates GC/CT diagnosis and treatment.
+#' @description Stochastically simulates GC/CT and syphilis diagnosis and treatment.
 #'
 #' @inheritParams aging_msm
 #'
@@ -709,108 +708,97 @@ sti_tx <- function(dat, at) {
   }
 
   # symptomatic syphilis treatment
-  idssyph_tx_sympt_prim <- which(dat$attr$syph.status == 1 & 
+  idssyph_tx_sympt_prim <- which(dat$attr$syphstatus == 1 & 
                                 dat$attr$syph.infTime < at &
                                 dat$attr$stage.syph == 2 &
                                 stage.prim.sympt == 1 &
-                                is.na(dat$attr$syph.tx) == FALSE) # &
-                                #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                is.na(dat$attr$syph.tx) &
+                                dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_sympt_prim <- idssyph_tx_sympt_prim[which(rbinom(length(idssyph_tx_sympt_prim), 1, syph.prim.sympt.prob.tx) == 1)]
   
-  idssyph_tx_sympt_seco <- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_sympt_seco <- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      stage.seco.sympt == 1 &
-                                     is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                     is.na(dat$attr.syph.tx) &
+                                     dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco), 1, syph.seco.sympt.prob.tx) == 1)]
 
-  idssyph_tx_sympt_tert<- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_sympt_tert<- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 6 &
                                      stage.tert.sympt == 1 &
-                                     is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                     is.na(dat$attr.syph.tx) &
+                                     dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_sympt_tert <- idssyph_tx_sympt_tert[which(rbinom(length(idssyph_tx_sympt_tert), 1, syph.tert.sympt.prob.tx) == 1)]
   
-  
+  idssyph_tx_sympt <- c(idssyph_tx_sympt_prim, idssyph_tx_sympt_seco, idssyph_tx_sympt_tert)
   txsyph_sympt <- c(txsyph_sympt_prim, txsyph_sympt_seco, txsyph_sympt_tert)
 
   
-  
-  
   # Asymptomatic syphilis treatment
   
-  idssyph_tx_asympt_prim <- which(dat$attr$syph.status == 1 & 
+  idssyph_tx_asympt_prim <- which(dat$attr$syphstatus == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 2 &
                                      stage.prim.sympt == 0 &
-                                     is.na(dat$attr$syph.tx) == FALSE) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                     is.na(dat$attr$syph.tx) &
+                                     dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_prim <- idssyph_tx_asympt_prim[which(rbinom(length(idssyph_tx_asympt_prim), 1, syph.prim.asympt.prob.tx) == 1)]
   
-  idssyph_tx_asympt_seco <- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_asympt_seco <- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      stage.seco.sympt == 0 &
-                                     is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                     is.na(dat$attr.syph.tx)  &
+                                     dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.seco.asympt.prob.tx) == 1)]
   
   
-  idssyph_tx_asympt_earlat <- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_asympt_earlat <- which(dat$attr$syphstatus ==1 & 
                                       dat$attr$syph.infTime < at &
                                       dat$attr$stage.syph == 4 &
                                       stage.earlat.sympt == 0 &
-                                      is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                      is.na(dat$attr.syph.tx) &
+                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
-  txsyph_asympt_earlat <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.earlat.prob.tx) == 1)]
+  txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.earlat.prob.tx) == 1)]
   
-  idssyph_tx_asympt_latelat <- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_asympt_latelat <- which(dat$attr$syphstatus ==1 & 
                                         dat$attr$syph.infTime < at &
                                         dat$attr$stage.syph == 5 &
                                         stage.latelat.sympt == 0 &
-                                        is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                        is.na(dat$attr.syph.tx) &
+                                        dat$attr$prepStat %in% prep.stand.tx.grp)
   
-  txsyph_asympt_latelat <- idssyph_tx_asympt_late[which(rbinom(length(idssyph_tx_asympt_late), 1, syph.latelat.prob.tx) == 1)]
+  txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_late), 1, syph.latelat.prob.tx) == 1)]
   
-  idssyph_tx_asympt_tert <- which(dat$attr$syph.status ==1 & 
+  idssyph_tx_asympt_tert <- which(dat$attr$syphstatus ==1 & 
                                         dat$attr$syph.infTime < at &
                                         dat$attr$stage.syph == 6 &
                                         stage.tert.sympt == 0 &
-                                        is.na(dat$attr.syph.tx)) # &
-  #dat$attr$prepStat %in% prep.stand.tx.grp)
+                                        is.na(dat$attr.syph.tx) &
+                                        dat$attr$prepStat %in% prep.stand.tx.grp)
   
-  txsyph_asympt_tert <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_tert), 1, syph.tert.asympt.prob.tx) == 1)]
+  txsyph_asympt_tert <- idssyph_tx_asympt_tert[which(rbinom(length(idssyph_tx_asympt_tert), 1, syph.tert.asympt.prob.tx) == 1)]
   
+  idssyph_tx_asympt <- c(idssyph_tx_asympt_prim, idssyph_tx_asympt_seco, idssyph_tx_asympt_earlat, idssyph_tx_asympt_latelat, idssyph_tx_asympt_tert)
   
   txsyph_asympt <- c(txsyph_asympt_prim, txsyph_asympt_seco, txsyph_asympt_earlat, txsyph_asympt_latelat, txsyph_asympt_tert)
   
   
   # All treated syphilis
-  # txsyph <- union(txsyph_sympt, txsyph_asympt)
-  # idssyph_tx <- union(idsRGC_tx_sympt, idsRGC_tx_asympt)
-  
-  
-  # all treated GC - isn't this repetitive?
-  #txRGC <- union(txRGC_sympt, txRGC_asympt)
-  #txUGC <- union(txUGC_sympt, txUGC_asympt)
-  
-  #idsRGC_tx <- union(idsRGC_tx_sympt, idsRGC_tx_asympt)
-  #idsUGC_tx <- union(idsUGC_tx_sympt, idsUGC_tx_asympt)
-  
+  txsyph <- union(txsyph_sympt, txsyph_asympt)
+  idssyph_tx <- union(idssyph_tx_sympt, idssyph_tx_asympt)
+
+
   # check variables against recovery module
-  # add onto update attributes at end of this module
   # clear variables after progression in progression
-  # dat$attr$syph.tx
-  
   
   # symptomatic gc treatment
   idsRGC_tx_sympt <- which(dat$attr$rGC == 1 &
@@ -922,7 +910,12 @@ sti_tx <- function(dat, at) {
                               which(dat$attr$uCT == 1 &
                                       dat$attr$uCT.infTime < at &
                                       is.na(dat$attr$uCT.tx.prep)))
-
+  
+  idssyph_prep_tx <- intersect(idsSTI_screen,
+                                 which(dat$attr$syphstatus == 1 &
+                                        dat$attr$rGC.infTime < at &
+                                         is.na(dat$attr$syph.tx.prep)))
+ 
   txRGC_prep <- idsRGC_prep_tx[which(rbinom(length(idsRGC_prep_tx), 1,
                                             prep.sti.prob.tx) == 1)]
   txUGC_prep <- idsUGC_prep_tx[which(rbinom(length(idsUGC_prep_tx), 1,
@@ -931,9 +924,15 @@ sti_tx <- function(dat, at) {
                                             prep.sti.prob.tx) == 1)]
   txUCT_prep <- idsUCT_prep_tx[which(rbinom(length(idsUCT_prep_tx), 1,
                                             prep.sti.prob.tx) == 1)]
+  txsyph_prep <- idssyph_prep_tx[which(rbinom(length(idssyph_prep_tx), 1,
+                                              prep.sti.prob.tx) == 1)]
 
-
+  
   # update attributes
+  
+  dat$attr$syph.tx[idssyph_tx] <- 0
+  dat$attr$syph.tx[txsyph] <- 1
+  
   dat$attr$rGC.tx[idsRGC_tx] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
 
@@ -958,6 +957,8 @@ sti_tx <- function(dat, at) {
   dat$attr$uCT.tx.prep[idsUCT_prep_tx] <- 0
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
 
+  dat$attr$syph.tx.prep[idssyph_prep_tx] <- 0
+  dat$attr$syph.tx.prep[txsyph_prep] <- 1
 
   # add tx at other site
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1) & dat$attr$rGC == 1)] <- 1
@@ -970,7 +971,7 @@ sti_tx <- function(dat, at) {
   txUGC_all <- union(txUGC, txUGC_prep)
   txRCT_all <- union(txRCT, txRCT_prep)
   txUCT_all <- union(txUCT, txUCT_prep)
-
+  txsyph_all <- union(txsyph, txsyph_prep)
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {
@@ -987,26 +988,38 @@ sti_tx <- function(dat, at) {
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
-                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)))
+                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)),
+                 intersect(txsyph_all, which((dat$attr$stage.prim.sympt == 0 | dat$attr$stage.seco.sympt == 0 |
+                                              dat$attr$stage.earlat.sympt == 0 | dat$attr$stage.latelat.sympt == 0 |
+                                              dat$attr$stage.tert.sympt == 0))))
+                           
   dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
   asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
+                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
+                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which((dat$attr$stage.prim.sympt == 0 | dat$attr$stage.seco.sympt == 0 |
+                                                                           dat$attr$stage.earlat.sympt == 0 | dat$attr$stage.latelat.sympt == 0 |
+                                                                           dat$attr$stage.tert.sympt == 0))))
   dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
 
 
   asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
                       intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
                       intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
-                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)))
+                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)),
+                      intersect(txsyph_prep, which((dat$attr$stage.prim.sympt == 0 | dat$attr$stage.seco.sympt == 0 |
+                                                      dat$attr$stage.earlat.sympt == 0 | dat$attr$stage.latelat.sympt == 0 |
+                                                      dat$attr$stage.tert.sympt == 0))))
   dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
   asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                          intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                          intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
+                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
+                         intersect(idssyph_prep_tx, which((dat$attr$stage.prim.sympt == 0 | dat$attr$stage.seco.sympt == 0 |
+                                                             dat$attr$stage.earlat.sympt == 0 | dat$attr$stage.latelat.sympt == 0 |
+                                                             dat$attr$stage.tert.sympt == 0))))
   dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
-
 
   rect.tx <- c(txRGC_all, txRCT_all)
   dat$epi$num.rect.tx[at] <- length(unique(rect.tx))

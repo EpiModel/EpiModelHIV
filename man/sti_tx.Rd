@@ -13,7 +13,7 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \description{
-Stochastically simulates GC/CT diagnosis and treatment.
+Stochastically simulates GC/CT and syphilis diagnosis and treatment.
 }
 \keyword{module}
 \keyword{msm}
