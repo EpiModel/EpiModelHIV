@@ -37,10 +37,17 @@ prevalence_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  syphstatus <- dat$attr$syphstatus
   rGC.sympt <- dat$attr$rGC.sympt
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
+  stage.prim.sympt <- dat$attr$stage.prim.sympt
+  stage.seco.sympt <- dat$attr$stage.seco.sympt
+  stage.earlat.sympt <- dat$attr$stage.earlat.sympt
+  stage.latelat.sympt <- dat$attr$stage.latelat.sympt
+  stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
+  stage.tert.sympt <- dat$attr$stage.tert.sympt
 
 
   nsteps <- dat$control$nsteps
@@ -81,6 +88,16 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$prev.rgcct <- rNA
     dat$epi$prev.ugcct <- rNA
+    
+    dat$epi$prev.syphilis <- rNA
+    dat$epi$prev.stage.prim <- rNA
+    dat$epi$prev.stage.seco <- rNA
+    dat$epi$prev.stage.earlat <- rNA
+    dat$epi$prev.stage.latelat <- rNA
+    dat$epi$prev.stage.latelatelat <- rNA
+    dat$epi$prev.stage.tert <- rNA
+    dat$epi$prev.earlysyph <- rNA
+    dat$epi$prev.latesyph <- rNA
 
     dat$epi$incid.rgc <- rNA
     dat$epi$incid.ugc <- rNA
@@ -88,14 +105,16 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.rct <- rNA
     dat$epi$incid.uct <- rNA
     dat$epi$incid.ct <- rNA
-
+    dat$epi$incid.syphilis <- rNA
+    
     dat$epi$ir100.rgc <- rNA
     dat$epi$ir100.ugc <- rNA
     dat$epi$ir100.gc <- rNA
     dat$epi$ir100.rct <- rNA
     dat$epi$ir100.uct <- rNA
     dat$epi$ir100.ct <- rNA
-
+    dat$epi$ir100.syph <- rNA
+    
     dat$epi$ir100.sti <- rNA
     dat$epi$incid.gcct.prep <- rNA
 
@@ -103,7 +122,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$recov.ugc <- rNA
     dat$epi$recov.rct <- rNA
     dat$epi$recov.uct <- rNA
-
+    dat$epi$recov.prim.syph <- rNA
+    dat$epi$recov.seco.syph <- rNA
+    dat$epi$recov.earlat.syph <- rNA
+    dat$epi$recov.latelat.syph <- rNA
+    dat$epi$recov.latelatelat.syph <- rNA
+    dat$epi$recov.tert.syph <- rNA
+    dat$epi$recov.immune.syph <- rNA
+    dat$epi$recov.earlysyph <- rNA
+    dat$epi$recov.latesyph <- rNA
+    dat$epi$recov.syphilis <- rNA
+    
     dat$epi$trans.main <- rNA
     dat$epi$trans.casl <- rNA
     dat$epi$trans.inst <- rNA
@@ -150,7 +179,17 @@ prevalence_msm <- function(dat, at) {
 
   dat$epi$prev.rgcct[at] <- sum(rGC == 1 | rCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ugcct[at] <- sum(uGC == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
-
+  
+  dat$epi$prev.stage.prim <- sum(stage.syph == 2, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.seco <- sum(stage.syph == 3, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.earlat <- sum(stage.syph == 4, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.latelat <- sum(stage.syph == 5, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.latelatelat <- sum(stage.syph == 6, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.tert <-sum(stage.syph == 7, na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.earlysyph <- sum(stage.syph %in% c(1, 2, 3, 4), na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.latesyph <- sum(stage.syph %in% c(5, 6, 7), na.rm=TRUE) / dat$epi$num[at]
+  dat$epi$prev.syphilis <- sum(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7), na.rm = TRUE) / dat$epi$num[at]
+  
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at] /
@@ -162,9 +201,11 @@ prevalence_msm <- function(dat, at) {
   dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at] /
                              (sum(rCT == 0, na.rm = TRUE) +
                                 sum(uCT == 0, na.rm = TRUE))) * 5200
+  
+  dat$epi$ir100.syph[at] <- (dat$epi$incid.syph[at] / sum(syphstatus == 0 , na.rm = TRUE)) * 5200
 
   dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
-                                rCT ==1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
+                                rCT == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at]) /
                               (sum(rGC == 0, na.rm = TRUE) +
                                  sum(uGC == 0, na.rm = TRUE) +

@@ -138,8 +138,6 @@ progress_syph_msm <- function(dat, at) {
     syphstatus <- dat$attr$syphstatus
     time.since.inf.syph <- at - dat$attr$syph.infTime
     time.since.immune.syph <- at - dat$attr$syph.immune.time
-    #cum.time.on.tx.syph <- dat$attr$cum.time.on.tx
-    #cum.time.off.tx.syph <- dat$attr$cum.time.off.tx
     stage.syph <- dat$attr$stage.syph
     stage.time.syph <- dat$attr$stage.time.syph
     tx.status.syph <- dat$attr$tx.status.syph
@@ -150,6 +148,7 @@ progress_syph_msm <- function(dat, at) {
     seco.syph.int <- dat$param$seco.syph.int
     earlat.syph.int <- dat$param$earlat.syph.int
     latelat.syph.int <- dat$param$latelat.syph.int
+    latelatelat.syph.int <- dat$param$latelatelat.syph.int
     tert.syph.int <- dat$param$tert.syph.int
     
     syph.incub.sympt.prob <- dat$param$syph.incub.sympt.prob
@@ -201,21 +200,34 @@ progress_syph_msm <- function(dat, at) {
     stage.latelat.sympt[toLateLat] <- rbinom(length(toLateLat), 1, syph.latelat.sympt.prob)
     stage.earlat.sympt[toLateLat] <- NA
     
-    # Change stage to Tertiary and assign symptoms
-    toTert <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+    # Change stage to late late latent (functions the same way as late latent)
+    tolatelate <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
                                                                  prim.syph.int +
                                                                  seco.syph.int + 
                                                                  earlat.syph.int +
                                                                  latelat.syph.int + 1) & 
                                     stage.syph == 5)
-    stage.syph[toTert] <- 6
+    stage.syph[tolatelate] <- 6
+    stage.time.syph[tolatelate] <- 0
+    stage.latelatelat.sympt[tolatelate] <- rbinom(length(toTert), 1, syph.latelat.sympt.prob)
+    stage.latelat.sympt[tolatelate] <- NA
+    
+    # Change stage to tertiary for fraction of those in late/late late latent
+    toTert <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+                                                                  prim.syph.int +
+                                                                  seco.syph.int + 
+                                                                  earlat.syph.int +
+                                                                  latelat.syph.int + 1) & 
+                                    stage.syph == 6)
+    toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
+    stage.syph[toTert] <- 7
     stage.time.syph[toTert] <- 0
     stage.tert.sympt[toTert] <- rbinom(length(toTert), 1, syph.tert.sympt.prob)
-    stage.latelat.sympt[toTert] <- NA
+    stage.latelatelat.sympt[toTert] <- NA
     
     # Immune protection lapsing
     idssyph_lose_immune <- which(time.since.immune.syph > dat$attr$immune.syph.dur &
-                                     syph.stage == 7)
+                                     stage.syph == 8)
     stage.time.syph[idssyph_lose_immune] <- NA
 
     ## Output
@@ -227,6 +239,7 @@ progress_syph_msm <- function(dat, at) {
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
+    dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
     
     return(dat)
