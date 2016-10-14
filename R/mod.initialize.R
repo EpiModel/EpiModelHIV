@@ -761,6 +761,7 @@ init_status_syph_msm <- function(dat) {
     syphstatus[ids.W] <- rbinom(num.W, 1, probInfsyphW)
        }
     syph.timesInf[syphstatus == 1] <- 1
+    syph.infTime[syphstatus ==  1] <- 1
     dat$attr$syphstatus <- syphstatus
         
 
@@ -771,7 +772,7 @@ init_status_syph_msm <- function(dat) {
                                           dat$param$stage.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     
-    # Assign duration of untreated infection at beginning --------------------------
+    # Assign duration of untreated infection at beginning
     # Incubating
     selected <- which(syphstatus == 1 & stage.syph == 1)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)

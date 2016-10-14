@@ -22,8 +22,11 @@ sti_trans <- function(dat, at) {
   syph.tprob <- dat$param$syph.tprob
   
   #Multiplier for syphilis infection
+  syph.cond.rr <- dat$param$syph.cond.rr
   syph.earlat.rr <- dat$param$syph.earlat.rr
   syph.late.rr <- dat$param$syph.late.rr
+  syph.immune.rr <- dat$param$syph.immune.rr
+  syph.hiv.rr <- dat$param$syph.hiv.rr
   
   # Probability of symptoms given infection
   rgc.sympt.prob <- dat$param$rgc.sympt.prob
@@ -221,11 +224,12 @@ sti_trans <- function(dat, at) {
   # Syphilis ---------------------------------------------------------
   
   # Requires: Syphilis in one man (insertive or receptive in receptive man), and no syphilis in other
-  p1Inf_syph <- which(syphstatus[al[, "p1"]] == 1 & syph.infTime[al[, "p1"]] < at &
-                          syphstatus[al[, "p2"]] == 0)
-  p2Inf_syph <- which(syphstatus[al[, "p2"]] == 1 & syph.infTime[al[, "p2"]] < at &
-                         syphstatus[al[, "p1"]] == 0)
-  allActs_syph <- c(p1Inf_syph, p2Inf_syph)
+  p1Inf_syph <- al[which(syphstatus[al[, "p1"]] == 1 & syph.infTime[al[, "p1"]] < at &
+                          syphstatus[al[, "p2"]] == 0), ]
+  p2Inf_syph <- al[which(syphstatus[al[, "p2"]] == 1 & syph.infTime[al[, "p2"]] < at &
+                         syphstatus[al[, "p1"]] == 0), ]
+  allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
+  ncols <- dim(allActs_syph)[2]
 
   # Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, ]
@@ -237,22 +241,22 @@ sti_trans <- function(dat, at) {
   ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
  
   # Base TP from VL
-  ip.syph.tprob <- syph.tprob
+  ip.syph.tprob <- rep(syph.tprob, length(ip.stage.syph))
    
   # Transform to log odds
   ip.syph.tlo <- log(ip.syph.tprob/(1-ip.syph.tprob))
    
   # Condom use multiplier
   not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
-  ip.syph.tlo[not.syph.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(syph.cond.rr)
+  ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(syph.cond.rr)
   
   # Early latent-stage multipliers
   isearlat <- which(ip.stage.syph %in% 4)
   ip.syph.tlo[isearlat] <- ip.syph.tlo[isearlat] + log(syph.earlat.rr)
 
-  # Multiplier for HIV - which direction is this?
-  #is.HIV <- which(status[disc.syph.ip[, 2]])
-  #ip.tlo[is.HIV] <- ip.tlo[is.HIV] + log(syph.hiv.rr)
+  # Multiplier for syphilis transmission by HIV-infected- which direction is this?
+  is.HIV <- which(status[disc.syph.ip[, 2]] == 1)
+  ip.syph.tlo[is.HIV] <- ip.syph.tlo[is.HIV] + log(syph.hiv.rr)
   
   # Retransformation to probability
   ip.syph.tprob <- plogis(ip.syph.tlo)
@@ -273,22 +277,22 @@ sti_trans <- function(dat, at) {
   rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
    
   # Base TP from VL
-  rp.syph.tprob <- syph.tprob
+  rp.syph.tprob <- rep(syph.tprob, length(rp.stage.syph))
    
   # Transform to log odds
   rp.syph.tlo <- log(rp.syph.tprob/(1-rp.syph.tprob))
    
   # Condom use multiplier
   not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
-  rp.syph.tlo[not.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(syph.cond.rr)
+  rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(syph.cond.rr)
   
   # Early latent stage multipliers
   isearlat <- which(rp.stage.syph %in% 4)
   rp.syph.tlo[isearlat] <- rp.syph.tlo[isearlat] + log(syph.earlat.rr)
 
-  # Multiplier for HIV - which direction is this?
-  #is.HIV <- which(status[disc.syph.rp[, 1]])
-  #rp.syph.tlo[is.HIV] <- rp.tlo[is.HIV] + log(syph.hiv.rr)
+  # Multiplier for syphilis transmission by HIV-infected - which direction is this?
+  is.HIV <- which(status[disc.syph.rp[, 1]] == 1)
+  rp.syph.tlo[is.HIV] <- rp.syph.tlo[is.HIV] + log(syph.hiv.rr)
   
   # Retransformation to probability
   rp.syph.tprob <- plogis(rp.syph.tlo)
@@ -312,13 +316,13 @@ sti_trans <- function(dat, at) {
   
   # Update attributes
   infected.syph <- inf.type.syph <- NULL
-  if (sum(trans.syph.ip, trans.syph.rp) > 0) {
+  if (sum(trans.syph.ip, trans.syph.rp, na.rm = TRUE) > 0) {
       
-      infected.syph <- c(disc.ip[trans.syph.ip == 1, 2],
-                    disc.rp[trans.syph.rp == 1, 1])
+      infected.syph <- rbind(disc.syph.ip[trans.syph.ip == 1, 2],
+                    disc.syph.rp[trans.syph.rp == 1, 1])
       inf.role.syph <- c(rep(0, sum(trans.syph.ip)), rep(1, sum(trans.syph.rp)))
-      inf.type.syph <- c(disc.ip[trans.syph.ip == 1, "ptype"],
-                    disc.rp[trans.syph.rp == 1, "ptype"])
+      inf.type.syph <- c(disc.syph.ip[trans.syph.ip == 1, "ptype"],
+                    disc.syph.rp[trans.syph.rp == 1, "ptype"])
       
       dat$attr$syphstatus[infected.syph] <- 1
       dat$attr$syph.infTime[infected.syph] <- at
@@ -350,12 +354,12 @@ sti_trans <- function(dat, at) {
 
   
   # Symptomatic syphilis
-  syphilis.sympt <- which(is.na(syph.cease) & (stage.prim.sympt == 1 |
-                                               stage.seco.sympt == 1 |
-                                               stage.earlat.sympt == 1 |
-                                               stage.latelat.sympt |
-                                               stage.latelatelat.sympt |
-                                               stage.tert.sympt))
+  syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.prim.sympt == 1 |
+                                               dat$attr$stage.seco.sympt == 1 |
+                                               dat$attr$stage.earlat.sympt == 1 |
+                                               dat$attr$stage.latelat.sympt |
+                                               dat$attr$stage.latelatelat.sympt |
+                                               dat$attr$stage.tert.sympt))
   idssyph.cease <- syphilis.sympt[which(rbinom(length(syphilis.sympt),
                                        1, syph.prob.cease) == 1)]
   syph.cease[syphilis.sympt] <- 0
@@ -660,13 +664,12 @@ sti_recov <- function(dat, at) {
   
   # Recovery by early, late, and all
   recovsyph_early_tx <- c(recovsyph_prim_tx, recovsyph_seco_tx, recovsyph_earlat_tx)
-  recovsyph_late_tx <- c( recovsyph_latelat_tx, recovsyph_latelatelat_tx, recovsyph_tert_tx)
+  recovsyph_late_tx <- c(recovsyph_latelat_tx, recovsyph_latelatelat_tx, recovsyph_tert_tx)
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
   
   # Change stage to immune (will last 5 years)
-  toimmune <- which(recovsyph_late_tx)
-  dat$attr$stage.syph[toimmune] <- 8
-  dat$attr$syph.immune.time[toimmune] <- 0
+  dat$attr$stage.syph[recovsyph_late_tx] <- 8
+  dat$attr$syph.immune.time[recovsyph_late_tx] <- 0
   
   # Update attributes
   dat$attr$syphstatus[recovsyph] <- 0
@@ -751,7 +754,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_sympt_prim <- which(dat$attr$syphstatus == 1 & 
                                 dat$attr$syph.infTime < at &
                                 dat$attr$stage.syph == 2 &
-                                stage.prim.sympt == 1 &
+                                dat$attr$stage.prim.sympt == 1 &
                                 is.na(dat$attr$syph.tx) &
                                 dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -760,7 +763,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_sympt_seco <- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
-                                     stage.seco.sympt == 1 &
+                                     dat$attr$stage.seco.sympt == 1 &
                                      is.na(dat$attr.syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -769,7 +772,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_sympt_tert<- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 7 &
-                                     stage.tert.sympt == 1 &
+                                     dat$attr$stage.tert.sympt == 1 &
                                      is.na(dat$attr.syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -784,7 +787,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_asympt_prim <- which(dat$attr$syphstatus == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 2 &
-                                     stage.prim.sympt == 0 &
+                                     dat$attr$stage.prim.sympt == 0 &
                                      is.na(dat$attr$syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -793,7 +796,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_asympt_seco <- which(dat$attr$syphstatus ==1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
-                                     stage.seco.sympt == 0 &
+                                     dat$attr$stage.seco.sympt == 0 &
                                      is.na(dat$attr.syph.tx)  &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -803,7 +806,7 @@ sti_tx <- function(dat, at) {
   idssyph_tx_asympt_earlat <- which(dat$attr$syphstatus ==1 & 
                                       dat$attr$syph.infTime < at &
                                       dat$attr$stage.syph == 4 &
-                                      stage.earlat.sympt == 0 &
+                                      dat$attr$stage.earlat.sympt == 0 &
                                       is.na(dat$attr.syph.tx) &
                                       dat$attr$prepStat %in% prep.stand.tx.grp)
   
@@ -812,16 +815,16 @@ sti_tx <- function(dat, at) {
   idssyph_tx_asympt_latelat <- which(dat$attr$syphstatus ==1 & 
                                         dat$attr$syph.infTime < at &
                                         (dat$attr$stage.syph == 5 | dat$attr$stage.syph == 6) &
-                                        stage.latelat.sympt == 0 &
+                                        dat$attr$stage.latelat.sympt == 0 &
                                         is.na(dat$attr.syph.tx) &
                                         dat$attr$prepStat %in% prep.stand.tx.grp)
   
-  txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_late), 1, syph.latelat.prob.tx) == 1)]
+  txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_latelat), 1, syph.latelat.prob.tx) == 1)]
   
   idssyph_tx_asympt_tert <- which(dat$attr$syphstatus ==1 & 
                                         dat$attr$syph.infTime < at &
                                         dat$attr$stage.syph == 7 &
-                                        stage.tert.sympt == 0 &
+                                        dat$attr$stage.tert.sympt == 0 &
                                         is.na(dat$attr.syph.tx) &
                                         dat$attr$prepStat %in% prep.stand.tx.grp)
   
