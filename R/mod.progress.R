@@ -134,13 +134,15 @@ progress_syph_msm <- function(dat, at) {
     ## Variables
     
     # Attributes
+
     active <- dat$attr$active
     syphstatus <- dat$attr$syphstatus
     time.since.inf.syph <- at - dat$attr$syph.infTime
     time.since.immune.syph <- at - dat$attr$syph.immune.time
     stage.syph <- dat$attr$stage.syph
     stage.time.syph <- dat$attr$stage.time.syph
-    tx.status.syph <- dat$attr$tx.status.syph
+    syph.tx <- dat$attr$syph.tx
+    syph.tx.prep <- dat$attr$syph.tx.prep
     
     # Parameters
     incu.syph.int <- dat$param$incu.syph.int
@@ -157,6 +159,14 @@ progress_syph_msm <- function(dat, at) {
     syph.earlat.sympt.prob <- dat$param$syph.earlat.sympt.prob
     syph.latelat.sympt.prob <- dat$param$syph.latelat.sympt.prob
     syph.tert.sympt.prob <- dat$param$syph.tert.sympt.prob
+    syph.tert.prog.prob <- dat$param$syph.tert.prog.prob
+    
+    stage.prim.sympt <- dat$attr$stage.prim.sympt
+    stage.seco.sympt <- dat$attr$stage.seco.sympt
+    stage.earlat.sympt <- dat$attr$stage.earlat.sympt
+    stage.latelat.sympt <- dat$attr$stage.latelat.sympt
+    stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
+    stage.tert.sympt <- dat$attr$stage.tert.sympt
     
     ## Process
     
@@ -209,7 +219,7 @@ progress_syph_msm <- function(dat, at) {
                                     stage.syph == 5)
     stage.syph[tolatelate] <- 6
     stage.time.syph[tolatelate] <- 0
-    stage.latelatelat.sympt[tolatelate] <- rbinom(length(toTert), 1, syph.latelat.sympt.prob)
+    stage.latelatelat.sympt[tolatelate] <- rbinom(length(tolatelate), 1, syph.latelat.sympt.prob)
     stage.latelat.sympt[tolatelate] <- NA
     
     # Change stage to tertiary for fraction of those in late/late late latent
@@ -232,7 +242,7 @@ progress_syph_msm <- function(dat, at) {
 
     ## Output
     dat$attr$stage.syph[idssyph_lose_immune] <- NA
-    dar$attr$syph.immune.time[idssyph_lose_immune] <- NA
+    dat$attr$syph.immune.time[idssyph_lose_immune] <- NA
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$stage.prim.sympt <- stage.prim.sympt

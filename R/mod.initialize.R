@@ -681,6 +681,7 @@ init_status_msm <- function(dat) {
   dat$attr$inf.diag <- inf.diag
   dat$attr$inf.tx <- inf.tx
   dat$attr$inf.stage <- inf.stage
+  
 
   return(dat)
 
@@ -717,14 +718,40 @@ init_status_syph_msm <- function(dat) {
     probInfsyphCrB <- age[ids.B] * dat$init$init.prev.syph.age.slope.B
     probInfsyphB <- probInfsyphCrB + (nInfsyphB - sum(probInfsyphCrB)) / num.B
     
-    probInfsyphCrW <- age[ids.W] * dat$init.prev.syph.age.slope.W
+    probInfsyphCrW <- age[ids.W] * dat$init$init.prev.syph.age.slope.W
     probInfsyphW <- probInfsyphCrW + (nInfsyphW - sum(probInfsyphCrW)) / num.W
     
     if (any(probInfsyphB <= 0) | any(probInfsyphW <= 0)) {
         stop("Slope of initial syphilis prevalence by age must be sufficiently low to ",
              "avoid non-positive probabilities.", call. = FALSE)
     }
+    ## Infection-related attributes
+    stage.syph <- rep(NA, num)
+    stage.time.syph <- rep(NA, num)
+    syph.infTime <- rep(NA, num)
+    syph.immune.time <- rep(NA, num)
+    syph.timesInf <- rep(0, num)
+    syph.cease <- rep(NA, num)
+    diag.status.syph <- rep(NA, num)
+    diag.time.syph <- rep(NA, num)
+    infector.syph <- rep(NA, num)
+    inf.role.syph <- rep(NA, num)
+    inf.type.syph <- rep(NA, num)
+    inf.diag.syph <- rep(NA, num)
+    inf.tx.syph <- rep(NA, num)
+    inf.stage.syph <- rep(NA, num)
+    syph.tx <- rep(NA, num)
+    syph.tx.prep <- rep(NA, num)
+    stage.prim.sympt <- rep(NA, num) 
+    stage.seco.sympt <- rep(NA, num)
+    stage.earlat.sympt <- rep(NA, num)
+    stage.latelat.sympt <- rep(NA, num)
+    stage.latelatelat.sympt <- rep(NA, num)
+    stage.tert.sympt <- rep(NA, num)
     
+    time.sex.active <- pmax(1,
+                            round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
+                                      min(dat$init$ages), 0))
     # Infection status
     syphstatus <- rep(0, num)
     while (sum(syphstatus[ids.B]) != nInfsyphB) {
@@ -736,35 +763,11 @@ init_status_syph_msm <- function(dat) {
     syph.timesInf[syphstatus == 1] <- 1
     dat$attr$syphstatus <- syphstatus
         
-    ## Infection-related attributes
-    stage.syph <- rep(NA, num)
-    stage.time.syph <- rep(NA, num)
-    syph.infTime <- rep(NA, num)
-    syph.immune.time <- rep(NA, num)
-    syph.timesInf <- rep(0, num)
-    syph.cease <- rep(NA, num)
-    diag.status.syph <- rep(NA, num)
-    diag.time.syph <- rep(NA, num)
-    tx.status.syph <- rep(NA, num)
-    tx.init.time.syph <- rep(NA, num)
-    infector.syph <- rep(NA, num)
-    inf.role.syph <- rep(NA, num)
-    inf.type.syph <- rep(NA, num)
-    inf.diag.syph <- rep(NA, num)
-    inf.tx.syph <- rep(NA, num)
-    inf.stage.syph <- rep(NA, num)
-    
-    time.sex.active <- pmax(1,
-                            round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
-                                      min(dat$init$ages), 0))
 
     # Stage of infection
-    selected <- which(syphstatus == 1)
-    selected.B <- selected[ids.B]
-    selected.W <- selected[ids.W]
-    stage.syph[selected.B] <- sample(apportion_lr(selected.B, c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[ids.B] <- sample(apportion_lr(num.B, c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.B.prob))
-    stage.syph[selected.W] <- sample(apportion_lr(selected.W, c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     
@@ -824,7 +827,7 @@ init_status_syph_msm <- function(dat) {
     # Immune
     selected <- which(dat$attr$syphstatus == 0 & stage.syph == 8)
     max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.dur)
-    time.since.inf <- ceiling(runif(length(selected), max = max.immune.time))
+    time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
     syph.immune.time[selected] <- time.since.immune
     syph.tx[selected] <- NA
     
@@ -852,19 +855,13 @@ init_status_syph_msm <- function(dat) {
     # 
 
     # Set all onto dat$attr
-    dat$attr$syph.tx <- dat$attr$syph.tx <- rep(NA, num)
-    dat$attr$syph.tx.prep <- dat$attr$syph.tx.prep <- rep(NA, num)
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$syph.immune.time <- syph.immune.time
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$diag.time.syph <- diag.time.syph
-    dat$attr$last.neg.test.syph <- last.neg.test.syph
-    dat$attr$tx.status.syph <- tx.status.syph
-    dat$attr$tx.init.time.syph <- tx.init.time.syph
-    dat$attr$cum.time.on.tx.syph <- cum.time.on.tx.syph
-    dat$attr$cum.time.off.tx.syph <- cum.time.off.tx.syph
+    #dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$infector.syph <- infector.syph
     dat$attr$inf.role.syph <- inf.role.syph
     dat$attr$inf.type.syph <- inf.type.syph
@@ -873,6 +870,14 @@ init_status_syph_msm <- function(dat) {
     dat$attr$inf.stage.syph <- inf.stage.syph
     dat$attr$syph.timesInf <- syph.timesInf
     dat$attr$syph.cease <- syph.cease
+    dat$attr$syph.tx <- syph.tx
+    dat$attr$syph.tx.prep <- syph.tx.prep
+    dat$attr$stage.prim.sympt <- stage.prim.sympt 
+    dat$attr$stage.seco.sympt <- stage.seco.sympt
+    dat$attr$stage.earlat.sympt <- stage.earlat.sympt
+    dat$attr$stage.latelat.sympt <- stage.latelat.sympt
+    dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
+    dat$attr$stage.tert.sympt <- stage.tert.sympt
     
     return(dat)
     

@@ -55,7 +55,7 @@ sti_trans <- function(dat, at) {
   uGC.timesInf <- dat$attr$uGC.timesInf
   rCT.timesInf <- dat$attr$rCT.timesInf
   uCT.timesInf <- dat$attr$uCT.timesInf
-  syph.timesInf <- data$attr$syph.timesInf
+  syph.timesInf <- dat$attr$syph.timesInf
 
   # Set disease status to 0 for new births
   newBirths <- which(dat$attr$arrival.time == at)
@@ -232,7 +232,7 @@ sti_trans <- function(dat, at) {
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
   colnames(disc.syph.ip)[1:2] <- colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
   
-  # PATP: Insertive Man Infected (Col 1) --------------------------------
+  # PATP: Insertive Man Infected (Col 1)
   # Attributes of infected
   ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
  
@@ -267,7 +267,7 @@ sti_trans <- function(dat, at) {
   ip.syph.tprob[isimmune] <- ip.syph.tprob[isimmune] * syph.immune.rr 
    
 
-  # PATP: Receptive Man Infected (Col 2) --------------------------------
+  # PATP: Receptive Man Infected (Col 2)
    
   # Attributes of infected
   rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]

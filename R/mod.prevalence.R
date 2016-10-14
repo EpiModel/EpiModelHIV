@@ -42,6 +42,7 @@ prevalence_msm <- function(dat, at) {
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
+  stage.syph <- dat$attr$stage.syph
   stage.prim.sympt <- dat$attr$stage.prim.sympt
   stage.seco.sympt <- dat$attr$stage.seco.sympt
   stage.earlat.sympt <- dat$attr$stage.earlat.sympt
