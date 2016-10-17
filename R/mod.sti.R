@@ -764,7 +764,7 @@ sti_tx <- function(dat, at) {
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      dat$attr$stage.seco.sympt == 1 &
-                                     is.na(dat$attr.syph.tx) &
+                                     is.na(dat$attr$syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco), 1, syph.seco.sympt.prob.tx) == 1)]
@@ -773,7 +773,7 @@ sti_tx <- function(dat, at) {
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 7 &
                                      dat$attr$stage.tert.sympt == 1 &
-                                     is.na(dat$attr.syph.tx) &
+                                     is.na(dat$attr$syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_sympt_tert <- idssyph_tx_sympt_tert[which(rbinom(length(idssyph_tx_sympt_tert), 1, syph.tert.sympt.prob.tx) == 1)]
@@ -797,7 +797,7 @@ sti_tx <- function(dat, at) {
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      dat$attr$stage.seco.sympt == 0 &
-                                     is.na(dat$attr.syph.tx)  &
+                                     is.na(dat$attr$syph.tx)  &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.seco.asympt.prob.tx) == 1)]
@@ -807,7 +807,7 @@ sti_tx <- function(dat, at) {
                                       dat$attr$syph.infTime < at &
                                       dat$attr$stage.syph == 4 &
                                       dat$attr$stage.earlat.sympt == 0 &
-                                      is.na(dat$attr.syph.tx) &
+                                      is.na(dat$attr$syph.tx) &
                                       dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.earlat.prob.tx) == 1)]
@@ -816,7 +816,7 @@ sti_tx <- function(dat, at) {
                                         dat$attr$syph.infTime < at &
                                         (dat$attr$stage.syph == 5 | dat$attr$stage.syph == 6) &
                                         dat$attr$stage.latelat.sympt == 0 &
-                                        is.na(dat$attr.syph.tx) &
+                                        is.na(dat$attr$syph.tx) &
                                         dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_latelat), 1, syph.latelat.prob.tx) == 1)]
@@ -825,7 +825,7 @@ sti_tx <- function(dat, at) {
                                         dat$attr$syph.infTime < at &
                                         dat$attr$stage.syph == 7 &
                                         dat$attr$stage.tert.sympt == 0 &
-                                        is.na(dat$attr.syph.tx) &
+                                        is.na(dat$attr$syph.tx) &
                                         dat$attr$prepStat %in% prep.stand.tx.grp)
   
   txsyph_asympt_tert <- idssyph_tx_asympt_tert[which(rbinom(length(idssyph_tx_asympt_tert), 1, syph.tert.asympt.prob.tx) == 1)]

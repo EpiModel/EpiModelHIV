@@ -766,9 +766,9 @@ init_status_syph_msm <- function(dat) {
         
 
     # Stage of infection
-    stage.syph[ids.B] <- sample(apportion_lr(num.B, c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[ids.B[syphstatus == 1]] <- sample(apportion_lr(ids.B[syphstatus == 1], c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.B.prob))
-    stage.syph[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[ids.W[syphstatus == 1]] <- sample(apportion_lr(ids.W[syphstatus == 1], c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     

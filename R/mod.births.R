@@ -105,6 +105,16 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
+  
+  # Syphilis
+  dat$attr$syphstatus[newIds] <- rep(0, nBirths)
+  dat$attr$stage.syph[newIds[newB]] <- rep(0, nBirths.B)
+  dat$attr$stage.syph[newIds[newW]] <- rep(0, nBirths.W)
+  dat$attr$syph.infTime[newIds] <- rep(NA, nBirths)
+  dat$attr$stage.time.syph[newIds] <- rep(NA, nBirths)
+  dat$attr$syph.timesInf[newIds] <- rep(NA, nBirths)
+  dat$attr$inf.role.syph[newIds] <- rep(NA, nBirths)
+  dat$attr$inf.type.syph[newIds] <- rep(NA, nBirths)
 
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
