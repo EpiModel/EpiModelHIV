@@ -182,17 +182,17 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rgcct[at] <- sum(rGC == 1 | rCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ugcct[at] <- sum(uGC == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   
-  dat$epi$prev.stage.incub <- length(which(stage.syph == 1)) / dat$epi$num[at]
-  dat$epi$prev.stage.prim <- length(which(stage.syph == 2)) / dat$epi$num[at]
-  dat$epi$prev.stage.seco <- length(which(stage.syph == 3)) / dat$epi$num[at]
-  dat$epi$prev.stage.earlat <- length(which(stage.syph == 4)) / dat$epi$num[at]
-  dat$epi$prev.stage.latelat <- length(which(stage.syph == 5)) / dat$epi$num[at]
-  dat$epi$prev.stage.latelatelat <- length(which(stage.syph == 6)) / dat$epi$num[at]
-  dat$epi$prev.stage.tert <- length(which(stage.syph == 7)) / dat$epi$num[at]
-  dat$epi$prev.stage.immune <- length(which(stage.syph == 8)) / dat$epi$num[at]
-  dat$epi$prev.earlysyph <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
-  dat$epi$prev.latesyph <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
-  dat$epi$prev.syph <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$num[at]
+  dat$epi$prev.stage.incub[at] <- length(which(stage.syph == 1)) / dat$epi$num[at]
+  dat$epi$prev.stage.prim[at] <- length(which(stage.syph == 2)) / dat$epi$num[at]
+  dat$epi$prev.stage.seco[at] <- length(which(stage.syph == 3)) / dat$epi$num[at]
+  dat$epi$prev.stage.earlat[at] <- length(which(stage.syph == 4)) / dat$epi$num[at]
+  dat$epi$prev.stage.latelat[at] <- length(which(stage.syph == 5)) / dat$epi$num[at]
+  dat$epi$prev.stage.latelatelat[at] <- length(which(stage.syph == 6)) / dat$epi$num[at]
+  dat$epi$prev.stage.tert[at] <- length(which(stage.syph == 7)) / dat$epi$num[at]
+  dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / dat$epi$num[at]
+  dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
+  dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
+  dat$epi$prev.syph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$num[at]
   
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200

@@ -361,17 +361,17 @@ sti_trans <- function(dat, at) {
 
   
   # Symptomatic syphilis
-  # syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.incub.sympt == 1 |
-  #                                              dat$attr$stage.prim.sympt == 1 |
-  #                                              dat$attr$stage.seco.sympt == 1 |
-  #                                              dat$attr$stage.earlat.sympt == 1 |
-  #                                              dat$attr$stage.latelat.sympt == 1 |
-  #                                              dat$attr$stage.latelatelat.sympt == 1 |
-  #                                              dat$attr$stage.tert.sympt == 1))
-  # idssyph.cease <- syphilis.sympt[which(rbinom(length(syphilis.sympt),
-  #                                      1, syph.prob.cease) == 1)]
-  # syph.cease[syphilis.sympt] <- 0
-  # syph.cease[idssyph.cease] <- 1
+  syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.incub.sympt == 1 |
+                                                dat$attr$stage.prim.sympt == 1 |
+                                                dat$attr$stage.seco.sympt == 1 |
+                                                dat$attr$stage.earlat.sympt == 1 |
+                                                dat$attr$stage.latelat.sympt == 1 |
+                                                dat$attr$stage.latelatelat.sympt == 1 |
+                                                dat$attr$stage.tert.sympt == 1))
+  idssyph.cease <- syphilis.sympt[which(rbinom(length(syphilis.sympt),
+                                        1, syph.prob.cease) == 1)]
+  syph.cease[syphilis.sympt] <- 0
+  syph.cease[idssyph.cease] <- 1
 
   # Output --------------------------------------------------------------
 
@@ -802,7 +802,7 @@ sti_tx <- function(dat, at) {
   
   txsyph_asympt_prim <- idssyph_tx_asympt_prim[which(rbinom(length(idssyph_tx_asympt_prim), 1, syph.prim.asympt.prob.tx) == 1)]
   
-  idssyph_tx_asympt_seco <- which(dat$attr$syphstatus ==1 & 
+  idssyph_tx_asympt_seco <- which(dat$attr$syphstatus == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      dat$attr$stage.seco.sympt == 0 &
@@ -812,7 +812,7 @@ sti_tx <- function(dat, at) {
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.seco.asympt.prob.tx) == 1)]
   
   
-  idssyph_tx_asympt_earlat <- which(dat$attr$syphstatus ==1 & 
+  idssyph_tx_asympt_earlat <- which(dat$attr$syphstatus == 1 & 
                                       dat$attr$syph.infTime < at &
                                       dat$attr$stage.syph == 4 &
                                       dat$attr$stage.earlat.sympt == 0 &
@@ -821,7 +821,7 @@ sti_tx <- function(dat, at) {
   
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_seco), 1, syph.earlat.prob.tx) == 1)]
   
-  idssyph_tx_asympt_latelat <- which(dat$attr$syphstatus ==1 & 
+  idssyph_tx_asympt_latelat <- which(dat$attr$syphstatus == 1 & 
                                         dat$attr$syph.infTime < at &
                                         (dat$attr$stage.syph == 5 | dat$attr$stage.syph == 6) &
                                         dat$attr$stage.latelat.sympt == 0 &
@@ -1036,37 +1036,37 @@ sti_tx <- function(dat, at) {
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
-                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)),
-                 intersect(txsyph_all, which((dat$attr$stage.incub.sympt == 0| dat$attr$stage.prim.sympt == 0 |
-                                              dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
-                                              dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0))))
+                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0))) #,
+                 #intersect(txsyph_all, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                 #                             dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
+                 #                             dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
                            
   dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
   asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
-                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which((dat$attr$stage.incub.sympt == 0| dat$attr$stage.prim.sympt == 0 |
-                                                                             dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
-                                                                             dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0))))
+                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0))) #,
+                    #idssyph_tx_asympt, intersect(idssyph_prep_tx, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                    #                                                         dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
+                    #                                                         dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
 
 
   asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
                       intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
                       intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
-                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)),
-                      intersect(txsyph_prep, which((dat$attr$stage.incub.sympt | dat$attr$stage.prim.sympt == 0 |
-                                                        dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
-                                                        dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0))))
+                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0))) #,
+                      #intersect(txsyph_prep, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                      #                                  dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
+                      #                                  dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
   asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                          intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                          intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
-                         intersect(idssyph_prep_tx, which((dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
-                                                               dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
-                                                               dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0))))
+                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0))) #,
+                         #intersect(idssyph_prep_tx, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                         #                                      dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
+                         #                                      dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
 
   rect.tx <- c(txRGC_all, txRCT_all)

@@ -769,11 +769,18 @@ init_status_syph_msm <- function(dat) {
     inf.ids.W <- which(syphstatus[ids.W] == 1)
     inf.ids <- c(inf.ids.B, inf.ids.W)
     
+    notinf.ids.B <- which(syphstatus[ids.B] == 0)
+    notinf.ids.W <- which(syphstatus[ids.B] == 0)
+    
     # Stage of infection
-    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
                                           dat$param$stage.syph.B.prob))
-    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7),
                                           dat$param$stage.syph.W.prob))
+    stage.syph[notinf.ids.B] <- sample(apportion_lr(length(!inf.ids.W), c(8),
+                                                  dat$param$immune.syph.B.prob))
+    stage.syph[notinf.ids.W] <- sample(apportion_lr(length(!inf.ids.W), c(8),
+                                                  dat$param$immune.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     
     # Assign duration of untreated infection and symptomatic at beginning
@@ -836,8 +843,8 @@ init_status_syph_msm <- function(dat) {
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
     
-    # Immune
-    selected <- which(stage.syph[inf.ids] == 8)
+    # Immune 
+    selected <- which(stage.syph[ids.B] == 8 | stage.syph[ids.W] == 8)
     max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.dur)
     time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
     syph.immune.time[selected] <- time.since.immune

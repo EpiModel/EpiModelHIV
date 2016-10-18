@@ -307,8 +307,10 @@ param_msm <- function(nwstats,
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
                       
-                      stage.syph.B.prob = c(0.10, 0.20, 0.10, 0.15, 0.15, 0.10, 0.10, 0.10),
-                      stage.syph.W.prob = c(0.10, 0.20, 0.10, 0.15, 0.15, 0.10, 0.10, 0.10),
+                      stage.syph.B.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
+                      stage.syph.W.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
+                      immune.syph.B.prob = 0.05, # prev of immunity among those not infected
+                      immune.syph.W.prob = 0.05, # prev of immunity among those not infected
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,

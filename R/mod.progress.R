@@ -180,6 +180,7 @@ progress_syph_msm <- function(dat, at) {
     stage.syph[toPrim] <- 2
     stage.time.syph[toPrim] <- 0
     stage.prim.sympt[toPrim] <- rbinom(length(toPrim), 1, syph.prim.sympt.prob)
+    stage.incub.sympt[toPrim] <- NA
 
     # Change stage to Secondary and assign symptoms
     toSeco <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
