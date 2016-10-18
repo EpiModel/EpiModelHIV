@@ -108,8 +108,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   
   # Syphilis
   dat$attr$syphstatus[newIds] <- rep(0, nBirths)
-  dat$attr$stage.syph[newIds[newB]] <- rep(0, nBirths.B)
-  dat$attr$stage.syph[newIds[newW]] <- rep(0, nBirths.W)
+  dat$attr$stage.syph[newIds[newB]] <- rep(NA, nBirths.B)
+  dat$attr$stage.syph[newIds[newW]] <- rep(NA, nBirths.W)
   dat$attr$syph.infTime[newIds] <- rep(NA, nBirths)
   dat$attr$stage.time.syph[newIds] <- rep(NA, nBirths)
   dat$attr$syph.timesInf[newIds] <- rep(NA, nBirths)

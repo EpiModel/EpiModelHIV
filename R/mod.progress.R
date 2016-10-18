@@ -161,6 +161,7 @@ progress_syph_msm <- function(dat, at) {
     syph.tert.sympt.prob <- dat$param$syph.tert.sympt.prob
     syph.tert.prog.prob <- dat$param$syph.tert.prog.prob
     
+    stage.incub.sympt <- dat$attr$stage.incub.sympt
     stage.prim.sympt <- dat$attr$stage.prim.sympt
     stage.seco.sympt <- dat$attr$stage.seco.sympt
     stage.earlat.sympt <- dat$attr$stage.earlat.sympt
@@ -245,6 +246,7 @@ progress_syph_msm <- function(dat, at) {
     dat$attr$syph.immune.time[idssyph_lose_immune] <- NA
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
+    dat$attr$stage.incub.sympt <- stage.incub.sympt
     dat$attr$stage.prim.sympt <- stage.prim.sympt
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt

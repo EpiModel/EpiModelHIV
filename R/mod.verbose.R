@@ -58,7 +58,7 @@ verbose_msm <- function(x, type, s, at) {
           prev.ugc <- round(x$epi$prev.ugc[at], 3)
           prev.rct <- round(x$epi$prev.rct[at], 3)
           prev.uct <- round(x$epi$prev.uct[at], 3)
-          prev.syphilis <- round(x$epi$prev.syphilis[at], 3)
+          prev.syph <- round(x$epi$prev.syph[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -78,7 +78,7 @@ verbose_msm <- function(x, type, s, at) {
           cat("\nuGC Prevalence: ", prev.ugc, sep = "")
           cat("\nrCT Prevalence: ", prev.rct, sep = "")
           cat("\nuCT Prevalence: ", prev.uct, sep = "")
-          cat("\nSyphilis Prevalence: ", prev.syphilis, sep = "")
+          cat("\nSyphilis Prevalence: ", prev.syph, sep = "")
           cat("\n==============================")
 
         }

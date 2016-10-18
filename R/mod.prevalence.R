@@ -43,6 +43,7 @@ prevalence_msm <- function(dat, at) {
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
   stage.syph <- dat$attr$stage.syph
+  stage.incub.sympt <- dat$attr$stage.incub.sympt
   stage.prim.sympt <- dat$attr$stage.prim.sympt
   stage.seco.sympt <- dat$attr$stage.seco.sympt
   stage.earlat.sympt <- dat$attr$stage.earlat.sympt
@@ -90,7 +91,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.rgcct <- rNA
     dat$epi$prev.ugcct <- rNA
     
-    dat$epi$prev.syphilis <- rNA
+    dat$epi$prev.syph <- rNA
     dat$epi$prev.stage.prim <- rNA
     dat$epi$prev.stage.seco <- rNA
     dat$epi$prev.stage.earlat <- rNA
@@ -106,7 +107,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.rct <- rNA
     dat$epi$incid.uct <- rNA
     dat$epi$incid.ct <- rNA
-    dat$epi$incid.syphilis <- rNA
+    dat$epi$incid.syph <- rNA
     
     dat$epi$ir100.rgc <- rNA
     dat$epi$ir100.ugc <- rNA
@@ -181,15 +182,17 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rgcct[at] <- sum(rGC == 1 | rCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ugcct[at] <- sum(uGC == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   
-  dat$epi$prev.stage.prim <- sum(stage.syph == 2, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.stage.seco <- sum(stage.syph == 3, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.stage.earlat <- sum(stage.syph == 4, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.stage.latelat <- sum(stage.syph == 5, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.stage.latelatelat <- sum(stage.syph == 6, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.stage.tert <-sum(stage.syph == 7, na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.earlysyph <- sum(stage.syph %in% c(1, 2, 3, 4), na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.latesyph <- sum(stage.syph %in% c(5, 6, 7), na.rm=TRUE) / dat$epi$num[at]
-  dat$epi$prev.syphilis <- sum(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7), na.rm = TRUE) / dat$epi$num[at]
+  dat$epi$prev.stage.incub <- length(which(stage.syph == 1)) / dat$epi$num[at]
+  dat$epi$prev.stage.prim <- length(which(stage.syph == 2)) / dat$epi$num[at]
+  dat$epi$prev.stage.seco <- length(which(stage.syph == 3)) / dat$epi$num[at]
+  dat$epi$prev.stage.earlat <- length(which(stage.syph == 4)) / dat$epi$num[at]
+  dat$epi$prev.stage.latelat <- length(which(stage.syph == 5)) / dat$epi$num[at]
+  dat$epi$prev.stage.latelatelat <- length(which(stage.syph == 6)) / dat$epi$num[at]
+  dat$epi$prev.stage.tert <- length(which(stage.syph == 7)) / dat$epi$num[at]
+  dat$epi$prev.stage.immune <- length(which(stage.syph == 8)) / dat$epi$num[at]
+  dat$epi$prev.earlysyph <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
+  dat$epi$prev.latesyph <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
+  dat$epi$prev.syph <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$num[at]
   
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200
@@ -206,18 +209,20 @@ prevalence_msm <- function(dat, at) {
   dat$epi$ir100.syph[at] <- (dat$epi$incid.syph[at] / sum(syphstatus == 0 , na.rm = TRUE)) * 5200
 
   dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
-                                rCT == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
-  dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at]) /
+                                rCT == 1 | uCT == 1 | syphstatus == 1 , na.rm = TRUE) / dat$epi$num[at]
+  dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at] + dat$epi$incid.syph[at]) /
                               (sum(rGC == 0, na.rm = TRUE) +
                                  sum(uGC == 0, na.rm = TRUE) +
                                  sum(rCT == 0, na.rm = TRUE) +
-                                 sum(uCT == 0, na.rm = TRUE))) * 5200
+                                 sum(uCT == 0, na.rm = TRUE) +
+                                 sum(syphstatus == 0, na.rm = TRUE))) * 5200
 
   dat$epi$ir100.sti.prep[at] <- (dat$epi$incid.gcct.prep[at] /
                                   (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
-                                   sum(uCT == 0 & prepStat == 1, na.rm = TRUE))) * 5200
+                                   sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
+                                       sum(syphstatus == 0, na.rm = TRUE))) * 5200
 
   return(dat)
 }

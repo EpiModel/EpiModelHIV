@@ -742,6 +742,7 @@ init_status_syph_msm <- function(dat) {
     inf.stage.syph <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
+    stage.incub.sympt <- rep(NA, num)
     stage.prim.sympt <- rep(NA, num) 
     stage.seco.sympt <- rep(NA, num)
     stage.earlat.sympt <- rep(NA, num)
@@ -764,17 +765,21 @@ init_status_syph_msm <- function(dat) {
     syph.infTime[syphstatus ==  1] <- 1
     dat$attr$syphstatus <- syphstatus
         
-
+    inf.ids.B <- which(syphstatus[ids.B] == 1)
+    inf.ids.W <- which(syphstatus[ids.W] == 1)
+    inf.ids <- c(inf.ids.B, inf.ids.W)
+    
     # Stage of infection
-    stage.syph[ids.B[syphstatus == 1]] <- sample(apportion_lr(ids.B[syphstatus == 1], c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.B.prob))
-    stage.syph[ids.W[syphstatus == 1]] <- sample(apportion_lr(ids.W[syphstatus == 1], c(1, 2, 3, 4, 5, 6, 7, 8),
+    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7, 8),
                                           dat$param$stage.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     
-    # Assign duration of untreated infection at beginning
+    # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
-    selected <- which(syphstatus == 1 & stage.syph == 1)
+    selected <- which(stage.syph[inf.ids] == 1)
+    stage.incub.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.incub.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
@@ -782,7 +787,8 @@ init_status_syph_msm <- function(dat) {
     
     
     # Primary
-    selected <- which(syphstatus == 1 & stage.syph == 2)
+    selected <- which(stage.syph[inf.ids] == 2)
+    stage.prim.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.prim.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
@@ -790,28 +796,32 @@ init_status_syph_msm <- function(dat) {
     
     
     # Secondary
-    selected <- which(dat$attr$syphstatus == 1 & stage.syph == 3)
+    selected <- which(stage.syph[inf.ids] == 3)
+    stage.seco.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.seco.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
     
     # Early latent
-    selected <- which(dat$attr$syphstatus == 1 & stage.syph == 4)
+    selected <- which(stage.syph[inf.ids] == 4)
+    stage.earlat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.earlat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
     
     # Late latent
-    selected <- which(dat$attr$syphstatus == 1 & stage.syph == 5)
+    selected <- which(stage.syph[inf.ids] == 5)
+    stage.latelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
     
     # Late late latent
-    selected <- which(dat$attr$syphstatus == 1 & stage.syph == 6)
+    selected <- which(stage.syph[inf.ids] == 6)
+    stage.latelatelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
@@ -819,14 +829,15 @@ init_status_syph_msm <- function(dat) {
     
     
     # Tertiary
-    selected <- which(dat$attr$syphstatus == 1 & stage.syph == 7)
+    selected <- which(stage.syph[inf.ids] == 7)
+    stage.tert.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
     
     # Immune
-    selected <- which(dat$attr$syphstatus == 0 & stage.syph == 8)
+    selected <- which(stage.syph[inf.ids] == 8)
     max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.dur)
     time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
     syph.immune.time[selected] <- time.since.immune
@@ -873,6 +884,7 @@ init_status_syph_msm <- function(dat) {
     dat$attr$syph.cease <- syph.cease
     dat$attr$syph.tx <- syph.tx
     dat$attr$syph.tx.prep <- syph.tx.prep
+    dat$attr$stage.incub.sympt <- stage.incub.sympt
     dat$attr$stage.prim.sympt <- stage.prim.sympt 
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt
