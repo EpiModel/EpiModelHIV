@@ -742,7 +742,6 @@ init_status_syph_msm <- function(dat) {
     inf.stage.syph <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
-    stage.incub.sympt <- rep(NA, num)
     stage.prim.sympt <- rep(NA, num) 
     stage.seco.sympt <- rep(NA, num)
     stage.earlat.sympt <- rep(NA, num)
@@ -777,16 +776,15 @@ init_status_syph_msm <- function(dat) {
                                           dat$param$stage.syph.B.prob))
     stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7),
                                           dat$param$stage.syph.W.prob))
-    stage.syph[notinf.ids.B] <- sample(apportion_lr(length(!inf.ids.W), c(8),
-                                                  dat$param$immune.syph.B.prob))
-    stage.syph[notinf.ids.W] <- sample(apportion_lr(length(!inf.ids.W), c(8),
-                                                  dat$param$immune.syph.W.prob))
+    immune.B <- which(rbinom(length(notinf.ids.B), 1, dat$param$immune.syph.B.prob) == 1)
+    immune.W <- which(rbinom(length(notinf.ids.W), 1, dat$param$immune.syph.W.prob) == 1)
+    stage.syph[immune.B] <- 8
+    stage.syph[immune.W] <- 8
     dat$attr$stage.syph <- stage.syph
     
     # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
     selected <- which(stage.syph[inf.ids] == 1)
-    stage.incub.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.incub.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
@@ -891,7 +889,6 @@ init_status_syph_msm <- function(dat) {
     dat$attr$syph.cease <- syph.cease
     dat$attr$syph.tx <- syph.tx
     dat$attr$syph.tx.prep <- syph.tx.prep
-    dat$attr$stage.incub.sympt <- stage.incub.sympt
     dat$attr$stage.prim.sympt <- stage.prim.sympt 
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt

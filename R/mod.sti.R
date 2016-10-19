@@ -80,7 +80,6 @@ sti_trans <- function(dat, at) {
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
-  stage.incub.sympt <- dat$attr$stage.incub.sympt 
   stage.prim.sympt <- dat$attr$stage.prim.sympt
   stage.seco.sympt <- dat$attr$stage.seco.sympt
   stage.earlat.sympt <- dat$attr$stage.earlat.sympt
@@ -238,6 +237,8 @@ sti_trans <- function(dat, at) {
   allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
   ncols <- dim(allActs_syph)[2]
 
+  if (sum(allActs_syph, na.rm = TRUE) > 0) {
+      
   # Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, ]
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
@@ -267,8 +268,7 @@ sti_trans <- function(dat, at) {
   
   # Retransformation to probability
   ip.syph.tprob <- plogis(ip.syph.tlo)
-  stopifnot(ip.syph.tprob >= 0, ip.syph.tprob <= 1)
-    
+  
   # Late stage multiplier (not log odds b/c log 0 = undefined)
   islate <- which(ip.stage.syph %in% c(5, 6, 7))
   ip.syph.tprob[islate] <- ip.syph.tprob[islate] * syph.late.rr
@@ -276,7 +276,9 @@ sti_trans <- function(dat, at) {
   # Multiplier for receptive partner being immune (e.g. unable to contract syphilis) - (not log odds b/c log 0 = undefined)
   isimmune <- which(stage.syph[disc.syph.ip[, 2]] %in% 8)
   ip.syph.tprob[isimmune] <- ip.syph.tprob[isimmune] * syph.immune.rr 
-   
+  
+  # Check for valid probabilities
+  stopifnot(ip.syph.tprob >= 0, ip.syph.tprob <= 1) 
 
   # PATP: Receptive Man Infected (Col 2)
    
@@ -303,7 +305,6 @@ sti_trans <- function(dat, at) {
   
   # Retransformation to probability
   rp.syph.tprob <- plogis(rp.syph.tlo)
-  stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
   
   # Late stage multiplier (not log odds b/c log 0 = undefined)
   islate <- which(rp.stage.syph %in% c(5, 6, 7))
@@ -312,14 +313,17 @@ sti_trans <- function(dat, at) {
 
   # Multiplier for insertive partner being immune (e.g. unable to contract syphilis) - (not log odds b/c log 0 = undefined)
   isimmune <- which(stage.syph[disc.syph.rp[, 1]] %in% 8)
-  rp.syph.tprob[isimmune] <- ip.syph.tprob[isimmune] * syph.immune.rr 
+  rp.syph.tprob[isimmune] <- rp.syph.tprob[isimmune] * syph.immune.rr 
   
+  # Check for valid probabilities
+  stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
   
   # Transmission 
   ## Bernoulli transmission events
   trans.syph.ip <- rbinom(length(ip.syph.tprob), 1, ip.syph.tprob)
   trans.syph.rp <- rbinom(length(rp.syph.tprob), 1, rp.syph.tprob)
   
+  }
   
   # Update attributes
   infected.syph <- inf.type.syph <- inf.role.syph <- NULL
@@ -335,7 +339,6 @@ sti_trans <- function(dat, at) {
       dat$attr$syph.infTime[infected.syph] <- at
       dat$attr$stage.syph[infected.syph] <- 1
       dat$attr$stage.time.syph[infected.syph] <- 0
-      dat$attr$stage.incub.sympt <- rbinom(length(infected.syph), 1, dat$param$syph.incub.sympt.prob)
       syph.timesInf[infected.syph] <- syph.timesInf[infected.syph] + 1
       dat$attr$inf.role.syph[infected.syph] <- inf.role.syph
       dat$attr$inf.type.syph[infected.syph] <- inf.type.syph
@@ -361,8 +364,7 @@ sti_trans <- function(dat, at) {
 
   
   # Symptomatic syphilis
-  syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.incub.sympt == 1 |
-                                                dat$attr$stage.prim.sympt == 1 |
+  syphilis.sympt <- which(is.na(syph.cease) & ( dat$attr$stage.prim.sympt == 1 |
                                                 dat$attr$stage.seco.sympt == 1 |
                                                 dat$attr$stage.earlat.sympt == 1 |
                                                 dat$attr$stage.latelat.sympt == 1 |
@@ -681,7 +683,6 @@ sti_recov <- function(dat, at) {
   
   # Update attributes
   dat$attr$syphstatus[recovsyph] <- 0
-  dat$attr$stage.incub.sympt[recovsyph] <- NA
   dat$attr$stage.prim.sympt[recovsyph] <- NA
   dat$attr$stage.seco.sympt[recovsyph] <- NA
   dat$attr$stage.earlat.sympt[recovsyph] <- NA
@@ -1037,7 +1038,7 @@ sti_tx <- function(dat, at) {
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
                  intersect(txUCT_all, which(dat$attr$uCT.sympt == 0))) #,
-                 #intersect(txsyph_all, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                 #intersect(txsyph_all, which(#dat$attr$stage.prim.sympt == 0 |
                  #                             dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
                  #                             dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
                            
@@ -1046,7 +1047,7 @@ sti_tx <- function(dat, at) {
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
                     idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0))) #,
-                    #idssyph_tx_asympt, intersect(idssyph_prep_tx, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                    #idssyph_tx_asympt, intersect(idssyph_prep_tx, which( dat$attr$stage.prim.sympt == 0 |
                     #                                                         dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
                     #                                                         dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
@@ -1056,7 +1057,7 @@ sti_tx <- function(dat, at) {
                       intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
                       intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
                       intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0))) #,
-                      #intersect(txsyph_prep, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                      #intersect(txsyph_prep, which(#dat$attr$stage.prim.sympt == 0 |
                       #                                  dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
                       #                                  dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
@@ -1064,7 +1065,7 @@ sti_tx <- function(dat, at) {
                          intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                          intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
                          intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0))) #,
-                         #intersect(idssyph_prep_tx, which(dat$attr$stage.incub.sympt == 0 | dat$attr$stage.prim.sympt == 0 |
+                         #intersect(idssyph_prep_tx, which(#dat$attr$stage.prim.sympt == 0 |
                          #                                      dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
                          #                                      dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
