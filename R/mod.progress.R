@@ -153,7 +153,6 @@ progress_syph_msm <- function(dat, at) {
     latelatelat.syph.int <- dat$param$latelatelat.syph.int
     tert.syph.int <- dat$param$tert.syph.int
     
-    syph.incub.sympt.prob <- dat$param$syph.incub.sympt.prob
     syph.prim.sympt.prob <- dat$param$syph.prim.sympt.prob
     syph.seco.sympt.prob <- dat$param$syph.seco.sympt.prob
     syph.earlat.sympt.prob <- dat$param$syph.earlat.sympt.prob
@@ -236,7 +235,7 @@ progress_syph_msm <- function(dat, at) {
     stage.latelatelat.sympt[toTert] <- NA
     
     # Immune protection lapsing
-    idssyph_lose_immune <- which(time.since.immune.syph > dat$attr$immune.syph.dur &
+    idssyph_lose_immune <- which(time.since.immune.syph > dat$attr$immune.syph.int &
                                      stage.syph == 8)
     stage.time.syph[idssyph_lose_immune] <- NA
 

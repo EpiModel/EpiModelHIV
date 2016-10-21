@@ -237,11 +237,11 @@ sti_trans <- function(dat, at) {
   allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
   ncols <- dim(allActs_syph)[2]
 
-  if (sum(allActs_syph, na.rm = TRUE) > 0) {
-      
-  # Reorder by role: ins on the left, rec on the right, flippers represented twice
+    # Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, ]
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
+  
+  if (sum(disc.syph.ip, disc.syph.rp, na.rm = TRUE) > 0) {
   colnames(disc.syph.ip)[1:2] <- colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
   
   # PATP: Insertive Man Infected (Col 1)
@@ -459,18 +459,18 @@ sti_recov <- function(dat, at) {
 
   # Parameters ----------------------------------------------------------
 
-  rgc.dur.asympt <- dat$param$rgc.dur.asympt
-  ugc.dur.asympt <- dat$param$ugc.dur.asympt
-  gc.dur.tx <- dat$param$gc.dur.tx
-  gc.dur.ntx <- dat$param$gc.dur.ntx
+  rgc.asympt.int <- dat$param$rgc.asympt.int
+  ugc.asympt.int <- dat$param$ugc.asympt.int
+  gc.tx.int <- dat$param$gc.tx.int
+  gc.ntx.int <- dat$param$gc.ntx.int
 
-  rct.dur.asympt <- dat$param$rct.dur.asympt
-  uct.dur.asympt <- dat$param$uct.dur.asympt
-  ct.dur.tx <- dat$param$ct.dur.tx
-  ct.dur.ntx <- dat$param$ct.dur.ntx
+  rct.asympt.int <- dat$param$rct.asympt.int
+  uct.asympt.int <- dat$param$asympt.int
+  ct.tx.int <- dat$param$ct.tx.int
+  ct.ntx.int <- dat$param$ct.ntx.int
   
-  syph.early.dur.tx <- dat$param$syph.early.dur.tx
-  syph.late.dur.tx <- dat$param$syph.late.dur.tx
+  syph.early.tx.int <- dat$param$syph.early.tx.int
+  syph.late.tx.int <- dat$param$syph.late.tx.int
 
 
   # GC Recovery ---------------------------------------------------------
@@ -488,9 +488,9 @@ sti_recov <- function(dat, at) {
                              (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
 
   recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1,
-                                                        1/rgc.dur.asympt) == 1)]
+                                                        1/rgc.asympt.int) == 1)]
   recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1,
-                                                        1/ugc.dur.asympt) == 1)]
+                                                        1/ugc.asympt.int) == 1)]
 
   # Symptomatic untreated
   idsRGC_sympt_ntx <- which(dat$attr$rGC == 1 &
@@ -505,16 +505,16 @@ sti_recov <- function(dat, at) {
                             (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
 
   # If parameter is null, uses recovery rate of asymptomatic untreated
-  if (!is.null(gc.dur.ntx)) {
+  if (!is.null(gc.ntx.int)) {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                        1/gc.dur.ntx) == 1)]
+                                                        1/gc.ntx.int) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                        1/gc.dur.ntx) == 1)]
+                                                        1/gc.ntx.int) == 1)]
   } else {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                        1/rgc.dur.asympt) == 1)]
+                                                        1/rgc.asympt.int) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                        1/ugc.dur.asympt) == 1)]
+                                                        1/ugc.asympt.int) == 1)]
   }
 
   # Treated (asymptomatic and symptomatic)
@@ -526,9 +526,9 @@ sti_recov <- function(dat, at) {
                      (dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1))
 
   recovRGC_tx <- idsRGC_tx[which(rbinom(length(idsRGC_tx), 1,
-                                        1/gc.dur.tx) == 1)]
+                                        1/gc.tx.int) == 1)]
   recovUGC_tx <- idsUGC_tx[which(rbinom(length(idsUGC_tx), 1,
-                                        1/gc.dur.tx) == 1)]
+                                        1/gc.tx.int) == 1)]
 
   recovRGC <- c(recovRGC_asympt_ntx, recovRGC_sympt_ntx, recovRGC_tx)
   recovUGC <- c(recovUGC_asympt_ntx, recovUGC_sympt_ntx, recovUGC_tx)
@@ -564,9 +564,9 @@ sti_recov <- function(dat, at) {
                              (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
 
   recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx),
-                                                        1, 1/rct.dur.asympt) == 1)]
+                                                        1, 1/rct.asympt.int) == 1)]
   recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx),
-                                                        1, 1/uct.dur.asympt) == 1)]
+                                                        1, 1/uct.asympt.int) == 1)]
 
   # Symptomatic untreated
   idsRCT_sympt_ntx <- which(dat$attr$rCT == 1 &
@@ -582,14 +582,14 @@ sti_recov <- function(dat, at) {
 
   if (!is.null(ct.dur.ntx)) {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                                        1, 1/ct.dur.ntx) == 1)]
+                                                        1, 1/ct.ntx.int) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                                        1, 1/ct.dur.ntx) == 1)]
+                                                        1, 1/ct.ntx.int) == 1)]
   } else {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                                        1, 1/rct.dur.asympt) == 1)]
+                                                        1, 1/rct.asympt.int) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                                        1, 1/uct.dur.asympt) == 1)]
+                                                        1, 1/uct.asympt.int) == 1)]
   }
 
   # Treated (asymptomatic and symptomatic)
@@ -601,9 +601,9 @@ sti_recov <- function(dat, at) {
                      (dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1))
 
   recovRCT_tx <- idsRCT_tx[which(rbinom(length(idsRCT_tx),
-                                        1, 1/ct.dur.tx) == 1)]
+                                        1, 1/ct.tx.int) == 1)]
   recovUCT_tx <- idsUCT_tx[which(rbinom(length(idsUCT_tx),
-                                        1, 1/ct.dur.tx) == 1)]
+                                        1, 1/ct.tx.int) == 1)]
 
 
   recovRCT <- c(recovRCT_asympt_ntx, recovRCT_sympt_ntx, recovRCT_tx)
@@ -659,17 +659,17 @@ sti_recov <- function(dat, at) {
   
   # Move stage-specific treated to recovered
   recovsyph_prim_tx <- idssyph_prim_tx[which(rbinom(length(idssyph_prim_tx), 1,
-                                                      1/syph.early.dur.tx) == 1)]
+                                                      1/syph.early.tx.int) == 1)]
   recovsyph_seco_tx <- idssyph_seco_tx[which(rbinom(length(idssyph_seco_tx), 1,
-                                                    1/syph.early.dur.tx) == 1)]
+                                                    1/syph.early.tx.int) == 1)]
   recovsyph_earlat_tx <- idssyph_earlat_tx[which(rbinom(length(idssyph_earlat_tx), 1,
-                                                    1/syph.early.dur.tx) == 1)]
+                                                    1/syph.early.tx.int) == 1)]
   recovsyph_latelat_tx <- idssyph_latelat_tx[which(rbinom(length(idssyph_latelat_tx), 1,
-                                                    1/syph.late.dur.tx) == 1)]
+                                                    1/syph.late.tx.int) == 1)]
   recovsyph_latelatelat_tx <- idssyph_latelatelat_tx[which(rbinom(length(idssyph_latelatelat_tx), 1,
-                                                    1/syph.late.dur.tx) == 1)]
+                                                    1/syph.late.tx.int) == 1)]
   recovsyph_tert_tx <- idssyph_tert_tx[which(rbinom(length(idssyph_tert_tx), 1,
-                                                    1/syph.late.dur.tx) == 1)]
+                                                    1/syph.late.tx.int) == 1)]
   
   
   # Recovery by early, late, and all

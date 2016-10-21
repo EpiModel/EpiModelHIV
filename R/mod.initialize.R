@@ -843,7 +843,7 @@ init_status_syph_msm <- function(dat) {
     
     # Immune 
     selected <- which(stage.syph[ids.B] == 8 | stage.syph[ids.W] == 8)
-    max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.dur)
+    max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.int)
     time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
     syph.immune.time[selected] <- time.since.immune
     syph.tx[selected] <- NA

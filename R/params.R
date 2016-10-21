@@ -26,6 +26,16 @@
 #'        and test and treated with full suppression.
 #' @param tt.traj.W.prob Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
+#'        
+#' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
+#'        active stages of syphilis: incubating, primary, secondary, early 
+#'        latent, late latent, late late latent, and tertiary.
+#' @param stage.syph.W.prob Proportion of white MSM who enter each of the seven
+#'        active stages of syphilis, as defined above.
+#' @param immune.syph.B.prob Prevalence of immunity (e.g. recovering from late syphilis) 
+#'        among black MSM not infected with syphilis.
+#' @param immune.syph.W.prob Prevalence of immunity among black MSM not infected with
+#'        syphilis.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
 #' @param tx.init.W.prob Probability per time step that a white MSM who has
@@ -71,6 +81,19 @@
 #'        re-initiation until the level in \code{vl.part.supp}.
 #' @param part.supp.up.slope For partial suppressors, number of log10 units that
 #'        viral load rises per time step from treatment halting until expected value.
+#'        
+#' @param incu.syph.int Number of days in incubation stage of syphilis.
+#' @param prim.syph.int Number of days in primary stage of syphilis.
+#' @param seco.syph.int Number of days in secondary stage of syphilis.
+#' @param earlat.syph.int = Number of days in early latent stage of syphilis.
+#' @param latelat.syph.int Number of days in first late latent stage of syphilis.
+#' @param latelatelat.syph.int Number of days in second stage of late latent 
+#'        syphilis for those who will not progress to tertiary infection.
+#' @param tert.syph.int Number of days in tertiary stage of syphilis.
+#' @param immune.syph.int Number of days that temporary immunity from syphilis
+#'        infection lasts after treatment and recovery from late syphilis infection.
+#' @param syph.tert.prog.prob Probability of progression from late latent stage of
+#'        syphilis to tertiary stage.
 #' @param b.B.rate Rate at which black MSM enter the population.
 #' @param b.W.rate Rate at which white MSM enter the population.
 #' @param birth.age Age (in years) of new arrivals.
@@ -245,6 +268,13 @@
 #' @param ugc.tprob Probability of urethral gonorrhea infection per act.
 #' @param rct.tprob Probability of rectal chlamydia infection per act.
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
+#' @param syph.tprob Base probability of syphilis infection per act.
+#' @param syph.earlat.rr Multiplier for reduced infection probability in early latent 
+#'        stage of syphilis infection.
+#' @param syph.late.rr Multiplier for reduced infection probability in late stages 
+#'        of syphilis infection.
+#' @param syph.immune.rr Multiplier for reduced infection probability given an 
+#'        immune partner.
 #' @param rgc.sympt.prob Probability of symptoms given infection with rectal
 #'        gonorrhea.
 #' @param ugc.sympt.prob Probability of symptoms given infection with urethral
@@ -253,24 +283,55 @@
 #'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
 #'        chlamydia.
-#' @param rgc.dur.asympt Average duration in weeks of asymptomatic rectal gonorrhea.
-#' @param ugc.dur.asympt Average duration in weeks of asymptomatic urethral gonorrhea.
-#' @param gc.dur.tx Average duration in weeks of treated gonorrhea (both sites).
-#' @param gc.dur.ntx Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
+#'        
+#' @param syph.prim.sympt.prob Probability of symptoms given primary stage syphilis 
+#'        infection.
+#' @param syph.seco.sympt.prob Probability of symptoms given secondary stage syphilis 
+#'        infection.
+#' @param syph.earlat.sympt.prob Probability of symptoms given early latent stage 
+#'        syphilis infection.
+#' @param syph.latelat.sympt.prob Probability of symptoms given late latent stage 
+#'        syphilis infection.
+#' @param syph.tert.sympt.prob Probability of symptoms given tertiary stage syphilis 
+#'        infection.
+#' @param rgc.asympt.int Average duration in days of asymptomatic rectal gonorrhea.
+#' @param ugc.asympt.int Average duration in days of asymptomatic urethral gonorrhea.
+#' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
+#' @param gc.ntx.int Average duration in days of untreated, symptomatic gonorrhea (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
-#' @param rct.dur.asympt Average in weeks duration of asymptomatic rectal chlamydia.
-#' @param uct.dur.asympt Average in weeks duration of asymptomatic urethral chlamydia.
-#' @param ct.dur.tx Average in weeks duration of treated chlamydia (both sites).
-#' @param ct.dur.ntx Average in weeks duration of untreated, symptomatic chlamydia (both sites).
+#' @param rct.asympt.int Average in days duration of asymptomatic rectal chlamydia.
+#' @param uct.asympt.int Average in days duration of asymptomatic urethral chlamydia.
+#' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
+#' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
+#' @param syph.early.tx.int Average in days duration of treatment for early syphilis. 
+#' @param syph.late.tx.int Average in days duration of treatment for late syphilis.
 #' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
 #'        infection with gonorrhea.
 #' @param ct.prob.cease Probability of ceasing sexual activity during symptomatic
 #'        infection with chlamydia.
+#' @param syph.prob.cease Probability of ceasing sexual activity during symptomatic
+#'        infection with syphilis.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
 #' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
 #' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
 #' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chlamydia.
+#' @param syph.prim.sympt.prob.tx Probability of treatment for symptomatic primary
+#'        stage syphilis infection.
+#' @param syph.prim.asympt.prob.tx Probability of treatment for asymptomatic primary
+#'        stage syphilis infection.
+#' @param syph.seco.sympt.prob.tx Probability of treatment for symptomatic secondary
+#'        stage syphilis infection.
+#' @param syph.seco.asympt.prob.tx Probability of treatment for asymptomatic secondary
+#'        stage syphilis infection.
+#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic or
+#'        asymptomatic early latent stage syphilis infection.
+#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic or
+#'        asymptomatic late latent stage syphilis infection.
+#' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic tertiary
+#'        stage syphilis infection.
+#' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
+#'        stage syphilis infection.
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -278,12 +339,16 @@
 #'        STI treatment of symptomatic cases even after PrEP initiation.
 #' @param sti.cond.rr Relative risk of STI infection (in either direction) given
 #'        a condom used by the insertive partner.
+#' @param syph.cond.rr Relative risk of syphilis infection (in either direction) given
+#'        a condom used by the insertive partner.
 #' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
 #' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
 #' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia.
 #' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia.
 #' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
 #'        given dual infection with both gonorrhea and chlamydia.
+#' @param hiv.syph.rr Relative risk of HIV infection given current syphilis infection.
+#' @param syph.hiv.rr Relative risk of syphilis infection given current HIV infection.
 #'
 #' @param ... Additional arguments passed to the function.
 #'
@@ -343,7 +408,7 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9*365,
                       latelatelat.syph.int = 30*365,
                       tert.syph.int = 30*365,
-                      immune.syph.dur = 5*365,
+                      immune.syph.int = 5*365,
                       syph.tert.prog.prob = 0.15,
                       
                       b.B.rate = 1e-3 / 7,
@@ -445,25 +510,24 @@ param_msm <- function(nwstats,
                       rct.sympt.prob = 0.103517,
                       uct.sympt.prob = 0.885045,
                       
-                      syph.incub.sympt.prob = 0,
                       syph.prim.sympt.prob = 0.50,
                       syph.seco.sympt.prob = 0.85,
                       syph.earlat.sympt.prob = 0,
                       syph.latelat.sympt.prob = 0,
                       syph.tert.sympt.prob = 0.90,
 
-                      rgc.dur.asympt = 35.11851,
-                      ugc.dur.asympt = 35.11851,
-                      gc.dur.tx = 2,
-                      gc.dur.ntx = NULL,
+                      rgc.asympt.int = 35.11851*7,
+                      ugc.asympt.int = 35.11851*7,
+                      gc.tx.int = 2*7,
+                      gc.ntx.int = NULL,
 
-                      rct.dur.asympt = 44.24538,
-                      uct.dur.asympt = 44.24538,
-                      ct.dur.tx = 2,
-                      ct.dur.ntx = NULL,
+                      rct.asympt.int = 44.24538*7,
+                      uct.asympt.int = 44.24538*7,
+                      ct.tx.int = 2*7,
+                      ct.ntx.int = NULL,
 
-                      syph.early.dur.tx = 2,
-                      syph.late.dur.tx = 15,
+                      syph.early.tx.int = 2,
+                      syph.late.tx.int = 15,
                       
                       gc.prob.cease = 0,
                       ct.prob.cease = 0,

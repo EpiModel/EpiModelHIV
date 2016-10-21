@@ -23,7 +23,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   incu.syph.int = 27, prim.syph.int = 90, seco.syph.int = 120,
   earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
   latelat.syph.int = 9 * 365, latelatelat.syph.int = 30 * 365,
-  tert.syph.int = 30 * 365, immune.syph.dur = 5 * 365,
+  tert.syph.int = 30 * 365, immune.syph.int = 5 * 365,
   syph.tert.prog.prob = 0.15, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
   birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
   UIAI.prob = 0.0031 * 1.09, acute.rr = 6, circ.rr = 0.4,
@@ -61,13 +61,13 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.earlat.rr = 0.5, syph.late.rr = 0, syph.immune.rr = 0,
   rgc.sympt.prob = 0.076975, ugc.sympt.prob = 0.824368,
   rct.sympt.prob = 0.103517, uct.sympt.prob = 0.885045,
-  syph.incub.sympt.prob = 0, syph.prim.sympt.prob = 0.5,
-  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
-  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
-  rgc.dur.asympt = 34.93723, ugc.dur.asympt = 36.48328, gc.dur.tx = 2,
-  gc.dur.ntx = NULL, rct.dur.asympt = 45.02343, uct.dur.asympt = 44.88562,
-  ct.dur.tx = 2, ct.dur.ntx = NULL, syph.early.dur.tx = 2,
-  syph.late.dur.tx = 15, gc.prob.cease = 0, ct.prob.cease = 0,
+  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
+  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
+  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NULL,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NULL, syph.early.tx.int = 2,
+  syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
   syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
   syph.prim.sympt.prob.tx = 0, syph.prim.asympt.prob.tx = 0,
@@ -76,8 +76,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.tert.sympt.prob.tx = 0, syph.tert.asympt.prob.tx = 0,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
-  hiv.rgc.rr = 2.644584, hiv.ugc.rr = 1.69434, hiv.rct.rr = 2.644584,
-  hiv.uct.rr = 1.69434, hiv.dual.rr = 0.2, hiv.syph.rr = 2,
+  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2,
   syph.hiv.rr = 2, ...)
 }
 \arguments{
@@ -110,6 +110,19 @@ and test and treated with full suppression.}
 
 \item{tt.traj.W.prob}{Proportion of white MSM who enter into the four
 testing/treatment trajectories, as defined above.}
+
+\item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
+active stages of syphilis: incubating, primary, secondary, early 
+latent, late latent, late late latent, and tertiary.}
+
+\item{stage.syph.W.prob}{Proportion of white MSM who enter each of the seven
+active stages of syphilis, as defined above.}
+
+\item{immune.syph.B.prob}{Prevalence of immunity (e.g. recovering from late syphilis) 
+among black MSM not infected with syphilis.}
+
+\item{immune.syph.W.prob}{Prevalence of immunity among black MSM not infected with
+syphilis.}
 
 \item{tx.init.B.prob}{Probability per time step that a black MSM who has
 tested positive will initiate treatment.}
@@ -177,6 +190,27 @@ re-initiation until the level in \code{vl.part.supp}.}
 
 \item{part.supp.up.slope}{For partial suppressors, number of log10 units that
 viral load rises per time step from treatment halting until expected value.}
+
+\item{incu.syph.int}{Number of days in incubation stage of syphilis.}
+
+\item{prim.syph.int}{Number of days in primary stage of syphilis.}
+
+\item{seco.syph.int}{Number of days in secondary stage of syphilis.}
+
+\item{earlat.syph.int}{= Number of days in early latent stage of syphilis.}
+
+\item{latelat.syph.int}{Number of days in first late latent stage of syphilis.}
+
+\item{latelatelat.syph.int}{Number of days in second stage of late latent 
+syphilis for those who will not progress to tertiary infection.}
+
+\item{tert.syph.int}{Number of days in tertiary stage of syphilis.}
+
+\item{immune.syph.int}{Number of days that temporary immunity from syphilis
+infection lasts after treatment and recovery from late syphilis infection.}
+
+\item{syph.tert.prog.prob}{Probability of progression from late latent stage of
+syphilis to tertiary stage.}
 
 \item{b.B.rate}{Rate at which black MSM enter the population.}
 
@@ -427,6 +461,17 @@ partnerships only, versus all partnerships.}
 
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
+\item{syph.tprob}{Base probability of syphilis infection per act.}
+
+\item{syph.earlat.rr}{Multiplier for reduced infection probability in early latent 
+stage of syphilis infection.}
+
+\item{syph.late.rr}{Multiplier for reduced infection probability in late stages 
+of syphilis infection.}
+
+\item{syph.immune.rr}{Multiplier for reduced infection probability given an 
+immune partner.}
+
 \item{rgc.sympt.prob}{Probability of symptoms given infection with rectal
 gonorrhea.}
 
@@ -439,29 +484,51 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.dur.asympt}{Average duration in weeks of asymptomatic rectal gonorrhea.}
+\item{syph.prim.sympt.prob}{Probability of symptoms given primary stage syphilis 
+infection.}
 
-\item{ugc.dur.asympt}{Average duration in weeks of asymptomatic urethral gonorrhea.}
+\item{syph.seco.sympt.prob}{Probability of symptoms given secondary stage syphilis 
+infection.}
 
-\item{gc.dur.tx}{Average duration in weeks of treated gonorrhea (both sites).}
+\item{syph.earlat.sympt.prob}{Probability of symptoms given early latent stage 
+syphilis infection.}
 
-\item{gc.dur.ntx}{Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
+\item{syph.latelat.sympt.prob}{Probability of symptoms given late latent stage 
+syphilis infection.}
+
+\item{syph.tert.sympt.prob}{Probability of symptoms given tertiary stage syphilis 
+infection.}
+
+\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
+
+\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
+
+\item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
+
+\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 
-\item{rct.dur.asympt}{Average in weeks duration of asymptomatic rectal chlamydia.}
+\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
 
-\item{uct.dur.asympt}{Average in weeks duration of asymptomatic urethral chlamydia.}
+\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
 
-\item{ct.dur.tx}{Average in weeks duration of treated chlamydia (both sites).}
+\item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.dur.ntx}{Average in weeks duration of untreated, symptomatic chlamydia (both sites).
+\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+
+\item{syph.early.tx.int}{Average in days duration of treatment for early syphilis.}
+
+\item{syph.late.tx.int}{Average in days duration of treatment for late syphilis.}
 
 \item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
 infection with gonorrhea.}
 
 \item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
 infection with chlamydia.}
+
+\item{syph.prob.cease}{Probability of ceasing sexual activity during symptomatic
+infection with syphilis.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 
@@ -470,6 +537,24 @@ infection with chlamydia.}
 \item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
 
 \item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+
+\item{syph.prim.sympt.prob.tx}{Probability of treatment for symptomatic primary
+stage syphilis infection.}
+
+\item{syph.prim.asympt.prob.tx}{Probability of treatment for asymptomatic primary
+stage syphilis infection.}
+
+\item{syph.seco.sympt.prob.tx}{Probability of treatment for symptomatic secondary
+stage syphilis infection.}
+
+\item{syph.seco.asympt.prob.tx}{Probability of treatment for asymptomatic secondary
+stage syphilis infection.}
+
+\item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic tertiary
+stage syphilis infection.}
+
+\item{syph.tert.asympt.prob.tx}{Probability of treatment for asymptomatic tertiary
+stage syphilis infection.}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 
@@ -480,6 +565,9 @@ PrEP visit.}
 STI treatment of symptomatic cases even after PrEP initiation.}
 
 \item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
+a condom used by the insertive partner.}
+
+\item{syph.cond.rr}{Relative risk of syphilis infection (in either direction) given
 a condom used by the insertive partner.}
 
 \item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
@@ -493,7 +581,17 @@ a condom used by the insertive partner.}
 \item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
 given dual infection with both gonorrhea and chlamydia.}
 
+\item{hiv.syph.rr}{Relative risk of HIV infection given current syphilis infection.}
+
+\item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
+
 \item{...}{Additional arguments passed to the function.}
+
+\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic or
+asymptomatic early latent stage syphilis infection.}
+
+\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic or
+asymptomatic late latent stage syphilis infection.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to
