@@ -253,15 +253,15 @@
 #'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
 #'        chlamydia.
-#' @param rgc.dur.asympt Average duration in weeks of asymptomatic rectal gonorrhea.
-#' @param ugc.dur.asympt Average duration in weeks of asymptomatic urethral gonorrhea.
-#' @param gc.dur.tx Average duration in weeks of treated gonorrhea (both sites).
-#' @param gc.dur.ntx Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
+#' @param rgc.asympt.int Average duration in weeks of asymptomatic rectal gonorrhea.
+#' @param ugc.asympt.int Average duration in weeks of asymptomatic urethral gonorrhea.
+#' @param gc.tx.int Average duration in weeks of treated gonorrhea (both sites).
+#' @param gc.ntx.int Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
-#' @param rct.dur.asympt Average in weeks duration of asymptomatic rectal chlamydia.
-#' @param uct.dur.asympt Average in weeks duration of asymptomatic urethral chlamydia.
-#' @param ct.dur.tx Average in weeks duration of treated chlamydia (both sites).
-#' @param ct.dur.ntx Average in weeks duration of untreated, symptomatic chlamydia (both sites).
+#' @param rct.asympt.int Average in weeks duration of asymptomatic rectal chlamydia.
+#' @param uct.asympt.int Average in weeks duration of asymptomatic urethral chlamydia.
+#' @param ct.tx.int Average in weeks duration of treated chlamydia (both sites).
+#' @param ct.ntx.int Average in weeks duration of untreated, symptomatic chlamydia (both sites).
 #'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
 #' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
 #'        infection with gonorrhea.
@@ -425,15 +425,15 @@ param_msm <- function(nwstats,
                       rct.sympt.prob = 0.103517,
                       uct.sympt.prob = 0.885045,
 
-                      rgc.dur.asympt = 34.93723,
-                      ugc.dur.asympt = 36.48328,
-                      gc.dur.tx = 2,
-                      gc.dur.ntx = NULL,
+                      rgc.asympt.int = 35.11851 * 7,
+                      ugc.asympt.int = 35.11851 * 7,
+                      gc.tx.int = 2 * 7,
+                      gc.ntx.int = NULL,
 
-                      rct.dur.asympt = 45.02343,
-                      uct.dur.asympt = 44.88562,
-                      ct.dur.tx = 2,
-                      ct.dur.ntx = NULL,
+                      rct.asympt.int = 44.24538 * 7,
+                      uct.asympt.int = 44.24538 * 7,
+                      ct.tx.int = 2 * 7,
+                      ct.ntx.int = NULL,
 
                       gc.prob.cease = 0,
                       ct.prob.cease = 0,
@@ -449,10 +449,10 @@ param_msm <- function(nwstats,
 
                       sti.cond.rr = 0.3,
 
-                      hiv.rgc.rr = 2.644584,
-                      hiv.ugc.rr = 1.69434,
-                      hiv.rct.rr = 2.644584,
-                      hiv.uct.rr = 1.69434,
+                      hiv.rgc.rr = 2.780673,
+                      hiv.ugc.rr = 1.732363,
+                      hiv.rct.rr = 2.780673,
+                      hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
                       ...) {
 
