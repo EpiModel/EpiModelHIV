@@ -95,6 +95,104 @@ test_msm <- function(dat, at) {
 }
 
 
+#' @title Syphilis Testing Module
+#'
+#' @description Module function for syphilis diagnostic testing of infected persons.
+#'
+#' @inheritParams aging_msm
+#'
+#' @details
+#' This testing module supports two testing parameterizations, input via the
+#' \code{testing.pattern} parameter: memoryless for stochastic and
+#' geometrically-distributed waiting times to test (constant hazard); and interval
+#' for deterministic tested after defined waiting time intervals.
+#'
+#' @return
+#' This function returns the \code{dat} object with updated \code{last.neg.test},
+#' \code{diag.status} and \code{diag.time} attributes.
+#'
+#' @keywords module msm
+#'
+#' @export
+#'
+test_syph_msm <- function(dat, at) {
+    
+    ## Variables
+    
+    # Attributes
+    diag.status.syph <- dat$attr$diag.status.syph
+    race <- dat$attr$race
+    tt.traj.syph <- dat$attr$tt.traj.syph
+    syphstatus <- dat$attr$syphstatus
+    inf.time.syph <- dat$attr$inf.time.syph
+    ttntest.syph <- dat$attr$ttntest.syph
+    stage.syph <- dat$attr$stage.syph
+    
+    prepStat <- dat$attr$prepStat
+    prep.tst.int <- dat$param$prep.tst.int
+    
+    # Parameters
+    testing.pattern.syph <- dat$param$testing.pattern.syph
+    syph.annualtest.int <- dat$param$syph.annualtest.int
+    syph.6motest.int <- dat$param$syph.6motest.int
+    
+    tsincelntst.syph <- at - dat$attr$last.neg.test.syph
+    tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
+    
+    ## Process
+    selected.ann <- which(tt.traj.syph == 3)
+    selected.6mo <- which(tt.traj.syph == 4)
+    
+    if (testing.pattern.syph == "memoryless") {
+        elig.syph.ann <- which(tt.traj.syph == 3 &
+                               (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                prepStat == 0)
+        rates.syph <- rep(1/syph.annualtest.int, length(elig.syph.ann))
+        tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
+        
+        
+        elig.syph.6mo <- which(tt.traj.syph == 4 &
+                               (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                               prepStat == 0)
+        rates.syph <- rep(1/syph.6motest.int, length(elig.syph.6mo))
+        tst.syph.nprep.6mo <- elig.syph.6mo[rbinom(length(elig.syph.6mo), 1, rates.syph) == 1]
+        tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.6mo)
+    }
+    
+    if (testing.pattern.syph == "interval" ) {
+        tst.syph.annual.interval <- which(tt.traj.syph == 3 &
+                                          (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                          tsincelntst.syph >= 2*(syph.annualtest.int) & 
+                                          prepStat == 0)
+
+    
+        tst.syph.6mo.interval <- which(tt.traj.syph == 4 &
+                                       (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                       tsincelntst.syph >= 2*(syph.6motest.int) &
+                                       prepStat == 0)
+        tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.6mo.interval)
+    }
+    
+    
+    # PrEP testing
+    tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
+                           prepStat == 1 &
+                           tsincelntst.syph >= prep.tst.int)
+    
+    tst.all <- c(tst.syph.nprep, tst.syph.prep)
+    
+    tst.pos <- tst.all[syphstatus[tst.all] == 1 & stage.syph[tst.all] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.neg <- setdiff(tst.all, tst.pos)
+    
+    # Attributes
+    dat$attr$last.neg.test.syph[tst.neg] <- at
+    dat$attr$diag.status.syph[tst.pos] <- 1
+    dat$attr$diag.time.syph[tst.pos] <- at
+    
+    return(dat)
+}
+
+
 #' @title HIV Diagnosis Module
 #'
 #' @description Module function for simulating HIV diagnosis after infection,

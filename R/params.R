@@ -19,6 +19,9 @@
 #' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
+#' @param testing.pattern.syph Method for syphilis testing, with options 
+#'        \code{"memoryless"} for constant hazard without regard to time since    
+#'        previous test, or \code{"interval"} deterministic fixed intervals.
 #' @param test.window.int Length of the HIV test window period in days.
 #' @param tt.traj.B.prob Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
@@ -26,7 +29,11 @@
 #'        and test and treated with full suppression.
 #' @param tt.traj.W.prob Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
-#'        
+#' @param tt.traj.syph.B.prob Proportion of black MSM who enter into the four
+#'        testing/treatment trajectories for syphilis: Never, when symptomatic,
+#'        yearly, or every six months.      
+#' @param tt.traj.syph.W.prob Proportion of black MSM who enter into the four
+#'        testing/treatment trajectories for syphilis, as defined above.
 #' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
 #'        active stages of syphilis: incubating, primary, secondary, early 
 #'        latent, late latent, late late latent, and tertiary.
@@ -332,6 +339,8 @@
 #'        stage syphilis infection.
 #' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
 #'        stage syphilis infection.
+#' @param syph.annualtest.int Interval in days between syphilis screening for annual testers
+#' @param syph.6motest.int Interval in days between syphilis screening for 6 month testers   
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -367,15 +376,19 @@ param_msm <- function(nwstats,
                       mean.test.B.int = 301,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
+                      testing.pattern.syph = "memoryless",
                       test.window.int = 21,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
                       
+                      tt.traj.syph.B.prob = c(0.050, 0.400, 0.350, 0.20),
+                      tt.traj.syph.W.prob = c(0.050, 0.400, 0.350, 0.20),
+                      
                       stage.syph.B.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
                       stage.syph.W.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
-                      immune.syph.B.prob = 0.05, # prev of immunity among those not infected
-                      immune.syph.W.prob = 0.05, # prev of immunity among those not infected
+                      immune.syph.B.prob = 0.01, # prev of immunity among those not infected
+                      immune.syph.W.prob = 0.01, # prev of immunity among those not infected
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -519,12 +532,12 @@ param_msm <- function(nwstats,
                       rgc.asympt.int = 35.11851*7,
                       ugc.asympt.int = 35.11851*7,
                       gc.tx.int = 2*7,
-                      gc.ntx.int = NULL,
+                      gc.ntx.int = NA,
 
                       rct.asympt.int = 44.24538*7,
                       uct.asympt.int = 44.24538*7,
                       ct.tx.int = 2*7,
-                      ct.ntx.int = NULL,
+                      ct.ntx.int = NA,
 
                       syph.early.tx.int = 2,
                       syph.late.tx.int = 15,
@@ -546,7 +559,10 @@ param_msm <- function(nwstats,
                       syph.latelat.prob.tx = 0,
                       syph.tert.sympt.prob.tx = 0,
                       syph.tert.asympt.prob.tx = 0,
-
+                      
+                      syph.annualtest.int = 365,
+                      syph.6motest.int = 182,
+                     
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
@@ -783,6 +799,7 @@ control_msm <- function(simno = 1,
                         deaths.FUN = deaths_msm,
                         births.FUN = births_msm,
                         test.FUN = test_msm,
+                        testsyph.FUN = test_syph_msm,
                         tx.FUN = tx_msm,
                         prep.FUN = prep_msm,
                         progress.FUN = progress_msm,

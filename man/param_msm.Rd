@@ -6,11 +6,13 @@
 \usage{
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
-  testing.pattern = "memoryless", test.window.int = 21,
-  tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
-  0.331, 0.617), stage.syph.B.prob = c(0.1, 0.2, 0.2, 0.15, 0.15, 0.1, 0.1),
+  testing.pattern = "memoryless", testing.pattern.syph = "memoryless",
+  test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
+  tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tt.traj.syph.B.prob = c(0.05,
+  0.4, 0.35, 0.2), tt.traj.syph.W.prob = c(0.05, 0.4, 0.35, 0.2),
+  stage.syph.B.prob = c(0.1, 0.2, 0.2, 0.15, 0.15, 0.1, 0.1),
   stage.syph.W.prob = c(0.1, 0.2, 0.2, 0.15, 0.15, 0.1, 0.1),
-  immune.syph.B.prob = 0.05, immune.syph.W.prob = 0.05,
+  immune.syph.B.prob = 0.01, immune.syph.W.prob = 0.01,
   tx.init.B.prob = 0.092, tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
   tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
   tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = 520 * 7,
@@ -64,9 +66,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
   syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
   syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NULL,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
   rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NULL, syph.early.tx.int = 2,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 2,
   syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
   syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
@@ -74,6 +76,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.seco.sympt.prob.tx = 0, syph.seco.asympt.prob.tx = 0,
   syph.earlat.prob.tx = 0, syph.latelat.prob.tx = 0,
   syph.tert.sympt.prob.tx = 0, syph.tert.asympt.prob.tx = 0,
+  syph.annualtest.int = 365, syph.6motest.int = 182,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
   hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
@@ -101,6 +104,10 @@ white men.}
 for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
+\item{testing.pattern.syph}{Method for syphilis testing, with options 
+\code{"memoryless"} for constant hazard without regard to time since    
+previous test, or \code{"interval"} deterministic fixed intervals.}
+
 \item{test.window.int}{Length of the HIV test window period in days.}
 
 \item{tt.traj.B.prob}{Proportion of black MSM who enter one of four
@@ -110,6 +117,13 @@ and test and treated with full suppression.}
 
 \item{tt.traj.W.prob}{Proportion of white MSM who enter into the four
 testing/treatment trajectories, as defined above.}
+
+\item{tt.traj.syph.B.prob}{Proportion of black MSM who enter into the four
+testing/treatment trajectories for syphilis: Never, when symptomatic,
+yearly, or every six months.}
+
+\item{tt.traj.syph.W.prob}{Proportion of black MSM who enter into the four
+testing/treatment trajectories for syphilis, as defined above.}
 
 \item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
 active stages of syphilis: incubating, primary, secondary, early 
@@ -555,6 +569,10 @@ stage syphilis infection.}
 
 \item{syph.tert.asympt.prob.tx}{Probability of treatment for asymptomatic tertiary
 stage syphilis infection.}
+
+\item{syph.annualtest.int}{Interval in days between syphilis screening for annual testers}
+
+\item{syph.6motest.int}{Interval in days between syphilis screening for 6 month testers}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 
