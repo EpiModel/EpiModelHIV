@@ -10,8 +10,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
   tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tt.traj.syph.B.prob = c(0.05,
   0.4, 0.35, 0.2), tt.traj.syph.W.prob = c(0.05, 0.4, 0.35, 0.2),
-  stage.syph.B.prob = c(0.1, 0.2, 0.2, 0.15, 0.15, 0.1, 0.1),
-  stage.syph.W.prob = c(0.1, 0.2, 0.2, 0.15, 0.15, 0.1, 0.1),
+  stage.syph.B.prob = c(0.3, 0.2, 0.2, 0.13, 0.13, 0.02, 0.02),
+  stage.syph.W.prob = c(0.3, 0.2, 0.2, 0.13, 0.13, 0.02, 0.02),
   immune.syph.B.prob = 0.01, immune.syph.W.prob = 0.01,
   tx.init.B.prob = 0.092, tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
   tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
@@ -59,7 +59,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
   rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
-  rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.028,
+  rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.045,
   syph.earlat.rr = 0.5, syph.late.rr = 0, syph.immune.rr = 0,
   rgc.sympt.prob = 0.076975, ugc.sympt.prob = 0.824368,
   rct.sympt.prob = 0.103517, uct.sympt.prob = 0.885045,
@@ -68,19 +68,19 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
   ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
   rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 2,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
   syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
   syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
-  syph.prim.sympt.prob.tx = 0, syph.prim.asympt.prob.tx = 0,
-  syph.seco.sympt.prob.tx = 0, syph.seco.asympt.prob.tx = 0,
-  syph.earlat.prob.tx = 0, syph.latelat.prob.tx = 0,
-  syph.tert.sympt.prob.tx = 0, syph.tert.asympt.prob.tx = 0,
+  syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 0.4,
+  syph.seco.sympt.prob.tx = 0.7, syph.seco.asympt.prob.tx = 0.5,
+  syph.earlat.prob.tx = 0.1, syph.latelat.prob.tx = 0.1,
+  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.4,
   syph.annualtest.int = 365, syph.6motest.int = 182,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
   hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
-  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 3,
   syph.hiv.rr = 2, ...)
 }
 \arguments{
@@ -132,10 +132,10 @@ latent, late latent, late late latent, and tertiary.}
 \item{stage.syph.W.prob}{Proportion of white MSM who enter each of the seven
 active stages of syphilis, as defined above.}
 
-\item{immune.syph.B.prob}{Prevalence of immunity (e.g. recovering from late syphilis) 
-among black MSM not infected with syphilis.}
+\item{immune.syph.B.prob}{Prevalence of immunity (e.g. recovering from treated late syphilis) 
+among black MSM not actively infected with syphilis.}
 
-\item{immune.syph.W.prob}{Prevalence of immunity among black MSM not infected with
+\item{immune.syph.W.prob}{Prevalence of immunity among black MSM not actively infected with
 syphilis.}
 
 \item{tx.init.B.prob}{Probability per time step that a black MSM who has

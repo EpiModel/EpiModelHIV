@@ -122,27 +122,33 @@ test_syph_msm <- function(dat, at) {
     # Attributes
     diag.status.syph <- dat$attr$diag.status.syph
     race <- dat$attr$race
-    tt.traj.syph <- dat$attr$tt.traj.syph
     syphstatus <- dat$attr$syphstatus
     inf.time.syph <- dat$attr$inf.time.syph
     ttntest.syph <- dat$attr$ttntest.syph
     stage.syph <- dat$attr$stage.syph
+    diag.time.syph <- dat$attr$diag.time.syph
     
     prepStat <- dat$attr$prepStat
     prep.tst.int <- dat$param$prep.tst.int
+
+    # Assign new births and diagnosis
+    newBirths <- which(dat$attr$arrival.time == at)
+    diag.status.syph[newBirths] <- NA
+    dat$attr$diag.time.syph[newBirths] <- NA
     
     # Parameters
     testing.pattern.syph <- dat$param$testing.pattern.syph
     syph.annualtest.int <- dat$param$syph.annualtest.int
     syph.6motest.int <- dat$param$syph.6motest.int
+    tt.traj.syph <- dat$param$tt.traj.syph
     
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     
-    ## Process
-    selected.ann <- which(tt.traj.syph == 3)
-    selected.6mo <- which(tt.traj.syph == 4)
+    # Debit one unit from time until next test
+    # ttntest.syph <- ttntest.syph - time.unit
     
+    ## Process
     if (testing.pattern.syph == "memoryless") {
         elig.syph.ann <- which(tt.traj.syph == 3 &
                                (diag.status.syph == 0 | is.na(diag.status.syph)) &
@@ -188,6 +194,7 @@ test_syph_msm <- function(dat, at) {
     dat$attr$last.neg.test.syph[tst.neg] <- at
     dat$attr$diag.status.syph[tst.pos] <- 1
     dat$attr$diag.time.syph[tst.pos] <- at
+    #dat$attr$ttntest.syph <- ttntest.syph
     
     return(dat)
 }

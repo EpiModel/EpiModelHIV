@@ -39,9 +39,9 @@
 #'        latent, late latent, late late latent, and tertiary.
 #' @param stage.syph.W.prob Proportion of white MSM who enter each of the seven
 #'        active stages of syphilis, as defined above.
-#' @param immune.syph.B.prob Prevalence of immunity (e.g. recovering from late syphilis) 
-#'        among black MSM not infected with syphilis.
-#' @param immune.syph.W.prob Prevalence of immunity among black MSM not infected with
+#' @param immune.syph.B.prob Prevalence of immunity (e.g. recovering from treated late syphilis) 
+#'        among black MSM not actively infected with syphilis.
+#' @param immune.syph.W.prob Prevalence of immunity among black MSM not actively infected with
 #'        syphilis.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
@@ -385,10 +385,10 @@ param_msm <- function(nwstats,
                       tt.traj.syph.B.prob = c(0.050, 0.400, 0.350, 0.20),
                       tt.traj.syph.W.prob = c(0.050, 0.400, 0.350, 0.20),
                       
-                      stage.syph.B.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
-                      stage.syph.W.prob = c(0.10, 0.20, 0.20, 0.15, 0.15, 0.10, 0.10),
-                      immune.syph.B.prob = 0.01, # prev of immunity among those not infected
-                      immune.syph.W.prob = 0.01, # prev of immunity among those not infected
+                      stage.syph.B.prob = c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02),
+                      stage.syph.W.prob = c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02),
+                      immune.syph.B.prob = 0.01,
+                      immune.syph.W.prob = 0.01, 
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -513,7 +513,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.028,
+                      syph.tprob = 0.045,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
@@ -539,7 +539,7 @@ param_msm <- function(nwstats,
                       ct.tx.int = 2*7,
                       ct.ntx.int = NA,
 
-                      syph.early.tx.int = 2,
+                      syph.early.tx.int = 7, #2
                       syph.late.tx.int = 15,
                       
                       gc.prob.cease = 0,
@@ -551,14 +551,14 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 0,
                       ct.asympt.prob.tx = 0,
                       
-                      syph.prim.sympt.prob.tx = 0,
-                      syph.prim.asympt.prob.tx = 0,
-                      syph.seco.sympt.prob.tx = 0,
-                      syph.seco.asympt.prob.tx = 0,
-                      syph.earlat.prob.tx = 0,
-                      syph.latelat.prob.tx = 0,
-                      syph.tert.sympt.prob.tx = 0,
-                      syph.tert.asympt.prob.tx = 0,
+                      syph.prim.sympt.prob.tx = 0.60,
+                      syph.prim.asympt.prob.tx = 0.40,
+                      syph.seco.sympt.prob.tx = 0.70,
+                      syph.seco.asympt.prob.tx = 0.50,
+                      syph.earlat.prob.tx = 0.10,
+                      syph.latelat.prob.tx = 0.10,
+                      syph.tert.sympt.prob.tx = 0.90,
+                      syph.tert.asympt.prob.tx = 0.40,
                       
                       syph.annualtest.int = 365,
                       syph.6motest.int = 182,
@@ -575,7 +575,7 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.780673,
                       hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 2.0,
+                      hiv.syph.rr = 3,
                       syph.hiv.rr = 2.0,
                       
                       ...) {

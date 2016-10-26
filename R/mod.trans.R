@@ -48,6 +48,7 @@ trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  syphstatus <- dat$attr$syphstatus
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
@@ -94,6 +95,7 @@ trans_msm <- function(dat, at) {
   ip.prepcl <- prepClass[disc.ip[, 2]]
   ip.rGC <- rGC[disc.ip[, 2]]
   ip.rCT <- rCT[disc.ip[, 2]]
+  ip.syph <- syphstatus[disc.ip[, 2]]
 
   # Base TP from VL
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
@@ -123,6 +125,8 @@ trans_msm <- function(dat, at) {
   is.rGC <- which(ip.rGC == 1)
 
   is.rCT <- which(ip.rCT == 1)
+  
+  is.rsyph <- which(ip.syph == 1)
 
   is.rect.dual <- intersect(is.rGC, is.rCT)
 
@@ -131,6 +135,7 @@ trans_msm <- function(dat, at) {
 
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
+  ip.tlo[is.rsyph] <- ip.tlo[is.rsyph] + log(hiv.syph.rr)
 
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
@@ -153,6 +158,7 @@ trans_msm <- function(dat, at) {
   rp.prepcl <- prepClass[disc.rp[, 1]]
   rp.uGC <- uGC[disc.rp[, 1]]
   rp.uCT <- uCT[disc.rp[, 1]]
+  rp.syph <- syphstatus[disc.rp[, 1]]
 
   # Base TP from VL
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
@@ -185,6 +191,8 @@ trans_msm <- function(dat, at) {
   is.uGC <- which(rp.uGC == 1)
 
   is.uCT <- which(rp.uCT == 1)
+  
+  is.usyph <- which(rp.syph == 1)
 
   is.ureth.dual <- intersect(is.uGC, is.uCT)
 
@@ -193,7 +201,8 @@ trans_msm <- function(dat, at) {
 
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-
+  rp.tlo[is.usyph] <- rp.tlo[is.usyph] + log(hiv.syph.rr)
+  
   rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
     min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr

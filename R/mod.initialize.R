@@ -749,7 +749,7 @@ init_status_syph_msm <- function(dat) {
     stage.latelat.sympt <- rep(NA, num)
     stage.latelatelat.sympt <- rep(NA, num)
     stage.tert.sympt <- rep(NA, num)
-    ttntest.syph <- rep(NA, num)
+    #ttntest.syph <- rep(NA, num)
     tt.traj.syph <- rep(NA, num)
     
     time.sex.active <- pmax(1,
@@ -859,19 +859,19 @@ init_status_syph_msm <- function(dat) {
     syph.tx[selected] <- NA
 
     # Time to next test
-    selected.ann <- which(tt.traj.syph == 3)
-    selected.6mo <- which(tt.traj.syph == 4)
-    
-    if (dat$param$testing.pattern == "interval") {
-            ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
-                                    max = dat$param$syph.annualtest.int))
-            ttntest.syph[selected.6mo] <- ceiling(runif(length(selected.6mo), min = 0,
-                                    max = dat$param$syph.6motest.int))
-    }
-    if (dat$param$testing.pattern == "memoryless") {
-            ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$syph.annualtest.int))
-            ttntest.syph[selected.6mo] <- rgeom(length(selected.6mo), 1 / (dat$param$syph.6motest.int))
-    }
+    # selected.ann <- which(tt.traj.syph == 3)
+    # selected.6mo <- which(tt.traj.syph == 4)
+    # 
+    # if (dat$param$testing.pattern == "interval") {
+    #         ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
+    #                                 max = dat$param$syph.annualtest.int))
+    #         ttntest.syph[selected.6mo] <- ceiling(runif(length(selected.6mo), min = 0,
+    #                                 max = dat$param$syph.6motest.int))
+    # }
+    # if (dat$param$testing.pattern == "memoryless") {
+    #         ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$syph.annualtest.int))
+    #         ttntest.syph[selected.6mo] <- rgeom(length(selected.6mo), 1 / (dat$param$syph.6motest.int))
+    # }
     
 
     #diag.status.syph[selected.ann][ttntest.syph > cum.time.off.tx[selected] - twind.int] <- 0
@@ -888,7 +888,7 @@ init_status_syph_msm <- function(dat) {
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$diag.time.syph <- diag.time.syph
-    dat$attr$ttntest.syph <- ttntest.syph
+    #dat$attr$ttntest.syph <- ttntest.syph
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$infector.syph <- infector.syph
     dat$attr$inf.role.syph <- inf.role.syph
