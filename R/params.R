@@ -385,8 +385,11 @@ param_msm <- function(nwstats,
                       tt.traj.syph.B.prob = c(0.050, 0.400, 0.350, 0.20),
                       tt.traj.syph.W.prob = c(0.050, 0.400, 0.350, 0.20),
                       
-                      stage.syph.B.prob = c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02),
-                      stage.syph.W.prob = c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02),
+                      #Average of 2001 - 2015
+                      # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
+                      #Was c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02)
+                      stage.syph.B.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.20, 0.20, 0.046),
+                      stage.syph.W.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.20, 0.20, 0.046),
                       immune.syph.B.prob = 0.01,
                       immune.syph.W.prob = 0.01, 
 

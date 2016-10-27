@@ -99,6 +99,16 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.stage.tert <- rNA
     dat$epi$prev.earlysyph <- rNA
     dat$epi$prev.latesyph <- rNA
+    
+    #HIV Coinfection
+    dat$epi$prev.syph.hivneg <- rNA
+    dat$epi$prev.syph.hivpos <- rNA
+    
+    dat$epi$prev.gc.hivneg <- rNA
+    dat$epi$prev.gc.hivpos <- rNA
+    
+    dat$epi$prev.ct.hivneg <- rNA
+    dat$epi$prev.ct.hivpos <- rNA
 
     dat$epi$incid.rgc <- rNA
     dat$epi$incid.ugc <- rNA
@@ -192,6 +202,26 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
   dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
   dat$epi$prev.syph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$num[at]
+  
+  dat$epi$prev.syph.hivneg[at] <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$s.num[at]
+  dat$epi$prev.syph.hivpos[at] <- length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7))) / dat$epi$i.num[at]
+  
+  dat$epi$prev.gc.hivneg[at] <- sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$s.num[at]
+  dat$epi$prev.gc.hivpos[at] <- sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$i.num[at]
+  
+  dat$epi$prev.ct.hivneg[at] <- sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$s.num[at]
+  dat$epi$prev.ct.hivpos[at] <- sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$i.num[at]
+  
+  dat$epi$prev.gc.hivneg[at] <- sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$s.num[at]
+  dat$epi$prev.gc.hivpos[at] <- sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$i.num[at]
+  
+  dat$epi$prev.ct.hivneg[at] <- sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$s.num[at]
+  dat$epi$prev.ct.hivpos[at] <- sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$i.num[at]
+  
+  dat$epi$prev.hiv.syphpos[at] <- dat$epi$i.num /length(which(stage.syph %in% c(1, 2, 3, 4, 5, 6, 7)))
+  dat$epi$prev.hiv.gcpos[at] <- dat$epi$i.num /sum((rGC == 1 | uGC == 1), na.rm = TRUE)
+  dat$epi$prev.hiv.ctpos[at] <- dat$epi$i.num /sum((rCT == 1 | uCT == 1), na.rm = TRUE)
+  
   
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200
