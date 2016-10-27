@@ -345,7 +345,7 @@ sti_recov <- function(dat, at) {
                             (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
 
   # If parameter is null, uses recovery rate of asytomatic untreated
-  if (!is.null(gc.dur.ntx)) {
+  if (!is.na(gc.ntx.int)) {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
                                                         1/gc.ntx.int) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
@@ -420,7 +420,7 @@ sti_recov <- function(dat, at) {
                             (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
                             (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
 
-  if (!is.null(ct.dur.ntx)) {
+  if (!is.na(ct.ntx.int)) {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
                                                         1, 1/ct.ntx.int) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
