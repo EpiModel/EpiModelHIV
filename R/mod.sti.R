@@ -261,8 +261,13 @@ sti_trans <- function(dat, at) {
   ip.syph.tlo[isearlat] <- ip.syph.tlo[isearlat] + log(syph.earlat.rr)
 
   # Multiplier for syphilis transmission if receptive partner is HIV+ (infectee)
-  is.HIV <- which(status[disc.syph.ip[, 2]] == 1)
-  ip.syph.tlo[is.HIV] <- ip.syph.tlo[is.HIV] + log(syph.hiv.rr)
+  is.HIV.infectee <- which(status[disc.syph.ip[, 2]] == 1)
+  
+  # Multiplier for syphilis transmission if insertive partner is HIV+ (infector)
+  is.HIV.infector <- which(status[disc.syph.ip[, 1]] == 1)
+  
+  ip.syph.tlo[is.HIV.infectee] <- ip.syph.tlo[is.HIV.infectee] + log(syph.hiv.rr)
+  ip.syph.tlo[is.HIV.infector] <- ip.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
 
   # Retransformation to probability
   ip.syph.tprob <- plogis(ip.syph.tlo)
@@ -306,8 +311,13 @@ sti_trans <- function(dat, at) {
   rp.syph.tlo[isearlat] <- rp.syph.tlo[isearlat] + log(syph.earlat.rr)
 
   # Multiplier for syphilis transmission if insertive partner is HIV+ (infectee)
-  is.HIV <- which(status[disc.syph.rp[, 1]] == 1)
-  rp.syph.tlo[is.HIV] <- rp.syph.tlo[is.HIV] + log(syph.hiv.rr)
+  is.HIV.infectee <- which(status[disc.syph.rp[, 1]] == 1)
+  
+  # Multiplier for syphilis transmission if receptive partner is HIV+ (infector)
+  is.HIV.infectee <- which(status[disc.syph.rp[, 2]] == 1)
+  
+  rp.syph.tlo[is.HIV.infectee] <- rp.syph.tlo[is.HIV.infectee] + log(syph.hiv.rr)
+  rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
   
   # Retransformation to probability
   rp.syph.tprob <- plogis(rp.syph.tlo)
