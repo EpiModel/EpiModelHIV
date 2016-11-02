@@ -59,7 +59,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
   rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
-  rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.045,
+  rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.018,
   syph.earlat.rr = 0.5, syph.late.rr = 0, syph.immune.rr = 0,
   rgc.sympt.prob = 0.076975, ugc.sympt.prob = 0.824368,
   rct.sympt.prob = 0.103517, uct.sympt.prob = 0.885045,
@@ -80,8 +80,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
   hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
-  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 3,
-  syph.hiv.rr = 2, ...)
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2.5,
+  syph.hiv.rr = 2.5, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -520,7 +520,7 @@ infection.}
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
 \item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
 
@@ -529,7 +529,7 @@ If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
 \item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{syph.early.tx.int}{Average in days duration of treatment for early syphilis.}
 
@@ -563,6 +563,12 @@ stage syphilis infection.}
 
 \item{syph.seco.asympt.prob.tx}{Probability of treatment for asymptomatic secondary
 stage syphilis infection.}
+
+\item{syph.earlat.prob.tx}{Probability of treatment for symptomatic or
+asymptomatic early latent stage syphilis infection.}
+
+\item{syph.latelat.prob.tx}{Probability of treatment for symptomatic or
+asymptomatic late latent stage syphilis infection.}
 
 \item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic tertiary
 stage syphilis infection.}
@@ -604,12 +610,6 @@ given dual infection with both gonorrhea and chlamydia.}
 \item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic or
-asymptomatic early latent stage syphilis infection.}
-
-\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic or
-asymptomatic late latent stage syphilis infection.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

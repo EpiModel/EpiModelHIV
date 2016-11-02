@@ -214,17 +214,17 @@ prevalence_msm <- function(dat, at) {
   
   dat$epi$prev.hiv.syphpos[at] <- length(intersect(which(status == 1), which(syphstatus == 1))) /
                                     length(which(syphstatus == 1))
-  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(syphstatus == 1))) /
-      length(which(syphstatus == 1))
+  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(syphstatus == 0))) /
+      length(which(syphstatus == 0))
   
   dat$epi$prev.hiv.gcpos[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
                                 sum((rGC == 1 | uGC == 1), na.rm = TRUE)
-  dat$epi$prev.hiv.gcneg[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
+  dat$epi$prev.hiv.gcneg[at] <- length(intersect(which(status == 1), which((rGC == 0 & uGC == 0)))) /
       sum((rGC == 0 & uGC == 0), na.rm = TRUE)
   
   dat$epi$prev.hiv.ctpos[at] <- length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / 
                                 sum((rCT == 1 | uGC == 1), na.rm = TRUE)
-  dat$epi$prev.hiv.ctneg[at] <- length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / 
+  dat$epi$prev.hiv.ctneg[at] <- length(intersect(which(status == 1), which((rCT == 0 & uCT == 0)))) / 
       sum((rCT == 0 & uGC == 0), na.rm = TRUE)
   
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200

@@ -305,12 +305,12 @@
 #' @param ugc.asympt.int Average duration in days of asymptomatic urethral gonorrhea.
 #' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
 #' @param gc.ntx.int Average duration in days of untreated, symptomatic gonorrhea (both sites).
-#'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
 #' @param rct.asympt.int Average in days duration of asymptomatic rectal chlamydia.
 #' @param uct.asympt.int Average in days duration of asymptomatic urethral chlamydia.
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
 #' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
-#'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
 #' @param syph.early.tx.int Average in days duration of treatment for early syphilis. 
 #' @param syph.late.tx.int Average in days duration of treatment for late syphilis.
 #' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
@@ -331,9 +331,9 @@
 #'        stage syphilis infection.
 #' @param syph.seco.asympt.prob.tx Probability of treatment for asymptomatic secondary
 #'        stage syphilis infection.
-#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic or
+#' @param syph.earlat.prob.tx Probability of treatment for symptomatic or
 #'        asymptomatic early latent stage syphilis infection.
-#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic or
+#' @param syph.latelat.prob.tx Probability of treatment for symptomatic or
 #'        asymptomatic late latent stage syphilis infection.
 #' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic tertiary
 #'        stage syphilis infection.
@@ -516,7 +516,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.045,
+                      syph.tprob = 0.018,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
@@ -578,8 +578,8 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.780673,
                       hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 3.0,
-                      syph.hiv.rr = 2.0,
+                      hiv.syph.rr = 2.5,
+                      syph.hiv.rr = 2.5,
                       
                       ...) {
 
@@ -752,9 +752,11 @@ init_msm <- function(nwstats,
 #' @param deaths.FUN Module function for general and disease-realted deaths.
 #' @param births.FUN Module function for births or entries into the population.
 #' @param test.FUN Module function for diagnostic disease testing.
+#' @param testsyph.FUN Module function for diagnostic testing for syphilis
 #' @param tx.FUN Module function for ART initiation and adherence.
 #' @param prep.FUN Module function for PrEP initiation and utilization.
 #' @param progress.FUN Module function for HIV disease progression.
+#' @param progresssyph.FUN Module function for syphilis disease progression
 #' @param vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
 #' @param roleclass.FUN Module function for transitions in sexual roles.

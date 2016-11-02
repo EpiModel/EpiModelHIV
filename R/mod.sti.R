@@ -240,7 +240,9 @@ sti_trans <- function(dat, at) {
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
 
   # PATP: Insertive Man Infected with Syphilis (Col 1)
-  if (dim(disc.syph.ip)[1] > 0)  {
+  if (is.null(dim(disc.syph.ip)[1])) {
+      trans.syph.ip <- NULL
+  }  else {
   colnames(disc.syph.ip)[1:2] <- c("ins","rec")
 
   # Attributes of infected
@@ -286,12 +288,12 @@ sti_trans <- function(dat, at) {
   ## Bernoulli Transmission Events
   trans.syph.ip <- rbinom(length(ip.syph.tprob), 1, ip.syph.tprob)
   
-  } else {
-        trans.syph.ip <- NULL
   }
   
   # PATP: Receptive Man Infected with Syphilis (Col 2)
-  if (dim(disc.syph.rp)[1] > 0)  { 
+  if (is.null(dim(disc.syph.rp)[1])) {
+          trans.syph.rp <- NULL
+      }  else {
   colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
   # Attributes of infected
   rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
@@ -314,7 +316,7 @@ sti_trans <- function(dat, at) {
   is.HIV.infectee <- which(status[disc.syph.rp[, 1]] == 1)
   
   # Multiplier for syphilis transmission if receptive partner is HIV+ (infector)
-  is.HIV.infectee <- which(status[disc.syph.rp[, 2]] == 1)
+  is.HIV.infector <- which(status[disc.syph.rp[, 2]] == 1)
   
   rp.syph.tlo[is.HIV.infectee] <- rp.syph.tlo[is.HIV.infectee] + log(syph.hiv.rr)
   rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
@@ -337,8 +339,6 @@ sti_trans <- function(dat, at) {
   # Bernoulli transmission events
   trans.syph.rp <- rbinom(length(rp.syph.tprob), 1, rp.syph.tprob)
   
-  } else {
-        trans.syph.rp <- NULL
   }
   
   

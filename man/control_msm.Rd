@@ -45,11 +45,15 @@ model.}
 
 \item{test.FUN}{Module function for diagnostic disease testing.}
 
+\item{testsyph.FUN}{Module function for diagnostic testing for syphilis}
+
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
 \item{progress.FUN}{Module function for HIV disease progression.}
+
+\item{progresssyph.FUN}{Module function for syphilis disease progression}
 
 \item{vl.FUN}{Module function for HIV viral load evolution.}
 
