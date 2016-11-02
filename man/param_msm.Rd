@@ -53,9 +53,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
   ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
   uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NULL,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
   rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NULL, gc.prob.cease = 0,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
   ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0, prep.sti.screen.int = 182,
   prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
@@ -421,22 +421,22 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.asympt.int}{Average duration in weeks of asymptomatic rectal gonorrhea.}
+\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
 
-\item{ugc.asympt.int}{Average duration in weeks of asymptomatic urethral gonorrhea.}
+\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
 
-\item{gc.tx.int}{Average duration in weeks of treated gonorrhea (both sites).}
+\item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
-\item{gc.ntx.int}{Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
+\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 
-\item{rct.asympt.int}{Average in weeks duration of asymptomatic rectal chlamydia.}
+\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
 
-\item{uct.asympt.int}{Average in weeks duration of asymptomatic urethral chlamydia.}
+\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
 
-\item{ct.tx.int}{Average in weeks duration of treated chlamydia (both sites).}
+\item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.ntx.int}{Average in weeks duration of untreated, symptomatic chlamydia (both sites).
+\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
 If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 
 \item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
