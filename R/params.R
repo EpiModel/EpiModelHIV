@@ -257,12 +257,12 @@
 #' @param ugc.asympt.int Average duration in days of asymptomatic urethral gonorrhea.
 #' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
 #' @param gc.ntx.int Average duration in days of untreated, symptomatic gonorrhea (both sites).
-#'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
 #' @param rct.asympt.int Average in days duration of asymptomatic rectal chlamydia.
 #' @param uct.asympt.int Average in days duration of asymptomatic urethral chlamydia.
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
 #' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
-#'        If \code{NULL}, uses site-specific durations for asymptomatic infections.
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
 #' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
 #'        infection with gonorrhea.
 #' @param ct.prob.cease Probability of ceasing sexual activity during symptomatic

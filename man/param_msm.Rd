@@ -428,7 +428,7 @@ chlamydia.}
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
 \item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
 
@@ -437,7 +437,7 @@ If \code{NULL}, uses site-specific durations for asymptomatic infections.}
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
 \item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
 infection with gonorrhea.}
