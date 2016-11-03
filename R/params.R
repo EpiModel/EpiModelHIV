@@ -516,7 +516,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.018,
+                      syph.tprob = 0.05,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
@@ -578,8 +578,8 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.780673,
                       hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 2.5,
-                      syph.hiv.rr = 2.5,
+                      hiv.syph.rr = 1.0,
+                      syph.hiv.rr = 1.0,
                       
                       ...) {
 

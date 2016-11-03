@@ -1,6 +1,6 @@
 # Synergy plots
 
-par(mfrow=c(2,3), oma=c(2,2,2,2))
+#par(mfrow=c(3,3), oma=c(2,2,2,2))
 plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence")
 plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE)
 title("Syphilis by HIV Status")
@@ -19,4 +19,30 @@ title("HIV by GC +/-")
 plot(sim, y = "prev.hiv.ctpos", ylab = "Prevalence")
 plot(sim, y = "prev.hiv.ctneg", ylab = "Prevalence", add = TRUE)
 title("HIV by CT +/-")
-title("Syph Tprob = 0.018, Relrisk for Syph<->HIV = 2.5", outer = TRUE)
+plot(sim, y = "prev.syph", ylab = "Prevalence")
+title("Syphilis Prevalence")
+plot(sim, y = "prev.ct", ylab = "Prevalence")
+plot(sim, y = "prev.gc", ylab = "Prevalence", add = TRUE)
+title("GC and CT Prevalence")
+plot(sim, y = "i.prev", ylab = "Prevalence")
+abline(h=0.26)
+title("HIV Prevalence")
+
+
+title("Syph Tprob = 0.018, Relrisk for Syph<->HIV = 2.0", outer = TRUE)
+
+
+# Incidence
+par(mfrow=c(2,2))
+plot(sim, y = "ir100")
+abline(h = 3.8)
+title("HIV Incidence")
+plot(sim, y = "ir100.gc")
+abline(h = 4.2)
+title("GC Incidence")
+plot(sim, y = "ir100.ct")
+abline(h = 6.6)
+title("CT Incidence")
+plot(sim, y = "ir100.syph")
+abline(h = 0.9)
+title("Syph Incidence")
