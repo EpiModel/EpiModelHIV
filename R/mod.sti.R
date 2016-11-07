@@ -229,15 +229,15 @@ sti_trans <- function(dat, at) {
   
   # Syphilis ---------------------------------------------------------
   p1Inf_syph <- al[which(syphstatus[al[, "p1"]] == 1 & syph.infTime[al[, "p1"]] < at &
-                          syphstatus[al[, "p2"]] == 0), ]
+                          syphstatus[al[, "p2"]] == 0), , drop = FALSE]
   p2Inf_syph <- al[which(syphstatus[al[, "p2"]] == 1 & syph.infTime[al[, "p2"]] < at &
-                         syphstatus[al[, "p1"]] == 0), ]
+                         syphstatus[al[, "p1"]] == 0), , drop = FALSE]
   allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
   ncols <- dim(allActs_syph)[2]
 
   # Reorder by role: ins on the left, rec on the right, flippers represented twice
-  disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, ]
-  disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
+  disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, , drop = FALSE]
+  disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop = FALSE]
 
   # PATP: Insertive Man Infected with Syphilis (Col 1)
   if (is.null(dim(disc.syph.ip)[1])) {
