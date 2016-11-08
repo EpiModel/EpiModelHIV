@@ -52,15 +52,15 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
   rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
   ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
-  uct.sympt.prob = 0.885045, rgc.dur.asympt = 34.93723,
-  ugc.dur.asympt = 36.48328, gc.dur.tx = 2, gc.dur.ntx = NULL,
-  rct.dur.asympt = 45.02343, uct.dur.asympt = 44.88562, ct.dur.tx = 2,
-  ct.dur.ntx = NULL, gc.prob.cease = 0, ct.prob.cease = 0,
-  gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0,
-  ct.asympt.prob.tx = 0, prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.644584,
-  hiv.ugc.rr = 1.69434, hiv.rct.rr = 2.644584, hiv.uct.rr = 1.69434,
-  hiv.dual.rr = 0.2, ...)
+  uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
+  ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
+  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -421,23 +421,23 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.dur.asympt}{Average duration in weeks of asymptomatic rectal gonorrhea.}
+\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
 
-\item{ugc.dur.asympt}{Average duration in weeks of asymptomatic urethral gonorrhea.}
+\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
 
-\item{gc.dur.tx}{Average duration in weeks of treated gonorrhea (both sites).}
+\item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
-\item{gc.dur.ntx}{Average duration in weeks of untreated, symptomatic gonorrhea (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
-\item{rct.dur.asympt}{Average in weeks duration of asymptomatic rectal chlamydia.}
+\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
 
-\item{uct.dur.asympt}{Average in weeks duration of asymptomatic urethral chlamydia.}
+\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
 
-\item{ct.dur.tx}{Average in weeks duration of treated chlamydia (both sites).}
+\item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.dur.ntx}{Average in weeks duration of untreated, symptomatic chlamydia (both sites).
-If \code{NULL}, uses site-specific durations for asymptomatic infections.}
+\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
 infection with gonorrhea.}
