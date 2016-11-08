@@ -489,7 +489,6 @@ sti_recov <- function(dat, at) {
   syph.early.tx.int <- dat$param$syph.early.tx.int
   syph.late.tx.int <- dat$param$syph.late.tx.int
 
-
   # GC Recovery ---------------------------------------------------------
 
   # Asymptomatic untreated

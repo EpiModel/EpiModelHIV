@@ -536,7 +536,7 @@ param_msm <- function(nwstats,
 
                       syph.early.tx.int = 7, #2
                       syph.late.tx.int = 15,
-                      
+
                       gc.prob.cease = 0,
                       ct.prob.cease = 0,
                       syph.prob.cease = 0,
