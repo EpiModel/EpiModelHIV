@@ -776,10 +776,6 @@ init_status_syph_msm <- function(dat) {
     
     # Random treatment trajectory
     # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months
-    tt.traj.syph[ids.B] <- sample(apportion_lr(num.B, c(1, 2, 3, 4),
-                                          dat$param$tt.traj.syph.B.prob))
-    tt.traj.syph[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4),
-                                          dat$param$tt.traj.syph.W.prob))
     
     # Stage of infection
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
@@ -799,7 +795,6 @@ init_status_syph_msm <- function(dat) {
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
-    
     
     # Primary
     selected <- which(stage.syph[inf.ids] == 2)
@@ -906,7 +901,7 @@ init_status_syph_msm <- function(dat) {
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
-    dat$attr$tt.traj.syph <- dat$attr$tt.traj.syph
+    dat$attr$tt.traj.syph <- tt.traj.syph
     
     return(dat)
     

@@ -115,17 +115,11 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$syph.timesInf[newIds] <- rep(NA, nBirths)
   dat$attr$inf.role.syph[newIds] <- rep(NA, nBirths)
   dat$attr$inf.type.syph[newIds] <- rep(NA, nBirths)
-  
+  dat$attr$tt.traj.syph[newIds] <- rep(NA, nBirths)
   
   #Syphilis testing trajectory
   # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months
-  dat$attr$tt.traj.syph[newIds[newB]] <- sample(c(1, 2, 3, 4),
-                                           nBirths.B, replace = TRUE,
-                                           prob = dat$param$tt.traj.syph.B.prob)
-  dat$attr$tt.traj.syph[newIds[newW]] <- sample(c(1, 2, 3, 4),
-                                           nBirths.W, replace = TRUE,
-                                           prob = dat$param$tt.traj.syph.W.prob)
-
+  
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)

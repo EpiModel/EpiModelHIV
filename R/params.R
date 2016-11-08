@@ -29,11 +29,6 @@
 #'        and test and treated with full suppression.
 #' @param tt.traj.W.prob Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
-#' @param tt.traj.syph.B.prob Proportion of black MSM who enter into the four
-#'        testing/treatment trajectories for syphilis: Never, when symptomatic,
-#'        yearly, or every six months.      
-#' @param tt.traj.syph.W.prob Proportion of black MSM who enter into the four
-#'        testing/treatment trajectories for syphilis, as defined above.
 #' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
 #'        active stages of syphilis: incubating, primary, secondary, early 
 #'        latent, late latent, late late latent, and tertiary.
@@ -381,9 +376,6 @@ param_msm <- function(nwstats,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
-                      
-                      tt.traj.syph.B.prob = c(0.050, 0.400, 0.350, 0.20),
-                      tt.traj.syph.W.prob = c(0.050, 0.400, 0.350, 0.20),
                       
                       #Average of 2001 - 2015
                       # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
