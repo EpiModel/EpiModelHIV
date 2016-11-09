@@ -31,6 +31,11 @@ acts_msm <- function(dat, at) {
     # Attributes
     status <- dat$attr$status
     race <- dat$attr$race
+    syphstatus <- dat$attr$syphstatus
+    rGC <- dat$attr$rGC
+    uGC <- dat$attr$uGC
+    rCT <- dat$attr$rCT
+    uCT <- dat$attr$uCT
 
     # Parameters
     ai.scale <- dat$param$ai.scale
@@ -65,6 +70,8 @@ acts_msm <- function(dat, at) {
 
     st1 <- status[el[, 1]]
     st2 <- status[el[, 2]]
+    
+    # HIV discordancy
     disc <- abs(st1 - st2) == 1
     el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
     el <- cbind(el, status[el[, 1]], status[el[, 2]])
@@ -110,5 +117,8 @@ acts_msm <- function(dat, at) {
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
+  #Set most recent active edge as today
+  dat$attr$sexactive[-which(dat$temp$el[, "ai"] == 0), ] <- at
+  
   return(dat)
 }

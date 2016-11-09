@@ -80,6 +80,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
   # Demographic
   dat$attr$active[newIds] <- rep(1, nBirths)
+  dat$att$sexactive[newIds] <- rep(NA, nBirths)
   dat$attr$uid[newIds] <- dat$temp$max.uid + (1:nBirths)
   dat$temp$max.uid <- dat$temp$max.uid + nBirths
 
@@ -116,6 +117,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$inf.role.syph[newIds] <- rep(NA, nBirths)
   dat$attr$inf.type.syph[newIds] <- rep(NA, nBirths)
   dat$attr$tt.traj.syph[newIds] <- rep(NA, nBirths)
+  dat$attr$tt.traj.gc[newIds] <- rep(NA, nBirths)
+  dat$attr$tt.traj.ct[newIds] <- rep(NA, nBirths)
   
   #Syphilis testing trajectory
   # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months

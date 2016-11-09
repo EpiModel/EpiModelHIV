@@ -24,6 +24,7 @@ riskhist_msm <- function(dat, at) {
   uGC.tx <- dat$attr$uGC.tx
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
+  sexactive <- dat$attr$sexactive
 
   ## Parameters
   time.unit <- dat$param$time.unit
@@ -44,6 +45,7 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
+    dat$attr$stitest.highrisk <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -95,6 +97,14 @@ riskhist_msm <- function(dat, at) {
   idsDx <- which(rGC.tx == 1 | uGC.tx == 1 |
                    rCT.tx == 1 | uCT.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at
+  
+  
+  ## STI Testing conditions
+  
+  # High risk: Multiple sex partners
+  idshighriskSTI <- which(tot.deg > 1)
+  dat$attr$stitest.highrisk <- at
+  
 
   return(dat)
 }

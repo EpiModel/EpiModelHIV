@@ -83,6 +83,7 @@ initialize_msm <- function(x, param, init, control, s) {
   ids.W <- which(dat$attr$race == "W")
 
   dat$attr$active <- rep(1, num)
+  dat$attr$sexactive <- rep(NA, num)
   dat$attr$uid <- 1:num
   dat$temp$max.uid <- num
 
@@ -751,6 +752,8 @@ init_status_syph_msm <- function(dat) {
     stage.tert.sympt <- rep(NA, num)
     #ttntest.syph <- rep(NA, num)
     tt.traj.syph <- rep(NA, num)
+    dat$attr$tt.traj.gc[newIds] <- rep(NA, nBirths)
+    dat$attr$tt.traj.ct[newIds] <- rep(NA, nBirths)
     
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *

@@ -7,7 +7,7 @@
 control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm, test.FUN = test_msm,
-  testsyph.FUN = test_syph_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
+  teststi.FUN = test_sti_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
   progress.FUN = progress_msm, progresssyph.FUN = progress_syph_msm,
   vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
   resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
@@ -44,8 +44,6 @@ model.}
 \item{births.FUN}{Module function for births or entries into the population.}
 
 \item{test.FUN}{Module function for diagnostic disease testing.}
-
-\item{testsyph.FUN}{Module function for diagnostic testing for syphilis}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
@@ -102,6 +100,8 @@ if in interactive mode or text files if in batch mode.}
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{testsyph.FUN}{Module function for diagnostic testing for syphilis}
 }
 \value{
 A list object of class \code{control_msm}, which can be passed to the

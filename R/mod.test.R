@@ -95,9 +95,9 @@ test_msm <- function(dat, at) {
 }
 
 
-#' @title Syphilis Testing Module
+#' @title STI Testing Module
 #'
-#' @description Module function for syphilis diagnostic testing of infected persons.
+#' @description Module function for STI diagnostic testing of infected persons.
 #'
 #' @inheritParams aging_msm
 #'
@@ -115,7 +115,7 @@ test_msm <- function(dat, at) {
 #'
 #' @export
 #'
-test_syph_msm <- function(dat, at) {
+test_sti_msm <- function(dat, at) {
     
     ## Variables
     
@@ -141,6 +141,8 @@ test_syph_msm <- function(dat, at) {
     syph.annualtest.int <- dat$param$syph.annualtest.int
     syph.6motest.int <- dat$param$syph.6motest.int
     tt.traj.syph <- dat$param$tt.traj.syph
+    tt.traj.gc <- dat$attr$tt.traj.gc
+    tt.traj.ct <- dat$attr$tt.traj.ct
     
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
