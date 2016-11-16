@@ -699,6 +699,7 @@ sti_recov <- function(dat, at) {
   
   # Update attributes
   dat$attr$syphstatus[recovsyph] <- 0
+  dat$attr$stage.syph[recovsyph_early_tx] <- NA
   dat$attr$stage.prim.sympt[recovsyph] <- NA
   dat$attr$stage.seco.sympt[recovsyph] <- NA
   dat$attr$stage.earlat.sympt[recovsyph] <- NA

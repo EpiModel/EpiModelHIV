@@ -508,7 +508,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.01,
+                      syph.tprob = 0.03,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,

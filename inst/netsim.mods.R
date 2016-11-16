@@ -6,8 +6,7 @@ data(est)
 data(st)
 est
 st
-param <- param_msm(nwstats = st, 
-                   ai.scale = 1.323,
+param <- param_msm(nwstats = st,
                    prep.coverage = 0)
 init <- init_msm(nwstats = st, 
                  prev.B = 0.10, 
@@ -19,7 +18,7 @@ init <- init_msm(nwstats = st,
                  prev.syph.B = 0.02,
                  prev.syph.W = 0.02)
 control <- control_msm(simno = 0.253, 
-                       nsteps = 52*50,
+                       nsteps = 52*100,
                        nsims = 1, 
                        ncores = 1,
                        save.nwstats = TRUE,

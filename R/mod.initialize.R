@@ -750,10 +750,10 @@ init_status_syph_msm <- function(dat) {
     stage.latelat.sympt <- rep(NA, num)
     stage.latelatelat.sympt <- rep(NA, num)
     stage.tert.sympt <- rep(NA, num)
-    #ttntest.syph <- rep(NA, num)
+    ttntest.syph <- rep(NA, num)
     tt.traj.syph <- rep(NA, num)
-    dat$attr$tt.traj.gc[newIds] <- rep(NA, nBirths)
-    dat$attr$tt.traj.ct[newIds] <- rep(NA, nBirths)
+    dat$attr$tt.traj.gc <- rep(NA, num)
+    dat$attr$tt.traj.ct <- rep(NA, num)
     
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *

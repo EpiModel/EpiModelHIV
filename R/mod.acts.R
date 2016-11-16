@@ -118,7 +118,7 @@ acts_msm <- function(dat, at) {
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
   #Set most recent active edge as today
-  dat$attr$sexactive[-which(dat$temp$el[, "ai"] == 0), ] <- at
+  #dat$attr$sexactive[-which(dat$temp$el[, "ai"] == 0), ] <- at
   
   return(dat)
 }
