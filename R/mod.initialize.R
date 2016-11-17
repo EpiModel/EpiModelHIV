@@ -140,8 +140,8 @@ initialize_msm <- function(x, param, init, control, s) {
   # HIV-related attributes
   dat <- init_status_msm(dat)
   
-  # Syphilis-related attributes
-  dat <- init_status_syph_msm(dat)
+  # Syphilis- and STI-related attributes
+  dat <- init_status_sti_msm(dat)
 
   ## GC/CT status
   idsUreth <- which(role.class %in% c("I", "V"))
@@ -690,7 +690,7 @@ init_status_msm <- function(dat) {
 
 
 
-#' @title Initialize the syphilis status of persons in the network
+#' @title Initialize the STI status of persons in the network
 #'
 #' @description Sets the initial individual-level disease status of persons
 #'              in the network, as well as disease-related attributes for
@@ -699,9 +699,9 @@ init_status_msm <- function(dat) {
 #' @param dat Data object created in initialization module.
 #'
 #' @export
-#' @keywords initiation utility msm syphilis
+#' @keywords initiation utility msm STI syphilis GC CT
 #'
-init_status_syph_msm <- function(dat) {
+init_status_sti_msm <- function(dat) {
     
     num.B <- dat$init$num.B
     num.W <- dat$init$num.W
@@ -752,8 +752,8 @@ init_status_syph_msm <- function(dat) {
     stage.tert.sympt <- rep(NA, num)
     ttntest.syph <- rep(NA, num)
     tt.traj.syph <- rep(NA, num)
-    dat$attr$tt.traj.gc <- rep(NA, num)
-    dat$attr$tt.traj.ct <- rep(NA, num)
+    tt.traj.gc <- rep(NA, num)
+    tt.traj.ct <- rep(NA, num)
     
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
@@ -905,6 +905,8 @@ init_status_syph_msm <- function(dat) {
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
     dat$attr$tt.traj.syph <- tt.traj.syph
+    dat$attr$tt.traj.gc <- tt.traj.gc
+    dat$attr$tt.traj.ct <- tt.traj.ct
     
     return(dat)
     
