@@ -19,7 +19,7 @@
 #' @param testing.pattern Method for HIV testing, with options \code{"memoryless"}
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
-#' @param testing.pattern.syph Method for syphilis testing, with options 
+#' @param testing.pattern.sti Method for STI testing, with options 
 #'        \code{"memoryless"} for constant hazard without regard to time since    
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
 #' @param test.window.int Length of the HIV test window period in days.
@@ -334,8 +334,9 @@
 #'        stage syphilis infection.
 #' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
 #'        stage syphilis infection.
-#' @param syph.annualtest.int Interval in days between syphilis screening for annual testers
-#' @param syph.6motest.int Interval in days between syphilis screening for 6 month testers   
+#' @param sti.annualtest.int Interval in days between STI screening for annual testers
+#' @param sti.6motest.int Interval in days between STI screening for 6 month testers
+#' @param sti.3motest.int Interval in days between STI screenign for 3 month testers   
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -371,7 +372,7 @@ param_msm <- function(nwstats,
                       mean.test.B.int = 301,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
-                      testing.pattern.syph = "memoryless",
+                      testing.pattern.sti = "memoryless",
                       test.window.int = 21,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
@@ -508,7 +509,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.03,
+                      syph.tprob = 0.030,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
@@ -553,10 +554,11 @@ param_msm <- function(nwstats,
                       syph.earlat.prob.tx = 0.10,
                       syph.latelat.prob.tx = 0.10,
                       syph.tert.sympt.prob.tx = 0.90,
-                      syph.tert.asympt.prob.tx = 0.40,
+                      syph.tert.asympt.prob.tx = 0.60,
                       
-                      syph.annualtest.int = 365,
-                      syph.6motest.int = 182,
+                      sti.annualtest.int = 365,
+                      sti.6motest.int = 182,
+                      sti.3motest.int = 91,
                      
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,

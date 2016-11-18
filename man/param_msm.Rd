@@ -6,7 +6,7 @@
 \usage{
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
-  testing.pattern = "memoryless", testing.pattern.syph = "memoryless",
+  testing.pattern = "memoryless", testing.pattern.sti = "memoryless",
   test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
   tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), stage.syph.B.prob = c(0,
   0.1385, 0.1385, 0.277, 0.2, 0.2, 0.046), stage.syph.W.prob = c(0, 0.1385,
@@ -74,8 +74,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 0.4,
   syph.seco.sympt.prob.tx = 0.7, syph.seco.asympt.prob.tx = 0.5,
   syph.earlat.prob.tx = 0.1, syph.latelat.prob.tx = 0.1,
-  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.4,
-  syph.annualtest.int = 365, syph.6motest.int = 182,
+  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.6,
+  sti.annualtest.int = 365, sti.6motest.int = 182, sti.3motest.int = 91,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
   hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
@@ -103,7 +103,7 @@ white men.}
 for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
-\item{testing.pattern.syph}{Method for syphilis testing, with options 
+\item{testing.pattern.sti}{Method for STI testing, with options 
 \code{"memoryless"} for constant hazard without regard to time since    
 previous test, or \code{"interval"} deterministic fixed intervals.}
 
@@ -568,9 +568,11 @@ stage syphilis infection.}
 \item{syph.tert.asympt.prob.tx}{Probability of treatment for asymptomatic tertiary
 stage syphilis infection.}
 
-\item{syph.annualtest.int}{Interval in days between syphilis screening for annual testers}
+\item{sti.annualtest.int}{Interval in days between STI screening for annual testers}
 
-\item{syph.6motest.int}{Interval in days between syphilis screening for 6 month testers}
+\item{sti.6motest.int}{Interval in days between STI screening for 6 month testers}
+
+\item{sti.3motest.int}{Interval in days between STI screenign for 3 month testers}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 

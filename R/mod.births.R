@@ -119,6 +119,9 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$tt.traj.syph[newIds] <- rep(NA, nBirths)
   dat$attr$tt.traj.gc[newIds] <- rep(NA, nBirths)
   dat$attr$tt.traj.ct[newIds] <- rep(NA, nBirths)
+  dat$attr$diag.status.syph[newIds] <- rep(NA, nBirths)
+  dat$attr$diag.status.gc[newIds] <- rep(NA, nBirths)
+  dat$attr$diag.status.ct[newIds] <- rep(NA, nBirths)
   
   #Syphilis testing trajectory
   # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months

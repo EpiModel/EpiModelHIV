@@ -91,6 +91,11 @@ sti_trans <- function(dat, at) {
   GC.cease <- dat$attr$GC.cease
   CT.cease <- dat$attr$CT.cease
   syph.cease <- dat$attr$syph.cease
+  
+  # Diagnosis status
+  diag.status.syph <- dat$attr$diag.status.syph
+  diag.status.gc <- dat$attr$diag.status.gc
+  diag.status.ct <- dat$attr$diag.status.ct
 
   # Pull act list
   al <- dat$temp$al
@@ -130,6 +135,7 @@ sti_trans <- function(dat, at) {
   rGC.infTime[idsInf_rgc] <- at
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   rGC.timesInf[idsInf_rgc] <- rGC.timesInf[idsInf_rgc] + 1
+  diag.status.gc[idsInf_rgc] <- 0
 
   # Urethral GC ---------------------------------------------------------
 
@@ -161,6 +167,7 @@ sti_trans <- function(dat, at) {
   uGC.infTime[idsInf_ugc] <- at
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
   uGC.timesInf[idsInf_ugc] <- uGC.timesInf[idsInf_ugc] + 1
+  diag.status.gc[idsInf_ugc] <- 0
 
 
   # Rectal CT -----------------------------------------------------------
@@ -193,6 +200,7 @@ sti_trans <- function(dat, at) {
   rCT.infTime[idsInf_rct] <- at
   rCT.sympt[idsInf_rct] <- rbinom(length(idsInf_rct), 1, rct.sympt.prob)
   rCT.timesInf[idsInf_rct] <- rCT.timesInf[idsInf_rct] + 1
+  diag.status.ct[idsInf_rct] <- 0
 
 
   # Urethral CT ---------------------------------------------------------
@@ -225,6 +233,7 @@ sti_trans <- function(dat, at) {
   uCT.infTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
+  diag.status.ct[idsInf_uct] <- 0
 
   
   # Syphilis ---------------------------------------------------------
@@ -356,6 +365,7 @@ sti_trans <- function(dat, at) {
       dat$attr$syph.infTime[infected.syph] <- at
       dat$attr$stage.syph[infected.syph] <- 1
       dat$attr$stage.time.syph[infected.syph] <- 0
+      dat$attr$diag.status.syph[infected.syph] <- 0
       syph.timesInf[infected.syph] <- syph.timesInf[infected.syph] + 1
       dat$attr$inf.role.syph[infected.syph] <- inf.role.syph
       dat$attr$inf.type.syph[infected.syph] <- inf.type.syph
@@ -409,7 +419,7 @@ sti_trans <- function(dat, at) {
   dat$attr$uGC.timesInf <- uGC.timesInf
   dat$attr$rCT.timesInf <- rCT.timesInf
   dat$attr$uCT.timesInf <- uCT.timesInf
-
+  
   dat$attr$rGC.sympt <- rGC.sympt
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$rCT.sympt <- rCT.sympt
@@ -418,8 +428,10 @@ sti_trans <- function(dat, at) {
   dat$attr$GC.cease <- GC.cease
   dat$attr$CT.cease <- CT.cease
   #dat$attr$syph.cease <- syph.cease
-
-
+  
+  dat$attr$diag.status.gc <- diag.status.gc
+  dat$attr$diag.status.ct <- diag.status.ct
+  
   # Summary stats
   dat$epi$incid.rgc[at] <- length(idsInf_rgc)
   dat$epi$incid.ugc[at] <- length(idsInf_ugc)
@@ -777,9 +789,11 @@ sti_tx <- function(dat, at) {
     prep.stand.tx.grp <- 0
   }
   
-  # Attributes from interval testing
+  # Attributes from testing
   diag.status.syph <- dat$attr$diag.status.syph
-
+  diag.status.gc <- dat$attr$diag.status.gc
+  diag.status.ct <- dat$attr$diag.status.ct
+  
   # symptomatic syphilis treatment
   idssyph_tx_sympt_prim <- which(dat$attr$syphstatus == 1 & 
                                 dat$attr$syph.infTime < at &
@@ -838,6 +852,7 @@ sti_tx <- function(dat, at) {
                                       dat$attr$stage.syph == 4 &
                                       dat$attr$stage.earlat.sympt == 0 &
                                       is.na(dat$attr$syph.tx) &
+                                      # diag.status?
                                       dat$attr$prepStat %in% prep.stand.tx.grp)
   idssyph_tx_asympt_earlat_dx <- which(diag.status.syph[idssyph_tx_asympt_earlat] == 1)
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat_dx[which(rbinom(length(idssyph_tx_asympt_earlat_dx), 1, syph.earlat.prob.tx) == 1)]
