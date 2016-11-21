@@ -700,8 +700,8 @@ init_msm <- function(nwstats,
                      prev.rgc = 0.005,
                      prev.uct = 0.013,
                      prev.rct = 0.013,
-                     prev.syph.B = 0.04,
-                     prev.syph.W = 0.04,
+                     prev.syph.B = 0.02,
+                     prev.syph.W = 0.02,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
