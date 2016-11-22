@@ -7,10 +7,10 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.14,
-                   syph.tprob = 0.03,
-                   hiv.syph.rr = 2.0,
-                   syph.hiv.rr = 2.2,
+                   ai.scale = 1.15,
+                   syph.tprob = 0.021,
+                   hiv.syph.rr = 2.37,
+                   syph.hiv.rr = 2.46,
                    prep.coverage = 0)
 init <- init_msm(nwstats = st, 
                  prev.B = 0.10, 

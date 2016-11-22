@@ -47,6 +47,7 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
     dat$attr$stitest.active <- rep(NA, length(uid))
     dat$attr$stitest.highrisk <- rep(NA, length(uid))
+    dat$attr$stitest.recurrsti <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -102,23 +103,31 @@ riskhist_msm <- function(dat, at) {
   
   ## STI Testing conditions
   
-  # Sexually active - annual testing for syphilis
+  # Sexually active - annual testing for syphilis, CT, GC
   idsactive <- which((at - sexactive) <= dat$param$sti.activetest.int)
   dat$attr$stitest.active[idsactive] <- at
   
-  # Urethral - any insertive in last year
-  #Use act list
-  
-  # Rectal - any receptive in last year
-  #Use act list
   
   # High risk: Multiple sex partners
+  # Update to be # of unique partners
   idshighriskSTI <- which(tot.deg > 1)
   dat$attr$stitest.highrisk <- at
   
   # High risk: Condomless AI?
+  uai.any <- unique(c(el2$p1[el2$uai > 0],
+                      el2$p2[el2$uai > 0]))
   
   # High risk: any PrEP indications?
+  dat$attr$stitest.prep1b[part.not.tested.6mo] <- at
+  dat$attr$stitest.prep2b[uai.nmain] <- at
+  dat$attr$stitest.prep3[ai.sd] <- at
+  dat$attr$stitest.prep4[idsDx] <- at
+  
+  # High risk: recurrent STI infections
+  idsSTI <- which(dat$attr$syph.timesInf > 1 | sum(dat$attr$rGC.timesInf, dat$attr$uGC.timesInf) > 1 |
+                      sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) > 1)
+  dat$attr$stitest.recurrsti[idsSTI] <- at
+  
 
   return(dat)
 }
