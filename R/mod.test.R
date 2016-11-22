@@ -117,6 +117,10 @@ test_msm <- function(dat, at) {
 #'
 test_sti_msm <- function(dat, at) {
     
+    if (at < dat$param$stitest.start) {
+        return(dat)
+    }
+    
     ## Variables
     
     # Attributes

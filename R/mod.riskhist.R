@@ -45,6 +45,7 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
+    dat$attr$stitest.active <- rep(NA, length(uid))
     dat$attr$stitest.highrisk <- rep(NA, length(uid))
   }
 
@@ -101,10 +102,23 @@ riskhist_msm <- function(dat, at) {
   
   ## STI Testing conditions
   
+  # Sexually active - annual testing for syphilis
+  idsactive <- which((at - sexactive) <= dat$param$sti.activetest.int)
+  dat$attr$stitest.active[idsactive] <- at
+  
+  # Urethral - any insertive in last year
+  #Use act list
+  
+  # Rectal - any receptive in last year
+  #Use act list
+  
   # High risk: Multiple sex partners
   idshighriskSTI <- which(tot.deg > 1)
   dat$attr$stitest.highrisk <- at
   
+  # High risk: Condomless AI?
+  
+  # High risk: any PrEP indications?
 
   return(dat)
 }

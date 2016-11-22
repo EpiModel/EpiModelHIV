@@ -21,7 +21,7 @@ title("HIV by GC +/-")
 plot(sim, y = "prev.hiv.ctpos", ylab = "Prevalence")
 plot(sim, y = "prev.hiv.ctneg", ylab = "Prevalence", add = TRUE)
 title("HIV by CT +/-")
-title("Syph Tprob = 0.03, Relrisk for Syph<->HIV = 2.0", outer = TRUE)
+title("Syph Tprob = XXX, Syph.HIV.RR = , HIV.Syph.RR =", outer = TRUE)
 
 
 #Prevalence
@@ -35,7 +35,7 @@ title("GC Prevalence")
 plot(sim, y = "i.prev", ylab = "Prevalence")
 abline(h=0.26, col = "red", lty = 2)
 title("HIV Prevalence")
-title("Syph Tprob = 0.03, Relrisk for Syph<->HIV = 2.0", outer = TRUE)
+title("Syph Tprob = XXX, Syph.HIV.RR = , HIV.Syph.RR =", outer = TRUE)
 
 
 # Incidence
@@ -52,4 +52,4 @@ title("CT Incidence")
 plot(sim, y = "ir100.syph")
 abline(h = 0.9, col = "red", lty = 2)
 title("Syph Incidence")
-title("Syph Tprob = 0.03, Relrisk for Syph<->HIV = 2.0", outer = TRUE)
+title("Syph Tprob = XXX, Relrisk for Syph<->HIV = XXX", outer = TRUE)

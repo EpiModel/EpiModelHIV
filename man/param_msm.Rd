@@ -55,7 +55,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
   prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
-  prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
+  prep.risk.int = 182, prep.risk.reassess = TRUE,
+  stitest.active.int = 365, stitest.start = Inf, rcomp.prob = 0,
   rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
   rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.03,
@@ -79,8 +80,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
   hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
-  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2,
-  syph.hiv.rr = 2, ...)
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2.1,
+  syph.hiv.rr = 2.6, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -443,6 +444,12 @@ in days.}
 
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
+
+\item{stitest.active.int}{Interval in which individuals need to be sexually active
+for STI Testing Guidelines}
+
+\item{stitest.start}{Time step at which the STI testing guidelines intervention
+should start.}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use

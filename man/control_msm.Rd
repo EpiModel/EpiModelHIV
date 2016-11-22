@@ -45,6 +45,8 @@ model.}
 
 \item{test.FUN}{Module function for diagnostic disease testing.}
 
+\item{teststi.FUN}{Module function for diagnostic testing for syphilis}
+
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
@@ -100,8 +102,6 @@ if in interactive mode or text files if in batch mode.}
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{testsyph.FUN}{Module function for diagnostic testing for syphilis}
 }
 \value{
 A list object of class \code{control_msm}, which can be passed to the

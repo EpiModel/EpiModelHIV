@@ -566,12 +566,14 @@ sti_recov <- function(dat, at) {
   dat$attr$rGC.infTime[recovRGC] <- NA
   dat$attr$rGC.tx[recovRGC] <- NA
   dat$attr$rGC.tx.prep[recovRGC] <- NA
+  dat$attr$diag.status.gc[recovRGC] <- NA
 
   dat$attr$uGC[recovUGC] <- 0
   dat$attr$uGC.sympt[recovUGC] <- NA
   dat$attr$uGC.infTime[recovUGC] <- NA
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
+  dat$attr$diag.status.gc[recovUGC] <- NA
 
   dat$attr$GC.cease[c(recovRGC, recovUGC)] <- NA
 
@@ -642,15 +644,18 @@ sti_recov <- function(dat, at) {
   dat$attr$rCT.infTime[recovRCT] <- NA
   dat$attr$rCT.tx[recovRCT] <- NA
   dat$attr$rCT.tx.prep[recovRCT] <- NA
-
+  dat$attr$diag.status.ct[recovRCT] <- NA
+  
   dat$attr$uCT[recovUCT] <- 0
   dat$attr$uCT.sympt[recovUCT] <- NA
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
-
+  dat$attr$diag.status.ct[recovUCT] <- NA
+  
   dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
 
+  
   
   # Syphilis Recovery -------------------------------------------------
 
@@ -719,6 +724,7 @@ sti_recov <- function(dat, at) {
   dat$attr$stage.latelatelat.sympt[recovsyph] <- NA
   dat$attr$stage.tert.sympt[recovsyph] <- NA
   dat$attr$syph.infTime[recovsyph] <- NA
+  dat$attr$diag.status.syph[recovsyph] <- NA
   dat$attr$syph.tx[recovsyph] <- NA
   dat$attr$syph.tx.prep[recovsyph] <- NA
   dat$attr$syph.cease[recovsyph] <- NA

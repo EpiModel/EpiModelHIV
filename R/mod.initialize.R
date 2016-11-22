@@ -715,17 +715,6 @@ init_status_sti_msm <- function(dat) {
     nInfsyphB <- round(dat$init$prev.syph.B * num.B)
     nInfsyphW <- round(dat$init$prev.syph.W * num.W)
     
-    # Age-based infection probability
-    probInfsyphCrB <- age[ids.B] * dat$init$init.prev.syph.age.slope.B
-    probInfsyphB <- probInfsyphCrB + (nInfsyphB - sum(probInfsyphCrB)) / num.B
-    
-    probInfsyphCrW <- age[ids.W] * dat$init$init.prev.syph.age.slope.W
-    probInfsyphW <- probInfsyphCrW + (nInfsyphW - sum(probInfsyphCrW)) / num.W
-    
-    if (any(probInfsyphB <= 0) | any(probInfsyphW <= 0)) {
-        stop("Slope of initial syphilis prevalence by age must be sufficiently low to ",
-             "avoid non-positive probabilities.", call. = FALSE)
-    }
     ## Infection-related attributes
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
@@ -767,10 +756,10 @@ init_status_sti_msm <- function(dat) {
     # Infection status
     syphstatus <- rep(0, num)
     while (sum(syphstatus[ids.B]) != nInfsyphB) {
-        syphstatus[ids.B] <- rbinom(num.B, 1, probInfsyphB)
+        syphstatus[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
     }
        while (sum(syphstatus[ids.W]) != nInfsyphW) {
-    syphstatus[ids.W] <- rbinom(num.W, 1, probInfsyphW)
+    syphstatus[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
        }
     syph.timesInf[syphstatus == 1] <- 1
     syph.infTime[syphstatus ==  1] <- 1

@@ -253,7 +253,10 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
-#'
+#' @param stitest.active.int Interval in which individuals need to be sexually active
+#'        for STI Testing Guidelines
+#' @param stitest.start Time step at which the STI testing guidelines intervention
+#'        should start.
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
 #'        per act, and 1 is a complete cessation of condom use following PrEP
@@ -498,6 +501,8 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+                      stitest.active.int = 365,
+                      stitest.start = Inf,
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -572,8 +577,8 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.780673,
                       hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 2.0,
-                      syph.hiv.rr = 2.0,
+                      hiv.syph.rr = 2.1,
+                      syph.hiv.rr = 2.6,
                       
                       ...) {
 
@@ -746,7 +751,7 @@ init_msm <- function(nwstats,
 #' @param deaths.FUN Module function for general and disease-realted deaths.
 #' @param births.FUN Module function for births or entries into the population.
 #' @param test.FUN Module function for diagnostic disease testing.
-#' @param testsyph.FUN Module function for diagnostic testing for syphilis
+#' @param teststi.FUN Module function for diagnostic testing for STIs
 #' @param tx.FUN Module function for ART initiation and adherence.
 #' @param prep.FUN Module function for PrEP initiation and utilization.
 #' @param progress.FUN Module function for HIV disease progression.
