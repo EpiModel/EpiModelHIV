@@ -444,6 +444,7 @@ sti_trans <- function(dat, at) {
   dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
                                                     idsInf_rct, idsInf_uct)),
                                            which(dat$attr$prepStat == 1)))
+  dat$epi$incid.syph.prep[at] <- length(intersect(unique(infected.syph), which(dat$attr$prepStat == 1)))
 
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),

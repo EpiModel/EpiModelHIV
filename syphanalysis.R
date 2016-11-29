@@ -1,10 +1,12 @@
-# Synergy plots
+# Syphilis ratio
+boxplot(sim$epi$prev.syph.hivpos / sim$epi$prev.syph.hivneg)
 
+# Synergy plots
 par(mfrow=c(2,3), oma=c(0,0,2,0))
 plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim=c(0, 0.12))
 plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE)
 abline(h = 0.103, col = "red", lty = 2)
-abline(h = 0.0206, col = "red", lty = 2)
+abline(h = 0.026, col = "red", lty = 2)
 title("Syphilis by HIV Status")
 plot(sim, y = "prev.gc.hivpos", ylab = "Prevalence")
 plot(sim, y = "prev.gc.hivneg", ylab = "Prevalence", add = TRUE)
@@ -22,6 +24,7 @@ plot(sim, y = "prev.hiv.ctpos", ylab = "Prevalence")
 plot(sim, y = "prev.hiv.ctneg", ylab = "Prevalence", add = TRUE)
 title("HIV by CT +/-")
 title("Syph Tprob = XXX, Syph.HIV.RR = , HIV.Syph.RR =", outer = TRUE)
+
 
 
 #Prevalence

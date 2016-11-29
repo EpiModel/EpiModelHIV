@@ -45,7 +45,7 @@ model.}
 
 \item{test.FUN}{Module function for diagnostic disease testing.}
 
-\item{teststi.FUN}{Module function for diagnostic testing for syphilis}
+\item{teststi.FUN}{Module function for diagnostic testing for STIs}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 

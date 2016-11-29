@@ -8,9 +8,9 @@ est
 st
 param <- param_msm(nwstats = st,
                    ai.scale = 1.15,
-                   syph.tprob = 0.021,
-                   hiv.syph.rr = 2.37,
-                   syph.hiv.rr = 2.46,
+                   syph.tprob = 0.0245,
+                   hiv.syph.rr = 2.30,
+                   syph.hiv.rr = 2.40,
                    prep.coverage = 0)
 init <- init_msm(nwstats = st, 
                  prev.B = 0.10, 
@@ -19,10 +19,10 @@ init <- init_msm(nwstats = st,
                  prev.rgc = 0.005,
                  prev.uct = 0.013,
                  prev.rct = 0.013,
-                 prev.syph.B = 0.02,
-                 prev.syph.W = 0.02)
+                 prev.syph.B = 0.01,
+                 prev.syph.W = 0.01)
 control <- control_msm(simno = 0.253, 
-                       nsteps = 52*100,
+                       nsteps = 52*60,
                        nsims = 1, 
                        ncores = 1,
                        save.nwstats = TRUE,
