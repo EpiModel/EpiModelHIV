@@ -22,7 +22,6 @@ sti_trans <- function(dat, at) {
   syph.tprob <- dat$param$syph.tprob
   
   #Multiplier for syphilis infection
-  syph.cond.rr <- dat$param$syph.cond.rr
   syph.earlat.rr <- dat$param$syph.earlat.rr
   syph.late.rr <- dat$param$syph.late.rr
   syph.immune.rr <- dat$param$syph.immune.rr
@@ -265,7 +264,7 @@ sti_trans <- function(dat, at) {
 
   # Condom use multiplier
   not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
-  ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(syph.cond.rr)
+  ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(sti.cond.rr)
 
   # Early latent-stage multipliers
   isearlat <- which(ip.stage.syph %in% 4)
@@ -315,7 +314,7 @@ sti_trans <- function(dat, at) {
    
   # Condom use multiplier
   not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
-  rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(syph.cond.rr)
+  rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(sti.cond.rr)
   
   # Early latent stage multipliers
   isearlat <- which(rp.stage.syph %in% 4)
@@ -718,6 +717,7 @@ sti_recov <- function(dat, at) {
   # Update attributes
   dat$attr$syphstatus[recovsyph] <- 0
   dat$attr$stage.syph[recovsyph_early_tx] <- NA
+  dat$attr$stage.time.syph[recovsyph] <- NA
   dat$attr$stage.prim.sympt[recovsyph] <- NA
   dat$attr$stage.seco.sympt[recovsyph] <- NA
   dat$attr$stage.earlat.sympt[recovsyph] <- NA
@@ -802,6 +802,7 @@ sti_tx <- function(dat, at) {
   diag.status.ct <- dat$attr$diag.status.ct
   
   # symptomatic syphilis treatment
+  # add in diagnosed infection?
   idssyph_tx_sympt_prim <- which(dat$attr$syphstatus == 1 & 
                                 dat$attr$syph.infTime < at &
                                 dat$attr$stage.syph == 2 &
@@ -811,7 +812,7 @@ sti_tx <- function(dat, at) {
   
   txsyph_sympt_prim <- idssyph_tx_sympt_prim[which(rbinom(length(idssyph_tx_sympt_prim), 1, syph.prim.sympt.prob.tx) == 1)]
   
-  idssyph_tx_sympt_seco <- which(dat$attr$syphstatus ==1 & 
+  idssyph_tx_sympt_seco <- which(dat$attr$syphstatus == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 3 &
                                      dat$attr$stage.seco.sympt == 1 &
@@ -820,7 +821,7 @@ sti_tx <- function(dat, at) {
   
   txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco), 1, syph.seco.sympt.prob.tx) == 1)]
 
-  idssyph_tx_sympt_tert<- which(dat$attr$syphstatus ==1 & 
+  idssyph_tx_sympt_tert<- which(dat$attr$syphstatus == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 7 &
                                      dat$attr$stage.tert.sympt == 1 &
@@ -859,7 +860,6 @@ sti_tx <- function(dat, at) {
                                       dat$attr$stage.syph == 4 &
                                       dat$attr$stage.earlat.sympt == 0 &
                                       is.na(dat$attr$syph.tx) &
-                                      # diag.status?
                                       dat$attr$prepStat %in% prep.stand.tx.grp)
   idssyph_tx_asympt_earlat_dx <- which(diag.status.syph[idssyph_tx_asympt_earlat] == 1)
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat_dx[which(rbinom(length(idssyph_tx_asympt_earlat_dx), 1, syph.earlat.prob.tx) == 1)]
@@ -1063,6 +1063,17 @@ sti_tx <- function(dat, at) {
   txRCT_all <- union(txRCT, txRCT_prep)
   txUCT_all <- union(txUCT, txUCT_prep)
   txsyph_all <- union(txsyph, txsyph_prep)
+  
+  # Adding EPT eligibility here - if treated at this time step, can provide EPT but may not cause uptake
+  dat$attr$eptElig[txRGC_all] <- 1
+  dat$attr$eptStat[txRGC_all] <- 0
+  dat$attr$eptElig[txUGC_all] <- 1
+  dat$attr$eptStat[txUGC_all] <- 0
+  dat$attr$eptElig[txRCT_all] <- 1
+  dat$attr$eptStat[txRCT_all] <- 0
+  dat$attr$eptElig[txUCT_all] <- 1
+  dat$attr$eptStat[txUCT_all] <- 0
+  dat$attr$eptEligdate <- at
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {

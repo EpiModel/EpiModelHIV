@@ -8,15 +8,15 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm, test.FUN = test_msm,
   teststi.FUN = test_sti_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
-  progress.FUN = progress_msm, progresssyph.FUN = progress_syph_msm,
-  vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
-  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
-  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
-  riskhist.FUN = riskhist_msm, position.FUN = position_msm,
-  trans.FUN = trans_msm, stitrans.FUN = sti_trans,
-  stirecov.FUN = sti_recov, stitx.FUN = sti_tx, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
-  verbose.int = 1, ...)
+  ept.FUN = ept_msm, progress.FUN = progress_msm,
+  progresssyph.FUN = progress_syph_msm, vl.FUN = vl_msm,
+  aiclass.FUN = NULL, roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
+  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
+  condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
+  position.FUN = position_msm, trans.FUN = trans_msm,
+  stitrans.FUN = sti_trans, stirecov.FUN = sti_recov, stitx.FUN = sti_tx,
+  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
+  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -50,6 +50,8 @@ model.}
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
+
+\item{ept.FUN}{Module function for EPT intervention}
 
 \item{progress.FUN}{Module function for HIV disease progression.}
 

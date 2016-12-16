@@ -172,6 +172,8 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$rGC.timesInf[rGC == 1] <- 1
   dat$attr$uGC.timesInf <- rep(0, num)
   dat$attr$uGC.timesInf[uGC == 1] <- 1
+  dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
+  dat$attr$diag.time.gc <- rep(NA, num)
 
   dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
   dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
@@ -199,6 +201,8 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$rCT.timesInf[rCT == 1] <- 1
   dat$attr$uCT.timesInf <- rep(0, num)
   dat$attr$uCT.timesInf[uCT == 1] <- 1
+  dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
+  dat$attr$diag.time.ct <- rep(NA, num)
 
   dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
   dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
@@ -316,7 +320,6 @@ init_status_msm <- function(dat) {
   tt.traj[ids.W] <- sample(apportion_lr(num.W, c(1, 2, 3, 4),
                                         dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
-
 
 
   ## Infection-related attributes
@@ -749,11 +752,16 @@ init_status_sti_msm <- function(dat) {
     tt.traj.syph <- rep(NA, num)
     tt.traj.gc <- rep(NA, num)
     tt.traj.ct <- rep(NA, num)
+    eptElig <- rep(NA, num)
+    eptStat <- rep(NA, num)
+    eptEligdate <- rep(NA, num)
     
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
                                       min(dat$init$ages), 0))
-    # Infection status
+    
+
+    # Infection status for syphilis
     syphstatus <- rep(0, num)
     while (sum(syphstatus[ids.B]) != nInfsyphB) {
         syphstatus[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
@@ -771,9 +779,6 @@ init_status_sti_msm <- function(dat) {
     
     notinf.ids.B <- which(syphstatus[ids.B] == 0)
     notinf.ids.W <- which(syphstatus[ids.B] == 0)
-    
-    # Random treatment trajectory
-    # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months, 5 = 3 months
     
     # Stage of infection
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
@@ -801,7 +806,6 @@ init_status_sti_msm <- function(dat) {
     time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.since.inf
     syph.tx[selected] <- 0
-    
     
     # Secondary
     selected <- which(stage.syph[inf.ids] == 3)
@@ -850,34 +854,29 @@ init_status_sti_msm <- function(dat) {
     time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
     syph.immune.time[selected] <- time.since.immune
     syph.tx[selected] <- NA
+    
+    # Diagnosed?
+    diag.status.syph[syphstatus == 1] <- 0
+    
+    # Set random 3-6 month testing interval
+    selected <- which(active == 1)
+    sti.36motest.int <- runif(length(selected), min = 91, max = 182)
 
     # Time to next test
-    # selected.ann <- which(tt.traj.syph == 3)
-    # selected.6mo <- which(tt.traj.syph == 4)
-    # selected.3mo <- which(tt.traj.syph == 5)
-    # 
-    # if (dat$param$testing.pattern == "interval") {
+    #selected.ann <- which(tt.traj.syph == 1)
+    #selected.36mo <- which(tt.traj.syph == 2)
+
+    #  if (dat$param$testing.pattern == "interval") {
     #         ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
     #                                 max = dat$param$sti.annualtest.int))
-    #         ttntest.syph[selected.6mo] <- ceiling(runif(length(selected.6mo), min = 0,
-    #                                 max = dat$param$sti.6motest.int))
-    #         ttntest.syph[selected.3mo] <- ceiling(runif(length(selected.3mo), min = 0,
-    #                                 max = dat$param$sti.3motest.int))
+    #         ttntest.syph[selected.36mo] <- ceiling(runif(length(selected.36mo), min = 0,
+    #                                 max = dat$attr$sti.36motest.int))
     # }
     # if (dat$param$testing.pattern == "memoryless") {
     #         ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$sti.annualtest.int))
-    #         ttntest.syph[selected.6mo] <- rgeom(length(selected.6mo), 1 / (dat$param$sti.6motest.int))
-    #         ttntest.syph[selected.3mo] <- rgeom(length(selected.6mo), 1 / (dat$param$sti.3motest.int))
+    #         ttntest.syph[selected.36mo] <- rgeom(length(selected.36mo), 1 / (dat$attr$sti.36motest.int))
     # }
     
-
-    #diag.status.syph[selected.ann][ttntest.syph > cum.time.off.tx[selected] - twind.int] <- 0
-    #diag.status.syph[selected.6mo][ttntest.syph]
-    #diag.status.syph[selected.3mo][ttntest.syph]
-    #last.neg.test[selected][ttntest > cum.time.off.tx[selected] - twind.int] <-
-    #                       -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
-
-    #diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
 
     # Set all onto dat$attr
     dat$attr$stage.syph <- stage.syph
@@ -885,15 +884,9 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.immune.time <- syph.immune.time
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
-    dat$attr$diag.status.gc <- diag.status.gc
-    dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$diag.time.syph <- diag.time.syph
-    dat$attr$diag.time.gc <- diag.time.gc
-    dat$attr$diag.time.ct <- diag.time.ct
     #dat$attr$ttntest.syph <- ttntest.syph
     dat$attr$last.neg.test.syph <- last.neg.test.syph
-    dat$attr$last.neg.test.gc <- last.neg.test.gc
-    dat$attr$last.neg.test.ct <- last.neg.test.ct
     dat$attr$infector.syph <- infector.syph
     dat$attr$inf.role.syph <- inf.role.syph
     dat$attr$inf.type.syph <- inf.type.syph
@@ -913,6 +906,11 @@ init_status_sti_msm <- function(dat) {
     dat$attr$tt.traj.syph <- tt.traj.syph
     dat$attr$tt.traj.gc <- tt.traj.gc
     dat$attr$tt.traj.ct <- tt.traj.ct
+    dat$attr$eptElig <- eptElig
+    dat$attr$eptStat <- eptStat
+    dat$attr$eptEligdate <- eptEligdate
+    dat$attr$sti.36motest.int <- sti.36motest.int
+    
     
     return(dat)
     

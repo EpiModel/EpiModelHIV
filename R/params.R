@@ -257,6 +257,16 @@
 #'        for STI Testing Guidelines
 #' @param stitest.start Time step at which the STI testing guidelines intervention
 #'        should start.
+#' @param ept.start Time step at which the EPT intervention should start
+#' @param ept.risk.int Time window for assessment of risk eligibility for EPT in days
+#' @param ept.coverage The proportion of the eligible population who are start
+#'        EPT once they become eligible.
+#' @param ept.cov.method The method for calculating EPT coverage, with options
+#'        of \code{"curr"} to base the numerator on the number of people currently
+#'        on EPT and \code{"ever"} to base it on the number of people ever on
+#'        EPT.
+#' @param ept.cov.rate The rate at which persons initiate EPT conditional on
+#'        their eligibility, with 1 equal to instant start.
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
 #'        per act, and 1 is a complete cessation of condom use following PrEP
@@ -338,16 +348,12 @@
 #' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
 #'        stage syphilis infection.
 #' @param sti.annualtest.int Interval in days between STI screening for annual testers
-#' @param sti.6motest.int Interval in days between STI screening for 6 month testers
-#' @param sti.3motest.int Interval in days between STI screenign for 3 month testers   
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
 #' @param prep.continue.stand.tx Logical, if \code{TRUE} will continue standard
 #'        STI treatment of symptomatic cases even after PrEP initiation.
 #' @param sti.cond.rr Relative risk of STI infection (in either direction) given
-#'        a condom used by the insertive partner.
-#' @param syph.cond.rr Relative risk of syphilis infection (in either direction) given
 #'        a condom used by the insertive partner.
 #' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
 #' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
@@ -380,8 +386,18 @@ param_msm <- function(nwstats,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
+
+                      # Would need to add to @params
+                      # tt.traj.syph.B.prob = c(),
+                      # tt.traj.syph.W.prob = c(),
+                      # 
+                      # tt.traj.gc.B.prob = c(),
+                      # tt.traj.gc.W.prob = c(),
+                      # 
+                      # tt.traj.ct.B.prob = c(),
+                      # tt.traj.ct.W.prob = c(),
                       
-                      #Average of 2001 - 2015
+                      #Average of 2001 - 2015 syphilis data from CDC surveillance
                       # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
                       #Was c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02)
                       stage.syph.B.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.20, 0.20, 0.046),
@@ -503,6 +519,11 @@ param_msm <- function(nwstats,
                       prep.risk.reassess = TRUE,
                       stitest.active.int = 365,
                       stitest.start = Inf,
+                      ept.start = Inf,
+                      ept.risk.int = 60,
+                      ept.coverage = 0,
+                      ept.cov.method = "curr",
+                      ept.cov.rate = 1, 
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -561,16 +582,13 @@ param_msm <- function(nwstats,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 0.60,
                       
-                      sti.annualtest.int = 365,
-                      sti.6motest.int = 182,
-                      sti.3motest.int = 91,
+                      sti.annualtest.int = 364,
                      
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
 
                       sti.cond.rr = 0.3,
-                      syph.cond.rr = 0.1,
 
                       hiv.rgc.rr = 2.780673,
                       hiv.ugc.rr = 1.732363,
@@ -660,6 +678,7 @@ param_msm <- function(nwstats,
 
 
   p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 
   p$method <- nwstats$method
   p$modes <- 1
@@ -720,9 +739,6 @@ init_msm <- function(nwstats,
   p$init.prev.age.slope.B <- prev.B / 12
   p$init.prev.age.slope.W <- prev.W / 12
   
-  p$init.prev.syph.age.slope.B <- prev.syph.B / 12
-  p$init.prev.syph.age.slope.W <- prev.syph.W / 12
-
   p$nwstats <- NULL
 
   class(p) <- "init.net"
@@ -754,6 +770,7 @@ init_msm <- function(nwstats,
 #' @param teststi.FUN Module function for diagnostic testing for STIs
 #' @param tx.FUN Module function for ART initiation and adherence.
 #' @param prep.FUN Module function for PrEP initiation and utilization.
+#' @param ept.FUN Module function for EPT intervention
 #' @param progress.FUN Module function for HIV disease progression.
 #' @param progresssyph.FUN Module function for syphilis disease progression
 #' @param vl.FUN Module function for HIV viral load evolution.
@@ -806,6 +823,7 @@ control_msm <- function(simno = 1,
                         teststi.FUN = test_sti_msm,
                         tx.FUN = tx_msm,
                         prep.FUN = prep_msm,
+                        ept.FUN = ept_msm,
                         progress.FUN = progress_msm,
                         progresssyph.FUN = progress_syph_msm,
                         vl.FUN = vl_msm,

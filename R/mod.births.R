@@ -107,7 +107,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
   
-  # Syphilis
+  # STIs
   dat$attr$syphstatus[newIds] <- rep(0, nBirths)
   dat$attr$stage.syph[newIds[newB]] <- rep(NA, nBirths.B)
   dat$attr$stage.syph[newIds[newW]] <- rep(NA, nBirths.W)
@@ -122,9 +122,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$diag.status.syph[newIds] <- rep(NA, nBirths)
   dat$attr$diag.status.gc[newIds] <- rep(NA, nBirths)
   dat$attr$diag.status.ct[newIds] <- rep(NA, nBirths)
-  
-  #Syphilis testing trajectory
-  # 1 = Never, 2 = Symptomatic, 3 = Yearly, 4 = 6 months
+  dat$attr$diag.time.syph[newIds] <- rep(NA, num)
+  dat$attr$diag.time.gc[newIds] <- rep(NA, num)
+  dat$attr$diag.time.ct[newIds] <- rep(NA, num)
+  dat$attr$eptElig[newIds] <- rep(NA, nBirths)
+  dat$attr$eptStat[newIds] <- rep(NA, nBirths)
+  dat$attr$eptEligdate[newIds] <- rep(NA, nBirths)
+  dat$attr$sti.36motest.int[newIds] <- runif(length(newIds), min = 91, max = 182)
   
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)

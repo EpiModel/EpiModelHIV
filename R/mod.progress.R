@@ -134,17 +134,17 @@ progress_syph_msm <- function(dat, at) {
     ## Variables
     
     # Attributes
-
     active <- dat$attr$active
     syphstatus <- dat$attr$syphstatus
     time.since.inf.syph <- at - dat$attr$syph.infTime
-    time.since.immune.syph <- at - dat$attr$syph.immune.time
+    syph.immune.time <- dat$attr$syph.immune.time
     stage.syph <- dat$attr$stage.syph
     stage.time.syph <- dat$attr$stage.time.syph
     syph.tx <- dat$attr$syph.tx
     syph.tx.prep <- dat$attr$syph.tx.prep
     
     # Parameters
+    time.unit <- dat$param$time.unit
     incu.syph.int <- dat$param$incu.syph.int
     prim.syph.int <- dat$param$prim.syph.int
     seco.syph.int <- dat$param$seco.syph.int
@@ -169,8 +169,9 @@ progress_syph_msm <- function(dat, at) {
     
     ## Process
     
-    # Increment day
-    stage.time.syph[active == 1] <- stage.time.syph[active == 1] + 1
+    # Increment time unit
+    stage.time.syph[active == 1] <- stage.time.syph[active == 1] + time.unit/365
+    syph.immune.time[which(active == 1 & stage.syph == 8)] <- syph.immune.time[which(active == 1 & stage.syph == 8)] + time.unit/365     
     
     # Change stage to Primary and assign symptoms
     toPrim <- which(active == 1 & time.since.inf.syph == (incu.syph.int + 1) & 
@@ -221,7 +222,7 @@ progress_syph_msm <- function(dat, at) {
     stage.latelatelat.sympt[tolatelate] <- rbinom(length(tolatelate), 1, syph.latelat.sympt.prob)
     stage.latelat.sympt[tolatelate] <- NA
     
-    # Change stage to tertiary for fraction of those in late/late late latent
+    # Change stage to tertiary for fraction of those in late late latent at time of progression to late late latent
     toTert <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
                                                                   prim.syph.int +
                                                                   seco.syph.int + 
@@ -235,13 +236,12 @@ progress_syph_msm <- function(dat, at) {
     stage.latelatelat.sympt[toTert] <- NA
     
     # Immune protection lapsing
-    idssyph_lose_immune <- which(time.since.immune.syph > dat$attr$immune.syph.int &
+    idssyph_lose_immune <- which(syph.immune.time > dat$attr$immune.syph.int &
                                      stage.syph == 8)
+    syph.immune.time[idssyph_lose_immune] <- NA
     stage.time.syph[idssyph_lose_immune] <- NA
 
     ## Output
-    dat$attr$stage.syph[idssyph_lose_immune] <- NA
-    dat$attr$syph.immune.time[idssyph_lose_immune] <- NA
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$stage.prim.sympt <- stage.prim.sympt
@@ -250,6 +250,7 @@ progress_syph_msm <- function(dat, at) {
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
+    dat$attr$syph.immune.time <- syph.immune.time
     
     return(dat)
 }

@@ -128,6 +128,13 @@ riskhist_msm <- function(dat, at) {
                       sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) > 1)
   dat$attr$stitest.recurrsti[idsSTI] <- at
   
+  ## EPT
+  idsept <- which((at - sexactive) <= dat$param$ept.risk.int)
+  dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
+  
+  # Random treatment trajectory
+  # 1 = Never, 2 = Yearly, 3 = runif(3-6 months)
+  
 
   return(dat)
 }

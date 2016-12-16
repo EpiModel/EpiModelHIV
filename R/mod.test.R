@@ -124,38 +124,33 @@ test_sti_msm <- function(dat, at) {
     ## Variables
     
     # Attributes
-    # diag.status.syph <- dat$attr$diag.status.syph
-    # diag.status.gc <- dat$attr$diag.status.gc
-    # diag.status.ct <- dat$attr$diag.status.ct
-    # race <- dat$attr$race
-    # syphstatus <- dat$attr$syphstatus
-    # rGC <- dat$attr$rGC
-    # uGC <- dat$attr$uGC
-    # rCT <- dat$attr$rCT
-    # uCT <- dat$attr$uCT
-    # inf.time.syph <- dat$attr$inf.time.syph
+    diag.status.syph <- dat$attr$diag.status.syph
+    diag.status.gc <- dat$attr$diag.status.gc
+    diag.status.ct <- dat$attr$diag.status.ct
+    syphstatus <- dat$attr$syphstatus
+    rGC <- dat$attr$rGC
+    uGC <- dat$attr$uGC
+    rCT <- dat$attr$rCT
+    uCT <- dat$attr$uCT
+    inf.time.syph <- dat$attr$inf.time.syph
     # ttntest.syph <- dat$attr$ttntest.syph
-    # stage.syph <- dat$attr$stage.syph
-    # diag.time.syph <- dat$attr$diag.time.syph
-    # sexactive <- dat$attr$sexactive
-    # 
+    # # Add attrs for GC and CT ttntest in init or elsewhere
+     
+    stage.syph <- dat$attr$stage.syph
+    diag.time.syph <- dat$attr$diag.time.syph
+    sexactive <- dat$attr$sexactive
+     
     # prepStat <- dat$attr$prepStat
     # prep.tst.int <- dat$param$prep.tst.int
     # 
-    # # Assign new births and diagnosis
-    # newBirths <- which(dat$attr$arrival.time == at)
-    # diag.status.syph[newBirths] <- NA
-    # dat$attr$diag.time.syph[newBirths] <- NA
-    # 
     # # Parameters
-    # testing.pattern.sti <- dat$param$testing.pattern.sti
-    # sti.annualtest.int <- dat$param$sti.annualtest.int
-    # sti.6motest.int <- dat$param$sti.6motest.int
-    # sti.3motest.int <- dat$param$sti.3motest.int
-    # tt.traj.syph <- dat$param$tt.traj.syph
-    # tt.traj.gc <- dat$attr$tt.traj.gc
-    # tt.traj.ct <- dat$attr$tt.traj.ct
-    # 
+    testing.pattern.sti <- dat$param$testing.pattern.sti
+    sti.annualtest.int <- dat$param$sti.annualtest.int
+    sti.36motest.int <- dat$attr$sti.36motest.int
+    tt.traj.syph <- dat$param$tt.traj.syph
+    tt.traj.gc <- dat$attr$tt.traj.gc
+    tt.traj.ct <- dat$attr$tt.traj.ct
+     
     # tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     # tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     # 
@@ -164,192 +159,148 @@ test_sti_msm <- function(dat, at) {
     # 
     # tsincelntst.ct <- at - dat$attr$last.neg.test.ct
     # tsincelntst.ct[is.na(tsincelntst.ct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ct)]
+    # 
+    # # Debit one unit from time until next test
+    # #ttntest.syph <- ttntest.syph - time.unit
+    # #ttntest.gc <- ttntest.gc - time.unit
+    # #ttntest.ct <- ttntest.ct - time.unit
+    
+    # Testing Rates by serostatus/race?
+    
+    # Symptomatic vs asymptomatic testing?
 
-    # Debit one unit from time until next test
-    # ttntest.syph <- ttntest.syph - time.unit
-    
     ## Process for syphilis
-    # if (testing.pattern.sti == "memoryless") {
-    #     elig.syph.ann <- which(tt.traj.syph == 3 &
-    #                            (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                             prepStat == 0)
-    #     rates.syph <- rep(1/sti.annualtest.int, length(elig.syph.ann))
-    #     tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
-    #     
-    #     
-    #     elig.syph.6mo <- which(tt.traj.syph == 4 &
-    #                            (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                            prepStat == 0)
-    #     rates.syph <- rep(1/sti.6motest.int, length(elig.syph.6mo))
-    #     tst.syph.nprep.6mo <- elig.syph.6mo[rbinom(length(elig.syph.6mo), 1, rates.syph) == 1]
-    #     
-    #     
-    #     elig.syph.3mo <- which(tt.traj.syph == 5 &
-    #                                (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                                prepStat == 0)
-    #     rates.syph <- rep(1/sti.3motest.int, length(elig.syph.3mo))
-    #     tst.syph.nprep.3mo <- elig.syph.3mo[rbinom(length(elig.syph.3mo), 1, rates.syph) == 1]
-    #     
-    #     
-    #     tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.6mo, tst.syph.nprep.3mo)
-    # }
-    # 
-    # if (testing.pattern.sti == "interval" ) {
-    #     tst.syph.annual.interval <- which(tt.traj.syph == 3 &
-    #                                       (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                                       tsincelntst.syph >= 2*(sti.annualtest.int) & 
-    #                                       prepStat == 0)
-    # 
-    # 
-    #     tst.syph.6mo.interval <- which(tt.traj.syph == 4 &
-    #                                    (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                                    tsincelntst.syph >= 2*(sti.6motest.int) &
-    #                                    prepStat == 0)
-    #     tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.6mo.interval)
-    # 
-    #     tst.syph.3mo.interval <- which(tt.traj.syph == 5 &
-    #                                        (diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                                        tsincelntst.syph >= 2*(sti.3motest.int) &
-    #                                        prepStat == 0)
-    #     tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.6mo.interval, tst.syph.3mo.interval)
-    # }
+    if (testing.pattern.sti == "memoryless") {
+         elig.syph.ann <- which(tt.traj.syph == 1 &
+                                    (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                     prepStat == 0)
+             rates.syph <- rep(1/sti.annualtest.int, length(elig.syph.ann))
+             tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
+
+         elig.syph.36mo <- which(tt.traj.syph == 2 &
+                                    (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                     prepStat == 0)
+         rates.syph <- rep(1/sti.36motest.int, length(elig.syph.36mo))
+         tst.syph.nprep.36mo <- elig.syph.36mo[rbinom(length(elig.syph.36mo), 1, rates.syph) == 1]
+         tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.36mo)
+     }
     
-        # ## Process for GC
-    # if (testing.pattern.sti == "memoryless") {
-    #     elig.gc.ann <- which(tt.traj.gc == 3 &
-    #                                (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                prepStat == 0)
-    #     rates.gc <- rep(1/sti.annualtest.int, length(elig.gc.ann))
-    #     tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
-    #     
-    #     
-    #     elig.gc.6mo <- which(tt.traj.gc == 4 &
-    #                                (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                prepStat == 0)
-    #     rates.gc <- rep(1/sti.6motest.int, length(elig.gc.6mo))
-    #     tst.gc.nprep.6mo <- elig.gc.6mo[rbinom(length(elig.gc.6mo), 1, rates.gc) == 1]
-    #
-    #
-    #     elig.gc.3mo <- which(tt.traj.gc == 5 &
-    #                                (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                prepStat == 0)
-    #     rates.gc <- rep(1/sti.3motest.int, length(elig.gc.3mo))
-    #     tst.gc.nprep.3mo <- elig.gc.3mo[rbinom(length(elig.gc.6mo), 1, rates.gc) == 1]
-    #
-    #
-    #     tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.6mo, tst.gc.nprep.3mo)
-    # }
-    # 
-    # if (testing.pattern.sti == "interval" ) {
-    #     tst.gc.annual.interval <- which(tt.traj.gc == 3 &
-    #                                           (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                           tsincelntst.gc >= #2*(gc.annualtest.int) & 
-    #                                           prepStat == 0)
-    #     
-    #     
-    #     tst.gc.6mo.interval <- which(tt.traj.gc == 4 &
-    #                                        (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                        tsincelntst.gc >= #2*(gc.6motest.int) &
-    #                                        prepStat == 0)
-    #
-    #
-    #     tst.gc.3mo.interval <- which(tt.traj.gc == 5 &
-    #                                        (diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                                        tsincelntst.gc >= #2*(gc.3motest.int) &
-    #                                        prepStat == 0)
-    #
-    #
-    #     tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.6mo.interval, tst.gc.3mo.interval)
-    # }
-    # 
-    # ## Process for CT
-    # if (testing.pattern.sti == "memoryless") {
-    #     elig.ct.ann <- which(tt.traj.ct == 3 &
-    #                                (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                prepStat == 0)
-    #     rates.ct <- rep(1/ct.annualtest.int, length(elig.ct.ann))
-    #     tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
-    #     
-    #     
-    #     elig.ct.6mo <- which(tt.traj.ct == 4 &
-    #                                (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                prepStat == 0)
-    #     rates.ct <- rep(1/ct.6motest.int, length(elig.ct.6mo))
-    #     tst.ct.nprep.6mo <- elig.ct.6mo[rbinom(length(elig.ct.6mo), 1, rates.ct) == 1]
-    #
-    #     elig.ct.6mo <- which(tt.traj.ct == 5 &
-    #                                (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                prepStat == 0)
-    #     rates.ct <- rep(1/ct.3motest.int, length(elig.ct.3mo))
-    #     tst.ct.nprep.3mo <- elig.ct.3mo[rbinom(length(elig.ct.3mo), 1, rates.ct) == 1]
-    #     tst.ct.nprep <- c(tst.ct.nprep.ann, tst.ct.nprep.6mo, tst.ct.nprep.3mo)
-    # }
-    # 
-    # if (testing.pattern.sti == "interval" ) {
-    #     tst.ct.annual.interval <- which(tt.traj.ct == 3 &
-    #                                           (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                           tsincelntst.ct >= 2*(ct.annualtest.int) & 
-    #                                           prepStat == 0)
-    #     
-    #     
-    #     tst.ct.6mo.interval <- which(tt.traj.ct == 4 &
-    #                                        (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                        tsincelntst.ct >= 2*(ct.6motest.int) &
-    #                                        prepStat == 0)
-    #
-    #
-    #     tst.ct.3mo.interval <- which(tt.traj.ct == 5 &
-    #                                        (diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                                        tsincelntst.ct >= 2*(ct.3motest.int) &
-    #                                        prepStat == 0)
-    #
-    #     tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.6mo.interval, tst.ct.3mo.interval)
-    # }
-    #
-    # # PrEP testing
-    # tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
-    #                        prepStat == 1 &
-    #                        tsincelntst.syph >= prep.tst.int)
-    # tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
-    #                            prepStat == 1 &
-    #                            tsincelntst.gc >= prep.tst.int)
-    # tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
-    #                            prepStat == 1 &
-    #                            tsincelntst.ct >= prep.tst.int)
-    # 
-    # # Syphilis testing
-    # tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    # tst.syph.pos <- tst.syph.all[syphstatus[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
-    # tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
-    # 
-    # # GC testing
-    # tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
-    # tst.gc.pos <- tst.gc.all[rGC == 1 | uGC == 1]
-    # tst.gc.neg <- setdiff(tst.gc.all, tst.gc.pos)
-    # 
-    # # CT testing
-    # tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
-    # tst.ct.pos <- tst.ct.all[rCT == 1 | uCT == 1]
-    # tst.ct.neg <- setdiff(tst.ct.all, tst.ct.pos)
-    # 
-    # 
-    # # Syphilis Attributes
-    # dat$attr$last.neg.test.syph[tst.syph.neg] <- at
-    # dat$attr$diag.status.syph[tst.syph.pos] <- 1
-    # dat$attr$diag.time.syph[tst.syph.pos] <- at
-    # #dat$attr$ttntest.syph <- ttntest.syph
-    # 
-    # # GC Attributes
+    if (testing.pattern.sti == "interval" ) {
+         tst.syph.annual.interval <- which(tt.traj.syph == 1 &
+                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                            tsincelntst.syph >= 2*(sti.annualtest.int) &
+                                            prepStat == 0)
+         tst.syph.36mo.interval <- which(tt.traj.syph == 2 &
+                                        (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                         tsincelntst.syph >= 2*(sti.36motest.int) &
+                                         prepStat == 0)
+         tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.36mo.interval)
+     }
+
+    ## Process for GC
+    if (testing.pattern.sti == "memoryless") {
+         elig.gc.ann <- which(tt.traj.gc == 1 &
+                              (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                               prepStat == 0)
+         rates.gc <- rep(1/sti.annualtest.int, length(elig.gc.ann))
+         tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
+    
+         elig.gc.36mo <- which(tt.traj.gc == 2 &
+                              (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                               prepStat == 0)
+         rates.gc <- rep(1/sti.36motest.int, length(elig.gc.36mo))
+         tst.gc.nprep.36mo <- elig.gc.36mo[rbinom(length(elig.gc.36mo), 1, rates.gc) == 1]
+         tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.36mo)
+     }
+     
+    if (testing.pattern.sti == "interval" ) {
+         tst.gc.annual.interval <- which(tt.traj.gc == 1 &
+                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                                          tsincelntst.gc >= 2*(gc.annualtest.int) &
+                                          prepStat == 0)
+    
+         tst.gc.36mo.interval <- which(tt.traj.gc == 2 &
+                                      (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                                       tsincelntst.gc >= 2*(gc.36motest.int) &
+                                       prepStat == 0)
+    
+         tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.36mo.interval)
+     }
+     
+    ## Process for CT
+    if (testing.pattern.sti == "memoryless") {
+         elig.ct.ann <- which(tt.traj.ct == 1 &
+                           (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                            prepStat == 0)
+         rates.ct <- rep(1/ct.annualtest.int, length(elig.ct.ann))
+         tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
+    
+         elig.ct.36mo <- which(tt.traj.ct == 2 &
+                           (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                            prepStat == 0)
+         rates.ct <- rep(1/ct.36motest.int, length(elig.ct.36mo))
+         tst.ct.nprep.36mo <- elig.ct.36mo[rbinom(length(elig.ct.36mo), 1, rates.ct) == 1]
+     
+         tst.ct.nprep <- c(tst.ct.nprep.ann, tst.ct.nprep.36mo)
+     }
+    
+    if (testing.pattern.sti == "interval" ) {
+         tst.ct.annual.interval <- which(tt.traj.ct == 1 &
+                                         (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                                          tsincelntst.ct >= 2*(ct.annualtest.int) &
+                                          prepStat == 0)
+     
+         tst.ct.36mo.interval <- which(tt.traj.ct == 2 &
+                                      (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                                       tsincelntst.ct >= 2*(ct.36motest.int) &
+                                       prepStat == 0)
+
+         tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.36mo.interval)
+     }
+     
+    # PrEP testing
+    tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
+                         prepStat == 1 &
+                         #tsincelntst.syph >= prep.tst.int)
+    tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
+                           prepStat == 1 &
+                           #tsincelntst.gc >= prep.tst.int)
+    tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
+                           prepStat == 1 &
+                           #tsincelntst.ct >= prep.tst.int)
+    
+    # Syphilis testing
+    tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
+    tst.syph.pos <- tst.syph.all[syphstatus[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
+    
+    # GC testing
+    tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
+    tst.gc.pos <- tst.gc.all[rGC == 1 | uGC == 1]
+    tst.gc.neg <- setdiff(tst.gc.all, tst.gc.pos)
+    
+    # CT testing
+    tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
+    tst.ct.pos <- tst.ct.all[rCT == 1 | uCT == 1]
+    tst.ct.neg <- setdiff(tst.ct.all, tst.ct.pos)
+    
+    # Syphilis Attributes
+    #dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+    dat$attr$diag.status.syph[tst.syph.pos] <- 1
+    dat$attr$diag.time.syph[tst.syph.pos] <- at
+    #dat$attr$ttntest.syph <- ttntest.syph
+    
+    # GC Attributes
     # dat$attr$last.neg.test.gc[tst.gc.neg] <- at
-    # dat$attr$diag.status.gc[tst.gc.pos] <- 1
-    # dat$attr$diag.time.gc[tst.gc.pos] <- at
-    # #dat$attr$ttntest.gc <- ttntest.gc
-    # 
-    # # CT Attributes
+    dat$attr$diag.status.gc[tst.gc.pos] <- 1
+    dat$attr$diag.time.gc[tst.gc.pos] <- at
+    #dat$attr$ttntest.gc <- ttntest.gc
+    
+    # CT Attributes
     # dat$attr$last.neg.test.ct[tst.ct.neg] <- at
-    # dat$attr$diag.status.ct[tst.ct.pos] <- 1
-    # dat$attr$diag.time.ct[tst.ct.pos] <- at
-    # #dat$attr$ttntest.ct <- ttntest.ct
+    dat$attr$diag.status.ct[tst.ct.pos] <- 1
+    dat$attr$diag.time.ct[tst.ct.pos] <- at
+    #dat$attr$ttntest.ct <- ttntest.ct
     
     return(dat)
 }

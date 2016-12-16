@@ -56,32 +56,32 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
   prep.risk.int = 182, prep.risk.reassess = TRUE,
-  stitest.active.int = 365, stitest.start = Inf, rcomp.prob = 0,
-  rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
-  rct.tprob = 0.321597, uct.tprob = 0.212965, syph.tprob = 0.03,
-  syph.earlat.rr = 0.5, syph.late.rr = 0, syph.immune.rr = 0,
-  rgc.sympt.prob = 0.076975, ugc.sympt.prob = 0.824368,
-  rct.sympt.prob = 0.103517, uct.sympt.prob = 0.885045,
-  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
-  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
-  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
-  syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
-  syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
+  stitest.active.int = 365, stitest.start = Inf, ept.start = Inf,
+  ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
+  ept.cov.rate = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.357698,
+  ugc.tprob = 0.248095, rct.tprob = 0.321597, uct.tprob = 0.212965,
+  syph.tprob = 0.03, syph.earlat.rr = 0.5, syph.late.rr = 0,
+  syph.immune.rr = 0, rgc.sympt.prob = 0.076975,
+  ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
+  uct.sympt.prob = 0.885045, syph.prim.sympt.prob = 0.5,
+  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
+  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
+  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
+  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
+  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
+  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
+  ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
+  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
   syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 0.4,
   syph.seco.sympt.prob.tx = 0.7, syph.seco.asympt.prob.tx = 0.5,
   syph.earlat.prob.tx = 0.1, syph.latelat.prob.tx = 0.1,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.6,
-  sti.annualtest.int = 365, sti.6motest.int = 182, sti.3motest.int = 91,
+  sti.annualtest.int = 364, sti.6motest.int = 182, sti.3motest.int = 91,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, syph.cond.rr = 0.1,
-  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
-  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2.1,
-  syph.hiv.rr = 2.6, ...)
+  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
+  hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
+  hiv.dual.rr = 0.2, hiv.syph.rr = 2.1, syph.hiv.rr = 2.6, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -451,6 +451,21 @@ for STI Testing Guidelines}
 \item{stitest.start}{Time step at which the STI testing guidelines intervention
 should start.}
 
+\item{ept.start}{Time step at which the EPT intervention should start}
+
+\item{ept.risk.int}{Time window for assessment of risk eligibility for EPT in days}
+
+\item{ept.coverage}{The proportion of the eligible population who are start
+EPT once they become eligible.}
+
+\item{ept.cov.method}{The method for calculating EPT coverage, with options
+of \code{"curr"} to base the numerator on the number of people currently
+on EPT and \code{"ever"} to base it on the number of people ever on
+EPT.}
+
+\item{ept.cov.rate}{The rate at which persons initiate EPT conditional on
+their eligibility, with 1 equal to instant start.}
+
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
 per act, and 1 is a complete cessation of condom use following PrEP
@@ -590,9 +605,6 @@ PrEP visit.}
 STI treatment of symptomatic cases even after PrEP initiation.}
 
 \item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
-a condom used by the insertive partner.}
-
-\item{syph.cond.rr}{Relative risk of syphilis infection (in either direction) given
 a condom used by the insertive partner.}
 
 \item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
