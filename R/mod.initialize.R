@@ -143,72 +143,6 @@ initialize_msm <- function(x, param, init, control, s) {
   # Syphilis- and STI-related attributes
   dat <- init_status_sti_msm(dat)
 
-  ## GC/CT status
-  idsUreth <- which(role.class %in% c("I", "V"))
-  idsRect <- which(role.class %in% c("R", "V"))
-
-  uGC <- rGC <- rep(0, num)
-  uCT <- rCT <- rep(0, num)
-
-  # Initialize GC infection at both sites
-  idsUGC <- sample(idsUreth, size = round(init$prev.ugc * num), FALSE)
-  uGC[idsUGC] <- 1
-
-  idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(init$prev.rgc * num), FALSE)
-  rGC[idsRGC] <- 1
-
-  dat$attr$rGC <- rGC
-  dat$attr$uGC <- uGC
-
-  dat$attr$rGC.sympt <- dat$attr$uGC.sympt <- rep(NA, num)
-  dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
-  dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
-
-  dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- rep(NA, length(dat$attr$active))
-  dat$attr$rGC.infTime[rGC == 1] <- 1
-  dat$attr$uGC.infTime[uGC == 1] <- 1
-
-  dat$attr$rGC.timesInf <- rep(0, num)
-  dat$attr$rGC.timesInf[rGC == 1] <- 1
-  dat$attr$uGC.timesInf <- rep(0, num)
-  dat$attr$uGC.timesInf[uGC == 1] <- 1
-  dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
-  dat$attr$diag.time.gc <- rep(NA, num)
-
-  dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
-  dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
-  dat$attr$GC.cease <- rep(NA, num)
-
-  # Initialize CT infection at both sites
-  idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
-  uCT[idsUCT] <- 1
-
-  idsRCT <- sample(setdiff(idsRect, idsUCT), size = round(init$prev.rct * num), FALSE)
-  rCT[idsRCT] <- 1
-
-  dat$attr$rCT <- rCT
-  dat$attr$uCT <- uCT
-
-  dat$attr$rCT.sympt <- dat$attr$uCT.sympt <- rep(NA, num)
-  dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
-  dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
-
-  dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- rep(NA, num)
-  dat$attr$rCT.infTime[dat$attr$rCT == 1] <- 1
-  dat$attr$uCT.infTime[dat$attr$uCT == 1] <- 1
-
-  dat$attr$rCT.timesInf <- rep(0, num)
-  dat$attr$rCT.timesInf[rCT == 1] <- 1
-  dat$attr$uCT.timesInf <- rep(0, num)
-  dat$attr$uCT.timesInf[uCT == 1] <- 1
-  dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
-  dat$attr$diag.time.ct <- rep(NA, num)
-
-  dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
-  dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
-  dat$attr$CT.cease <- rep(NA, num)
-
-
   # CCR5
   dat <- init_ccr5_msm(dat)
 
@@ -713,12 +647,16 @@ init_status_sti_msm <- function(dat) {
     ids.W <- which(dat$attr$race == "W")
     age <- dat$attr$age
     race <- dat$attr$race
+    ins.quot <- dat$attr$ins.quot
+    role.class <- dat$attr$role.class
+    active <- dat$attr$active
+    sexactive <- dat$attr$sexactive
 
     # Infection Status
     nInfsyphB <- round(dat$init$prev.syph.B * num.B)
     nInfsyphW <- round(dat$init$prev.syph.W * num.W)
     
-    ## Infection-related attributes
+    # Infection-related attributes
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
     syph.infTime <- rep(NA, num)
@@ -858,10 +796,6 @@ init_status_sti_msm <- function(dat) {
     # Diagnosed?
     diag.status.syph[syphstatus == 1] <- 0
     
-    # Set random 3-6 month testing interval
-    selected <- which(active == 1)
-    sti.36motest.int <- runif(length(selected), min = 91, max = 182)
-
     # Time to next test
     #selected.ann <- which(tt.traj.syph == 1)
     #selected.36mo <- which(tt.traj.syph == 2)
@@ -877,6 +811,71 @@ init_status_sti_msm <- function(dat) {
     #         ttntest.syph[selected.36mo] <- rgeom(length(selected.36mo), 1 / (dat$attr$sti.36motest.int))
     # }
     
+    ## GC/CT status
+    idsUreth <- which(role.class %in% c("I", "V"))
+    idsRect <- which(role.class %in% c("R", "V"))
+    
+    uGC <- rGC <- rep(0, num)
+    uCT <- rCT <- rep(0, num)
+    
+    # Initialize GC infection at both sites
+    idsUGC <- sample(idsUreth, size = round(dat$init$prev.ugc * num), FALSE)
+    uGC[idsUGC] <- 1
+    
+    idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(dat$init$prev.rgc * num), FALSE)
+    rGC[idsRGC] <- 1
+    
+    dat$attr$rGC <- rGC
+    dat$attr$uGC <- uGC
+    
+    dat$attr$rGC.sympt <- dat$attr$uGC.sympt <- rep(NA, num)
+    dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
+    dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
+    
+    dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- rep(NA, num)
+    dat$attr$rGC.infTime[rGC == 1] <- 1
+    dat$attr$uGC.infTime[uGC == 1] <- 1
+    
+    dat$attr$rGC.timesInf <- rep(0, num)
+    dat$attr$rGC.timesInf[rGC == 1] <- 1
+    dat$attr$uGC.timesInf <- rep(0, num)
+    dat$attr$uGC.timesInf[uGC == 1] <- 1
+    dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
+    dat$attr$diag.time.gc <- rep(NA, num)
+    
+    dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
+    dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
+    dat$attr$GC.cease <- rep(NA, num)
+    
+    # Initialize CT infection at both sites
+    idsUCT <- sample(idsUreth, size = round(dat$init$prev.uct * num), FALSE)
+    uCT[idsUCT] <- 1
+    
+    idsRCT <- sample(setdiff(idsRect, idsUCT), size = round(dat$init$prev.rct * num), FALSE)
+    rCT[idsRCT] <- 1
+    
+    dat$attr$rCT <- rCT
+    dat$attr$uCT <- uCT
+    
+    dat$attr$rCT.sympt <- dat$attr$uCT.sympt <- rep(NA, num)
+    dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
+    dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
+    
+    dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- rep(NA, num)
+    dat$attr$rCT.infTime[dat$attr$rCT == 1] <- 1
+    dat$attr$uCT.infTime[dat$attr$uCT == 1] <- 1
+    
+    dat$attr$rCT.timesInf <- rep(0, num)
+    dat$attr$rCT.timesInf[rCT == 1] <- 1
+    dat$attr$uCT.timesInf <- rep(0, num)
+    dat$attr$uCT.timesInf[uCT == 1] <- 1
+    dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
+    dat$attr$diag.time.ct <- rep(NA, num)
+    
+    dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
+    dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
+    dat$attr$CT.cease <- rep(NA, num)
+    
 
     # Set all onto dat$attr
     dat$attr$stage.syph <- stage.syph
@@ -885,8 +884,10 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$diag.time.syph <- diag.time.syph
-    #dat$attr$ttntest.syph <- ttntest.syph
+    dat$attr$ttntest.syph <- ttntest.syph
     dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$last.neg.test.gc <- last.neg.test.gc
+    dat$attr$last.neg.test.ct <- last.neg.test.ct
     dat$attr$infector.syph <- infector.syph
     dat$attr$inf.role.syph <- inf.role.syph
     dat$attr$inf.type.syph <- inf.type.syph
@@ -909,8 +910,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptElig <- eptElig
     dat$attr$eptStat <- eptStat
     dat$attr$eptEligdate <- eptEligdate
-    dat$attr$sti.36motest.int <- sti.36motest.int
-    
     
     return(dat)
     

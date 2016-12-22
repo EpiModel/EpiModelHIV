@@ -1073,7 +1073,7 @@ sti_tx <- function(dat, at) {
   dat$attr$eptStat[txRCT_all] <- 0
   dat$attr$eptElig[txUCT_all] <- 1
   dat$attr$eptStat[txUCT_all] <- 0
-  dat$attr$eptEligdate <- at
+  dat$attr$eptEligdate[dat$attr$eptElig == 1] <- at
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {

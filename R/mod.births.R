@@ -107,29 +107,18 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
   
-  # STIs
+  # Non-NA STI variables
   dat$attr$syphstatus[newIds] <- rep(0, nBirths)
-  dat$attr$stage.syph[newIds[newB]] <- rep(NA, nBirths.B)
-  dat$attr$stage.syph[newIds[newW]] <- rep(NA, nBirths.W)
-  dat$attr$syph.infTime[newIds] <- rep(NA, nBirths)
-  dat$attr$stage.time.syph[newIds] <- rep(NA, nBirths)
-  dat$attr$syph.timesInf[newIds] <- rep(NA, nBirths)
-  dat$attr$inf.role.syph[newIds] <- rep(NA, nBirths)
-  dat$attr$inf.type.syph[newIds] <- rep(NA, nBirths)
-  dat$attr$tt.traj.syph[newIds] <- rep(NA, nBirths)
-  dat$attr$tt.traj.gc[newIds] <- rep(NA, nBirths)
-  dat$attr$tt.traj.ct[newIds] <- rep(NA, nBirths)
-  dat$attr$diag.status.syph[newIds] <- rep(NA, nBirths)
-  dat$attr$diag.status.gc[newIds] <- rep(NA, nBirths)
-  dat$attr$diag.status.ct[newIds] <- rep(NA, nBirths)
-  dat$attr$diag.time.syph[newIds] <- rep(NA, num)
-  dat$attr$diag.time.gc[newIds] <- rep(NA, num)
-  dat$attr$diag.time.ct[newIds] <- rep(NA, num)
-  dat$attr$eptElig[newIds] <- rep(NA, nBirths)
-  dat$attr$eptStat[newIds] <- rep(NA, nBirths)
-  dat$attr$eptEligdate[newIds] <- rep(NA, nBirths)
-  dat$attr$sti.36motest.int[newIds] <- runif(length(newIds), min = 91, max = 182)
-  
+  dat$attr$rGC[newIds] <- rep(0, nBirths)
+  dat$attr$rCT[newIds] <- rep(0, nBirths)
+  dat$attr$uGC[newIds] <- rep(0, nBirths)
+  dat$attr$uCT[newIds] <- rep(0, nBirths)
+  dat$attr$syph.timesInf[newIds] <- rep(0, nBirths)
+  dat$attr$rGC.timesInf[newIds] <- rep(0, nBirths)
+  dat$attr$rCT.timesInf[newIds] <- rep(0, nBirths)
+  dat$attr$uGC.timesInf[newIds] <- rep(0, nBirths)
+  dat$attr$uCT.timesInf[newIds] <- rep(0, nBirths)
+
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)

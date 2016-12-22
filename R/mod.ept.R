@@ -46,6 +46,7 @@ ept_msm <- function(dat, at) {
     
     eptElig <- dat$attr$eptElig
     eptStat <- dat$attr$eptStat
+    eptEligdate <- dat$attr$eptEligdate
     #eptLastRisk <- dat$attr$eptLastRisk
     #eptStartTime <- dat$attr$eptStartTime
 
@@ -57,7 +58,7 @@ ept_msm <- function(dat, at) {
     ## Eligibility ---------------------------------------------------------------
     
     # Base eligibility (index partners who were just treated)
-    idsEligStart <- which(active == 1 & eptEligdate == at & eptStat == 0)
+    idsEligStart <- which(active == 1 & eptEligdate >= at & eptStat == 0)
     
     # Interval - Last sexually active date: Need to be sexually active in last X days to have partners to give meds to
     ind1 <- dat$attr$ept.ind1
@@ -75,20 +76,20 @@ ept_msm <- function(dat, at) {
     # Change EPT eligibility back to NA?
     
     # No indications
-    # idsRiskAssess <- which(active == 1 & eptStat == 1) #& lnt == at & (at - eptLastRisk) >= 52)
-    # eptLastRisk[idsRiskAssess] <- at
+    #idsRiskAssess <- which(active == 1 & eptStat == 1) #& lnt == at & (at - eptLastRisk) >= 52)
+    #eptLastRisk[idsRiskAssess] <- at
     # 
-    # #idsEligStop <- intersect(which(ind1 < twind & ind2 < twind &
-    # #                                   ind3 < twind & ind4 < twind),
-    # #                         idsRiskAssess)
+    # idsEligStop <- intersect(which(ind1 < twind & ind2 < twind &
+    #                                   ind3 < twind & ind4 < twind),
+    #                         idsRiskAssess)
     # 
-    eptElig[idsEligStop] <- NA
+    # eptElig[idsEligStop] <- NA
     # 
     # Diagnosis - should be partner's status?
     # idsStpDx <- which(active == 1 & eptStat == 1 & )
     # 
     # # Death
-    idsStpDth <- which(active == 0 & eptStat == 1)
+    #idsStpDth <- which(active == 0 & eptStat == 1)
     # 
     # # Reset EPT status
     # idsStp <- c(idsStpDx, idsStpDth, idsEligStop)

@@ -77,7 +77,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.seco.sympt.prob.tx = 0.7, syph.seco.asympt.prob.tx = 0.5,
   syph.earlat.prob.tx = 0.1, syph.latelat.prob.tx = 0.1,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.6,
-  sti.annualtest.int = 364, sti.6motest.int = 182, sti.3motest.int = 91,
+  sti.annualtest.int = 364, sti.highrisktest.int = 182,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
@@ -592,9 +592,7 @@ stage syphilis infection.}
 
 \item{sti.annualtest.int}{Interval in days between STI screening for annual testers}
 
-\item{sti.6motest.int}{Interval in days between STI screening for 6 month testers}
-
-\item{sti.3motest.int}{Interval in days between STI screenign for 3 month testers}
+\item{sti.highrisktest.int}{Interval in days between STI screening for annual testers}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 

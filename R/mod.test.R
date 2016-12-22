@@ -140,30 +140,31 @@ test_sti_msm <- function(dat, at) {
     diag.time.syph <- dat$attr$diag.time.syph
     sexactive <- dat$attr$sexactive
      
-    # prepStat <- dat$attr$prepStat
-    # prep.tst.int <- dat$param$prep.tst.int
-    # 
-    # # Parameters
+    prepStat <- dat$attr$prepStat
+    prep.tst.int <- dat$param$prep.tst.int
+     
+    # Parameters
+    time.unit <- dat$param$time.unit
     testing.pattern.sti <- dat$param$testing.pattern.sti
     sti.annualtest.int <- dat$param$sti.annualtest.int
-    sti.36motest.int <- dat$attr$sti.36motest.int
+    sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tt.traj.syph <- dat$param$tt.traj.syph
     tt.traj.gc <- dat$attr$tt.traj.gc
     tt.traj.ct <- dat$attr$tt.traj.ct
      
-    # tsincelntst.syph <- at - dat$attr$last.neg.test.syph
-    # tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
-    # 
-    # tsincelntst.gc <- at - dat$attr$last.neg.test.gc
-    # tsincelntst.gc[is.na(tsincelntst.gc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.gc)]
-    # 
-    # tsincelntst.ct <- at - dat$attr$last.neg.test.ct
-    # tsincelntst.ct[is.na(tsincelntst.ct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ct)]
-    # 
-    # # Debit one unit from time until next test
-    # #ttntest.syph <- ttntest.syph - time.unit
-    # #ttntest.gc <- ttntest.gc - time.unit
-    # #ttntest.ct <- ttntest.ct - time.unit
+    tsincelntst.syph <- at - dat$attr$last.neg.test.syph
+    tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
+    
+    tsincelntst.gc <- at - dat$attr$last.neg.test.gc
+    tsincelntst.gc[is.na(tsincelntst.gc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.gc)]
+     
+    tsincelntst.ct <- at - dat$attr$last.neg.test.ct
+    tsincelntst.ct[is.na(tsincelntst.ct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ct)]
+     
+    # Debit one unit from time until next test
+    ttntest.syph <- ttntest.syph - time.unit
+    ttntest.gc <- ttntest.gc - time.unit
+    ttntest.ct <- ttntest.ct - time.unit
     
     # Testing Rates by serostatus/race?
     
@@ -177,12 +178,12 @@ test_sti_msm <- function(dat, at) {
              rates.syph <- rep(1/sti.annualtest.int, length(elig.syph.ann))
              tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
-         elig.syph.36mo <- which(tt.traj.syph == 2 &
+         elig.syph.highrisk <- which(tt.traj.syph == 2 &
                                     (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                      prepStat == 0)
-         rates.syph <- rep(1/sti.36motest.int, length(elig.syph.36mo))
-         tst.syph.nprep.36mo <- elig.syph.36mo[rbinom(length(elig.syph.36mo), 1, rates.syph) == 1]
-         tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.36mo)
+         rates.syph <- rep(1/sti.highrisktest.int, length(elig.syph.highrisk))
+         tst.syph.nprep.highrisk <- elig.syph.highrisk[rbinom(length(elig.syph.highrisk), 1, rates.syph) == 1]
+         tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
      }
     
     if (testing.pattern.sti == "interval" ) {
@@ -190,11 +191,11 @@ test_sti_msm <- function(dat, at) {
                                            (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                             tsincelntst.syph >= 2*(sti.annualtest.int) &
                                             prepStat == 0)
-         tst.syph.36mo.interval <- which(tt.traj.syph == 2 &
+         tst.syph.highrisk.interval <- which(tt.traj.syph == 2 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                         tsincelntst.syph >= 2*(sti.36motest.int) &
+                                         tsincelntst.syph >= 2*(sti.highrisktest.int) &
                                          prepStat == 0)
-         tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.36mo.interval)
+         tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
      }
 
     ## Process for GC
@@ -205,26 +206,26 @@ test_sti_msm <- function(dat, at) {
          rates.gc <- rep(1/sti.annualtest.int, length(elig.gc.ann))
          tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
     
-         elig.gc.36mo <- which(tt.traj.gc == 2 &
+         elig.gc.highrisk <- which(tt.traj.gc == 2 &
                               (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                prepStat == 0)
-         rates.gc <- rep(1/sti.36motest.int, length(elig.gc.36mo))
-         tst.gc.nprep.36mo <- elig.gc.36mo[rbinom(length(elig.gc.36mo), 1, rates.gc) == 1]
-         tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.36mo)
+         rates.gc <- rep(1/sti.highrisktest.int, length(elig.gc.highrisk))
+         tst.gc.nprep.highrisk <- elig.gc.highrisk[rbinom(length(elig.gc.highrisk), 1, rates.gc) == 1]
+         tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
      }
      
     if (testing.pattern.sti == "interval" ) {
          tst.gc.annual.interval <- which(tt.traj.gc == 1 &
                                          (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                          tsincelntst.gc >= 2*(gc.annualtest.int) &
+                                          tsincelntst.gc >= 2*(sti.annualtest.int) &
                                           prepStat == 0)
     
-         tst.gc.36mo.interval <- which(tt.traj.gc == 2 &
+         tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                       tsincelntst.gc >= 2*(gc.36motest.int) &
+                                       tsincelntst.gc >= 2*(sti.highrisktest.int) &
                                        prepStat == 0)
     
-         tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.36mo.interval)
+         tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
      }
      
     ## Process for CT
@@ -232,42 +233,42 @@ test_sti_msm <- function(dat, at) {
          elig.ct.ann <- which(tt.traj.ct == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
                             prepStat == 0)
-         rates.ct <- rep(1/ct.annualtest.int, length(elig.ct.ann))
+         rates.ct <- rep(1/sti.annualtest.int, length(elig.ct.ann))
          tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
     
-         elig.ct.36mo <- which(tt.traj.ct == 2 &
+         elig.ct.highrisk <- which(tt.traj.ct == 2 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
                             prepStat == 0)
-         rates.ct <- rep(1/ct.36motest.int, length(elig.ct.36mo))
-         tst.ct.nprep.36mo <- elig.ct.36mo[rbinom(length(elig.ct.36mo), 1, rates.ct) == 1]
+         rates.ct <- rep(1/sti.highrisktest.int, length(elig.ct.highrisk))
+         tst.ct.nprep.highrisk <- elig.ct.highrisk[rbinom(length(elig.ct.highrisk), 1, rates.ct) == 1]
      
-         tst.ct.nprep <- c(tst.ct.nprep.ann, tst.ct.nprep.36mo)
+         tst.ct.nprep <- c(tst.ct.nprep.ann, tst.ct.nprep.highrisk)
      }
     
     if (testing.pattern.sti == "interval" ) {
          tst.ct.annual.interval <- which(tt.traj.ct == 1 &
                                          (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                          tsincelntst.ct >= 2*(ct.annualtest.int) &
+                                          tsincelntst.ct >= 2*(sti.annualtest.int) &
                                           prepStat == 0)
      
-         tst.ct.36mo.interval <- which(tt.traj.ct == 2 &
+         tst.ct.highrisk.interval <- which(tt.traj.ct == 2 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                       tsincelntst.ct >= 2*(ct.36motest.int) &
+                                       tsincelntst.ct >= 2*(sti.highrisktest.int) &
                                        prepStat == 0)
 
-         tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.36mo.interval)
+         tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
      }
      
     # PrEP testing
     tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
                          prepStat == 1 &
-                         #tsincelntst.syph >= prep.tst.int)
+                         tsincelntst.syph >= prep.tst.int)
     tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
                            prepStat == 1 &
-                           #tsincelntst.gc >= prep.tst.int)
+                           tsincelntst.gc >= prep.tst.int)
     tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
                            prepStat == 1 &
-                           #tsincelntst.ct >= prep.tst.int)
+                           tsincelntst.ct >= prep.tst.int)
     
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
@@ -285,19 +286,19 @@ test_sti_msm <- function(dat, at) {
     tst.ct.neg <- setdiff(tst.ct.all, tst.ct.pos)
     
     # Syphilis Attributes
-    #dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+    dat$attr$last.neg.test.syph[tst.syph.neg] <- at
     dat$attr$diag.status.syph[tst.syph.pos] <- 1
     dat$attr$diag.time.syph[tst.syph.pos] <- at
     #dat$attr$ttntest.syph <- ttntest.syph
     
     # GC Attributes
-    # dat$attr$last.neg.test.gc[tst.gc.neg] <- at
+    dat$attr$last.neg.test.gc[tst.gc.neg] <- at
     dat$attr$diag.status.gc[tst.gc.pos] <- 1
     dat$attr$diag.time.gc[tst.gc.pos] <- at
     #dat$attr$ttntest.gc <- ttntest.gc
     
     # CT Attributes
-    # dat$attr$last.neg.test.ct[tst.ct.neg] <- at
+    dat$attr$last.neg.test.ct[tst.ct.neg] <- at
     dat$attr$diag.status.ct[tst.ct.pos] <- 1
     dat$attr$diag.time.ct[tst.ct.pos] <- at
     #dat$attr$ttntest.ct <- ttntest.ct

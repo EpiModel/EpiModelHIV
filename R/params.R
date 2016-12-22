@@ -348,6 +348,7 @@
 #' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
 #'        stage syphilis infection.
 #' @param sti.annualtest.int Interval in days between STI screening for annual testers
+#' @param sti.highrisktest.int Interval in days between STI screening for annual testers
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -583,6 +584,7 @@ param_msm <- function(nwstats,
                       syph.tert.asympt.prob.tx = 0.60,
                       
                       sti.annualtest.int = 364,
+                      sti.highrisktest.int = 182,
                      
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
