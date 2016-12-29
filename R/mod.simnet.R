@@ -20,9 +20,8 @@ simnet_msm <- function(dat, at) {
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
-  # t1 <- updatenwp_msm(dat, network = 1)
   dat$attr$deg.pers <- get_degree(dat$el[[2]])
-  dat <- updateInputs(dat, network = 1)
+  dat <- updateModelTermInputs(dat, network = 1)
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
@@ -43,9 +42,8 @@ simnet_msm <- function(dat, at) {
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
 
-  # t1 <- updatenwp_msm(dat, network = 2)
   dat$attr$deg.main <- get_degree(dat$el[[1]])
-  dat <- updateInputs(dat, network = 2)
+  dat <- updateModelTermInputs(dat, network = 2)
 
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -66,9 +64,8 @@ simnet_msm <- function(dat, at) {
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
 
-  # t1 <- updatenwp_msm(dat, network = 3)
   dat$attr$deg.pers <- get_degree(dat$el[[2]])
-  dat <- updateInputs(dat, network = 3)
+  dat <- updateModelTermInputs(dat, network = 3)
 
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
@@ -138,13 +135,18 @@ updateInputs <- function(dat, network = 1) {
     term <- mf$terms[[t]]
 
     if (term$name == "edges") {
+
+      ## Reference: ergm:::InitErgmTerm.edges
+
+      # Only need to update maxval, no update to inputs
       mf$terms[[t]]$maxval <- maxdyads
     }
 
     else if (term$name == "nodematch") {
 
-      # ergm:::InitErgmTerm.nodematch
-      # need to get the formation formula to try to parse the params
+      ## Reference: ergm:::InitErgmTerm.nodematch
+
+      # Get the formation formula to parse the params
       form <- dat$nwparam[[network]]$formation
       args <- get_formula_term_args_in_formula_env(form, t)
       # get the name of the attribute to be used for nodecov
@@ -173,11 +175,14 @@ updateInputs <- function(dat, network = 1) {
 
     else if (term$name == "nodefactor") {
 
-      # ergm:::InitErgmTerm.nodefactor
+      ## Reference: ergm:::InitErgmTerm.nodefactor
+
       form <- dat$nwparam[[network]]$formation
       args <- get_formula_term_args_in_formula_env(form, t)
 
       attrname <- args[[1]]
+
+      # Handles interaction terms: nodefactor("attr1", "attr2")
       if (length(attrname) == 1) {
         nodecov <- dat$attr[[attrname]]
       } else {
@@ -189,9 +194,6 @@ updateInputs <- function(dat, network = 1) {
       u <- sort(unique(nodecov))
       if (any(statnet.common::NVL(args$base, 0) != 0)) {
         u <- u[-args$base]
-        if (length(u) == 0) {
-          stop("nodefactor term should be deleted because it contributes no statistics")
-        }
       }
       nodecov <- match(nodecov, u, nomatch = length(u) + 1)
       ui <- seq(along = u)
