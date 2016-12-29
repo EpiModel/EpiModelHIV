@@ -82,8 +82,31 @@ simnet_msm <- function(dat, at) {
 }
 
 
+#' @title Alternate Methods for Computing Ergm Term Inputs
+#'
+#' @description Function to appropriately update model params based on ergm model
+#'              terms when using 'fast_edgelist' representations.
+#'
+#' @param dat EpiModel dat object tracking simulation state
+#' @param network Numberic number of network location for multi-network simulations.
+#'
+#' @details Contains hard-coded implementations of some of the most commonly used
+#' ergm terms called instead of InitErgmTerm.x, checkErgmTerm, etc.
+#'
+#' Implemented terms are:
+#'  \itemize{
+#'    \item edges
+#'    \item nodematch
+#'    \item nodefactor
+#'    \item concurrent
+#'    \item absdiff
+#'  }
+#'  All other terms will return errors.
+#'
 #' @export
-updateInputs <- function(dat, network) {
+#' @importFrom statnet.common NVL
+#'
+updateInputs <- function(dat, network = 1) {
 
   p <- dat$p[[network]]
 
