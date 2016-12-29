@@ -204,20 +204,20 @@ updateInputs <- function(dat, network = 1) {
 
     else if (term$name == "concurrent") {
 
-      # ergm:::InitErgmTerm.concurrent
+      # Reference: ergm:::InitErgmTerm.concurrent
       # TODO: add by term for concurrent
 
+      # Homogenous form only updates maxval
       mf$terms[[t]]$maxval <- n
-
     }
 
     else if (term$name == "absdiff") {
 
-      # see ergm:::InitErgmTerm.absdiff
+      # Reference: ergm:::InitErgmTerm.absdiff
       form <- dat$nwparam[[network]]$formation
       args <- get_formula_term_args_in_formula_env(form, t)
       attrname <- args[[1]]
-      # get the transformation function
+      # Transformation function
       pow <- args$pow
       inputs <- c(pow, dat$attr[[attrname]])
       mf$terms[[t]]$inputs <- c(0, length(mf$terms[[t]]$coef.names),
@@ -231,13 +231,14 @@ updateInputs <- function(dat, network = 1) {
 
   }
 
-  # update combinded maxval
+  # Update combined maxval vector
   for (j in seq_along(mf$terms)) {
     if (j == 1) {
       new.maxval <- rep(if (!is.null(mf$terms[[j]]$maxval)) mf$terms[[j]]$maxval else +Inf,
                                     length.out = length(mf$terms[[j]]$coef.names))
     } else {
-      new.maxval <- c(new.maxval, rep(if (!is.null(mf$terms[[j]]$maxval)) mf$terms[[j]]$maxval else +Inf,
+      new.maxval <- c(new.maxval,
+                      rep(if (!is.null(mf$terms[[j]]$maxval)) mf$terms[[j]]$maxval else +Inf,
                                         length.out = length(mf$terms[[j]]$coef.names)))
     }
   }
@@ -284,6 +285,9 @@ updateInputs <- function(dat, network = 1) {
   if (dynamic == TRUE) {
     mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
   }
+
+
+  ## 4. Update and return ##
 
   # update the elements of the parameter list and return
   if (dynamic == TRUE) {
