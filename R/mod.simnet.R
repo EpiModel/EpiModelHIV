@@ -19,15 +19,16 @@ simnet_msm <- function(dat, at) {
 
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
-  dat <- updatenwp_msm(dat, network = 1)
 
+  # t1 <- updatenwp_msm(dat, network = 1)
+  dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  dat <- updateInputs(dat, network = 1)
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
                                              coef.form = nwparam.m$coef.form,
                                              coef.diss = nwparam.m$coef.diss$coef.adj,
                                              save.changes = TRUE)
-
 
   dat$temp$new.edges <- NULL
   if (at == 2) {
@@ -41,7 +42,10 @@ simnet_msm <- function(dat, at) {
 
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
-  dat <- updatenwp_msm(dat, network = 2)
+
+  # t1 <- updatenwp_msm(dat, network = 2)
+  dat$attr$deg.main <- get_degree(dat$el[[1]])
+  dat <- updateInputs(dat, network = 2)
 
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -61,7 +65,10 @@ simnet_msm <- function(dat, at) {
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
-  dat <- updatenwp_msm(dat, network = 3)
+
+  # t1 <- updatenwp_msm(dat, network = 3)
+  dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  dat <- updateInputs(dat, network = 3)
 
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
@@ -73,6 +80,202 @@ simnet_msm <- function(dat, at) {
 
   return(dat)
 }
+
+
+#' @export
+updateInputs <- function(dat, network) {
+
+  p <- dat$p[[network]]
+
+  if ("model.diss" %in% names(p)) {
+    dynamic <- TRUE
+  } else {
+    dynamic <- FALSE
+  }
+
+  if (dynamic == TRUE) {
+    mf <- p$model.form
+    md <- p$model.diss
+    mhf <- p$MHproposal.form
+    mhd <- p$MHproposal.diss
+  } else {
+    mf <- p$model.form
+    mhf <- p$MHproposal
+  }
+
+  n <- attributes(dat$el[[network]])$n
+  maxdyads <- choose(n, 2)
+
+
+  ## 1. Formation Model ##
+
+  for (t in seq_along(mf$terms)) {
+
+    # pull term name
+    term <- mf$terms[[t]]
+
+    if (term$name == "edges") {
+      mf$terms[[t]]$maxval <- maxdyads
+    }
+
+    else if (term$name == "nodematch") {
+
+      # ergm:::InitErgmTerm.nodematch
+      # need to get the formation formula to try to parse the params
+      form <- dat$nwparam[[network]]$formation
+      args <- get_formula_term_args_in_formula_env(form, t)
+      # get the name of the attribute to be used for nodecov
+      attrname <- args[[1]]
+      diff <- args$diff
+      # collect the values for the attribute
+      nodecov <- dat$attr[[attrname]]
+      u <- sort(unique(nodecov))
+      # optionally remove values not indicated by "keep:
+      if (!is.null(args$keep)) {
+        u <- u[args$keep]
+      }
+      nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+      dontmatch <- nodecov == (length(u) + 1)
+      nodecov[dontmatch] <- length(u) + (1:sum(dontmatch))
+      ui <- seq(along = u)
+      if (diff == TRUE) {
+        inputs <- c(ui, nodecov)
+      } else {
+        inputs <- nodecov
+      }
+      mf$terms[[t]]$inputs <- c(0, length(mf$terms[[t]]$coef.names),
+                                length(inputs), inputs)
+
+    }
+
+    else if (term$name == "nodefactor") {
+
+      # ergm:::InitErgmTerm.nodefactor
+      form <- dat$nwparam[[network]]$formation
+      args <- get_formula_term_args_in_formula_env(form, t)
+
+      attrname <- args[[1]]
+      if (length(attrname) == 1) {
+        nodecov <- dat$attr[[attrname]]
+      } else {
+        nodecov <- do.call(paste, c(sapply(attrname,
+                                           function(oneattr) dat$attr[[oneattr]],
+                                           simplify = FALSE), sep = "."))
+      }
+
+      u <- sort(unique(nodecov))
+      if (any(statnet.common::NVL(args$base, 0) != 0)) {
+        u <- u[-args$base]
+        if (length(u) == 0) {
+          stop("nodefactor term should be deleted because it contributes no statistics")
+        }
+      }
+      nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+      ui <- seq(along = u)
+      inputs <- c(ui, nodecov)
+      attr(inputs, "ParamsBeforeCov") <- length(ui)
+
+      mf$terms[[t]]$inputs <- c(length(ui), length(mf$terms[[t]]$coef.names),
+                                length(inputs), inputs)
+    }
+
+    else if (term$name == "concurrent") {
+
+      # ergm:::InitErgmTerm.concurrent
+      # TODO: add by term for concurrent
+
+      mf$terms[[t]]$maxval <- n
+
+    }
+
+    else if (term$name == "absdiff") {
+
+      # see ergm:::InitErgmTerm.absdiff
+      form <- dat$nwparam[[network]]$formation
+      args <- get_formula_term_args_in_formula_env(form, t)
+      attrname <- args[[1]]
+      # get the transformation function
+      pow <- args$pow
+      inputs <- c(pow, dat$attr[[attrname]])
+      mf$terms[[t]]$inputs <- c(0, length(mf$terms[[t]]$coef.names),
+                                length(inputs), inputs)
+    }
+
+    else {
+      stop("tergmLite does not know how to update the term '",
+           term$name,"' in the formation model formula")
+    }
+
+  }
+
+  # update combinded maxval
+  for (j in seq_along(mf$terms)) {
+    if (j == 1) {
+      new.maxval <- rep(if (!is.null(mf$terms[[j]]$maxval)) mf$terms[[j]]$maxval else +Inf,
+                                    length.out = length(mf$terms[[j]]$coef.names))
+    } else {
+      new.maxval <- c(new.maxval, rep(if (!is.null(mf$terms[[j]]$maxval)) mf$terms[[j]]$maxval else +Inf,
+                                        length.out = length(mf$terms[[j]]$coef.names)))
+    }
+  }
+  mf$maxval <- new.maxval
+
+
+  ## 2. Dissolution Model ##
+
+  # loop over dissolution model terms and update
+  if (dynamic == TRUE) {
+    for (t in seq_along(md$terms)) {
+      term <- md$terms[[t]]
+
+      if (term$name == "edges") {
+        md$terms[[t]]$maxval <- maxdyads
+      }
+
+      else {
+        stop("tergmLite does not know how to update the term ',
+           term$name,' in the dissolution model formula")
+      }
+
+    }
+    # TODO: this assumes just an edges model, may need to update
+    md$maxval <- maxdyads
+  }
+
+
+  ## 3. MHproposal Lists (for constraints) ##
+
+  ## Update MHproposal.form
+  hasBD <- !is.null(mhf$arguments$constraints$bd$attribs[1])
+  if (hasBD == TRUE) {
+    bd <- mhf$arguments$constraints$bd
+    bd$attribs <- matrix(rep(bd$attribs[1], n), ncol = 1)
+    bd$maxout <- matrix(rep(bd$maxout[1], n), ncol = 1)
+    bd$maxin <- matrix(rep(n - 1, n), ncol = 1)
+    bd$minout <- matrix(rep(0, n), ncol = 1)
+    bd$minin <- matrix(rep(0, n), ncol = 1)
+    mhf$arguments$constraints$bd <- bd
+  }
+
+  # MHproposal.diss (currently matches mhf bd constraint)
+  if (dynamic == TRUE) {
+    mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
+  }
+
+  # update the elements of the parameter list and return
+  if (dynamic == TRUE) {
+    p <- list(model.form = mf, model.diss = md,
+              MHproposal.form = mhf, MHproposal.diss = mhd)
+  } else {
+    p <- list(model.form = mf, MHproposal = mhf)
+  }
+
+  dat$p[[network]] <- p
+
+  return(dat)
+}
+
+
 
 
 calc_resim_nwstats <- function(dat, at) {
@@ -94,6 +297,7 @@ calc_resim_nwstats <- function(dat, at) {
 
   return(dat)
 }
+
 
 
 #' @title Adjustment for the Edges Coefficient with Changing Network Size
