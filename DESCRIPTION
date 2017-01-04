@@ -23,8 +23,7 @@ Imports:
     network,
     networkDynamic,
     Rcpp,
-    dplyr,
-    statnet.common
+    dplyr
 Suggests:
     knitr,
     testthat
