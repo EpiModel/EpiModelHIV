@@ -19,7 +19,13 @@ simnet_msm <- function(dat, at) {
 
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
-  dat <- updatenwp_msm(dat, network = 1)
+
+  if (dat$param$method == 1) {
+      dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  } else {
+      dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+  }
+  dat <- tergmLite::updateModelTermInputs(dat, network = 1)
 
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
@@ -41,7 +47,13 @@ simnet_msm <- function(dat, at) {
 
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
-  dat <- updatenwp_msm(dat, network = 2)
+  
+  if (dat$param$method == 1) {
+      dat$attr$deg.main <- get_degree(dat$el[[1]])
+  } else {
+      dat$attr$deg.main <- paste0(dat$attr$race, get_degree(dat$el[[1]]))
+  }
+  dat <- tergmLite::updateModelTermInputs(dat, network = 2)
 
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -61,7 +73,13 @@ simnet_msm <- function(dat, at) {
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
-  dat <- updatenwp_msm(dat, network = 3)
+  
+  if (dat$param$method == 1) {
+      dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  } else {
+      dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+  }
+  dat <- tergmLite::updateModelTermInputs(dat, network = 3)
 
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],

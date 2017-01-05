@@ -160,7 +160,7 @@ deaths_het <- function(dat, at) {
 
   ## 4. Update Population Structure ##
   inactive <- which(dat$attr$active == 0)
-  dat$el <- delete_vertices(dat$el, inactive)
+  dat$el <- tergmLite::delete_vertices(dat$el, inactive)
   dat$attr <- deleteAttr(dat$attr, inactive)
 
   if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {

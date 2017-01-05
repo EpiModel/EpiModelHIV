@@ -55,7 +55,7 @@ births_msm <- function(dat, at){
   # Update Networks
   if (nBirths > 0) {
     for (i in 1:3) {
-      dat$el[[i]] <- add_vertices(dat$el[[i]], nBirths)
+      dat$el[[i]] <- tergmLite::add_vertices(dat$el[[i]], nBirths)
     }
   }
 
@@ -219,7 +219,7 @@ births_het <- function(dat, at) {
   # Update Population Structure
   if (nBirths > 0) {
     dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el <- add_vertices(dat$el, nBirths)
+    dat$el <- tergmLite::add_vertices(dat$el, nBirths)
   }
 
   if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {
