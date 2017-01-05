@@ -25,7 +25,7 @@ simnet_msm <- function(dat, at) {
   } else {
     dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
   }
-  dat <- updateModelTermInputs(dat, network = 1)
+  dat <- tergmLite::updateModelTermInputs(dat, network = 1)
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
@@ -51,7 +51,7 @@ simnet_msm <- function(dat, at) {
   } else {
     dat$attr$deg.main <- paste0(dat$attr$race, get_degree(dat$el[[1]]))
   }
-  dat <- updateModelTermInputs(dat, network = 2)
+  dat <- tergmLite::updateModelTermInputs(dat, network = 2)
 
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -77,7 +77,7 @@ simnet_msm <- function(dat, at) {
   } else {
     dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
   }
-  dat <- updateModelTermInputs(dat, network = 3)
+  dat <- tergmLite::updateModelTermInputs(dat, network = 3)
 
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
