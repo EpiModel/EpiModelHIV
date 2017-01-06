@@ -1,11 +1,9 @@
-
 rm(list = ls())
 suppressMessages(library("EpiModelHIV"))
 
 data(est)
 data(st)
-# est
-# st
+
 param <- param_msm(nwstats = st,
                    ai.scale = 1.323,
                    prep.coverage = 0)
