@@ -133,9 +133,7 @@ test_sti_msm <- function(dat, at) {
     rCT <- dat$attr$rCT
     uCT <- dat$attr$uCT
     inf.time.syph <- dat$attr$inf.time.syph
-    # ttntest.syph <- dat$attr$ttntest.syph
-    # # Add attrs for GC and CT ttntest in init or elsewhere
-     
+    
     role.class <- dat$attr$role.class
     
     stage.syph <- dat$attr$stage.syph
@@ -157,16 +155,17 @@ test_sti_msm <- function(dat, at) {
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     
-    tsincelntst.gc <- at - dat$attr$last.neg.test.gc
-    tsincelntst.gc[is.na(tsincelntst.gc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.gc)]
+    tsincelntst.rgc <- at - dat$attr$last.neg.test.rgc
+    tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
+    tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
+    tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
+    tsincelntst.gc <- min(tsincelntst.rgc, tsincelntst.ugc)
      
-    tsincelntst.ct <- at - dat$attr$last.neg.test.ct
-    tsincelntst.ct[is.na(tsincelntst.ct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ct)]
-     
-    # Debit one unit from time until next test
-    ttntest.syph <- ttntest.syph - time.unit
-    ttntest.gc <- ttntest.gc - time.unit
-    ttntest.ct <- ttntest.ct - time.unit
+    tsincelntst.rct <- at - dat$attr$last.neg.test.rct
+    tsincelntst.uct <- at - dat$attr$last.neg.test.uct
+    tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
+    tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
+    tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
     
     # Testing Rates by serostatus/race?
     # All MSM with HIV infection entering care should be screened for gonorrhea and 
@@ -280,44 +279,53 @@ test_sti_msm <- function(dat, at) {
     
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    tst.syph.pos <- tst.syph.all[syphilis[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
-    tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
+    tst.rsyph <- tst.syph.all[dat$attr$role.class %in% c("R", "V")]
+    tst.usyph <- tst.syph.all[dat$attr$role.class %in% c("I", "V")]
+    tst.rsyph.pos <- tst.rsyph[syphilis[tst.rsyph] == 1 & stage.syph[tst.rsyph] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.usyph.pos <- tst.usyph[syphilis[tst.usyph] == 1 & stage.syph[tst.usyph] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.rsyph.neg <- setdiff(tst.rsyph, tst.rsyph.pos)
+    tst.usyph.neg <- setdiff(tst.usyph, tst.usyph.pos)
+    tst.syph.pos <- unique(c(tst.rsyph.pos, tst.usyph.pos))
+    tst.syph.neg <- unique(c(tst.rsyph.neg, tst.usyph.neg))
     
     # GC testing
     tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
-    tst.rgc <- test.gc.all[dat$attr$role.class %in% c("R", "V")]
-    tst.ugc <- test.gc.all[dat$attr$role.class %in% c("I", "V")]
+    tst.rgc <- tst.gc.all[dat$attr$role.class %in% c("R", "V")]
+    tst.ugc <- tst.gc.all[dat$attr$role.class %in% c("I", "V")]
     tst.rgc.pos <- tst.rgc[rGC == 1]
     tst.ugc.pos <- tst.ugc[uGC == 1]
     tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
     tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
+    tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
+    tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
     
     # CT testing
     tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
-    tst.rct <- test.ct.all[dat$attr$role.class %in% c("R", "V")]
-    tst.uct <- test.ct.all[dat$attr$role.class %in% c("I", "V")]
+    tst.rct <- tst.ct.all[dat$attr$role.class %in% c("R", "V")]
+    tst.uct <- tst.ct.all[dat$attr$role.class %in% c("I", "V")]
     tst.rct.pos <- tst.rct[rCT == 1]
     tst.uct.pos <- tst.uct[uCT == 1]
     tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
     tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
+    tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
+    tst.ct.neg <- unique(c(tst.rct.neg, tst.uct.neg))
     
     # Syphilis Attributes
     dat$attr$last.neg.test.syph[tst.syph.neg] <- at
     dat$attr$diag.status.syph[tst.syph.pos] <- 1
     dat$attr$diag.time.syph[tst.syph.pos] <- at
-    #dat$attr$ttntest.syph <- ttntest.syph
     
     # GC Attributes
-    dat$attr$last.neg.test.gc[tst.gc.neg] <- at
+    dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
+    dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
     dat$attr$diag.status.gc[tst.gc.pos] <- 1
     dat$attr$diag.time.gc[tst.gc.pos] <- at
-    #dat$attr$ttntest.gc <- ttntest.gc
     
     # CT Attributes
-    dat$attr$last.neg.test.ct[tst.ct.neg] <- at
+    dat$attr$last.neg.test.rct[tst.rct.neg] <- at
+    dat$attr$last.neg.test.uct[tst.uct.neg] <- at
     dat$attr$diag.status.ct[tst.ct.pos] <- 1
-    dat$attr$diag.time.ct[tst.ct.pos] <- at
-    #dat$attr$ttntest.ct <- ttntest.ct
+    dat$attr$diag.time.gc[tst.ct.pos] <- at
     
     return(dat)
 }

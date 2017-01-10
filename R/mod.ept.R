@@ -40,8 +40,10 @@ ept_msm <- function(dat, at) {
     diag.status.ct <- dat$attr$diag.status.ct
     
     lnt <- dat$attr$last.neg.test
-    lnt.gc <- dat$attr$last.neg.test.gc
-    lnt.ct <- dat$attr$last.neg.test.ct
+    lnt.rgc <- dat$attr$last.neg.test.rgc
+    lnt.ugc <- dat$attr$last.neg.test.ugc
+    lnt.rct <- dat$attr$last.neg.test.rct
+    lnt.uct <- dat$attr$last.neg.test.uct
     lnt.syph <- dat$attr$last.neg.test.syph
     
     eptElig <- dat$attr$eptElig

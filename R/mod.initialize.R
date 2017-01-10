@@ -670,8 +670,10 @@ init_status_sti_msm <- function(dat) {
     diag.time.gc <- rep(NA, num)
     diag.time.ct <- rep(NA, num)
     last.neg.test.syph <- rep(NA, num)
-    last.neg.test.gc <- rep(NA, num)
-    last.neg.test.ct <- rep(NA, num)
+    last.neg.test.rgc <- rep(NA, num)
+    last.neg.test.ugc <- rep(NA, num)
+    last.neg.test.rct <- rep(NA, num)
+    last.neg.test.uct <- rep(NA, num)
     infector.syph <- rep(NA, num)
     inf.role.syph <- rep(NA, num)
     inf.type.syph <- rep(NA, num)
@@ -686,7 +688,6 @@ init_status_sti_msm <- function(dat) {
     stage.latelat.sympt <- rep(NA, num)
     stage.latelatelat.sympt <- rep(NA, num)
     stage.tert.sympt <- rep(NA, num)
-    ttntest.syph <- rep(NA, num)
     tt.traj.syph <- rep(NA, num)
     tt.traj.gc <- rep(NA, num)
     tt.traj.ct <- rep(NA, num)
@@ -796,21 +797,6 @@ init_status_sti_msm <- function(dat) {
     # Set diagnosis status for syphilis 
     diag.status.syph[syphilis == 1] <- 0
     
-    # Time to next test
-    selected.ann <- which(tt.traj.syph == 1)
-    selected.36mo <- which(tt.traj.syph == 2)
-
-    if (dat$param$testing.pattern == "interval") {
-         ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
-                                 max = dat$param$sti.annualtest.int))
-         ttntest.syph[selected.36mo] <- ceiling(runif(length(selected.36mo), min = 0,
-                                 max = dat$attr$sti.36motest.int))
-    }
-    if (dat$param$testing.pattern == "memoryless") {
-         ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$sti.annualtest.int))
-         ttntest.syph[selected.36mo] <- rgeom(length(selected.36mo), 1 / (dat$attr$sti.36motest.int))
-    }
-    
     ## GC/CT status
     idsUreth <- which(role.class %in% c("I", "V"))
     idsRect <- which(role.class %in% c("R", "V"))
@@ -884,10 +870,11 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$diag.time.syph <- diag.time.syph
-    dat$attr$ttntest.syph <- ttntest.syph
     dat$attr$last.neg.test.syph <- last.neg.test.syph
-    dat$attr$last.neg.test.gc <- last.neg.test.gc
-    dat$attr$last.neg.test.ct <- last.neg.test.ct
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct
     dat$attr$infector.syph <- infector.syph
     dat$attr$inf.role.syph <- inf.role.syph
     dat$attr$inf.type.syph <- inf.type.syph
