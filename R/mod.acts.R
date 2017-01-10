@@ -31,7 +31,7 @@ acts_msm <- function(dat, at) {
     # Attributes
     status <- dat$attr$status
     race <- dat$attr$race
-    syphstatus <- dat$attr$syphstatus
+    syphilis <- dat$attr$syphilis
     rGC <- dat$attr$rGC
     uGC <- dat$attr$uGC
     rCT <- dat$attr$rCT

@@ -108,7 +108,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                            prob = dat$param$tt.traj.W.prob)
   
   # Non-NA STI variables
-  dat$attr$syphstatus[newIds] <- rep(0, nBirths)
+  dat$attr$syphilis[newIds] <- rep(0, nBirths)
   dat$attr$rGC[newIds] <- rep(0, nBirths)
   dat$attr$rCT[newIds] <- rep(0, nBirths)
   dat$attr$uGC[newIds] <- rep(0, nBirths)

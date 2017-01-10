@@ -127,7 +127,7 @@ test_sti_msm <- function(dat, at) {
     diag.status.syph <- dat$attr$diag.status.syph
     diag.status.gc <- dat$attr$diag.status.gc
     diag.status.ct <- dat$attr$diag.status.ct
-    syphstatus <- dat$attr$syphstatus
+    syphilis <- dat$attr$syphilis
     rGC <- dat$attr$rGC
     uGC <- dat$attr$uGC
     rCT <- dat$attr$rCT
@@ -272,7 +272,7 @@ test_sti_msm <- function(dat, at) {
     
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    tst.syph.pos <- tst.syph.all[syphstatus[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.syph.pos <- tst.syph.all[syphilis[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
     tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
     
     # GC testing

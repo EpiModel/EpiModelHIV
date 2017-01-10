@@ -135,7 +135,7 @@ progress_syph_msm <- function(dat, at) {
     
     # Attributes
     active <- dat$attr$active
-    syphstatus <- dat$attr$syphstatus
+    syphilis <- dat$attr$syphilis
     time.since.inf.syph <- at - dat$attr$syph.infTime
     syph.immune.time <- dat$attr$syph.immune.time
     stage.syph <- dat$attr$stage.syph

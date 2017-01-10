@@ -37,7 +37,7 @@ prevalence_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
-  syphstatus <- dat$attr$syphstatus
+  syphilis <- dat$attr$syphilis
   rGC.sympt <- dat$attr$rGC.sympt
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
@@ -202,10 +202,10 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / dat$epi$num[at]
   dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
   dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
-  dat$epi$prev.syph[at] <- length(which(syphstatus == 1)) / dat$epi$num[at]
+  dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]
   
-  dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(syphstatus == 1))) / dat$epi$s.num[at]
-  dat$epi$prev.syph.hivpos[at] <- length(intersect(which(status == 1), which(syphstatus == 1))) / dat$epi$i.num[at]
+  dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at]
+  dat$epi$prev.syph.hivpos[at] <- length(intersect(which(status == 1), which(syphilis == 1))) / dat$epi$i.num[at]
   
   dat$epi$prev.gc.hivneg[at] <- length(intersect(which(status == 0), which((rGC == 1 | uGC == 1)))) / dat$epi$s.num[at]
   dat$epi$prev.gc.hivpos[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) / dat$epi$i.num[at]
@@ -213,10 +213,10 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.ct.hivneg[at] <- length(intersect(which(status == 0), which((rCT == 1 | uCT == 1)))) / dat$epi$s.num[at]
   dat$epi$prev.ct.hivpos[at] <- length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / dat$epi$i.num[at]
   
-  dat$epi$prev.hiv.syphpos[at] <- length(intersect(which(status == 1), which(syphstatus == 1))) /
-                                    length(which(syphstatus == 1))
-  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(syphstatus == 0))) /
-      length(which(syphstatus == 0))
+  dat$epi$prev.hiv.syphpos[at] <- length(intersect(which(status == 1), which(syphilis == 1))) /
+                                    length(which(syphilis == 1))
+  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(syphilis == 0))) /
+      length(which(syphilis == 0))
   
   dat$epi$prev.hiv.gcpos[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
                                 sum((rGC == 1 | uGC == 1), na.rm = TRUE)
@@ -240,23 +240,23 @@ prevalence_msm <- function(dat, at) {
                              (sum(rCT == 0, na.rm = TRUE) +
                                 sum(uCT == 0, na.rm = TRUE))) * 5200
   
-  dat$epi$ir100.syph[at] <- (dat$epi$incid.syph[at] / sum(syphstatus == 0 , na.rm = TRUE)) * 5200
+  dat$epi$ir100.syph[at] <- (dat$epi$incid.syph[at] / sum(syphilis == 0 , na.rm = TRUE)) * 5200
 
   dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
-                                rCT == 1 | uCT == 1 | syphstatus == 1 , na.rm = TRUE) / dat$epi$num[at]
+                                rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) / dat$epi$num[at]
   dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at] + dat$epi$incid.syph[at]) /
                               (sum(rGC == 0, na.rm = TRUE) +
                                  sum(uGC == 0, na.rm = TRUE) +
                                  sum(rCT == 0, na.rm = TRUE) +
                                  sum(uCT == 0, na.rm = TRUE) +
-                                 sum(syphstatus == 0, na.rm = TRUE))) * 5200
+                                 sum(syphilis == 0, na.rm = TRUE))) * 5200
 
   dat$epi$ir100.sti.prep[at] <- (dat$epi$incid.gcct.prep[at] + dat$epi$incid.syph.prep[at] /
                                   (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
-                                       sum(syphstatus == 0 & prepStat == 1, na.rm = TRUE))) * 5200
+                                       sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
 
   return(dat)
 }

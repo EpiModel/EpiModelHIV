@@ -48,7 +48,7 @@ trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
-  syphstatus <- dat$attr$syphstatus
+  syphilis <- dat$attr$syphilis
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
@@ -88,7 +88,7 @@ trans_msm <- function(dat, at) {
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
   ip.stage <- stage[disc.ip[, 1]]
-  ip.syph.infector <- syphstatus[disc.ip[, 1]]
+  ip.syph.infector <- syphilis[disc.ip[, 1]]
 
   # Attributes of susceptible
   ip.ccr5 <- ccr5[disc.ip[, 2]]
@@ -96,7 +96,7 @@ trans_msm <- function(dat, at) {
   ip.prepcl <- prepClass[disc.ip[, 2]]
   ip.rGC <- rGC[disc.ip[, 2]]
   ip.rCT <- rCT[disc.ip[, 2]]
-  ip.syph.infectee <- syphstatus[disc.ip[, 2]]
+  ip.syph.infectee <- syphilis[disc.ip[, 2]]
 
   # Base TP from VL
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
@@ -152,7 +152,7 @@ trans_msm <- function(dat, at) {
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
-  rp.syph.infector <-syphstatus[disc.rp[, 2]]
+  rp.syph.infector <-syphilis[disc.rp[, 2]]
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
@@ -161,7 +161,7 @@ trans_msm <- function(dat, at) {
   rp.prepcl <- prepClass[disc.rp[, 1]]
   rp.uGC <- uGC[disc.rp[, 1]]
   rp.uCT <- uCT[disc.rp[, 1]]
-  rp.syph.infectee <- syphstatus[disc.rp[, 1]]
+  rp.syph.infectee <- syphilis[disc.rp[, 1]]
 
   # Base TP from VL
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)

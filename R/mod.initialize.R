@@ -700,23 +700,23 @@ init_status_sti_msm <- function(dat) {
     
 
     # Infection status for syphilis
-    syphstatus <- rep(0, num)
-    while (sum(syphstatus[ids.B]) != nInfsyphB) {
-        syphstatus[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
+    syphilis <- rep(0, num)
+    while (sum(syphilis[ids.B]) != nInfsyphB) {
+        syphilis[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
     }
-       while (sum(syphstatus[ids.W]) != nInfsyphW) {
-    syphstatus[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
+       while (sum(syphilis[ids.W]) != nInfsyphW) {
+    syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
        }
-    syph.timesInf[syphstatus == 1] <- 1
-    syph.infTime[syphstatus ==  1] <- 1
-    dat$attr$syphstatus <- syphstatus
+    syph.timesInf[syphilis == 1] <- 1
+    syph.infTime[syphilis ==  1] <- 1
+    dat$attr$syphilis <- syphilis
         
-    inf.ids.B <- which(syphstatus[ids.B] == 1)
-    inf.ids.W <- which(syphstatus[ids.W] == 1)
+    inf.ids.B <- which(syphilis[ids.B] == 1)
+    inf.ids.W <- which(syphilis[ids.W] == 1)
     inf.ids <- c(inf.ids.B, inf.ids.W)
     
-    notinf.ids.B <- which(syphstatus[ids.B] == 0)
-    notinf.ids.W <- which(syphstatus[ids.B] == 0)
+    notinf.ids.B <- which(syphilis[ids.B] == 0)
+    notinf.ids.W <- which(syphilis[ids.B] == 0)
     
     # Stage of infection
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
@@ -793,23 +793,23 @@ init_status_sti_msm <- function(dat) {
     syph.immune.time[selected] <- time.since.immune
     syph.tx[selected] <- NA
     
-    # Diagnosed?
-    diag.status.syph[syphstatus == 1] <- 0
+    # Set diagnosis status for syphilis 
+    diag.status.syph[syphilis == 1] <- 0
     
     # Time to next test
-    #selected.ann <- which(tt.traj.syph == 1)
-    #selected.36mo <- which(tt.traj.syph == 2)
+    selected.ann <- which(tt.traj.syph == 1)
+    selected.36mo <- which(tt.traj.syph == 2)
 
-    #  if (dat$param$testing.pattern == "interval") {
-    #         ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
-    #                                 max = dat$param$sti.annualtest.int))
-    #         ttntest.syph[selected.36mo] <- ceiling(runif(length(selected.36mo), min = 0,
-    #                                 max = dat$attr$sti.36motest.int))
-    # }
-    # if (dat$param$testing.pattern == "memoryless") {
-    #         ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$sti.annualtest.int))
-    #         ttntest.syph[selected.36mo] <- rgeom(length(selected.36mo), 1 / (dat$attr$sti.36motest.int))
-    # }
+    if (dat$param$testing.pattern == "interval") {
+         ttntest.syph[selected.ann] <- ceiling(runif(length(selected.ann), min = 0,
+                                 max = dat$param$sti.annualtest.int))
+         ttntest.syph[selected.36mo] <- ceiling(runif(length(selected.36mo), min = 0,
+                                 max = dat$attr$sti.36motest.int))
+    }
+    if (dat$param$testing.pattern == "memoryless") {
+         ttntest.syph[selected.ann] <- rgeom(length(selected.ann), 1 / (dat$param$sti.annualtest.int))
+         ttntest.syph[selected.36mo] <- rgeom(length(selected.36mo), 1 / (dat$attr$sti.36motest.int))
+    }
     
     ## GC/CT status
     idsUreth <- which(role.class %in% c("I", "V"))
