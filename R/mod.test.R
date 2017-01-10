@@ -136,6 +136,8 @@ test_sti_msm <- function(dat, at) {
     # ttntest.syph <- dat$attr$ttntest.syph
     # # Add attrs for GC and CT ttntest in init or elsewhere
      
+    role.class <- dat$attr$role.class
+    
     stage.syph <- dat$attr$stage.syph
     diag.time.syph <- dat$attr$diag.time.syph
     sexactive <- dat$attr$sexactive
@@ -167,6 +169,12 @@ test_sti_msm <- function(dat, at) {
     ttntest.ct <- ttntest.ct - time.unit
     
     # Testing Rates by serostatus/race?
+    # All MSM with HIV infection entering care should be screened for gonorrhea and 
+    # chlamydia at appropriate anatomic sites of exposure, as well as for syphilis
+    
+    # More frequent STD screening (i.e., for syphilis, gonorrhea, and chlamydia) 
+    # at 3–6-month intervals is indicated for MSM, including those with HIV infection 
+    # if risk behaviors persist or if they or their sexual partners have multiple partners.
     
     # Symptomatic vs asymptomatic testing?
 
@@ -277,13 +285,21 @@ test_sti_msm <- function(dat, at) {
     
     # GC testing
     tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
-    tst.gc.pos <- tst.gc.all[rGC == 1 | uGC == 1]
-    tst.gc.neg <- setdiff(tst.gc.all, tst.gc.pos)
+    tst.rgc <- test.gc.all[dat$attr$role.class %in% c("R", "V")]
+    tst.ugc <- test.gc.all[dat$attr$role.class %in% c("I", "V")]
+    tst.rgc.pos <- tst.rgc[rGC == 1]
+    tst.ugc.pos <- tst.ugc[uGC == 1]
+    tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
+    tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
     
     # CT testing
     tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
-    tst.ct.pos <- tst.ct.all[rCT == 1 | uCT == 1]
-    tst.ct.neg <- setdiff(tst.ct.all, tst.ct.pos)
+    tst.rct <- test.ct.all[dat$attr$role.class %in% c("R", "V")]
+    tst.uct <- test.ct.all[dat$attr$role.class %in% c("I", "V")]
+    tst.rct.pos <- tst.rct[rCT == 1]
+    tst.uct.pos <- tst.uct[uCT == 1]
+    tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
+    tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
     
     # Syphilis Attributes
     dat$attr$last.neg.test.syph[tst.syph.neg] <- at

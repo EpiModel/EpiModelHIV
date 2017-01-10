@@ -132,8 +132,9 @@ riskhist_msm <- function(dat, at) {
   idsept <- which((at - sexactive) <= dat$param$ept.risk.int)
   dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
   
-  # Random treatment trajectory
-  # 1 = Never, 2 = Yearly, 3 = runif(3-6 months)
+  # Assign/adjust STI testing trajectory based on indications
+  dat$attr$stitest.active
+  dat$attr$stitest.highrisk
   
 
   return(dat)
