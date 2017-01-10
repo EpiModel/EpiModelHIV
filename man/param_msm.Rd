@@ -72,16 +72,17 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
   syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
   ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
-  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
-  syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 0.4,
-  syph.seco.sympt.prob.tx = 0.7, syph.seco.asympt.prob.tx = 0.5,
-  syph.earlat.prob.tx = 0.1, syph.latelat.prob.tx = 0.1,
-  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.6,
-  sti.annualtest.int = 364, sti.highrisktest.int = 182,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
-  hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
-  hiv.dual.rr = 0.2, hiv.syph.rr = 2.1, syph.hiv.rr = 2.6, ...)
+  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0.9,
+  ct.asympt.prob.tx = 0.85, syph.prim.sympt.prob.tx = 0.6,
+  syph.prim.asympt.prob.tx = 0.6, syph.seco.sympt.prob.tx = 0.7,
+  syph.seco.asympt.prob.tx = 0.7, syph.earlat.prob.tx = 0.1,
+  syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
+  syph.tert.asympt.prob.tx = 0.9, sti.annualtest.int = 364,
+  sti.highrisktest.int = 182, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2.1,
+  syph.hiv.rr = 2.6, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -562,20 +563,20 @@ infection with syphilis.}
 
 \item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
 
-\item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
+\item{gc.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic gonorrhea.}
 
-\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+\item{ct.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic chlamydia.}
 
 \item{syph.prim.sympt.prob.tx}{Probability of treatment for symptomatic primary
 stage syphilis infection.}
 
-\item{syph.prim.asympt.prob.tx}{Probability of treatment for asymptomatic primary
+\item{syph.prim.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic primary
 stage syphilis infection.}
 
 \item{syph.seco.sympt.prob.tx}{Probability of treatment for symptomatic secondary
 stage syphilis infection.}
 
-\item{syph.seco.asympt.prob.tx}{Probability of treatment for asymptomatic secondary
+\item{syph.seco.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic secondary
 stage syphilis infection.}
 
 \item{syph.earlat.prob.tx}{Probability of treatment for symptomatic or
@@ -587,7 +588,7 @@ asymptomatic late latent stage syphilis infection.}
 \item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic tertiary
 stage syphilis infection.}
 
-\item{syph.tert.asympt.prob.tx}{Probability of treatment for asymptomatic tertiary
+\item{syph.tert.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic tertiary
 stage syphilis infection.}
 
 \item{sti.annualtest.int}{Interval in days between STI screening for annual testers}

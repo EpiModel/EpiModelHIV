@@ -14,7 +14,7 @@ individual-level attributes, and summary statistics.}
 }
 \value{
 This function returns the \code{dat} object with updated \code{last.neg.test},
-\code{diag.status} and \code{diag.time} attributes.
+\code{diag.status} and \code{diag.time} attributes for each STI.
 }
 \description{
 Module function for STI diagnostic testing of infected persons.

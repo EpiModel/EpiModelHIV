@@ -109,7 +109,7 @@ test_msm <- function(dat, at) {
 #'
 #' @return
 #' This function returns the \code{dat} object with updated \code{last.neg.test},
-#' \code{diag.status} and \code{diag.time} attributes.
+#' \code{diag.status} and \code{diag.time} attributes for each STI.
 #'
 #' @keywords module msm
 #'
@@ -175,7 +175,7 @@ test_sti_msm <- function(dat, at) {
     # at 3–6-month intervals is indicated for MSM, including those with HIV infection 
     # if risk behaviors persist or if they or their sexual partners have multiple partners.
     
-    # Symptomatic vs asymptomatic testing?
+    # Mostly asymptomatic testing handled here - symptomatic testing is equated to probability of symptomatic treatment
 
     ## Process for syphilis
     if (testing.pattern.sti == "memoryless") {

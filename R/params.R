@@ -329,15 +329,15 @@
 #'        infection with syphilis.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
 #' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
-#' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
-#' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chlamydia.
+#' @param gc.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic gonorrhea.
+#' @param ct.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic chlamydia.
 #' @param syph.prim.sympt.prob.tx Probability of treatment for symptomatic primary
 #'        stage syphilis infection.
-#' @param syph.prim.asympt.prob.tx Probability of treatment for asymptomatic primary
+#' @param syph.prim.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic primary
 #'        stage syphilis infection.
 #' @param syph.seco.sympt.prob.tx Probability of treatment for symptomatic secondary
 #'        stage syphilis infection.
-#' @param syph.seco.asympt.prob.tx Probability of treatment for asymptomatic secondary
+#' @param syph.seco.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic secondary
 #'        stage syphilis infection.
 #' @param syph.earlat.prob.tx Probability of treatment for symptomatic or
 #'        asymptomatic early latent stage syphilis infection.
@@ -345,7 +345,7 @@
 #'        asymptomatic late latent stage syphilis infection.
 #' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic tertiary
 #'        stage syphilis infection.
-#' @param syph.tert.asympt.prob.tx Probability of treatment for asymptomatic tertiary
+#' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic tertiary
 #'        stage syphilis infection.
 #' @param sti.annualtest.int Interval in days between STI screening for annual testers
 #' @param sti.highrisktest.int Interval in days between STI screening for annual testers
@@ -571,17 +571,17 @@ param_msm <- function(nwstats,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,
-                      gc.asympt.prob.tx = 0,
-                      ct.asympt.prob.tx = 0,
+                      gc.asympt.prob.tx = 0.90,
+                      ct.asympt.prob.tx = 0.85,
                       
                       syph.prim.sympt.prob.tx = 0.60,
-                      syph.prim.asympt.prob.tx = 0.40,
+                      syph.prim.asympt.prob.tx = 0.60,
                       syph.seco.sympt.prob.tx = 0.70,
-                      syph.seco.asympt.prob.tx = 0.50,
+                      syph.seco.asympt.prob.tx = 0.70,
                       syph.earlat.prob.tx = 0.10,
                       syph.latelat.prob.tx = 0.10,
                       syph.tert.sympt.prob.tx = 0.90,
-                      syph.tert.asympt.prob.tx = 0.60,
+                      syph.tert.asympt.prob.tx = 0.90,
                       
                       sti.annualtest.int = 364,
                       sti.highrisktest.int = 182,

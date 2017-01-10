@@ -801,8 +801,8 @@ sti_tx <- function(dat, at) {
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
   
+  
   # symptomatic syphilis treatment
-  # add in diagnosed infection? only will function when testing module is referenced
   idssyph_tx_sympt_prim <- which(dat$attr$syphilis == 1 & 
                                 dat$attr$syph.infTime < at &
                                 dat$attr$stage.syph == 2 &
@@ -835,7 +835,6 @@ sti_tx <- function(dat, at) {
 
   
   # Asymptomatic syphilis treatment
-  # Eligible to be treated
   idssyph_tx_asympt_prim <- which(dat$attr$syphilis == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 2 &
@@ -921,8 +920,9 @@ sti_tx <- function(dat, at) {
                             is.na(dat$attr$uGC.tx) &
                             dat$attr$prepStat %in% prep.stand.tx.grp)
   idsGC_tx_asympt <- c(idsRGC_tx_asympt, idsUGC_tx_asympt)
-
-  txGC_asympt <- idsGC_tx_asympt[which(rbinom(length(idsGC_tx_asympt), 1,
+  idsGC_tx_asympt_dx <- which(diag.status.gc[idsGC_tx_asympt] == 1)
+  
+  txGC_asympt <- idsGC_tx_asympt_dx[which(rbinom(length(idsGC_tx_asympt_dx), 1,
                                               gc.asympt.prob.tx) == 1)]
   txRGC_asympt <- intersect(idsRGC_tx_asympt, txGC_asympt)
   txUGC_asympt <- intersect(idsUGC_tx_asympt, txGC_asympt)
@@ -953,11 +953,11 @@ sti_tx <- function(dat, at) {
   txRCT_sympt <- intersect(idsRCT_tx_sympt, txCT_sympt)
   txUCT_sympt <- intersect(idsUCT_tx_sympt, txCT_sympt)
 
-  # asymptomatic ct treatment
+  # asymptomatic ct treatment - add diagnosis
   idsRCT_tx_asympt <- which(dat$attr$rCT == 1 &
                             dat$attr$rCT.infTime < at &
                             dat$attr$rCT.sympt == 0 &
-                            is.na(dat$attr$rCT.tx) &
+                            dat$attr$diag.status.ct == 1 &
                             dat$attr$prepStat == 0)
   idsUCT_tx_asympt <- which(dat$attr$uCT == 1 &
                             dat$attr$uCT.infTime < at &
@@ -965,8 +965,9 @@ sti_tx <- function(dat, at) {
                             is.na(dat$attr$uCT.tx) &
                             dat$attr$prepStat == 0)
   idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)
-
-  txCT_asympt <- idsCT_tx_asympt[which(rbinom(length(idsCT_tx_asympt), 1,
+  idsCT_tx_asympt_dx <- which(diag.status.ct[idsCT_tx_asympt] == 1)
+  
+  txCT_asympt <- idsCT_tx_asympt_dx[which(rbinom(length(idsCT_tx_asympt_dx), 1,
                                               ct.asympt.prob.tx) == 1)]
   txRCT_asympt <- intersect(idsRCT_tx_asympt, txCT_asympt)
   txUCT_asympt <- intersect(idsUCT_tx_asympt, txCT_asympt)
@@ -1100,7 +1101,7 @@ sti_tx <- function(dat, at) {
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
                     idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
-                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which( dat$attr$stage.prim.sympt == 0 |
+                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which(dat$attr$stage.prim.sympt == 0 |
                                                                              dat$attr$stage.seco.sympt == 0 | dat$attr$stage.earlat.sympt == 0 |
                                                                              dat$attr$stage.latelat.sympt == 0 | dat$attr$stage.tert.sympt == 0)))
   dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
