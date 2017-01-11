@@ -28,6 +28,9 @@ riskhist_msm <- function(dat, at) {
 
   ## Parameters
   time.unit <- dat$param$time.unit
+  sti.annualtest.int <- dat$param$sti.annualtest.int
+  sti.highrisktest.int <- dat$param$sti.highrisktest.int
+  ept.risk.int <- dat$param$ept.risk.int
 
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
@@ -45,9 +48,9 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
-    dat$attr$stitest.active <- rep(NA, length(uid))
-    dat$attr$stitest.highrisk <- rep(NA, length(uid))
-    dat$attr$stitest.recurrsti <- rep(NA, length(uid))
+    dat$attr$stitest.ind.active <- rep(NA, length(uid))
+    dat$attr$stitest.ind.highrisk <- rep(NA, length(uid))
+    dat$attr$stitest.ind.recurrsti <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -104,37 +107,46 @@ riskhist_msm <- function(dat, at) {
   ## STI Testing conditions
   
   # Sexually active - annual testing for syphilis, CT, GC
-  idsactive <- which((at - sexactive) <= dat$param$sti.activetest.int)
-  dat$attr$stitest.active[idsactive] <- at
+  idsactive <- which((at - sexactive) <= sti.activetest.int)
+  dat$attr$stitest.ind.active[idsactive] <- at
   
+  # CDC definition of increased risk for women
+  # Add these indications to top of this module 
+  #	Have a new sex partner
+    # in x months?
   
-  # High risk: Multiple sex partners
-  # Update to be # of unique partners
+  #	Have more than one sex partner
+    # Count unique # of partners in last x months - relies on new partners
   idshighriskSTI <- which(tot.deg > 1)
-  dat$attr$stitest.highrisk <- at
+  dat$attr$stitest.ind.highrisk <- at
   
-  # High risk: Condomless AI?
-  uai.any <- unique(c(el2$p1[el2$uai > 0],
-                      el2$p2[el2$uai > 0]))
+  #	Have a sex partner with concurrent partners
   
-  # High risk: any PrEP indications?
-  dat$attr$stitest.prep1b[part.not.tested.6mo] <- at
-  dat$attr$stitest.prep2b[uai.nmain] <- at
-  dat$attr$stitest.prep3[ai.sd] <- at
-  dat$attr$stitest.prep4[idsDx] <- at
+  #	Have a sex partner who has a sexually transmitted infection - reformat edge list?	
+
+  #	Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
+  # Could be a closer approximation?
+  uai.nmain <- unique(c(el$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
+                        el$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
+  dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
   
-  # High risk: recurrent STI infections
-  idsSTI <- which(dat$attr$syph.timesInf > 1 | sum(dat$attr$rGC.timesInf, dat$attr$uGC.timesInf) > 1 |
-                      sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) > 1)
-  dat$attr$stitest.recurrsti[idsSTI] <- at
-  
+  #	Previous or coexisting STIs
+  idsSTI <- which(dat$attr$syph.timesInf >= 1 | sum(dat$attr$rGC.timesInf, dat$attr$uGC.timesInf) >= 1 |
+                      sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) >= 1)
+  dat$attr$stitest.ind.sti[idsSTI] <- at
+    
+
   ## EPT
-  idsept <- which((at - sexactive) <= dat$param$ept.risk.int)
+  idsept <- which((at - sexactive) <= ept.risk.int)
   dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
   
-  # Assign/adjust STI testing trajectory based on indications
-  dat$attr$stitest.active
-  dat$attr$stitest.highrisk
+  ## Assign/adjust STI testing trajectory based on indications
+  
+  # Annual STI testing trajectory
+  tt.traj.syph[idsactive] <- tt.traj.gc[idsactive] <- tt.traj.ct[idsactive] <- 1
+  
+  # 3-6 month STI testing trajectory
+  tt.traj.syph[] <- tt.traj.gc[] <- tt.traj.ct <- 2
   
 
   return(dat)

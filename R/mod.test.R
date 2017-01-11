@@ -141,7 +141,6 @@ test_sti_msm <- function(dat, at) {
     sexactive <- dat$attr$sexactive
      
     prepStat <- dat$attr$prepStat
-    prep.tst.int <- dat$param$prep.tst.int
     
     tt.traj.syph <- dat$attr$tt.traj.syph
     tt.traj.gc <- dat$attr$tt.traj.gc
@@ -150,9 +149,11 @@ test_sti_msm <- function(dat, at) {
     # Parameters
     time.unit <- dat$param$time.unit
     testing.pattern.sti <- dat$param$testing.pattern.sti
+    prep.tst.int <- dat$param$prep.tst.int
     sti.annualtest.int <- dat$param$sti.annualtest.int
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
+    
      
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
@@ -172,6 +173,7 @@ test_sti_msm <- function(dat, at) {
     # Testing Rates by serostatus/race?
     # All MSM with HIV infection entering care should be screened for gonorrhea and 
     # chlamydia at appropriate anatomic sites of exposure, as well as for syphilis
+    # For sexually active individuals, screen at first HIV evaluation, and at least annually thereafter8
     
     # More frequent STD screening (i.e., for syphilis, gonorrhea, and chlamydia) 
     # at 3–6-month intervals is indicated for MSM, including those with HIV infection 
