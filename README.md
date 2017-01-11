@@ -20,9 +20,6 @@ devtools::install_github("statnet/EpiModelHIV")
 
 Documentation on using this software package is forthcoming, although limited function documentation is provided within the package and available with the `help(package = "EpiModelHIV")` command.
 
-### Note on Repository and Package Name
-This Github repository `EpiModelHIV` and the R package within it were previously named `EpiModelHIVmsm`. On 6/24/2016, we merged that MSM package with our `EpiModelHIVhet` (HIV models for heterosexuals) into this combined repository and package. All scripts from those separate packages should still function with this current version after changing the input to `library`. 
-
 ## Software Development Team
 
 Author                                                        | Department                 | Institution
