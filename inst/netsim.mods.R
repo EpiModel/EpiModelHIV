@@ -8,12 +8,12 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.13,
-                   syph.tprob = 0.021,
-                   rgc.tprob = 0.40,
-                   ugc.tprob = 0.30,
-                   rct.tprob = 0.24,
-                   uct.tprob = 0.2,
+                   ai.scale = 1.00,
+                   syph.tprob = 0.022,
+                   rgc.tprob = 0.45, # was 0.357698
+                   ugc.tprob = 0.35, # was 0.248095
+                   rct.tprob = 0.25, # was 0.321597
+                   uct.tprob = 0.18, # was 0.212965
                    hiv.syph.rr = 2.00,
                    syph.hiv.rr = 2.40,
                    prep.coverage = 0,
