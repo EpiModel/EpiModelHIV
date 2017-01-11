@@ -142,15 +142,17 @@ test_sti_msm <- function(dat, at) {
      
     prepStat <- dat$attr$prepStat
     prep.tst.int <- dat$param$prep.tst.int
+    
+    tt.traj.syph <- dat$attr$tt.traj.syph
+    tt.traj.gc <- dat$attr$tt.traj.gc
+    tt.traj.ct <- dat$attr$tt.traj.ct
      
     # Parameters
     time.unit <- dat$param$time.unit
     testing.pattern.sti <- dat$param$testing.pattern.sti
     sti.annualtest.int <- dat$param$sti.annualtest.int
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
-    tt.traj.syph <- dat$param$tt.traj.syph
-    tt.traj.gc <- dat$attr$tt.traj.gc
-    tt.traj.ct <- dat$attr$tt.traj.ct
+    tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
      
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
@@ -280,6 +282,7 @@ test_sti_msm <- function(dat, at) {
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
     tst.rsyph <- tst.syph.all[dat$attr$role.class %in% c("R", "V")]
+    tst.rsyph <- sample(tst.rsyph, tst.rect.sti.rr * length(tst.rsyph))
     tst.usyph <- tst.syph.all[dat$attr$role.class %in% c("I", "V")]
     tst.rsyph.pos <- tst.rsyph[syphilis[tst.rsyph] == 1 & stage.syph[tst.rsyph] %in% c(2, 3, 4, 5, 6, 7)]
     tst.usyph.pos <- tst.usyph[syphilis[tst.usyph] == 1 & stage.syph[tst.usyph] %in% c(2, 3, 4, 5, 6, 7)]
@@ -291,6 +294,7 @@ test_sti_msm <- function(dat, at) {
     # GC testing
     tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
     tst.rgc <- tst.gc.all[dat$attr$role.class %in% c("R", "V")]
+    tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
     tst.ugc <- tst.gc.all[dat$attr$role.class %in% c("I", "V")]
     tst.rgc.pos <- tst.rgc[rGC == 1]
     tst.ugc.pos <- tst.ugc[uGC == 1]
@@ -302,6 +306,7 @@ test_sti_msm <- function(dat, at) {
     # CT testing
     tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
     tst.rct <- tst.ct.all[dat$attr$role.class %in% c("R", "V")]
+    tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
     tst.uct <- tst.ct.all[dat$attr$role.class %in% c("I", "V")]
     tst.rct.pos <- tst.rct[rCT == 1]
     tst.uct.pos <- tst.uct[uCT == 1]

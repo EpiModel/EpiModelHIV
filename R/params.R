@@ -347,6 +347,7 @@
 #'        stage syphilis infection.
 #' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic tertiary
 #'        stage syphilis infection.
+#' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested        
 #' @param sti.annualtest.int Interval in days between STI screening for annual testers
 #' @param sti.highrisktest.int Interval in days between STI screening for annual testers
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
@@ -583,6 +584,7 @@ param_msm <- function(nwstats,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 0.90,
                       
+                      tst.rect.sti.rr = 1,
                       sti.annualtest.int = 364,
                       sti.highrisktest.int = 182,
                      
