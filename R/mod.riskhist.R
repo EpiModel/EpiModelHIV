@@ -104,21 +104,24 @@ riskhist_msm <- function(dat, at) {
   dat$attr$prep.ind.sti[idsDx] <- at
   
   
-  ## STI Testing conditions
+  ## STI Testing Conditions
   
   # Sexually active - annual testing for syphilis, CT, GC
-  idsactive <- which((at - sexactive) <= sti.activetest.int)
+  idsactive <- which((at - sexactive) <= sti.annualtest.int)
   dat$attr$stitest.ind.active[idsactive] <- at
   
-  # CDC definition of increased risk for women
+  # High-risk: CDC definition of increased risk for women
   # Add these indications to top of this module 
   #	Have a new sex partner
     # in x months?
   
   #	Have more than one sex partner
-    # Count unique # of partners in last x months - relies on new partners
-  idshighriskSTI <- which(tot.deg > 1)
-  dat$attr$stitest.ind.highrisk <- at
+  # A: Total degree at time point >1 - not ideal, will lapse quickly    
+  idstotdeg <- which(tot.deg > 1)
+  dat$attr$stitest.ind.totdeg[idstotdeg] <- at
+  
+  # B: Count unique # of partners in last x months - relies on new partners
+  # If tot.deg > 1 in last x months?
   
   #	Have a sex partner with concurrent partners
   
@@ -135,19 +138,23 @@ riskhist_msm <- function(dat, at) {
                       sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) >= 1)
   dat$attr$stitest.ind.sti[idsSTI] <- at
     
-
-  ## EPT
-  idsept <- which((at - sexactive) <= ept.risk.int)
-  dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
+  # All high-risk indications
+  idshighrisk <- c()
   
   ## Assign/adjust STI testing trajectory based on indications
   
   # Annual STI testing trajectory
   tt.traj.syph[idsactive] <- tt.traj.gc[idsactive] <- tt.traj.ct[idsactive] <- 1
   
-  # 3-6 month STI testing trajectory
-  tt.traj.syph[] <- tt.traj.gc[] <- tt.traj.ct <- 2
+  # 3-6 month STI testing trajectory - will overwrite annual
+  tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2
   
+  # Remove testing trajectory if no longer indicated
+  tt.traj.syph[!(idsactive)] <- tt.traj.gc[!(idsactive)] <- tt.traj.ct[!(idsactive)] <- NA
+  
+  ## EPT
+  idsept <- which((at - sexactive) <= ept.risk.int)
+  dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
 
   return(dat)
 }
