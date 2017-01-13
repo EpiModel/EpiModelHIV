@@ -111,7 +111,16 @@ riskhist_msm <- function(dat, at) {
   dat$attr$stitest.ind.active[idsactive] <- at
   
   # High-risk: CDC definition of increased risk for women
-  # Add these indications to top of this module 
+  # Add these indications to top of this module
+  
+  # Subset a new master el by time in period
+  elnewedges <- elnewedges[(at - first) <= sti.highrisktest.int]
+
+  # or cumulative new partners attribute in a time frame by month
+    # needs massaging
+    # mark time of each edge?
+  idsnewedges <- which((at - ) <= sti.highrisktest.int)
+    
   #	Have a new sex partner
     # in x months?
   
@@ -139,7 +148,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$stitest.ind.sti[idsSTI] <- at
     
   # All high-risk indications
-  idshighrisk <- c()
+  # idshighrisk <- c()
   
   ## Assign/adjust STI testing trajectory based on indications
   

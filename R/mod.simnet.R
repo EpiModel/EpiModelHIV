@@ -85,6 +85,10 @@ simnet_msm <- function(dat, at) {
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
 
+  # Create new master el recording time edge first occurred, last occurred, and subset? 
+  dat$elnewedges <- rbind()
+  # need to rid of edges when d
+  
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
   }
