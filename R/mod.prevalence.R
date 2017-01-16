@@ -110,6 +110,9 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$txGC <- rNA
     dat$epi$txCT <- rNA
+
+    dat$epi$prep.sens <- rNA
+    dat$epi$prep.spec <- rNA
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -164,7 +167,7 @@ prevalence_msm <- function(dat, at) {
                                 sum(uCT == 0, na.rm = TRUE))) * 5200
 
   dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
-                                rCT ==1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
+                                rCT == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at]) /
                               (sum(rGC == 0, na.rm = TRUE) +
                                  sum(uGC == 0, na.rm = TRUE) +
@@ -176,6 +179,12 @@ prevalence_msm <- function(dat, at) {
                                    sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE))) * 5200
+
+  dat$epi$prep.sens[at] <- sum(dat$attr$prepElig.ever[dat$attr$status == 1] == 1, na.rm = TRUE) /
+                           sum(dat$attr$status == 1, na.rm = TRUE)
+
+  dat$epi$prep.spec[at] <- sum(dat$attr$prepElig.ever[dat$attr$status == 0] == 0, na.rm = TRUE) /
+                           sum(dat$attr$status == 0, na.rm = TRUE)
 
   return(dat)
 }
