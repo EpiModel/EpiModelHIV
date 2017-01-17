@@ -83,7 +83,6 @@ initialize_msm <- function(x, param, init, control, s) {
   ids.W <- which(dat$attr$race == "W")
 
   dat$attr$active <- rep(1, num)
-  dat$attr$sexactive <- rep(NA, num)
   dat$attr$uid <- 1:num
   dat$temp$max.uid <- num
 
@@ -650,7 +649,6 @@ init_status_sti_msm <- function(dat) {
     ins.quot <- dat$attr$ins.quot
     role.class <- dat$attr$role.class
     active <- dat$attr$active
-    sexactive <- dat$attr$sexactive
 
     # Infection Status
     nInfsyphB <- round(dat$init$prev.syph.B * num.B)
@@ -698,7 +696,8 @@ init_status_sti_msm <- function(dat) {
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
                                       min(dat$init$ages), 0))
-    
+    sexactive <- rep(NA, num)
+    sexnewedge <- rep(NA, num)
 
     # Infection status for syphilis
     syphilis <- rep(0, num)
@@ -897,6 +896,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptElig <- eptElig
     dat$attr$eptStat <- eptStat
     dat$attr$eptEligdate <- eptEligdate
+    dat$attr$sexactive <- sexactive
+    dat$attr$sexnewedge <- sexnewedge
     
     return(dat)
     

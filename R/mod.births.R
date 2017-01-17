@@ -80,7 +80,6 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
   # Demographic
   dat$attr$active[newIds] <- rep(1, nBirths)
-  dat$att$sexactive[newIds] <- rep(NA, nBirths)
   dat$attr$uid[newIds] <- dat$temp$max.uid + (1:nBirths)
   dat$temp$max.uid <- dat$temp$max.uid + nBirths
 

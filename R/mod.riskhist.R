@@ -25,6 +25,7 @@ riskhist_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
   sexactive <- dat$attr$sexactive
+  sexnewedge <- dat$attr$sexnewedge
 
   ## Parameters
   time.unit <- dat$param$time.unit
@@ -50,12 +51,12 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
     dat$attr$stitest.ind.active <- rep(NA, length(uid))
     dat$attr$stitest.ind.highrisk <- rep(NA, length(uid))
-    dat$attr$stitest.ind.recurrsti <- rep(NA, length(uid))
+    dat$attr$stitest.ind.totdeg <- rep(NA, length(uid))
+    dat$attr$stitest.ind.sti <- rep(NA, length(uid))
   }
 
   ## Degree ##
   main.deg <- get_degree(dat$el[[1]])
-  casl.deg <- get_degree(dat$el[[2]])
   inst.deg <- get_degree(dat$el[[3]])
 
 
@@ -110,22 +111,13 @@ riskhist_msm <- function(dat, at) {
   idsactive <- which((at - sexactive) <= sti.annualtest.int)
   dat$attr$stitest.ind.active[idsactive] <- at
   
-  # High-risk: CDC definition of increased risk for women
-  # Add these indications to top of this module
+  # High-risk: CDC definition of increased risk for women - Add these indications to top of this module
   
-  # Subset a new master el by time in period
-  elnewedges <- elnewedges[(at - first) <= sti.highrisktest.int]
-
-  # or cumulative new partners attribute in a time frame by month
-    # needs massaging
-    # mark time of each edge?
-  idsnewedges <- which((at - ) <= sti.highrisktest.int)
-    
   #	Have a new sex partner
-    # in x months?
+  idsnewpart <- which((at - sexnewedge) <- sti.highrisktest.int) 
   
   #	Have more than one sex partner
-  # A: Total degree at time point >1 - not ideal, will lapse quickly    
+  # A: Total degree at time point > 1 - not ideal, will lapse quickly    
   idstotdeg <- which(tot.deg > 1)
   dat$attr$stitest.ind.totdeg[idstotdeg] <- at
   
@@ -138,9 +130,9 @@ riskhist_msm <- function(dat, at) {
 
   #	Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
   # Could be a closer approximation?
-  uai.nmain <- unique(c(el$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
-                        el$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
-  dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
+  #uai.nmain <- unique(c(el$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
+  #                      el$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
+  #dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
   
   #	Previous or coexisting STIs
   idsSTI <- which(dat$attr$syph.timesInf >= 1 | sum(dat$attr$rGC.timesInf, dat$attr$uGC.timesInf) >= 1 |
@@ -148,7 +140,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$stitest.ind.sti[idsSTI] <- at
     
   # All high-risk indications
-  # idshighrisk <- c()
+  idshighrisk <- c(idsnewpart, idsSTI)
   
   ## Assign/adjust STI testing trajectory based on indications
   

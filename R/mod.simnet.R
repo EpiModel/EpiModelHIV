@@ -85,9 +85,15 @@ simnet_msm <- function(dat, at) {
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
 
-  # Create new master el recording time edge first occurred, last occurred, and subset? 
-  dat$elnewedges <- rbind()
-  # need to rid of edges when d
+  # Check if had recent new edge in an interval - multiple edges in last x months - only works for first new edge right now
+  idsrecentedge <- which((dat$attr$sexnewedge - at) <= dat$param$sti.highrisktest.int)
+  dat$attr$sexmultedge <- idsrecentedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])]
+  #dat$attr$sexmultedge
+  # what about longer-term partnerships? sexactive and new edge? tot.deg?
+  
+  # Timing of newest edge
+  dat$attr$sexnewedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])] <- at
+  dat$attr$sexnewedge[which(dat$attr$uid %in% dat$el[[3]][, 1:2])] <- at
   
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)

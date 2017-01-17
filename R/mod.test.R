@@ -319,18 +319,23 @@ test_sti_msm <- function(dat, at) {
     
     # Syphilis Attributes
     dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+    dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
     dat$attr$diag.status.syph[tst.syph.pos] <- 1
     dat$attr$diag.time.syph[tst.syph.pos] <- at
     
     # GC Attributes
     dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
     dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
+    dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
+    dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
     dat$attr$diag.status.gc[tst.gc.pos] <- 1
     dat$attr$diag.time.gc[tst.gc.pos] <- at
     
     # CT Attributes
     dat$attr$last.neg.test.rct[tst.rct.neg] <- at
     dat$attr$last.neg.test.uct[tst.uct.neg] <- at
+    dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
+    dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
     dat$attr$diag.status.ct[tst.ct.pos] <- 1
     dat$attr$diag.time.gc[tst.ct.pos] <- at
     
