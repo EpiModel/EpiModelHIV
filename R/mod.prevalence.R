@@ -113,6 +113,14 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$prep.sens <- rNA
     dat$epi$prep.spec <- rNA
+
+    dat$epi$prep.sens.1y <- dat$epi$prep.sens.2y <- dat$epi$prep.sens.3y <-
+      dat$epi$prep.sens.4y <- dat$epi$prep.sens.5y <- rNA
+    dat$epi$prep.spec.1y <- dat$epi$prep.spec.2y <- dat$epi$prep.spec.3y <-
+      dat$epi$prep.spec.4y <- dat$epi$prep.spec.5y <- rNA
+
+    dat$epi$prep.sens.ftime <- rNA
+    dat$epi$prep.sens.ltime <- rNA
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -180,11 +188,34 @@ prevalence_msm <- function(dat, at) {
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE))) * 5200
 
-  dat$epi$prep.sens[at] <- sum(dat$attr$prepElig.ever[dat$attr$status == 1] == 1, na.rm = TRUE) /
-                           sum(dat$attr$status == 1, na.rm = TRUE)
 
-  dat$epi$prep.spec[at] <- sum(dat$attr$prepElig.ever[dat$attr$status == 0] == 0, na.rm = TRUE) /
-                           sum(dat$attr$status == 0, na.rm = TRUE)
+  # new stats
+  prepElig.ever <- dat$attr$prepElig.ever
+  prepElig.first <- dat$attr$prepElig.first
+  prepElig.last <- dat$attr$prepElig.last
+  inf.time <- dat$attr$inf.time
+
+  dat$epi$prep.sens[at] <- sum(prepElig.ever[status == 1] == 1, na.rm = TRUE) /
+                           sum(status == 1, na.rm = TRUE)
+
+  dat$epi$prep.spec[at] <- sum(prepElig.ever[status == 0] == 0, na.rm = TRUE) /
+                           sum(status == 0, na.rm = TRUE)
+
+  for (j in 1:5) {
+    num <- which(status == 1 & (at - inf.time <= j * 52) & (at - prepElig.last <= j * 52))
+    den <- which(status == 1 & (at - inf.time <= j * 52))
+    vname <- paste0("prep.sens.", j, "y")
+    dat$epi[[vname]][at] <- length(num) / length(den)
+
+    num <- which(dat$attr$status == 0 & (prepElig.ever == 0 | (at - prepElig.last >= j * 52)))
+    den <- which(dat$attr$status == 0)
+    vname <- paste0("prep.spec.", j, "y")
+    dat$epi[[vname]][at] <- length(num) / length(den)
+  }
+
+  Infprep <- which(status == 1 & dat$attr$prepElig.ever == 1)
+  dat$epi$prep.sens.ftime[at] <- mean(inf.time[Infprep] - prepElig.first[Infprep], na.rm = TRUE)
+  dat$epi$prep.sens.ltime[at] <- mean(inf.time[Infprep] - prepElig.last[Infprep], na.rm = TRUE)
 
   return(dat)
 }
