@@ -57,6 +57,7 @@ riskhist_msm <- function(dat, at) {
 
   ## Degree ##
   main.deg <- get_degree(dat$el[[1]])
+  casl.deg <- get_degree(dat$el[[2]])
   inst.deg <- get_degree(dat$el[[3]])
 
 
@@ -105,8 +106,9 @@ riskhist_msm <- function(dat, at) {
   dat$attr$prep.ind.sti[idsDx] <- at
   
   
-  ## STI Testing Conditions
-  
+  ## STI Testing and EPT Conditions
+  part.list <- dat$temp$part.list
+ 
   # Sexually active - annual testing for syphilis, CT, GC
   idsactive <- which((at - sexactive) <= sti.annualtest.int)
   dat$attr$stitest.ind.active[idsactive] <- at
@@ -114,7 +116,7 @@ riskhist_msm <- function(dat, at) {
   # High-risk: CDC definition of increased risk for women - Add these indications to top of this module
   
   #	Have a new sex partner
-  idsnewpart <- which((at - sexnewedge) <- sti.highrisktest.int) 
+  idsnewpart <- which((at - sexnewedge) <= sti.highrisktest.int) 
   
   #	Have more than one sex partner
   # A: Total degree at time point > 1 - not ideal, will lapse quickly    

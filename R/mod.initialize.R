@@ -154,6 +154,10 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
+  
+  # Relationship tracking
+  dat$temp$part.list <- matrix(NA, nrow = 0, ncol = 6)
+  colnames(dat$temp$part.list) <- c("uid1", "uid2", "ptype", "start.time", "last.active.time", "end.time")
 
   dat <- prevalence_msm(dat, at = 1)
 

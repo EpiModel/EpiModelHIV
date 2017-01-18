@@ -86,14 +86,16 @@ simnet_msm <- function(dat, at) {
                                           coef = nwparam.i$coef.form)
 
   # Check if had recent new edge in an interval - multiple edges in last x months - only works for first new edge right now
-  idsrecentedge <- which((dat$attr$sexnewedge - at) <= dat$param$sti.highrisktest.int)
-  dat$attr$sexmultedge <- idsrecentedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])]
+  #idsrecentedge <- which((dat$attr$sexnewedge - at) <= dat$param$sti.highrisktest.int)
+  #dat$attr$sexmultedge <- idsrecentedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])]
   #dat$attr$sexmultedge
   # what about longer-term partnerships? sexactive and new edge? tot.deg?
   
   # Timing of newest edge
   dat$attr$sexnewedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])] <- at
   dat$attr$sexnewedge[which(dat$attr$uid %in% dat$el[[3]][, 1:2])] <- at
+  
+  # Set no longer active edges to end.time
   
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
