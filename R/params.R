@@ -773,6 +773,7 @@ init_msm <- function(nwstats,
 #' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
+#' @param part.FUN Module function for creating master partnership matrix.
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
 #' @param condoms.FUN Module function to simulate condom use within acts.
@@ -825,6 +826,7 @@ control_msm <- function(simno = 1,
                         roleclass.FUN = NULL,
                         resim_nets.FUN = simnet_msm,
                         disclose.FUN = disclose_msm,
+                        part.FUN = part_msm,
                         acts.FUN = acts_msm,
                         condoms.FUN = condoms_msm,
                         riskhist.FUN = riskhist_msm,

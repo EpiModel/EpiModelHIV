@@ -132,58 +132,6 @@ disclose_msm <- function(dat, at){
       }
     }
       
-      
-      # STI tracking
-      # Order with lowest uid value first - just to create matrix
-      highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
-      lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
-      part.el <- rbind(highlow[, 2:1], lowhigh)
-       
-      # Check for not already in partnership list
-      part.list <- dat$temp$part.list
-      exist.cdl <- part.list[, 1] * 1e7 + part.list[, 2]
-      check.cdl <- uid[part.el[, 1]] * 1e7 + uid[part.el[, 2]]
-      notpartlist <- !(check.cdl %in% exist.cdl)
-       
-      # data frame of pairs not yet in edgelist
-      notyet <- part.el[notpartlist, , drop = FALSE]
-      
-      # If there are any eligible pairs to add
-      if (nrow(notyet) > 0) {
-
-          if (type %in% c("main", "pers", "inst")) {
-              # Check that rel is new
-              # new.edges matrix is expressed in uid, so need to transform notyet
-              new.edges <- dat$temp$new.edges #only includes types 1 and 2 so far
-              new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
-                              (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-                  ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
-                       (new.edges[, 1] * 1e7 + new.edges[, 2]))
-          
-              if (type == "main") {
-                  parttype = 1
-              }
-              if (type == "pers") {
-                  parttype = 2
-              }
-              if (type == "inst") {
-                  parttype = 3
-              }      
-              
-              
-          # Write output
-          if (length(new.rel) > 0) {
-              new.part <- cbind(uid1 = uid[notyet[, 1]],
-                                 uid2 = uid[notyet[, 2]],
-                                 ptype = parttype,
-                                 start.time = at,
-                                 last.active.time = at,
-                                 end.time = NA)
-              dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
-           }
-      
-    
-    }
   }
     
   if (at > 2) {
@@ -194,29 +142,7 @@ disclose_msm <- function(dat, at){
                match(discl.list[, 2] * 1e7 + discl.list[, 1],
                      uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
     dat$temp$discl.list <- discl.list[m, ]
-    
-    # Partnership tracking - last x months
-    part.list <- dat$temp$part.list
-    
-    # Select matching partnerships to update last active date of partnership
-    # Update for edges that do not have an end date (is.na(partlist[, "end.time"]))
-    part.list2 <- part.list[is.na(part.list[ , "end.time"])]
-    m2 <- which(match(part.list2[, 1] * 1e7 + part.list2[, 2],
-                     uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-                   match(part.list2[, 2] * 1e7 + part.list2[, 1],
-                         uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
-    existing <- master.el[m2, ]
-    dat$temp$part.list[existing, "last.active.time"] <- at
-    
-    # Instantaneous - end time and last.active.time get value of start.time
-    dat$temp$part.list[ , c("last.active.time", "end.time")][dat$temp$part.list[, "ptype" == 3]] <- dat$temp$part.list[, "start.time"]
-
-    # Partnership end dates for non-instantaneous
-
-    # Subset part.list to include only partnerships active in last x months
-    dat$temp$part.list <- dat$temp$part.list[(at-(dat$temp$part.list[, "last.active.time"]) <= dat$param$sti.highrisk.int), ]
   }
 
   return(dat)
-    }
 }

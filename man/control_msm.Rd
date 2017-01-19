@@ -11,7 +11,7 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   ept.FUN = ept_msm, progress.FUN = progress_msm,
   progresssyph.FUN = progress_syph_msm, vl.FUN = vl_msm,
   aiclass.FUN = NULL, roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
-  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
+  disclose.FUN = disclose_msm, part.FUN = part_msm, acts.FUN = acts_msm,
   condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
   position.FUN = position_msm, trans.FUN = trans_msm,
   stitrans.FUN = sti_trans, stirecov.FUN = sti_recov, stitx.FUN = sti_tx,
@@ -67,6 +67,8 @@ model.}
 step.}
 
 \item{disclose.FUN}{Module function for HIV status disclosure.}
+
+\item{part.FUN}{Module function for creating master partnership matrix.}
 
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
