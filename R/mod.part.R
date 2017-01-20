@@ -111,19 +111,12 @@ part_msm <- function(dat, at){
         # Partnership tracking - last x months
         part.list <- dat$temp$part.list
         
-        # Select matching (currently in edgelist and existing temp$part.list) partnerships to update last active date of partnership
-        m2 <- which(match(part.list[, 1] * 1e7 + part.list[, 2],
-                          uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-                        match(part.list[, 2] * 1e7 + part.list[, 1],
-                              uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
-
-        existing <- part.list[m2, ]
-
-
-        dat$temp$part.list[existing, 5] <- at
-        
-        # Update for edges that do not have an end date (is.na(partlist[, "end.time"]))
-        # part.list2 <- part.list[is.na(part.list[ , 6]), ]
+        # Select matching ((currently in edgelist and existing temp$part.list) and no end date yet) partnerships to update last active date of partnership
+        part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
+                              uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
+                          match(part.list[, 2] * 1e7 + part.list[, 1],
+                                uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) & is.na(part.list[, 6])), 5] <- at
+  
         
         # Add partnership end dates for non-instantaneous
         
