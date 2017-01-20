@@ -9,11 +9,11 @@ est
 st
 param <- param_msm(nwstats = st,
                    ai.scale = 1.00,
-                   syph.tprob = 0.022,
-                   rgc.tprob = 0.45, # was 0.357698
+                   syph.tprob = 0.024,
+                   rgc.tprob = 0.40, # was 0.357698
                    ugc.tprob = 0.35, # was 0.248095
-                   rct.tprob = 0.25, # was 0.321597
-                   uct.tprob = 0.18, # was 0.212965
+                   rct.tprob = 0.20, # was 0.321597
+                   uct.tprob = 0.15, # was 0.212965
                    hiv.syph.rr = 2.00,
                    syph.hiv.rr = 2.40,
                    prep.coverage = 0,
@@ -64,6 +64,7 @@ dat <- update_roleclass_msm(dat, at)
 dat <- edges_correct_msm(dat, at)
 dat <- simnet_msm(dat, at)
 dat <- disclose_msm(dat, at)
+dat <- part_msm(dat, at)
 dat <- acts_msm(dat, at)
 dat <- condoms_msm(dat, at)
 dat <- riskhist_msm(dat, at)
