@@ -28,7 +28,7 @@ part_msm <- function(dat, at){
         uid <- dat$attr$uid
         
         # Parameters and network
-        part.int <- dat$param$sti.highrisk.int
+        part.int <- dat$param$sti.highrisktest.int
         if (type == "main") {
             el <- dat$el[[1]]
         }
@@ -95,8 +95,11 @@ part_msm <- function(dat, at){
                               end.time = NA)
             dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
             
+            if (type %in% "inst") {
+                
             # Instantaneous - last.active.time and end.time columnns get value of start.time
-            dat$temp$part.list[ , 5:6][dat$temp$part.list[, 3] == 3] <- dat$temp$part.list[, "start.time"]
+                dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <- dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
+        }
         }
     }
     
@@ -108,22 +111,22 @@ part_msm <- function(dat, at){
         # Partnership tracking - last x months
         part.list <- dat$temp$part.list
         
-        # Select matching partnerships to update last active date of partnership
-        # Update for edges that do not have an end date (is.na(partlist[, "end.time"]))
-        part.list2 <- part.list[is.na(part.list[ , "end.time"])]
-        m2 <- which(match(part.list2[, 1] * 1e7 + part.list2[, 2],
+        # Select matching (currently in edgelist and existing temp$part.list) partnerships to update last active date of partnership
+        m2 <- which(match(part.list[, 1] * 1e7 + part.list[, 2],
                           uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-                        match(part.list2[, 2] * 1e7 + part.list2[, 1],
+                        match(part.list[, 2] * 1e7 + part.list[, 1],
                               uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
-        existing <- master.el[m2, ]
         dat$temp$part.list[existing, 5] <- at
+        
+        # Update for edges that do not have an end date (is.na(partlist[, "end.time"]))
+        # part.list2 <- part.list[is.na(part.list[ , 6]), ]
         
         # Add partnership end dates for non-instantaneous
         
         # Subset part.list to include only partnerships active in last x months
         dat$temp$part.list <- dat$temp$part.list[(at-(dat$temp$part.list[, 5]) <= part.int), ]
     }
-    
+return(dat)    
 }
 
     
