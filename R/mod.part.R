@@ -116,10 +116,10 @@ part_msm <- function(dat, at){
                           uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
                         match(part.list[, 2] * 1e7 + part.list[, 1],
                               uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
-<<<<<<< HEAD
+
         existing <- part.list[m2, ]
-=======
->>>>>>> origin/syph_ept
+
+
         dat$temp$part.list[existing, 5] <- at
         
         # Update for edges that do not have an end date (is.na(partlist[, "end.time"]))
