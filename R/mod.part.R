@@ -29,6 +29,7 @@ part_msm <- function(dat, at){
         
         # Parameters and network
         part.int <- dat$param$sti.highrisktest.int
+        
         if (type == "main") {
             el <- dat$el[[1]]
         }
@@ -74,8 +75,7 @@ part_msm <- function(dat, at){
                     parttype = 3
                 }
                 
-                # Check that rel is new
-                # new.edges matrix is expressed in uid, so need to transform notyet
+                # new.edges matrix is expressed in uid, so check notyet vs. new.edges
                 new.edges <- dat$temp$new.edges #only includes types 1 and 2 so far
                 new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
                                 (new.edges[, 1] * 1e7 + new.edges[, 2])) |
@@ -97,7 +97,7 @@ part_msm <- function(dat, at){
             
             if (type %in% "inst") {
                 
-            # Instantaneous - last.active.time and end.time columnns get value of start.time
+            # Instantaneous - last.active.time and end.time columns get value of start.time
                 dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <- dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
         }
         }
@@ -111,17 +111,34 @@ part_msm <- function(dat, at){
         # Partnership tracking - last x months
         part.list <- dat$temp$part.list
         
-        # Select matching ((currently in edgelist and existing temp$part.list) and no end date yet) partnerships to update last active date of partnership
+        # Add partnership end dates for non-instantaneous
+        dead.edges.m <- attributes(dat$el[[1]])$changes
+        dead.edges.m <- dead.edges.m[dead.edges.m[, "to"] == 0, 1:2, drop = FALSE]
+        dead.edges.p <- attributes(dat$el[[2]])$changes
+        dead.edges.p <- dead.edges.p[dead.edges.p[, "to"] == 0, 1:2, drop = FALSE]
+        dead.edges <- rbind(dead.edges.m, dead.edges.p)
+        
+        dead.rel <- ((uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) %in%
+                        (part.list[, 1] * 1e7 + part.list[, 2])) |
+            ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in%
+                 (part.list[, 1] * 1e7 + part.list[, 2]))
+        
+        if (length(dead.rel) > 0) {
+            part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
+                             uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |
+                           match(part.list[, 2] * 1e7 + part.list[, 1],
+                                 uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]))), 6] <- at
+        }
+        
+        # Select matching ((currently in both edgelist and existing temp$part.list) and no end date yet) partnerships to update last active date of partnership
         part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
                               uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
                           match(part.list[, 2] * 1e7 + part.list[, 1],
                                 uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) & is.na(part.list[, 6])), 5] <- at
-  
-        
-        # Add partnership end dates for non-instantaneous
-        
+          
         # Subset part.list to include only partnerships active in last x months
-        dat$temp$part.list <- dat$temp$part.list[(at-(dat$temp$part.list[, 5]) <= part.int), ]
+        part.list <- part.list[which((at-(part.list[, 5]) <= part.int)), ]
+        dat$temp$part.list <- part.list
     }
 return(dat)    
 }
