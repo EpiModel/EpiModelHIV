@@ -365,7 +365,8 @@
 #'        given dual infection with both gonorrhea and chlamydia.
 #' @param hiv.syph.rr Relative risk of HIV infection given current syphilis infection.
 #' @param syph.hiv.rr Relative risk of syphilis infection given current HIV infection.
-#'
+#' @param part_list.start Time step at which persisting edge list should begin
+#'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -515,7 +516,7 @@ param_msm <- function(nwstats,
                       ept.risk.int = 60,
                       ept.coverage = 0,
                       ept.cov.method = "curr",
-                      ept.cov.rate = 1, 
+                      ept.cov.rate = 1,
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -591,6 +592,8 @@ param_msm <- function(nwstats,
                       hiv.dual.rr = 0.2,
                       hiv.syph.rr = 2.1,
                       syph.hiv.rr = 2.6,
+                      
+                      part_list.start = 2600 - sti.highrisktest.int,
                       
                       ...) {
 

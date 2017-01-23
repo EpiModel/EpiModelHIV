@@ -20,6 +20,10 @@
 #' @export
 #'
 part_msm <- function(dat, at){
+    
+    if (at < dat$param$part_list.start) {
+        return(dat)
+    }
     for (type in c("main", "pers", "inst")) {
         
         # Variables --------------------------------------------------------------
