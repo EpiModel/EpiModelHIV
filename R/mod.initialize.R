@@ -905,7 +905,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners
-    dat$attr$stitestLastElig <- stitestLastRisk
+    dat$attr$stitestLastElig <- stitestLastElig
     
     return(dat)
     

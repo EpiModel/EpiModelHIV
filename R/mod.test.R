@@ -160,7 +160,7 @@ test_sti_msm <- function(dat, at) {
     
     # Eligibility and trajectory
     # Base eligibility
-    idsEligTest <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
+    idsEligTest <- which(active == 1)
     
     # Annual indications- sexually active in last year
     stitestind1 <- dat$attr$stitest.ind.active

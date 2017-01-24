@@ -83,7 +83,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
   hiv.dual.rr = 0.2, hiv.syph.rr = 2.1, syph.hiv.rr = 2.6,
-  part_list.start = 2600 - sti.highrisktest.int, ...)
+  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -624,10 +624,10 @@ given dual infection with both gonorrhea and chlamydia.}
 
 \item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
 
+\item{...}{Additional arguments passed to the function.}
+
 \item{part_list.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}
-
-\item{...}{Additional arguments passed to the function.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

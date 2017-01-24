@@ -593,7 +593,7 @@ param_msm <- function(nwstats,
                       hiv.syph.rr = 2.1,
                       syph.hiv.rr = 2.6,
                       
-                      part_list.start = 2600 - sti.highrisktest.int,
+                      partlist.start = stitest.start - sti.highrisktest.int - 1,
                       
                       ...) {
 
@@ -675,6 +675,7 @@ param_msm <- function(nwstats,
 
 
   p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  p$riskh.stitest.start <- max(1, stitest.start - sti.highrisktest.int - 1)
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 
   p$method <- nwstats$method
