@@ -126,15 +126,17 @@ riskhist_msm <- function(dat, at) {
   dat$attr$stitest.ind.newpartners[idsnewpartners] <- at
   
   ## Multiple sex partners
-  # Reset # of partners to 0
-  dat$attr$recentpartners <- rep(0, length(uid))
-  
+
   #	Have more than one sex partner in last x months
   part.count <- as.data.frame(table(part.list[, 1:2]))
   idspartlist <- which(uid %in% part.list[, 1:2])
-  dat$attr$recentpartners[idspartlist] <- part.count[, 2]
+  idsnotpartlist <- which(!(uid%in% part.list[, 1:2]))
+  dat$attr$recentpartners[idspartlist] <- part.count[idspartlist, 2]
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
+  
+  # Reset # of partners to 0 for those no longer in part.list
+  dat$attr$recentpartners[idsnotpartlist] <- 0
   
   #	Have a sex partner with concurrent partners
   
