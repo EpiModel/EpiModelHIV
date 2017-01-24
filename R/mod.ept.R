@@ -72,6 +72,10 @@ ept_msm <- function(dat, at) {
     
     eptElig[idsEligStart] <- 1
 
+    # ## EPT
+    # idsept <- which((at - sexactive) <= ept.risk.int)
+    # dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
+    
     
     ## Stoppage ------------------------------------------------------------------
     

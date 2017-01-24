@@ -48,7 +48,7 @@ part_msm <- function(dat, at){
         
         
         # Processes --------------------------------------------------------------
-        # STI tracking
+        # STI tracking - start with existing edge list
         # Order with lowest uid value first - just to create matrix
         highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
         lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
@@ -107,7 +107,7 @@ part_msm <- function(dat, at){
         }
     }
     
-    if (at > 2) {
+    if (at > (dat$param$partlist.start)) {
         
         # Existing edges to reference against partnership list
         master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])

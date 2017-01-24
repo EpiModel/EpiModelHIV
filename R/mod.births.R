@@ -117,6 +117,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$rCT.timesInf[newIds] <- rep(0, nBirths)
   dat$attr$uGC.timesInf[newIds] <- rep(0, nBirths)
   dat$attr$uCT.timesInf[newIds] <- rep(0, nBirths)
+  dat$attr$recentpartners[newIds] <- rep(0, nBirths)
 
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)

@@ -121,9 +121,11 @@ test_sti_msm <- function(dat, at) {
         return(dat)
     }
     
+    
     ## Variables
     
     # Attributes
+    active <- dat$attr$active
     diag.status.syph <- dat$attr$diag.status.syph
     diag.status.gc <- dat$attr$diag.status.gc
     diag.status.ct <- dat$attr$diag.status.ct
@@ -132,12 +134,14 @@ test_sti_msm <- function(dat, at) {
     uGC <- dat$attr$uGC
     rCT <- dat$attr$rCT
     uCT <- dat$attr$uCT
-    inf.time.syph <- dat$attr$inf.time.syph
+    #inf.time.syph <- dat$attr$inf.time.syph
     
     role.class <- dat$attr$role.class
     
     stage.syph <- dat$attr$stage.syph
     diag.time.syph <- dat$attr$diag.time.syph
+    diag.time.gc <- dat$attr$diag.time.gc
+    diag.time.ct <- dat$attr$diag.time.ct
     sexactive <- dat$attr$sexactive
      
     prepStat <- dat$attr$prepStat
@@ -154,7 +158,43 @@ test_sti_msm <- function(dat, at) {
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
     
-     
+    # Eligibility and trajectory
+    # Base eligibility
+    idsEligTest <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
+    
+    # Annual indications- sexually active in last year
+    stitestind1 <- dat$attr$stitest.ind.active
+    
+    # High-risk indications
+    stitestind2 <- dat$attr$stitest.ind.sti
+    stitestind3 <- dat$attr$stitest.ind.recentpartners
+    stitestind4 <- dat$attr$stitest.ind.newpartners
+    
+    
+    # Annual - testing trajectory update
+    annualindwindow <- at - sti.annualtest.int
+    idsannual <- intersect(which(at - stitestind1 <= annualindwindow), idsEligTest)
+    tt.traj.syph[idsannual] <- tt.traj.gc[idsannual] <- tt.traj.ct[idsannual] <- 1
+    
+    # High-risk - testing trajectory update
+    highriskindwindow <- at - sti.highrisktest.int
+    idshighrisk <- intersect(which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
+                                       (at - stitestind4 <= highriskindwindow)), idsEligTest)
+    tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2   
+    
+    
+
+    ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
+    
+    # Remove testing trajectory if no longer indicated (idsannual includes high-risk)
+    idsnottestelig <- which(active == 1 & tt.traj.syph %in% c(1, 2) & (at - stitestind1 >= annualindwindow))
+    stitestLastElig[idsnottestelig] <- at
+    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
+    dat$attr$stitestLastElig <- stitestLastElig
+    
+
+    ## Testing
+    
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     

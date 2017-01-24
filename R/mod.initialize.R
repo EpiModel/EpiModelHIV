@@ -696,6 +696,8 @@ init_status_sti_msm <- function(dat) {
     eptElig <- rep(NA, num)
     eptStat <- rep(NA, num)
     eptEligdate <- rep(NA, num)
+    recentpartners <- rep(0, num)
+    stitestLastElig <- rep(NA, num)
     
     time.sex.active <- pmax(1,
                             round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
@@ -902,6 +904,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptEligdate <- eptEligdate
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
+    dat$attr$recentpartners <- recentpartners
+    dat$attr$stitestLastElig <- stitestLastRisk
     
     return(dat)
     

@@ -12,7 +12,7 @@
 #'
 riskhist_msm <- function(dat, at) {
 
-  if (at < dat$param$riskh.start) {
+  if (at < dat$param$riskh.stitest.start) {
     return(dat)
   }
 
@@ -26,6 +26,9 @@ riskhist_msm <- function(dat, at) {
   uCT.tx <- dat$attr$uCT.tx
   sexactive <- dat$attr$sexactive
   sexnewedge <- dat$attr$sexnewedge
+  tt.traj.ct <- dat$attr$tt.traj.ct
+  tt.traj.gc <- dat$attr$tt.traj.gc
+  tt.traj.syph <- dat$attr$tt.traj.syph
 
   ## Parameters
   time.unit <- dat$param$time.unit
@@ -50,9 +53,9 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
     dat$attr$stitest.ind.active <- rep(NA, length(uid))
-    dat$attr$stitest.ind.highrisk <- rep(NA, length(uid))
-    dat$attr$stitest.ind.totdeg <- rep(NA, length(uid))
+    dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
     dat$attr$stitest.ind.sti <- rep(NA, length(uid))
+    dat$attr$stitest.ind.newpartners <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -106,7 +109,10 @@ riskhist_msm <- function(dat, at) {
   dat$attr$prep.ind.sti[idsDx] <- at
   
   
-  ## STI Testing and EPT Conditions
+  ####################################
+  ## STI Testing and EPT Conditions ##
+  ####################################
+  
   part.list <- dat$temp$part.list
  
   # Sexually active - annual testing for syphilis, CT, GC
@@ -115,16 +121,20 @@ riskhist_msm <- function(dat, at) {
   
   # High-risk: CDC definition of increased risk for women - Add these indications to top of this module
   
-  #	Have a new sex partner
-  idsnewpart <- which((at - sexnewedge) <= sti.highrisktest.int) 
+  ## Have a new sex partner in last x months
+  idsnewpartners <- which((at - sexnewedge) <= sti.highrisktest.int)
+  dat$attr$stitest.ind.newpartners[idsnewpartners] <- at
   
-  #	Have more than one sex partner
-  # A: Total degree at time point > 1 - not ideal, will lapse quickly    
-  idstotdeg <- which(tot.deg > 1)
-  dat$attr$stitest.ind.totdeg[idstotdeg] <- at
+  ## Multiple sex partners
+  # Reset # of partners to 0
+  dat$attr$recentpartners <- rep(0, length(uid))
   
-  # B: Count unique # of partners in last x months - relies on new partners
-  # If tot.deg > 1 in last x months?
+  #	Have more than one sex partner in last x months
+  part.count <- as.data.frame(table(part.list[, 1:2]))
+  idspartlist <- which(uid %in% part.list[, 1:2])
+  dat$attr$recentpartners[idspartlist] <- part.count[, 2]
+  idsrecentpartners <- which(dat$attr$recentpartners > 1)
+  dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
   
   #	Have a sex partner with concurrent partners
   
@@ -141,23 +151,11 @@ riskhist_msm <- function(dat, at) {
                       sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) >= 1)
   dat$attr$stitest.ind.sti[idsSTI] <- at
     
-  # All high-risk indications
-  idshighrisk <- c(idsnewpart, idsSTI)
-  
-  ## Assign/adjust STI testing trajectory based on indications
-  
-  # Annual STI testing trajectory
-  tt.traj.syph[idsactive] <- tt.traj.gc[idsactive] <- tt.traj.ct[idsactive] <- 1
-  
-  # 3-6 month STI testing trajectory - will overwrite annual
-  tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2
-  
-  # Remove testing trajectory if no longer indicated
-  tt.traj.syph[!(idsactive)] <- tt.traj.gc[!(idsactive)] <- tt.traj.ct[!(idsactive)] <- NA
-  
-  ## EPT
-  idsept <- which((at - sexactive) <= ept.risk.int)
-  dat$attr$ept.ind1[dat$param$ept.risk.int] <- at
 
+  # Reset attributes
+  dat$attr$tt.traj.ct <- tt.traj.ct
+  dat$attr$tt.traj.gc <- tt.traj.gc
+  dat$attr$tt.traj.syph <- tt.traj.syph
+  
   return(dat)
 }
