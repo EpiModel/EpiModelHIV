@@ -1,5 +1,6 @@
 rm(list=ls())
 suppressMessages(library("EpiModelHIV"))
+suppressMessages(library("dplyr"))
 sourceDir("R/")
 
 
@@ -8,12 +9,12 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.10,
-                   syph.tprob = 0.024,
-                   rgc.tprob = 0.35, # was 0.357698
-                   ugc.tprob = 0.25, # was 0.248095
-                   rct.tprob = 0.32, # was 0.321597
-                   uct.tprob = 0.21, # was 0.212965
+                   ai.scale = 1.12,
+                   syph.tprob = 0.0195,
+                   rgc.tprob = 0.40, # was 0.357698
+                   ugc.tprob = 0.35, # was 0.248095
+                   rct.tprob = 0.21, # was 0.321597
+                   uct.tprob = 0.15, # was 0.212965
                    hiv.syph.rr = 2.00,
                    syph.hiv.rr = 2.40,
                    prep.coverage = 0,
