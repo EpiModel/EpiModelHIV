@@ -21,7 +21,7 @@
 #'
 part_msm <- function(dat, at){
     
-    if (at < dat$param$part_list.start) {
+    if (at < dat$param$partlist.start) {
         return(dat)
     }
     for (type in c("main", "pers", "inst")) {
