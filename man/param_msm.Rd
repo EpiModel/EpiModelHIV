@@ -78,12 +78,12 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.seco.asympt.prob.tx = 0.7, syph.earlat.prob.tx = 0.1,
   syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
   syph.tert.asympt.prob.tx = 0.9, tst.rect.sti.rr = 1,
-  sti.annualtest.int = 364, sti.highrisktest.int = 182,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
-  hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
-  hiv.dual.rr = 0.2, hiv.syph.rr = 2.1, syph.hiv.rr = 2.6,
-  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
+  sti.highrisktest.int = 182, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, hiv.syph.rr = 2.1,
+  syph.hiv.rr = 2.6, partlist.start = stitest.start - sti.highrisktest.int -
+  1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -594,9 +594,7 @@ stage syphilis infection.}
 
 \item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested}
 
-\item{sti.annualtest.int}{Interval in days between STI screening for annual testers}
-
-\item{sti.highrisktest.int}{Interval in days between STI screening for annual testers}
+\item{sti.highrisktest.int}{Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 
@@ -624,10 +622,10 @@ given dual infection with both gonorrhea and chlamydia.}
 
 \item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
 
-\item{...}{Additional arguments passed to the function.}
-
-\item{part_list.start}{Time step at which persisting edge list should begin
+\item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}
+
+\item{...}{Additional arguments passed to the function.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

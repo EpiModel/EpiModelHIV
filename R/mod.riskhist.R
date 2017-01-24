@@ -32,7 +32,7 @@ riskhist_msm <- function(dat, at) {
 
   ## Parameters
   time.unit <- dat$param$time.unit
-  sti.annualtest.int <- dat$param$sti.annualtest.int
+  stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
   ept.risk.int <- dat$param$ept.risk.int
 
@@ -116,7 +116,7 @@ riskhist_msm <- function(dat, at) {
   part.list <- dat$temp$part.list
  
   # Sexually active - annual testing for syphilis, CT, GC
-  idsactive <- which((at - sexactive) <= sti.annualtest.int)
+  idsactive <- which((at - sexactive) <= stitest.active.int)
   dat$attr$stitest.ind.active[idsactive] <- at
   
   # High-risk: CDC definition of increased risk for women - Add these indications to top of this module

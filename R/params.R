@@ -348,8 +348,7 @@
 #' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic tertiary
 #'        stage syphilis infection.
 #' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested        
-#' @param sti.annualtest.int Interval in days between STI screening for annual testers
-#' @param sti.highrisktest.int Interval in days between STI screening for annual testers
+#' @param sti.highrisktest.int Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -365,7 +364,7 @@
 #'        given dual infection with both gonorrhea and chlamydia.
 #' @param hiv.syph.rr Relative risk of HIV infection given current syphilis infection.
 #' @param syph.hiv.rr Relative risk of syphilis infection given current HIV infection.
-#' @param part_list.start Time step at which persisting edge list should begin
+#' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
 #'
@@ -576,7 +575,6 @@ param_msm <- function(nwstats,
                       syph.tert.asympt.prob.tx = 0.90,
                       
                       tst.rect.sti.rr = 1,
-                      sti.annualtest.int = 364,
                       sti.highrisktest.int = 182,
                      
                       prep.sti.screen.int = 182,

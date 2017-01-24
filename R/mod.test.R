@@ -154,7 +154,7 @@ test_sti_msm <- function(dat, at) {
     time.unit <- dat$param$time.unit
     testing.pattern.sti <- dat$param$testing.pattern.sti
     prep.tst.int <- dat$param$prep.tst.int
-    sti.annualtest.int <- dat$param$sti.annualtest.int
+    stitest.active.int <- dat$param$stitest.active.int
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
     
@@ -172,9 +172,9 @@ test_sti_msm <- function(dat, at) {
     
     
     # Annual - testing trajectory update
-    annualindwindow <- at - sti.annualtest.int
-    idsannual <- intersect(which(at - stitestind1 <= annualindwindow), idsEligTest)
-    tt.traj.syph[idsannual] <- tt.traj.gc[idsannual] <- tt.traj.ct[idsannual] <- 1
+    activeindwindow <- at - stitest.active.int
+    idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
+    tt.traj.syph[idsactive] <- tt.traj.gc[idsactive] <- tt.traj.ct[idsactive] <- 1
     
     # High-risk - testing trajectory update
     highriskindwindow <- at - sti.highrisktest.int
@@ -224,7 +224,7 @@ test_sti_msm <- function(dat, at) {
          elig.syph.ann <- which(tt.traj.syph == 1 &
                                     (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                      prepStat == 0)
-             rates.syph <- rep(1/sti.annualtest.int, length(elig.syph.ann))
+             rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
              tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
          elig.syph.highrisk <- which(tt.traj.syph == 2 &
@@ -238,7 +238,7 @@ test_sti_msm <- function(dat, at) {
     if (testing.pattern.sti == "interval" ) {
          tst.syph.annual.interval <- which(tt.traj.syph == 1 &
                                            (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                            tsincelntst.syph >= 2*(sti.annualtest.int) &
+                                            tsincelntst.syph >= 2*(stitest.active.int) &
                                             prepStat == 0)
          tst.syph.highrisk.interval <- which(tt.traj.syph == 2 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
@@ -252,7 +252,7 @@ test_sti_msm <- function(dat, at) {
          elig.gc.ann <- which(tt.traj.gc == 1 &
                               (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                prepStat == 0)
-         rates.gc <- rep(1/sti.annualtest.int, length(elig.gc.ann))
+         rates.gc <- rep(1/stitest.active.int, length(elig.gc.ann))
          tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
     
          elig.gc.highrisk <- which(tt.traj.gc == 2 &
@@ -266,7 +266,7 @@ test_sti_msm <- function(dat, at) {
     if (testing.pattern.sti == "interval" ) {
          tst.gc.annual.interval <- which(tt.traj.gc == 1 &
                                          (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                          tsincelntst.gc >= 2*(sti.annualtest.int) &
+                                          tsincelntst.gc >= 2*(stitest.active.int) &
                                           prepStat == 0)
     
          tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
@@ -282,7 +282,7 @@ test_sti_msm <- function(dat, at) {
          elig.ct.ann <- which(tt.traj.ct == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
                             prepStat == 0)
-         rates.ct <- rep(1/sti.annualtest.int, length(elig.ct.ann))
+         rates.ct <- rep(1/stitest.active.int, length(elig.ct.ann))
          tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
     
          elig.ct.highrisk <- which(tt.traj.ct == 2 &
@@ -297,7 +297,7 @@ test_sti_msm <- function(dat, at) {
     if (testing.pattern.sti == "interval" ) {
          tst.ct.annual.interval <- which(tt.traj.ct == 1 &
                                          (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                          tsincelntst.ct >= 2*(sti.annualtest.int) &
+                                          tsincelntst.ct >= 2*(stitest.active.int) &
                                           prepStat == 0)
      
          tst.ct.highrisk.interval <- which(tt.traj.ct == 2 &
