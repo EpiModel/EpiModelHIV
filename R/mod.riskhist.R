@@ -138,14 +138,14 @@ riskhist_msm <- function(dat, at) {
   # Reset # of partners to 0 for those no longer in part.list
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
-  #	Have a sex partner with concurrent partners
+  #	Had/have a sex partner with concurrent partners
   
-  #	Have a sex partner who has a sexually transmitted infection - reformat edge list?	
+  #	Have a sex partner who has a sexually transmitted infection	
 
   #	Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
   # Could be a closer approximation?
-  #uai.nmain <- unique(c(el$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
-  #                      el$p2[el2$uai > 0 & el2$ptype %in% 2:3]))
+  #uai.nmain <- unique(c(el$p1[el$uai > 0 & el$ptype %in% 2:3],
+  #                      el$p2[el$uai > 0 & el$ptype %in% 2:3]))
   #dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
   
   #	Previous or coexisting STIs

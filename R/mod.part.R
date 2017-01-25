@@ -56,9 +56,9 @@ part_msm <- function(dat, at){
         
         # Check for not already in partnership list
         part.list <- dat$temp$part.list
-        exist.cdl <- part.list[, 1] * 1e7 + part.list[, 2]
-        check.cdl <- uid[part.el[, 1]] * 1e7 + uid[part.el[, 2]]
-        notpartlist <- !(check.cdl %in% exist.cdl)
+        exist.partel <- part.list[, 1] * 1e7 + part.list[, 2]
+        check.partel <- uid[part.el[, 1]] * 1e7 + uid[part.el[, 2]]
+        notpartlist <- !(check.partel %in% exist.partel)
         
         # data frame of pairs not yet in edgelist
         notyet <- part.el[notpartlist, , drop = FALSE]
