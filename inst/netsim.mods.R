@@ -9,21 +9,35 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.12,
-                   syph.tprob = 0.0195,
-                   rgc.tprob = 0.40, # was 0.357698
-                   ugc.tprob = 0.35, # was 0.248095
-                   rct.tprob = 0.21, # was 0.321597
-                   uct.tprob = 0.15, # was 0.212965
-                   hiv.syph.rr = 2.00,
-                   syph.hiv.rr = 2.40,
+                   ai.scale = 1.11889726,
+                   prep.start = 5000,
+                   partlist.start = 5000,
+                   stitest.start = 5000,
+                   
+                   hiv.rgc.rr = 2.780673,
+                   hiv.ugc.rr = 1.732363,
+                   hiv.rct.rr = 2.780673,
+                   hiv.uct.rr = 1.732363,
+                   hiv.syph.rr = 2.00793856,
+                   syph.hiv.rr = 2.16933746,
+                   
+                   syph.tprob = 0.01950727,
+                   rgc.tprob = 0.38353111, # was 0.357698
+                   ugc.tprob = 0.25444490, # was 0.248095
+                   rct.tprob = 0.31968155, # was 0.321597
+                   uct.tprob = 0.23424104, # was 0.212965
+                   
                    prep.coverage = 0,
                    ept.coverage = 0,
+                   
                    rgc.sympt.prob = 0.16, # Beck
                    ugc.sympt.prob = 0.90, # Beck
                    rct.sympt.prob = 0.14, # Beck
                    uct.sympt.prob = 0.58, # Beck
-                   stitest.int = 182) # adjustable for 3 or 6 months
+                   
+                   stitest.active.int = 364,
+                   sti.highrisktest.int = 182) # adjustable for 3 or 6 months
+
 init <- init_msm(nwstats = st, 
                  prev.B = 0.10, 
                  prev.W = 0.10,
