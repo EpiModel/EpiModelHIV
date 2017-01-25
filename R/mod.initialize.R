@@ -662,20 +662,26 @@ init_status_sti_msm <- function(dat) {
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
     syph.infTime <- rep(NA, num)
+    syph.lastinfTime <- rep(NA, num)
     syph.immune.time <- rep(NA, num)
     syph.timesInf <- rep(0, num)
     syph.cease <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
-    diag.time.syph <- rep(NA, num)
-    diag.time.gc <- rep(NA, num)
-    diag.time.ct <- rep(NA, num)
+    lastdiag.time.syph <- rep(NA, num)
+    lastdiag.time.gc <- rep(NA, num)
+    lastdiag.time.ct <- rep(NA, num)
     last.neg.test.syph <- rep(NA, num)
     last.neg.test.rgc <- rep(NA, num)
     last.neg.test.ugc <- rep(NA, num)
     last.neg.test.rct <- rep(NA, num)
     last.neg.test.uct <- rep(NA, num)
+    last.tx.time.syph <- rep(NA, num)
+    last.tx.time.rgc <- rep(NA, num)
+    last.tx.time.ugc <- rep(NA, num)
+    last.tx.time.rct <- rep(NA, num)
+    last.tx.time.uct <- rep(NA, num)
     infector.syph <- rep(NA, num)
     inf.role.syph <- rep(NA, num)
     inf.type.syph <- rep(NA, num)
@@ -716,7 +722,7 @@ init_status_sti_msm <- function(dat) {
     syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
        }
     syph.timesInf[syphilis == 1] <- 1
-    syph.infTime[syphilis ==  1] <- 1
+    syph.infTime[syphilis ==  1] <- dat$attr$syph.lastinfTime[syphilis == 1] <- 1
     dat$attr$syphilis <- syphilis
         
     inf.ids.B <- which(syphilis[ids.B] == 1)
@@ -834,7 +840,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uGC.timesInf <- rep(0, num)
     dat$attr$uGC.timesInf[uGC == 1] <- 1
     dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
-    dat$attr$diag.time.gc <- rep(NA, num)
     
     dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
     dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
@@ -863,7 +868,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uCT.timesInf <- rep(0, num)
     dat$attr$uCT.timesInf[uCT == 1] <- 1
     dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
-    dat$attr$diag.time.ct <- rep(NA, num)
     
     dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
     dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
@@ -876,7 +880,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.immune.time <- syph.immune.time
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
-    dat$attr$diag.time.syph <- diag.time.syph
+    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
     dat$attr$last.neg.test.ugc <- last.neg.test.ugc
@@ -898,6 +902,13 @@ init_status_sti_msm <- function(dat) {
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
+    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$last.tx.time.syph <- last.tx.time.syph
+    dat$attr$last.tx.time.rgc <- last.tx.time.rgc
+    dat$attr$last.tx.time.ugc <- last.tx.time.ugc
+    dat$attr$last.tx.time.rct <- last.tx.time.rct
+    dat$attr$last.tx.time.uct <- last.tx.time.uct
     dat$attr$tt.traj.syph <- tt.traj.syph
     dat$attr$tt.traj.gc <- tt.traj.gc
     dat$attr$tt.traj.ct <- tt.traj.ct

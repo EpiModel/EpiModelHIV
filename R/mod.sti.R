@@ -1070,6 +1070,13 @@ sti_tx <- function(dat, at) {
   txUCT_all <- union(txUCT, txUCT_prep)
   txsyph_all <- union(txsyph, txsyph_prep)
   
+  # Update last treated time
+  dat$attr$last.tx.time.syph[txsyph_all] <- at
+  dat$attr$last.tx.time.rgc[txRGC_all] <- at
+  dat$attr$last.tx.time.ugc[txUGC_all] <- at
+  dat$attr$last.tx.time.rct[txRCT_all] <- at
+  dat$attr$last.tx.time.uct[txUCT_all] <- at
+  
   # Adding EPT eligibility here - if treated at this time step, can provide EPT but may not cause uptake
   dat$attr$eptElig[txRGC_all] <- 1
   dat$attr$eptStat[txRGC_all] <- 0
