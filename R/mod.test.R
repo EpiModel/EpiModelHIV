@@ -187,7 +187,7 @@ test_sti_msm <- function(dat, at) {
     ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
     
     # Remove testing trajectory if no longer indicated (idsannual includes high-risk)
-    idsnottestelig <- which(active == 1 & tt.traj.syph %in% c(1, 2) & (at - stitestind1 >= annualindwindow))
+    idsnottestelig <- which(active == 1 & tt.traj.syph %in% c(1, 2) & (at - stitestind1 >= activeindwindow))
     dat$attr$stitestLastElig[idsnottestelig] <- at
     tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
 

@@ -696,7 +696,6 @@ init_status_sti_msm <- function(dat) {
     eptElig <- rep(NA, num)
     eptStat <- rep(NA, num)
     eptEligdate <- rep(NA, num)
-    recentpartners <- rep(0, num)
     stitestLastElig <- rep(NA, num)
     
     time.sex.active <- pmax(1,
@@ -704,6 +703,9 @@ init_status_sti_msm <- function(dat) {
                                       min(dat$init$ages), 0))
     sexactive <- rep(NA, num)
     sexnewedge <- rep(NA, num)
+    recentpartners <- rep(0, num)
+    concurrpartner <- rep(NA, num)
+    partnersti <- rep(NA, num)
 
     # Infection status for syphilis
     syphilis <- rep(0, num)
@@ -823,9 +825,9 @@ init_status_sti_msm <- function(dat) {
     dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
     dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
     
-    dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- rep(NA, num)
-    dat$attr$rGC.infTime[rGC == 1] <- 1
-    dat$attr$uGC.infTime[uGC == 1] <- 1
+    dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- dat$attr$rGC.lastinfTime <- dat$attr$uGC.lastinfTime <- rep(NA, num)
+    dat$attr$rGC.infTime[rGC == 1] <- dat$attr$rGC.lastinfTime[rGC == 1] <- 1
+    dat$attr$uGC.infTime[uGC == 1] <- dat$attr$uGC.lastinfTime[uGC == 1] <- 1
     
     dat$attr$rGC.timesInf <- rep(0, num)
     dat$attr$rGC.timesInf[rGC == 1] <- 1
@@ -852,9 +854,9 @@ init_status_sti_msm <- function(dat) {
     dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
     dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
     
-    dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- rep(NA, num)
-    dat$attr$rCT.infTime[dat$attr$rCT == 1] <- 1
-    dat$attr$uCT.infTime[dat$attr$uCT == 1] <- 1
+    dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- dat$attr$rCT.lastinfTime <- dat$attr$uCT.lastinfTime <- rep(NA, num)
+    dat$attr$rCT.infTime[dat$attr$rCT == 1] <- dat$attr$rCT.lastinfTime[dat$attr$rCT == 1] <- 1
+    dat$attr$uCT.infTime[dat$attr$uCT == 1] <- dat$attr$uCT.lastinfTime[dat$attr$uCT == 1] <- 1
     
     dat$attr$rCT.timesInf <- rep(0, num)
     dat$attr$rCT.timesInf[rCT == 1] <- 1
@@ -905,6 +907,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners
+    dat$attr$concurrpartner <- concurrpartner
+    dat$attr$partnersti <- partnersti
     dat$attr$stitestLastElig <- stitestLastElig
     
     return(dat)

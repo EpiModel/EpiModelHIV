@@ -56,6 +56,8 @@ riskhist_msm <- function(dat, at) {
     dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
     dat$attr$stitest.ind.sti <- rep(NA, length(uid))
     dat$attr$stitest.ind.newpartners <- rep(NA, length(uid))
+    dat$attr$stitest.ind.concurrpartner <- rep(NA, length(uid))
+    dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -139,18 +141,21 @@ riskhist_msm <- function(dat, at) {
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
   #	Had/have a sex partner with concurrent partners
+  #dat$attr$stitest.ind.concurrpartner[ids] <- at
   
-  #	Have a sex partner who has a sexually transmitted infection	
-
+  #	Have a sex partner who has a diagnosed/treated sexually transmitted infection	
+  #dat$attr$stitest.ind.partnersti[ids] <- at
+  
   #	Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
   # Could be a closer approximation?
   #uai.nmain <- unique(c(el$p1[el$uai > 0 & el$ptype %in% 2:3],
   #                      el$p2[el$uai > 0 & el$ptype %in% 2:3]))
   #dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
   
-  #	Previous or coexisting STIs
-  idsSTI <- which(dat$attr$syph.timesInf >= 1 | sum(dat$attr$rGC.timesInf, dat$attr$uGC.timesInf) >= 1 |
-                      sum(dat$attr$rCT.timesInf, dat$attr$uCT.timesInf) >= 1)
+  #	Previous or coexisting STIs in a time interval
+  idsSTI <- which((at - dat$attr$syph.lastinfTime) <= sti.highrisktest.int | (at - dat$attr$rGC.lastinfTime) <= sti.highrisktest.int |
+                      (at - dat$attr$uGC.lastinfTime) <= sti.highrisktest.int | (at - dat$attr$rCT.lastinfTime) <= sti.highrisktest.int | 
+                      (at - dat$attr$uCT.lastinfTime) <= sti.highrisktest.int)
   dat$attr$stitest.ind.sti[idsSTI] <- at
     
 

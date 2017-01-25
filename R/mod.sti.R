@@ -132,6 +132,7 @@ sti_trans <- function(dat, at) {
   # Update attributes
   rGC[idsInf_rgc] <- 1
   rGC.infTime[idsInf_rgc] <- at
+  rGC.lastinfTime[idsInf_rgc] <- at
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   rGC.timesInf[idsInf_rgc] <- rGC.timesInf[idsInf_rgc] + 1
   diag.status.gc[idsInf_rgc] <- 0
@@ -164,6 +165,7 @@ sti_trans <- function(dat, at) {
   # Update attributes
   uGC[idsInf_ugc] <- 1
   uGC.infTime[idsInf_ugc] <- at
+  uGC.lastinfTime[idsInf_ugc] <- at
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
   uGC.timesInf[idsInf_ugc] <- uGC.timesInf[idsInf_ugc] + 1
   diag.status.gc[idsInf_ugc] <- 0
@@ -197,6 +199,7 @@ sti_trans <- function(dat, at) {
   # Update attributes
   rCT[idsInf_rct] <- 1
   rCT.infTime[idsInf_rct] <- at
+  rCT.lastinfTime[idsInf_rct] <- at
   rCT.sympt[idsInf_rct] <- rbinom(length(idsInf_rct), 1, rct.sympt.prob)
   rCT.timesInf[idsInf_rct] <- rCT.timesInf[idsInf_rct] + 1
   diag.status.ct[idsInf_rct] <- 0
@@ -230,6 +233,7 @@ sti_trans <- function(dat, at) {
   # Update attributes
   uCT[idsInf_uct] <- 1
   uCT.infTime[idsInf_uct] <- at
+  uCT.lastinfTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
   diag.status.ct[idsInf_uct] <- 0
@@ -362,6 +366,7 @@ sti_trans <- function(dat, at) {
       
       dat$attr$syphilis[infected.syph] <- 1
       dat$attr$syph.infTime[infected.syph] <- at
+      dat$attr$syph.lastinfTime[infected.syph] <- at
       dat$attr$stage.syph[infected.syph] <- 1
       dat$attr$stage.time.syph[infected.syph] <- 0
       dat$attr$diag.status.syph[infected.syph] <- 0
@@ -409,10 +414,10 @@ sti_trans <- function(dat, at) {
   dat$attr$rCT <- rCT
   dat$attr$uCT <- uCT
 
-  dat$attr$rGC.infTime <- rGC.infTime
-  dat$attr$uGC.infTime <- uGC.infTime
-  dat$attr$rCT.infTime <- rCT.infTime
-  dat$attr$uCT.infTime <- uCT.infTime
+  dat$attr$rGC.infTime <- dat$attr$rGC.lastinfTime <- rGC.infTime
+  dat$attr$uGC.infTime <- dat$attr$uGC.infTime <-uGC.infTime
+  dat$attr$rCT.infTime <- dat$attr$rCT.infTime <- rCT.infTime
+  dat$attr$uCT.infTime <- dat$attr$uCT.infTime <- uCT.infTime
 
   dat$attr$rGC.timesInf <- rGC.timesInf
   dat$attr$uGC.timesInf <- uGC.timesInf
