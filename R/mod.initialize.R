@@ -710,8 +710,6 @@ init_status_sti_msm <- function(dat) {
     sexactive <- rep(NA, num)
     sexnewedge <- rep(NA, num)
     recentpartners <- rep(0, num)
-    concurrpartner <- rep(NA, num)
-    partnersti <- rep(NA, num)
 
     # Infection status for syphilis
     syphilis <- rep(0, num)
@@ -918,8 +916,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners
-    dat$attr$concurrpartner <- concurrpartner
-    dat$attr$partnersti <- partnersti
     dat$attr$stitestLastElig <- stitestLastElig
     
     return(dat)

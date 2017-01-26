@@ -73,6 +73,11 @@ sti_trans <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
   syph.infTime <- dat$attr$syph.infTime
+  rGC.lastinfTime <- dat$attr$rGC.lastinfTime
+  uGC.lastinfTime <- dat$attr$uGC.lastinfTime
+  rCT.lastinfTime <- dat$attr$rCT.lastinfTime
+  uCT.lastinfTime <- dat$attr$uCT.lastinfTime
+  syph.lastinfTime <- dat$attr$syph.lastinfTime
 
   # Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt

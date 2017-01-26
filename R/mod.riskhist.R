@@ -131,7 +131,7 @@ riskhist_msm <- function(dat, at) {
   #	Have more than one sex partner in last x months
   part.count <- as.data.frame(table(part.list[, 1:2]))
   idspartlist <- which(uid %in% part.list[, 1:2])
-  idsnotpartlist <- which(!(uid%in% part.list[, 1:2]))
+  idsnotpartlist <- which(!(uid %in% part.list[, 1:2]))
   dat$attr$recentpartners[idspartlist] <- part.count[idspartlist, 2]
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
@@ -140,30 +140,45 @@ riskhist_msm <- function(dat, at) {
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
   ### Had/have a sex partner with concurrent partners
-  #dat$attr$stitest.ind.concurrpartner[ids] <- at
+  # Partner 1 has multiple partners, Partner 2 indicated
+  part.listmult1 <- part.list[which((dat$attr$recentpartners[part.list[, 1]]) > 1) , , drop = FALSE]
+  # Partner 2 indicated
+  idspartlistmult1 <- part.listmult1[, 2]
+  
+  # Partner 2 has multiple partners, so partner 1 is indicated
+  part.listmult2 <- part.list[which((dat$attr$recentpartners[part.list[, 2]]) > 1), , drop = FALSE]
+  # Partner 1 indicated
+  idspartlistmult2 <- part.listmult2[, 1]
+  
+  # Combine into one list for indication
+  idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
+  idspartmult <-  uid[which(uid %in% idspartmult)]
+  dat$attr$stitest.ind.concurrpartner[which(uid %in% idspartmult)] <- at
+
   
   ### Have a sex partner who has a treated sexually transmitted infection in the last interval
-  # Partner 1 has a STI
+  # Partner 1 has a STI, Partner 2 indicated
   part.liststi1 <- part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 1]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.uct[part.list[, 1]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.rgc[part.list[, 1]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.ugc[part.list[, 1]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.syph[part.list[, 1]]) <= sti.highrisktest.int), , drop = FALSE]
   # Partner 2 indicated
-  idspartliststi1 <- uid[part.list[, 2]]
+  idspartliststi1 <- part.liststi1[, 2]
   
-  # Partner 2 has an sti
+  # Partner 2 has a STI, so partner 1 is indicated
   part.liststi2 <- part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 2]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.uct[part.list[, 2]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.rgc[part.list[, 2]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.ugc[part.list[, 2]]) <= sti.highrisktest.int |
                                        (at - dat$attr$last.tx.time.syph[part.list[, 2]]) <= sti.highrisktest.int), , drop = FALSE]
   # Partner 1 indicated
-  idspartliststi2 <- uid[part.list[, 1]]
+  idspartliststi2 <- part.liststi2[, 1]
   
   # Combine into one list for indication
   idspartsti <- unique(c(idspartliststi1, idspartliststi2))
-  dat$attr$stitest.ind.partnersti[idspartsti] <- at
+  idspartsti <-  uid[which(uid %in% idspartsti)]
+  dat$attr$stitest.ind.partnersti[which(uid %in% idspartsti)] <- at
   
   ### Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
   # Could be a closer approximation?

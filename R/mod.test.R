@@ -126,6 +126,7 @@ test_sti_msm <- function(dat, at) {
     
     # Attributes
     active <- dat$attr$active
+    uid <- dat$attr$uid
     diag.status.syph <- dat$attr$diag.status.syph
     diag.status.gc <- dat$attr$diag.status.gc
     diag.status.ct <- dat$attr$diag.status.ct
@@ -359,7 +360,7 @@ test_sti_msm <- function(dat, at) {
     dat$attr$last.neg.test.syph[tst.syph.neg] <- at
     dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
     dat$attr$diag.status.syph[tst.syph.pos] <- 1
-    dat$attr$diag.time.syph[tst.syph.pos] <- dat$attr$lastdiag.time.syph[tst.syph.pos] <- at
+    dat$attr$lastdiag.time.syph[tst.syph.pos] <- at
     
     # GC Attributes
     dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
@@ -367,7 +368,7 @@ test_sti_msm <- function(dat, at) {
     dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
     dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
     dat$attr$diag.status.gc[tst.gc.pos] <- 1
-    dat$attr$diag.time.gc[tst.gc.pos] <- dat$attr$lastdiag.time.gc[tst.gc.pos] <- at
+    dat$attr$lastdiag.time.gc[tst.gc.pos] <- at
     
     # CT Attributes
     dat$attr$last.neg.test.rct[tst.rct.neg] <- at
@@ -375,7 +376,7 @@ test_sti_msm <- function(dat, at) {
     dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
     dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
     dat$attr$diag.status.ct[tst.ct.pos] <- 1
-    dat$attr$diag.time.ct[tst.ct.pos] <- dat$attr$lastdiagtime.ct[tst.ct.pos] <- at
+    dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
     
     return(dat)
 }
