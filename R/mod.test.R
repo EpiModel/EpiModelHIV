@@ -138,12 +138,7 @@ test_sti_msm <- function(dat, at) {
     #inf.time.syph <- dat$attr$inf.time.syph
     
     role.class <- dat$attr$role.class
-    
     stage.syph <- dat$attr$stage.syph
-    diag.time.syph <- dat$attr$diag.time.syph
-    diag.time.gc <- dat$attr$diag.time.gc
-    diag.time.ct <- dat$attr$diag.time.ct
-    sexactive <- dat$attr$sexactive
      
     prepStat <- dat$attr$prepStat
     
@@ -170,7 +165,9 @@ test_sti_msm <- function(dat, at) {
     stitestind2 <- dat$attr$stitest.ind.sti
     stitestind3 <- dat$attr$stitest.ind.recentpartners
     stitestind4 <- dat$attr$stitest.ind.newpartners
-    
+    stitestind5 <- dat$attr$stitest.ind.concurrpartner
+    stitestind6 <- dat$attr$stitest.ind.partnersti
+    stitestind7 <- dat$attr$stitest.ind.uai.nmain
     
     # Annual - testing trajectory update
     activeindwindow <- at - stitest.active.int
@@ -180,7 +177,8 @@ test_sti_msm <- function(dat, at) {
     # High-risk - testing trajectory update
     highriskindwindow <- at - sti.highrisktest.int
     idshighrisk <- intersect(which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
-                                       (at - stitestind4 <= highriskindwindow)), idsEligTest)
+                                    (at - stitestind4 <= highriskindwindow)) | (at - stitestind5 <= highriskindwindow) |
+                                    (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow), idsEligTest)
     tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2   
     
     
@@ -322,9 +320,9 @@ test_sti_msm <- function(dat, at) {
     
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    tst.rsyph <- tst.syph.all[dat$attr$role.class %in% c("R", "V")]
+    tst.rsyph <- tst.syph.all[role.class %in% c("R", "V")]
     tst.rsyph <- sample(tst.rsyph, tst.rect.sti.rr * length(tst.rsyph))
-    tst.usyph <- tst.syph.all[dat$attr$role.class %in% c("I", "V")]
+    tst.usyph <- tst.syph.all[role.class %in% c("I", "V")]
     tst.rsyph.pos <- tst.rsyph[syphilis[tst.rsyph] == 1 & stage.syph[tst.rsyph] %in% c(2, 3, 4, 5, 6, 7)]
     tst.usyph.pos <- tst.usyph[syphilis[tst.usyph] == 1 & stage.syph[tst.usyph] %in% c(2, 3, 4, 5, 6, 7)]
     tst.rsyph.neg <- setdiff(tst.rsyph, tst.rsyph.pos)
