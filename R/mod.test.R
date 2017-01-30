@@ -376,6 +376,27 @@ test_sti_msm <- function(dat, at) {
     dat$attr$diag.status.ct[tst.ct.pos] <- 1
     dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
     
+    if (is.null(dat$epi$num.asympt.tx)) {
+        dat$epi$rGCasympttests <- rep(NA, length(dat$epi$num))
+        dat$epi$uGCasympttests <- rep(NA, length(dat$epi$num))
+        dat$epi$rCTasympttests <- rep(NA, length(dat$epi$num))
+        dat$epi$rCTasympttests <- rep(NA, length(dat$epi$num))
+        dat$epi$syphasympttests <- rep(NA, length(dat$epi$num))
+    }
+    
+    # Number of tests for symptomatic
+    dat$epi$rGCasympttests[at] <- length(tst.rgc)
+    dat$epi$uGCasympttests[at] <- length(tst.ugc)
+    dat$epi$GCasympttests[at] <- length(c(tst.rgc, tst.ugc))
+    
+    dat$epi$rCTasympttests[at] <- length(tst.rct)
+    dat$epi$uCTasympttests[at] <- length(tst.uct)
+    dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
+    
+    dat$epi$rsyphasympttests[at] <- length(tst.rsyph)
+    dat$epi$usyphasympttests[at] <- length(tst.usyph)
+    dat$epi$syphasympttests[at] <- length(c(tst.rsyph, tst.usyph))
+    
     return(dat)
 }
 

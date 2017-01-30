@@ -1110,7 +1110,7 @@ sti_tx <- function(dat, at) {
   dat$epi$GCsympttests[at] <- length(c(txRGC_sympt, txUGC_sympt))
   
   dat$epi$rCTsympttests[at] <- length(txRCT_sympt)
-  dat$epi$rCTsympttests[at] <- length(txUCT_sympt)
+  dat$epi$uCTsympttests[at] <- length(txUCT_sympt)
   dat$epi$CTsympttests[at] <- length(c(txRCT_sympt, txUCT_sympt))
   
   dat$epi$syphsympttests[at] <- length(txsyph_sympt)
