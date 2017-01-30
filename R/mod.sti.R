@@ -266,7 +266,7 @@ sti_trans <- function(dat, at) {
   ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
 
   # Base TP from VL
-  ip.syph.tprob <- rep(syph.tprob, length(ip.stage.syph))
+  ip.syph.tprob <- rep(rsyph.tprob, length(ip.stage.syph))
 
   # Transform to log odds
   ip.syph.tlo <- log(ip.syph.tprob/(1-ip.syph.tprob))
@@ -316,7 +316,7 @@ sti_trans <- function(dat, at) {
   rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
    
   # Base TP from VL
-  rp.syph.tprob <- rep(syph.tprob, length(rp.stage.syph))
+  rp.syph.tprob <- rep(usyph.tprob, length(rp.stage.syph))
    
   # Transform to log odds
   rp.syph.tlo <- log(rp.syph.tprob/(1-rp.syph.tprob))

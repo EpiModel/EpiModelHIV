@@ -283,7 +283,8 @@
 #' @param ugc.tprob Probability of urethral gonorrhea infection per act.
 #' @param rct.tprob Probability of rectal chlamydia infection per act.
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
-#' @param syph.tprob Base probability of syphilis infection per act.
+#' @param rsyph.tprob Base probability of rectal syphilis infection per act.
+#' @param usyph.tprob Base probability of urethral syphilis infection per act.
 #' @param syph.earlat.rr Multiplier for reduced infection probability in early latent 
 #'        stage of syphilis infection.
 #' @param syph.late.rr Multiplier for reduced infection probability in late stages 
@@ -527,7 +528,8 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.321597,
                       uct.tprob = 0.212965,
 
-                      syph.tprob = 0.030,
+                      usyph.tprob = 0.030,
+                      rsyph.tprob = 0.030,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,

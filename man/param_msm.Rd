@@ -61,8 +61,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   ept.cov.rate = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
   rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.357698,
   ugc.tprob = 0.248095, rct.tprob = 0.321597, uct.tprob = 0.212965,
-  syph.tprob = 0.03, syph.earlat.rr = 0.5, syph.late.rr = 0,
-  syph.immune.rr = 0, rgc.sympt.prob = 0.076975,
+  usyph.tprob = 0.03, rsyph.tprob = 0.03, syph.earlat.rr = 0.5,
+  syph.late.rr = 0, syph.immune.rr = 0, rgc.sympt.prob = 0.076975,
   ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
   uct.sympt.prob = 0.885045, syph.prim.sympt.prob = 0.5,
   syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
@@ -491,7 +491,9 @@ partnerships only, versus all partnerships.}
 
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
-\item{syph.tprob}{Base probability of syphilis infection per act.}
+\item{usyph.tprob}{Base probability of urethral syphilis infection per act.}
+
+\item{rsyph.tprob}{Base probability of rectal syphilis infection per act.}
 
 \item{syph.earlat.rr}{Multiplier for reduced infection probability in early latent 
 stage of syphilis infection.}
