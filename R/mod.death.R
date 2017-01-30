@@ -30,6 +30,7 @@ deaths_msm <- function(dat, at) {
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
+  uid <- dat$attr$uid
 
   alive.B <- which(race == "B")
   age.B <- age[alive.B]
@@ -50,7 +51,17 @@ deaths_msm <- function(dat, at) {
 
   dth.all <- NULL
   dth.all <- unique(c(dth.gen, dth.dis))
+  
+  
+  # Update edges in part.list to update end date for edges with dead individuals
+  
+  if (at >= dat$param$partlist.start) {
+  
+        deadidspartlist <- uid[which(dth.all %in% dat$temp$part.list[, 1:2])]
+        dat$temp$part.list[(which(dth.all %in% dat$temp$part.list[, 1:2])), 6] <- at
 
+  }
+  
   if (length(dth.all) > 0) {
     dat$attr$active[dth.all] <- 0
     for (i in 1:3) {

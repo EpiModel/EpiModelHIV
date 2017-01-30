@@ -151,6 +151,16 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$txGC <- rNA
     dat$epi$txCT <- rNA
+    
+    dat$epi$stiactiveind <- rNA  
+    dat$epi$recentpartners <- rNA
+    dat$epi$recentSTI <- rNA
+    dat$epi$newpartner <- rNA
+    dat$epi$concurrpart <- rNA
+    dat$epi$partnersti <- rNA
+    dat$epi$uai.nmain <- rNA
+    
+    ##########
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -257,6 +267,14 @@ prevalence_msm <- function(dat, at) {
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
                                        sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
+  
+  #dat$epi$stiactiveind[at] <-   
+  #dat$epi$recentpartners[at] <-
+  #dat$epi$recentSTI[at] <-
+  #dat$epi$newpartner[at] <- 
+  #dat$epi$concurrpart[at] <-
+  #dat$epi$partnersti[at] <-
+  #dat$epi$uai.nmain[at] <-
 
   return(dat)
 }
