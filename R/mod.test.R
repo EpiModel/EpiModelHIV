@@ -176,9 +176,9 @@ test_sti_msm <- function(dat, at) {
     
     # High-risk - testing trajectory update
     highriskindwindow <- at - sti.highrisktest.int
-    idshighrisk <- intersect(which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
-                                    (at - stitestind4 <= highriskindwindow)) | (at - stitestind5 <= highriskindwindow) |
-                                    (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow), idsEligTest)
+    idshighrisk <- which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
+                                    (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
+                                    (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow))
     tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2   
     
     
