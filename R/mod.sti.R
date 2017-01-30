@@ -98,7 +98,6 @@ sti_trans <- function(dat, at) {
   syph.cease <- dat$attr$syph.cease
   
   # Diagnosis status
-  diag.status.syph <- dat$attr$diag.status.syph
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
 
@@ -270,7 +269,7 @@ sti_trans <- function(dat, at) {
   ip.syph.tprob <- rep(rsyph.tprob, length(ip.stage.syph))
 
   # Transform to log odds
-  ip.syph.tlo <- log(ip.syph.tprob/(1-ip.syph.tprob))
+  ip.syph.tlo <- log(ip.syph.tprob/(1 - ip.syph.tprob))
 
   # Condom use multiplier
   not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
@@ -320,7 +319,7 @@ sti_trans <- function(dat, at) {
   rp.syph.tprob <- rep(usyph.tprob, length(rp.stage.syph))
    
   # Transform to log odds
-  rp.syph.tlo <- log(rp.syph.tprob/(1-rp.syph.tprob))
+  rp.syph.tlo <- log(rp.syph.tprob/(1 - rp.syph.tprob))
    
   # Condom use multiplier
   not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
@@ -782,12 +781,6 @@ sti_tx <- function(dat, at) {
   gc.asympt.prob.tx <- dat$param$gc.asympt.prob.tx
   ct.asympt.prob.tx <- dat$param$ct.asympt.prob.tx
   
-  syph.prim.sympt.prob <- dat$param$syph.prim.sympt.prob
-  syph.seco.sympt.prob <- dat$param$syph.seco.sympt.prob
-  syph.earlat.sympt.prob <- dat$param$syph.earlat.sympt.prob
-  syph.latelat.sympt.prob <- dat$param$syph.latelat.sympt.prob
-  syph.tert.sympt.prob <- dat$param$syph.tert.sympt.prob
-  
   syph.prim.sympt.prob.tx <- dat$param$syph.prim.sympt.prob.tx
   syph.prim.asympt.prob.tx <- dat$param$syph.prim.asympt.prob.tx
   syph.seco.sympt.prob.tx <- dat$param$syph.seco.sympt.prob.tx
@@ -832,7 +825,7 @@ sti_tx <- function(dat, at) {
   
   txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco), 1, syph.seco.sympt.prob.tx) == 1)]
 
-  idssyph_tx_sympt_tert<- which(dat$attr$syphilis == 1 & 
+  idssyph_tx_sympt_tert <- which(dat$attr$syphilis == 1 & 
                                      dat$attr$syph.infTime < at &
                                      dat$attr$stage.syph == 7 &
                                      dat$attr$stage.tert.sympt == 1 &
@@ -1096,6 +1089,11 @@ sti_tx <- function(dat, at) {
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {
+    dat$epi$rGCsympttests <- rep(NA, length(dat$epi$num))
+    dat$epi$uGCsympttests <- rep(NA, length(dat$epi$num))
+    dat$epi$rCTsympttests <- rep(NA, length(dat$epi$num))
+    dat$epi$rCTsympttests <- rep(NA, length(dat$epi$num))
+    dat$epi$syphsympttests <- rep(NA, length(dat$epi$num))
     dat$epi$num.asympt.tx <- rep(NA, length(dat$epi$num))
     dat$epi$num.asympt.cases <- rep(NA, length(dat$epi$num))
     dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$epi$num))
@@ -1105,7 +1103,19 @@ sti_tx <- function(dat, at) {
     dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$num))
     dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$num))
   }
-
+  
+  # Number of tests for symptomatic
+  dat$epi$rGCsympttests[at] <- length(txRGC_sympt)
+  dat$epi$uGCsympttests[at] <- length(txUGC_sympt)
+  dat$epi$GCsympttests[at] <- length(c(txRGC_sympt, txUGC_sympt))
+  
+  dat$epi$rCTsympttests[at] <- length(txRCT_sympt)
+  dat$epi$rCTsympttests[at] <- length(txUCT_sympt)
+  dat$epi$CTsympttests[at] <- length(c(txRCT_sympt, txUCT_sympt))
+  
+  dat$epi$syphsympttests[at] <- length(txsyph_sympt)
+  
+  
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
