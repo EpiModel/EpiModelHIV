@@ -19,7 +19,8 @@ sti_trans <- function(dat, at) {
   ugc.tprob <- dat$param$ugc.tprob
   rct.tprob <- dat$param$rct.tprob
   uct.tprob <- dat$param$uct.tprob
-  syph.tprob <- dat$param$syph.tprob
+  rsyph.tprob <- dat$param$rsyph.tprob
+  usyph.tprob <- dat$param$usyph.tprob
   
   #Multiplier for syphilis infection
   syph.earlat.rr <- dat$param$syph.earlat.rr
