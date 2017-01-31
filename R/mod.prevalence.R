@@ -202,16 +202,16 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rgcct[at] <- sum(rGC == 1 | rCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ugcct[at] <- sum(uGC == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   
-  dat$epi$prev.stage.incub[at] <- length(which(stage.syph == 1)) / dat$epi$num[at]
-  dat$epi$prev.stage.prim[at] <- length(which(stage.syph == 2)) / dat$epi$num[at]
-  dat$epi$prev.stage.seco[at] <- length(which(stage.syph == 3)) / dat$epi$num[at]
-  dat$epi$prev.stage.earlat[at] <- length(which(stage.syph == 4)) / dat$epi$num[at]
-  dat$epi$prev.stage.latelat[at] <- length(which(stage.syph == 5)) / dat$epi$num[at]
-  dat$epi$prev.stage.latelatelat[at] <- length(which(stage.syph == 6)) / dat$epi$num[at]
-  dat$epi$prev.stage.tert[at] <- length(which(stage.syph == 7)) / dat$epi$num[at]
-  dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / dat$epi$num[at]
-  dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / dat$epi$num[at]
-  dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / dat$epi$num[at]
+  dat$epi$prev.stage.incub[at] <- length(which(stage.syph == 1)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.prim[at] <- length(which(stage.syph == 2)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.seco[at] <- length(which(stage.syph == 3)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.earlat[at] <- length(which(stage.syph == 4)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.latelat[at] <- length(which(stage.syph == 5)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.latelatelat[at] <- length(which(stage.syph == 6)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.tert[at] <- length(which(stage.syph == 7)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / length(which(syphilis == 0))
+  dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / length(which(syphilis == 1))
+  dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / length(which(syphilis == 1))
   dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]
   
   dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at]
