@@ -204,6 +204,7 @@ prevalence_msm <- function(dat, at) {
   
   dat$epi$prev.stage.incub[at] <- length(which(stage.syph == 1)) / length(which(syphilis == 1))
   dat$epi$prev.stage.prim[at] <- length(which(stage.syph == 2)) / length(which(syphilis == 1))
+  dat$epi$prev.stage.incubprim[at] <- length(which(stage.syph == 1 | stage.syph == 2)) / length(which(syphilis == 1))
   dat$epi$prev.stage.seco[at] <- length(which(stage.syph == 3)) / length(which(syphilis == 1))
   dat$epi$prev.stage.earlat[at] <- length(which(stage.syph == 4)) / length(which(syphilis == 1))
   dat$epi$prev.stage.latelat[at] <- length(which(stage.syph == 5)) / length(which(syphilis == 1))
