@@ -24,6 +24,7 @@ riskhist_msm <- function(dat, at) {
   uGC.tx <- dat$attr$uGC.tx
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
+  syph.tx <- dat$attr$syph.tx
   sexactive <- dat$attr$sexactive
   sexnewedge <- dat$attr$sexnewedge
   tt.traj.ct <- dat$attr$tt.traj.ct
@@ -108,7 +109,7 @@ riskhist_msm <- function(dat, at) {
 
   ## Condition 4, any STI diagnosis
   idsDx <- which(rGC.tx == 1 | uGC.tx == 1 |
-                   rCT.tx == 1 | uCT.tx == 1)
+                   rCT.tx == 1 | uCT.tx == 1 | syph.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at
   
   

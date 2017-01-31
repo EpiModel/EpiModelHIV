@@ -534,10 +534,10 @@ param_msm <- function(nwstats,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
                       
-                      rgc.sympt.prob = 0.076975,
-                      ugc.sympt.prob = 0.824368,
-                      rct.sympt.prob = 0.103517,
-                      uct.sympt.prob = 0.885045,
+                      rgc.sympt.prob = 0.16, # Beck
+                      ugc.sympt.prob = 0.90, # Beck
+                      rct.sympt.prob = 0.14, # Beck
+                      uct.sympt.prob = 0.58, # Beck
                       
                       syph.prim.sympt.prob = 0.50,
                       syph.seco.sympt.prob = 0.85,
