@@ -22,10 +22,10 @@ param <- param_msm(nwstats = st,
                    syph.hiv.rr = 1.7, #2.17038393, # 2.16933746, # functional at 2.40
                    
                    rsyph.tprob = 0.040, # 0.01950727,
-                   usyph.tprob = 0.025, # 0.01950727,
+                   usyph.tprob = 0.030, # 0.01950727,
                    
-                   rgc.tprob = 0.40, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
-                   ugc.tprob = 0.30, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
+                   rgc.tprob = 0.45, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
+                   ugc.tprob = 0.35, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
                    rct.tprob = 0.21, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
                    uct.tprob = 0.15, #0.25309465,# 0.23424104, # was 0.212965 # functional at 0.15
                    

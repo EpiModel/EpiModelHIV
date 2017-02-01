@@ -13,18 +13,18 @@ plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "g
 abline(h = 0.103, col = "red", lty = 2)
 abline(h = 0.026, col = "red", lty = 2)
 title("Syphilis by HIV Status")
-plot(sim, y = "prev.stage.incubprim", ylab = "Prevalence", ylim = c(0.10, 0.20), col = "blue")
-plot(sim, y = "prev.stage.seco", ylab = "Prevalence", add = TRUE, col = "green")
+plot(sim, y = "prev.stage.incubprim", ylab = "Prevalence", ylim = c(0.10, 0.30), mean.col = "blue")
+plot(sim, y = "prev.stage.seco", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.1385, col = "red", lty = 2)
 abline(h = 0.1385, col = "red", lty = 2)
 title("P and S Syphilis Prevalence")
-plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", ylim = c(0.15, 0.35), col = "blue")
-plot(sim, y = "prev.stage.latelat", ylab = "Prevalence", add = TRUE, col = "green")
+plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", ylim = c(0.15, 0.35), mean.col = "blue")
+plot(sim, y = "prev.stage.latelat", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.2770, col = "red", lty = 2)
 abline(h = 0.20, col = "red", lty = 2)
 title("Early and Late Latent Syphilis Prevalence")
-plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", ylim = c(0, 0.35), col = "blue")
-plot(sim, y = "prev.stage.latelat", ylab = "Prevalence", add = TRUE, col = "green")
+plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", ylim = c(0, 0.35), mean.col = "blue")
+plot(sim, y = "prev.stage.latelat", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.2770, col = "red", lty = 2)
 abline(h = 0.046, col = "red", lty = 2)
 title("Late Late Latent and Tertiary Syphilis Prevalence")
@@ -38,12 +38,12 @@ plot(sim, y = "prev.stage.latelat", ylab = "Prevalence", add = TRUE, mean.col = 
 plot(sim, y = "prev.stage.latelatelat", ylab = "Prevalence", add = TRUE, mean.col = "purple")
 plot(sim, y = "prev.stage.tert", ylab = "Prevalence", add = TRUE, mean.col = "black")
 title("Stage-specific Syphilis Prevalence")
-abline(h = 0.1385, col = "blue", lty = 2)
-abline(h = 0.1385, col = "green", lty = 2)
-abline(h = 0.2770, col = "orange", lty = 2)
-abline(h = 0.20, col = "gray", lty = 2)
-abline(h = 0.20, col = "yellow", lty = 2)
-abline(h = 0.046, col = "black", lty = 2)
+abline(h = 0.1385, col = "blue", lty = 1)
+abline(h = 0.1385, col = "green", lty = 1)
+abline(h = 0.2770, col = "orange", lty = 1)
+abline(h = 0.20, col = "gray", lty = 1)
+abline(h = 0.20, col = "purple", lty = 1)
+abline(h = 0.046, col = "black", lty = 1)
 legend("topright", c("Primary/Incub", "Secondary", "Early Latent", "Late latent", "Late late latent", "Tertiary"),
        col = c("blue", "green", "orange", "gray", "purple", "black"), lty = c(1, 1, 1, 1, 1, 1))
 
@@ -67,21 +67,6 @@ prev.latesyph <- as.numeric(sim$epi$prev.latesyph[2600, ])
 
 ir100.gc <- as.numeric(sim$epi$ir100.gc[2600, ])
 ir100.ct <- as.numeric(sim$epi$ir100.ct[2600, ])
-
-a <- cbind(c(i.prev, ir100, prev.syph.hivpos, prev.syph, prev.syph.hivneg, prev.stage.incubprim,
-             prev.stage.seco, prev.stage.earlat, prev.stage.latelat, prev.stage.latelatelat,
-             prev.stage.tert, prev.earlysyph, prev.latesyph))
-rownames(a) <- c("i.prev", "ir100", "prev.syph.hivpos", "prev.syph", "prev.syph.hivneg", "prev.stage.incubprim",
-                 "prev.stage.seco", "prev.stage.earlat", "prev.stage.latelat", "prev.stage.latelatelat",
-                 "prev.stage.tert", "prev.earlysyph", "prev.latesyph")
-a
-
-mean.s <- c(ir100.gc, ir100.ct, ir100, ir100.syph, i.prev, prev.syph.hivpos, prev.syph.hivneg, prev.syph, prev.hiv.syphpos)
-tar.syph <- c(4.2, 6.6, 3.8, 0.9, 0.26, 0.103, 0.026, 0.046, 0.498) #, 0.1385, 0.1385, 0.2770, 0.2000, 0.2000, 0.0460)
-
-b <- data.frame(mean.s, tar.syph)
-rownames(b) <- c("ir100.gc", "ir100.ct", "ir100", "ir100.syph", "i.prev", "prev.syph.hivpos", "prev.syph.hivneg", "prev.syph", "prev.hiv.syphpos")
-b
 
 # STI Prevalence
 par(mfrow = c(2,2), oma = c(0,0,2,0))
@@ -112,3 +97,19 @@ plot(sim, y = "ir100.syph")
 abline(h = 0.9, col = "red", lty = 2)
 title("Syph Incidence")
 #title("Syph Tprob = XXX, Relrisk for Syph<->HIV = XXX", outer = TRUE)
+
+a <- cbind(c(i.prev, ir100, prev.syph.hivpos, prev.syph, prev.syph.hivneg, prev.stage.incubprim,
+             prev.stage.seco, prev.stage.earlat, prev.stage.latelat, prev.stage.latelatelat,
+             prev.stage.tert, prev.earlysyph, prev.latesyph))
+rownames(a) <- c("i.prev", "ir100", "prev.syph.hivpos", "prev.syph", "prev.syph.hivneg", "prev.stage.incubprim",
+                 "prev.stage.seco", "prev.stage.earlat", "prev.stage.latelat", "prev.stage.latelatelat",
+                 "prev.stage.tert", "prev.earlysyph", "prev.latesyph")
+a
+
+mean.s <- c(ir100.gc, ir100.ct, ir100, ir100.syph, i.prev, prev.syph.hivpos, prev.syph.hivneg, prev.syph, prev.hiv.syphpos)
+tar.syph <- c(4.2, 6.6, 3.8, 0.9, 0.26, 0.103, 0.026, 0.046, 0.498) #, 0.1385, 0.1385, 0.2770, 0.2000, 0.2000, 0.0460)
+
+b <- data.frame(mean.s, tar.syph)
+rownames(b) <- c("ir100.gc", "ir100.ct", "ir100", "ir100.syph", "i.prev", "prev.syph.hivpos", "prev.syph.hivneg", "prev.syph", "prev.hiv.syphpos")
+b
+
