@@ -81,8 +81,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
-  hiv.dual.rr = 0.2, hiv.syph.rr = 2.1, syph.hiv.rr = 2.6,
-  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
+  hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.5, hiv.usyph.rr = 1.5,
+  syph.hiv.rr = 1.7, partlist.start = stitest.start - sti.highrisktest.int -
+  1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -619,7 +620,9 @@ a condom used by the insertive partner.}
 \item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
 given dual infection with both gonorrhea and chlamydia.}
 
-\item{hiv.syph.rr}{Relative risk of HIV infection given current syphilis infection.}
+\item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal syphilis infection of either partner.}
+
+\item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral syphilis infection of either partner.}
 
 \item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
 

@@ -63,7 +63,8 @@ trans_msm <- function(dat, at) {
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
   hiv.rct.rr <- dat$param$hiv.rct.rr
   hiv.dual.rr <- dat$param$hiv.dual.rr
-  hiv.syph.rr <- dat$param$hiv.syph.rr
+  hiv.rsyph.rr <- dat$param$hiv.rsyph.rr
+  hiv.usyph.rr <- dat$param$hiv.usyph.rr
   syph.hiv.rr <- dat$param$syph.hiv.rr
 
 
@@ -136,7 +137,7 @@ trans_msm <- function(dat, at) {
 
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
-  ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.syph.rr)
+  ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.usyph.rr)
   ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.syph.rr)
   
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
@@ -205,8 +206,8 @@ trans_msm <- function(dat, at) {
 
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-  rp.tlo[is.syph.infectee] <- rp.tlo[is.syph.infectee] + log(hiv.syph.rr)
-  rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.syph.rr)
+  rp.tlo[is.syph.infectee] <- rp.tlo[is.syph.infectee] + log(hiv.rsyph.rr)
+  rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.usyph.rr)
   
   rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +

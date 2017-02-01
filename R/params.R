@@ -363,7 +363,8 @@
 #' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia.
 #' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
 #'        given dual infection with both gonorrhea and chlamydia.
-#' @param hiv.syph.rr Relative risk of HIV infection given current syphilis infection.
+#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal syphilis infection of either partner.
+#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection of either partner.
 #' @param syph.hiv.rr Relative risk of syphilis infection given current HIV infection.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
@@ -591,8 +592,9 @@ param_msm <- function(nwstats,
                       hiv.rct.rr = 2.780673,
                       hiv.uct.rr = 1.732363,
                       hiv.dual.rr = 0.2,
-                      hiv.syph.rr = 2.1,
-                      syph.hiv.rr = 2.6,
+                      hiv.rsyph.rr = 2.5,
+                      hiv.usyph.rr = 1.5,
+                      syph.hiv.rr = 1.7,
                       
                       partlist.start = stitest.start - sti.highrisktest.int - 1,
                       
