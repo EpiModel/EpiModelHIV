@@ -138,7 +138,7 @@ trans_msm <- function(dat, at) {
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
   ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.usyph.rr)
-  ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.syph.rr)
+  ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.rsyph.rr)
   
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
