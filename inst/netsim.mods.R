@@ -1,5 +1,6 @@
-rm(list=ls())
+rm(list = ls())
 suppressMessages(library("EpiModelHIV"))
+suppressMessages(library("EpiModelHPC"))
 suppressMessages(library("dplyr"))
 sourceDir("R/")
 
@@ -9,31 +10,27 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.11889726,
+                   ai.scale = 1.115, # 1.11889726, # was 1.13
                    prep.start = 5000,
-                   partlist.start = 5000,
                    stitest.start = 5000,
+
+                   hiv.rgc.rr = 2.5, #2.780673,
+                   hiv.ugc.rr = 1.5, #1.732363,
+                   hiv.rct.rr = 2.5, #2.780673,
+                   hiv.uct.rr = 1.5, #1.732363,
+                   hiv.syph.rr = 2.5, # 2.00892218, # 2.00793856, # functional at 2.00
+                   syph.hiv.rr = 1.7, #2.17038393, # 2.16933746, # functional at 2.40
                    
-                   hiv.rgc.rr = 2.780673,
-                   hiv.ugc.rr = 1.732363,
-                   hiv.rct.rr = 2.780673,
-                   hiv.uct.rr = 1.732363,
-                   hiv.syph.rr = 2.00793856,
-                   syph.hiv.rr = 2.16933746,
+                   rsyph.tprob = 0.040, # 0.01950727,
+                   usyph.tprob = 0.025, # 0.01950727,
                    
-                   syph.tprob = 0.01950727,
-                   rgc.tprob = 0.38353111, # was 0.357698
-                   ugc.tprob = 0.25444490, # was 0.248095
-                   rct.tprob = 0.31968155, # was 0.321597
-                   uct.tprob = 0.23424104, # was 0.212965
+                   rgc.tprob = 0.40, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
+                   ugc.tprob = 0.30, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
+                   rct.tprob = 0.21, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
+                   uct.tprob = 0.15, #0.25309465,# 0.23424104, # was 0.212965 # functional at 0.15
                    
                    prep.coverage = 0,
                    ept.coverage = 0,
-                   
-                   rgc.sympt.prob = 0.16, # Beck
-                   ugc.sympt.prob = 0.90, # Beck
-                   rct.sympt.prob = 0.14, # Beck
-                   uct.sympt.prob = 0.58, # Beck
                    
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
@@ -47,6 +44,7 @@ init <- init_msm(nwstats = st,
                  prev.rct = 0.013,
                  prev.syph.B = 0.01,
                  prev.syph.W = 0.01)
+
 control <- control_msm(simno = 0.253, 
                        nsteps = 52*50,
                        nsims = 1, 
