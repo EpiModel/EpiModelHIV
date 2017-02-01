@@ -8,8 +8,8 @@ abline(h = 3.96, lty = 2, col = "red")
 
 # Syphilis prevalence plots
 par(mfrow = c(2,2), oma = c(0,0,2,0))
-plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), col = "blue")
-plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, col = "green")
+plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), mean.col = "blue")
+plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.103, col = "red", lty = 2)
 abline(h = 0.026, col = "red", lty = 2)
 title("Syphilis by HIV Status")

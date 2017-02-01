@@ -114,7 +114,7 @@ sti_trans <- function(dat, at) {
   # Requires: uGC in insertive man, and no rGC in receptive man
   p1Inf_rgc <- which(uGC[al[, "p1"]] == 1 & uGC.infTime[al[, "p1"]] < at &
                        rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rgc <- which(uGC[al[, "p1"]] == 0 & uGC.infTime[al[, "p2"]] < at &
+  p2Inf_rgc <- which(uGC[al[, "p2"]] == 1 & uGC.infTime[al[, "p2"]] < at &
                        rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rgc <- c(p1Inf_rgc, p2Inf_rgc)
 
@@ -147,7 +147,7 @@ sti_trans <- function(dat, at) {
   # Requires: rGC in receptive man, and no uGC in insertive man
   p1Inf_ugc <- which(rGC[al[, "p1"]] == 1 & rGC.infTime[al[, "p1"]] < at &
                        uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_ugc <- which(rGC[al[, "p1"]] == 0 & rGC.infTime[al[, "p2"]] < at &
+  p2Inf_ugc <- which(rGC[al[, "p2"]] == 1 & rGC.infTime[al[, "p2"]] < at &
                        uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_ugc <- c(p1Inf_ugc, p2Inf_ugc)
 
@@ -181,7 +181,7 @@ sti_trans <- function(dat, at) {
   # Requires: uCT in insertive man, and no rCT in receptive man
   p1Inf_rct <- which(uCT[al[, "p1"]] == 1 & uCT.infTime[al[, "p1"]] < at &
                        rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rct <- which(uCT[al[, "p1"]] == 0 & uCT.infTime[al[, "p2"]] < at &
+  p2Inf_rct <- which(uCT[al[, "p2"]] == 1 & uCT.infTime[al[, "p2"]] < at &
                        rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rct <- c(p1Inf_rct, p2Inf_rct)
 
@@ -215,7 +215,7 @@ sti_trans <- function(dat, at) {
   # Requires: rCT in receptive man, and no uCT in insertive man
   p1Inf_uct <- which(rCT[al[, "p1"]] == 1 & rCT.infTime[al[, "p1"]] < at &
                        uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_uct <- which(rCT[al[, "p1"]] == 0 & rCT.infTime[al[, "p2"]] < at &
+  p2Inf_uct <- which(rCT[al[, "p2"]] == 1 & rCT.infTime[al[, "p2"]] < at &
                        uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_uct <- c(p1Inf_uct, p2Inf_uct)
 
