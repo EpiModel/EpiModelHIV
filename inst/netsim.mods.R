@@ -26,8 +26,8 @@ param <- param_msm(nwstats = st,
                    usyph.tprob = 0.030, # 0.01950727,
                    
                    rgc.tprob = 0.40, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
-                   ugc.tprob = 0.35, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
-                   rct.tprob = 0.21, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
+                   ugc.tprob = 0.30, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
+                   rct.tprob = 0.25, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
                    uct.tprob = 0.15, #0.25309465,# 0.23424104, # was 0.212965 # functional at 0.15
                    
                    prep.coverage = 0,
@@ -39,12 +39,12 @@ param <- param_msm(nwstats = st,
 init <- init_msm(nwstats = st, 
                  prev.B = 0.10, 
                  prev.W = 0.10,
-                 prev.ugc = 0.013,
-                 prev.rgc = 0.013,
-                 prev.uct = 0.013,
-                 prev.rct = 0.013,
-                 prev.syph.B = 0.01,
-                 prev.syph.W = 0.01)
+                 prev.ugc = 0.015,
+                 prev.rgc = 0.015,
+                 prev.uct = 0.015,
+                 prev.rct = 0.015,
+                 prev.syph.B = 0.02,
+                 prev.syph.W = 0.02)
 
 control <- control_msm(simno = 0.253, 
                        nsteps = 52*50,

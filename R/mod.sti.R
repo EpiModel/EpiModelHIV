@@ -400,7 +400,7 @@ sti_trans <- function(dat, at) {
 
   
   # Symptomatic syphilis
-  syphilis.sympt <- which(is.na(syph.cease) & ( dat$attr$stage.prim.sympt == 1 |
+  syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.prim.sympt == 1 |
                                                 dat$attr$stage.seco.sympt == 1 |
                                                 dat$attr$stage.earlat.sympt == 1 |
                                                 dat$attr$stage.latelat.sympt == 1 |
@@ -420,7 +420,7 @@ sti_trans <- function(dat, at) {
   dat$attr$uCT <- uCT
 
   dat$attr$rGC.infTime <- dat$attr$rGC.lastinfTime <- rGC.infTime
-  dat$attr$uGC.infTime <- dat$attr$uGC.infTime <-uGC.infTime
+  dat$attr$uGC.infTime <- dat$attr$uGC.infTime <- uGC.infTime
   dat$attr$rCT.infTime <- dat$attr$rCT.infTime <- rCT.infTime
   dat$attr$uCT.infTime <- dat$attr$uCT.infTime <- uCT.infTime
 
