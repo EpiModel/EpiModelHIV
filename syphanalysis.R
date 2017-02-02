@@ -31,22 +31,24 @@ abline(h = 3.96, lty = 2, col = "red")
 par(mfrow = c(2,2), oma = c(0,0,2,0))
 plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), mean.col = "blue")
 plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "green")
-abline(h = 0.103, col = "red", lty = 2)
-abline(h = 0.026, col = "red", lty = 2)
+abline(h = 0.103, col = "blue", lty = 2)
+abline(h = 0.026, col = "green", lty = 2)
 title("Syphilis by HIV Status")
-plot(sim, y = "prev.stage.incubprim", ylab = "Prevalence", ylim = c(0.10, 0.30), mean.col = "blue")
+legend("topleft", c("HIV+", "HIV-"), col = c("blue", "green"), lty = c(1, 1))
+plot(sim, y = "prev.stage.incubprim", ylab = "Prevalence", ylim = c(0.00, 0.40), mean.col = "blue")
 plot(sim, y = "prev.stage.seco", ylab = "Prevalence", add = TRUE, mean.col = "green")
-plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", ylim = c(0.15, 0.35), mean.col = "purple")
-abline(h = 0.1385, col = "red", lty = 2)
-abline(h = 0.1385, col = "red", lty = 2)
-abline(h = 0.2770, col = "red", lty = 2)
+plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", add = TRUE, mean.col = "purple")
+abline(h = 0.1385, col = "blue", lty = 2)
+abline(h = 0.1385, col = "green", lty = 2)
+abline(h = 0.2770, col = "purple", lty = 2)
 title("P, S, and Early latent Syphilis Prevalence")
-
-plot(sim, y = "prev.stage.alllatelat", ylab = "Prevalence", ylim = c(0.10, 0.30), mean.col = "blue")
+legend("topright", c("Primary", "Seco", "Early latent"), col = c("blue", "green", "purple"), lty = c(1, 1, 1))
+plot(sim, y = "prev.stage.alllatelat", ylab = "Prevalence", ylim = c(0.00, 0.60), mean.col = "blue")
 plot(sim, y = "prev.stage.tert", ylab = "Prevalence", add = TRUE, mean.col = "green")
-abline(h = 0.40, col = "red", lty = 2)
-abline(h = 0.046, col = "red", lty = 2)
-title("Late Late Latent and Tertiary Syphilis Prevalence")
+abline(h = 0.40, col = "blue", lty = 2)
+abline(h = 0.046, col = "green", lty = 2)
+title("Late Latent and Tertiary Syphilis Prevalence")
+legend("right", c("Late latent", "Tertiary"), col = c("blue", "green"), lty = c(1, 1))
 
 # All syphilis stages
 par(mfrow = c(1, 1), oma = c(0, 0, 2, 0))
@@ -61,14 +63,14 @@ abline(h = 0.1385, col = "green", lty = 1)
 abline(h = 0.2770, col = "orange", lty = 1)
 abline(h = 0.40, col = "purple", lty = 1)
 abline(h = 0.046, col = "black", lty = 1)
-legend("topright", c("Primary/Incub", "Secondary", "Early Latent", "Late latent", "Late late latent", "Tertiary"),
+legend("topright", c("Primary/Incub", "Secondary", "Early Latent", "Late latent", "Tertiary"),
        col = c("blue", "green", "orange", "purple", "black"), lty = c(1, 1, 1, 1, 1))
 
 a <- cbind(c(prev.syph.hivpos, prev.syph, prev.syph.hivneg, prev.stage.incubprim,
              prev.stage.seco, prev.stage.earlat, prev.stage.alllatelat,
              prev.stage.tert, prev.earlysyph, prev.latesyph))
 rownames(a) <- c( "prev.syph.hivpos", "prev.syph", "prev.syph.hivneg", "prev.stage.incubprim",
-                  "prev.stage.seco", "prev.stage.earlat", "prev.stage.latelat", "prev.stage.latelatelat",
+                  "prev.stage.seco", "prev.stage.earlat", "prev.stage.alllatelat",
                   "prev.stage.tert", "prev.earlysyph", "prev.latesyph")
 a
 
