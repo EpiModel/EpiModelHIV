@@ -256,7 +256,7 @@ sti_trans <- function(dat, at) {
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, , drop = FALSE]
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop = FALSE]
 
-  # Insertive Man Infected with Syphilis (Col 1)
+  ###### Insertive Man Infected with Syphilis (Col 1)
   if (is.null(dim(disc.syph.ip)[1])) {
       trans.syph.ip <- NULL
   }  else {
@@ -283,10 +283,10 @@ sti_trans <- function(dat, at) {
   is.HIV.infectee <- which(status[disc.syph.ip[, 2]] == 1)
   
   # Multiplier for syphilis transmission if insertive partner is HIV+ (infector)
-  is.HIV.infector <- which(status[disc.syph.ip[, 1]] == 1)
+  #is.HIV.infector <- which(status[disc.syph.ip[, 1]] == 1)
   
   ip.syph.tlo[is.HIV.infectee] <- ip.syph.tlo[is.HIV.infectee] + log(syph.hiv.rr)
-  ip.syph.tlo[is.HIV.infector] <- ip.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
+  #ip.syph.tlo[is.HIV.infector] <- ip.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
 
   # Retransformation to probability
   ip.syph.tprob <- plogis(ip.syph.tlo)
@@ -307,7 +307,7 @@ sti_trans <- function(dat, at) {
   
   }
   
-  # Receptive Man Infected with Syphilis (Col 2)
+  ##### Receptive Man Infected with Syphilis (Col 2)
   if (is.null(dim(disc.syph.rp)[1])) {
           trans.syph.rp <- NULL
       }  else {

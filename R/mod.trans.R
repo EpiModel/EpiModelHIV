@@ -103,7 +103,7 @@ trans_msm <- function(dat, at) {
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Transform to log odds
-  ip.tlo <- log(ip.tprob/(1-ip.tprob))
+  ip.tlo <- log(ip.tprob/(1 - ip.tprob))
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
@@ -115,7 +115,7 @@ trans_msm <- function(dat, at) {
 
   # PrEP, cycle through 4 adherence classes
   for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
+    temp.ids <- which(ip.prep == 1 & ip.prepcl == i - 1)
     ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
   }
 
@@ -129,7 +129,7 @@ trans_msm <- function(dat, at) {
   is.rCT <- which(ip.rCT == 1)
   
   is.syph.infectee <- which(ip.syph.infectee == 1)
-  is.syph.infector <- which(ip.syph.infector == 1)
+  #is.syph.infector <- which(ip.syph.infector == 1)
   is.rect.dual <- intersect(is.rGC, is.rCT)
 
   is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
@@ -138,7 +138,7 @@ trans_msm <- function(dat, at) {
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
   ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.rsyph.rr)
-  ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.usyph.rr)
+  #ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.usyph.rr)
   
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
@@ -153,7 +153,7 @@ trans_msm <- function(dat, at) {
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
-  rp.syph.infector <-syphilis[disc.rp[, 2]]
+  #rp.syph.infector <- syphilis[disc.rp[, 2]]
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
@@ -183,7 +183,7 @@ trans_msm <- function(dat, at) {
 
   # PrEP, cycle through 4 adherence classes
   for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
+    temp.ids <- which(rp.prep == 1 & rp.prepcl == i - 1)
     rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
   }
 
@@ -197,7 +197,7 @@ trans_msm <- function(dat, at) {
   is.uCT <- which(rp.uCT == 1)
   
   is.syph.infectee <- which(rp.syph.infectee == 1)
-  is.syph.infector <- which(rp.syph.infector == 1)
+  #is.syph.infector <- which(rp.syph.infector == 1)
 
   is.ureth.dual <- intersect(is.uGC, is.uCT)
 
@@ -207,7 +207,7 @@ trans_msm <- function(dat, at) {
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
   rp.tlo[is.syph.infectee] <- rp.tlo[is.syph.infectee] + log(hiv.usyph.rr)
-  rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.rsyph.rr)
+  #rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.rsyph.rr)
   
   rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +

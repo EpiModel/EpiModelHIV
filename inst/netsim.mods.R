@@ -10,29 +10,29 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.11, # 1.11889726, # was 1.13
-                   prep.start = 5000,
-                   stitest.start = 5000,
-
-                   hiv.rgc.rr = 2.5, #2.780673,
-                   hiv.ugc.rr = 1.5, #1.732363,
-                   hiv.rct.rr = 2.5, #2.780673,
-                   hiv.uct.rr = 1.5, #1.732363,
+                   ai.scale = 1.105, # 1.11889726, # was 1.13
+                   
+                   rsyph.tprob = 0.040, # 0.01950727,
+                   usyph.tprob = 0.029, # 0.01950727,
+                   
                    hiv.rsyph.rr = 2.5, # 2.00892218, # 2.00793856, # functional at 2.00
                    hiv.usyph.rr = 1.5,
-                   syph.hiv.rr = 1.7, #2.17038393, # 2.16933746, # functional at 2.40
+                   syph.hiv.rr = 1.5, #2.17038393, # 2.16933746, # functional at 2.40
                    
-                   rsyph.tprob = 0.038, # 0.01950727,
-                   usyph.tprob = 0.030, # 0.01950727,
+                   rgc.tprob = 0.45, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
+                   ugc.tprob = 0.30, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
+                   rct.tprob = 0.20, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
+                   uct.tprob = 0.15, #0.25309465,# 0.23424104, # was 0.212965 # functional at 0.15
                    
-                   rgc.tprob = 0.40, #0.3928965, # 0.38353111, # was 0.357698 # functional at 0.40
-                   ugc.tprob = 0.32, #0.24297633, # 0.25444490, # was 0.248095 # functional at 0.35
-                   rct.tprob = 0.21, #0.29367628, # 0.31968155, # was 0.321597 # functional at 0.21
-                   uct.tprob = 0.16, #0.25309465,# 0.23424104, # was 0.212965 # functional at 0.15
+                   hiv.rgc.rr = 2.45, #2.780673,
+                   hiv.ugc.rr = 1.4, #1.732363,
+                   hiv.rct.rr = 2.3, #2.780673,
+                   hiv.uct.rr = 1.6, #1.732363,
                    
                    prep.coverage = 0,
                    ept.coverage = 0,
-                   
+                   prep.start = 5000,
+                   stitest.start = 5000,
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
 
