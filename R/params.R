@@ -395,8 +395,8 @@ param_msm <- function(nwstats,
                       # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
                       #Was c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02)
                       # Incub, Primary, Secondary, Early latent, Late Latent, Late Late Latent, Tertiary
-                      stage.syph.B.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.026),
-                      stage.syph.W.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.026),
+                      stage.syph.B.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.006),
+                      stage.syph.W.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.006),
                       immune.syph.B.prob = 0.01,
                       immune.syph.W.prob = 0.01, 
 
