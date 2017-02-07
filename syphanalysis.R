@@ -28,25 +28,27 @@ boxplot(sim$epi$prev.syph.hivpos / sim$epi$prev.syph.hivneg)
 abline(h = 3.96, lty = 2, col = "red")
 
 # Syphilis prevalence plots
-par(mfrow = c(2,2), oma = c(0,0,2,0))
+par(mfrow = c(1, 1), oma = c(0,0,2,0))
 plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), mean.col = "blue")
 plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.103, col = "blue", lty = 2)
 abline(h = 0.026, col = "green", lty = 2)
 title("Syphilis by HIV Status")
 legend("topleft", c("HIV+", "HIV-"), col = c("blue", "green"), lty = c(1, 1))
+
 plot(sim, y = "prev.stage.incubprim", ylab = "Prevalence", ylim = c(0.00, 0.40), mean.col = "blue")
 plot(sim, y = "prev.stage.seco", ylab = "Prevalence", add = TRUE, mean.col = "green")
 plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", add = TRUE, mean.col = "purple")
-abline(h = 0.1385, col = "blue", lty = 2)
-abline(h = 0.1385, col = "green", lty = 2)
+abline(h = 0.20, col = "blue", lty = 2)
+abline(h = 0.077, col = "green", lty = 2)
 abline(h = 0.2770, col = "purple", lty = 2)
 title("P, S, and Early latent Syphilis Prevalence")
 legend("topright", c("Primary", "Seco", "Early latent"), col = c("blue", "green", "purple"), lty = c(1, 1, 1))
+
 plot(sim, y = "prev.stage.alllatelat", ylab = "Prevalence", ylim = c(0.00, 0.60), mean.col = "blue")
 plot(sim, y = "prev.stage.tert", ylab = "Prevalence", add = TRUE, mean.col = "green")
-abline(h = 0.40, col = "blue", lty = 2)
-abline(h = 0.046, col = "green", lty = 2)
+abline(h = 0.44, col = "blue", lty = 2)
+abline(h = 0.006, col = "green", lty = 2)
 title("Late Latent and Tertiary Syphilis Prevalence")
 legend("right", c("Late latent", "Tertiary"), col = c("blue", "green"), lty = c(1, 1))
 
@@ -58,11 +60,11 @@ plot(sim, y = "prev.stage.earlat", ylab = "Prevalence", add = TRUE, mean.col = "
 plot(sim, y = "prev.stage.alllatelat", ylab = "Prevalence", add = TRUE, mean.col = "purple")
 plot(sim, y = "prev.stage.tert", ylab = "Prevalence", add = TRUE, mean.col = "black")
 title("Stage-specific Syphilis Prevalence")
-abline(h = 0.1385, col = "blue", lty = 1)
-abline(h = 0.1385, col = "green", lty = 1)
+abline(h = 0.20, col = "blue", lty = 1)
+abline(h = 0.077, col = "green", lty = 1)
 abline(h = 0.2770, col = "orange", lty = 1)
-abline(h = 0.40, col = "purple", lty = 1)
-abline(h = 0.046, col = "black", lty = 1)
+abline(h = 0.44, col = "purple", lty = 1)
+abline(h = 0.006, col = "black", lty = 1)
 legend("topright", c("Primary/Incub", "Secondary", "Early Latent", "Late latent", "Tertiary"),
        col = c("blue", "green", "orange", "purple", "black"), lty = c(1, 1, 1, 1, 1))
 
@@ -111,9 +113,6 @@ title("CT Incidence")
 plot(sim, y = "ir100.syph")
 abline(h = 0.9, col = "red", lty = 2)
 title("Syph Incidence")
-#title("Syph Tprob = XXX, Relrisk for Syph<->HIV = XXX", outer = TRUE)
-
-
 
 mean.s <- rbind(ir100.gc, ir100.ct, ir100, ir100.syph, i.prev, prev.syph.hivpos, 
             prev.syph.hivneg, prev.syph, prev.hiv.syphpos, prev.earlysyph, 
