@@ -19,4 +19,3 @@ Module function to calculate and store summary statistics for
 }
 \keyword{het}
 \keyword{module}
-

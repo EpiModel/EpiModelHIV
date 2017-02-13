@@ -17,4 +17,3 @@ Stochastically simulates GC/CT and syphilis diagnosis and treatment.
 }
 \keyword{module}
 \keyword{msm}
-

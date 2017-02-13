@@ -21,4 +21,3 @@ Sets the initial individual-level disease status of persons
 \keyword{msm}
 \keyword{syphilis}
 \keyword{utility}
-

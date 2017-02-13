@@ -29,4 +29,3 @@ couples.
 \author{
 Steven M. Goodreau
 }
-

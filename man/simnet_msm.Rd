@@ -18,4 +18,3 @@ Module function for resimulating the main, casual, and one-off
 }
 \keyword{module}
 \keyword{msm}
-

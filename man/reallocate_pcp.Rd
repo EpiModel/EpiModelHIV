@@ -18,4 +18,3 @@ Shifts probabilities from the high-adherence category to the lower
              three adherence categories while maintaining the proportional
              distribution of those lower categories.
 }
-

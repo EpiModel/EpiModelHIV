@@ -18,4 +18,3 @@ Module for simulating births/entries into the population, including
 }
 \keyword{het}
 \keyword{module}
-

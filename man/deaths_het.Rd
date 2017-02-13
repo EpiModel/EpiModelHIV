@@ -18,4 +18,3 @@ Module for simulating deaths among susceptible and infected
 }
 \keyword{het}
 \keyword{module}
-

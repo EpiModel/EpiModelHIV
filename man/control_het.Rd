@@ -86,4 +86,3 @@ This function sets the control settings for the stochastic
 This function sets the parameters for the models.
 }
 \keyword{het}
-

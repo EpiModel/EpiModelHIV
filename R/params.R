@@ -474,7 +474,7 @@ param_msm <- function(nwstats,
                       base.ai.pers.BB.rate = 0.11,
                       base.ai.pers.BW.rate = 0.16,
                       base.ai.pers.WW.rate = 0.14,
-                      ai.scale = 1.15,
+                      ai.scale = 1.12,
 
                       cond.main.BB.prob = 0.38,
                       cond.main.BW.prob = 0.10,

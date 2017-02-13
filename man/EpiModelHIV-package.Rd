@@ -2,8 +2,8 @@
 % Please edit documentation in R/EpiModelHIV-package.R
 \docType{package}
 \name{EpiModelHIV-package}
-\alias{EpiModelHIV}
 \alias{EpiModelHIV-package}
+\alias{EpiModelHIV}
 \title{HIV Transmission Dynamics among MSM and Heterosexuals}
 \description{
 \tabular{ll}{
@@ -24,4 +24,3 @@ sub-Saharan Africa.
 \keyword{het}
 \keyword{msm}
 \keyword{package}
-

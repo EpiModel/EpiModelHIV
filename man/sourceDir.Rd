@@ -17,4 +17,3 @@ sourceDir(path, verbose = TRUE, ...)
 Loops over all files in a directory to source them to the
              Global Environment.
 }
-

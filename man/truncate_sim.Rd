@@ -21,4 +21,3 @@ This function would be used when running a follow-up simulation from time steps
 where the final time window of interest for data analysis is \code{b} to \code{c}
 only.
 }
-

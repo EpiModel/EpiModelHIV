@@ -19,4 +19,3 @@ A dataset containing age-sex-period specific mortality rates.
 }
 }
 \keyword{datasets}
-

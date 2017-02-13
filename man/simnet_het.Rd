@@ -19,4 +19,3 @@ Module function to resimulate the dynamic network forward one
 }
 \keyword{het}
 \keyword{module}
-

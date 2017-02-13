@@ -103,4 +103,3 @@ to construct the base network, and then into the parameters in
 \code{\link{param_msm}}.
 }
 \keyword{msm}
-
