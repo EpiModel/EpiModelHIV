@@ -719,12 +719,12 @@ param_msm <- function(nwstats,
 #'
 #' @export
 init_msm <- function(nwstats,
-                     prev.B = 0.253,
-                     prev.W = 0.253,
-                     prev.ugc = 0.005,
-                     prev.rgc = 0.005,
-                     prev.uct = 0.013,
-                     prev.rct = 0.013,
+                     prev.B = 0.10,
+                     prev.W = 0.10,
+                     prev.ugc = 0.015,
+                     prev.rgc = 0.015,
+                     prev.uct = 0.015,
+                     prev.rct = 0.015,
                      prev.syph.B = 0.02,
                      prev.syph.W = 0.02,
                      ...) {
