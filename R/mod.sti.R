@@ -336,7 +336,7 @@ sti_trans <- function(dat, at) {
   is.HIV.infector <- which(status[disc.syph.rp[, 2]] == 1)
   
   rp.syph.tlo[is.HIV.infectee] <- rp.syph.tlo[is.HIV.infectee] + log(syph.hiv.rr)
-  rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
+  #rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
   
   # Retransformation to probability
   rp.syph.tprob <- plogis(rp.syph.tlo)

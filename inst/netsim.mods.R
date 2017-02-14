@@ -12,28 +12,28 @@ st
 param <- param_msm(nwstats = st,
                    ai.scale = 1.12, # 1.11889726, # was 1.13
                    
-                   rsyph.tprob = 0.048, # 0.050,
-                   usyph.tprob = 0.038, #0.038, 
+                   rsyph.tprob = 0.045, # 0.050,
+                   usyph.tprob = 0.035, #0.038, 
                    
                    hiv.rsyph.rr = 2.50, 
-                   hiv.usyph.rr = 1.80,
-                   syph.hiv.rr = 1.50,
+                   hiv.usyph.rr = 1.70,
+                   syph.hiv.rr = 1.70,
                    
-                   rgc.tprob = 0.41, 
-                   ugc.tprob = 0.35, 
-                   rct.tprob = 0.20,
-                   uct.tprob = 0.15,
+                   rgc.tprob = 0.40, 
+                   ugc.tprob = 0.31, 
+                   rct.tprob = 0.19, 
+                   uct.tprob = 0.145,
                    
-                   hiv.rgc.rr = 2.52, #2.780673,
-                   hiv.ugc.rr = 1.37, #1.732363,
-                   hiv.rct.rr = 2.34, #2.780673,
-                   hiv.uct.rr = 1.52, #1.732363,
+                   hiv.rgc.rr = 2.50, #2.780673,
+                   hiv.ugc.rr = 1.70, #1.732363,
+                   hiv.rct.rr = 2.50, #2.780673,
+                   hiv.uct.rr = 1.70, #1.732363,
                    
                    # adjust prim and seco from 0.1385 each
                    stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    
-                   syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                   syph.prim.sympt.prob.tx = 0.45, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                    syph.prim.asympt.prob.tx = 0.00,
                    syph.seco.sympt.prob.tx = 0.70, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                    syph.seco.asympt.prob.tx = 0.00,
