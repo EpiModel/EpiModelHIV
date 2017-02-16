@@ -395,8 +395,8 @@ param_msm <- function(nwstats,
                       # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
                       #Was c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02)
                       # Incub, Primary, Secondary, Early latent, Late Latent, Late Late Latent, Tertiary
-                      stage.syph.B.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.006),
-                      stage.syph.W.prob = c(0.00, 0.1385, 0.1385, 0.277, 0.22, 0.22, 0.006),
+                      stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
+                      stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                       immune.syph.B.prob = 0.01,
                       immune.syph.W.prob = 0.01, 
 
@@ -512,7 +512,7 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
-                      stitest.active.int = 365,
+                      stitest.active.int = 364,
                       stitest.start = 5000,
                       ept.start = Inf,
                       ept.risk.int = 60,
@@ -525,13 +525,13 @@ param_msm <- function(nwstats,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
 
-                      rgc.tprob = 0.357698,
-                      ugc.tprob = 0.248095,
-                      rct.tprob = 0.321597,
-                      uct.tprob = 0.212965,
+                      rgc.tprob = 0.39, #0.357698,
+                      ugc.tprob = 0.29, #0.248095,
+                      rct.tprob = 0.19, #0.321597,
+                      uct.tprob = 0.14, #0.212965,
 
-                      usyph.tprob = 0.030,
-                      rsyph.tprob = 0.030,
+                      usyph.tprob = 0.04883012,
+                      rsyph.tprob = 0.03829557,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
@@ -569,12 +569,12 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 0.90,
                       ct.asympt.prob.tx = 0.85,
                       
-                      syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                      syph.prim.sympt.prob.tx = 0.48201266, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 0.00,
-                      syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.seco.sympt.prob.tx = 0.67214403, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                       syph.seco.asympt.prob.tx = 0.00,
-                      syph.earlat.prob.tx = 0.10, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.latelat.prob.tx = 0.00,
+                      syph.earlat.prob.tx = 0.17136638, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.latelat.prob.tx = 0.15437417,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 0.00,
                       
@@ -587,14 +587,14 @@ param_msm <- function(nwstats,
 
                       sti.cond.rr = 0.3,
 
-                      hiv.rgc.rr = 2.780673,
-                      hiv.ugc.rr = 1.732363,
-                      hiv.rct.rr = 2.780673,
-                      hiv.uct.rr = 1.732363,
+                      hiv.rgc.rr = 2.64869327,
+                      hiv.ugc.rr = 1.67105474,
+                      hiv.rct.rr = 2.64869327,
+                      hiv.uct.rr = 1.67105474,
                       hiv.dual.rr = 0.2,
-                      hiv.rsyph.rr = 2.5,
-                      hiv.usyph.rr = 1.5,
-                      syph.hiv.rr = 1.7,
+                      hiv.rsyph.rr = 2.70,
+                      hiv.usyph.rr = 1.70,
+                      syph.hiv.rr = 1.80,
                       
                       partlist.start = stitest.start - sti.highrisktest.int - 1,
                       
