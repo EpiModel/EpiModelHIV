@@ -145,9 +145,18 @@ test_sti_msm <- function(dat, at) {
     tt.traj.syph <- dat$attr$tt.traj.syph
     tt.traj.gc <- dat$attr$tt.traj.gc
     tt.traj.ct <- dat$attr$tt.traj.ct
-     
+    
+    # eptElig <- dat$attr$eptElig
+    # eptStat <- dat$attr$eptStat
+    # eptEligdate <- dat$attr$eptEligdate
+    # eptLastRisk <- dat$attr$eptLastRisk
+    # eptStartTime <- dat$attr$eptStartTime
+
     # Parameters
-    time.unit <- dat$param$time.unit
+    stianntest.coverage <- dat$param$stianntest.coverage
+    stianntest.cov.rate <- dat$param$stianntest.cov.rate
+    stihighrisktest.coverage <- dat$param$stihighrisktest.coverage
+    stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
     testing.pattern.sti <- dat$param$testing.pattern.sti
     prep.tst.int <- dat$param$prep.tst.int
     stitest.active.int <- dat$param$stitest.active.int
@@ -172,17 +181,68 @@ test_sti_msm <- function(dat, at) {
     # Annual - testing trajectory update
     activeindwindow <- at - stitest.active.int
     idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
-    tt.traj.syph[idsactive] <- tt.traj.gc[idsactive] <- tt.traj.ct[idsactive] <- 1
     
     # High-risk - testing trajectory update
     highriskindwindow <- at - sti.highrisktest.int
     idshighrisk <- which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
-                                    (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
-                                    (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow))
-    tt.traj.syph[idshighrisk] <- tt.traj.gc[idshighrisk] <- tt.traj.ct[idshighrisk] <- 2   
+                             (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
+                             (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow))
+    
+    # Separating tt traj 1 vs 2 needs work
+    ## Testing coverage for high risk ----------------------------------------------------------------
+    stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
+    stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
+    
+    idsEligSt <- idshighrisk
+    nEligSt <- length(idshighrisk)
+    
+    nStart <- max(0, min(nEligSt, round((stihighrisktest.coverage - stihighrisktestCov) *
+                                            length(idshighrisk))))
+    idsStart <- NULL
+    if (nStart > 0) {
+        if (stihighrisktest.cov.rate >= 1) {
+            idsStart <- ssample(idsEligSt, nStart)
+        } else {
+            idsStart <- idsEligSt[rbinom(nStart, 1, stihighrisktest.cov.rate) == 1]
+        }
+    }
+    
+    ## Update testing trajectory
+    if (length(idsStart) > 0) {
+        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
+        #eptStartTime[idsStart] <- at
+        #eptLastRisk[idsStart] <- at
+    }   
     
     
-
+    
+    ## Testing coverage for annual ----------------------------------------------------------------
+    
+    stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(idsactive)
+    stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
+    
+    idsEligSt <- idsactive
+    nEligSt <- length(idsactive)
+    
+    nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
+                                            length(idsactive))))
+    idsStart <- NULL
+    if (nStart > 0) {
+        if (stianntest.cov.rate >= 1) {
+            idsStart <- ssample(idsEligSt, nStart)
+        } else {
+            idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+        }
+    }
+    
+    ## Update testing trajectory
+    if (length(idsStart) > 0) {
+        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
+        #eptStartTime[idsStart] <- at
+        #eptLastRisk[idsStart] <- at
+    }
+    
+    
     ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
     
     # Remove testing trajectory if no longer indicated (idsannual includes high-risk)

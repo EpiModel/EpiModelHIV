@@ -78,7 +78,10 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.17136638,
   syph.latelat.prob.tx = 0.15437417, syph.tert.sympt.prob.tx = 0.9,
   syph.tert.asympt.prob.tx = 0, tst.rect.sti.rr = 1,
-  sti.highrisktest.int = 182, prep.sti.screen.int = 182,
+  sti.highrisktest.int = 182, stianntest.coverage = 1,
+  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
+  stihighrisktest.coverage = 1, stihighrisktest.cov.method = "curr",
+  stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
   prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
@@ -457,7 +460,7 @@ should start.}
 
 \item{ept.risk.int}{Time window for assessment of risk eligibility for EPT in days}
 
-\item{ept.coverage}{The proportion of the eligible population who are start
+\item{ept.coverage}{The proportion of the eligible population who are starting
 EPT once they become eligible.}
 
 \item{ept.cov.method}{The method for calculating EPT coverage, with options
@@ -597,6 +600,23 @@ stage syphilis infection.}
 \item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested}
 
 \item{sti.highrisktest.int}{Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers}
+
+\item{stianntest.coverage}{The proportion of the eligible population who are starting annual STI testing once they become eligible.
+This is not inclusive of those who are simultaneously indicated for more frequent testing.}
+
+\item{stianntest.cov.method}{The method for calculating STI annual testing, with options of \code{"curr"} to base the numerator 
+on the number of people currently annually testing for STI and \code{"ever"} to base it on the number of people who have 
+ever been annually tested for STI. This is not inclusive of those who are simultaneously indicated for more frequent testing.}
+
+\item{stianntest.cov.rate}{The rate at which persons initiate annual STI testing conditional on their eligibility, with 1 equal to instant start.}
+
+\item{stihighrisktest.coverage}{The proportion of the eligible population who are starting high-risk STI testing once they become eligible.}
+
+\item{stihighrisktest.cov.method}{The method for calculating STI high-risk testing, with options of \code{"curr"} to base the numerator 
+on the number of people currently high-risk testing for STI and \code{"ever"} to base it on the number of people who have 
+ever been high-risk tested for STI.}
+
+\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk STI testing conditional on their eligibility, with 1 equal to instant start.}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 

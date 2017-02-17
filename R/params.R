@@ -259,7 +259,7 @@
 #'        should start.
 #' @param ept.start Time step at which the EPT intervention should start
 #' @param ept.risk.int Time window for assessment of risk eligibility for EPT in days
-#' @param ept.coverage The proportion of the eligible population who are start
+#' @param ept.coverage The proportion of the eligible population who are starting
 #'        EPT once they become eligible.
 #' @param ept.cov.method The method for calculating EPT coverage, with options
 #'        of \code{"curr"} to base the numerator on the number of people currently
@@ -350,6 +350,17 @@
 #'        stage syphilis infection.
 #' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested        
 #' @param sti.highrisktest.int Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers
+#' @param stianntest.coverage The proportion of the eligible population who are starting annual STI testing once they become eligible.
+#'        This is not inclusive of those who are simultaneously indicated for more frequent testing.
+#' @param stianntest.cov.method The method for calculating STI annual testing, with options of \code{"curr"} to base the numerator 
+#'        on the number of people currently annually testing for STI and \code{"ever"} to base it on the number of people who have 
+#'        ever been annually tested for STI. This is not inclusive of those who are simultaneously indicated for more frequent testing.
+#' @param stianntest.cov.rate The rate at which persons initiate annual STI testing conditional on their eligibility, with 1 equal to instant start.
+#' @param stihighrisktest.coverage The proportion of the eligible population who are starting high-risk STI testing once they become eligible.
+#' @param stihighrisktest.cov.method The method for calculating STI high-risk testing, with options of \code{"curr"} to base the numerator 
+#'        on the number of people currently high-risk testing for STI and \code{"ever"} to base it on the number of people who have 
+#'        ever been high-risk tested for STI.
+#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk STI testing conditional on their eligibility, with 1 equal to instant start.
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -519,6 +530,7 @@ param_msm <- function(nwstats,
                       ept.coverage = 0,
                       ept.cov.method = "curr",
                       ept.cov.rate = 1,
+                      
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -580,6 +592,12 @@ param_msm <- function(nwstats,
                       
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
+                      stianntest.coverage = 1,
+                      stianntest.cov.method = "curr",
+                      stianntest.cov.rate = 1,
+                      stihighrisktest.coverage = 1,
+                      stihighrisktest.cov.method = "curr",
+                      stihighrisktest.cov.rate = 1,
                      
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
