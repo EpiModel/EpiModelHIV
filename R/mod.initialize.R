@@ -263,6 +263,10 @@ init_status_msm <- function(dat) {
 
   stage <- rep(NA, num)
   stage.time <- rep(NA, num)
+  stage.time.ar <- rep(NA, num)
+  stage.time.af <- rep(NA, num)
+  stage.time.chronic <- rep(NA, num)
+  stage.time.aids <- rep(NA, num)
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
@@ -315,7 +319,21 @@ init_status_msm <- function(dat) {
                                                   vl.acute.int
   stage.time[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] -
                                                   vldo.int
-
+ 
+  # HIV stage times 
+  stage.time.ar[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1] 
+  stage.time.af[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] -
+                                                        vlar.int
+  stage.time.chronic[selected][stage[selected] == 3] <- time.since.inf[stage[selected] == 3] -
+                                                        vl.acute.int
+  stage.time.aids[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] -
+                                                        vldo.int
+  
+  # Assign time spent in earlier stages for those who are initialized in later stages
+  stage.time.ar[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.chronic[selected][stage[selected] == 4] <- vldo.int
+  
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
                      ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
@@ -400,7 +418,7 @@ init_status_msm <- function(dat) {
   offon.W[, 2] <- (1:max.possible.inf.time.W) - offon.W[, 1]
   stage.W <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
   stage.time.W <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.W, 1:vl.aids.int)
-
+  
   # Vl for Blacks
   selected <- which(status == 1 & tt.traj == 4 & race == "B")
   max.inf.time <- pmin(time.sex.active[selected], max.possible.inf.time.B)
@@ -410,6 +428,18 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.B[time.since.inf, 1]
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
+  
+  # HIV stage times
+  stage.time.ar[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.chronic[selected][stage[selected] == 3] <- stage.time[selected][stage[selected] == 3]
+  stage.time.aids[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+  
+  # Assign time spent in earlier stages for those who are initialized in later stages
+  stage.time.ar[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.chronic[selected][stage[selected] == 4] <- vldo.int
+  
   tx.status[selected] <- 0
   tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
     rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
@@ -432,6 +462,18 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.W[time.since.inf, 1]
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
+
+  # HIV stage times
+  stage.time.ar[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.chronic[selected][stage[selected] == 3] <- stage.time[selected][stage[selected] == 3]
+  stage.time.aids[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+  
+  # Assign time spent in earlier stages for those who are initialized in later stages
+  stage.time.ar[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.chronic[selected][stage[selected] == 4] <- vldo.int
+  
   tx.status[selected] <- 0
   tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
     rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
@@ -527,6 +569,18 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.B[time.since.inf, 1]
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
+  
+  # HIV stage times
+  stage.time.ar[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.chronic[selected][stage[selected] == 3] <- stage.time[selected][stage[selected] == 3]
+  stage.time.aids[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+  
+  # Assign time spent in earlier stages for those who are initialized in later stages
+  stage.time.ar[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.chronic[selected][stage[selected] == 4] <- vldo.int
+  
   tx.status[selected] <- 0
   tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
     rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
@@ -549,6 +603,18 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.W[time.since.inf, 1]
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
+  
+  # HIV stage times
+  stage.time.ar[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.chronic[selected][stage[selected] == 3] <- stage.time[selected][stage[selected] == 3]
+  stage.time.aids[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+  
+  # Assign time spent in earlier stages for those who are initialized in later stages
+  stage.time.ar[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.chronic[selected][stage[selected] == 4] <- vldo.int
+  
   tx.status[selected] <- 0
   tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
     rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
@@ -607,6 +673,10 @@ init_status_msm <- function(dat) {
   ## Set all onto dat$attr
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
+  dat$attr$stage.time.ar <- stage.time.ar
+  dat$attr$stage.time.af <- stage.time.af
+  dat$attr$stage.time.chronic <- stage.time.chronic
+  dat$attr$stage.time.aids <- stage.time.aids
   dat$attr$inf.time <- inf.time
   dat$attr$vl <- vl
   dat$attr$diag.status <- diag.status

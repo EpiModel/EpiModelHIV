@@ -43,6 +43,10 @@ progress_msm <- function(dat, at) {
   cum.time.off.tx <- dat$attr$cum.time.off.tx
   stage <- dat$attr$stage
   stage.time <- dat$attr$stage.time
+  stage.time.ar <- dat$attr$stage.time.ar
+  stage.time.af <- dat$attr$stage.time.af
+  stage.time.chronic <- dat$attr$stage.time.chronic
+  stage.time.aids <- dat$attr$stage.time.aids
   tt.traj <- dat$attr$tt.traj
   tx.status <- dat$attr$tx.status
 
@@ -57,20 +61,31 @@ progress_msm <- function(dat, at) {
 
 
   ## Process
+  # Current stage
+  AR <- which(active == 1 & stage == 1)
+  AF <- which(active == 1 & stage == 2)
+  Chronic <- which(active == 1 & stage == 3)
+  AIDS <- which(active == 1 & stage == 4)
 
   # Increment day
   stage.time[active == 1] <- stage.time[active == 1] + 1
+  stage.time.ar[AR] <- stage.time.ar[AR] + 1
+  stage.time.af[AF] <- stage.time.af[AF] + 1
+  stage.time.chronic[Chronic] <- stage.time.chronic[Chronic] + 1
+  stage.time.aids[AIDS] <- stage.time.aids[AIDS] + 1
 
   # Change stage to Acute Falling
   toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1))
   stage[toAF] <- 2
   stage.time[toAF] <- 1
+  stage.time.af[toAF] <- 1
 
   # Change stage to Chronic
   toC <- which(active == 1 & time.since.inf == (vl.acute.rise.int +
                                                 vl.acute.fall.int + 1))
   stage[toC] <- 3
   stage.time[toC] <- 1
+  stage.time.chronic[toC] <- 1
 
   # Change stage to AIDS
   aids.tx.naive <- which(active == 1 & status == 1 & cum.time.on.tx == 0 &
@@ -90,12 +105,17 @@ progress_msm <- function(dat, at) {
   isAIDS <- c(aids.tx.naive, aids.part.escape, aids.off.tx.full.escape)
   stage[isAIDS] <- 4
   stage.time[isAIDS] <- 1
+  stage.time.aids[isAIDS] <- 1
 
 
   ## Output
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
-
+  dat$attr$stage.time.ar <- stage.time.ar
+  dat$attr$stage.time.af <- stage.time.af
+  dat$attr$stage.time.chronic <- stage.time.chronic
+  dat$attr$stage.time.aids <- stage.time.aids
+  
   return(dat)
 }
 
