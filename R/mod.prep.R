@@ -30,6 +30,10 @@ prep_msm <- function(dat, at) {
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
 
+  # Update time on and off PrEP
+  dat$attr$time.on.prep[prepStat == 1] <- dat$attr$time.on.prep[prepStat == 1] + 1
+  dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
+  
   # Parameters
 
   prep.coverage <- dat$param$prep.coverage

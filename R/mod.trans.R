@@ -254,7 +254,8 @@ trans_msm <- function(dat, at) {
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
   }
-
+  dat$attr$time.hivneg[status == 0] <- dat$attr$time.hivneg[status == 0] + 1
+  
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
