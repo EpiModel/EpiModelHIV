@@ -368,15 +368,16 @@
 #'        STI treatment of symptomatic cases even after PrEP initiation.
 #' @param sti.cond.rr Relative risk of STI infection (in either direction) given
 #'        a condom used by the insertive partner.
-#' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
-#' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
-#' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia.
-#' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia.
+#' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea in the HIV-negative partner.
+#' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea in the HIV-negative partner.
+#' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia in the HIV-negative partner.
+#' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia in the HIV-negative partner.
 #' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
 #'        given dual infection with both gonorrhea and chlamydia.
-#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal syphilis infection of either partner.
-#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection of either partner.
-#' @param syph.hiv.rr Relative risk of syphilis infection given current HIV infection.
+#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal syphilis infection in the HIV-negative partner.
+#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection in the HIV-negative partner.
+#' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.
+#' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -612,7 +613,8 @@ param_msm <- function(nwstats,
                       hiv.dual.rr = 0.2,
                       hiv.rsyph.rr = 2.70,
                       hiv.usyph.rr = 1.70,
-                      syph.hiv.rr = 1.80,
+                      syph.rhiv.rr = 2.6,
+                      syph.uhiv.rr = 1.7,
                       
                       partlist.start = stitest.start - sti.highrisktest.int - 1,
                       

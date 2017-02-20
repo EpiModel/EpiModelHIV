@@ -85,8 +85,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
-  hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.hiv.rr = 1.8,
-  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
+  hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
+  syph.uhiv.rr = 1.7, partlist.start = stitest.start - sti.highrisktest.int
+  - 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -629,22 +630,24 @@ STI treatment of symptomatic cases even after PrEP initiation.}
 \item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
 a condom used by the insertive partner.}
 
-\item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
+\item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea in the HIV-negative partner.}
 
-\item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral gonorrhea.}
+\item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral gonorrhea in the HIV-negative partner.}
 
-\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chlamydia.}
+\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chlamydia in the HIV-negative partner.}
 
-\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chlamydia.}
+\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chlamydia in the HIV-negative partner.}
 
 \item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
 given dual infection with both gonorrhea and chlamydia.}
 
-\item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal syphilis infection of either partner.}
+\item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal syphilis infection in the HIV-negative partner.}
 
-\item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral syphilis infection of either partner.}
+\item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral syphilis infection in the HIV-negative partner.}
 
-\item{syph.hiv.rr}{Relative risk of syphilis infection given current HIV infection.}
+\item{syph.rhiv.rr}{Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.}
+
+\item{syph.uhiv.rr}{Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.}
 
 \item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}

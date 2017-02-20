@@ -270,7 +270,7 @@ test_sti_msm <- function(dat, at) {
     # Testing Rates by serostatus/race?
     # All MSM with HIV infection entering care should be screened for gonorrhea and 
     # chlamydia at appropriate anatomic sites of exposure, as well as for syphilis
-    # For sexually active individuals, screen at first HIV evaluation, and at least annually thereafter8
+    # For sexually active individuals, screen at first HIV evaluation, and at least annually thereafter
     
     # More frequent STD screening (i.e., for syphilis, gonorrhea, and chlamydia) 
     # at 3–6-month intervals is indicated for MSM, including those with HIV infection 

@@ -17,7 +17,8 @@ param <- param_msm(nwstats = st,
                    
                    hiv.rsyph.rr = 2.70, 
                    hiv.usyph.rr = 1.70,
-                   syph.hiv.rr = 1.90,
+                   syph.rhiv.rr = 2.60,
+                   syph.uhiv.rr = 1.80,
                    
                    rgc.tprob = 0.41, 
                    ugc.tprob = 0.31, 
