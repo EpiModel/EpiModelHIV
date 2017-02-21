@@ -545,7 +545,7 @@ param_msm <- function(nwstats,
 
                       usyph.tprob = 0.04883012,
                       rsyph.tprob = 0.03829557,
-                      syph.earlat.rr = 2/3,
+                      syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       syph.immune.rr = 0,
                       
