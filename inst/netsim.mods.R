@@ -20,6 +20,17 @@ param <- param_msm(nwstats = st,
                    syph.rhiv.rr = 2.60,
                    syph.uhiv.rr = 1.80,
                    
+                   syph.earlat.rr = 0.5, #2/3, 0
+                   incu.syph.int = 27,
+                   prim.syph.int = 90,
+                   seco.syph.int = 120,
+                   earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
+                   latelat.syph.int = 9*365,
+                   latelatelat.syph.int = 30*365,
+                   tert.syph.int = 30*365,
+                   immune.syph.int = 5*365,
+                   syph.tert.prog.prob = 0.15,
+                   
                    rgc.tprob = 0.41, 
                    ugc.tprob = 0.31, 
                    rct.tprob = 0.21, 
