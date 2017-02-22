@@ -115,7 +115,8 @@ progress_msm <- function(dat, at) {
   dat$attr$stage.time.af <- stage.time.af
   dat$attr$stage.time.chronic <- stage.time.chronic
   dat$attr$stage.time.aids <- stage.time.aids
-  
+  dat$attr$time.off.prep[dat$attr$prepStat == 0] <- dat$attr$time.off.prep[dat$attr$prepStat == 0] + 1
+ 
   return(dat)
 }
 

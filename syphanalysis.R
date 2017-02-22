@@ -4,11 +4,14 @@ suppressMessages(library("EpiModelHPC"))
 i.prev <- as.numeric(mean(sim$epi$i.prev[2500:2600, ]))
 ir100 <- as.numeric(mean(sim$epi$ir100[2500:2600, ]))
 prev.hiv.syphpos <- as.numeric(mean(sim$epi$prev.hiv.syphpos[2500:2600, ]))
+prev.hiv.primsecosyphpos <- as.numeric(mean(sim$epi$prev.hiv.primsecosyphpos[2500:2600, ]))
 
 ir100.syph <- as.numeric(mean(sim$epi$ir100.syph[2500:2600, ]))
 prev.syph <- as.numeric(mean(sim$epi$prev.syph[2500:2600, ]))
 prev.syph.hivpos <- as.numeric(mean(sim$epi$prev.syph.hivpos[2500:2600, ]))
 prev.syph.hivneg <- as.numeric(mean(sim$epi$prev.syph.hivneg[2500:2600, ]))
+prev.primsecosyph.hivpos <- as.numeric(mean(sim$epi$prev.syph.hivpos[2500:2600, ]))
+prev.primsecosyph.hivneg <- as.numeric(mean(sim$epi$prev.syph.hivneg[2500:2600, ]))
 prev.stage.incubprim <- as.numeric(mean(sim$epi$prev.stage.incubprim[2500:2600, ]))
 prev.stage.seco <- as.numeric(mean(sim$epi$prev.stage.seco[2500:2600, ]))
 prev.stage.earlat <- as.numeric(mean(sim$epi$prev.stage.earlat[2500:2600, ]))
@@ -29,8 +32,8 @@ abline(h = 3.96, lty = 2, col = "red")
 
 # Syphilis prevalence plots
 par(mfrow = c(1, 1), oma = c(0,0,2,0))
-plot(sim, y = "prev.syph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), mean.col = "blue")
-plot(sim, y = "prev.syph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "green")
+plot(sim, y = "prev.primsecosyph.hivpos", ylab = "Prevalence", ylim = c(0, 0.15), mean.col = "blue")
+plot(sim, y = "prev.primsecosyph.hivneg", ylab = "Prevalence", add = TRUE, mean.col = "green")
 abline(h = 0.103, col = "blue", lty = 2)
 abline(h = 0.026, col = "green", lty = 2)
 title("Syphilis by HIV Status")
@@ -68,7 +71,7 @@ abline(h = 0.006, col = "black", lty = 1)
 legend("topright", c("Primary/Incub", "Secondary", "Early Latent", "Late latent", "Tertiary"),
        col = c("blue", "green", "orange", "purple", "black"), lty = c(1, 1, 1, 1, 1))
 
-a <- cbind(c(prev.syph.hivpos, prev.syph, prev.syph.hivneg, prev.stage.incubprim,
+a <- cbind(c(prev.primsecosyph.hivpos, prev.syph, prev.primsecosyph.hivneg, prev.stage.incubprim,
              prev.stage.seco, prev.stage.earlat, prev.stage.alllatelat,
              prev.stage.tert, prev.earlysyph, prev.latesyph))
 rownames(a) <- c( "prev.syph.hivpos", "prev.syph", "prev.syph.hivneg", "prev.stage.incubprim",
@@ -114,8 +117,8 @@ plot(sim, y = "ir100.syph")
 abline(h = 0.9, col = "red", lty = 2)
 title("Syph Incidence")
 
-mean.s <- rbind(ir100.gc, ir100.ct, ir100, ir100.syph, i.prev, prev.syph.hivpos, 
-            prev.syph.hivneg, prev.syph, prev.hiv.syphpos, prev.earlysyph, 
+mean.s <- rbind(ir100.gc, ir100.ct, ir100, ir100.syph, i.prev, prev.primsecosyph.hivpos, 
+            prev.primsecosyph.hivneg, prev.syph, prev.hiv.primsecosyphpos, prev.earlysyph, 
             prev.latesyph)
 tar.syph <- c(4.2, 6.6, 3.8, 0.9, 0.26, 0.103, 0.026, 0.046, 0.498, 0.554, 0.446) #, 0.1385, 0.1385, 0.2770, 0.2000, 0.2000, 0.0460)
 

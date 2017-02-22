@@ -91,6 +91,9 @@ test_msm <- function(dat, at) {
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
 
+  # Tests
+  dat$epi$hivtests[at] <- length(tst.all)
+  
   return(dat)
 }
 

@@ -10,15 +10,15 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.13, # 1.11889726, # was 1.13
+                   ai.scale = 1.12, # 1.11889726, # was 1.13
                    
-                   rsyph.tprob = 0.048, # 0.050,
-                   usyph.tprob = 0.038, #0.038, 
+                   rsyph.tprob = 0.049, # 0.050,
+                   usyph.tprob = 0.040, #0.038, 
                    
                    hiv.rsyph.rr = 2.70, 
                    hiv.usyph.rr = 1.70,
-                   syph.rhiv.rr = 2.60,
-                   syph.uhiv.rr = 1.80,
+                   syph.rhiv.rr = 3.00,
+                   syph.uhiv.rr = 2.00,
                    
                    syph.earlat.rr = 0.5, #2/3, 0
                    incu.syph.int = 27,
@@ -26,8 +26,8 @@ param <- param_msm(nwstats = st,
                    seco.syph.int = 120,
                    earlat.syph.int = 365 - 120 - 60 - 27,
                    latelat.syph.int = 9*365,
-                   latelatelat.syph.int = 30*365,
-                   tert.syph.int = 30*365,
+                   latelatelat.syph.int = 20*365,
+                   tert.syph.int = 20*365,
                    immune.syph.int = 5*365,
                    syph.tert.prog.prob = 0.15,
                    

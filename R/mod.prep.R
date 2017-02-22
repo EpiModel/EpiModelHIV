@@ -15,7 +15,16 @@ prep_msm <- function(dat, at) {
   if (at < dat$param$prep.start) {
     return(dat)
   }
-
+    
+  if (at == dat$param$prep.start) {
+      dat$attr$time.hivneg <- rep(0, dat$epi$num)
+      dat$attr$stage.time <- rep(0, dat$epi$num)
+      dat$attr$stage.time.ar <- rep(0, dat$epi$num)
+      dat$attr$stage.time.af <- rep(0, dat$epi$num)
+      dat$attr$stage.time.chronic <- rep(0, dat$epi$num)
+      dat$attr$stage.time.aids <- rep(0, dat$epi$num)
+        return(dat)
+    }
   ## Variables
 
   # Attributes
@@ -30,9 +39,8 @@ prep_msm <- function(dat, at) {
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
 
-  # Update time on and off PrEP
+  # Update time on PrEP
   dat$attr$time.on.prep[prepStat == 1] <- dat$attr$time.on.prep[prepStat == 1] + 1
-  dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
   
   # Parameters
 

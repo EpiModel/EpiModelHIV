@@ -264,11 +264,11 @@ init_status_msm <- function(dat) {
   ## Infection-related attributes
 
   stage <- rep(NA, num)
-  stage.time <- rep(NA, num)
-  stage.time.ar <- rep(NA, num)
-  stage.time.af <- rep(NA, num)
-  stage.time.chronic <- rep(NA, num)
-  stage.time.aids <- rep(NA, num)
+  stage.time <- rep(0, num)
+  stage.time.ar <- rep(0, num)
+  stage.time.af <- rep(0, num)
+  stage.time.chronic <- rep(0, num)
+  stage.time.aids <- rep(0, num)
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)

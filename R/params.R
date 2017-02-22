@@ -378,6 +378,7 @@
 #' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection in the HIV-negative partner.
 #' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.
 #' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.
+#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -440,11 +441,11 @@ param_msm <- function(nwstats,
                       prim.syph.int = 60,
                       seco.syph.int = 120,
                       earlat.syph.int = 365 - 27 - 60 - 120,
-                      latelat.syph.int = 9*365,
-                      latelatelat.syph.int = 20*365,
-                      tert.syph.int = 20*365,
-                      immune.syph.int = 5*365,
-                      syph.tert.prog.prob = 0.15 / (52 * 20), #15% progress at end of 20 years 
+                      latelat.syph.int = 9 * 52 * 7,
+                      latelatelat.syph.int = 20 * 52 * 7,
+                      tert.syph.int = 20 * 52 * 7,
+                      immune.syph.int = 5 * 52 * 7,
+                      syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress at end of 20 years 
                       
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
@@ -615,6 +616,8 @@ param_msm <- function(nwstats,
                       hiv.usyph.rr = 1.70,
                       syph.rhiv.rr = 2.6,
                       syph.uhiv.rr = 1.7,
+                      
+                      hivdx.syph.sympt.tx.rr = 2.0,
                       
                       partlist.start = stitest.start - sti.highrisktest.int - 1,
                       

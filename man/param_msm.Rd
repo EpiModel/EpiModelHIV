@@ -21,23 +21,22 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
-  incu.syph.int = 27, prim.syph.int = 90, seco.syph.int = 120,
-  earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
-  latelat.syph.int = 9 * 365, latelatelat.syph.int = 30 * 365,
-  tert.syph.int = 30 * 365, immune.syph.int = 5 * 365,
-  syph.tert.prog.prob = 0.15, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
-  birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
-  UIAI.prob = 0.0031 * 1.09, acute.rr = 6, circ.rr = 0.4,
-  condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  incu.syph.int = 27, prim.syph.int = 60, seco.syph.int = 120,
+  earlat.syph.int = 365 - 27 - 60 - 120, latelat.syph.int = 9 * 52 * 7,
+  latelatelat.syph.int = 20 * 52 * 7, tert.syph.int = 20 * 52 * 7,
+  immune.syph.int = 5 * 52 * 7, syph.tert.prog.prob = 0.15/(52 * 7 * 20),
+  b.B.rate = 0.001/7, b.W.rate = 0.001/7, birth.age = 18,
+  b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
+  1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
+  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
+  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
@@ -73,10 +72,10 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
   ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0.9,
-  ct.asympt.prob.tx = 0.85, syph.prim.sympt.prob.tx = 0.48201266,
-  syph.prim.asympt.prob.tx = 0, syph.seco.sympt.prob.tx = 0.67214403,
-  syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.17136638,
-  syph.latelat.prob.tx = 0.15437417, syph.tert.sympt.prob.tx = 0.9,
+  ct.asympt.prob.tx = 0.85, syph.prim.sympt.prob.tx = 0.35,
+  syph.prim.asympt.prob.tx = 0, syph.seco.sympt.prob.tx = 0.6,
+  syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.15,
+  syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
   syph.tert.asympt.prob.tx = 0, tst.rect.sti.rr = 1,
   sti.highrisktest.int = 182, stianntest.coverage = 1,
   stianntest.cov.method = "curr", stianntest.cov.rate = 1,
@@ -86,8 +85,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
   hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
-  syph.uhiv.rr = 1.7, partlist.start = stitest.start - sti.highrisktest.int
-  - 1, ...)
+  syph.uhiv.rr = 1.7, hivdx.syph.sympt.tx.rr = 2,
+  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -223,7 +222,7 @@ syphilis for those who will not progress to tertiary infection.}
 infection lasts after treatment and recovery from late syphilis infection.}
 
 \item{syph.tert.prog.prob}{Probability of progression from late latent stage of
-syphilis to tertiary stage.}
+syphilis to tertiary stage at any point in time during late latent.}
 
 \item{b.B.rate}{Rate at which black MSM enter the population.}
 
@@ -648,6 +647,8 @@ given dual infection with both gonorrhea and chlamydia.}
 \item{syph.rhiv.rr}{Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.}
 
 \item{syph.uhiv.rr}{Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.}
+
+\item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection.}
 
 \item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}

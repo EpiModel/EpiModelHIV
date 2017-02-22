@@ -106,6 +106,16 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
   
+  # Non-NA HIV variables
+  dat$attr$time.hivneg[newIds] <- rep(0, nBirths)
+  dat$attr$time.off.prep[newIds] <- rep(0, nBirths)
+  dat$attr$time.on.prep[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.ar[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.af[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.chronic[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.aids[newIds] <- rep(0, nBirths)
+  
   # Non-NA STI variables
   dat$attr$syphilis[newIds] <- rep(0, nBirths)
   dat$attr$rGC[newIds] <- rep(0, nBirths)
