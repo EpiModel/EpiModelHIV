@@ -95,7 +95,7 @@
 #' @param immune.syph.int Number of days that temporary immunity from syphilis
 #'        infection lasts after treatment and recovery from late syphilis infection.
 #' @param syph.tert.prog.prob Probability of progression from late latent stage of
-#'        syphilis to tertiary stage.
+#'        syphilis to tertiary stage at any point in time during late latent.
 #' @param b.B.rate Rate at which black MSM enter the population.
 #' @param b.W.rate Rate at which white MSM enter the population.
 #' @param birth.age Age (in years) of new arrivals.
@@ -437,14 +437,14 @@ param_msm <- function(nwstats,
                       part.supp.up.slope = 0.25,
                       
                       incu.syph.int = 27,
-                      prim.syph.int = 90,
+                      prim.syph.int = 60,
                       seco.syph.int = 120,
                       earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
                       latelat.syph.int = 9*365,
                       latelatelat.syph.int = 30*365,
                       tert.syph.int = 30*365,
                       immune.syph.int = 5*365,
-                      syph.tert.prog.prob = 0.15,
+                      syph.tert.prog.prob = 0.15 / (52 * 20), #15% progress at end of 20 years 
                       
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,

@@ -212,7 +212,7 @@ progress_syph_msm <- function(dat, at) {
     # Change stage to Early Latent and assign symptoms
     toEarLat <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
                                                               prim.syph.int +
-                                                                seco.syph.int + 1)& 
+                                                                seco.syph.int + 1) & 
                                     stage.syph == 3)
     stage.syph[toEarLat] <- 4
     stage.time.syph[toEarLat] <- 0
@@ -242,8 +242,8 @@ progress_syph_msm <- function(dat, at) {
     stage.latelatelat.sympt[tolatelate] <- rbinom(length(tolatelate), 1, syph.latelat.sympt.prob)
     stage.latelat.sympt[tolatelate] <- NA
     
-    # Change stage to tertiary for fraction of those in late late latent at time of progression to late late latent
-    toTert <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
+    # Change stage to tertiary for fraction of those in late late latent at any time
+    toTert <- which(active == 1 & time.since.inf.syph >= (incu.syph.int +
                                                                   prim.syph.int +
                                                                   seco.syph.int + 
                                                                   earlat.syph.int +
