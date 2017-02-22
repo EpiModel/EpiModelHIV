@@ -217,8 +217,10 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]
   dat$epi$prev.primsecosyph[at] <- length(which(stage.syph %in% c(1, 2, 3))) / dat$epi$num[at]
   
-  dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at]
-  dat$epi$prev.syph.hivpos[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at]
+  dat$epi$prev.primsecosyph.hivneg[at] <- length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at]
+  dat$epi$prev.primsecosyph.hivpos[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at]
+  dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at]
+  dat$epi$prev.syph.hivpos[at] <- length(intersect(which(status == 1), which(syphilis == 1))) / dat$epi$i.num[at]
   
   dat$epi$prev.gc.hivneg[at] <- length(intersect(which(status == 0), which((rGC == 1 | uGC == 1)))) / dat$epi$s.num[at]
   dat$epi$prev.gc.hivpos[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) / dat$epi$i.num[at]
@@ -226,10 +228,16 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.ct.hivneg[at] <- length(intersect(which(status == 0), which((rCT == 1 | uCT == 1)))) / dat$epi$s.num[at]
   dat$epi$prev.ct.hivpos[at] <- length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / dat$epi$i.num[at]
   
-  dat$epi$prev.hiv.syphpos[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
+  dat$epi$prev.hiv.primsecosyphpos[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
                                     length(which(stage.syph %in% c(1, 2, 3)))
-  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
+  dat$epi$prev.hiv.primsecosyphneg[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
       length(which(stage.syph %in% c(1, 2, 3)))
+  
+  dat$epi$prev.hiv.syphpos[at] <- length(intersect(which(status == 1), which(syphilis == 1))) /
+      length(which(syphilis == 1))
+  dat$epi$prev.hiv.syphneg[at] <- length(intersect(which(status == 1), which(syphilis == 1))) /
+      length(which(syphilis == 1))
+  
   
   dat$epi$prev.hiv.gcpos[at] <- length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
                                 sum((rGC == 1 | uGC == 1), na.rm = TRUE)

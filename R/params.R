@@ -439,10 +439,10 @@ param_msm <- function(nwstats,
                       incu.syph.int = 27,
                       prim.syph.int = 60,
                       seco.syph.int = 120,
-                      earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
+                      earlat.syph.int = 365 - 27 - 60 - 120,
                       latelat.syph.int = 9*365,
-                      latelatelat.syph.int = 30*365,
-                      tert.syph.int = 30*365,
+                      latelatelat.syph.int = 20*365,
+                      tert.syph.int = 20*365,
                       immune.syph.int = 5*365,
                       syph.tert.prog.prob = 0.15 / (52 * 20), #15% progress at end of 20 years 
                       
@@ -582,12 +582,12 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 0.90,
                       ct.asympt.prob.tx = 0.85,
                       
-                      syph.prim.sympt.prob.tx = 0.48201266, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                      syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 0.00,
-                      syph.seco.sympt.prob.tx = 0.67214403, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                       syph.seco.asympt.prob.tx = 0.00,
-                      syph.earlat.prob.tx = 0.17136638, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.latelat.prob.tx = 0.15437417,
+                      syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.latelat.prob.tx = 0.10,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 0.00,
                       
