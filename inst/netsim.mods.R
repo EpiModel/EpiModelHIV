@@ -22,9 +22,9 @@ param <- param_msm(nwstats = st,
                    
                    syph.earlat.rr = 0.5, #2/3, 0
                    incu.syph.int = 27,
-                   prim.syph.int = 90,
+                   prim.syph.int = 45,
                    seco.syph.int = 120,
-                   earlat.syph.int = 365 - incu.syph.int - prim.syph.int - seco.syph.int,
+                   earlat.syph.int = 365 - 120 - 45 - 27,
                    latelat.syph.int = 9*365,
                    latelatelat.syph.int = 30*365,
                    tert.syph.int = 30*365,
