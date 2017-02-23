@@ -1126,7 +1126,19 @@ sti_tx <- function(dat, at) {
   
   dat$epi$syphsympttests[at] <- length(txsyph_sympt)
   
+  # Before start of STI testing, count # of tests in asymptomatic people as 0
+  if (at < dat$param$stitest.start) {
+      
+      dat$epi$rGCasympttests[at] <- 0
+      dat$epi$uGCasympttests[at] <- 0
+      dat$epi$GCasympttests[at] <- 0
+      dat$epi$rCTasympttests[at] <- 0
+      dat$epi$rCTasympttests[at] <- 0
+      dat$epi$rsyphasympttests[at] <- 0
+      dat$epi$usyphasympttests[at] <- 0
+      dat$epi$syphasympttests[at] <- 0
   
+  }
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),

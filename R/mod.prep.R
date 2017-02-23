@@ -16,15 +16,6 @@ prep_msm <- function(dat, at) {
     return(dat)
   }
     
-  if (at == dat$param$prep.start) {
-      dat$attr$time.hivneg <- rep(0, dat$epi$num)
-      dat$attr$stage.time <- rep(0, dat$epi$num)
-      dat$attr$stage.time.ar <- rep(0, dat$epi$num)
-      dat$attr$stage.time.af <- rep(0, dat$epi$num)
-      dat$attr$stage.time.chronic <- rep(0, dat$epi$num)
-      dat$attr$stage.time.aids <- rep(0, dat$epi$num)
-        return(dat)
-    }
   ## Variables
 
   # Attributes
@@ -38,9 +29,8 @@ prep_msm <- function(dat, at) {
   prepLastRisk <- dat$attr$prepLastRisk
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
+  time.on.prep <- dat$attr$time.on.prep
 
-  # Update time on PrEP
-  dat$attr$time.on.prep[prepStat == 1] <- dat$attr$time.on.prep[prepStat == 1] + 1
   
   # Parameters
 
@@ -48,6 +38,15 @@ prep_msm <- function(dat, at) {
   prep.cov.rate <- dat$param$prep.cov.rate
   prep.class.prob <- dat$param$prep.class.prob
 
+  if (at == dat$param$prep.start) {
+      dat$attr$time.hivneg[status == 0] <- 0
+      dat$attr$time.off.prep[active == 1] <- 0
+      dat$attr$stage.time[active == 1] <- 0
+      dat$attr$stage.time.ar[active == 1] <- 0
+      dat$attr$stage.time.af[active == 1] <- 0
+      dat$attr$stage.time.chronic[active == 1] <- 0
+      dat$attr$stage.time.aids[active == 1] <- 0
+  }
 
   ## Eligibility ---------------------------------------------------------------
 
@@ -92,6 +91,9 @@ prep_msm <- function(dat, at) {
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
   prepLastStiScreen[idsStp] <- NA
+  
+  # Update time on PrEP after people stop
+  time.on.prep[prepStat == 1] <- time.on.prep[prepStat == 1] + 1
 
 
   ## Initiation ----------------------------------------------------------------
@@ -125,6 +127,10 @@ prep_msm <- function(dat, at) {
                                           replace = TRUE, prob = prep.class.prob)
   }
 
+  # Update time off PrEP for those not starting PrEP (housed in PrEP module starting at PrEP start time)
+  if (at >= dat$param$prep.start) {
+      dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
+  }
 
   ## Output --------------------------------------------------------------------
 
@@ -135,10 +141,14 @@ prep_msm <- function(dat, at) {
   dat$attr$prepClass <- prepClass
   dat$attr$prepLastRisk <- prepLastRisk
   dat$attr$prepLastStiScreen <- prepLastStiScreen
-
+  dat$attr$time.on.prep <- time.on.prep
+  
   # Summary Statistics
   dat$epi$prepCov[at] <- prepCov
   dat$epi$prepStart[at] <- length(idsStart)
+  
+
+
 
   return(dat)
 }

@@ -117,8 +117,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
-  dat$attr$time.on.prep <- rep(0, num)
-  dat$attr$time.off.prep <- rep(0, num)
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -674,6 +672,8 @@ init_status_msm <- function(dat) {
 
   ## Set all onto dat$attr
   dat$attr$time.hivneg <- rep(0, num)
+  dat$attr$time.on.prep <- rep(0, num)
+  dat$attr$time.off.prep <- rep(0, num)
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
   dat$attr$stage.time.ar <- stage.time.ar
