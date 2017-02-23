@@ -440,11 +440,14 @@ test_sti_msm <- function(dat, at) {
     dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
     
     if (is.null(dat$epi$num.asympt.tx)) {
-        dat$epi$rGCasympttests <- rep(NA, length(dat$epi$num))
-        dat$epi$uGCasympttests <- rep(NA, length(dat$epi$num))
-        dat$epi$rCTasympttests <- rep(NA, length(dat$epi$num))
-        dat$epi$rCTasympttests <- rep(NA, length(dat$epi$num))
-        dat$epi$syphasympttests <- rep(NA, length(dat$epi$num))
+        dat$epi$rGCasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$uGCasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$GCasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$rsyphasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$usyphasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
     }
     
     # Number of tests for symptomatic

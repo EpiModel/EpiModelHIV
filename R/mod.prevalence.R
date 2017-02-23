@@ -75,15 +75,29 @@ prevalence_msm <- function(dat, at) {
     dat$epi$i.num.prep0 <- rNA
     dat$epi$i.num.prep1 <- rNA
     
-    dat$epi$time.hivneg <- rNA
-    dat$epi$time.on.prep <- rNA
-    dat$epi$time.off.prep <- rNA
-    dat$epi$stage.time.ar <- rNA
-    dat$epi$stage.time.af <- rNA
-    dat$epi$stage.time.chronic <- rNA
-    dat$epi$stage.time.aids <- rNA
-    dat$epi$hivtests <- rNA
-    dat$epi$totalhivtests <- rNA
+    dat$epi$time.hivneg <- rep(0, nsteps)
+    dat$epi$time.on.prep <- rep(0, nsteps)
+    dat$epi$time.off.prep <- rep(0, nsteps)
+    dat$epi$stage.time.ar <- rep(0, nsteps)
+    dat$epi$stage.time.af <- rep(0, nsteps)
+    dat$epi$stage.time.chronic <- rep(0, nsteps)
+    dat$epi$stage.time.aids <- rep(0, nsteps)
+    dat$epi$hivtests <- rep(0, nsteps)
+    dat$epi$totalhivtests <- rep(0, nsteps)
+    dat$epi$totalrGCsympttests <- rep(0, nsteps)
+    dat$epi$totaluGCsympttests <- rep(0, nsteps)
+    dat$epi$totalGCsympttests <- rep(0, nsteps)
+    dat$epi$totalrCTsympttests <- rep(0, nsteps)
+    dat$epi$totaluCTsympttests <- rep(0, nsteps)
+    dat$epi$totalCTsympttests <- rep(0, nsteps)
+    dat$epi$totalrGCasympttests <- rep(0, nsteps)
+    dat$epi$totaluGCasympttests <- rep(0, nsteps)
+    dat$epi$totalGCasympttests <- rep(0, nsteps)
+    dat$epi$totalrCTasympttests <- rep(0, nsteps)
+    dat$epi$totalrCTasympttests <- rep(0, nsteps)
+    dat$epi$totalrsyphasympttests <- rep(0, nsteps)
+    dat$epi$totalusyphasympttests <- rep(0, nsteps)
+    dat$epi$totalsyphasympttests <- rep(0, nsteps)
 
     dat$epi$prev.rgc <- rNA
     dat$epi$prev.ugc <- rNA
@@ -203,10 +217,45 @@ prevalence_msm <- function(dat, at) {
   dat$epi$stage.time.ar[at] <- sum(dat$attr$stage.time.ar, na.rm = TRUE)
   dat$epi$stage.time.af[at] <- sum(dat$attr$stage.time.af, na.rm = TRUE)
   dat$epi$stage.time.chronic[at] <- sum(dat$attr$stage.time.chronic, na.rm = TRUE) 
-  dat$epi$stage.time.aids[at] <- sum(dat$attr$stage.time.aids, na.rm = TRUE) 
-  dat$epi$totalhivtests <- sum(dat$epi$hivtests, na.rm = TRUE)
+  dat$epi$stage.time.aids[at] <- sum(dat$attr$stage.time.aids, na.rm = TRUE)
   
-  
+  # Number of tests
+  if (at == 2) {
+      dat$epi$totalhivtests[at] <- dat$epi$hivtests[at]
+      dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at]
+      dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at]
+      dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at]
+      dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at]
+      dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at]
+      dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at]
+      dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at]
+      dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at]
+      dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at]
+      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at]
+      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at]
+      dat$epi$totalrsyphasympttests[at] <- dat$epi$rsyphasympttests[at]
+      dat$epi$totalusyphasympttests[at] <- dat$epi$usyphasympttests[at]
+      dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
+      
+  }
+  if (at > 2) {
+      dat$epi$totalhivtests[at] <- dat$epi$hivtests[at] + dat$epi$totalhivtests[at - 1]
+      dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at] + dat$epi$rGCsympttests[at - 1] 
+      dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at] + dat$epi$uGCsympttests[at - 1]
+      dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at] + dat$epi$GCsympttests[at - 1]
+      dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at] + dat$epi$rCTsympttests[at - 1]
+      dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at] + dat$epi$uCTsympttests[at - 1]
+      dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at] + dat$epi$CTsympttests[at - 1]
+      dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$rGCasympttests[at - 1]
+      dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$uGCasympttests[at - 1]
+      dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at] + dat$epi$GCasympttests[at - 1]
+      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$rCTasympttests[at - 1]
+      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$rCTasympttests[at - 1]
+      dat$epi$totalrsyphasympttests[at] <- dat$epi$rsyphasympttests[at] + dat$epi$rsyphasympttests[at - 1]
+      dat$epi$totalusyphasympttests[at] <- dat$epi$usyphasympttests[at] + dat$epi$usyphasympttests[at - 1]
+      dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$syphasympttests[at - 1]
+  }
+ 
   # STI Prevalence
   
   dat$epi$prev.rgc[at] <- sum(rGC == 1, na.rm = TRUE) / dat$epi$num[at]

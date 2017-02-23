@@ -1100,19 +1100,19 @@ sti_tx <- function(dat, at) {
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {
-    dat$epi$rGCsympttests <- rep(NA, length(dat$epi$num))
-    dat$epi$uGCsympttests <- rep(NA, length(dat$epi$num))
-    dat$epi$rCTsympttests <- rep(NA, length(dat$epi$num))
-    dat$epi$rCTsympttests <- rep(NA, length(dat$epi$num))
-    dat$epi$syphsympttests <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$num))
+    dat$epi$rGCsympttests <- rep(0, length(dat$control$nsteps))
+    dat$epi$uGCsympttests <- rep(0, length(dat$control$nsteps))
+    dat$epi$rCTsympttests <- rep(0, length(dat$control$nsteps))
+    dat$epi$rCTsympttests <- rep(0, length(dat$control$nsteps))
+    dat$epi$syphsympttests <- rep(0, length(dat$control$nsteps))
+    dat$epi$num.asympt.tx <- rep(NA, length(dat$control$nsteps))
+    dat$epi$num.asympt.cases <- rep(NA, length(dat$control$nsteps))
+    dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$control$nsteps))
+    dat$epi$num.asympt.cases.prep <- rep(NA, length(dat$control$nsteps))
+    dat$epi$num.rect.tx <- rep(NA, length(dat$epi$control$nsteps))
+    dat$epi$num.rect.cases <- rep(NA, length(dat$epi$control$nsteps))
+    dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$control$nsteps))
+    dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$control$nsteps))
   }
   
   # Number of tests for symptomatic
