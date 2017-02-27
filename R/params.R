@@ -515,7 +515,7 @@ param_msm <- function(nwstats,
                       vv.iev.BW.prob = 0.56,
                       vv.iev.WW.prob = 0.49,
 
-                      prep.start = Inf,
+                      prep.start = 2601,
                       prep.elig.model = "base",
                       prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
                       prep.class.hr = c(1, 0.69, 0.19, 0.05),
