@@ -12,8 +12,12 @@
 #'
 riskhist_msm <- function(dat, at) {
 
-  if (at < dat$param$riskh.stitest.start) {
-    return(dat)
+  # if (at < dat$param$riskh.stitest.start) {
+  #   return(dat)
+  # }
+    
+  if (at < min(dat$param$riskh.start, dat$param$riskh.stitest.start)) {
+        return(dat)
   }
 
   ## Attributes
