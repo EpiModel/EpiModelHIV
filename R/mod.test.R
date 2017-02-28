@@ -100,7 +100,7 @@ test_msm <- function(dat, at) {
 
 #' @title STI Testing Module
 #'
-#' @description Module function for STI diagnostic testing of infected persons.
+#' @description Module function for STI screening of asymptomatic persons.
 #'
 #' @inheritParams aging_msm
 #'
@@ -216,7 +216,6 @@ test_sti_msm <- function(dat, at) {
         #eptStartTime[idsStart] <- at
         #eptLastRisk[idsStart] <- at
     }   
-    
     
     
     ## Testing coverage for annual ----------------------------------------------------------------
@@ -438,12 +437,10 @@ test_sti_msm <- function(dat, at) {
         dat$epi$GCasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
-        dat$epi$rsyphasympttests <- rep(0, length(dat$control$nsteps))
-        dat$epi$usyphasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
     }
     
-    # Number of tests for symptomatic
+    # Number of tests for asymptomatic
     dat$epi$rGCasympttests[at] <- length(tst.rgc)
     dat$epi$uGCasympttests[at] <- length(tst.ugc)
     dat$epi$GCasympttests[at] <- length(c(tst.rgc, tst.ugc))
@@ -452,9 +449,7 @@ test_sti_msm <- function(dat, at) {
     dat$epi$uCTasympttests[at] <- length(tst.uct)
     dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
     
-    dat$epi$rsyphasympttests[at] <- length(tst.rsyph)
-    dat$epi$usyphasympttests[at] <- length(tst.usyph)
-    dat$epi$syphasympttests[at] <- length(c(tst.rsyph, tst.usyph))
+    dat$epi$syphasympttests[at] <- length(c(tst.syph.all))
     
     return(dat)
 }
