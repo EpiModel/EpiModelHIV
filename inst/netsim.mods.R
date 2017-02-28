@@ -10,9 +10,9 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.12, # 1.11889726, # was 1.13
+                   ai.scale = 1.11, # 1.11889726, # was 1.13
                    
-                   rsyph.tprob = 0.049, # 0.050,
+                   rsyph.tprob = 0.055, # 0.050,
                    usyph.tprob = 0.040, #0.038, 
                    
                    hiv.rsyph.rr = 2.70, 
@@ -54,10 +54,10 @@ param <- param_msm(nwstats = st,
                    syph.tert.sympt.prob.tx = 0.90,
                    syph.tert.asympt.prob.tx = 0.00,
                    
-                   prep.coverage = 0,
+                   prep.coverage = 0.4,
                    ept.coverage = 0,
                    
-                   prep.start = 5000,
+                   prep.start = 501,
                    stitest.start = 5000,
                    
                    stitest.active.int = 364,
@@ -74,7 +74,7 @@ init <- init_msm(nwstats = st,
                  prev.syph.W = 0.02)
 
 control <- control_msm(simno = 0.253, 
-                       nsteps = 52*50,
+                       nsteps = 1000,#*50,
                        nsims = 1, 
                        ncores = 1,
                        save.nwstats = TRUE,

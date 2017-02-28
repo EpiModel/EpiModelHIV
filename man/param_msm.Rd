@@ -83,7 +83,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
   hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
-  syph.uhiv.rr = 1.7, hivdx.syph.sympt.tx.rr = 2,
+  syph.uhiv.rr = 1.7, rgc.hiv.rr = 1, ugc.hiv.rr = 1, rct.hiv.rr = 1,
+  uct.uhiv.rr = 1, hivdx.syph.sympt.tx.rr = 2,
   partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
 }
 \arguments{
@@ -634,6 +635,12 @@ given dual infection with both gonorrhea and chlamydia.}
 
 \item{syph.uhiv.rr}{Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.}
 
+\item{rgc.hiv.rr}{Relative risk of acquiring rectal gonorrhea given current HIV infection in the receptive partner.}
+
+\item{ugc.hiv.rr}{Relative risk of acquiring urethral gonorrhea given current HIV infection in the insertive partner.}
+
+\item{rct.hiv.rr}{Relative risk of acquiring rectal chlamydia given current HIV infection in the receptive partner.}
+
 \item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection. 
 This is implemented as an inverse, 1 / this value for those who do not have diagnosed infection, so it is a boost to get to 0.35.}
 
@@ -653,6 +660,8 @@ infection lasts after treatment and recovery from late syphilis infection.}
 
 \item{syph.immune.rr}{Multiplier for reduced infection probability given an 
 immune partner.}
+
+\item{uct.hiv.rr}{Relative risk of acquiring rectal chlamydia given current HIV infection in the insertive partner.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

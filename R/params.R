@@ -378,6 +378,11 @@
 #' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection in the HIV-negative partner.
 #' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.
 #' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.
+#' @param rgc.hiv.rr Relative risk of acquiring rectal gonorrhea given current HIV infection in the receptive partner.
+#' @param ugc.hiv.rr Relative risk of acquiring urethral gonorrhea given current HIV infection in the insertive partner.
+#' @param rct.hiv.rr Relative risk of acquiring rectal chlamydia given current HIV infection in the receptive partner.
+#' @param uct.hiv.rr Relative risk of acquiring rectal chlamydia given current HIV infection in the insertive partner.
+#' 
 #' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection. 
 #'        This is implemented as an inverse, 1 / this value for those who do not have diagnosed infection, so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
@@ -608,6 +613,7 @@ param_msm <- function(nwstats,
 
                       sti.cond.rr = 0.3,
 
+                      # Acquisition
                       hiv.rgc.rr = 2.64869327,
                       hiv.ugc.rr = 1.67105474,
                       hiv.rct.rr = 2.64869327,
@@ -615,8 +621,15 @@ param_msm <- function(nwstats,
                       hiv.dual.rr = 0.2,
                       hiv.rsyph.rr = 2.70,
                       hiv.usyph.rr = 1.70,
+                      
                       syph.rhiv.rr = 2.6,
                       syph.uhiv.rr = 1.7,
+                      rgc.hiv.rr = 1,
+                      ugc.hiv.rr = 1,
+                      rct.hiv.rr = 1,
+                      uct.uhiv.rr = 1,
+                      
+                      # Transmission
                       
                       hivdx.syph.sympt.tx.rr = 2.0,
                       

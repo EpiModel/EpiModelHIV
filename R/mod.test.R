@@ -191,8 +191,35 @@ test_sti_msm <- function(dat, at) {
                              (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
                              (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow))
     
-    # Separating tt traj 1 vs 2 needs work
-    ## Testing coverage for high risk ----------------------------------------------------------------
+    ## Initiation
+    # Testing coverage for annual ----------------------------------------------------------------
+    
+    stianntestCov <- sum(tt.traj.ct == 1, tt.traj.ct == 2, na.rm = TRUE) / length(idsactive)
+    stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
+    
+    idsEligSt <- idsactive
+    nEligSt <- length(idsactive)
+    
+    nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
+                                            length(idsactive))))
+    idsStart <- NULL
+    if (nStart > 0) {
+        if (stianntest.cov.rate >= 1) {
+            idsStart <- ssample(idsEligSt, nStart)
+        } else {
+            idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+        }
+    }
+    
+    ## Update testing trajectory
+    if (length(idsStart) > 0) {
+        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
+        #eptStartTime[idsStart] <- at
+        #eptLastRisk[idsStart] <- at
+    }
+    
+    
+    # Testing coverage for high risk ----------------------------------------------------------------
     stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
     stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
     
@@ -218,42 +245,24 @@ test_sti_msm <- function(dat, at) {
     }   
     
     
-    ## Testing coverage for annual ----------------------------------------------------------------
-    
-    stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(idsactive)
-    stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
-    
-    idsEligSt <- idsactive
-    nEligSt <- length(idsactive)
-    
-    nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
-                                            length(idsactive))))
-    idsStart <- NULL
-    if (nStart > 0) {
-        if (stianntest.cov.rate >= 1) {
-            idsStart <- ssample(idsEligSt, nStart)
-        } else {
-            idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
-        }
-    }
-    
-    ## Update testing trajectory
-    if (length(idsStart) > 0) {
-        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
-        #eptStartTime[idsStart] <- at
-        #eptLastRisk[idsStart] <- at
-    }
-    
-    
+
     ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
     
-    # Remove testing trajectory if no longer indicated (idsannual includes high-risk)
-    idsnottestelig <- which(active == 1 & tt.traj.syph %in% c(1, 2) & (at - stitestind1 >= activeindwindow))
-    dat$attr$stitestLastElig[idsnottestelig] <- at
+    # Reduce testing trajectory to annual if no longer indicated for more frequent high-risk testing
+    idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+        (at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
+        (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
+        (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow)))
+    
+    dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
+    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- 1
+    
+    # Remove testing trajectory if no longer indicated for annual testing (idsannual includes high-risk)
+    idsnottestelig <- which(active == 1 & tt.traj.syph == 1 & (at - stitestind1 >= activeindwindow))
+    dat$attr$stianntestLastElig[idsnottestelig] <- at
     tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
 
     ## Testing
-    
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     

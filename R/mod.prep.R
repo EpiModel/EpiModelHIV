@@ -128,7 +128,7 @@ prep_msm <- function(dat, at) {
   }
 
   # Update time off PrEP for those not starting PrEP (housed in PrEP module starting at PrEP start time)
-  if (at >= dat$param$prep.start) {
+  if (at > dat$param$prep.start) {
       dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
   }
 
