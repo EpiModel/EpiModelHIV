@@ -584,7 +584,7 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 0.90,
                       ct.asympt.prob.tx = 0.85,
                       
-                      syph.prim.sympt.prob.tx = 0.45, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                      syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 0.00,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                       syph.seco.asympt.prob.tx = 0.00,
