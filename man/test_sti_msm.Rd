@@ -17,7 +17,7 @@ This function returns the \code{dat} object with updated \code{last.neg.test},
 \code{diag.status} and \code{diag.time} attributes for each STI.
 }
 \description{
-Module function for STI diagnostic testing of infected persons.
+Module function for STI screening of asymptomatic persons.
 }
 \details{
 This testing module supports two testing parameterizations, input via the

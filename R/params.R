@@ -378,7 +378,8 @@
 #' @param hiv.usyph.rr Relative risk of HIV infection given current urethral syphilis infection in the HIV-negative partner.
 #' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV infection in the receptive syphilis-negative partner.
 #' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.
-#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection.
+#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection. 
+#'        This is implemented as an inverse, 1 / this value for those who do not have diagnosed infection, so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -583,7 +584,7 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 0.90,
                       ct.asympt.prob.tx = 0.85,
                       
-                      syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                      syph.prim.sympt.prob.tx = 0.45, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 0.00,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                       syph.seco.asympt.prob.tx = 0.00,

@@ -70,7 +70,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
   syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0.9, ct.asympt.prob.tx = 0.85,
-  syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 0,
+  syph.prim.sympt.prob.tx = 0.45, syph.prim.asympt.prob.tx = 0,
   syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 0,
   syph.earlat.prob.tx = 0.15, syph.latelat.prob.tx = 0.1,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0,
@@ -634,7 +634,8 @@ given dual infection with both gonorrhea and chlamydia.}
 
 \item{syph.uhiv.rr}{Relative risk of syphilis infection given current HIV infection in the insertive syphilis-negative partner.}
 
-\item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection.}
+\item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic syphilis given diagnosed HIV infection. 
+This is implemented as an inverse, 1 / this value for those who do not have diagnosed infection, so it is a boost to get to 0.35.}
 
 \item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}

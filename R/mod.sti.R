@@ -818,8 +818,8 @@ sti_tx <- function(dat, at) {
                                 dat$attr$prepStat %in% prep.stand.tx.grp)
   idssyph_tx_sympt_prim_hivdx <- which(diag.status[idssyph_tx_sympt_prim] == 1)
   idssyph_tx_sympt_prim_hivnotdx <- setdiff(idssyph_tx_sympt_prim, idssyph_tx_sympt_prim_hivdx)
-  txsyph_sympt_prim <- c(idssyph_tx_sympt_prim_hivnotdx[which(rbinom(length(idssyph_tx_sympt_prim_hivnotdx), 1, syph.prim.sympt.prob.tx) == 1)],
-                         idssyph_tx_sympt_prim_hivdx[which(rbinom(length(idssyph_tx_sympt_prim_hivdx), 1, (hivdx.syph.sympt.tx.rr * syph.prim.sympt.prob.tx)) == 1)])
+  txsyph_sympt_prim <- c(idssyph_tx_sympt_prim_hivnotdx[which(rbinom(length(idssyph_tx_sympt_prim_hivnotdx), 1, ((1 / hivdx.syph.sympt.tx.rr) * syph.prim.sympt.prob.tx)) == 1)],
+                         idssyph_tx_sympt_prim_hivdx[which(rbinom(length(idssyph_tx_sympt_prim_hivdx), 1, syph.prim.sympt.prob.tx) == 1)])
   
   idssyph_tx_sympt_seco <- which(dat$attr$syphilis == 1 & 
                                      dat$attr$syph.infTime < at &
@@ -830,8 +830,8 @@ sti_tx <- function(dat, at) {
   
   idssyph_tx_sympt_seco_hivdx <- which(diag.status[idssyph_tx_sympt_seco] == 1)
   idssyph_tx_sympt_seco_hivnotdx <- setdiff(idssyph_tx_sympt_seco, idssyph_tx_sympt_seco_hivdx)
-  txsyph_sympt_seco <- c(idssyph_tx_sympt_seco_hivnotdx[which(rbinom(length(idssyph_tx_sympt_seco_hivnotdx), 1, syph.seco.sympt.prob.tx) == 1)],
-                         idssyph_tx_sympt_seco_hivdx[which(rbinom(length(idssyph_tx_sympt_seco_hivdx), 1, (hivdx.syph.sympt.tx.rr * syph.seco.sympt.prob.tx)) == 1)])
+  txsyph_sympt_seco <- c(idssyph_tx_sympt_seco_hivnotdx[which(rbinom(length(idssyph_tx_sympt_seco_hivnotdx), 1, ((1 / hivdx.syph.sympt.tx.rr) * syph.seco.sympt.prob.tx)) == 1)],
+                         idssyph_tx_sympt_seco_hivdx[which(rbinom(length(idssyph_tx_sympt_seco_hivdx), 1,  syph.seco.sympt.prob.tx) == 1)])
 
   idssyph_tx_sympt_tert <- which(dat$attr$syphilis == 1 & 
                                      dat$attr$syph.infTime < at &
