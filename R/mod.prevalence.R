@@ -164,7 +164,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$recov.latelat.syph <- rNA
     dat$epi$recov.latelatelat.syph <- rNA
     dat$epi$recov.tert.syph <- rNA
-    dat$epi$recov.immune.syph <- rNA
+    # dat$epi$recov.immune.syph <- rNA
     dat$epi$recov.earlysyph <- rNA
     dat$epi$recov.latesyph <- rNA
     dat$epi$recov.syphilis <- rNA
@@ -283,7 +283,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.stage.latelatelat[at] <- length(which(stage.syph == 6)) / length(which(syphilis == 1))
   dat$epi$prev.stage.alllatelat[at] <- length(which(stage.syph %in% c(5,6))) / length(which(syphilis == 1))
   dat$epi$prev.stage.tert[at] <- length(which(stage.syph == 7)) / length(which(syphilis == 1))
-  dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / length(which(syphilis == 0))
+  # dat$epi$prev.stage.immune[at] <- length(which(stage.syph == 8)) / length(which(syphilis == 0))
   dat$epi$prev.earlysyph[at] <- length(which(stage.syph %in% c(1, 2, 3, 4))) / length(which(syphilis == 1))
   dat$epi$prev.latesyph[at] <- length(which(stage.syph %in% c(5, 6, 7))) / length(which(syphilis == 1))
   dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]

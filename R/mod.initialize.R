@@ -736,7 +736,7 @@ init_status_sti_msm <- function(dat) {
     stage.time.syph <- rep(NA, num)
     syph.infTime <- rep(NA, num)
     syph.lastinfTime <- rep(NA, num)
-    syph.immune.time <- rep(NA, num)
+    # syph.immune.time <- rep(NA, num)
     syph.timesInf <- rep(0, num)
     syph.cease <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
@@ -808,10 +808,10 @@ init_status_sti_msm <- function(dat) {
                                           dat$param$stage.syph.B.prob))
     stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7),
                                           dat$param$stage.syph.W.prob))
-    immune.B <- which(rbinom(length(notinf.ids.B), 1, dat$param$immune.syph.B.prob) == 1)
-    immune.W <- which(rbinom(length(notinf.ids.W), 1, dat$param$immune.syph.W.prob) == 1)
-    stage.syph[immune.B] <- 8
-    stage.syph[immune.W] <- 8
+    # immune.B <- which(rbinom(length(notinf.ids.B), 1, dat$param$immune.syph.B.prob) == 1)
+    # immune.W <- which(rbinom(length(notinf.ids.W), 1, dat$param$immune.syph.W.prob) == 1)
+    # stage.syph[immune.B] <- 8
+    # stage.syph[immune.W] <- 8
     dat$attr$stage.syph <- stage.syph
     
     # Assign duration of untreated infection and symptomatic at beginning
@@ -872,12 +872,12 @@ init_status_sti_msm <- function(dat) {
     syph.tx[selected] <- 0
     
     # Immune 
-    selected <- which(stage.syph[ids.B] == 8 | stage.syph[ids.W] == 8)
-    max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.int)
-    time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
-    syph.immune.time[selected] <- time.since.immune
-    syph.tx[selected] <- NA
-    
+    # selected <- which(stage.syph[ids.B] == 8 | stage.syph[ids.W] == 8)
+    # max.immune.time <- pmin(time.sex.active[selected], dat$param$immune.syph.int)
+    # time.since.immune <- ceiling(runif(length(selected), max = max.immune.time))
+    # syph.immune.time[selected] <- time.since.immune
+    # syph.tx[selected] <- NA
+    # 
     # Set diagnosis status for syphilis 
     diag.status.syph[syphilis == 1] <- 0
     
@@ -948,7 +948,7 @@ init_status_sti_msm <- function(dat) {
     # Set all onto dat$attr
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
-    dat$attr$syph.immune.time <- syph.immune.time
+    # dat$attr$syph.immune.time <- syph.immune.time
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$lastdiag.time.syph <- lastdiag.time.syph

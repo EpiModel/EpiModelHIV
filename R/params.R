@@ -410,8 +410,8 @@ param_msm <- function(nwstats,
                       # Incub, Primary, Secondary, Early latent, Late Latent, Late Late Latent, Tertiary
                       stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                       stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                      immune.syph.B.prob = 0.01,
-                      immune.syph.W.prob = 0.01, 
+                      # immune.syph.B.prob = 0.01,
+                      # immune.syph.W.prob = 0.01, 
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -444,7 +444,7 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      immune.syph.int = 5 * 52 * 7,
+                      # immune.syph.int = 5 * 52 * 7,
                       syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress at end of 20 years 
                       
                       b.B.rate = 1e-3 / 7,
@@ -548,7 +548,7 @@ param_msm <- function(nwstats,
                       rsyph.tprob = 0.03829557,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
-                      syph.immune.rr = 0,
+                      # syph.immune.rr = 0,
                       
                       rgc.sympt.prob = 0.16, # Beck
                       ugc.sympt.prob = 0.90, # Beck

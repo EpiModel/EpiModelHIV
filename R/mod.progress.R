@@ -163,7 +163,7 @@ progress_syph_msm <- function(dat, at) {
     active <- dat$attr$active
     syphilis <- dat$attr$syphilis
     time.since.inf.syph <- at - dat$attr$syph.infTime
-    syph.immune.time <- dat$attr$syph.immune.time
+    # syph.immune.time <- dat$attr$syph.immune.time
     stage.syph <- dat$attr$stage.syph
     stage.time.syph <- dat$attr$stage.time.syph
     syph.tx <- dat$attr$syph.tx
@@ -197,7 +197,7 @@ progress_syph_msm <- function(dat, at) {
     
     # Increment time unit
     stage.time.syph[active == 1] <- stage.time.syph[active == 1] + time.unit/365
-    syph.immune.time[which(active == 1 & stage.syph == 8)] <- syph.immune.time[which(active == 1 & stage.syph == 8)] + time.unit/365     
+    # syph.immune.time[which(active == 1 & stage.syph == 8)] <- syph.immune.time[which(active == 1 & stage.syph == 8)] + time.unit/365     
     
     # Change stage to Primary and assign symptoms
     toPrim <- which(active == 1 & time.since.inf.syph == (incu.syph.int + 1) & 
@@ -261,11 +261,11 @@ progress_syph_msm <- function(dat, at) {
     stage.tert.sympt[toTert] <- rbinom(length(toTert), 1, syph.tert.sympt.prob)
     stage.latelatelat.sympt[toTert] <- NA
     
-    # Immune protection lapsing
-    idssyph_lose_immune <- which(syph.immune.time > dat$attr$immune.syph.int &
-                                     stage.syph == 8)
-    syph.immune.time[idssyph_lose_immune] <- NA
-    stage.time.syph[idssyph_lose_immune] <- NA
+    # # Immune protection lapsing
+    # idssyph_lose_immune <- which(syph.immune.time > dat$attr$immune.syph.int &
+    #                                  stage.syph == 8)
+    # syph.immune.time[idssyph_lose_immune] <- NA
+    # stage.time.syph[idssyph_lose_immune] <- NA
 
     ## Output
     dat$attr$stage.syph <- stage.syph
@@ -276,7 +276,7 @@ progress_syph_msm <- function(dat, at) {
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
-    dat$attr$syph.immune.time <- syph.immune.time
+    # dat$attr$syph.immune.time <- syph.immune.time
     
     return(dat)
 }
