@@ -722,7 +722,7 @@ sti_recov <- function(dat, at) {
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
   
   # Change stage to immune (will last 5 years)
-  dat$attr$stage.syph[recovsyph_late_tx] <- 8
+  # dat$attr$stage.syph[recovsyph_late_tx] <- 8
   # dat$attr$syph.immune.time[recovsyph_late_tx] <- 0
   
   # Update attributes
