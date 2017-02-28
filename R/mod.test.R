@@ -383,15 +383,8 @@ test_sti_msm <- function(dat, at) {
     
     # Syphilis testing
     tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    tst.rsyph <- tst.syph.all[role.class %in% c("R", "V")]
-    tst.rsyph <- sample(tst.rsyph, tst.rect.sti.rr * length(tst.rsyph))
-    tst.usyph <- tst.syph.all[role.class %in% c("I", "V")]
-    tst.rsyph.pos <- tst.rsyph[syphilis[tst.rsyph] == 1 & stage.syph[tst.rsyph] %in% c(2, 3, 4, 5, 6, 7)]
-    tst.usyph.pos <- tst.usyph[syphilis[tst.usyph] == 1 & stage.syph[tst.usyph] %in% c(2, 3, 4, 5, 6, 7)]
-    tst.rsyph.neg <- setdiff(tst.rsyph, tst.rsyph.pos)
-    tst.usyph.neg <- setdiff(tst.usyph, tst.usyph.pos)
-    tst.syph.pos <- unique(c(tst.rsyph.pos, tst.usyph.pos))
-    tst.syph.neg <- unique(c(tst.rsyph.neg, tst.usyph.neg))
+    tst.syph.pos <- tst.syph.all[syphilis[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
     
     # GC testing
     tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
