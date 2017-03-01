@@ -64,6 +64,7 @@ riskhist_msm <- function(dat, at) {
     dat$attr$stitest.ind.concurrpartner <- rep(NA, length(uid))
     dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
     dat$attr$stitest.ind.uai.nmain <- rep(NA, length(uid))
+    dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -191,6 +192,10 @@ riskhist_msm <- function(dat, at) {
   uai.nmain <- unique(c(el$p1[el$uai > 0 & el$ptype %in% 2:3],
                         el$p2[el$uai > 0 & el$ptype %in% 2:3]))
   dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
+  
+  ## Any CAI
+  uai.any <- unique(c(el$p1[el$uai > 0], el$p2[el$uai > 0]))
+  dat$attr$stitest.ind.uai.any[uai.any] <- at
   
   ### Previous or coexisting STIs (treated) in a time interval
   idsSTI <- which((at - dat$attr$last.tx.time.syph) <= sti.highrisktest.int | (at - dat$attr$last.tx.time.rgc) <= sti.highrisktest.int |

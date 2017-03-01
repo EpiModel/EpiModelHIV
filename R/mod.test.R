@@ -180,6 +180,7 @@ test_sti_msm <- function(dat, at) {
     stitestind5 <- dat$attr$stitest.ind.concurrpartner
     stitestind6 <- dat$attr$stitest.ind.partnersti
     stitestind7 <- dat$attr$stitest.ind.uai.nmain
+    stitestind8 <- dat$attr$stitest.ind.uai.any
     
     # Annual - testing trajectory update
     activeindwindow <- at - stitest.active.int
@@ -189,7 +190,8 @@ test_sti_msm <- function(dat, at) {
     highriskindwindow <- at - sti.highrisktest.int
     idshighrisk <- which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
                              (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
-                             (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow))
+                             (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow) |
+                             (at - stitestind8 <= highriskindwindow))
     
     ## Initiation
     # Testing coverage for annual ----------------------------------------------------------------
@@ -252,7 +254,8 @@ test_sti_msm <- function(dat, at) {
     idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
         (at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
         (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
-        (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow)))
+        (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow) |
+        (at - stitestind8 <= highriskindwindow)))
     
     dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
     tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- 1
