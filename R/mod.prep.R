@@ -22,6 +22,16 @@ prep_msm <- function(dat, at) {
   active <- dat$attr$active
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
+  diag.status.syph <- dat$attr$diag.status.syph
+  diag.status.gc <- dat$attr$diag.status.gc
+  diag.status.ct <- dat$attr$diag.status.ct
+  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
+  rGC <- dat$attr$rGC
+  uGC <- dat$attr$uGC
+  rCT <- dat$attr$rCT
+  uCT <- dat$attr$uCT
+  syphilis <- dat$attr$syphilis
+  stage.syph <- dat$attr$stage.syph
   lnt <- dat$attr$last.neg.test
   prepElig <- dat$attr$prepElig
   prepStat <- dat$attr$prepStat
@@ -29,6 +39,7 @@ prep_msm <- function(dat, at) {
   prepLastRisk <- dat$attr$prepLastRisk
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
+  prep.tst.int <- dat$param$prep.tst.int
   time.on.prep <- dat$attr$time.on.prep
 
   
@@ -132,6 +143,103 @@ prep_msm <- function(dat, at) {
       dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
   }
 
+  ## STI Testing on PrEP -------------------------------------------------------
+
+  if (is.null(dat$epi$num.asympt.tx)) {
+      dat$epi$rGCasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$uGCasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$GCasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$rCTasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$rCTasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$syphasympttests.prep <- rep(0, length(dat$control$nsteps))
+  }
+  
+    ## Testing
+  tsincelntst.syph <- at - dat$attr$last.neg.test.syph
+  tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
+  
+  tsincelntst.rgc <- at - dat$attr$last.neg.test.rgc
+  tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
+  tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
+  tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
+  tsincelntst.gc <- min(tsincelntst.rgc, tsincelntst.ugc)
+  
+  tsincelntst.rct <- at - dat$attr$last.neg.test.rct
+  tsincelntst.uct <- at - dat$attr$last.neg.test.uct
+  tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
+  tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
+  tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
+  
+  # PrEP STI testing
+  tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
+                             prepStat == 1 &
+                             tsincelntst.syph >= prep.tst.int)
+  tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
+                           prepStat == 1 &
+                           tsincelntst.gc >= prep.tst.int)
+  tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
+                           prepStat == 1 &
+                           tsincelntst.ct >= prep.tst.int)
+  
+  # Syphilis non-PrEP testing
+  tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6, 7)]
+  tst.syph.neg <- setdiff(tst.syph.prep, tst.syph.pos)
+  
+  # GC non-PrEP testing
+  tst.rgc <- tst.gc.prep[dat$attr$role.class %in% c("R", "V")]
+  tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
+  tst.ugc <- tst.gc.prep[dat$attr$role.class %in% c("I", "V")]
+  tst.rgc.pos <- tst.rgc[rGC == 1]
+  tst.ugc.pos <- tst.ugc[uGC == 1]
+  tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
+  tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
+  tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
+  tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
+  
+  # CT non-PrEP testing
+  tst.rct <- tst.ct.prep[dat$attr$role.class %in% c("R", "V")]
+  tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
+  tst.uct <- tst.ct.prep[dat$attr$role.class %in% c("I", "V")]
+  tst.rct.pos <- tst.rct[rCT == 1]
+  tst.uct.pos <- tst.uct[uCT == 1]
+  tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
+  tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
+  tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
+  tst.ct.neg <- unique(c(tst.rct.neg, tst.uct.neg))
+  
+  # Syphilis Attributes
+  dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+  dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
+  dat$attr$diag.status.syph[tst.syph.pos] <- 1
+  dat$attr$lastdiag.time.syph[tst.syph.pos] <- at
+  
+  # GC Attributes
+  dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
+  dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
+  dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
+  dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
+  dat$attr$diag.status.gc[tst.gc.pos] <- 1
+  dat$attr$lastdiag.time.gc[tst.gc.pos] <- at
+  
+  # CT Attributes
+  dat$attr$last.neg.test.rct[tst.rct.neg] <- at
+  dat$attr$last.neg.test.uct[tst.uct.neg] <- at
+  dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
+  dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
+  dat$attr$diag.status.ct[tst.ct.pos] <- 1
+  dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
+  
+  # Count number of tests due to PrEP
+  dat$epi$rGCasympttests.prep[at] <- length(tst.rgc)
+  dat$epi$uGCasympttests.prep[at] <- length(tst.ugc)
+  dat$epi$GCasympttests.prep[at] <- length(c(tst.rgc, tst.ugc))
+  
+  dat$epi$rCTasympttests.prep[at] <- length(tst.rct)
+  dat$epi$uCTasympttests.prep[at] <- length(tst.uct)
+  dat$epi$CTasympttests.prep[at] <- length(c(tst.rct, tst.uct))
+  
+  dat$epi$syphasympttests.prep[at] <- length(c(tst.syph.prep))
+  
   ## Output --------------------------------------------------------------------
 
   # Attributes

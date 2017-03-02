@@ -92,7 +92,8 @@ test_msm <- function(dat, at) {
   dat$attr$diag.time[tst.pos] <- at
 
   # Tests
-  dat$epi$hivtests[at] <- length(tst.all)
+  dat$epi$hivtests.prep[at] <- length(tst.prep)
+  dat$epi$hivtests.nprep[at] <- length(tst.nprep)
   
   return(dat)
 }
@@ -138,7 +139,6 @@ test_sti_msm <- function(dat, at) {
     uGC <- dat$attr$uGC
     rCT <- dat$attr$rCT
     uCT <- dat$attr$uCT
-    #inf.time.syph <- dat$attr$inf.time.syph
     
     role.class <- dat$attr$role.class
     stage.syph <- dat$attr$stage.syph
@@ -381,27 +381,15 @@ test_sti_msm <- function(dat, at) {
          tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
      }
      
-    # PrEP testing
-    tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
-                         prepStat == 1 &
-                         tsincelntst.syph >= prep.tst.int)
-    tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
-                           prepStat == 1 &
-                           tsincelntst.gc >= prep.tst.int)
-    tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
-                           prepStat == 1 &
-                           tsincelntst.ct >= prep.tst.int)
     
-    # Syphilis testing
-    tst.syph.all <- c(tst.syph.nprep, tst.syph.prep)
-    tst.syph.pos <- tst.syph.all[syphilis[tst.syph.all] == 1 & stage.syph[tst.syph.all] %in% c(2, 3, 4, 5, 6, 7)]
-    tst.syph.neg <- setdiff(tst.syph.all, tst.syph.pos)
+    # Syphilis non-PrEP testing
+    tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 & stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
     
-    # GC testing
-    tst.gc.all <- c(tst.gc.nprep, tst.gc.prep)
-    tst.rgc <- tst.gc.all[dat$attr$role.class %in% c("R", "V")]
+    # GC non-PrEP testing
+    tst.rgc <- tst.gc.nprep[dat$attr$role.class %in% c("R", "V")]
     tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
-    tst.ugc <- tst.gc.all[dat$attr$role.class %in% c("I", "V")]
+    tst.ugc <- tst.gc.nprep[dat$attr$role.class %in% c("I", "V")]
     tst.rgc.pos <- tst.rgc[rGC == 1]
     tst.ugc.pos <- tst.ugc[uGC == 1]
     tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
@@ -409,11 +397,10 @@ test_sti_msm <- function(dat, at) {
     tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
     tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
     
-    # CT testing
-    tst.ct.all <- c(tst.ct.nprep, tst.ct.prep)
-    tst.rct <- tst.ct.all[dat$attr$role.class %in% c("R", "V")]
+    # CT non-PrEP testing
+    tst.rct <- tst.ct.nprep[dat$attr$role.class %in% c("R", "V")]
     tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
-    tst.uct <- tst.ct.all[dat$attr$role.class %in% c("I", "V")]
+    tst.uct <- tst.ct.nprep[dat$attr$role.class %in% c("I", "V")]
     tst.rct.pos <- tst.rct[rCT == 1]
     tst.uct.pos <- tst.uct[uCT == 1]
     tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
@@ -460,8 +447,6 @@ test_sti_msm <- function(dat, at) {
     dat$epi$rCTasympttests[at] <- length(tst.rct)
     dat$epi$uCTasympttests[at] <- length(tst.uct)
     dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
-    
-    dat$epi$syphasympttests[at] <- length(c(tst.syph.all))
     
     return(dat)
 }

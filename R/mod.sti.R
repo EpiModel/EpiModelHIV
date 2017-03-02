@@ -1134,8 +1134,6 @@ sti_tx <- function(dat, at) {
       dat$epi$GCasympttests[at] <- 0
       dat$epi$rCTasympttests[at] <- 0
       dat$epi$rCTasympttests[at] <- 0
-      dat$epi$rsyphasympttests[at] <- 0
-      dat$epi$usyphasympttests[at] <- 0
       dat$epi$syphasympttests[at] <- 0
   
   }
