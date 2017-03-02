@@ -25,7 +25,6 @@ sti_trans <- function(dat, at) {
   #Multiplier for syphilis infection
   syph.earlat.rr <- dat$param$syph.earlat.rr
   syph.late.rr <- dat$param$syph.late.rr
-  # syph.immune.rr <- dat$param$syph.immune.rr
   syph.rhiv.rr <- dat$param$syph.rhiv.rr
   syph.uhiv.rr <- dat$param$syph.uhiv.rr
   
@@ -296,9 +295,6 @@ sti_trans <- function(dat, at) {
   islate <- which(ip.stage.syph %in% c(5, 6, 7))
   ip.syph.tprob[islate] <- ip.syph.tprob[islate] * syph.late.rr
 
-  # Multiplier for receptive partner being immune (e.g. unable to contract syphilis) - (not log odds b/c log 0 = undefined)
-  # isimmune <- which(stage.syph[disc.syph.ip[, 2]] %in% 8)
-  # ip.syph.tprob[isimmune] <- ip.syph.tprob[isimmune] * syph.immune.rr
 
   # Check for valid probabilities
   stopifnot(ip.syph.tprob >= 0, ip.syph.tprob <= 1)
@@ -345,11 +341,6 @@ sti_trans <- function(dat, at) {
   # Late stage multiplier (not log odds b/c log 0 = undefined)
   islate <- which(rp.stage.syph %in% c(5, 6, 7))
   rp.syph.tprob[islate] <- rp.syph.tprob[islate] * (syph.late.rr)
-  
-
-  # Multiplier for insertive partner being immune (e.g. unable to contract syphilis) - (not log odds b/c log 0 = undefined)
-  # isimmune <- which(stage.syph[disc.syph.rp[, 1]] %in% 8)
-  # rp.syph.tprob[isimmune] <- rp.syph.tprob[isimmune] * syph.immune.rr 
   
   # Check for valid probabilities
   stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
@@ -720,10 +711,6 @@ sti_recov <- function(dat, at) {
   recovsyph_early_tx <- c(recovsyph_prim_tx, recovsyph_seco_tx, recovsyph_earlat_tx)
   recovsyph_late_tx <- c(recovsyph_latelat_tx, recovsyph_latelatelat_tx, recovsyph_tert_tx)
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
-  
-  # Change stage to immune (will last 5 years)
-  # dat$attr$stage.syph[recovsyph_late_tx] <- 8
-  # dat$attr$syph.immune.time[recovsyph_late_tx] <- 0
   
   # Update attributes
   dat$attr$syphilis[recovsyph] <- 0

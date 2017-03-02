@@ -28,7 +28,6 @@ param <- param_msm(nwstats = st,
                    latelat.syph.int = 9 * 52 * 7,
                    latelatelat.syph.int = 20 * 52 * 7,
                    tert.syph.int = 20 * 52 * 7,
-                   # immune.syph.int = 5 * 52 * 7,
                    syph.tert.prog.prob = 0.15 / (52 * 7 * 20),
                    
                    rgc.tprob = 0.41, 

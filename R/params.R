@@ -627,7 +627,7 @@ param_msm <- function(nwstats,
                       rgc.hiv.rr = 1,
                       ugc.hiv.rr = 1,
                       rct.hiv.rr = 1,
-                      uct.uhiv.rr = 1,
+                      uct.hiv.rr = 1,
                       
                       # Transmission
                       
