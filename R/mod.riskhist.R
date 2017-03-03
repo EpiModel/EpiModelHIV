@@ -29,6 +29,16 @@ riskhist_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
   syph.tx <- dat$attr$syph.tx
+  last.rCT.tx <- dat$attr$last.rCT.tx 
+  last.uCT.tx <- dat$attr$last.uCT.tx 
+  last.rGC.tx <- dat$attr$last.rGC.tx 
+  last.uGC.tx <- dat$attr$last.uGC.tx
+  last.syph.tx <- dat$attr$last.syph.tx
+  last.rCT.tx.prep <- dat$attr$last.rCT.tx.prep
+  last.uCT.tx.prep <- dat$attr$last.uCT.tx.prep 
+  last.rGC.tx.prep <- dat$attr$last.rGC.tx.prep 
+  last.uGC.tx.prep <- dat$attr$last.uGC.tx.prep
+  last.syph.tx.prep <- dat$attr$last.syph.tx.prep
   sexactive <- dat$attr$sexactive
   sexnewedge <- dat$attr$sexnewedge
   tt.traj.ct <- dat$attr$tt.traj.ct
@@ -112,7 +122,7 @@ riskhist_msm <- function(dat, at) {
   ai.sd <- el2.cond3$p2[discl == TRUE]
   dat$attr$prep.ind.ai.sd[ai.sd] <- at
 
-  ## Condition 4, any STI diagnosis
+  ## Condition 4, any current STI diagnosis (before recovery)
   idsDx <- which(rGC.tx == 1 | uGC.tx == 1 |
                    rCT.tx == 1 | uCT.tx == 1 | syph.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at

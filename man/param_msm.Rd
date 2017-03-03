@@ -126,9 +126,6 @@ testing/treatment trajectories, as defined above.}
 active stages of syphilis: incubating, primary, secondary, early 
 latent, late latent, late late latent, and tertiary.}
 
-\item{stage.syph.W.prob}{Proportion of white MSM who enter each of the seven
-active stages of syphilis, as defined above.}
-
 \item{tx.init.B.prob}{Probability per time step that a black MSM who has
 tested positive will initiate treatment.}
 
@@ -651,17 +648,8 @@ accumulating for eventual STI testing indications.}
 
 \item{...}{Additional arguments passed to the function.}
 
-\item{immune.syph.B.prob}{Prevalence of immunity (e.g. recovering from treated late syphilis) 
-among black MSM not actively infected with syphilis.}
-
-\item{immune.syph.W.prob}{Prevalence of immunity among black MSM not actively infected with
-syphilis.}
-
 \item{immune.syph.int}{Number of days that temporary immunity from syphilis
 infection lasts after treatment and recovery from late syphilis infection.}
-
-\item{syph.immune.rr}{Multiplier for reduced infection probability given an 
-immune partner.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

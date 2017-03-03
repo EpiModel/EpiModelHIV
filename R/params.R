@@ -32,12 +32,6 @@
 #' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
 #'        active stages of syphilis: incubating, primary, secondary, early 
 #'        latent, late latent, late late latent, and tertiary.
-#' @param stage.syph.W.prob Proportion of white MSM who enter each of the seven
-#'        active stages of syphilis, as defined above.
-#' @param immune.syph.B.prob Prevalence of immunity (e.g. recovering from treated late syphilis) 
-#'        among black MSM not actively infected with syphilis.
-#' @param immune.syph.W.prob Prevalence of immunity among black MSM not actively infected with
-#'        syphilis.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
 #' @param tx.init.W.prob Probability per time step that a white MSM who has
@@ -289,8 +283,6 @@
 #'        stage of syphilis infection.
 #' @param syph.late.rr Multiplier for reduced infection probability in late stages 
 #'        of syphilis infection.
-#' @param syph.immune.rr Multiplier for reduced infection probability given an 
-#'        immune partner.
 #' @param rgc.sympt.prob Probability of symptoms given infection with rectal
 #'        gonorrhea.
 #' @param ugc.sympt.prob Probability of symptoms given infection with urethral
@@ -416,8 +408,6 @@ param_msm <- function(nwstats,
                       # Incub, Primary, Secondary, Early latent, Late Latent, Late Late Latent, Tertiary
                       stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                       stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                      # immune.syph.B.prob = 0.01,
-                      # immune.syph.W.prob = 0.01, 
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -450,7 +440,6 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      # immune.syph.int = 5 * 52 * 7,
                       syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress at end of 20 years 
                       
                       b.B.rate = 1e-3 / 7,
@@ -554,7 +543,6 @@ param_msm <- function(nwstats,
                       rsyph.tprob = 0.03829557,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
-                      # syph.immune.rr = 0,
                       
                       rgc.sympt.prob = 0.16, # Beck
                       ugc.sympt.prob = 0.90, # Beck

@@ -26,10 +26,23 @@ ept_msm <- function(dat, at) {
     
     # Fix this - these tx vars are NA after recovery - can only be eligible to provide medication at one time step?
     # Or, change this variable to a day and have a x-week interval where EPT could be provided?
+    # Add a last tx time attribute and set to at
+    
     rGC.tx <- dat$attr$rGC.tx
     uGC.tx <- dat$attr$uGC.tx
     rCT.tx <- dat$attr$rCT.tx
     uCT.tx <- dat$attr$uCT.tx
+    syph.tx <- dat$attr$syph.tx
+    last.rCT.tx <- dat$attr$last.rCT.tx 
+    last.uCT.tx <- dat$attr$last.uCT.tx 
+    last.rGC.tx <- dat$attr$last.rGC.tx 
+    last.uGC.tx <- dat$attr$last.uGC.tx
+    last.syph.tx <- dat$attr$last.syph.tx
+    last.rCT.tx.prep <- dat$attr$last.rCT.tx.prep
+    last.uCT.tx.prep <- dat$attr$last.uCT.tx.prep 
+    last.rGC.tx.prep <- dat$attr$last.rGC.tx.prep 
+    last.uGC.tx.prep <- dat$attr$last.uGC.tx.prep
+    last.syph.tx.prep <- dat$attr$last.syph.tx.prep
     
     active <- dat$attr$active
     sexactive <- dat$attr$sexactive

@@ -1026,34 +1026,44 @@ sti_tx <- function(dat, at) {
   
   dat$attr$syph.tx[idssyph_tx] <- 0
   dat$attr$syph.tx[txsyph] <- 1
+  dat$attr$last.syph.tx <- at
   
   dat$attr$rGC.tx[idsRGC_tx] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
-
+  dat$attr$last.rGC.tx[txRGC] <- at
+  
   dat$attr$uGC.tx[idsUGC_tx] <- 0
   dat$attr$uGC.tx[txUGC] <- 1
+  dat$attr$last.uGC.tx[txUGC] <- at
 
   dat$attr$rCT.tx[idsRCT_tx] <- 0
   dat$attr$rCT.tx[txRCT] <- 1
+  dat$attr$last.rCT.tx[txRCT] <- at
 
   dat$attr$uCT.tx[idsUCT_tx] <- 0
   dat$attr$uCT.tx[txUCT] <- 1
+  dat$attr$last.uCT.tx[txUCT] <- at
 
   dat$attr$rGC.tx.prep[idsRGC_prep_tx] <- 0
   dat$attr$rGC.tx.prep[txRGC_prep] <- 1
+  dat$attr$last.rGC.tx.prep[txRGC_prep] <- at
 
   dat$attr$uGC.tx.prep[idsUGC_prep_tx] <- 0
   dat$attr$uGC.tx.prep[txUGC_prep] <- 1
+  dat$attr$last.uGC.tx.prep[txUGC_prep] <- at
 
   dat$attr$rCT.tx.prep[idsRCT_prep_tx] <- 0
   dat$attr$rCT.tx.prep[txRCT_prep] <- 1
-
+  dat$attr$last.rCT.tx.prep[txRCT_prep] <- at
+  
   dat$attr$uCT.tx.prep[idsUCT_prep_tx] <- 0
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
-
+  dat$attr$last.uCT.tx.prep[txUCT_prep] <- at
+  
   dat$attr$syph.tx.prep[idssyph_prep_tx] <- 0
   dat$attr$syph.tx.prep[txsyph_prep] <- 1
-
+  dat$attr$last.syph.tx.prep[txsyph_prep] <- at
+  
   # add tx at other site
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1) & dat$attr$uGC == 1)] <- 1

@@ -762,6 +762,8 @@ init_status_sti_msm <- function(dat) {
     inf.stage.syph <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
+    last.syph.tx <- rep(NA, num)
+    last.syph.tx.prep <- rep(NA, num)
     stage.prim.sympt <- rep(NA, num) 
     stage.seco.sympt <- rep(NA, num)
     stage.earlat.sympt <- rep(NA, num)
@@ -901,8 +903,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uGC.timesInf[uGC == 1] <- 1
     dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
     
-    dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
-    dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
+    dat$attr$rGC.tx <- dat$attr$uGC.tx <- dat$attr$last.rGC.tx <- dat$attr$last.uGC.tx <- rep(NA, num)
+    dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- dat$attr$last.rGC.tx.prep <- dat$attr$last.uGC.tx.prep <- rep(NA, num)
     dat$attr$GC.cease <- rep(NA, num)
     
     # Initialize CT infection at both sites
@@ -929,15 +931,14 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uCT.timesInf[uCT == 1] <- 1
     dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
     
-    dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
-    dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
+    dat$attr$rCT.tx <- dat$attr$uCT.tx <- dat$attr$last.rCT.tx <- dat$attr$last.uCT.tx <- rep(NA, num)
+    dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- dat$attr$last.rCT.tx.prep <- dat$attr$last.uCT.tx.prep <- rep(NA, num)
     dat$attr$CT.cease <- rep(NA, num)
     
 
     # Set all onto dat$attr
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
-    # dat$attr$syph.immune.time <- syph.immune.time
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$lastdiag.time.syph <- lastdiag.time.syph
