@@ -647,9 +647,6 @@ This is implemented as an inverse, 1 / this value for those who do not have diag
 accumulating for eventual STI testing indications.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{immune.syph.int}{Number of days that temporary immunity from syphilis
-infection lasts after treatment and recovery from late syphilis infection.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

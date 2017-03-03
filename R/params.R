@@ -86,8 +86,6 @@
 #' @param latelatelat.syph.int Number of days in second stage of late latent 
 #'        syphilis for those who will not progress to tertiary infection.
 #' @param tert.syph.int Number of days in tertiary stage of syphilis.
-#' @param immune.syph.int Number of days that temporary immunity from syphilis
-#'        infection lasts after treatment and recovery from late syphilis infection.
 #' @param syph.tert.prog.prob Probability of progression from late latent stage of
 #'        syphilis to tertiary stage at any point in time during late latent.
 #' @param b.B.rate Rate at which black MSM enter the population.
