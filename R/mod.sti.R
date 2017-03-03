@@ -1026,7 +1026,7 @@ sti_tx <- function(dat, at) {
   
   dat$attr$syph.tx[idssyph_tx] <- 0
   dat$attr$syph.tx[txsyph] <- 1
-  dat$attr$last.syph.tx <- at
+  dat$attr$last.syph.tx[txsyph] <- at
   
   dat$attr$rGC.tx[idsRGC_tx] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
@@ -1130,7 +1130,7 @@ sti_tx <- function(dat, at) {
       dat$epi$uGCasympttests[at] <- 0
       dat$epi$GCasympttests[at] <- 0
       dat$epi$rCTasympttests[at] <- 0
-      dat$epi$rCTasympttests[at] <- 0
+      dat$epi$uCTasympttests[at] <- 0
       dat$epi$syphasympttests[at] <- 0
   
   }

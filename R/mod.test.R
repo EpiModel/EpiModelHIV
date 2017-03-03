@@ -435,7 +435,7 @@ test_sti_msm <- function(dat, at) {
         dat$epi$uGCasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$GCasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
-        dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$uCTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
     }
     

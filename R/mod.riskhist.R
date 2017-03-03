@@ -75,6 +75,8 @@ riskhist_msm <- function(dat, at) {
     dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
     dat$attr$stitest.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
+    dat$attr$last.syph.tx <- rep(NA, length(uid))
+    dat$attr$last.syph.tx.prep <- rep(NA, length(uid))
   }
 
   ## Degree ##

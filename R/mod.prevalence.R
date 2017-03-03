@@ -100,15 +100,15 @@ prevalence_msm <- function(dat, at) {
     dat$epi$totaluGCasympttests <- rep(0, nsteps)
     dat$epi$totalGCasympttests <- rep(0, nsteps)
     dat$epi$totalrCTasympttests <- rep(0, nsteps)
-    dat$epi$totalrCTasympttests <- rep(0, nsteps)
+    dat$epi$totaluCTasympttests <- rep(0, nsteps)
     dat$epi$totalsyphasympttests <- rep(0, nsteps)
     
     dat$epi$totalrGCasympttests.prep <- rep(0, nsteps)
     dat$epi$totaluGCasympttests.prep <- rep(0, nsteps)
     dat$epi$totalGCasympttests.prep <- rep(0, nsteps)
     dat$epi$totalrCTasympttests.prep <- rep(0, nsteps)
-    dat$epi$totalrCTasympttests.prep <- rep(0, nsteps)
-    dat$epi$totalsyphasympttests.prep <- rep(0, nsteps)
+    dat$epi$totaluCTasympttests.prep <- rep(0, nsteps)
+    dat$epi$totalCTasympttests.prep <- rep(0, nsteps)
     dat$epi$totalsyphasympttests.prep <- rep(0, nsteps)
 
     dat$epi$prev.rgc <- rNA
@@ -250,14 +250,14 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at]
       dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at]
       dat$epi$totalCTasympttests[at] <- dat$epi$CTsympttests[at]
-      dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at]
+      dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
       
-      dat$epi$rGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
-      dat$epi$uGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
-      dat$epi$GCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at]
-      dat$epi$rCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at]
-      dat$epi$uCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at]
-      dat$epi$CTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at]
+      dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
+      dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
+      dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at]
+      dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at]
+      dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at]
+      dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at]
       dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at]
       
   }
@@ -278,7 +278,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$totaluGCasympttests[at - 1]
       dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at] + dat$epi$totalGCasympttests[at - 1]
       dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
-      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
+      dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$totaluCTasympttests[at - 1]
       dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$totalsyphasympttests[at - 1]
       
       dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at] + dat$epi$totalrGCasympttests.prep[at - 1]

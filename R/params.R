@@ -32,6 +32,9 @@
 #' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
 #'        active stages of syphilis: incubating, primary, secondary, early 
 #'        latent, late latent, late late latent, and tertiary.
+#' @param stage.syph.W.prob Proportion of white MSM who enter one of the seven
+#'        active stages of syphilis: incubating, primary, secondary, early 
+#'        latent, late latent, late late latent, and tertiary.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
 #' @param tx.init.W.prob Probability per time step that a white MSM who has

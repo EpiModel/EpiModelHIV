@@ -13,6 +13,18 @@
 prep_msm <- function(dat, at) {
 
   if (at < dat$param$prep.start) {
+      
+      # Update # of PrEP asymptomatic STI tests to 0 
+      dat$epi$rGCasympttests.prep[at] <- 0
+      dat$epi$uGCasympttests.prep[at] <- 0
+      dat$epi$GCasympttests.prep[at] <- 0
+      
+      dat$epi$rCTasympttests.prep[at] <- 0
+      dat$epi$uCTasympttests.prep[at] <- 0
+      dat$epi$CTasympttests.prep[at] <- 0
+      
+      dat$epi$syphasympttests.prep[at] <- 0
+      
     return(dat)
   }
     
@@ -150,7 +162,8 @@ prep_msm <- function(dat, at) {
       dat$epi$uGCasympttests.prep <- rep(0, length(dat$control$nsteps))
       dat$epi$GCasympttests.prep <- rep(0, length(dat$control$nsteps))
       dat$epi$rCTasympttests.prep <- rep(0, length(dat$control$nsteps))
-      dat$epi$rCTasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$uCTasympttests.prep <- rep(0, length(dat$control$nsteps))
+      dat$epi$CTasympttests.prep <- rep(0, length(dat$control$nsteps))
       dat$epi$syphasympttests.prep <- rep(0, length(dat$control$nsteps))
   }
   
