@@ -29,16 +29,16 @@ riskhist_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
   syph.tx <- dat$attr$syph.tx
-  last.rCT.tx <- dat$attr$last.rCT.tx 
-  last.uCT.tx <- dat$attr$last.uCT.tx 
-  last.rGC.tx <- dat$attr$last.rGC.tx 
-  last.uGC.tx <- dat$attr$last.uGC.tx
-  last.syph.tx <- dat$attr$last.syph.tx
-  last.rCT.tx.prep <- dat$attr$last.rCT.tx.prep
-  last.uCT.tx.prep <- dat$attr$last.uCT.tx.prep 
-  last.rGC.tx.prep <- dat$attr$last.rGC.tx.prep 
-  last.uGC.tx.prep <- dat$attr$last.uGC.tx.prep
-  last.syph.tx.prep <- dat$attr$last.syph.tx.prep
+  last.tx.time.syph <- dat$attr$last.tx.time.syph
+  last.tx.time.rgc <- dat$attr$last.tx.time.rgc 
+  last.tx.time.ugc <- dat$attr$last.tx.time.ugc
+  last.tx.time.rct <- dat$attr$last.tx.time.rct
+  last.tx.time.uct <- dat$attr$last.tx.time.uct
+  last.tx.time.syph.prep <- dat$attr$last.tx.time.syph.prep
+  last.tx.time.rct.prep <- dat$attr$last.tx.time.rct.prep 
+  last.tx.time.uct.prep <- dat$attr$last.tx.time.uct.prep
+  last.tx.time.rgc.prep <- dat$attr$last.tx.time.rgc.prep
+  last.tx.time.ugc.prep <- dat$attr$last.tx.time.ugc.prep
   sexactive <- dat$attr$sexactive
   sexnewedge <- dat$attr$sexnewedge
   tt.traj.ct <- dat$attr$tt.traj.ct
@@ -75,8 +75,6 @@ riskhist_msm <- function(dat, at) {
     dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
     dat$attr$stitest.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
-    dat$attr$last.syph.tx <- rep(NA, length(uid))
-    dat$attr$last.syph.tx.prep <- rep(NA, length(uid))
   }
 
   ## Degree ##

@@ -57,7 +57,7 @@ param <- param_msm(nwstats = st,
                    ept.coverage = 0,
                    
                    prep.start = 5000,
-                   stitest.start = 50,
+                   stitest.start = 183,
                    
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
@@ -73,7 +73,7 @@ init <- init_msm(nwstats = st,
                  prev.syph.W = 0.02)
 
 control <- control_msm(simno = 0.253, 
-                       nsteps = 1000,#*50,
+                       nsteps = 2600,#*50,
                        nsims = 1, 
                        ncores = 1,
                        save.nwstats = TRUE,

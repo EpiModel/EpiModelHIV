@@ -754,6 +754,11 @@ init_status_sti_msm <- function(dat) {
     last.tx.time.ugc <- rep(NA, num)
     last.tx.time.rct <- rep(NA, num)
     last.tx.time.uct <- rep(NA, num)
+    last.tx.time.syph.prep <- rep(NA, num)
+    last.tx.time.rct.prep <- rep(NA, num)
+    last.tx.time.uct.prep <- rep(NA, num)
+    last.tx.time.rgc.prep <- rep(NA, num)
+    last.tx.time.ugc.prep <- rep(NA, num)
     infector.syph <- rep(NA, num)
     inf.role.syph <- rep(NA, num)
     inf.type.syph <- rep(NA, num)
@@ -762,8 +767,6 @@ init_status_sti_msm <- function(dat) {
     inf.stage.syph <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
-    last.syph.tx <- rep(NA, num)
-    last.syph.tx.prep <- rep(NA, num)
     stage.prim.sympt <- rep(NA, num) 
     stage.seco.sympt <- rep(NA, num)
     stage.earlat.sympt <- rep(NA, num)
@@ -903,8 +906,10 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uGC.timesInf[uGC == 1] <- 1
     dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
     
-    dat$attr$rGC.tx <- dat$attr$uGC.tx <- dat$attr$last.rGC.tx <- dat$attr$last.uGC.tx <- rep(NA, num)
-    dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- dat$attr$last.rGC.tx.prep <- dat$attr$last.uGC.tx.prep <- rep(NA, num)
+    dat$attr$rGC.tx <- rep(NA, num)
+    dat$attr$uGC.tx <- rep(NA, num)
+    dat$attr$rGC.tx.prep <- rep(NA, num)
+    dat$attr$uGC.tx.prep <- rep(NA, num)
     dat$attr$GC.cease <- rep(NA, num)
     
     # Initialize CT infection at both sites
@@ -931,8 +936,10 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uCT.timesInf[uCT == 1] <- 1
     dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
     
-    dat$attr$rCT.tx <- dat$attr$uCT.tx <- dat$attr$last.rCT.tx <- dat$attr$last.uCT.tx <- rep(NA, num)
-    dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- dat$attr$last.rCT.tx.prep <- dat$attr$last.uCT.tx.prep <- rep(NA, num)
+    dat$attr$rCT.tx <- rep(NA, num)
+    dat$attr$uCT.tx <- rep(NA, num)
+    dat$attr$rCT.tx.prep <- rep(NA, num)
+    dat$attr$uCT.tx.prep <- rep(NA, num)
     dat$attr$CT.cease <- rep(NA, num)
     
 
@@ -970,6 +977,11 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.ugc <- last.tx.time.ugc
     dat$attr$last.tx.time.rct <- last.tx.time.rct
     dat$attr$last.tx.time.uct <- last.tx.time.uct
+    dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
+    dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
+    dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
+    dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
+    dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
     dat$attr$tt.traj.syph <- tt.traj.syph
     dat$attr$tt.traj.gc <- tt.traj.gc
     dat$attr$tt.traj.ct <- tt.traj.ct
