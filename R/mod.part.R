@@ -141,7 +141,7 @@ part_msm <- function(dat, at){
                                 uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) & is.na(part.list[, 6])), 5] <- at
           
         # Subset part.list to include only partnerships active in last x months
-        part.list <- part.list[which((at-(part.list[, 5]) <= part.int)), ]
+        part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , drop = FALSE]
         dat$temp$part.list <- part.list
     }
 return(dat)    

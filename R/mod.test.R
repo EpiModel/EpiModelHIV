@@ -149,11 +149,10 @@ test_sti_msm <- function(dat, at) {
     tt.traj.gc <- dat$attr$tt.traj.gc
     tt.traj.ct <- dat$attr$tt.traj.ct
     
-    # eptElig <- dat$attr$eptElig
-    # eptStat <- dat$attr$eptStat
-    # eptEligdate <- dat$attr$eptEligdate
-    # eptLastRisk <- dat$attr$eptLastRisk
-    # eptStartTime <- dat$attr$eptStartTime
+    eptElig <- dat$attr$eptElig
+    eptStat <- dat$attr$eptStat
+    eptEligdate <- dat$attr$eptEligdate
+    eptStartTime <- dat$attr$eptStartTime
 
     # Parameters
     stianntest.coverage <- dat$param$stianntest.coverage
@@ -216,8 +215,6 @@ test_sti_msm <- function(dat, at) {
     ## Update testing trajectory
     if (length(idsStart) > 0) {
         tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
-        #eptStartTime[idsStart] <- at
-        #eptLastRisk[idsStart] <- at
     }
     
     
@@ -242,8 +239,6 @@ test_sti_msm <- function(dat, at) {
     ## Update testing trajectory
     if (length(idsStart) > 0) {
         tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
-        #eptStartTime[idsStart] <- at
-        #eptLastRisk[idsStart] <- at
     }   
     
     

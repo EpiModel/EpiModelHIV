@@ -781,6 +781,8 @@ sti_tx <- function(dat, at) {
   
   prep.sti.screen.int <- dat$param$prep.sti.screen.int
   prep.sti.prob.tx <- dat$param$prep.sti.prob.tx
+  ept.gc.success <- dat$param$ept.gc.success
+  ept.ct.success <- dat$param$ept.ct.success
 
   prep.cont.stand.tx <- dat$param$prep.continue.stand.tx
   if (prep.cont.stand.tx == TRUE) {
@@ -794,6 +796,7 @@ sti_tx <- function(dat, at) {
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
   diag.status <- dat$attr$diag.status
+  eptTx <- dat$attr$eptTx
   
   
   # symptomatic syphilis treatment
@@ -1093,7 +1096,11 @@ sti_tx <- function(dat, at) {
   dat$attr$eptStat[txRCT_all] <- 0
   dat$attr$eptElig[txUCT_all] <- 1
   dat$attr$eptStat[txUCT_all] <- 0
-  dat$attr$eptEligdate[dat$attr$eptElig == 1] <- at
+  dat$attr$eptEligdate[txRGC_all] <- at
+  dat$attr$eptEligdate[txUGC_all] <- at
+  dat$attr$eptEligdate[txRCT_all] <- at
+  dat$attr$eptEligdate[txUCT_all] <- at
+  #dat$attr$eptEligdate[txsyph_all] <- at
 
   # summary stats
   if (is.null(dat$epi$num.asympt.tx)) {

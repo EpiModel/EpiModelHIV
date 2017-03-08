@@ -16,12 +16,13 @@ riskhist_msm <- function(dat, at) {
   #   return(dat)
   # }
     
-  if (at < min(dat$param$riskh.start, dat$param$riskh.stitest.start)) {
+  if (at < min(dat$param$riskh.start, dat$param$riskh.stitest.start, dat$param$riskh.ept.start)) {
         return(dat)
   }
 
   ## Attributes
   uid <- dat$attr$uid
+  active <- dat$attr$active
   dx <- dat$attr$diag.status
   since.test <- at - dat$attr$last.neg.test
   rGC.tx <- dat$attr$rGC.tx
@@ -29,27 +30,33 @@ riskhist_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
   syph.tx <- dat$attr$syph.tx
-  last.tx.time.syph <- dat$attr$last.tx.time.syph
-  last.tx.time.rgc <- dat$attr$last.tx.time.rgc 
-  last.tx.time.ugc <- dat$attr$last.tx.time.ugc
-  last.tx.time.rct <- dat$attr$last.tx.time.rct
-  last.tx.time.uct <- dat$attr$last.tx.time.uct
-  last.tx.time.syph.prep <- dat$attr$last.tx.time.syph.prep
-  last.tx.time.rct.prep <- dat$attr$last.tx.time.rct.prep 
-  last.tx.time.uct.prep <- dat$attr$last.tx.time.uct.prep
-  last.tx.time.rgc.prep <- dat$attr$last.tx.time.rgc.prep
-  last.tx.time.ugc.prep <- dat$attr$last.tx.time.ugc.prep
+  rGC.tx.prep <- dat$attr$rGC.tx.prep
+  uGC.tx.prep <- dat$attr$uGC.tx.prep
+  rCT.tx.prep <- dat$attr$rCT.tx.prep
+  uCT.tx.prep <- dat$attr$uCT.tx.prep
+  syph.tx.prep <- dat$attr$syph.tx.prep
   sexactive <- dat$attr$sexactive
   sexnewedge <- dat$attr$sexnewedge
   tt.traj.ct <- dat$attr$tt.traj.ct
   tt.traj.gc <- dat$attr$tt.traj.gc
   tt.traj.syph <- dat$attr$tt.traj.syph
+  eptStat <- dat$attr$eptStat
+  eptEligdate <- dat$attr$eptEligdate
+  eptEligTx <- dat$attr$eptEligTx
+  eptStartTime <- dat$attr$eptStartTime
+  eptTx <- dat$attr$eptTx
 
   ## Parameters
   time.unit <- dat$param$time.unit
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
   ept.risk.int <- dat$param$ept.risk.int
+  ept.provision.main <- dat$param$ept.provision.partner.main
+  ept.provision.casl <- dat$param$ept.provision.partner.casl
+  ept.provision.inst <- dat$param$ept.provision.partner.inst
+  ept.uptake.main <- dat$param$ept.uptake.partner.main
+  ept.uptake.casl <- dat$param$ept.uptake.partner.casl
+  ept.uptake.inst <- dat$param$ept.uptake.partner.inst
 
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
@@ -152,7 +159,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$recentpartners[idspartlist] <- part.count[idspartlist, 2]
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
-  
+
   # Reset # of partners to 0 for those no longer in part.list
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
@@ -207,22 +214,138 @@ riskhist_msm <- function(dat, at) {
   uai.any <- unique(c(el$p1[el$uai > 0], el$p2[el$uai > 0]))
   dat$attr$stitest.ind.uai.any[uai.any] <- at
   
+  
   ### Previous or coexisting STIs (treated) in a time interval
   idsSTI <- which((at - dat$attr$last.tx.time.syph) <= sti.highrisktest.int | (at - dat$attr$last.tx.time.rgc) <= sti.highrisktest.int |
                       (at - dat$attr$last.tx.time.ugc) <= sti.highrisktest.int | (at - dat$attr$last.tx.time.rct) <= sti.highrisktest.int | 
                       (at - dat$attr$last.tx.time.uct) <= sti.highrisktest.int)
   dat$attr$stitest.ind.sti[idsSTI] <- at
-    
-
-  # Reset attributes
+  
+  # Update attributes
   dat$attr$tt.traj.ct <- tt.traj.ct
   dat$attr$tt.traj.gc <- tt.traj.gc
   dat$attr$tt.traj.syph <- tt.traj.syph
+  
+  # Update epi to show prevalence of STI testing indications
+  if (at >= dat$param$riskh.stitest.start) {
+      dat$epi$stiactiveind[at] <- length(idsactive) / dat$epi$num[at]
+      dat$epi$newpartner[at] <- length(idsnewpartners) / dat$epi$num[at]
+      dat$epi$recentpartners[at] <- length(idsrecentpartners) / dat$epi$num[at]
+      dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) / dat$epi$num[at]
+      dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) / dat$epi$num[at]
+      dat$epi$uai.nmain[at] <- length(uai.nmain) / dat$epi$num[at]
+      dat$epi$uai.any[at] <- length(uai.any) / dat$epi$num[at]
+      dat$epi$recentSTI[at] <- length(idsSTI) / dat$epi$num[at]
+  }
+  
   
   #####################
   ## EPT  Conditions ##
   #####################
   
+  ## Eligibility of partners---------------------------------------------------------------
+  
+  # Subset partner list to those active within an EPT interval - last active date within 60 days
+  part.list <- part.list[which((at - (part.list[, 5]) <= ept.risk.int)), , drop = FALSE]
+  
+  # Subset partner list to alive
+  part.list <- part.list[which(active[part.list[, 1]] == 1 & active[part.list[, 2]] == 1), , drop = FALSE]
+  
+  # Partner 1 was recently treated, so partner 2 would be eligible to be treated through EPT if not currently being treated for anything
+  part.listept1.main <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1), , drop = FALSE]
+  
+  part.listept1.casl <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2), , drop = FALSE]
+  
+  part.listept1.inst <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3), , drop = FALSE]
+  
+  rGC.tx.prep <- dat$attr$rGC.tx.prep
+  uGC.tx.prep <- dat$attr$uGC.tx.prep
+  rCT.tx.prep <- dat$attr$rCT.tx.prep
+  uCT.tx.prep <- dat$attr$uCT.tx.prep
+  syph.tx.prep <- dat$attr$syph.tx.prep
+  
+  idspartlistsept1.main <- part.listept1.main[, 2]
+  idspartlistsept1.casl <- part.listept1.casl[, 2]
+  idspartlistsept1.inst <- part.listept1.inst[, 2]
+  
+  
+  # Partner 2 was recently treated, so partner 1 would be eligible to be treated through EPT if not currently being treated for anything
+  part.listept2.main <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1), , drop = FALSE]
+  
+  part.listept2.casl <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2), , drop = FALSE]
+  
+  part.listept2.inst <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3), , drop = FALSE]
+  
+  idspartlistsept2.main <- part.listept2.main[, 1]
+  idspartlistsept2.casl <- part.listept2.casl[, 1]
+  idspartlistsept2.inst <- part.listept2.inst[, 1]
+  
+  # All EPT eligible IDs (partners of index)
+  idsept <- unique(c(idspartlistsept1.main, idspartlistsept1.casl, idspartlistsept1.inst, 
+                     idspartlistsept2.main, idspartlistsept2.casl, idspartlistsept2.inst))
+  idsept.main <- unique(c(idspartlistsept1.main, idspartlistsept2.main))
+  idsept.casl <- unique(c(idspartlistsept1.casl, idspartlistsept2.casl))
+  idsept.inst <- unique(c(idspartlistsept1.inst, idspartlistsept2.inst))
+  
+  ## Provision to and uptake of partners (to be treated at next time step)
+  idsprovided.main <- idsept.main[which(rbinom(length(idsept.main), 1,
+                                               ept.provision.main) == 1)]
+  idsprovided.casl <- idsept.casl[which(rbinom(length(idsept.casl), 1,
+                                               ept.provision.casl) == 1)]
+  idsprovided.inst <- idsept.inst[which(rbinom(length(idsept.inst), 1,
+                                               ept.provision.inst) == 1)]
+  idsprovided_ept <- unique(c(idsprovided.main, idsprovided.casl, idsprovided.inst))
+  
+  # Uptake
+  idsept_tx.main <- idsprovided.main[which(rbinom(length(idsprovided.main), 1,
+                                                  ept.uptake.main) == 1)]
+  idsept_tx.casl <- idsprovided.casl[which(rbinom(length(idsprovided.casl), 1,
+                                                  ept.uptake.casl) == 1)]
+  idsept_tx.inst <- idsprovided.inst[which(rbinom(length(idsprovided.inst), 1,
+                                                  ept.uptake.inst) == 1)]
+  idsuptake_ept <- unique(c(idsept_tx.main, idsept_tx.casl, idsept_tx.inst))
+  
+  # Update attributes for partner who is assigned to uptake EPT
+  eptTx[idsuptake_ept] <- 1
+  
+  # Update Epi
+  if (at >= dat$param$riskh.ept.start) {
+      dat$epi$eptpartelig[at] <- length(idsept)
+      dat$epi$eptprovided[at] <- length(idsprovided_ept)
+      dat$epi$eptTx[at] <- length(idsuptake_ept)
+      dat$epi$eptprop_provided[at] <- dat$epi$eptprovided[at] / dat$epi$eptpartelig[at]
+      dat$epi$eptprop_tx[at] <- dat$epi$eptTx[at] / dat$epi$eptprovided[at]
+  }
   
   return(dat)
 }

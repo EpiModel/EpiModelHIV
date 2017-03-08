@@ -55,37 +55,41 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE,
   stitest.active.int = 364, stitest.start = 5000, ept.start = Inf,
   ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
-  ept.cov.rate = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.39,
-  ugc.tprob = 0.29, rct.tprob = 0.19, uct.tprob = 0.14,
-  usyph.tprob = 0.04883012, rsyph.tprob = 0.03829557,
-  syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
-  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
-  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
-  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
-  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
-  syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
-  syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 0.9, ct.asympt.prob.tx = 0.85,
-  syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 0,
-  syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 0,
-  syph.earlat.prob.tx = 0.15, syph.latelat.prob.tx = 0.1,
-  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0,
-  tst.rect.sti.rr = 1, sti.highrisktest.int = 182,
-  stianntest.coverage = 1, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.coverage = 1,
-  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  ept.cov.rate = 1, ept.provision.partner.main = 0.5,
+  ept.provision.partner.casl = 0.5, ept.provision.partner.inst = 0.5,
+  ept.uptake.partner.main = 0.5, ept.uptake.partner.casl = 0.5,
+  ept.uptake.partner.inst = 0.5, ept.gc.success = 1, ept.ct.success = 1,
+  rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, rgc.tprob = 0.39, ugc.tprob = 0.29,
+  rct.tprob = 0.19, uct.tprob = 0.14, usyph.tprob = 0.04883012,
+  rsyph.tprob = 0.03829557, syph.earlat.rr = 0.5, syph.late.rr = 0,
+  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
+  uct.sympt.prob = 0.58, syph.prim.sympt.prob = 0.5,
+  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
+  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
+  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
+  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
+  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
+  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
+  ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
+  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0.9,
+  ct.asympt.prob.tx = 0.85, syph.prim.sympt.prob.tx = 0.35,
+  syph.prim.asympt.prob.tx = 0, syph.seco.sympt.prob.tx = 0.6,
+  syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.15,
+  syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
+  syph.tert.asympt.prob.tx = 0, tst.rect.sti.rr = 1,
+  sti.highrisktest.int = 182, stianntest.coverage = 1,
+  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
+  stihighrisktest.coverage = 1, stihighrisktest.cov.method = "curr",
+  stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
   hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
   syph.uhiv.rr = 1.7, rgc.hiv.rr = 1, ugc.hiv.rr = 1, rct.hiv.rr = 1,
   uct.hiv.rr = 1, hivdx.syph.sympt.tx.rr = 2,
-  partlist.start = stitest.start - sti.highrisktest.int - 1, ...)
+  partlist.start = min((stitest.start - sti.highrisktest.int - 1), (ept.start
+  - ept.risk.int - 1)), ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -461,6 +465,22 @@ EPT.}
 
 \item{ept.cov.rate}{The rate at which persons initiate EPT conditional on
 their eligibility, with 1 equal to instant start.}
+
+\item{ept.provision.partner.main}{The likelihood of a index partner providing EPT medication to a main partner}
+
+\item{ept.provision.partner.casl}{The likelihood of a index partner providing EPT medication to a casual partner}
+
+\item{ept.provision.partner.inst}{The likelihood of a index partner providing EPT medication to a one-off partner}
+
+\item{ept.uptake.partner.main}{The likelihood of a partner taking medication provided to them by a main index partner}
+
+\item{ept.uptake.partner.casl}{The likelihood of a partner taking medication provided to them by a casual index partner}
+
+\item{ept.uptake.partner.inst}{The likelihood of a partner taking medication provided to them by a one-off index partner}
+
+\item{ept.gc.success}{The probability of effective treatment for GC in a partner give EPT medication}
+
+\item{ept.ct.success}{The probability of effective treatment for CT in a partner give EPT medication}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use

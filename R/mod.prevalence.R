@@ -50,7 +50,6 @@ prevalence_msm <- function(dat, at) {
   stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
   stage.tert.sympt <- dat$attr$stage.tert.sympt
 
-
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
 
@@ -95,6 +94,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$totaluCTsympttests <- rep(0, nsteps)
     dat$epi$totalCTsympttests <- rep(0, nsteps)
     dat$epi$totalsyphsympttests <- rep(0, nsteps)
+    dat$epi$totalstisympttests <- rep(0, nsteps)
     
     dat$epi$totalrGCasympttests <- rep(0, nsteps)
     dat$epi$totaluGCasympttests <- rep(0, nsteps)
@@ -102,6 +102,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$totalrCTasympttests <- rep(0, nsteps)
     dat$epi$totaluCTasympttests <- rep(0, nsteps)
     dat$epi$totalsyphasympttests <- rep(0, nsteps)
+    dat$epi$totalstiasympttests <- rep(0, nsteps)
     
     dat$epi$totalrGCasympttests.prep <- rep(0, nsteps)
     dat$epi$totaluGCasympttests.prep <- rep(0, nsteps)
@@ -110,6 +111,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$totaluCTasympttests.prep <- rep(0, nsteps)
     dat$epi$totalCTasympttests.prep <- rep(0, nsteps)
     dat$epi$totalsyphasympttests.prep <- rep(0, nsteps)
+    dat$epi$totalstiasympttests.prep <- rep(0, nsteps)
 
     dat$epi$prev.rgc <- rNA
     dat$epi$prev.ugc <- rNA
@@ -194,6 +196,13 @@ prevalence_msm <- function(dat, at) {
     dat$epi$concurrpart <- rNA
     dat$epi$partnersti <- rNA
     dat$epi$uai.nmain <- rNA
+    dat$epi$uai.any <- rNA
+    
+    dat$epi$eptpartelig <- rNA
+    dat$epi$eptprovided <- rNA
+    dat$epi$eptTx <- rNA
+    dat$epi$eptprop_provided <- rNA
+    dat$epi$eptprop_tx <- rNA
     
     ##########
   }
@@ -229,6 +238,9 @@ prevalence_msm <- function(dat, at) {
   dat$epi$stage.time.af[at] <- sum(dat$attr$stage.time.af, na.rm = TRUE)
   dat$epi$stage.time.chronic[at] <- sum(dat$attr$stage.time.chronic, na.rm = TRUE) 
   dat$epi$stage.time.aids[at] <- sum(dat$attr$stage.time.aids, na.rm = TRUE)
+  dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
+  dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
+  dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
   
   # Number of tests: Total resets at prep start time
   if (at == 2 | at == dat$param$prep.start) {
@@ -243,6 +255,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at]
       dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at]
       dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at]
+      dat$epi$totalstisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
       
       dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at]
       dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at]
@@ -251,6 +264,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at]
       dat$epi$totalCTasympttests[at] <- dat$epi$CTsympttests[at]
       dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
+      dat$epi$totalstiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
       
       dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
       dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
@@ -259,6 +273,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at]
       dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at]
       dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at]
+      dat$epi$totalstiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
       
   }
   if ((at > 2 & at < dat$param$prep.start) | (at > dat$param$prep.start)) {
@@ -273,6 +288,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at] + dat$epi$totaluCTsympttests[at - 1]
       dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at] + dat$epi$totalCTsympttests[at - 1]
       dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at] + dat$epi$totalsyphsympttests[at - 1]
+      dat$epi$totalstisympttests[at] <- dat$epi$stisympttests[at] + dat$epi$totalstisympttests[at - 1]
       
       dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$totalrGCasympttests[at - 1]
       dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$totaluGCasympttests[at - 1]
@@ -280,6 +296,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
       dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$totaluCTasympttests[at - 1]
       dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$totalsyphasympttests[at - 1]
+      dat$epi$totalstiasympttests[at] <- dat$epi$stiasympttests[at] + dat$epi$totalstiasympttests[at - 1]
       
       dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at] + dat$epi$totalrGCasympttests.prep[at - 1]
       dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at] + dat$epi$totaluGCasympttests.prep[at - 1]
@@ -288,6 +305,7 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at] + dat$epi$totaluCTasympttests.prep[at - 1]
       dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at] + dat$epi$totalCTasympttests.prep[at - 1]
       dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at] + dat$epi$totalsyphasympttests.prep[at - 1]
+      dat$epi$totalstiasympttests.prep[at] <- dat$epi$stiasympttests.prep[at] + dat$epi$totalstiasympttests.prep[at - 1]
       
   }
  
@@ -396,14 +414,6 @@ prevalence_msm <- function(dat, at) {
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
                                        sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
-  
-  #dat$epi$stiactiveind[at] <-   
-  #dat$epi$recentpartners[at] <-
-  #dat$epi$recentSTI[at] <-
-  #dat$epi$newpartner[at] <- 
-  #dat$epi$concurrpart[at] <-
-  #dat$epi$partnersti[at] <-
-  #dat$epi$uai.nmain[at] <-
 
   return(dat)
 }

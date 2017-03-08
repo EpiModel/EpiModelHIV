@@ -35,10 +35,10 @@ param <- param_msm(nwstats = st,
                    rct.tprob = 0.21, 
                    uct.tprob = 0.15,
                    
-                   hiv.rgc.rr = 2.70, #2.780673,
-                   hiv.ugc.rr = 1.70, #1.732363,
-                   hiv.rct.rr = 2.70, #2.780673,
-                   hiv.uct.rr = 1.70, #1.732363,
+                   hiv.rgc.rr = 2.50, #2.780673,
+                   hiv.ugc.rr = 1.50, #1.732363,
+                   hiv.rct.rr = 2.50, #2.780673,
+                   hiv.uct.rr = 1.50, #1.732363,
                    
                    # adjust prim and seco from 0.1385 each
                    stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
@@ -54,13 +54,14 @@ param <- param_msm(nwstats = st,
                    syph.tert.asympt.prob.tx = 0.00,
                    
                    prep.coverage = 0.4,
-                   ept.coverage = 0,
+                   ept.coverage = 0.4,
                    
-                   stianntest.coverage = 0.5,
-                   stihighrisktest.coverage = 0,
+                   stianntest.coverage = 0,
+                   stihighrisktest.coverage = 0.5,
                    
-                   prep.start = 5000,
-                   stitest.start = 183,
+                   prep.start = 1600,
+                   stitest.start = 1600,
+                   ept.start = 1600,
                    
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
@@ -76,7 +77,7 @@ init <- init_msm(nwstats = st,
                  prev.syph.W = 0.02)
 
 control <- control_msm(simno = 0.253, 
-                       nsteps = 2600,#*50,
+                       nsteps = 2600,
                        nsims = 1, 
                        ncores = 1,
                        save.nwstats = TRUE,

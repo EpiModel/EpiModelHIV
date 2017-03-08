@@ -779,6 +779,9 @@ init_status_sti_msm <- function(dat) {
     eptElig <- rep(NA, num)
     eptStat <- rep(NA, num)
     eptEligdate <- rep(NA, num)
+    eptStartTime <- rep(NA, num)
+    eptTx <- rep(NA, num)
+    eptEligTx <- rep(NA, num)
     stianntestLastElig <- rep(NA, num)
     stihighrisktestLastElig <- rep(NA, num)
     
@@ -988,6 +991,9 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptElig <- eptElig
     dat$attr$eptStat <- eptStat
     dat$attr$eptEligdate <- eptEligdate
+    dat$attr$eptEligTx <- eptEligTx
+    dat$attr$eptStartTime <- eptStartTime
+    dat$attr$eptTx <- eptTx
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners

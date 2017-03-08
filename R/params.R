@@ -262,6 +262,15 @@
 #'        EPT.
 #' @param ept.cov.rate The rate at which persons initiate EPT conditional on
 #'        their eligibility, with 1 equal to instant start.
+#' @param ept.provision.partner.main The likelihood of a index partner providing EPT medication to a main partner
+#' @param ept.provision.partner.casl The likelihood of a index partner providing EPT medication to a casual partner
+#' @param ept.provision.partner.inst The likelihood of a index partner providing EPT medication to a one-off partner
+#' @param ept.uptake.partner.main The likelihood of a partner taking medication provided to them by a main index partner
+#' @param ept.uptake.partner.casl The likelihood of a partner taking medication provided to them by a casual index partner
+#' @param ept.uptake.partner.inst The likelihood of a partner taking medication provided to them by a one-off index partner
+#' @param ept.gc.success The probability of effective treatment for GC in a partner give EPT medication
+#' @param ept.ct.success The probability of effective treatment for CT in a partner give EPT medication
+#'
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
 #'        per act, and 1 is a complete cessation of condom use following PrEP
@@ -528,7 +537,14 @@ param_msm <- function(nwstats,
                       ept.coverage = 0,
                       ept.cov.method = "curr",
                       ept.cov.rate = 1,
-                      
+                      ept.provision.partner.main = 0.5,
+                      ept.provision.partner.casl = 0.5,
+                      ept.provision.partner.inst = 0.5,
+                      ept.uptake.partner.main = 0.5,
+                      ept.uptake.partner.casl = 0.5,
+                      ept.uptake.partner.inst = 0.5,
+                      ept.gc.success = 1.0,
+                      ept.ct.success = 1.0,
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -622,7 +638,7 @@ param_msm <- function(nwstats,
                       
                       hivdx.syph.sympt.tx.rr = 2.0,
                       
-                      partlist.start = stitest.start - sti.highrisktest.int - 1,
+                      partlist.start = min((stitest.start - sti.highrisktest.int - 1),(ept.start - ept.risk.int - 1)),
                       
                       ...) {
 
