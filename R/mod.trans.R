@@ -244,7 +244,7 @@ trans_msm <- function(dat, at) {
     dat$attr$vl[infected] <- 0
     dat$attr$stage[infected] <- 1
     dat$attr$stage.time[infected] <- 0
-    dat$attr$stage.time.ar[infected] <- 0
+    dat$attr$stage.time.ar.ndx[infected] <- 0
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
 

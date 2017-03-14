@@ -65,13 +65,17 @@ prep_msm <- function(dat, at) {
       dat$attr$time.hivneg[status == 0] <- 0
       dat$attr$time.off.prep[active == 1] <- 0
       dat$attr$stage.time[active == 1] <- 0
-      dat$attr$stage.time.ar[active == 1] <- 0
+      dat$attr$stage.time.ar.ndx[active == 1] <- 0
+      dat$attr$stage.time.ar.dx[active == 1] <- 0
       dat$attr$stage.time.ar.art[active == 1] <- 0
-      dat$attr$stage.time.af[active == 1] <- 0
+      dat$attr$stage.time.af.ndx[active == 1] <- 0
+      dat$attr$stage.time.af.dx[active == 1] <- 0
       dat$attr$stage.time.af.art[active == 1] <- 0
-      dat$attr$stage.time.chronic[active == 1] <- 0
+      dat$attr$stage.time.chronic.ndx[active == 1] <- 0
+      dat$attr$stage.time.chronic.dx[active == 1] <- 0
       dat$attr$stage.time.chronic.art[active == 1] <- 0
-      dat$attr$stage.time.aids[active == 1] <- 0
+      dat$attr$stage.time.aids.ndx[active == 1] <- 0
+      dat$attr$stage.time.aids.dx[active == 1] <- 0
       dat$attr$stage.time.aids.art[active == 1] <- 0
   }
 
