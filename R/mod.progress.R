@@ -44,9 +44,13 @@ progress_msm <- function(dat, at) {
   stage <- dat$attr$stage
   stage.time <- dat$attr$stage.time
   stage.time.ar <- dat$attr$stage.time.ar
+  stage.time.ar.art <- dat$attr$stage.time.ar.art
   stage.time.af <- dat$attr$stage.time.af
+  stage.time.af.art <- dat$attr$stage.time.af.art
   stage.time.chronic <- dat$attr$stage.time.chronic
+  stage.time.chronic.art <- dat$attr$stage.time.chronic.art
   stage.time.aids <- dat$attr$stage.time.aids
+  stage.time.aids.art <- dat$attr$stage.time.aids.art
   tt.traj <- dat$attr$tt.traj
   tx.status <- dat$attr$tx.status
 
@@ -62,17 +66,26 @@ progress_msm <- function(dat, at) {
 
   ## Process
   # Current stage
-  AR <- which(active == 1 & stage == 1)
-  AF <- which(active == 1 & stage == 2)
-  Chronic <- which(active == 1 & stage == 3)
-  AIDS <- which(active == 1 & stage == 4)
+  AR <- which(active == 1 & stage == 1 & tx.status == 0)
+  AF <- which(active == 1 & stage == 2 & tx.status == 0)
+  Chronic <- which(active == 1 & stage == 3 & tx.status == 0)
+  AIDS <- which(active == 1 & stage == 4 & tx.status == 0)
+  
+  AR.art <- which(active == 1 & stage == 1 & tx.status == 1)
+  AF.art <- which(active == 1 & stage == 2 & tx.status == 1)
+  Chronic.art <- which(active == 1 & stage == 3 & tx.status == 1)
+  AIDS.art <- which(active == 1 & stage == 4 & tx.status == 1)
 
   # Increment day
   stage.time[active == 1] <- stage.time[active == 1] + 1
   stage.time.ar[AR] <- stage.time.ar[AR] + 1
+  stage.time.ar.art[AR.art] <- stage.time.ar.art[AR.art] + 1
   stage.time.af[AF] <- stage.time.af[AF] + 1
+  stage.time.af.art[AF.art] <- stage.time.af.art[AF.art] + 1
   stage.time.chronic[Chronic] <- stage.time.chronic[Chronic] + 1
+  stage.time.chronic.art[Chronic.art] <- stage.time.chronic.art[Chronic.art] + 1
   stage.time.aids[AIDS] <- stage.time.aids[AIDS] + 1
+  stage.time.aids.art[AIDS.art] <- stage.time.aids.art[AIDS.art] + 1
 
   # Change stage to Acute Falling
   toAF <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1))
@@ -102,10 +115,14 @@ progress_msm <- function(dat, at) {
                                    cum.time.off.tx >= max.time.off.tx.full &
                                    stage != 4)
 
-  isAIDS <- c(aids.tx.naive, aids.part.escape, aids.off.tx.full.escape)
+  isAIDS <- c(aids.tx.naive[tx.status == 0], aids.part.escape[tx.status == 0], aids.off.tx.full.escape[tx.status == 0])
+  isAIDS.art <- c(aids.tx.naive[tx.status == 1], aids.part.escape[tx.status == 1], aids.off.tx.full.escape[tx.status == 1])
   stage[isAIDS] <- 4
+  stage[isAIDS.art] <- 4
   stage.time[isAIDS] <- 1
+  stage.time[isAIDS.art] <- 1
   stage.time.aids[isAIDS] <- 1
+  stage.time.aids.art[isAIDS.art] <- 1
 
 
   ## Output
@@ -115,6 +132,10 @@ progress_msm <- function(dat, at) {
   dat$attr$stage.time.af <- stage.time.af
   dat$attr$stage.time.chronic <- stage.time.chronic
   dat$attr$stage.time.aids <- stage.time.aids
+  dat$attr$stage.time.ar.art <- stage.time.ar.art
+  dat$attr$stage.time.af.art <- stage.time.af.art
+  dat$attr$stage.time.chronic.art <- stage.time.chronic.art
+  dat$attr$stage.time.aids.art <- stage.time.aids.art
   
   if (at < dat$param$prep.start) {
       dat$attr$time.off.prep[dat$attr$prepStat == 0] <- dat$attr$time.off.prep[dat$attr$prepStat == 0] + 1

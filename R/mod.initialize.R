@@ -264,9 +264,13 @@ init_status_msm <- function(dat) {
   stage <- rep(NA, num)
   stage.time <- rep(0, num)
   stage.time.ar <- rep(0, num)
+  stage.time.ar.art <- rep(0, num)
   stage.time.af <- rep(0, num)
+  stage.time.af.art <- rep(0, num)
   stage.time.chronic <- rep(0, num)
+  stage.time.chronic.art <- rep(0, num)
   stage.time.aids <- rep(0, num)
+  stage.time.aids.art <- rep(0, num)
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
@@ -312,6 +316,7 @@ init_status_msm <- function(dat) {
   stage[selected[time.since.inf > vl.acute.int & time.since.inf <= vldo.int]] <- 3
   stage[selected[time.since.inf > vldo.int]] <- 4
 
+  # Need to make this ART/no?
   stage.time[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1]
   stage.time[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] -
                                                    vlar.int
@@ -486,6 +491,7 @@ init_status_msm <- function(dat) {
                   (time.since.inf > exp.onset.aids.W) *
                   (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
+  # stage.time.chronic.art[selected][tx.status[selected] == 1] <- runif(length(selected), max = stage.time.chronic)
 
   # Diagnosis
   selected <- which(status == 1 & tt.traj == 4)
@@ -627,6 +633,7 @@ init_status_msm <- function(dat) {
                   (time.since.inf > exp.onset.aids.W) *
                   (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
+  # stage.time.chronic.art[selected][tx.status[selected] == 1] <- runif(length(selected), max = stage.time.chronic)
 
   # Implement diagnosis for both
   selected <- which(status == 1 & tt.traj == 3)
@@ -677,9 +684,13 @@ init_status_msm <- function(dat) {
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
   dat$attr$stage.time.ar <- stage.time.ar
+  dat$attr$stage.time.ar.art <- stage.time.ar.art
   dat$attr$stage.time.af <- stage.time.af
+  dat$attr$stage.time.af.art <- stage.time.af.art
   dat$attr$stage.time.chronic <- stage.time.chronic
+  dat$attr$stage.time.chronic.art <- stage.time.chronic.art
   dat$attr$stage.time.aids <- stage.time.aids
+  dat$attr$stage.time.aids.art <- stage.time.aids.art
   dat$attr$inf.time <- inf.time
   dat$attr$vl <- vl
   dat$attr$diag.status <- diag.status

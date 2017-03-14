@@ -66,9 +66,13 @@ prep_msm <- function(dat, at) {
       dat$attr$time.off.prep[active == 1] <- 0
       dat$attr$stage.time[active == 1] <- 0
       dat$attr$stage.time.ar[active == 1] <- 0
+      dat$attr$stage.time.ar.art[active == 1] <- 0
       dat$attr$stage.time.af[active == 1] <- 0
+      dat$attr$stage.time.af.art[active == 1] <- 0
       dat$attr$stage.time.chronic[active == 1] <- 0
+      dat$attr$stage.time.chronic.art[active == 1] <- 0
       dat$attr$stage.time.aids[active == 1] <- 0
+      dat$attr$stage.time.aids.art[active == 1] <- 0
   }
 
   ## Eligibility ---------------------------------------------------------------
