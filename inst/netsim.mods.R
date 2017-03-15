@@ -20,7 +20,7 @@ param <- param_msm(nwstats = st,
                    syph.rhiv.rr = 3.00,
                    syph.uhiv.rr = 2.00,
 
-                   syph.earlat.rr = 0.5, #2/3, 0
+                   syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
                    prim.syph.int = 60,
                    seco.syph.int = 120,
@@ -59,9 +59,9 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0,
                    stihighrisktest.coverage = 0.5,
 
-                   prep.start = 2601,
-                   stitest.start = 5000,
-                   ept.start = 5000,
+                   prep.start = 1600,
+                   stitest.start = 1600,
+                   ept.start = 1600,
 
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months

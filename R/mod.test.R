@@ -164,7 +164,8 @@ test_sti_msm <- function(dat, at) {
     stitest.active.int <- dat$param$stitest.active.int
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
-    
+    stitest.elig.model <- dat$param$stitest.elig.model
+
     # Eligibility and trajectory
     # Base eligibility
     idsEligTest <- which(active == 1)
@@ -173,25 +174,97 @@ test_sti_msm <- function(dat, at) {
     stitestind1 <- dat$attr$stitest.ind.active
     
     # High-risk indications
-    stitestind2 <- dat$attr$stitest.ind.sti
-    stitestind3 <- dat$attr$stitest.ind.recentpartners
-    stitestind4 <- dat$attr$stitest.ind.newpartners
-    stitestind5 <- dat$attr$stitest.ind.concurrpartner
-    stitestind6 <- dat$attr$stitest.ind.partnersti
-    stitestind7 <- dat$attr$stitest.ind.uai.nmain
-    stitestind8 <- dat$attr$stitest.ind.uai.any
+
     
     # Annual - testing trajectory update
     activeindwindow <- at - stitest.active.int
     idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
     
     # High-risk - testing trajectory update
-    highriskindwindow <- at - sti.highrisktest.int
-    idshighrisk <- which((at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
-                             (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
-                             (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow) |
-                             (at - stitestind8 <= highriskindwindow))
+    hrindwindow <- at - sti.highrisktest.int
     
+    #STI testing eligibility scenarios
+    
+    if (stitest.elig.model == "all") {
+        c1 <- dat$attr$stitest.ind.sti
+        c2 <- dat$attr$stitest.ind.recentpartners
+        c3 <- dat$attr$stitest.ind.newpartners
+        c4 <- dat$attr$stitest.ind.concurrpartner
+        c5 <- dat$attr$stitest.ind.partnersti
+        c6 <- dat$attr$stitest.ind.uai.nmain
+        c7 <- dat$attr$stitest.ind.uai.any
+        
+        idshighrisk <- which((at - c1 <= hrindwindow) | (at - c2 <= hrindwindow) |
+                             (at - c3 <= hrindwindow) | (at - c4 <= hrindwindow) |
+                             (at - c5 <= hrindwindow) | (at - c6 <= hrindwindow) |
+                             (at - c7 <= hrindwindow))
+        
+        idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                            (at - c1 > hrindwindow) & (at - c2 > hrindwindow) &
+                            (at - c3 > hrindwindow) & (at - c4 > hrindwindow) &
+                            (at - c5 > hrindwindow) & (at - c6 > hrindwindow) &
+                            (at - c7 > hrindwindow)))
+        
+    } else if (stitest.elig.model != "all") {
+        
+        if (substr(stitest.elig.model, 1, 3) == "cdc") {
+            
+            if (stitest.elig.model == "cdc1") {
+                c1 <- dat$attr$stitest.ind.recentpartners
+                c2 <- dat$attr$stitest.ind.newpartners
+                
+                idshighrisk <- which((at - c1) <= hrindwindow |
+                                     (at - c2) <= hrindwindow)
+                
+                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                                        (at - c1 > hrindwindow) & 
+                                        (at - c2 > hrindwindow)))
+            
+            } else if (stitest.elig.model == "cdc2") {
+                c1 <- dat$attr$stitest.ind.sti
+                c2 <- dat$attr$stitest.ind.recentpartners
+                c3 <- dat$attr$stitest.ind.newpartners
+                
+                idshighrisk <- which((at - c1) <= hrindwindow |
+                                     (at - c2) <= hrindwindow |
+                                     (at - c3) <= hrindwindow)
+                
+                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                                        (at - c1 > hrindwindow) & 
+                                        (at - c2 > hrindwindow) &
+                                        (at - c3 > hrindwindow)))
+                
+            } else if (stitest.elig.model == "cdc3") {
+                c1 <- dat$attr$stitest.ind.uai.nmain
+                c2 <- dat$attr$stitest.ind.uai.any
+                
+                idshighrisk <- which((at - c1) <= hrindwindow |
+                                     (at - c2) <= hrindwindow)
+                
+                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                                        (at - c1 > hrindwindow) & 
+                                        (at - c2 > hrindwindow)))
+                
+            } else if (stitest.elig.model == "cdc4") {
+                c1 <- dat$attr$stitest.ind.concurrpartner
+                c2 <- dat$attr$stitest.ind.partnersti
+                
+                idshighrisk <- which((at - c1) <= hrindwindow |
+                                     (at - c2) <= hrindwindow)
+
+                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                                        (at - c1 > hrindwindow) & 
+                                        (at - c2 > hrindwindow)))
+    } else {
+                c1 <- dat$attr$stitest.ind.[[stitest.elig.model]]
+        
+                idshighrisk <- which((at - c1) <= hrindwindow)
+        
+                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            }    
+        }
+    }
     ## Initiation
     # Testing coverage for annual ----------------------------------------------------------------
     
@@ -242,16 +315,9 @@ test_sti_msm <- function(dat, at) {
     }   
     
     
-
     ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
     
     # Reduce testing trajectory to annual if no longer indicated for more frequent high-risk testing
-    idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
-        (at - stitestind2 <= highriskindwindow) | (at - stitestind3 <= highriskindwindow) |
-        (at - stitestind4 <= highriskindwindow) | (at - stitestind5 <= highriskindwindow) |
-        (at - stitestind6 <= highriskindwindow) | (at - stitestind7 <= highriskindwindow) |
-        (at - stitestind8 <= highriskindwindow)))
-    
     dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
     tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- 1
     

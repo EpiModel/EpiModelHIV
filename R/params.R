@@ -352,6 +352,8 @@
 #'        stage syphilis infection.
 #' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested        
 #' @param sti.highrisktest.int Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers
+#' @param stitest.elig.model Modeling approach for determining who is eligible for high-risk
+#'        STI testing. Current options are limited to: \code{"all"}.
 #' @param stianntest.coverage The proportion of the eligible population who are starting annual STI testing once they become eligible.
 #'        This is not inclusive of those who are simultaneously indicated for more frequent testing.
 #' @param stianntest.cov.method The method for calculating STI annual testing, with options of \code{"curr"} to base the numerator 
@@ -605,6 +607,7 @@ param_msm <- function(nwstats,
                       
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
+                      stitest.elig.model = "all",
                       stianntest.coverage = 1,
                       stianntest.cov.method = "curr",
                       stianntest.cov.rate = 1,

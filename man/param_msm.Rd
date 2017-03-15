@@ -78,11 +78,12 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.15,
   syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
   syph.tert.asympt.prob.tx = 0, tst.rect.sti.rr = 1,
-  sti.highrisktest.int = 182, stianntest.coverage = 1,
-  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
-  stihighrisktest.coverage = 1, stihighrisktest.cov.method = "curr",
-  stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
-  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  sti.highrisktest.int = 182, stitest.elig.model = "all",
+  stianntest.coverage = 1, stianntest.cov.method = "curr",
+  stianntest.cov.rate = 1, stihighrisktest.coverage = 1,
+  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
+  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
   hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
@@ -608,6 +609,9 @@ stage syphilis infection.}
 \item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested}
 
 \item{sti.highrisktest.int}{Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers}
+
+\item{stitest.elig.model}{Modeling approach for determining who is eligible for high-risk
+STI testing. Current options are limited to: \code{"all"}.}
 
 \item{stianntest.coverage}{The proportion of the eligible population who are starting annual STI testing once they become eligible.
 This is not inclusive of those who are simultaneously indicated for more frequent testing.}
