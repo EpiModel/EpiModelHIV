@@ -273,12 +273,6 @@ riskhist_msm <- function(dat, at) {
                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
                                             eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3), , drop = FALSE]
   
-  rGC.tx.prep <- dat$attr$rGC.tx.prep
-  uGC.tx.prep <- dat$attr$uGC.tx.prep
-  rCT.tx.prep <- dat$attr$rCT.tx.prep
-  uCT.tx.prep <- dat$attr$uCT.tx.prep
-  syph.tx.prep <- dat$attr$syph.tx.prep
-  
   idspartlistsept1.main <- part.listept1.main[, 2]
   idspartlistsept1.casl <- part.listept1.casl[, 2]
   idspartlistsept1.inst <- part.listept1.inst[, 2]

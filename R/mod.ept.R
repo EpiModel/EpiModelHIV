@@ -47,7 +47,7 @@ ept_msm <- function(dat, at) {
     
     ## Stoppage (Index) ---------------------------------------------------------------
     
-    # Index no longer eligible( > 60 days since treatment time)
+    # Index no longer eligible(> 60 days since treatment time)
     idseptExpired <- which(at - eptEligdate > ept.risk.int)
     
     # Death
@@ -56,6 +56,7 @@ ept_msm <- function(dat, at) {
     # Reset EPT status
     idsStp <- c(idseptExpired, idsStpDth)
     eptStat[idsStp] <- NA
+    eptElig[idsStp] <- NA
     
     ## Initiation (index) -------------------------------------------------------------
     
