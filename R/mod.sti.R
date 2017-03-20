@@ -1139,6 +1139,7 @@ sti_tx <- function(dat, at) {
       dat$epi$rCTasympttests[at] <- 0
       dat$epi$uCTasympttests[at] <- 0
       dat$epi$syphasympttests[at] <- 0
+      dat$epi$totalstiasympttests[at] <- 0
   
   }
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),

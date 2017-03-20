@@ -498,6 +498,7 @@ test_sti_msm <- function(dat, at) {
         dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$uCTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$totalstiasympttests <- rep(0, length(dat$control$nsteps))
     }
     
     # Number of tests for asymptomatic
@@ -508,6 +509,9 @@ test_sti_msm <- function(dat, at) {
     dat$epi$rCTasympttests[at] <- length(tst.rct)
     dat$epi$uCTasympttests[at] <- length(tst.uct)
     dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
+    
+    dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
+    dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.nprep))
     
     return(dat)
 }
