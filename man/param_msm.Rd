@@ -59,31 +59,35 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   ept.provision.partner.casl = 0.5, ept.provision.partner.inst = 0.5,
   ept.uptake.partner.main = 0.5, ept.uptake.partner.casl = 0.5,
   ept.uptake.partner.inst = 0.5, ept.gc.success = 1, ept.ct.success = 1,
-  rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, rgc.tprob = 0.39, ugc.tprob = 0.29,
-  rct.tprob = 0.19, uct.tprob = 0.14, usyph.tprob = 0.04883012,
-  rsyph.tprob = 0.03829557, syph.earlat.rr = 0.5, syph.late.rr = 0,
-  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
-  uct.sympt.prob = 0.58, syph.prim.sympt.prob = 0.5,
-  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
-  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
-  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
-  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
-  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
-  ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
-  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0.9,
-  ct.asympt.prob.tx = 0.85, syph.prim.sympt.prob.tx = 0.35,
-  syph.prim.asympt.prob.tx = 0, syph.seco.sympt.prob.tx = 0.6,
-  syph.seco.asympt.prob.tx = 0, syph.earlat.prob.tx = 0.15,
-  syph.latelat.prob.tx = 0.1, syph.tert.sympt.prob.tx = 0.9,
-  syph.tert.asympt.prob.tx = 0, tst.rect.sti.rr = 1,
-  sti.highrisktest.int = 182, stitest.elig.model = "all",
-  stianntest.coverage = 1, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.coverage = 1,
-  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  ept.provision.short.main.rr = 1, ept.provision.short.casl.rr = 1,
+  ept.provision.short.inst.rr = 1, ept.provision.med.main.rr = 1,
+  ept.provision.med.casl.rr = 1, ept.provision.med.inst.rr = 1,
+  ept.provision.long.main.rr = 1, ept.provision.long.casl.rr = 1,
+  ept.provision.long.inst.rr = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.39,
+  ugc.tprob = 0.29, rct.tprob = 0.19, uct.tprob = 0.14,
+  usyph.tprob = 0.04883012, rsyph.tprob = 0.03829557,
+  syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
+  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
+  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
+  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
+  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
+  syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
+  syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
+  gc.asympt.prob.tx = 0.9, ct.asympt.prob.tx = 0.85,
+  syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 0,
+  syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 0,
+  syph.earlat.prob.tx = 0.15, syph.latelat.prob.tx = 0.1,
+  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0,
+  tst.rect.sti.rr = 1, sti.highrisktest.int = 182,
+  stitest.elig.model = "all", stianntest.coverage = 1,
+  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
+  stihighrisktest.coverage = 1, stihighrisktest.cov.method = "curr",
+  stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
   hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
   hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
@@ -479,9 +483,27 @@ their eligibility, with 1 equal to instant start.}
 
 \item{ept.uptake.partner.inst}{The likelihood of a partner taking medication provided to them by a one-off index partner}
 
-\item{ept.gc.success}{The probability of effective treatment for GC in a partner give EPT medication}
+\item{ept.gc.success}{The probability of effective treatment for GC in a partner given EPT medication}
 
-\item{ept.ct.success}{The probability of effective treatment for CT in a partner give EPT medication}
+\item{ept.ct.success}{The probability of effective treatment for CT in a partner given EPT medication}
+
+\item{ept.provision.short.main.rr}{Relative risk for provision to a main partner with whom the last sexual act was a short time ago (1-20 days)}
+
+\item{ept.provision.short.casl.rr}{Relative risk for provision to a casual partner with whom the last sexual act was a short time ago (21-40 days)}
+
+\item{ept.provision.short.inst.rr}{Relative risk for provision to a one-off partner with whom the last sexual act was a short time ago (41-60 days)}
+
+\item{ept.provision.med.main.rr}{Relative risk for provision to a main partner with whom the last sexual act was a medium time ago (1-20 days)}
+
+\item{ept.provision.med.casl.rr}{Relative risk for provision to a casual partner with whom the last sexual act was a medium time ago (21-40 days)}
+
+\item{ept.provision.med.inst.rr}{Relative risk for provision to a one-off partner with whom the last sexual act was a medium time ago (41-60 days)}
+
+\item{ept.provision.long.main.rr}{Relative risk for provision to a main partner with whom the last sexual act was a long time ago (1-20 days)}
+
+\item{ept.provision.long.casl.rr}{Relative risk for provision to a casual partner with whom the last sexual act was a long time ago (21-40 days)}
+
+\item{ept.provision.long.inst.rr}{Relative risk for provision to a one-off partner with whom the last sexual act was a long time ago (41-60 days)}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use

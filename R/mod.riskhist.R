@@ -57,6 +57,15 @@ riskhist_msm <- function(dat, at) {
   ept.uptake.main <- dat$param$ept.uptake.partner.main
   ept.uptake.casl <- dat$param$ept.uptake.partner.casl
   ept.uptake.inst <- dat$param$ept.uptake.partner.inst
+  ept.provision.short.main.rr <- dat$param$ept.provision.short.main.rr
+  ept.provision.short.casl.rr <- dat$param$ept.provision.short.casl.rr
+  ept.provision.short.inst.rr <- dat$param$ept.provision.short.inst.rr
+  ept.provision.med.main.rr <- dat$param$ept.provision.med.main.rr
+  ept.provision.med.casl.rr <- dat$param$ept.provision.med.casl.rr
+  ept.provision.med.inst.rr <- dat$param$ept.provision.med.inst.rr
+  ept.provision.long.main.rr <- dat$param$ept.provision.long.main.rr
+  ept.provision.long.casl.rr <- dat$param$ept.provision.long.casl.rr
+  ept.provision.long.inst.rr <- dat$param$ept.provision.long.inst.rr
 
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
@@ -252,80 +261,226 @@ riskhist_msm <- function(dat, at) {
   part.list <- part.list[which(active[part.list[, 1]] == 1 & active[part.list[, 2]] == 1), , drop = FALSE]
   
   # Partner 1 was recently treated, so partner 2 would be eligible to be treated through EPT if not currently being treated for anything
-  part.listept1.main <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+  part.listept1.main.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1), , drop = FALSE]
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) <= 20), , drop = FALSE]
   
-  part.listept1.casl <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+  part.listept1.casl.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2), , drop = FALSE]
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) <= 20), , drop = FALSE]
   
-  part.listept1.inst <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+  part.listept1.inst.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3), , drop = FALSE]
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+
+  part.listept1.main.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 21 &
+                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
   
-  idspartlistsept1.main <- part.listept1.main[, 2]
-  idspartlistsept1.casl <- part.listept1.casl[, 2]
-  idspartlistsept1.inst <- part.listept1.inst[, 2]
+  part.listept1.casl.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 21 &
+                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  
+  part.listept1.inst.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                             eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 21 &
+                                             (at - part.list[, 5]) <= 40), , drop = FALSE]
+  
+  part.listept1.main.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                             eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 41 &
+                                             (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  part.listept1.casl.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 41 &
+                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  part.listept1.inst.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 41 &
+                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  idspartlistsept1.main.short <- part.listept1.main.short[, 2]
+  idspartlistsept1.casl.short <- part.listept1.casl.short[, 2]
+  idspartlistsept1.inst.short <- part.listept1.inst.short[, 2]
+  
+  idspartlistsept1.main.med <- part.listept1.main.med[, 2]
+  idspartlistsept1.casl.med <- part.listept1.casl.med[, 2]
+  idspartlistsept1.inst.med <- part.listept1.inst.med[, 2]
+  
+  idspartlistsept1.main.long <- part.listept1.main.long[, 2]
+  idspartlistsept1.casl.long <- part.listept1.casl.long[, 2]
+  idspartlistsept1.inst.long <- part.listept1.inst.long[, 2]
   
   
   # Partner 2 was recently treated, so partner 1 would be eligible to be treated through EPT if not currently being treated for anything
-  part.listept2.main <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+  part.listept2.main.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1), , drop = FALSE]
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) <= 20), , drop = FALSE]
   
-  part.listept2.casl <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+  part.listept2.casl.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2), , drop = FALSE]
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) <= 20), , drop = FALSE]
   
-  part.listept2.inst <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+  part.listept2.inst.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3), , drop = FALSE]
+                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) <= 20), , drop = FALSE]
   
-  idspartlistsept2.main <- part.listept2.main[, 1]
-  idspartlistsept2.casl <- part.listept2.casl[, 1]
-  idspartlistsept2.inst <- part.listept2.inst[, 1]
+  part.listept2.main.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 21 &
+                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  
+  part.listept2.casl.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 21 &
+                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  
+  part.listept2.inst.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 21 &
+                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  
+  part.listept2.main.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 41 &
+                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  part.listept2.casl.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 41 &
+                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  part.listept2.inst.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 41 &
+                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  
+  idspartlistsept2.main.short <- part.listept2.main.short[, 1]
+  idspartlistsept2.casl.short <- part.listept2.casl.short[, 1]
+  idspartlistsept2.inst.short <- part.listept2.inst.short[, 1]
+  
+  idspartlistsept2.main.med <- part.listept2.main.med [, 1]
+  idspartlistsept2.casl.med <- part.listept2.casl.med [, 1]
+  idspartlistsept2.inst.med <- part.listept2.inst.med [, 1]
+  
+  idspartlistsept2.main.long <- part.listept2.main.long[, 1]
+  idspartlistsept2.casl.long <- part.listept2.casl.long[, 1]
+  idspartlistsept2.inst.long <- part.listept2.inst.long[, 1]
   
   # All EPT eligible IDs (partners of index)
-  idsept <- unique(c(idspartlistsept1.main, idspartlistsept1.casl, idspartlistsept1.inst, 
-                     idspartlistsept2.main, idspartlistsept2.casl, idspartlistsept2.inst))
-  idsept.main <- unique(c(idspartlistsept1.main, idspartlistsept2.main))
-  idsept.casl <- unique(c(idspartlistsept1.casl, idspartlistsept2.casl))
-  idsept.inst <- unique(c(idspartlistsept1.inst, idspartlistsept2.inst))
+  idsept <- unique(c(idspartlistsept1.main.short, idspartlistsept1.casl.short, idspartlistsept1.inst.short, 
+                     idspartlistsept2.main.short, idspartlistsept2.casl.short, idspartlistsept2.inst.short,
+                     idspartlistsept1.main.med, idspartlistsept1.casl.med, idspartlistsept1.inst.med, 
+                     idspartlistsept2.main.med, idspartlistsept2.casl.med, idspartlistsept2.inst.med,
+                     idspartlistsept1.main.long, idspartlistsept1.casl.long, idspartlistsept1.inst.long, 
+                     idspartlistsept2.main.long, idspartlistsept2.casl.long, idspartlistsept2.inst.long))
+  
+  idsept.main.short <- unique(c(idspartlistsept1.main.short, idspartlistsept2.main.short))
+  idsept.casl.short <- unique(c(idspartlistsept1.casl.short, idspartlistsept2.casl.short))
+  idsept.inst.short <- unique(c(idspartlistsept1.inst.short, idspartlistsept2.inst.short))
+  
+  idsept.main.med <- unique(c(idspartlistsept1.main.med, idspartlistsept2.main.med))
+  idsept.casl.med <- unique(c(idspartlistsept1.casl.med, idspartlistsept2.casl.med))
+  idsept.inst.med <- unique(c(idspartlistsept1.inst.med, idspartlistsept2.inst.med))
+ 
+  idsept.main.long <- unique(c(idspartlistsept1.main.long, idspartlistsept2.main.long))
+  idsept.casl.long <- unique(c(idspartlistsept1.casl.long, idspartlistsept2.casl.long))
+  idsept.inst.long <- unique(c(idspartlistsept1.inst.long, idspartlistsept2.inst.long))
   
   ## Provision to and uptake of partners (to be treated at next time step)
-  idsprovided.main <- idsept.main[which(rbinom(length(idsept.main), 1,
-                                               ept.provision.main) == 1)]
-  idsprovided.casl <- idsept.casl[which(rbinom(length(idsept.casl), 1,
-                                               ept.provision.casl) == 1)]
-  idsprovided.inst <- idsept.inst[which(rbinom(length(idsept.inst), 1,
-                                               ept.provision.inst) == 1)]
-  idsprovided_ept <- unique(c(idsprovided.main, idsprovided.casl, idsprovided.inst))
+  idsprovided.main.short <- idsept.main.short[which(rbinom(length(idsept.main.short), 1,
+                                               ept.provision.main * ept.provision.short.main.rr) == 1)]
+  idsprovided.casl.short <- idsept.casl.short[which(rbinom(length(idsept.casl.short), 1,
+                                               ept.provision.casl * ept.provision.short.casl.rr) == 1)]
+  idsprovided.inst.short <- idsept.inst.short[which(rbinom(length(idsept.inst.short), 1,
+                                               ept.provision.inst * ept.provision.short.inst.rr) == 1)]
+  idsprovided.main.med <- idsept.main.med[which(rbinom(length(idsept.main.med), 1,
+                                               ept.provision.main * ept.provision.med.main.rr) == 1)]
+  idsprovided.casl.med <- idsept.casl.med[which(rbinom(length(idsept.casl.med), 1,
+                                               ept.provision.casl * ept.provision.med.casl.rr) == 1)]
+  idsprovided.inst.med <- idsept.inst.med[which(rbinom(length(idsept.inst.med), 1,
+                                               ept.provision.inst * ept.provision.med.inst.rr) == 1)]
+  idsprovided.main.long <- idsept.main.long[which(rbinom(length(idsept.main.long), 1,
+                                               ept.provision.main * ept.provision.long.main.rr) == 1)]
+  idsprovided.casl.long <- idsept.casl.long[which(rbinom(length(idsept.casl.long), 1,
+                                               ept.provision.casl * ept.provision.long.casl.rr) == 1)]
+  idsprovided.inst.long <- idsept.inst.long[which(rbinom(length(idsept.inst.long), 1,
+                                               ept.provision.inst * ept.provision.long.inst.rr) == 1)]
+  
+  idsprovided_ept <- unique(c(idsprovided.main.short, idsprovided.casl.short, idsprovided.inst.short,
+                              idsprovided.main.med, idsprovided.casl.med, idsprovided.inst.med,
+                              idsprovided.main.long, idsprovided.casl.long, idsprovided.inst.long))
+  
+  idsprovided.main_ept <- unique(c(idsprovided.main.short, idsprovided.main.med, idsprovided.main.long))
+  
+  idsprovided.casl_ept <- unique(c(idsprovided.casl.short, idsprovided.casl.med, idsprovided.casl.long))
+  
+  idsprovided.inst_ept <- unique(c(idsprovided.inst.short, idsprovided.inst.med, idsprovided.inst.long))
   
   # Uptake
-  idsept_tx.main <- idsprovided.main[which(rbinom(length(idsprovided.main), 1,
+  idsept_tx.main <- idsprovided.main_ept[which(rbinom(length(idsprovided.main_ept), 1,
                                                   ept.uptake.main) == 1)]
-  idsept_tx.casl <- idsprovided.casl[which(rbinom(length(idsprovided.casl), 1,
+  idsept_tx.casl <- idsprovided.casl_ept[which(rbinom(length(idsprovided.casl_ept), 1,
                                                   ept.uptake.casl) == 1)]
-  idsept_tx.inst <- idsprovided.inst[which(rbinom(length(idsprovided.inst), 1,
+  idsept_tx.inst <- idsprovided.inst_ept[which(rbinom(length(idsprovided.inst_ept), 1,
                                                   ept.uptake.inst) == 1)]
   idsuptake_ept <- unique(c(idsept_tx.main, idsept_tx.casl, idsept_tx.inst))
   
