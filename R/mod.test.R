@@ -177,11 +177,11 @@ test_sti_msm <- function(dat, at) {
 
     
     # Annual - testing trajectory update
-    activeindwindow <- at - stitest.active.int
+    activeindwindow <- stitest.active.int
     idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
     
     # High-risk - testing trajectory update
-    hrindwindow <- at - sti.highrisktest.int
+    hrindwindow <- sti.highrisktest.int
     
     #STI testing eligibility scenarios
     
