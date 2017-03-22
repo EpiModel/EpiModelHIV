@@ -10,16 +10,16 @@ data(st)
 est
 st
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.11, # 1.11889726, # was 1.13
-
-                   rsyph.tprob = 0.055, # 0.050,
-                   usyph.tprob = 0.040, #0.038,
-
-                   hiv.rsyph.rr = 2.70,
-                   hiv.usyph.rr = 1.70,
-                   syph.rhiv.rr = 3.00,
-                   syph.uhiv.rr = 2.00,
-
+                   ai.scale = 1.11,
+                   
+                   rsyph.tprob = 0.04668348,
+                   usyph.tprob = 0.03598792,
+                   
+                   hiv.rsyph.rr = 2.98876572, 
+                   hiv.usyph.rr = 1.74566180,
+                   syph.rhiv.rr = 6.54189295,
+                   syph.uhiv.rr = 5.09641658,
+                   
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
                    prim.syph.int = 60,
@@ -29,39 +29,43 @@ param <- param_msm(nwstats = st,
                    latelatelat.syph.int = 20 * 52 * 7,
                    tert.syph.int = 20 * 52 * 7,
                    syph.tert.prog.prob = 0.15 / (52 * 7 * 20),
-
-                   rgc.tprob = 0.41,
-                   ugc.tprob = 0.31,
-                   rct.tprob = 0.21,
-                   uct.tprob = 0.15,
-
-                   hiv.rgc.rr = 2.50, #2.780673,
-                   hiv.ugc.rr = 1.50, #1.732363,
-                   hiv.rct.rr = 2.50, #2.780673,
-                   hiv.uct.rr = 1.50, #1.732363,
-
+                   
+                   rgc.tprob = 0.4133300,
+                   ugc.tprob = 0.31404720,
+                   rct.tprob = 0.1907554,
+                   uct.tprob = 0.16394697,
+                   
+                   hiv.rgc.rr = 2.30,
+                   hiv.ugc.rr = 1.30,
+                   hiv.rct.rr = 2.30,
+                   hiv.uct.rr = 1.30,
+                   
                    # adjust prim and seco from 0.1385 each
                    stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-
+                   
                    syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                    syph.prim.asympt.prob.tx = 0.00,
-                   syph.seco.sympt.prob.tx = 0.65, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                   syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                    syph.seco.asympt.prob.tx = 0.00,
-                   syph.earlat.prob.tx = 0.17136638, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.latelat.prob.tx = 0.15437417,
+                   syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                   syph.latelat.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 0.90,
                    syph.tert.asympt.prob.tx = 0.00,
+                   
+                   hivdx.syph.sympt.tx.rr = 1.45,
 
                    prep.coverage = 0.4,
                    ept.coverage = 0.4,
 
-                   stianntest.coverage = 0,
-                   stihighrisktest.coverage = 0.5,
+                   stianntest.coverage = 0.5,
+                   stihighrisktest.coverage = 0.8,
 
-                   prep.start = 1600,
-                   stitest.start = 1600,
-                   ept.start = 1600,
+                   prep.start = 2600,
+                   stitest.start = 2100,
+                   ept.start = 2600,
+                   
+                   stitest.elig.model = "all",
 
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
@@ -69,12 +73,12 @@ param <- param_msm(nwstats = st,
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
                  prev.W = 0.10,
-                 prev.ugc = 0.015,
-                 prev.rgc = 0.015,
-                 prev.uct = 0.015,
-                 prev.rct = 0.015,
-                 prev.syph.B = 0.02,
-                 prev.syph.W = 0.02)
+                 prev.ugc = 0.025,
+                 prev.rgc = 0.025,
+                 prev.uct = 0.025,
+                 prev.rct = 0.025,
+                 prev.syph.B = 0.04,
+                 prev.syph.W = 0.04)
 
 control <- control_msm(simno = 0.253,
                        nsteps = 2600,

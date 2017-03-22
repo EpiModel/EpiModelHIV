@@ -140,19 +140,23 @@ test_sti_msm <- function(dat, at) {
     rCT <- dat$attr$rCT
     uCT <- dat$attr$uCT
     
+    last.neg.test.rgc <- dat$attr$last.neg.test.rgc
+    last.neg.test.ugc <- dat$attr$last.neg.test.ugc
+    last.neg.test.rct <- dat$attr$last.neg.test.rct
+    last.neg.test.uct <- dat$attr$last.neg.test.uct
+    last.neg.test.syph <- dat$attr$last.neg.test.syph
+    lastdiag.time.gc <- dat$attr$lastdiag.time.gc
+    lastdiag.time.ct <- dat$attr$lastdiag.time.ct
+    lastdiag.time.syph <- dat$attr$lastdiag.time.syph
+    
     role.class <- dat$attr$role.class
     stage.syph <- dat$attr$stage.syph
+    
+    tt.traj.ct <- dat$attr$tt.traj.ct
+    tt.traj.gc <- dat$attr$tt.traj.gc
+    tt.traj.syph <- dat$attr$tt.traj.syph
      
     prepStat <- dat$attr$prepStat
-    
-    tt.traj.syph <- dat$attr$tt.traj.syph
-    tt.traj.gc <- dat$attr$tt.traj.gc
-    tt.traj.ct <- dat$attr$tt.traj.ct
-    
-    eptElig <- dat$attr$eptElig
-    eptStat <- dat$attr$eptStat
-    eptEligdate <- dat$attr$eptEligdate
-    eptStartTime <- dat$attr$eptStartTime
 
     # Parameters
     stianntest.coverage <- dat$param$stianntest.coverage
@@ -160,7 +164,6 @@ test_sti_msm <- function(dat, at) {
     stihighrisktest.coverage <- dat$param$stihighrisktest.coverage
     stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
     testing.pattern.sti <- dat$param$testing.pattern.sti
-    prep.tst.int <- dat$param$prep.tst.int
     stitest.active.int <- dat$param$stitest.active.int
     sti.highrisktest.int <- dat$param$sti.highrisktest.int
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
@@ -358,8 +361,8 @@ test_sti_msm <- function(dat, at) {
          elig.syph.ann <- which(tt.traj.syph == 1 &
                                     (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                      prepStat == 0)
-             rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
-             tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
+         rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
+         tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
          elig.syph.highrisk <- which(tt.traj.syph == 2 &
                                     (diag.status.syph == 0 | is.na(diag.status.syph)) &
@@ -442,54 +445,53 @@ test_sti_msm <- function(dat, at) {
          tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
      }
      
-    
     # Syphilis non-PrEP testing
     tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 & stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
     tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
     
     # GC non-PrEP testing
-    tst.rgc <- tst.gc.nprep[dat$attr$role.class %in% c("R", "V")]
+    tst.rgc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("R", "V")]
     tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
-    tst.ugc <- tst.gc.nprep[dat$attr$role.class %in% c("I", "V")]
-    tst.rgc.pos <- tst.rgc[rGC == 1]
-    tst.ugc.pos <- tst.ugc[uGC == 1]
+    tst.ugc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("I", "V")]
+    tst.rgc.pos <- tst.rgc[rGC[tst.rgc] == 1]
+    tst.ugc.pos <- tst.ugc[uGC[tst.ugc] == 1]
     tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
     tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
     tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
     tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
     
     # CT non-PrEP testing
-    tst.rct <- tst.ct.nprep[dat$attr$role.class %in% c("R", "V")]
+    tst.rct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("R", "V")]
     tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
-    tst.uct <- tst.ct.nprep[dat$attr$role.class %in% c("I", "V")]
-    tst.rct.pos <- tst.rct[rCT == 1]
-    tst.uct.pos <- tst.uct[uCT == 1]
+    tst.uct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("I", "V")]
+    tst.rct.pos <- tst.rct[rCT[tst.rct] == 1]
+    tst.uct.pos <- tst.uct[uCT[tst.uct] == 1]
     tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
     tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
     tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
     tst.ct.neg <- unique(c(tst.rct.neg, tst.uct.neg))
     
     # Syphilis Attributes
-    dat$attr$last.neg.test.syph[tst.syph.neg] <- at
-    dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
-    dat$attr$diag.status.syph[tst.syph.pos] <- 1
-    dat$attr$lastdiag.time.syph[tst.syph.pos] <- at
+    last.neg.test.syph[tst.syph.neg] <- at
+    last.neg.test.syph[tst.syph.pos] <- NA
+    diag.status.syph[tst.syph.pos] <- 1
+    lastdiag.time.syph[tst.syph.pos] <- at
     
     # GC Attributes
-    dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
-    dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
-    dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
-    dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
-    dat$attr$diag.status.gc[tst.gc.pos] <- 1
-    dat$attr$lastdiag.time.gc[tst.gc.pos] <- at
+    last.neg.test.rgc[tst.rgc.neg] <- at
+    last.neg.test.ugc[tst.ugc.neg] <- at
+    last.neg.test.rgc[tst.rgc.pos] <- NA
+    last.neg.test.ugc[tst.ugc.pos] <- NA
+    diag.status.gc[tst.gc.pos] <- 1
+    lastdiag.time.gc[tst.gc.pos] <- at
     
     # CT Attributes
-    dat$attr$last.neg.test.rct[tst.rct.neg] <- at
-    dat$attr$last.neg.test.uct[tst.uct.neg] <- at
-    dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
-    dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
-    dat$attr$diag.status.ct[tst.ct.pos] <- 1
-    dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
+    last.neg.test.rct[tst.rct.neg] <- at
+    last.neg.test.uct[tst.uct.neg] <- at
+    last.neg.test.rct[tst.rct.pos] <- NA
+    last.neg.test.uct[tst.uct.pos] <- NA
+    diag.status.ct[tst.ct.pos] <- 1
+    lastdiag.time.ct[tst.ct.pos] <- at
     
     if (is.null(dat$epi$num.asympt.tx)) {
         dat$epi$rGCasympttests <- rep(0, length(dat$control$nsteps))
@@ -512,6 +514,32 @@ test_sti_msm <- function(dat, at) {
     
     dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
     dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.nprep))
+    
+    
+    ## Output --------------------------------------------------------------------
+    
+    # Attributes
+    
+    # Syphilis Attributes
+    dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$diag.status.syph <- diag.status.syph
+    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    dat$attr$tt.traj.syph <- tt.traj.syph
+    
+    # GC Attributes
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$diag.status.gc <- diag.status.gc
+    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$tt.traj.gc <- tt.traj.gc
+    
+    # CT Attributes
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct
+    dat$attr$diag.status.ct <- diag.status.ct
+    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$tt.traj.ct <- tt.traj.ct    
+    
     
     return(dat)
 }
