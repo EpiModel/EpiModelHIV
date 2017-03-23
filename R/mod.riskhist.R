@@ -236,15 +236,15 @@ riskhist_msm <- function(dat, at) {
   dat$attr$tt.traj.syph <- tt.traj.syph
   
   # Update epi to show prevalence of STI testing indications
-  if (at >= dat$param$riskh.stitest.start) {
-      dat$epi$stiactiveind[at] <- length(idsactive) / dat$epi$num[at]
-      dat$epi$newpartner[at] <- length(idsnewpartners) / dat$epi$num[at]
-      dat$epi$recentpartners[at] <- length(idsrecentpartners) / dat$epi$num[at]
-      dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) / dat$epi$num[at]
-      dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) / dat$epi$num[at]
-      dat$epi$uai.nmain[at] <- length(uai.nmain) / dat$epi$num[at]
-      dat$epi$uai.any[at] <- length(uai.any) / dat$epi$num[at]
-      dat$epi$recentSTI[at] <- length(idsSTI) / dat$epi$num[at]
+  if (at >= dat$param$stitest.start) {
+      dat$epi$stiactiveind[at] <- length(idsactive) / sum(active == 1, na.rm = TRUE)
+      dat$epi$newpartner[at] <- length(idsnewpartners) / sum(active == 1, na.rm = TRUE)
+      dat$epi$recentpartners[at] <- length(idsrecentpartners) / sum(active == 1, na.rm = TRUE)
+      dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) / sum(active == 1, na.rm = TRUE)
+      dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) / sum(active == 1, na.rm = TRUE)
+      dat$epi$uai.nmain[at] <- length(uai.nmain) / sum(active == 1, na.rm = TRUE)
+      dat$epi$uai.any[at] <- length(uai.any) / sum(active == 1, na.rm = TRUE)
+      dat$epi$recentSTI[at] <- length(idsSTI) / sum(active == 1, na.rm = TRUE)
   }
   
   
@@ -353,7 +353,7 @@ riskhist_msm <- function(dat, at) {
   
   part.listept2.casl.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                             ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
                                             eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) <= 20), , drop = FALSE]
@@ -375,7 +375,7 @@ riskhist_msm <- function(dat, at) {
   
   part.listept2.casl.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                           ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
                                              (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                              (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
                                           eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 21 &
@@ -399,7 +399,7 @@ riskhist_msm <- function(dat, at) {
   
   part.listept2.casl.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
                                           ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA)|
+                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
                                              (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
                                              (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
                                           eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 41 &
@@ -417,9 +417,9 @@ riskhist_msm <- function(dat, at) {
   idspartlistsept2.casl.short <- part.listept2.casl.short[, 1]
   idspartlistsept2.inst.short <- part.listept2.inst.short[, 1]
   
-  idspartlistsept2.main.med <- part.listept2.main.med [, 1]
-  idspartlistsept2.casl.med <- part.listept2.casl.med [, 1]
-  idspartlistsept2.inst.med <- part.listept2.inst.med [, 1]
+  idspartlistsept2.main.med <- part.listept2.main.med[, 1]
+  idspartlistsept2.casl.med <- part.listept2.casl.med[, 1]
+  idspartlistsept2.inst.med <- part.listept2.inst.med[, 1]
   
   idspartlistsept2.main.long <- part.listept2.main.long[, 1]
   idspartlistsept2.casl.long <- part.listept2.casl.long[, 1]

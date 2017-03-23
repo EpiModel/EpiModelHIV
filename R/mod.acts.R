@@ -118,7 +118,7 @@ acts_msm <- function(dat, at) {
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
   # Set most recent active edge as today for both partners from an active edge list
-  dat$attr$sexactive[which(dat$attr$uid %in% dat$temp$el[, 1:2])] <- at
+  dat$attr$sexactive[dat$temp$el[, 1:2]] <- at
   
   return(dat)
 }

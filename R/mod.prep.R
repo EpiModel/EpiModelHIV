@@ -18,12 +18,19 @@ prep_msm <- function(dat, at) {
       dat$epi$rGCasympttests.prep[at] <- 0
       dat$epi$uGCasympttests.prep[at] <- 0
       dat$epi$GCasympttests.prep[at] <- 0
+      dat$epi$rGCasympttests.pos.prep[at] <- 0
+      dat$epi$uGCasympttests.pos.prep[at] <- 0
+      dat$epi$GCasympttests.pos.prep[at] <- 0
       
       dat$epi$rCTasympttests.prep[at] <- 0
       dat$epi$uCTasympttests.prep[at] <- 0
       dat$epi$CTasympttests.prep[at] <- 0
+      dat$epi$rCTasympttests.pos.prep[at] <- 0
+      dat$epi$uCTasympttests.pos.prep[at] <- 0
+      dat$epi$CTasympttests.pos.prep[at] <- 0
       
       dat$epi$syphasympttests.prep[at] <- 0
+      dat$epi$syphasympttests.pos.prep[at] <- 0
       
     return(dat)
   }
@@ -255,11 +262,23 @@ prep_msm <- function(dat, at) {
   dat$epi$uGCasympttests.prep[at] <- length(tst.ugc)
   dat$epi$GCasympttests.prep[at] <- length(c(tst.rgc, tst.ugc))
   
+  dat$epi$rGCasympttests.pos.prep[at] <- length(tst.rgc)
+  dat$epi$uGCasympttests.pos.prep[at] <- length(tst.ugc)
+  dat$epi$GCasympttests.pos.prep[at] <- length(c(tst.rgc.pos, tst.ugc.pos))
+  
   dat$epi$rCTasympttests.prep[at] <- length(tst.rct)
   dat$epi$uCTasympttests.prep[at] <- length(tst.uct)
   dat$epi$CTasympttests.prep[at] <- length(c(tst.rct, tst.uct))
   
+  dat$epi$rCTasympttests.pos.prep[at] <- length(tst.rct)
+  dat$epi$uCTasympttests.pos.prep[at] <- length(tst.uct)
+  dat$epi$CTasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos))
+  
   dat$epi$syphasympttests.prep[at] <- length(c(tst.syph.prep))
+  dat$epi$syphasympttests.pos.prep[at] <- length(c(tst.syph.pos))
+  
+  dat$epi$totalstiasympttests.prep[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.prep))
+  dat$epi$totalstiasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos, tst.rgc.pos, tst.ugc.pos, tst.syph.pos))
   
   ## Output --------------------------------------------------------------------
 

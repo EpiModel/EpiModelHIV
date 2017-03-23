@@ -197,6 +197,7 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$txGC <- rNA
     dat$epi$txCT <- rNA
+    dat$epi$txsyph <- rNA
     
     dat$epi$stiactiveind <- rNA  
     dat$epi$recentpartners <- rNA
@@ -258,6 +259,8 @@ prevalence_msm <- function(dat, at) {
   dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
   dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
   dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
+  dat$epi$stiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], dat$epi$GCasympttests.pos[at], na.rm = TRUE)
+  dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at], dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
   
   # Number of tests: Total resets at PrEP or STI testing start time
   if (at == 2 | at == dat$param$prep.start | at == dat$param$stitest.start) {
@@ -277,20 +280,42 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at]
       dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at]
       dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at]
+      dat$epi$totalrGCasympttests.pos[at] <- dat$epi$rGCasympttests.pos[at]
+      dat$epi$totaluGCasympttests.pos[at] <- dat$epi$uGCasympttests.pos[at]
+      dat$epi$totalGCasympttests.pos[at] <- dat$epi$GCasympttests.pos[at]
+      
       dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at]
       dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at]
       dat$epi$totalCTasympttests[at] <- dat$epi$CTsympttests[at]
+      dat$epi$totalrCTasympttests.pos[at] <- dat$epi$rCTasympttests.pos[at]
+      dat$epi$totaluCTasympttests.pos[at] <- dat$epi$uCTasympttests.pos[at]
+      dat$epi$totalCTasympttests.pos[at] <- dat$epi$CTasympttests.pos[at]
+      
       dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
+      dat$epi$totalsyphasympttests.pos[at] <- dat$epi$syphasympttests.pos[at]
+      
       dat$epi$totalstiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
+      dat$epi$totalstiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], dat$epi$GCasympttests.pos[at], na.rm = TRUE)
       
       dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
       dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
       dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at]
+      dat$epi$totalrGCasympttests.pos.prep[at] <- dat$epi$rGCasympttests.pos.prep[at]
+      dat$epi$totaluGCasympttests.pos.prep[at] <- dat$epi$uGCasympttests.pos.prep[at]
+      dat$epi$totalGCasympttests.pos.prep[at] <- dat$epi$GCasympttests.pos.prep[at]
+      
       dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at]
       dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at]
       dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at]
+      dat$epi$totalrCTasympttests.pos.prep[at] <- dat$epi$rCTasympttests.pos.prep[at]
+      dat$epi$totaluCTasympttests.pos.prep[at] <- dat$epi$uCTasympttests.pos.prep[at]
+      dat$epi$totalCTasympttests.pos.prep[at] <- dat$epi$CTasympttests.pos.prep[at]
+      
       dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at]
+      dat$epi$totalsyphasympttests.pos.prep[at] <- dat$epi$syphasympttests.pos.prep[at]
+      
       dat$epi$totalstiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
+      dat$epi$totalstiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at], dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
       
   }
   if ((at > 2 & at < dat$param$prep.start) | (at > dat$param$prep.start) |

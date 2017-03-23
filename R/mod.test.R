@@ -188,6 +188,8 @@ test_sti_msm <- function(dat, at) {
     
     #STI testing eligibility scenarios
     
+    # Set to null values if 
+
     if (stitest.elig.model == "all") {
         c1 <- dat$attr$stitest.ind.sti
         c2 <- dat$attr$stitest.ind.recentpartners
@@ -258,19 +260,93 @@ test_sti_msm <- function(dat, at) {
                 idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
                                         (at - c1 > hrindwindow) & 
                                         (at - c2 > hrindwindow)))
-    } else {
-                c1 <- dat$attr$stitest.ind.[[stitest.elig.model]]
+                
+    }
+            } else if (stitest.elig.model == "sti") {
+        
+                c1 <- dat$attr$stitest.ind.sti
         
                 idshighrisk <- which((at - c1) <= hrindwindow)
         
                 idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
-            }    
+                
+        }  else if (stitest.elig.model == "recentpartners") {
+            
+            c1 <- dat$attr$stitest.ind.recentpartners
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            
+        }  else if (stitest.elig.model == "newpartners") {
+            
+            c1 <- dat$attr$stitest.ind.newpartners
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+        } else if (stitest.elig.model == "concurrpartner") {
+            
+            c1 <- dat$attr$stitest.ind.concurrpartner
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            
+        } else if (stitest.elig.model == "partnersti") {
+            
+            c1 <- dat$attr$stitest.ind.partnersti
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            
+        } else if (stitest.elig.model == "uai.nmain") {
+            
+            c1 <- dat$attr$stitest.ind.uai.nmain
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            
+        } else if (stitest.elig.model == "uai.any") {
+            
+            c1 <- dat$attr$stitest.ind.uai.any
+            
+            idshighrisk <- which((at - c1) <= hrindwindow)
+            
+            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                                        (at - c1 > hrindwindow))
+            
+        } else if (stitest.elig.model == "none") {
+          
+            idshighrisk <- NULL
+            idsnottestelig <- which(active == 1)
+            
         }
     }
-    ## Initiation
-    # Testing coverage for annual ----------------------------------------------------------------
     
+    ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
+    
+    # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
+    dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
+    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
+    
+    # Remove testing trajectory if no longer indicated for annual testing (idsannual includes high-risk)
+    idsnottestelig <- which(active == 1 & tt.traj.syph == 1 & (at - stitestind1 >= activeindwindow))
+    dat$attr$stianntestLastElig[idsnottestelig] <- at
+    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
+    
+    
+    ## Initiation ----------------------------------------------------------------
+    
+    # Testing coverage for annual 
     stianntestCov <- sum(tt.traj.ct == 1, tt.traj.ct == 2, na.rm = TRUE) / length(idsactive)
     stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
     
@@ -293,8 +369,7 @@ test_sti_msm <- function(dat, at) {
         tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
     }
     
-    
-    # Testing coverage for high risk ----------------------------------------------------------------
+    # Testing coverage for high risk 
     stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
     stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
     
@@ -317,17 +392,6 @@ test_sti_msm <- function(dat, at) {
         tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
     }   
     
-    
-    ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
-    
-    # Reduce testing trajectory to annual if no longer indicated for more frequent high-risk testing
-    dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
-    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- 1
-    
-    # Remove testing trajectory if no longer indicated for annual testing (idsannual includes high-risk)
-    idsnottestelig <- which(active == 1 & tt.traj.syph == 1 & (at - stitestind1 >= activeindwindow))
-    dat$attr$stianntestLastElig[idsnottestelig] <- at
-    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
 
     ## Testing
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
@@ -499,8 +563,17 @@ test_sti_msm <- function(dat, at) {
         dat$epi$GCasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$uCTasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$CTasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
         dat$epi$totalstiasympttests <- rep(0, length(dat$control$nsteps))
+        dat$epi$rGCasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$uGCasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$GCasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$rCTasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$uCTasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$CTasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$syphasympttests.pos <- rep(0, length(dat$control$nsteps))
+        dat$epi$totalstiasympttests.pos <- rep(0, length(dat$control$nsteps))
     }
     
     # Number of tests for asymptomatic
@@ -508,12 +581,23 @@ test_sti_msm <- function(dat, at) {
     dat$epi$uGCasympttests[at] <- length(tst.ugc)
     dat$epi$GCasympttests[at] <- length(c(tst.rgc, tst.ugc))
     
+    dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos)
+    dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos)
+    dat$epi$GCasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos))
+    
     dat$epi$rCTasympttests[at] <- length(tst.rct)
     dat$epi$uCTasympttests[at] <- length(tst.uct)
     dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
     
+    dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos)
+    dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos)
+    dat$epi$CTasympttests.pos[at] <- length(c(tst.rct.pos, tst.uct.pos))
+    
     dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
+    dat$epi$syphasympttests.pos[at] <- length(c(tst.syph.pos))
+    
     dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.nprep))
+    dat$epi$totalstiasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos, tst.rct.pos, tst.uct.pos, tst.syph.pos))
     
     
     ## Output --------------------------------------------------------------------

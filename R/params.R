@@ -614,13 +614,13 @@ param_msm <- function(nwstats,
                       ct.asympt.prob.tx = 0.85,
                       
                       syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                      syph.prim.asympt.prob.tx = 0.00,
+                      syph.prim.asympt.prob.tx = 0.35,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.seco.asympt.prob.tx = 0.00,
+                      syph.seco.asympt.prob.tx = 0.60,
                       syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                       syph.latelat.prob.tx = 0.10,
                       syph.tert.sympt.prob.tx = 0.90,
-                      syph.tert.asympt.prob.tx = 0.00,
+                      syph.tert.asympt.prob.tx = 0.90,
                       
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
