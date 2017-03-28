@@ -38,6 +38,13 @@ prevalence_msm <- function(dat, at) {
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
   syphilis <- dat$attr$syphilis
+  inf.role <- dat$attr$inf.role
+  inf.time <- dat$attr$inf.time
+  rGC.infTime <- dat$attr$rGC.infTime
+  uGC.infTime <- dat$attr$uGC.infTime
+  rCT.infTime <- dat$attr$rCT.infTime
+  uCT.infTime <- dat$attr$uCT.infTime
+  syph.infTime <- dat$attr$syph.infTime
   rGC.sympt <- dat$attr$rGC.sympt
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
@@ -176,6 +183,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ir100.sti <- rNA
     dat$epi$incid.gcct.prep <- rNA
     dat$epi$incid.syph.prep <- rNA
+    
+    #PAF
+    dat$epi$sti_paf <- rNA
+    dat$epi$sti_u_paf <- rNA
+    dat$epi$sti_r_paf <- rNA
+    dat$epi$sti_syph_paf <- rNA
+    dat$epi$sti_hiv_sum <- rNA
+    dat$epi$sti_u_hiv_sum <- rNA
+    dat$epi$sti_r_hiv_sum <- rNA
+    dat$epi$sti_syph_hiv_sum <- rNA
+    dat$epi$hiv_sum <- rNA
 
     dat$epi$recov.rgc <- rNA
     dat$epi$recov.ugc <- rNA
@@ -384,8 +402,12 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]
   dat$epi$prev.primsecosyph[at] <- length(which(stage.syph %in% c(1, 2, 3))) / dat$epi$num[at]
   
+  uGC.prev <- which(uGC == 1 & uGC.infTime < at)
+  uCT.prev <- which(uCT == 1 & uCT.infTime < at)
+  rGC.prev <- which(rGC == 1 & rGC.infTime < at)
+  rCT.prev <- which(rCT == 1 & rCT.infTime < at)
+
   # Prevalence of HIV/STI overlap
-  
   dat$epi$prev.primsecosyph.hivneg[at] <- length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at]
   dat$epi$prev.primsecosyph.hivpos[at] <- length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at]
   dat$epi$prev.syph.hivneg[at] <- length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at]
@@ -459,6 +481,55 @@ prevalence_msm <- function(dat, at) {
                                    sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
                                        sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
 
+  
+  # PAF
+  # syph.prev <- which(syphilis == 1 & syph.infTime < at)
+  # sti.prev <- which(uGC.prev == 1 | uCT.prev == 1 | rGC.prev == 1 | rCT.prev == 1 | syph.prev == 1)
+  # u.sti.prev <- which(uGC.prev == 1 | uCT.prev == 1)
+  # r.sti.prev <- which(rGC.prev == 1 | rCT.prev == 1)
+  # u.sti.sympt <- which(uGC.sympt == 1 | uCT.sympt == 1)
+  # u.sti.asympt <- which(uGC.sympt == 0 | uCT.sympt == 0) 
+  # r.sti.sympt <- which(rGC.sympt == 1 | rCT.sympt == 1)
+  # r.sti.asympt <- which(rGC.sympt == 0 | rCT.sympt == 0)
+  # 
+  # u.sympt <- which(uGC.sympt == 1 | uCT.sympt == 1) 
+  # u.asympt <- setdiff(u.sti.prev, u.sti.sympt)
+  # r.sympt <- which(rGC.sympt == 1 | rCT.sympt == 1)
+  # r.asympt <- setdiff(r.sti.prev, r.sti.sympt)
+  # syph.sympt <- which(stage.prim.sympt == 1 | stage.seco.sympt == 1 | stage.earlat.sympt == 1 | stage.latelat.sympt == 1 | stage.latelatelat.sympt == 1 | stage.tert.sympt == 1)
+  # syph.asympt <- which(syph.prev == 1 & (stage.prim.sympt == 0 & 
+  #                                            stage.seco.sympt == 0 & 
+  #                                            stage.earlat.sympt == 0 &
+  #                                            stage.latelat.sympt == 0 & 
+  #                                            stage.latelatelat.sympt == 0 & 
+  #                                            stage.tert.sympt == 0))
+  
+  # #paf values
+  # dat$epi$sti_paf[at] <- sum(inf.time == at & sti.prev == 1) / sum(inf.time == at)
+  # dat$epi$sti_u_paf[at] <- sum(inf.time == at & u.sti.prev == 1 & inf.role == 1) / sum(inf.time == at)
+  # dat$epi$sti_r_paf[at] <- sum(inf.time == at & r.sti.prev == 1 & inf.role == 0) / sum(inf.time == at)
+  # dat$epi$sti_syph_paf[at] <- sum(inf.time == at & syph.prev == 1) / sum(inf.time == at)
+  # dat$epi$sti_u_sympt_paf[at] <- sum(inf.time == at & u.sympt == 1) / sum(inf.time == at)
+  # dat$epi$sti_u_asympt_paf[at] <- sum(inf.time == at & u.asympt == 1) / sum(inf.time == at)
+  # dat$epi$sti_r_sympt_paf[at] <- sum(inf.time == at & r.sympt == 1) / sum(inf.time == at)
+  # dat$epi$sti_r_asympt_paf[at] <- sum(inf.time == at & r.asympt == 1) / sum(inf.time == at)
+  # dat$epi$sti_syph_sympt_paf[at] <- sum(inf.time == at & syph.sympt == 1) / sum(inf.time == at)
+  # dat$epi$sti_syph_asympt_paf[at] <- sum(inf.time == at & syph.asympt == 1) / sum(inf.time == at)
+  # 
+  # #sums at each time step (numerators from paf formulae)
+  # dat$epi$sti_hiv_sum[at] <- sum(inf.time == at & sti.prev == 1)
+  # dat$epi$sti_u_hiv_sum[at] <- sum(inf.time == at & u.sti.prev == 1 & inf.role == 1)
+  # dat$epi$sti_r_hiv_sum[at] <- sum(inf.time == at & r.sti.prev == 1 & inf.role == 0)
+  # dat$epi$sti_syph_hiv_sum[at] <- sum(inf.time == at & syph.prev == 1)
+  # dat$epi$hiv_sum[at] <- sum(inf.time == at)
+  # dat$epi$sti_u_sympt_hiv_sum[at] <- sum(inf.time == at & u.sympt == 1)
+  # dat$epi$sti_u_asympt_hiv_sum[at] <- sum(inf.time == at & u.asympt == 1)
+  # dat$epi$sti_r_sympt_hiv_sum[at] <- sum(inf.time == at & r.sympt == 1)
+  # dat$epi$sti_r_asympt_hiv_sum[at] <- sum(inf.time == at & r.asympt == 1)
+  # dat$epi$sti_syph_sympt_hiv_sum[at] <- sum(inf.time == at & syph.sympt == 1)
+  # dat$epi$sti_syph_asympt_hiv_sum[at] <- sum(inf.time == at & syph.asympt == 1)
+  
+  
   return(dat)
 }
 

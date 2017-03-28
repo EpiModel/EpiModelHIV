@@ -64,9 +64,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   ept.provision.med.casl.rr = 1, ept.provision.med.inst.rr = 1,
   ept.provision.long.main.rr = 1, ept.provision.long.casl.rr = 1,
   ept.provision.long.inst.rr = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.39,
-  ugc.tprob = 0.29, rct.tprob = 0.19, uct.tprob = 0.14,
-  usyph.tprob = 0.04883012, rsyph.tprob = 0.03829557,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.41333,
+  ugc.tprob = 0.3140472, rct.tprob = 0.1907554, uct.tprob = 0.16394697,
+  rsyph.tprob = 0.04668348, usyph.tprob = 0.03598792,
   syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
   ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
   syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
@@ -88,11 +88,11 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   stihighrisktest.coverage = 1, stihighrisktest.cov.method = "curr",
   stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
   prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.64869327, hiv.ugc.rr = 1.67105474,
-  hiv.rct.rr = 2.64869327, hiv.uct.rr = 1.67105474, hiv.dual.rr = 0.2,
-  hiv.rsyph.rr = 2.7, hiv.usyph.rr = 1.7, syph.rhiv.rr = 2.6,
-  syph.uhiv.rr = 1.7, rgc.hiv.rr = 1, ugc.hiv.rr = 1, rct.hiv.rr = 1,
-  uct.hiv.rr = 1, hivdx.syph.sympt.tx.rr = 2,
+  hiv.rgc.rr = 2.3, hiv.ugc.rr = 1.3, hiv.rct.rr = 2.3,
+  hiv.uct.rr = 1.3, hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572,
+  hiv.usyph.rr = 1.7456618, syph.rhiv.rr = 6.54189295,
+  syph.uhiv.rr = 5.09641658, rgc.hiv.rr = 1, ugc.hiv.rr = 1,
+  rct.hiv.rr = 1, uct.hiv.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
   partlist.start = min((stitest.start - sti.highrisktest.int - 1), (ept.start
   - ept.risk.int - 1)), ...)
 }
@@ -528,9 +528,9 @@ partnerships only, versus all partnerships.}
 
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
-\item{usyph.tprob}{Base probability of urethral syphilis infection per act.}
-
 \item{rsyph.tprob}{Base probability of rectal syphilis infection per act.}
+
+\item{usyph.tprob}{Base probability of urethral syphilis infection per act.}
 
 \item{syph.earlat.rr}{Multiplier for reduced infection probability in early latent 
 stage of syphilis infection.}

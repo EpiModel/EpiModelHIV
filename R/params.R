@@ -570,13 +570,13 @@ param_msm <- function(nwstats,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
 
-                      rgc.tprob = 0.39, #0.357698,
-                      ugc.tprob = 0.29, #0.248095,
-                      rct.tprob = 0.19, #0.321597,
-                      uct.tprob = 0.14, #0.212965,
+                      rgc.tprob = 0.41333,
+                      ugc.tprob = 0.3140472,
+                      rct.tprob = 0.1907554,
+                      uct.tprob = 0.16394697,
 
-                      usyph.tprob = 0.04883012,
-                      rsyph.tprob = 0.03829557,
+                      rsyph.tprob = 0.04668348,
+                      usyph.tprob = 0.03598792,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
                       
@@ -639,16 +639,16 @@ param_msm <- function(nwstats,
                       sti.cond.rr = 0.3,
 
                       # Acquisition
-                      hiv.rgc.rr = 2.64869327,
-                      hiv.ugc.rr = 1.67105474,
-                      hiv.rct.rr = 2.64869327,
-                      hiv.uct.rr = 1.67105474,
+                      hiv.rgc.rr = 2.30,
+                      hiv.ugc.rr = 1.30,
+                      hiv.rct.rr = 2.30,
+                      hiv.uct.rr = 1.30,
                       hiv.dual.rr = 0.2,
-                      hiv.rsyph.rr = 2.70,
-                      hiv.usyph.rr = 1.70,
+                      hiv.rsyph.rr = 2.98876572,
+                      hiv.usyph.rr = 1.7456618,
                       
-                      syph.rhiv.rr = 2.6,
-                      syph.uhiv.rr = 1.7,
+                      syph.rhiv.rr = 6.54189295,
+                      syph.uhiv.rr = 5.09641658,
                       rgc.hiv.rr = 1,
                       ugc.hiv.rr = 1,
                       rct.hiv.rr = 1,
@@ -656,7 +656,7 @@ param_msm <- function(nwstats,
                       
                       # Transmission
                       
-                      hivdx.syph.sympt.tx.rr = 2.0,
+                      hivdx.syph.sympt.tx.rr = 1.45,
                       
                       partlist.start = min((stitest.start - sti.highrisktest.int - 1),(ept.start - ept.risk.int - 1)),
                       
