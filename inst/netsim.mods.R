@@ -16,7 +16,7 @@ param <- param_msm(nwstats = st,
                    usyph.tprob = 0.03598792,
                    
                    hiv.rsyph.rr = 2.98876572, 
-                   hiv.usyph.rr = 1.74566180,
+                   hiv.usyph.rr = 1.7456618,
                    syph.rhiv.rr = 6.54189295,
                    syph.uhiv.rr = 5.09641658,
                    
@@ -35,23 +35,23 @@ param <- param_msm(nwstats = st,
                    rct.tprob = 0.1907554,
                    uct.tprob = 0.16394697,
                    
-                   hiv.rgc.rr = 2.30,
-                   hiv.ugc.rr = 1.30,
-                   hiv.rct.rr = 2.30,
-                   hiv.uct.rr = 1.30,
+                   hiv.rgc.rr = 2.35,
+                   hiv.ugc.rr = 1.35,
+                   hiv.rct.rr = 2.35,
+                   hiv.uct.rr = 1.35,
                    
                    # adjust prim and seco from 0.1385 each
                    stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    
                    syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                   syph.prim.asympt.prob.tx = 0.00,
+                   syph.prim.asympt.prob.tx = 0.35,
                    syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.seco.asympt.prob.tx = 0.00,
+                   syph.seco.asympt.prob.tx = 0.60,
                    syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                    syph.latelat.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 0.90,
-                   syph.tert.asympt.prob.tx = 0.00,
+                   syph.tert.asympt.prob.tx = 0.90,
                    
                    hivdx.syph.sympt.tx.rr = 1.45,
 
@@ -61,9 +61,9 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0.5,
                    stihighrisktest.coverage = 0.8,
 
-                   prep.start = 2600,
-                   stitest.start = 2100,
-                   ept.start = 2600,
+                   prep.start = 5000,
+                   stitest.start = 5000,
+                   ept.start = 5000,
                    
                    stitest.elig.model = "all",
 
@@ -73,12 +73,12 @@ param <- param_msm(nwstats = st,
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
                  prev.W = 0.10,
-                 prev.ugc = 0.025,
-                 prev.rgc = 0.025,
-                 prev.uct = 0.025,
-                 prev.rct = 0.025,
-                 prev.syph.B = 0.04,
-                 prev.syph.W = 0.04)
+                 prev.ugc = 0.015,
+                 prev.rgc = 0.015,
+                 prev.uct = 0.015,
+                 prev.rct = 0.015,
+                 prev.syph.B = 0.020,
+                 prev.syph.W = 0.020)
 
 control <- control_msm(simno = 0.253,
                        nsteps = 2600,

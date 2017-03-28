@@ -92,17 +92,19 @@ legend("topright", c("Early", "Late"), col = c("blue", "green"), lty = c(1, 1))
 
 # STI Prevalence
 par(mfrow = c(2,2), oma = c(0,0,2,0))
-plot(sim, y = "prev.syph", ylab = "Prevalence")
+plot(sim, y = "prev.primsecosyph", ylab = "Prevalence")
 abline(h = 0.046, col = "red", lty = 2)
 abline(v = sim$param$stitest.start)
-title("Syphilis Prevalence")
+title("P and S Syphilis Prevalence")
 
 plot(sim, y = "prev.ct", ylab = "Prevalence")
 abline(v = sim$param$stitest.start)
+abline(h = 0.040, col = "red", lty = 2)
 title("CT Prevalence")
 
 plot(sim, y = "prev.gc", ylab = "Prevalence")
 abline(v = sim$param$stitest.start)
+abline(h = 0.040, col = "red", lty = 2)
 title("GC Prevalence")
 
 plot(sim, y = "i.prev", ylim = c(0, 0.3), ylab = "Prevalence")
@@ -112,7 +114,7 @@ title("HIV Prevalence")
 #title("Syph Tprob = XXX, Syph.HIV.RR = , HIV.Syph.RR =", outer = TRUE)
 
 # HIV and STI Incidence
-par(mfrow = c(2,2), oma = c(0,0,2,0))
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
 plot(sim, y = "ir100")
 abline(h = 3.8, col = "red", lty = 2)
 abline(v = sim$param$stitest.start)
@@ -130,6 +132,39 @@ abline(h = 0.9, col = "red", lty = 2)
 abline(v = sim$param$stitest.start)
 title("Syph Incidence")
 
+par(mfrow = c(1, 1), oma = c(0, 0, 2, 0))
+plot(sim, y = "hiv_sum", mean.col = "blue")
+plot(sim, y = "sti_hiv_sum", mean.col = "green", add = TRUE)
+plot(sim, y = "sti_u_hiv_sum", mean.col = "red", add = TRUE)
+plot(sim, y = "sti_r_hiv_sum", mean.col = "orange", add = TRUE)
+plot(sim, y = "sti_syph_hiv_sum", mean.col = "purple", add = TRUE)
+legend("topleft", lty = c(1, 1, 1, 1, 1), col = c("blue", "green", "red", "orange", "purple"), 
+       c("HIV Sum", "STI & HIV sum", "USTI & HIV sum", "RSTI & HIV sum", "Syph & HIV sum"))
+
+plot(sim, y = "sti_paf", mean.col = "blue")
+plot(sim, y = "sti_u_paf", mean.col = "green", add = TRUE)
+plot(sim, y = "sti_r_paf", mean.col = "red", add = TRUE)
+plot(sim, y = "sti_syph_paf", mean.col = "orange", add = TRUE)
+legend("topleft", lty = c(1, 1, 1, 1), col = c("blue", "green", "red", "orange"), 
+       c("STI PAF", "USTI PAF", "RSTI PAF", "Syph PAF"))
+
+plot(sim, y = "sti_u_paf", mean.col = "blue")
+plot(sim, y = "sti_u_sympt_paf", mean.col = "green", add = TRUE)
+plot(sim, y = "sti_u_asympt_paf", mean.col = "red", add = TRUE)
+legend("topleft", lty = c(1, 1, 1), col = c("blue", "green", "red"), 
+       c("U STI PAF", "U Sympt STI PAF", "U Asympt STI PAF"))
+
+plot(sim, y = "sti_r_paf", mean.col = "blue")
+plot(sim, y = "sti_r_sympt_paf", mean.col = "green", add = TRUE)
+plot(sim, y = "sti_r_asympt_paf", mean.col = "red", add = TRUE)
+legend("topleft", lty = c(1, 1, 1), col = c("blue", "green", "red"), 
+       c("R STI PAF", "R Sympt STI PAF", "R Asympt STI PAF"))
+
+plot(sim, y = "sti_syph_paf", mean.col = "blue")
+plot(sim, y = "sti_syph_sympt_paf", mean.col = "green", add = TRUE)
+plot(sim, y = "sti_syph_asympt_paf", mean.col = "red", add = TRUE)
+legend("topleft", lty = c(1, 1, 1), col = c("blue", "green", "red"), 
+       c("Syph PAF", "Syph Sympt PAF", "Syph Asympt PAF"))
 
 # Evaluate whether testing is leading to treatment
 a <- cbind(sim$epi$txCT, sim$epi$CTsympttests, sim$epi$CTasympttests.pos,

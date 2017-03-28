@@ -807,8 +807,7 @@ sti_tx <- function(dat, at) {
                                  dat$attr$syph.infTime < at &
                                  dat$attr$stage.syph == 2 &
                                  dat$attr$stage.prim.sympt == 1 &
-                                 (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                 (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                 is.na(dat$attr$syph.tx) &
                                  dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_sympt_prim_hivdx <- which(diag.status[idssyph_tx_sympt_prim] == 1)
@@ -820,8 +819,7 @@ sti_tx <- function(dat, at) {
                                  dat$attr$syph.infTime < at &
                                  dat$attr$stage.syph == 3 &
                                  dat$attr$stage.seco.sympt == 1 &
-                                 (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                 (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                 is.na(dat$attr$syph.tx) &
                                  dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_sympt_seco_hivdx <- which(diag.status[idssyph_tx_sympt_seco] == 1)
@@ -833,8 +831,7 @@ sti_tx <- function(dat, at) {
                                  dat$attr$syph.infTime < at &
                                  dat$attr$stage.syph == 7 &
                                  dat$attr$stage.tert.sympt == 1 &
-                                 (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                 (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                 is.na(dat$attr$syph.tx) &
                                  dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_sympt_tert_hivdx <- which(diag.status[idssyph_tx_sympt_tert] == 1)
@@ -852,8 +849,7 @@ sti_tx <- function(dat, at) {
                                   dat$attr$syph.infTime < at &
                                   dat$attr$stage.syph == 2 &
                                   dat$attr$stage.prim.sympt == 0 &
-                                  (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                  (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                  is.na(dat$attr$syph.tx) &
                                   dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_asympt_prim_dx <- which(diag.status.syph[idssyph_tx_asympt_prim] == 1)
@@ -863,8 +859,7 @@ sti_tx <- function(dat, at) {
                                   dat$attr$syph.infTime < at &
                                   dat$attr$stage.syph == 3 &
                                   dat$attr$stage.seco.sympt == 0 &
-                                  (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                  (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                  is.na(dat$attr$syph.tx) &
                                   dat$attr$prepStat %in% prep.stand.tx.grp)
 
   idssyph_tx_asympt_seco_dx <- which(diag.status.syph[idssyph_tx_asympt_seco] == 1)
@@ -875,8 +870,7 @@ sti_tx <- function(dat, at) {
                                     dat$attr$syph.infTime < at &
                                     dat$attr$stage.syph == 4 &
                                     dat$attr$stage.earlat.sympt == 0 &
-                                    (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                    (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                    is.na(dat$attr$syph.tx) &
                                     dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_asympt_earlat_dx <- which(diag.status.syph[idssyph_tx_asympt_earlat] == 1)
@@ -886,8 +880,7 @@ sti_tx <- function(dat, at) {
                                      dat$attr$syph.infTime < at &
                                      (dat$attr$stage.syph == 5 | dat$attr$stage.syph == 6) &
                                      dat$attr$stage.latelat.sympt == 0 &
-                                     (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                     (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
+                                     is.na(dat$attr$syph.tx) &
                                      dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_asympt_latelat_dx <- which(diag.status.syph[idssyph_tx_asympt_latelat] == 1)
@@ -897,9 +890,8 @@ sti_tx <- function(dat, at) {
                                   dat$attr$syph.infTime < at &
                                   dat$attr$stage.syph == 7 &
                                   dat$attr$stage.tert.sympt == 0 &
-                                  (is.na(dat$attr$syph.tx) | dat$attr$syph.tx == 0) &
-                                  (is.na(dat$attr$syph.tx.prep) | dat$attr$syph.tx.prep == 0) &
-                                        dat$attr$prepStat %in% prep.stand.tx.grp)
+                                  is.na(dat$attr$syph.tx) &
+                                  dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idssyph_tx_asympt_tert_dx <- which(diag.status.syph[idssyph_tx_asympt_tert] == 1)
   txsyph_asympt_tert <- idssyph_tx_asympt_tert_dx[which(rbinom(length(idssyph_tx_asympt_tert_dx), 1, syph.tert.asympt.prob.tx) == 1)]
@@ -917,15 +909,13 @@ sti_tx <- function(dat, at) {
   idsRGC_tx_sympt <- which(dat$attr$rGC == 1 &
                            dat$attr$rGC.infTime < at &
                            dat$attr$rGC.sympt == 1 &
-                           (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
-                           (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0) &
+                           is.na(dat$attr$rGC.tx)  &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idsUGC_tx_sympt <- which(dat$attr$uGC == 1 &
                            dat$attr$uGC.infTime < at &
                            dat$attr$uGC.sympt == 1 &
-                           (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
-                           (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0) &
+                           is.na(dat$attr$uGC.tx) &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idsGC_tx_sympt <- c(idsRGC_tx_sympt, idsUGC_tx_sympt)
@@ -939,15 +929,13 @@ sti_tx <- function(dat, at) {
   idsRGC_tx_asympt <- which(dat$attr$rGC == 1 &
                             dat$attr$rGC.infTime < at &
                             dat$attr$rGC.sympt == 0 &
-                            (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
-                            (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0) &
+                            is.na(dat$attr$rGC.tx) &
                             dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idsUGC_tx_asympt <- which(dat$attr$uGC == 1 &
                             dat$attr$uGC.infTime < at &
                             dat$attr$uGC.sympt == 0 &
-                            (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
-                            (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0) &
+                            is.na(dat$attr$uGC.tx) &
                             dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idsGC_tx_asympt <- c(idsRGC_tx_asympt, idsUGC_tx_asympt)
@@ -970,15 +958,13 @@ sti_tx <- function(dat, at) {
   idsRCT_tx_sympt <- which(dat$attr$rCT == 1 &
                            dat$attr$rCT.infTime < at &
                            dat$attr$rCT.sympt == 1 &
-                           (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
-                           (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0) &
+                           is.na(dat$attr$rCT.tx) &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
   
   idsUCT_tx_sympt <- which(dat$attr$uCT == 1 &
                            dat$attr$uCT.infTime < at &
                            dat$attr$uCT.sympt == 1 &
-                           (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
-                           (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0) &
+                           is.na(dat$attr$uCT.tx) &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
   idsCT_tx_sympt <- c(idsRCT_tx_sympt, idsUCT_tx_sympt)
 
@@ -992,16 +978,14 @@ sti_tx <- function(dat, at) {
                             dat$attr$rCT.infTime < at &
                             dat$attr$rCT.sympt == 0 &
                             dat$attr$diag.status.ct == 1 &
-                            (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
-                            (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0) &
+                            is.na(dat$attr$rCT.tx) &
                             dat$attr$prepStat == 0)
   
   idsUCT_tx_asympt <- which(dat$attr$uCT == 1 &
                             dat$attr$uCT.infTime < at &
                             dat$attr$uCT.sympt == 0 &
                             dat$attr$uCT.tx %in% c(0, NA) &
-                            (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
-                            (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0) &
+                            is.na(dat$attr$uCT.tx) &
                             dat$attr$prepStat == 0)
   
   idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)
