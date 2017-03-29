@@ -1,50 +1,24 @@
-rm(list = ls())
-suppressMessages(library("EpiModelHIV"))
 
-data(est)
-data(st)
-
-param <- param_msm(nwstats = st,
-                   ai.scale = 1.323,
-                   prep.coverage = 0)
-init <- init_msm(nwstats = st,
-                 prev.B = 0.253,
-                 prev.W = 0.253)
-control <- control_msm(simno = 0.253,
-                       nsteps = 52,
-                       nsims = 5,
-                       ncores = 1,
-                       save.nwstats = TRUE,
-                       verbose.int = 1)
-# sim <- netsim(est, param, init, control)
-
-# debug(stergm_prep)
-
-
-at <- 1
-dat <- initialize_msm(est, param, init, control, s = 1)
-# dat <- reinit_msm(sim, param, init, control, s = 1)
-
-# mf <- dat$p[[1]]$model.form
-# mf$terms[[4]]
-
-
-at <- at + 1
-dat <- aging_msm(dat, at)
-dat <- deaths_msm(dat, at)
-dat <- births_msm(dat, at)
-dat <- test_msm(dat, at)
-dat <- tx_msm(dat, at)
-dat <- prep_msm(dat, at)
-dat <- progress_msm(dat, at)
-dat <- vl_msm(dat, at)
-# dat <- update_aiclass_msm(dat, at)
-# dat <- update_roleclass_msm(dat, at)
-dat <- simnet_msm(dat, at)
-dat <- disclose_msm(dat, at)
-dat <- acts_msm(dat, at)
-dat <- condoms_msm(dat, at)
-dat <- riskhist_msm(dat, at)
-dat <- position_msm(dat, at)
-dat <- trans_msm(dat, at)
-dat <- prevalence_msm(dat, at)
+at <- 2
+dat <- initialize.mard(est, param, init, control, s = 1)
+for (at in max(2, control$start):control$nsteps) {
+  dat <- aging.mard(dat, at)
+  dat <- deaths.mard(dat, at)
+  dat <- births.mard(dat, at)
+  dat <- test.mard(dat, at)
+  dat <- tx.mard(dat, at)
+  dat <- prep.mard(dat, at)
+  dat <- progress.mard(dat, at)
+  dat <- update_vl.mard(dat, at)
+  dat <- update_aiclass.mard(dat, at)
+  dat <- update_roleclass.mard(dat, at)
+  dat <- edges_correct.mard(dat, at)
+  dat <- simnet.mard(dat, at)
+  dat <- disclose.mard(dat, at)
+  dat <- acts.mard(dat, at)
+  dat <- condoms.mard(dat, at)
+  dat <- position.mard(dat, at)
+  dat <- trans.mard(dat, at)
+  dat <- prevalence.mard(dat, at)
+  verbose.mard(dat, type = "progress", s = 1, at)
+}
