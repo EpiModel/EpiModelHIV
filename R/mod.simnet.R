@@ -1,248 +1,183 @@
 
-# MSM -----------------------------------------------------------------
-
 #' @title Network Resimulation Module
 #'
 #' @description Module function for resimulating the main, casual, and one-off
 #'              networks for one time step.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
-#' @keywords module msm
+#' @details
+#' The three networks must be simulated for one time step at a time because of
+#' the underlying changes to the node set. Nodes have been added and removed due
+#' to births and deaths, and vertex attributes of nodes may have changed. For
+#' each of the three networks in the epidemic simulation, this module pulls the
+#' relevant network model coefficients, resimulates the network with the
+#' necessary functions, calculates and stores the network statistics in an
+#' external data frame, updates the cross-network degree statistics using
+#' \code{\link{update_degree}}, and calculates which edges on the newly
+#' simulated network are new (needed for \code{\link{disclose.mard}} module).
 #'
+#' The main and causal networks are resimulated using the \code{simulate.network}
+#' function in the \code{tergm} package, whereas the one-off network is
+#' resimulated with the \code{simulate.formula} function in the \code{ergm}
+#' package.
+#'
+#' The module also deletes inactive nodes on all three networks depending on the
+#' value of the \code{delete.nodes} control setting. For the main and casual
+#' network, this involves extracting the \code{networkDynamic} object at the
+#' current time point after the resimulation has occurre (dead nodes have already
+#' been deactivated in \code{\link{deaths.mard}} so that they will not be allowed
+#' to form partnerships). For the one-off network, this involves deleting the
+#' vertices before the resimulation. This approach for deleting nodes is needed
+#' given the book-keeping of calculating the new edges list.
+#'
+#' @return
+#' The three network objects on \code{dat$nw} are returned with newly simulated
+#' edges, and potentially reduced node sets. The network statistics on
+#' \code{dat$nw} are updated, and the newly formed edge list in
+#' \code{dat$temp$new.edges} is also updated.
+#'
+#' @keywords module
 #' @export
 #'
-simnet_msm <- function(dat, at) {
+simnet.mard <- function(dat, at) {
 
-  ## Edges correction
-  dat <- edges_correct_msm(dat, at)
+  resim.int <- dat$control$resim.int
 
-  ## Main network
-  nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
+  # Main network ------------------------------------------------------------
 
-  if (dat$param$method == 1) {
-    dat$attr$deg.pers <- get_degree(dat$el[[2]])
-  } else {
-    dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+  if (at %% resim.int == 0) {
+    nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
+
+    suppressWarnings(
+      dat$nw$m <- simulate(dat$nw$m,
+                           formation = nwparam.m$formation,
+                           dissolution = nwparam.m$coef.diss$dissolution,
+                           coef.form = nwparam.m$coef.form,
+                           coef.diss = nwparam.m$coef.diss$coef.adj,
+                           constraints = nwparam.m$constraints,
+                           time.start = at,
+                           time.slices = 1 * resim.int,
+                           time.offset = 0,
+                           monitor = "all",
+                           output = "networkDynamic"))
+
+    stats <- tail(as.data.frame(attributes(dat$nw$m)$stats), 1 * resim.int)
+    stats <- calc_meandegs(dat, at, stats, "main")  ## Fix this for resim.int > 1
+    if (at == 2) {
+      dat$stats$nwstats$m <- stats
+    } else {
+      dat$stats$nwstats$m <- rbind(dat$stats$nwstats$m, stats)
+    }
   }
-  dat <- tergmLite::updateModelTermInputs(dat, network = 1)
 
-  dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
-                                             el = dat$el[[1]],
-                                             coef.form = nwparam.m$coef.form,
-                                             coef.diss = nwparam.m$coef.diss$coef.adj,
-                                             save.changes = TRUE)
+  dat$nw$p <- update_degree(dat$nw$p, dat$nw$m, deg.type = "main", at = at)
+  dat$nw$i <- update_degree(dat$nw$i, dat$nw$m, deg.type = "main", at = at)
 
+  asdf <- as.data.frame(dat$nw$m)
   dat$temp$new.edges <- NULL
-  if (at == 2) {
-    new.edges.m <- matrix(dat$el[[1]], ncol = 2)
-  } else {
-    new.edges.m <- attributes(dat$el[[1]])$changes
-    new.edges.m <- new.edges.m[new.edges.m[, "to"] == 1, 1:2, drop = FALSE]
-  }
+  new.edges.m <- as.matrix(asdf[asdf$onset == at, c("tail", "head")], ncol = 2)[, 2:1]
   dat$temp$new.edges <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
 
 
-  ## Casual network
-  nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
+  # Casual network ----------------------------------------------------------
+  if (at %% resim.int == 0) {
+    nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
 
-  if (dat$param$method == 1) {
-    dat$attr$deg.main <- get_degree(dat$el[[1]])
-  } else {
-    dat$attr$deg.main <- paste0(dat$attr$race, get_degree(dat$el[[1]]))
+    suppressWarnings(
+      dat$nw$p <- simulate(dat$nw$p,
+                           formation = nwparam.p$formation,
+                           dissolution = nwparam.p$coef.diss$dissolution,
+                           coef.form = nwparam.p$coef.form,
+                           coef.diss = nwparam.p$coef.diss$coef.adj,
+                           constraints = nwparam.p$constraints,
+                           time.start = at,
+                           time.slices = 1 * resim.int,
+                           time.offset = 0,
+                           monitor = "all",
+                           output = "networkDynamic"))
+
+    stats <- tail(as.data.frame(attributes(dat$nw$p)$stats), 1 * resim.int)
+    stats <- calc_meandegs(dat, at, stats, "pers") ## Fix this for resim.int > 1
+    if (at == 2) {
+      dat$stats$nwstats$p <- stats
+    } else {
+      dat$stats$nwstats$p <- rbind(dat$stats$nwstats$p, stats)
+    }
   }
-  dat <- tergmLite::updateModelTermInputs(dat, network = 2)
 
-  dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
-                                             el = dat$el[[2]],
-                                             coef.form = nwparam.p$coef.form,
-                                             coef.diss = nwparam.p$coef.diss$coef.adj,
-                                             save.changes = TRUE)
+  dat$nw$m <- update_degree(dat$nw$m, dat$nw$p, deg.type = "pers", at = at)
+  dat$nw$i <- update_degree(dat$nw$i, dat$nw$p, deg.type = "pers", at = at)
 
-  if (at == 2) {
-    new.edges.p <- matrix(dat$el[[2]], ncol = 2)
-  } else {
-    new.edges.p <- attributes(dat$el[[2]])$changes
-    new.edges.p <- new.edges.p[new.edges.p[, "to"] == 1, 1:2, drop = FALSE]
-  }
+  asdf <- as.data.frame(dat$nw$p)
+  new.edges.p <- as.matrix(asdf[asdf$onset == at, c("tail", "head")], ncol = 2)[, 2:1]
   dat$temp$new.edges <- rbind(dat$temp$new.edges,
                               matrix(dat$attr$uid[new.edges.p], ncol = 2))
 
 
-  ## One-off network
+  # Delete nodes ------------------------------------------------------------
+  inactive <- which(dat$attr$active == 0)
+  if (dat$control$delete.nodes == TRUE && ((at %% resim.int) == (resim.int - 1))
+      && length(inactive) > 0) {
+    for (i in 1:2) {
+      dat$nw[[i]] <- network.extract(dat$nw[[i]], at = at)
+    }
+    dat$nw$i <- delete.vertices(dat$nw$i, vid = inactive)
+    dat$attr <- EpiModel::deleteAttr(dat$attr, inactive)
+  }
+
+  # Stop checks for consistency in nw / attr sizes
+  stopifnot(length(unique(sapply(dat$nw, function(x) x$gal$n))) == 1)
+  stopifnot(length(unique(sapply(dat$attr, length))) == 1)
+  stopifnot(length(dat$attr[[1]]) == dat$nw$m$gal$n)
+
+
+  # Instant network ---------------------------------------------------------
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
 
-  if (dat$param$method == 1) {
-    dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  inst.formula <- update.formula(nwparam.i$formation, dat$nw$i ~ .)
+  environment(inst.formula) <- environment()
+  dat$nw$i <- simulate(inst.formula, coef = nwparam.i$coef.form)
+
+  stats <- data.frame(t(summary(inst.formula)))
+  stats <- calc_meandegs(dat, at, stats, "inst")
+  if (at == 2) {
+    dat$stats$nwstats$i <- stats
   } else {
-    dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
-  }
-  dat <- tergmLite::updateModelTermInputs(dat, network = 3)
-
-  dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
-                                          el = dat$el[[3]],
-                                          coef = nwparam.i$coef.form)
-
-  if (dat$control$save.nwstats == TRUE) {
-    dat <- calc_resim_nwstats(dat, at)
+    dat$stats$nwstats$i <- rbind(dat$stats$nwstats$i, stats)
   }
 
+
   return(dat)
 }
 
 
 
-calc_resim_nwstats <- function(dat, at) {
+calc_meandegs <- function(dat, at, stats, type) {
 
-  for (nw in 1:3) {
-    n <- attr(dat$el[[nw]], "n")
-    edges <- nrow(dat$el[[nw]])
-    meandeg <- round(edges / n, 3)
-    concurrent <- round(mean(get_degree(dat$el[[nw]]) > 1), 3)
-    mat <- matrix(c(edges, meandeg, concurrent), ncol = 3, nrow = 1)
-    if (at == 2) {
-      dat$stats$nwstats[[nw]] <- mat
-      colnames(dat$stats$nwstats[[nw]]) <- c("edges", "meand", "conc")
-    }
-    if (at > 2) {
-      dat$stats$nwstats[[nw]] <- rbind(dat$stats$nwstats[[nw]], mat)
-    }
+  if (type == "main") {
+    nf.m <- summary(dat$nw$m ~ nodefactor("race", base = 0), at = at)
+    md.MB <- unname(round(nf.m[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
+    md.MW <- unname(round(nf.m[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
+    stats$md.MB <- md.MB
+    stats$md.MW <- md.MW
   }
 
-  return(dat)
+  if (type == "pers") {
+    nf.p <- summary(dat$nw$p ~ nodefactor("race", base = 0), at = at)
+    md.PB <- unname(round(nf.p[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
+    md.PW <- unname(round(nf.p[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
+    stats$md.PB <- md.PB
+    stats$md.PW <- md.PW
+  }
+
+  if (type == "inst") {
+    nf.i <- summary(dat$nw$i ~ nodefactor("race", base = 0))
+    md.IB <- unname(round(nf.i[1] / sum(dat$attr$active == 1 & dat$attr$race == "B"), 3))
+    md.IW <- unname(round(nf.i[2] / sum(dat$attr$active == 1 & dat$attr$race == "W"), 3))
+    stats$md.IB <- md.IB
+    stats$md.IW <- md.IW
+  }
+
+  return(stats)
 }
-
-
-
-#' @title Adjustment for the Edges Coefficient with Changing Network Size
-#'
-#' @description Adjusts the edges coefficients in a dynamic network model
-#'              to preserve the mean degree.
-#'
-#' @inheritParams aging_msm
-#'
-#' @details
-#' In HIV/STI modeling, there is typically an assumption that changes in
-#' population size do not affect one's number of partners, specified as the
-#' mean degree for network models. A person would not have 10 times the number
-#' of partners should he move from a city 10 times as large. This module uses
-#' the adjustment of Krivitsky et al. to adjust the edges coefficients on the
-#' three network models to account for varying population size in order to
-#' preserve that mean degree.
-#'
-#' @return
-#' The network model parameters stored in \code{dat$nwparam} are updated for
-#' each of the three network models.
-#'
-#' @references
-#' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
-#' composition effects in exponential-family random graph models." Statistical
-#' Methodology. 2011; 8.4: 319-339.
-#'
-#' @keywords module msm
-#'
-#' @export
-#'
-edges_correct_msm <- function(dat, at) {
-
-  old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
-  adjust <- log(old.num) - log(new.num)
-
-  coef.form.m <- get_nwparam(dat, network = 1)$coef.form
-  coef.form.m[1] <- coef.form.m[1] + adjust
-  dat$nwparam[[1]]$coef.form <- coef.form.m
-
-  coef.form.p <- get_nwparam(dat, network = 2)$coef.form
-  coef.form.p[1] <- coef.form.p[1] + adjust
-  dat$nwparam[[2]]$coef.form <- coef.form.p
-
-  coef.form.i <- get_nwparam(dat, network = 3)$coef.form
-  coef.form.i[1] <- coef.form.i[1] + adjust
-  dat$nwparam[[3]]$coef.form <- coef.form.i
-
-  return(dat)
-}
-
-
-
-
-# HET -----------------------------------------------------------------
-
-
-#' @title Network Resimulation Module
-#'
-#' @description Module function to resimulate the dynamic network forward one
-#'              time step conditional on current network structure and vertex
-#'              attributes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
-#' @export
-#'
-simnet_het <- function(dat, at) {
-
-  # Update edges coefficients
-  dat <- edges_correct_het(dat, at)
-
-  # Update internal ergm data
-  dat <- tergmLite::updateModelTermInputs(dat, network = 1)
-
-  # Pull network parameters
-  nwparam <- get_nwparam(dat, network = 1)
-
-  # Simulate edgelist
-  dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
-                                             el = dat$el[[1]],
-                                             coef.form = nwparam$coef.form,
-                                             coef.diss = nwparam$coef.diss$coef.adj)
-
-  return(dat)
-}
-
-
-
-#' @title Adjustment for the Edges Coefficient with Changing Network Size
-#'
-#' @description Adjusts the edges coefficients in a dynamic network model
-#'              to preserve the mean degree.
-#'
-#' @inheritParams aging_het
-#'
-#' @details
-#' In HIV/STI modeling, there is typically an assumption that changes in
-#' population size do not affect one's number of partners, specified as the
-#' mean degree for network models. A person would not have 10 times the number
-#' of partners should he move from a city 10 times as large. This module uses
-#' the adjustment of Krivitsky et al. to adjust the edges coefficients on the
-#' three network models to account for varying population size in order to
-#' preserve that mean degree.
-#'
-#' @return
-#' The network model parameters stored in \code{dat$nwparam} are updated.
-#'
-#' @references
-#' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
-#' composition effects in exponential-family random graph models." Statistical
-#' Methodology. 2011; 8.4: 319-339.
-#'
-#' @keywords module het
-#'
-#' @export
-#'
-edges_correct_het <- function(dat, at) {
-
-  # Popsize
-  old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
-
-  # New Coefs
-  coef.form <- get_nwparam(dat)$coef.form
-  coef.form[1] <- coef.form[1] + log(old.num) - log(new.num)
-  dat$nwparam[[1]]$coef.form <- coef.form
-
-  return(dat)
-}
-

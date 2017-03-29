@@ -4,7 +4,7 @@
 #' @description Module function stochastically simulates potential condom use
 #'              for each act on the discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @details
 #' For each act on the discordant edgelist, condom use is stochastically simulated
@@ -17,24 +17,29 @@
 #' Updates the discordant edgelist with a \code{uai} variable indicating whether
 #' condoms were used in that act.
 #'
-#' @keywords module msm
+#' @keywords module
 #' @export
 #'
-condoms_msm <- function(dat, at) {
+condoms.mard <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
 
-    ## Variables ##
+    # Variables ---------------------------------------------------------------
 
     # Attributes
     uid <- dat$attr$uid
+    status <- dat$attr$status
     diag.status <- dat$attr$diag.status
     race <- dat$attr$race
+    tx.status <- dat$attr$tx.status
+    tt.traj <- dat$attr$tt.traj
 
-    # Parameters
-    cond.rr.BB <- dat$param$cond.rr.BB
-    cond.rr.BW <- dat$param$cond.rr.BW
-    cond.rr.WW <- dat$param$cond.rr.WW
+    # Parameters and data
+    if (dat$control$save.dal == TRUE) {
+      dal <- dat$temp$dal[[at]]
+    } else {
+      dal <- dat$temp$dal
+    }
 
     if (type == "main") {
       cond.BB.prob <- dat$param$cond.main.BB.prob
@@ -42,8 +47,9 @@ condoms_msm <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.main.WW.prob
       diag.beta <- dat$param$cond.diag.main.beta
       discl.beta <- dat$param$cond.discl.main.beta
-      cond.always <- NULL
-      ptype <- 1
+      fsupp.beta <- dat$param$cond.fsupp.main.beta
+      psupp.beta <- dat$param$cond.psupp.main.beta
+      dal <- dal[dal$type == "M", ]
     }
     if (type == "pers") {
       cond.BB.prob <- dat$param$cond.pers.BB.prob
@@ -51,8 +57,9 @@ condoms_msm <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.pers.WW.prob
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
-      cond.always <- dat$attr$cond.always.pers
-      ptype <- 2
+      fsupp.beta <- dat$param$cond.fsupp.pers.beta
+      psupp.beta <- dat$param$cond.psupp.pers.beta
+      dal <- dal[dal$type == "P", ]
     }
     if (type == "inst") {
       cond.BB.prob <- dat$param$cond.inst.BB.prob
@@ -60,85 +67,92 @@ condoms_msm <- function(dat, at) {
       cond.WW.prob <- dat$param$cond.inst.WW.prob
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
-      cond.always <- dat$attr$cond.always.inst
-      ptype <- 3
+      fsupp.beta <- dat$param$cond.fsupp.inst.beta
+      psupp.beta <- dat$param$cond.psupp.inst.beta
+      dal <- dal[dal$type == "I", ]
     }
 
-    el <- dat$temp$el
-    elt <- el[el[, "ptype"] == ptype, ]
 
-    ## Process ##
+    # Processes ---------------------------------------------------------------
 
-    # Base condom probs
-    race.p1 <- race[elt[, 1]]
-    race.p2 <- race[elt[, 2]]
-    num.B <- (race.p1 == "B") + (race.p2 == "B")
-    cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
-                 (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
-                 (num.B == 0) * (cond.WW.prob * cond.rr.WW)
+    if (nrow(dal) > 0) {
+      cond.prob <- rep(NA, dim(dal)[1])
+    }
 
-    # Transform to UAI logit
+    race.1 <- race[dal[, 1]]
+    race.2 <- race[dal[, 2]]
+    num.B <- (race.1 == "B") + (race.2 == "B")
+
+    cond.prob <- (num.B == 2) * cond.BB.prob +
+                 (num.B == 1) * cond.BW.prob +
+                 (num.B == 0) * cond.WW.prob
+
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
-    # Diagnosis modifier
-    pos.diag <- diag.status[elt[, 1]]
+    pos.diag <- diag.status[dal[, 1]]
+
+    dlist <- dat$temp$discl.list
+    discl <- sapply(1:nrow(dal), function(x) {
+      sum(dlist$pos == uid[dal[x, 1]] &
+            dlist$neg == uid[dal[x, 2]]) > 0
+    })
+
+    pos.tx <- tx.status[dal[, 1]]
+    pos.tt.traj <- tt.traj[dal[, 1]]
+
+    # Odds, Diagnosed
     isDx <- which(pos.diag == 1)
     uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
 
-    # Disclosure modifier
-    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
-    delt <- elt[isDiscord, ]
-    discl.list <- dat$temp$discl.list
-    disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
-    delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
-    discl.disc <- (delt.cdl %in% disclose.cdl)
-
-    discl <- rep(NA, nrow(elt))
-    discl[isDiscord] <- discl.disc
-
+    # Odds, Disclosed
     isDisc <- which(discl == 1)
     uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta
 
-    # Back transform to prob
+    # Odds, Tx Full Suppress Type
+    isFS <- which(pos.tx == 1 & pos.tt.traj == "YF")
+    uai.logodds[isFS] <- uai.logodds[isFS] + fsupp.beta
+
+    # Odds, Tx Part Supress Type
+    isPS <- which(pos.tx == 1 & pos.tt.traj == "YP")
+    uai.logodds[isPS] <- uai.logodds[isPS] + psupp.beta
+
     old.uai.prob <- uai.prob
     uai.prob <- exp(uai.logodds) / (1 + exp(uai.logodds))
 
     uai.prob[is.na(uai.prob) & old.uai.prob == 0] <- 0
     uai.prob[is.na(uai.prob) & old.uai.prob == 1] <- 1
 
-    # UAI group
-    if (type %in% c("pers", "inst")) {
-      ca1 <- cond.always[elt[, 1]]
-      ca2 <- cond.always[elt[, 2]]
-      uai.prob <- ifelse(ca1 == 1 | ca2 == 1, 0, uai.prob)
+    uai <- rbinom(n = length(uai.prob), size = 1, prob = uai.prob)
+
+
+    # Output ------------------------------------------------------------------
+
+    if (dat$control$save.dal == TRUE) {
+      if (type == "main") {
+        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "M"] <- uai
+      }
       if (type == "pers") {
-        dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
-      } else {
-        dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
+        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "P"] <- uai
+      }
+      if (type == "inst") {
+        dat$temp$dal[[at]]$uai[dat$temp$dal[[at]]$type == "I"] <- uai
+      }
+    } else {
+      if (type == "main") {
+        dat$temp$dal$uai[dat$temp$dal$type == "M"] <- uai
+      }
+      if (type == "pers") {
+        dat$temp$dal$uai[dat$temp$dal$type == "P"] <- uai
+      }
+      if (type == "inst") {
+        dat$temp$dal$uai[dat$temp$dal$type == "I"] <- uai
       }
     }
 
-    ai.vec <- elt[, "ai"]
-    pos <- rep(elt[, "p1"], ai.vec)
-    neg <- rep(elt[, "p2"], ai.vec)
-    ptype <- rep(elt[, "ptype"], ai.vec)
 
-    uai.prob.peract <- rep(uai.prob, ai.vec)
-    uai <- rbinom(length(pos), 1, uai.prob.peract)
-
-    if (type == "main") {
-      pid <- rep(1:length(ai.vec), ai.vec)
-      al <- cbind(pos, neg, ptype, uai, pid)
-    } else {
-      pid <- rep(max(al[, "pid"]) + (1:length(ai.vec)), ai.vec)
-      tmp.al <- cbind(pos, neg, ptype, uai, pid)
-      al <- rbind(al, tmp.al)
-    }
-
-  } # end ptype loop
-
-  dat$temp$al <- al
+  }
 
   return(dat)
 }
+

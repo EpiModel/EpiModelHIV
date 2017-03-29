@@ -4,7 +4,7 @@
 #' @description Module function for establishing sexual role or position in each
 #'              act on the discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @details
 #' The sexual role within each act is determined by each nodes "role identity"
@@ -19,21 +19,18 @@
 #' attribute for values of whether the infected node is insertive or the
 #' susceptible node is insertive for that act.
 #'
-#' @keywords module msm
-#' 
+#' @keywords module
 #' @export
 #'
-position_msm <- function(dat, at) {
+position.mard <- function(dat, at) {
 
   ## Variables
-  al <- dat$temp$al
-  if (nrow(al) == 0) {
-    return(dat)
-  }
 
-  status <- dat$attr$status
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
-  dat$temp$al <- NULL
+  if (dat$control$save.dal == TRUE) {
+    dal <- dat$temp$dal[[at]]
+  } else {
+    dal <- dat$temp$dal
+  }
 
   role.class <- dat$attr$role.class
   ins.quot <- dat$attr$ins.quot
@@ -45,35 +42,41 @@ position_msm <- function(dat, at) {
 
 
   ## Process
-  pos.role.class <- role.class[dal[, 1]]
-  neg.role.class <- role.class[dal[, 2]]
+  pos.role.class <- role.class[dal$pos]
+  neg.role.class <- role.class[dal$neg]
 
-  ins <- rep(NA, length(pos.role.class))
-  ins[which(pos.role.class == "I")] <- 1  # "P"
-  ins[which(pos.role.class == "R")] <- 0  # "N"
-  ins[which(neg.role.class == "I")] <- 0  # "N"
-  ins[which(neg.role.class == "R")] <- 1  # "P"
+  dal$ins <- NA
+  dal$ins[pos.role.class == "I"] <- "P"
+  dal$ins[pos.role.class == "R"] <- "N"
+  dal$ins[neg.role.class == "I"] <- "N"
+  dal$ins[neg.role.class == "R"] <- "P"
 
   vv <- which(pos.role.class == "V" & neg.role.class == "V")
-  vv.race.combo <- paste0(race[dal[, 1]][vv], race[dal[, 2]][vv])
+  vv.race.combo <- paste0(race[dal$pos[vv]], race[dal$neg[vv]])
   vv.race.combo[vv.race.combo == "WB"] <- "BW"
   vv.iev.prob <- (vv.race.combo == "BB") * vv.iev.BB.prob +
                  (vv.race.combo == "BW") * vv.iev.BW.prob +
                  (vv.race.combo == "WW") * vv.iev.WW.prob
 
   iev <- rbinom(length(vv), 1, vv.iev.prob)
-  ins[vv[iev == 1]] <- 2 # "B"
+  dal$ins[vv[iev == 1]] <- "B"
   vv.remaining <- vv[iev == 0]
 
-  inspos.prob <- ins.quot[dal[, 1][vv.remaining]] /
-                 (ins.quot[dal[, 1][vv.remaining]] + ins.quot[dal[, 2][vv.remaining]])
+  inspos.prob <- ins.quot[dal$pos[vv.remaining]] /
+                 (ins.quot[dal$pos[vv.remaining]] + ins.quot[dal$neg[vv.remaining]])
   inspos <- rbinom(length(vv.remaining), 1, inspos.prob)
-  ins[vv.remaining[inspos == 1]] <- 1  # "P"
-  ins[vv.remaining[inspos == 0]] <- 0  # "N"
+  dal$ins[vv.remaining[inspos == 1]] <- "P"
+  dal$ins[vv.remaining[inspos == 0]] <- "N"
 
 
   ## Output
-  dat$temp$dal <- cbind(dal, ins)
+  if (dat$control$save.dal == TRUE) {
+    dat$temp$dal[[at]] <- dal
+  } else {
+    dat$temp$dal <- dal
+  }
+
+
 
   return(dat)
 }

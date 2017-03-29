@@ -4,7 +4,7 @@
 #' @description Module function for simulting both general and disease-related
 #'              deaths among population members.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @details
 #' Deaths are divided into two categories: general deaths, for which demographic
@@ -19,24 +19,25 @@
 #' This function returns the updated \code{dat} object accounting for deaths.
 #' The deaths are deactivated from the main and casual networks, as those are in
 #' \code{networkDynamic} class objects; dead nodes are not deleted from the
-#' instant network until the \code{\link{simnet_msm}} module for bookkeeping
+#' instant network until the \code{\link{simnet.mard}} module for bookkeeping
 #' purposes.
 #'
-#' @keywords module msm
+#' @keywords module
 #' @export
 #'
-deaths_msm <- function(dat, at) {
+deaths.mard <- function(dat, at) {
 
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
+  active <- dat$attr$active
 
-  alive.B <- which(race == "B")
+  alive.B <- which(active == 1 & race == "B")
   age.B <- age[alive.B]
   death.B.prob <- dat$param$asmr.B[age.B]
   deaths.B <- alive.B[rbinom(length(death.B.prob), 1, death.B.prob) == 1]
 
-  alive.W <- which(race == "W")
+  alive.W <- which(active == 1 & race == "W")
   age.W <- age[alive.W]
   death.W.prob <- dat$param$asmr.W[age.W]
   deaths.W <- alive.W[rbinom(length(death.W.prob), 1, death.W.prob) == 1]
@@ -45,131 +46,32 @@ deaths_msm <- function(dat, at) {
 
 
   ## Disease deaths
-  dth.dis <- which(dat$attr$stage == 4 &
+  dth.dis <- which(dat$attr$active == 1 &
+                   dat$attr$stage == "D" &
                    dat$attr$vl >= dat$param$vl.fatal)
 
   dth.all <- NULL
   dth.all <- unique(c(dth.gen, dth.dis))
 
   if (length(dth.all) > 0) {
+
     dat$attr$active[dth.all] <- 0
-    for (i in 1:3) {
-      dat$el[[i]] <- tergmLite::delete_vertices(dat$el[[i]], dth.all)
-    }
-    dat$attr <- deleteAttr(dat$attr, dth.all)
-    if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-      stop("mismatch between el and attr length in death mod")
+    dat$attr$depart.time[dth.all] <- at
+
+    for (i in 1:2) {
+      dat$nw[[i]] <- deactivate.vertices(dat$nw[[i]], onset = at, terminus = Inf,
+                                         v = dth.all, deactivate.edges = TRUE)
     }
   }
 
 
   ## Summary Output
   dat$epi$dth.gen[at] <- length(dth.gen)
+  dat$epi$dth.gen.B[at] <- length(deaths.B)
+  dat$epi$dth.gen.W[at] <- length(deaths.W)
   dat$epi$dth.dis[at] <- length(dth.dis)
-
-  return(dat)
-}
-
-
-
-#' @title Deaths Module
-#'
-#' @description Module for simulating deaths among susceptible and infected
-#'              persons within the population.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
-#' @export
-#'
-deaths_het <- function(dat, at) {
-
-  ### 1. Susceptible Deaths ###
-
-  ## Variables
-  male <- dat$attr$male
-  age <- dat$attr$age
-  cd4Count <- dat$attr$cd4Count
-
-  di.cd4.aids <- dat$param$di.cd4.aids
-  ds.exit.age <- dat$param$ds.exit.age
-
-  ## Eligible are: active uninf, pre-death infected, unhealthy old
-  idsEligSus <- which((is.na(cd4Count) |
-                       cd4Count > di.cd4.aids |
-                       (cd4Count <= di.cd4.aids & age > ds.exit.age)))
-  nEligSus <- length(idsEligSus)
-
-  # Set age-sex specific rates
-  ds.rates <- dat$param$ds.rates
-  if (nEligSus > 0) {
-    rates <- ds.rates$mrate[100*male[idsEligSus] + age[idsEligSus]]
-  }
-
-
-  ## Process
-  nDeathsSus <- 0; idsDeathsSus <- NULL
-  if (nEligSus > 0) {
-    vecDeathsSus <- which(rbinom(nEligSus, 1, rates) == 1)
-    nDeathsSus <- length(vecDeathsSus)
-  }
-
-
-  ## Update Attributes
-  if (nDeathsSus > 0) {
-    idsDeathsSus <- idsEligSus[vecDeathsSus]
-    dat$attr$active[idsDeathsSus] <- 0
-  }
-
-
-  ### 2. Infected Deaths ###
-
-  ## Variables
-  active <- dat$attr$active
-  di.cd4.rate <- dat$param$di.cd4.rate
-
-  ## Process
-  nDeathsInf <- 0; idsDeathsInf <- NULL
-
-  cd4Count <- dat$attr$cd4Count
-  stopifnot(length(active) == length(cd4Count))
-
-  idsEligInf <- which(active == 1 & cd4Count <= di.cd4.aids)
-  nEligInf <- length(idsEligInf)
-
-  if (nEligInf > 0) {
-    vecDeathsInf <- which(rbinom(nEligInf, 1, di.cd4.rate) == 1)
-    if (length(vecDeathsInf) > 0) {
-      idsDeathsInf <- idsEligInf[vecDeathsInf]
-      nDeathsInf <- length(idsDeathsInf)
-    }
-  }
-
-  idsDeathsDet <- which(cd4Count <= 0)
-  if (length(idsDeathsDet) > 0) {
-    idsDeathsInf <- c(idsDeathsInf, idsDeathsDet)
-    nDeathsInf <- nDeathsInf + length(idsDeathsDet)
-  }
-
-
-  ### 3. Update Attributes ###
-  if (nDeathsInf > 0) {
-    dat$attr$active[idsDeathsInf] <- 0
-  }
-
-  ## 4. Update Population Structure ##
-  inactive <- which(dat$attr$active == 0)
-  dat$el[[1]] <- tergmLite::delete_vertices(dat$el[[1]], inactive)
-  dat$attr <- deleteAttr(dat$attr, inactive)
-
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-    stop("mismatch between el and attr length in death mod")
-  }
-
-  ### 5. Summary Statistics ###
-  dat$epi$ds.flow[at] <- nDeathsSus
-  dat$epi$di.flow[at] <- nDeathsInf
+  dat$epi$dth.dis.B[at] <- sum(race[dth.dis] == "B")
+  dat$epi$dth.dis.W[at] <- sum(race[dth.dis] == "W")
 
   return(dat)
 }

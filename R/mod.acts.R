@@ -4,7 +4,7 @@
 #' @description Module function for setting the number of sexual acts on the
 #'              discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @details
 #' The number of acts at each time step is specified as a function of the race of
@@ -19,91 +19,141 @@
 #' list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
 #' discordant pair repeated the number of times they have AI.
 #'
-#' @keywords module msm
+#' @keywords module
 #' @export
 #'
-acts_msm <- function(dat, at) {
+acts.mard <- function(dat, at) {
 
   for (type in c("main", "pers", "inst")) {
-
-    ## Variables ##
+    # Variables ---------------------------------------------------------------
 
     # Attributes
+    active <- dat$attr$active
+    uid <- dat$attr$uid
     status <- dat$attr$status
     race <- dat$attr$race
+    diag.status <- dat$attr$diag.status
+    tx.status <- dat$attr$tx.status
+    tt.traj <- dat$attr$tt.traj
 
     # Parameters
-    ai.scale <- dat$param$ai.scale
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
+      ai.diag.rr <- dat$param$ai.diag.main.rr
+      ai.discl.rr <- dat$param$ai.discl.main.rr
+      ai.full.supp.rr <- dat$param$ai.full.supp.main.rr
+      ai.part.supp.rr <- dat$param$ai.part.supp.main.rr
       fixed <- FALSE
-      ptype <- 1
-      el <- dat$el[[1]]
+      if (dat$control$delete.nodes == TRUE) {
+        el <- matrix(as.edgelist(dat$nw$m), ncol = 2)
+      } else {
+        el <- get.dyads.active(dat$nw$m, at = at)
+      }
     }
     if (type == "pers") {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
+      ai.diag.rr <- dat$param$ai.diag.pers.rr
+      ai.discl.rr <- dat$param$ai.discl.pers.rr
+      ai.full.supp.rr <- dat$param$ai.full.supp.pers.rr
+      ai.part.supp.rr <- dat$param$ai.part.supp.pers.rr
       fixed <- FALSE
-      ptype <- 2
-      el <- dat$el[[2]]
+      if (dat$control$delete.nodes == TRUE) {
+        el <- matrix(as.edgelist(dat$nw$p), ncol = 2)
+      } else {
+        el <- get.dyads.active(dat$nw$p, at = at)
+      }
     }
     if (type == "inst") {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
-      fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
-      ptype <- 3
-      el <- dat$el[[3]]
+      ai.diag.rr <- 1
+      ai.discl.rr <- 1
+      ai.full.supp.rr <- 1
+      ai.part.supp.rr <- 1
+      fixed <- TRUE
+      el <- matrix(as.edgelist(dat$nw$i), ncol = 2)
     }
 
-    ## Processes ##
 
-    # Construct edgelist
+    # Processes ---------------------------------------------------------------
 
-    st1 <- status[el[, 1]]
-    st2 <- status[el[, 2]]
-    disc <- abs(st1 - st2) == 1
-    el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
-    el <- cbind(el, status[el[, 1]], status[el[, 2]])
-    colnames(el) <- c("p1", "p2", "st1", "st2")
+    # Construct discordant edgelist
+    disc.el <- el[status[el[, 1]] - status[el[, 2]] == 1, , drop = FALSE]
+    disc.el <- rbind(disc.el, el[status[el[, 2]] - status[el[, 1]] == 1, 2:1, drop = FALSE])
 
-    if (nrow(el) > 0) {
 
-      # Base AI rates
-      ai.rate <- rep(NA, nrow(el))
-      race.p1 <- race[el[, 1]]
-      race.p2 <- race[el[, 2]]
-      num.B <- (race.p1 == "B") + (race.p2 == "B")
+    if (nrow(disc.el) > 0) {
+
+      ai.rate <- rep(NA, dim(disc.el)[1])
+
+      race.1 <- race[disc.el[, 1]]
+      race.2 <- race[disc.el[, 2]]
+      num.B <- (race.1 == "B") + (race.2 == "B")
+
       ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                 (num.B == 1) * base.ai.BW.rate +
-                 (num.B == 0) * base.ai.WW.rate
-      ai.rate <- ai.rate * ai.scale
+                (num.B == 1) * base.ai.BW.rate +
+                (num.B == 0) * base.ai.WW.rate
 
-      # Final act number
+      pos.diag <- diag.status[disc.el[, 1]]
+      pos.tx    <- tx.status[disc.el[, 1]]
+      pos.tt.traj <- tt.traj[disc.el[, 1]]
+
+      dlist <- dat$temp$discl.list
+      disclosed <- sapply(1:nrow(disc.el), function(x) {
+        length(intersect(which(uid[disc.el[x, 1]] == dlist$pos),
+                         which(uid[disc.el[x, 2]] == dlist$neg))) != 0
+      })
+
+      ai.rate[pos.diag == 1] <- ai.rate[pos.diag == 1] * ai.diag.rr
+      ai.rate[disclosed == TRUE] <- ai.rate[disclosed == TRUE] * ai.discl.rr
+      ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YF"] *
+                                                   ai.full.supp.rr
+      ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] <- ai.rate[pos.tx == 1 & pos.tt.traj == "YP"] *
+                                                   ai.part.supp.rr
+
       if (fixed == FALSE) {
         ai <- rpois(length(ai.rate), ai.rate)
       } else {
         ai <- round(ai.rate)
       }
 
-      # Full edge list
-      el <- cbind(el, ptype, ai)
-      colnames(el)[5:6] <- c("ptype", "ai")
+      if (sum(ai) > 0) {
+        result <- data.frame(pos = rep(disc.el[, 1], ai),
+                             neg = rep(disc.el[, 2], ai),
+                             type = toupper(substr(type, 1, 1)),
+                             uai = NA,
+                             ins = NA,
+                             stringsAsFactors = FALSE)
+      } else {
+        result <- data.frame(pos = NULL,
+                             neg = NULL,
+                             type = NULL,
+                             uai = NULL,
+                             ins = NULL,
+                             stringsAsFactors = FALSE)
+      }
 
       if (type == "main") {
-        dat$temp$el <- el
+        if (dat$control$save.dal == TRUE) {
+          dat$temp$dal[[at]] <- result
+        } else {
+          dat$temp$dal <- result
+        }
       } else {
-        dat$temp$el <- rbind(dat$temp$el, el)
+        if (dat$control$save.dal == TRUE) {
+          dat$temp$dal[[at]] <- rbind(dat$temp$dal[[at]], result)
+        } else {
+          dat$temp$dal <- rbind(dat$temp$dal, result)
+        }
       }
+
     }
-
-  } # loop over type end
-
-  # Remove inactive edges from el
-  dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
+  }
 
   return(dat)
 }

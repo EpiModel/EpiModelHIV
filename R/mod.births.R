@@ -4,7 +4,7 @@
 #' @description Module function for births or entries into the sexually active
 #'              population.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @details
 #' New population members are added based on expected numbers of entries among
@@ -18,12 +18,12 @@
 #' This function updates the \code{attr} list with new attributes for each new
 #' population member, and the \code{nw} objects with new vertices.
 #'
-#' @keywords module msm
+#' @keywords module
 #' @export
 #'
-births_msm <- function(dat, at){
+births.mard <- function(dat, at){
 
-  ## Variables
+  # Variables ---------------------------------------------------------------
 
   # Parameters
   b.B.rate <- dat$param$b.B.rate
@@ -31,7 +31,7 @@ births_msm <- function(dat, at){
   b.method <- dat$param$b.method
 
 
-  ## Process
+  # Process -----------------------------------------------------------------
   if (b.method == "fixed") {
     numB <- dat$epi$num.B[1]
     numW <- dat$epi$num.W[1]
@@ -48,26 +48,72 @@ births_msm <- function(dat, at){
 
   ## Update Attr
   if (nBirths > 0) {
-    dat <- setBirthAttr_msm(dat, at, nBirths.B, nBirths.W)
+    dat <- setBirthAttr.mard(dat, at, nBirths.B, nBirths.W)
   }
 
 
-  # Update Networks
+  # Update Networks ---------------------------------------------------------
+  currNwSize <- network.size(dat$nw$m)
+
+  newIds <- NULL
   if (nBirths > 0) {
+    newIds <- (currNwSize + 1):(currNwSize + nBirths)
+
+    stopifnot(unique(sapply(dat$attr, length)) == (currNwSize + nBirths))
+
+    new.race <- dat$attr$race[newIds]
+    new.srage <- dat$attr$sqrt.age[newIds]
+    new.rc <- dat$attr$role.class[newIds]
+    new.degm <- new.degp <- paste0(new.race, 0)
+    new.riskg <- dat$attr$riskg[newIds]
+
     for (i in 1:3) {
-      dat$el[[i]] <- tergmLite::add_vertices(dat$el[[i]], nBirths)
+      dat$nw[[i]] <- add.vertices.active(x = dat$nw[[i]], nv = nBirths,
+                                         onset = at, terminus = Inf)
     }
+
+    dat$nw$m <- set.vertex.attribute(x = dat$nw$m,
+                                     attrname = c("race", "sqrt.age",
+                                                  "role.class", "deg.pers"),
+                                     value = list(race = new.race,
+                                                  sqrt.age = new.srage,
+                                                  role.class = new.rc,
+                                                  deg.pers = new.degp),
+                                     v = newIds)
+
+    dat$nw$p <- set.vertex.attribute(x = dat$nw$p,
+                                     attrname = c("race", "sqrt.age",
+                                                  "role.class", "deg.main"),
+                                     value = list(race = new.race,
+                                                  sqrt.age = new.srage,
+                                                  role.class = new.rc,
+                                                  deg.main = new.degm),
+                                     v = newIds)
+
+    dat$nw$i <- set.vertex.attribute(x = dat$nw$i,
+                                     attrname = c("race", "sqrt.age",
+                                                  "role.class", "deg.pers",
+                                                  "deg.main", "riskg"),
+                                     value = list(race = new.race,
+                                                  sqrt.age = new.srage,
+                                                  role.class = new.rc,
+                                                  deg.pers = new.degp,
+                                                  deg.main = new.degm,
+                                                  riskg = new.riskg),
+                                     v = newIds)
   }
 
 
   ## Output
   dat$epi$nBirths[at] <- nBirths
+  dat$epi$nBirths.B[at] <- nBirths.B
+  dat$epi$nBirths.W[at] <- nBirths.W
 
   return(dat)
 }
 
 
-setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
+setBirthAttr.mard <- function(dat, at, nBirths.B, nBirths.W) {
 
   nBirths <- nBirths.B + nBirths.W
 
@@ -99,18 +145,16 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$inst.ai.class[newIds] <- sample(1:dat$param$num.inst.ai.classes,
                                            nBirths, replace = TRUE)
 
-  dat$attr$tt.traj[newIds[newB]] <- sample(c(1, 2, 3, 4),
+  dat$attr$tt.traj[newIds[newB]] <- sample(c("NN", "YN", "YP", "YF"),
                                            nBirths.B, replace = TRUE,
                                            prob = dat$param$tt.traj.B.prob)
-  dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
+  dat$attr$tt.traj[newIds[newW]] <- sample(c("NN", "YN", "YP", "YF"),
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
 
-  # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
 
-  # Role
   dat$attr$role.class[newIds[newB]] <- sample(c("I", "R", "V"),
                                               nBirths.B, replace = TRUE,
                                               prob = dat$param$role.B.prob)
@@ -137,147 +181,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                         prob = c(1 - sum(ccr5.W.prob),
                                                  ccr5.W.prob[2], ccr5.W.prob[1]))
 
-
-  # Degree
-  dat$attr$deg.main[newIds] <- 0
-  dat$attr$deg.pers[newIds] <- 0
-
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
-
-  # UAI group
-  p1 <- dat$param$cond.pers.always.prob
-  p2 <- dat$param$cond.inst.always.prob
-  rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
-  dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
-  dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
-
-  # PrEP
-  dat$attr$prepStat[newIds] <- 0
-
-  return(dat)
-}
-
-
-
-#' @title Births Module
-#'
-#' @description Module for simulating births/entries into the population, including
-#'              initialization of attributes for incoming nodes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
-#' @export
-#'
-births_het <- function(dat, at) {
-
-  # Variables
-  b.rate.method <- dat$param$b.rate.method
-  b.rate <- dat$param$b.rate
-  active <- dat$attr$active
-
-
-  # Process
-  nBirths <- 0
-  if (b.rate.method == "stgrowth") {
-    exptPopSize <- dat$epi$num[1] * (1 + b.rate*at)
-    numNeeded <- exptPopSize - sum(active == 1)
-    if (numNeeded > 0) {
-      nBirths <- rpois(1, numNeeded)
-    }
-  }
-  if (b.rate.method == "totpop") {
-    nElig <- dat$epi$num[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-  if (b.rate.method == "fpop") {
-    nElig <- dat$epi$num.feml[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-
-
-  # Update Population Structure
-  if (nBirths > 0) {
-    dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el[[1]] <- tergmLite::add_vertices(dat$el[[1]], nBirths)
-  }
-
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-    stop("mismatch between el and attr length in births mod")
-  }
-
-  # Output
-  dat$epi$b.flow[at] <- nBirths
-
-  return(dat)
-}
-
-
-#' @title Assign Vertex Attributes at Network Entry
-#'
-#' @description Assigns vertex attributes to incoming nodes at birth/entry into
-#'              the network.
-#'
-#' @inheritParams births_het
-#' @param nBirths Number of new births as determined by \code{\link{births_het}}.
-#'
-#' @keywords het
-#'
-#' @export
-#'
-#'
-setBirthAttr_het <- function(dat, at, nBirths) {
-
-  # Set attributes for new births to NA
-  dat$attr <- lapply(dat$attr, function(x) c(x, rep(NA, nBirths)))
-  newIds <- which(is.na(dat$attr$active))
-
-
-  # Network Status
-  dat$attr$active[newIds] <- rep(1, nBirths)
-  dat$attr$entTime[newIds] <- rep(at, nBirths)
-
-
-  # Demography
-  prop.male <- ifelse(is.null(dat$param$b.propmale),
-                      dat$epi$propMale[1],
-                      dat$param$b.propmale)
-  dat$attr$male[newIds] <- rbinom(nBirths, 1, prop.male)
-
-  dat$attr$age[newIds] <- rep(18, nBirths)
-
-  # Circumcision
-  entTime <- dat$attr$entTime
-
-  idsNewMale <- which(dat$attr$male == 1 & entTime == at)
-
-  if (length(idsNewMale) > 0) {
-    age <- dat$attr$age[idsNewMale]
-    newCirc <- rbinom(length(idsNewMale), 1, dat$param$circ.prob.birth)
-    isCirc <- which(newCirc == 1)
-
-    newCircTime <- rep(NA, length(idsNewMale))
-    newCircTime[isCirc] <- round(-age[isCirc] * (365 / dat$param$time.unit))
-
-    dat$attr$circStat[idsNewMale] <- newCirc
-    dat$attr$circTime[idsNewMale] <- newCircTime
-  }
-
-
-  # Epi/Clinical
-  dat$attr$status[newIds] <- rep(0, nBirths)
-
-  if (length(unique(sapply(dat$attr, length))) != 1) {
-    sapply(dat$attr, length)
-    stop("Attribute dimensions not unique")
-  }
 
   return(dat)
 }

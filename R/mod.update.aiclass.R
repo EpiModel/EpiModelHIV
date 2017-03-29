@@ -4,17 +4,16 @@
 #' @description Module function for updating act class in one-off partnerships
 #'              based on probabilities of transition.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging.mard
 #'
 #' @return
 #' This function updates the individual-level attribute \code{inst.ai.class} on
 #' \code{dat$attr}.
 #'
-#' @keywords module msm
-#' 
+#' @keywords module
 #' @export
 #'
-update_aiclass_msm <- function(dat, at) {
+update_aiclass.mard <- function(dat, at) {
 
   inst.trans.matrix <- dat$param$inst.trans.matrix
   if (sum(colSums(dat$param$inst.trans.matrix) != 1) > 0) {
