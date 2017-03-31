@@ -94,6 +94,7 @@ test_msm <- function(dat, at) {
   # Tests
   dat$epi$hivtests.prep[at] <- length(tst.prep)
   dat$epi$hivtests.nprep[at] <- length(tst.nprep)
+  dat$epi$hivtests.pos[at] <- length(tst.pos)
   
   return(dat)
 }
@@ -180,11 +181,11 @@ test_sti_msm <- function(dat, at) {
 
     
     # Annual - testing trajectory update
-    activeindwindow <- stitest.active.int
+    activeindwindow <- stitest.active.int * 7
     idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
     
     # High-risk - testing trajectory update
-    hrindwindow <- sti.highrisktest.int
+    hrindwindow <- sti.highrisktest.int * 7
     
     #STI testing eligibility scenarios
     

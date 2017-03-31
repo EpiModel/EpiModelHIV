@@ -1225,6 +1225,8 @@ sti_tx <- function(dat, at) {
   dat$epi$txGC[at] <- length(unique(c(txRGC_all, txUGC_all)))
   dat$epi$txCT[at] <- length(unique(c(txRCT_all, txUCT_all)))
   dat$epi$txsyph[at] <- length(unique(c(txsyph_all)))
+  dat$epi$txearlysyph[at] <- length(unique(c(txsyph_sympt_prim, txsyph_sympt_seco, txsyph_asympt_prim, txsyph_asympt_seco, txsyph_asympt_earlat)))
+  dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert, txsyph_sympt_tert)))
 
   return(dat)
 }

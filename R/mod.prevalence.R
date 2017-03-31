@@ -99,8 +99,10 @@ prevalence_msm <- function(dat, at) {
     
     dat$epi$hivtests.prep <- rep(0, nsteps)
     dat$epi$hivtests.nprep <- rep(0, nsteps)
+    dat$epi$hivtests.pos <- rep(0, nsteps)
     dat$epi$totalhivtests.prep <- rep(0, nsteps)
     dat$epi$totalhivtests <- rep(0, nsteps)
+    dat$epi$totalhivtests.pos <- rep(0, nsteps)
     
     dat$epi$totalrGCsympttests <- rep(0, nsteps)
     dat$epi$totaluGCsympttests <- rep(0, nsteps)
@@ -228,6 +230,8 @@ prevalence_msm <- function(dat, at) {
     dat$epi$txGC <- rNA
     dat$epi$txCT <- rNA
     dat$epi$txsyph <- rNA
+    dat$epi$txearlysyph <- rNA
+    dat$epi$txlatesyph <- rNA
     
     dat$epi$stiactiveind <- rNA  
     dat$epi$recentpartners <- rNA
@@ -297,6 +301,7 @@ prevalence_msm <- function(dat, at) {
       
       dat$epi$totalhivtests[at] <- sum(dat$epi$hivtests.prep[at], dat$epi$hivtests.nprep[at])
       dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at]
+      dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at]
       
       dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at]
       dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at]
@@ -353,6 +358,7 @@ prevalence_msm <- function(dat, at) {
       
       dat$epi$totalhivtests[at] <- dat$epi$hivtests.nprep[at] + dat$epi$hivtests.prep[at] + dat$epi$totalhivtests[at - 1]
       dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at] + dat$epi$totalhivtests.prep[at - 1]
+      dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at] + dat$epi$totalhivtests.pos[at - 1]
       
       dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at] + dat$epi$totalrGCsympttests[at - 1] 
       dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at] + dat$epi$totaluGCsympttests[at - 1]
