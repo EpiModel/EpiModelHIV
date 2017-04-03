@@ -45,13 +45,16 @@ param <- param_msm(nwstats = st,
                    stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                    
                    syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                   syph.prim.asympt.prob.tx = 0.35,
                    syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.seco.asympt.prob.tx = 0.60,
-                   syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.latelat.prob.tx = 0.10,
+                   syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                   syph.latelat.sympt.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 0.90,
-                   syph.tert.asympt.prob.tx = 0.90,
+                   
+                   syph.prim.asympt.prob.tx = 1,
+                   syph.seco.asympt.prob.tx = 1,
+                   syph.earlat.asympt.prob.tx = 1, 
+                   syph.latelat.asympt.prob.tx = 1,
+                   syph.tert.asympt.prob.tx = 1,
                    
                    hivdx.syph.sympt.tx.rr = 1.45,
 

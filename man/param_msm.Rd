@@ -78,10 +78,11 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
   syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
   gc.asympt.prob.tx = 0.9, ct.asympt.prob.tx = 0.85,
-  syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 0.35,
-  syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 0.6,
-  syph.earlat.prob.tx = 0.15, syph.latelat.prob.tx = 0.1,
-  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 0.9,
+  syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 1,
+  syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 1,
+  syph.earlat.sympt.prob.tx = 0.15, syph.earlat.asympt.prob.tx = 1,
+  syph.latelat.sympt.prob.tx = 0.1, syph.latelat.asympt.prob.tx = 1,
+  syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 1,
   tst.rect.sti.rr = 1, sti.highrisktest.int = 182,
   stitest.elig.model = "all", stianntest.coverage = 1,
   stianntest.cov.method = "curr", stianntest.cov.rate = 1,
@@ -616,17 +617,17 @@ stage syphilis infection.}
 \item{syph.seco.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic secondary
 stage syphilis infection.}
 
-\item{syph.earlat.prob.tx}{Probability of treatment for symptomatic or
-asymptomatic early latent stage syphilis infection.}
+\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic early latent stage syphilis infection.}
 
-\item{syph.latelat.prob.tx}{Probability of treatment for symptomatic or
-asymptomatic late latent stage syphilis infection.}
+\item{syph.earlat.asympt.prob.tx}{Probability of treatment for asymptomatic early latent stage syphilis infection.}
 
-\item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic tertiary
-stage syphilis infection.}
+\item{syph.latelat.sympt.prob.tx}{Probability of treatment for symptomatic late latent stage syphilis infection.}
 
-\item{syph.tert.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic tertiary
-stage syphilis infection.}
+\item{syph.latelat.asympt.prob.tx}{Probability of treatment for asymptomatic late latent stage syphilis infection.}
+
+\item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic tertiary stage syphilis infection.}
+
+\item{syph.tert.asympt.prob.tx}{Probability of treatment, given diagnosis, for asymptomatic tertiary stage syphilis infection.}
 
 \item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested}
 

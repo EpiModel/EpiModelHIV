@@ -350,14 +350,12 @@
 #'        stage syphilis infection.
 #' @param syph.seco.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic secondary
 #'        stage syphilis infection.
-#' @param syph.earlat.prob.tx Probability of treatment for symptomatic or
-#'        asymptomatic early latent stage syphilis infection.
-#' @param syph.latelat.prob.tx Probability of treatment for symptomatic or
-#'        asymptomatic late latent stage syphilis infection.
-#' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic tertiary
-#'        stage syphilis infection.
-#' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic tertiary
-#'        stage syphilis infection.
+#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic early latent stage syphilis infection.
+#' @param syph.earlat.asympt.prob.tx Probability of treatment for asymptomatic early latent stage syphilis infection.      
+#' @param syph.latelat.sympt.prob.tx Probability of treatment for symptomatic late latent stage syphilis infection.
+#' @param syph.latelat.asympt.prob.tx Probability of treatment for asymptomatic late latent stage syphilis infection.
+#' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic tertiary stage syphilis infection.
+#' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, for asymptomatic tertiary stage syphilis infection.
 #' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to urethral testing among those selected to be tested        
 #' @param sti.highrisktest.int Interval in which individuals need to be engaged in high-risk behavior for STI screening for high-risk testers
 #' @param stitest.elig.model Modeling approach for determining who is eligible for high-risk
@@ -614,13 +612,15 @@ param_msm <- function(nwstats,
                       ct.asympt.prob.tx = 0.85,
                       
                       syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                      syph.prim.asympt.prob.tx = 0.35,
+                      syph.prim.asympt.prob.tx = 1,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.seco.asympt.prob.tx = 0.60,
-                      syph.earlat.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.latelat.prob.tx = 0.10,
+                      syph.seco.asympt.prob.tx = 1,
+                      syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.earlat.asympt.prob.tx = 1, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.latelat.sympt.prob.tx = 0.10,
+                      syph.latelat.asympt.prob.tx = 1,
                       syph.tert.sympt.prob.tx = 0.90,
-                      syph.tert.asympt.prob.tx = 0.90,
+                      syph.tert.asympt.prob.tx = 1,
                       
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
