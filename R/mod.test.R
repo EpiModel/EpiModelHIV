@@ -176,10 +176,7 @@ test_sti_msm <- function(dat, at) {
     
     # Annual indications- sexually active in last year
     stitestind1 <- dat$attr$stitest.ind.active
-    
-    # High-risk indications
-
-    
+ 
     # Annual - testing trajectory update
     activeindwindow <- stitest.active.int * 7
     idsactive <- intersect(which(at - stitestind1 <= activeindwindow), idsEligTest)
