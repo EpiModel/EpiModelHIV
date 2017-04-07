@@ -156,16 +156,50 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.earlysyph <- rNA
     dat$epi$prev.latesyph <- rNA
     
-    #HIV Coinfection
+    #HIV/STI coinfection with conditional denominators
+    dat$epi$prev.primsecosyph.hivneg <- rNA
+    dat$epi$prev.primsecosyph.hivpos <- rNA
     dat$epi$prev.syph.hivneg <- rNA
     dat$epi$prev.syph.hivpos <- rNA
-    
     dat$epi$prev.gc.hivneg <- rNA
     dat$epi$prev.gc.hivpos <- rNA
-    
     dat$epi$prev.ct.hivneg <- rNA
     dat$epi$prev.ct.hivpos <- rNA
-
+    dat$epi$prev.hiv.primsecosyphpos <- rNA
+    dat$epi$prev.hiv.primsecosyphneg <- rNA
+    dat$epi$prev.hiv.syphpos <- rNA
+    dat$epi$prev.hiv.syphneg <- rNA
+    dat$epi$prev.hiv.gcpos <- rNA
+    dat$epi$prev.hiv.gcneg <- rNA
+    dat$epi$prev.hiv.ctpos <- rNA
+    dat$epi$prev.hiv.ctneg <- rNA
+    dat$epi$prev.rgc.hivpos <- rNA
+    dat$epi$prev.ugc.hivpos <- rNA
+    dat$epi$prev.rct.hivpos <- rNA
+    dat$epi$prev.uct.hivpos <- rNA
+    dat$epi$prev.rgc.hivneg <- rNA
+    dat$epi$prev.ugc.hivneg <- rNA
+    dat$epi$prev.rct.hivneg <- rNA
+    dat$epi$prev.uct.hivneg <- rNA
+    
+    #HIV/STI coinfection prevalence
+    dat$epi$prev.primsecosyph.hiv <- rNA
+    dat$epi$prev.syph.hiv <- rNA
+    dat$epi$prev.gc.hiv <- rNA
+    dat$epi$prev.rgc.hiv <- rNA
+    dat$epi$prev.ugc.hiv <- rNA
+    dat$epi$prev.ct.hiv <- rNA
+    dat$epi$prev.rct.hiv <- rNA
+    dat$epi$prev.uct.hiv <- rNA
+    dat$epi$prev.rct.uct <- rNA
+    dat$epi$prev.rgc.ugc <- rNA
+    dat$epi$prev.rct.rgc <- rNA
+    dat$epi$prev.uct.ugc <- rNA
+    dat$epi$prev.gc.syph <- rNA
+    dat$epi$prev.ct.syph <- rNA
+    dat$epi$prev.gc.primsecosyph <- rNA
+    dat$epi$prev.ct.primsecosyph <- rNA
+    
     dat$epi$incid.rgc <- rNA
     dat$epi$incid.ugc <- rNA
     dat$epi$incid.gc <- rNA
@@ -274,22 +308,9 @@ prevalence_msm <- function(dat, at) {
   } else {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] / sum(prepStat == 1, na.rm = TRUE)
   }
-
-  dat$epi$time.hivneg[at] <- sum(dat$attr$time.hivneg, na.rm = TRUE)
-  dat$epi$time.on.prep[at] <- sum(dat$attr$time.on.prep, na.rm = TRUE)
-  dat$epi$time.off.prep[at] <- sum(dat$attr$time.off.prep, na.rm = TRUE)
-  dat$epi$stage.time.ar.ndx[at] <- sum(dat$attr$stage.time.ar.ndx, na.rm = TRUE)
-  dat$epi$stage.time.ar.dx[at] <- sum(dat$attr$stage.time.ar.dx, na.rm = TRUE)
-  dat$epi$stage.time.ar.art[at] <- sum(dat$attr$stage.time.ar.art, na.rm = TRUE)
-  dat$epi$stage.time.af.ndx[at] <- sum(dat$attr$stage.time.af.ndx, na.rm = TRUE)
-  dat$epi$stage.time.af.dx[at] <- sum(dat$attr$stage.time.af.dx, na.rm = TRUE)
-  dat$epi$stage.time.af.art[at] <- sum(dat$attr$stage.time.af.art, na.rm = TRUE)
-  dat$epi$stage.time.chronic.ndx[at] <- sum(dat$attr$stage.time.chronic.ndx, na.rm = TRUE)
-  dat$epi$stage.time.chronic.dx[at] <- sum(dat$attr$stage.time.chronic.dx, na.rm = TRUE)
-  dat$epi$stage.time.chronic.art[at] <- sum(dat$attr$stage.time.chronic.art, na.rm = TRUE) 
-  dat$epi$stage.time.aids.ndx[at] <- sum(dat$attr$stage.time.aids.ndx, na.rm = TRUE)
-  dat$epi$stage.time.aids.dx[at] <- sum(dat$attr$stage.time.aids.dx, na.rm = TRUE)
-  dat$epi$stage.time.aids.art[at] <- sum(dat$attr$stage.time.aids.art, na.rm = TRUE)
+  
+  dat$epi$time.on.prep[at] <- length(which(dat$attr$prepStat == 1))
+  dat$epi$time.off.prep[at] <- length(which(dat$attr$prepStat == 0))
   dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
   dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
   dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
@@ -425,7 +446,7 @@ prevalence_msm <- function(dat, at) {
   rGC.prev <- which(rGC == 1 & rGC.infTime < at)
   rCT.prev <- which(rCT == 1 & rCT.infTime < at)
 
-  # Prevalence of HIV/STI overlap
+  # Prevalence of HIV/STI overlap (conditional denominators)
   dat$epi$prev.primsecosyph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at], 0)
   dat$epi$prev.primsecosyph.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at], 0)
   dat$epi$prev.syph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at], 0)
@@ -447,7 +468,6 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.hiv.syphneg[at] <- ifelse(length(which(syphilis == 0)) > 0, length(intersect(which(status == 1), which(syphilis == 1))) /
                                              length(which(syphilis == 0)), 0)
   
-  
   dat$epi$prev.hiv.gcpos[at] <- ifelse(sum((rGC == 1 | uGC == 1)) > 0, length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
                                 sum((rGC == 1 | uGC == 1), na.rm = TRUE), 0)
   dat$epi$prev.hiv.gcneg[at] <- ifelse(sum((rGC == 0 & uGC == 0)) > 0,length(intersect(which(status == 1), which((rGC == 0 & uGC == 0)))) /
@@ -467,7 +487,25 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.ugc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(uGC == 1))) / dat$epi$s.num[at], 0)
   dat$epi$prev.rct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(rCT == 1))) / dat$epi$s.num[at], 0)
   dat$epi$prev.uct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$s.num[at], 0)
-
+  
+  # Co-infection prevalence
+  dat$epi$prev.primsecosyph.hiv[at] <- (length(intersect(which(stage.syph %in% c(1, 2)), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.syph.hiv[at] <- (length(intersect(which(syphilis == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.gc.hiv[at] <- (length(intersect(which(rGC == 1 | uGC == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.rgc.hiv[at] <- (length(intersect(which(rGC == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.ugc.hiv[at] <- (length(intersect(which(uGC == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.ct.hiv[at] <- (length(intersect(which(rCT == 1 | uCT == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.rct.hiv[at] <- (length(intersect(which(rCT == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.uct.hiv[at] <- (length(intersect(which(uCT == 1), which(status == 1)))) / dat$epi$num[at]
+  dat$epi$prev.rct.uct[at] <- (length(intersect(which(rCT == 1), which(uCT == 1)))) / dat$epi$num[at]
+  dat$epi$prev.rgc.ugc[at] <- (length(intersect(which(rGC == 1), which(uGC == 1)))) / dat$epi$num[at]
+  dat$epi$prev.rct.rgc[at] <- (length(intersect(which(rGC == 1), which(rCT == 1))))  / dat$epi$num[at]
+  dat$epi$prev.uct.ugc[at] <- (length(intersect(which(uCT == 1), which(uGC == 1))))  / dat$epi$num[at]
+  dat$epi$prev.gc.syph[at] <- (length(intersect(which(rGC == 1 | uGC == 1), which(syphilis == 1)))) / dat$epi$num[at]
+  dat$epi$prev.ct.syph[at] <- (length(intersect(which(rCT == 1 | uCT == 1), which(syphilis == 1)))) / dat$epi$num[at]
+  dat$epi$prev.gc.primsecosyph[at] <- (length(intersect(which(rGC == 1 | uGC == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at]
+  dat$epi$prev.ct.primsecosyph[at] <- (length(intersect(which(rCT == 1 | uCT == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at]
+  
   # Site-specific STI incidence rates        
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200

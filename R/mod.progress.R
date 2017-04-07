@@ -73,18 +73,33 @@ progress_msm <- function(dat, at) {
   # Current stage
   AR.ndx <- which(active == 1 & stage == 1 & diag.status == 0)
   AF.ndx <- which(active == 1 & stage == 2 & diag.status == 0)
-  Chronic.ndx <- which(active == 1 & stage == 3 & diag.status == 0)
-  AIDS.ndx <- which(active == 1 & stage == 4 & diag.status == 0)
+  chronic.ndx <- which(active == 1 & stage == 3 & diag.status == 0)
+  aids.ndx <- which(active == 1 & stage == 4 & diag.status == 0)
   
   AR.dx <- which(active == 1 & stage == 1 & diag.status == 1 & tx.status == 0)
   AF.dx <- which(active == 1 & stage == 2 & diag.status == 1 & tx.status == 0)
-  Chronic.dx <- which(active == 1 & stage == 3 & diag.status == 1 & tx.status == 0)
-  AIDS.dx <- which(active == 1 & stage == 4 & diag.status == 1 & tx.status == 0)
+  chronic.dx <- which(active == 1 & stage == 3 & diag.status == 1 & tx.status == 0)
+  aids.dx <- which(active == 1 & stage == 4 & diag.status == 1 & tx.status == 0)
   
   AR.art <- which(active == 1 & stage == 1 & diag.status == 1 & tx.status == 1)
   AF.art <- which(active == 1 & stage == 2 & diag.status == 1 & tx.status == 1)
-  Chronic.art <- which(active == 1 & stage == 3 & diag.status == 1 & tx.status == 1)
-  AIDS.art <- which(active == 1 & stage == 4 & diag.status == 1 & tx.status == 1)
+  chronic.art <- which(active == 1 & stage == 3 & diag.status == 1 & tx.status == 1)
+  aids.art <- which(active == 1 & stage == 4 & diag.status == 1 & tx.status == 1)
+  
+  # Population numbers (person-time contributed at each time step)
+  dat$epi$stage.time.ar.ndx[at] <- length(AR.ndx)
+  dat$epi$stage.time.ar.dx[at] <- length(AR.dx)
+  dat$epi$stage.time.ar.art[at] <- length(AR.art)
+  dat$epi$stage.time.af.ndx[at] <- length(AF.ndx)
+  dat$epi$stage.time.af.dx[at] <- length(AF.dx)
+  dat$epi$stage.time.af.art[at] <- length(AF.art)
+  dat$epi$stage.time.chronic.ndx[at] <- length(chronic.ndx)
+  dat$epi$stage.time.chronic.dx[at] <- length(chronic.dx)
+  dat$epi$stage.time.chronic.art[at] <- length(chronic.art)
+  dat$epi$stage.time.aids.ndx[at] <- length(aids.ndx)
+  dat$epi$stage.time.aids.dx[at] <- length(aids.dx)
+  dat$epi$stage.time.aids.art[at] <- length(aids.art)
+  dat$epi$time.hivneg[at] <- length(which(status == 0))
 
   # Increment day
   stage.time[active == 1] <- stage.time[active == 1] + 1
@@ -94,12 +109,12 @@ progress_msm <- function(dat, at) {
   stage.time.af.ndx[AF.ndx] <- stage.time.af.ndx[AF.ndx] + 1
   stage.time.af.dx[AF.dx] <- stage.time.af.art[AF.dx] + 1
   stage.time.af.art[AF.art] <- stage.time.af.art[AF.art] + 1
-  stage.time.chronic.ndx[Chronic.ndx] <- stage.time.chronic.ndx[Chronic.ndx] + 1
-  stage.time.chronic.dx[Chronic.dx] <- stage.time.chronic.dx[Chronic.dx] + 1
-  stage.time.chronic.art[Chronic.art] <- stage.time.chronic.art[Chronic.art] + 1
-  stage.time.aids.ndx[AIDS.ndx] <- stage.time.aids.ndx[AIDS.ndx] + 1
-  stage.time.aids.dx[AIDS.dx] <- stage.time.aids.dx[AIDS.dx] + 1
-  stage.time.aids.art[AIDS.art] <- stage.time.aids.art[AIDS.art] + 1
+  stage.time.chronic.ndx[chronic.ndx] <- stage.time.chronic.ndx[chronic.ndx] + 1
+  stage.time.chronic.dx[chronic.dx] <- stage.time.chronic.dx[chronic.dx] + 1
+  stage.time.chronic.art[chronic.art] <- stage.time.chronic.art[chronic.art] + 1
+  stage.time.aids.ndx[aids.ndx] <- stage.time.aids.ndx[aids.ndx] + 1
+  stage.time.aids.dx[aids.dx] <- stage.time.aids.dx[aids.dx] + 1
+  stage.time.aids.art[aids.art] <- stage.time.aids.art[aids.art] + 1
 
   # Change stage to Acute Falling
   toAF.ndx <- which(active == 1 & time.since.inf == (vl.acute.rise.int + 1) & diag.status == 0)
@@ -179,6 +194,7 @@ progress_msm <- function(dat, at) {
   stage.time.aids.art[isAIDS.art] <- 1
 
   ## Output
+  # Individual attribute: time in stage
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
   dat$attr$stage.time.ar.ndx <- stage.time.ar.ndx
@@ -198,8 +214,6 @@ progress_msm <- function(dat, at) {
       dat$attr$time.off.prep[dat$attr$prepStat == 0] <- dat$attr$time.off.prep[dat$attr$prepStat == 0] + 1
   }
   
-  
- 
   return(dat)
 }
 
