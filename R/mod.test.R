@@ -344,30 +344,7 @@ test_sti_msm <- function(dat, at) {
     
     ## Initiation ----------------------------------------------------------------
     
-    # Testing coverage for annual 
-    stianntestCov <- sum(tt.traj.ct == 1, tt.traj.ct == 2, na.rm = TRUE) / length(idsactive)
-    stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
-    
-    idsEligSt <- idsactive
-    nEligSt <- length(idsactive)
-    
-    nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
-                                            length(idsactive))))
-    idsStart <- NULL
-    if (nStart > 0) {
-        if (stianntest.cov.rate >= 1) {
-            idsStart <- ssample(idsEligSt, nStart)
-        } else {
-            idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
-        }
-    }
-    
-    ## Update testing trajectory
-    if (length(idsStart) > 0) {
-        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
-    }
-    
-    # Testing coverage for high risk 
+    ### Testing coverage for high risk
     stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
     stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
     
@@ -390,8 +367,32 @@ test_sti_msm <- function(dat, at) {
         tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
     }   
     
-
-    ## Testing
+    ### Testing coverage for annual
+    # Make this only the sum of where tt.traj.ct == 1? - would need to change denominator to be those who are in not in intersect of idsactive and idshighrisk
+    stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(setdiff(idsactive, idshighrisk))
+    stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
+    
+    idsEligSt <- setdiff(idsactive, idshighrisk)
+    
+    nEligSt <- length(setdiff(idsactive, idshighrisk))
+    
+    nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
+                                            length(setdiff(idsactive, idshighrisk)))))
+    idsStart <- NULL
+    if (nStart > 0) {
+        if (stianntest.cov.rate >= 1) {
+            idsStart <- ssample(idsEligSt, nStart)
+        } else {
+            idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+        }
+    }
+    
+    ## Update testing trajectory
+    if (length(idsStart) > 0) {
+        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
+    }
+    
+        ## Testing
     tsincelntst.syph <- at - dat$attr$last.neg.test.syph
     tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
     

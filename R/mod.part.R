@@ -127,6 +127,7 @@ part_msm <- function(dat, at){
             ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in%
                  (part.list[, 1] * 1e7 + part.list[, 2]))
         
+        # Set dead edges to have ended at this timepoint
         if (length(dead.rel) > 0) {
             part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
                              uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |

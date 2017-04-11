@@ -159,35 +159,58 @@ riskhist_msm <- function(dat, at) {
   ### Have a new sex partner in last x months
   idsnewpartners <- which((at - sexnewedge) <= sti.highrisktest.int)
   dat$attr$stitest.ind.newpartners[idsnewpartners] <- at
-  
+ 
+
   ### Multiple sex partners
   #	Have more than one sex partner in last x months
   part.count <- as.data.frame(table(part.list[, 1:2]))
   idspartlist <- which(uid %in% part.list[, 1:2])
+  idscol1 <- which(uid %in% part.list[, 1])
+  idscol2 <- which(uid %in% part.list[, 2])
   idsnotpartlist <- which(!(uid %in% part.list[, 1:2]))
   dat$attr$recentpartners[idspartlist] <- part.count[idspartlist, 2]
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
 
-  # Reset # of partners to 0 for those no longer in part.list
-  dat$attr$recentpartners[idsnotpartlist] <- 0
+  uids.part1 <- uid[which(uid %in% part.list[, 1])]
+  uids.part2 <- uid[which(uid %in% part.list[, 2])]
+  uids.part1recent <- uid[which(dat$attr$recentpartners[which(uid %in% uids.part1)] > 1)]
+  uids.part2recent <- uid[which(dat$attr$recentpartners[which(uid %in% uids.part2)] > 1)]
   
-  ### Had/have a sex partner with concurrent partners
-  # Partner 1 has multiple partners, Partner 2 indicated
-  part.listmult1 <- part.list[which((dat$attr$recentpartners[part.list[, 1]]) > 1) , , drop = FALSE]
-  # Partner 2 indicated
-  idspartlistmult1 <- part.listmult1[, 2]
+  partlist.recent1 <- part.list[which(uid %in% uids.part1recent), , drop = FALSE]
+  partlist.recent2 <- part.list[which(uid %in% uids.part2recent), , drop = FALSE]
   
-  # Partner 2 has multiple partners, so partner 1 is indicated
-  part.listmult2 <- part.list[which((dat$attr$recentpartners[part.list[, 2]]) > 1), , drop = FALSE]
-  # Partner 1 indicated
-  idspartlistmult2 <- part.listmult2[, 1]
+  uidspart.listmult1 <- uid[which(uid %in% partlist.recent1[, 2])]
+  uidspart.listmult2 <- uid[which(uid %in% partlist.recent2[, 1])]
   
-  # Combine into one list for indication
-  idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
-  idspartmult <-  uid[which(uid %in% idspartmult)]
-  dat$attr$stitest.ind.concurrpartner[which(uid %in% idspartmult)] <- at
-
+  idspartmult <- unique(c(uidspart.listmult1, uidspart.listmult2))
+  multiplepartners <- which(uid %in% idspartmult)
+  dat$attr$stitest.ind.concurrpartner[multiplepartners] <- at
+  
+  # # Reset # of partners to 0 for those no longer in part.list
+  # dat$attr$recentpartners[idsnotpartlist] <- 0
+  # 
+  # # PROBLEMS WITH THIS component ------------------------------------------------------------------------------
+  # ### Had/have a sex partner with concurrent partners
+  # # Partner 1 has multiple partners, Partner 2 indicated
+  # part.list[which(uid %in% part.list[, 1]), , drop = FALSE]
+  # part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1) , , drop = FALSE]
+  # 
+  # # Partner 2 indicated
+  # idspartlistmult1 <- part.listmult1[, 2]
+  # 
+  # # Partner 2 has multiple partners, so partner 1 is indicated
+  # part.listmult2 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 2])]) > 1) , , drop = FALSE]
+  # # Partner 1 indicated
+  # idspartlistmult2 <- part.listmult2[, 1]
+  # 
+  # # Combine into one list for indication
+  # idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
+  # idspartmult <- uid[which(uid %in% idspartmult)]
+  # dat$attr$stitest.ind.concurrpartner[which(uid %in% idspartmult)] <- at
+  # #------------------------------------------------------------------------------
+  
+  # PROBLEMS WITH THIS component ------------------------------------------------------------------------------
   
   ### Have a sex partner who has a treated sexually transmitted infection in the last interval
   # Partner 1 has a STI, Partner 2 indicated
@@ -212,6 +235,8 @@ riskhist_msm <- function(dat, at) {
   idspartsti <- unique(c(idspartliststi1, idspartliststi2))
   idspartsti <-  uid[which(uid %in% idspartsti)]
   dat$attr$stitest.ind.partnersti[which(uid %in% idspartsti)] <- at
+  
+  #------------------------------------------------------------------------------
   
   ### Inconsistent condom use among persons who are not in mutually monogamous relationships - includes concordant HIV
   # Using PrEP logic for UAI in non-main relationships: Could there be a closer approximation?

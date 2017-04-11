@@ -65,10 +65,10 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.coverage = 0.8,
 
                    prep.start = 5000,
-                   stitest.start = 5000,
+                   stitest.start = 200,
                    ept.start = 5000,
                    
-                   stitest.elig.model = "all",
+                   stitest.elig.model = "sti",
 
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182) # adjustable for 3 or 6 months
