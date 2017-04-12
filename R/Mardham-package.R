@@ -1,7 +1,7 @@
 #' Modeling Approaches to Racial Disparities in HIV in Atlanta MSM in EpiModel
 #'
 #' \tabular{ll}{
-#'    Package: \tab Mardham\cr
+#'    Package: \tab EpiModelHIV\cr
 #'    Type: \tab Package\cr
 #'    Version: \tab 0.1.0\cr
 #'    Date: \tab 2015-03-20\cr
@@ -16,8 +16,8 @@
 #' into EpiModel modules for greater flexibility and efficiency, and then
 #' adds additional features like pre-exposure prophylaxis (PrEP).
 #'
-#' @name Mardham-package
-#' @aliases Mardham
+#' @name EpiModelHIV-package
+#' @aliases EpiModelHIV
 #' @import EpiModel network networkDynamic tergm ergm
 #' @docType package
 #' @keywords package
