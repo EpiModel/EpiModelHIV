@@ -57,7 +57,7 @@ InitErgmTerm.absdiffnodemix <- function(nw, arglist, ...) {
 
   list(name = "absdiffnodemix",
        coef.names = paste("absdiffnodemix", a$attrname, a$byattrname, uun, sep = "."),
-       pkgname = "Mardham",
+       pkgname = "EpiModelHIV",
        inputs = inputs,
        dependence = FALSE)
 }
