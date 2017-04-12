@@ -2,7 +2,7 @@
 #' @title Epidemic Model Parameters for MARDHAM Models
 #'
 #' @description Sets the epidemic parameters for stochastic network models
-#'              simulated with \code{\link{netsim}} for MARDHAM.
+#'              simulated with \code{\link{netsim}} for EpiModelHIV.
 #'
 #' @param nwstats Target statistics for the network model. An object of class
 #'        \code{nwstats} output from \code{\link{calc_nwstats.mard}}.
@@ -73,7 +73,7 @@
 #' @param b.method Method for calculating the number of expected births at each
 #'        time step, with \code{"fixed"} based on the number of persons at the
 #'        initial time step and \code{"varying"} based on the current time step.
-#'        The former method is compatible with \code{mardham1}.
+#'        The former method is compatible with \code{EpiModelHIV}.
 #' @param URAI.prob Probability of transmission for a man having unprotected
 #'        receptive anal intercourse with an infected man at set point viral
 #'        load.
