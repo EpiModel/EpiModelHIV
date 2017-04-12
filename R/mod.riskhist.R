@@ -164,21 +164,39 @@ riskhist_msm <- function(dat, at) {
   ### Multiple sex partners
   #	Have more than one sex partner in last x months
   part.count <- as.data.frame(table(part.list[, 1:2]))
+  part.count1 <- as.data.frame(table(part.list[, 1]))
+  part.count2 <- as.data.frame(table(part.list[, 2]))
   idspartlist <- which(uid %in% part.list[, 1:2])
-  idscol1 <- which(uid %in% part.list[, 1])
-  idscol2 <- which(uid %in% part.list[, 2])
-  idsnotpartlist <- which(!(uid %in% part.list[, 1:2]))
+  idspartlist <- part.count$Var1
+  idsnotpartlist <- setdiff(uid, idspartlist)
+  idsnotpartlist <- !(which(uid %in% part.list[, 1:2]))
   dat$attr$recentpartners[idspartlist] <- part.count[idspartlist, 2]
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
-
-  uids.part1 <- uid[which(uid %in% part.list[, 1])]
-  uids.part2 <- uid[which(uid %in% part.list[, 2])]
-  uids.part1recent <- uid[which(dat$attr$recentpartners[which(uid %in% uids.part1)] > 1)]
-  uids.part2recent <- uid[which(dat$attr$recentpartners[which(uid %in% uids.part2)] > 1)]
   
-  partlist.recent1 <- part.list[which(uid %in% uids.part1recent), , drop = FALSE]
-  partlist.recent2 <- part.list[which(uid %in% uids.part2recent), , drop = FALSE]
+  # Reset # of partners to 0 for those no longer in part.list
+  dat$attr$recentpartners[idsnotpartlist] <- 0
+  
+  # Partner has multiple sex partners
+  uids.part1 <- part.list[, 1]
+  uids.part2 <- part.list[, 2]
+  #these are uids of active ids
+  
+  idscol1 <- which(uid %in% uids.part1)
+  idscol2 <- which(uid %in% uids.part2)
+  # these are the active numbers of those in partner list
+  
+  idscol1.mult <- unique(idscol1[which(dat$attr$recentpartners[uids.part1] > 1)])
+  idscol2.mult <- unique(idscol2[which(dat$attr$recentpartners[uids.part2] > 1)])
+  
+  uids.part1.mult <- uid[idscol1.mult]
+  uids.part2.mult <- uid[idscol1.mult]
+  
+  partlist.recent1 <- part.list[which(uids.part1recent %in% part.list[, 1]), , drop = FALSE]
+  partlist.recent2 <- part.list[which(uids.part2recent %in% part.list[, 2]), , drop = FALSE]
+  
+  part.list[which(uid %in% uids.part1recent), , drop = FALSE]
+  part.list[which(uid %in% part.list[uids.part1recent, 1]), , drop = FALSE]
   
   uidspart.listmult1 <- uid[which(uid %in% partlist.recent1[, 2])]
   uidspart.listmult2 <- uid[which(uid %in% partlist.recent2[, 1])]
@@ -187,27 +205,25 @@ riskhist_msm <- function(dat, at) {
   multiplepartners <- which(uid %in% idspartmult)
   dat$attr$stitest.ind.concurrpartner[multiplepartners] <- at
   
-  # # Reset # of partners to 0 for those no longer in part.list
-  # dat$attr$recentpartners[idsnotpartlist] <- 0
   # 
   # # PROBLEMS WITH THIS component ------------------------------------------------------------------------------
   # ### Had/have a sex partner with concurrent partners
   # # Partner 1 has multiple partners, Partner 2 indicated
-  # part.list[which(uid %in% part.list[, 1]), , drop = FALSE]
-  # part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1) , , drop = FALSE]
-  # 
-  # # Partner 2 indicated
-  # idspartlistmult1 <- part.listmult1[, 2]
-  # 
-  # # Partner 2 has multiple partners, so partner 1 is indicated
-  # part.listmult2 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 2])]) > 1) , , drop = FALSE]
-  # # Partner 1 indicated
-  # idspartlistmult2 <- part.listmult2[, 1]
-  # 
-  # # Combine into one list for indication
-  # idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
-  # idspartmult <- uid[which(uid %in% idspartmult)]
-  # dat$attr$stitest.ind.concurrpartner[which(uid %in% idspartmult)] <- at
+  part.list[which(uid %in% part.list[, 1]), , drop = FALSE]
+  part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1) , , drop = FALSE]
+
+  # Partner 2 indicated
+  idspartlistmult1 <- part.listmult1[, 2]
+
+  # Partner 2 has multiple partners, so partner 1 is indicated
+  part.listmult2 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 2])]) > 1) , , drop = FALSE]
+  # Partner 1 indicated
+  idspartlistmult2 <- part.listmult2[, 1]
+
+  # Combine into one list for indication
+  idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
+  idspartmult <- uid[which(uid %in% idspartmult)]
+  dat$attr$stitest.ind.concurrpartner[which(uid %in% idspartmult)] <- at
   # #------------------------------------------------------------------------------
   
   # PROBLEMS WITH THIS component ------------------------------------------------------------------------------
