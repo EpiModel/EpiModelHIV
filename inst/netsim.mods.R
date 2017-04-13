@@ -58,9 +58,8 @@ param <- param_msm(nwstats = st,
                    
                    hivdx.syph.sympt.tx.rr = 1.45,
 
-                   prep.coverage = 0.4,
-                   ept.coverage = 0.4,
-
+                   prep.coverage = 0.0,
+                   ept.coverage = 0.0,
                    stianntest.coverage = 0.5,
                    stihighrisktest.coverage = 0.8,
 
