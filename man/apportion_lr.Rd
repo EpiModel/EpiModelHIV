@@ -21,4 +21,3 @@ Apportions a vector of values given a specified frequency
              distribution of those values such that the length of the output
              is robust to rounding and other instabilities.
 }
-

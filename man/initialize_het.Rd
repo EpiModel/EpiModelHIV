@@ -28,4 +28,3 @@ This function initializes the master \code{dat} object on which
 }
 \keyword{het}
 \keyword{module}
-

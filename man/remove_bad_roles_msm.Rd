@@ -17,4 +17,3 @@ Due to occassional issues in ERGM fitting, it is possible to
 \keyword{initiation}
 \keyword{msm}
 \keyword{utility}
-

@@ -22,4 +22,3 @@ Module for aging over time for nodes in the population.
 }
 \keyword{module}
 \keyword{msm}
-

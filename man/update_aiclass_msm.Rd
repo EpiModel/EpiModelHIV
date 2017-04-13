@@ -22,4 +22,3 @@ Module function for updating act class in one-off partnerships
 }
 \keyword{module}
 \keyword{msm}
-

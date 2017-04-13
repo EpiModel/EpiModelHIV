@@ -18,4 +18,3 @@ Module function for simulating progression of CD4 in natural
 }
 \keyword{het}
 \keyword{module}
-

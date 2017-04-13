@@ -18,4 +18,3 @@ Module function for simulating progression of HIV viral load in
 }
 \keyword{het}
 \keyword{module}
-

@@ -119,4 +119,3 @@ Sets the simulation parameters for the stochastic
 This function sets the parameters for the models.
 }
 \keyword{het}
-
