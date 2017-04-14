@@ -132,14 +132,6 @@ and test and treated with full suppression.}
 \item{tt.traj.W.prob}{Proportion of white MSM who enter into the four
 testing/treatment trajectories, as defined above.}
 
-\item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
-active stages of syphilis: incubating, primary, secondary, early 
-latent, late latent, late late latent, and tertiary.}
-
-\item{stage.syph.W.prob}{Proportion of white MSM who enter one of the seven
-active stages of syphilis: incubating, primary, secondary, early 
-latent, late latent, late late latent, and tertiary.}
-
 \item{tx.init.B.prob}{Probability per time step that a black MSM who has
 tested positive will initiate treatment.}
 

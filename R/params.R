@@ -29,12 +29,6 @@
 #'        and test and treated with full suppression.
 #' @param tt.traj.W.prob Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
-#' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
-#'        active stages of syphilis: incubating, primary, secondary, early 
-#'        latent, late latent, late late latent, and tertiary.
-#' @param stage.syph.W.prob Proportion of white MSM who enter one of the seven
-#'        active stages of syphilis: incubating, primary, secondary, early 
-#'        latent, late latent, late late latent, and tertiary.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
 #' @param tx.init.W.prob Probability per time step that a white MSM who has
@@ -677,8 +671,6 @@ param_msm <- function(nwstats,
     p$mean.test.W.int = (mean.test.W.int + mean.test.B.int)/2
     p$tt.traj.B.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
     p$tt.traj.W.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
-    p$stage.syph.B.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
-    p$stage.syph.W.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
     p$tx.init.B.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.init.W.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.halt.B.prob = (tx.halt.B.prob + tx.halt.W.prob)/2

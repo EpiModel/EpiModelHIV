@@ -40,10 +40,6 @@ param <- param_msm(nwstats = st,
                    hiv.rct.rr = 2.35,
                    hiv.uct.rr = 1.35,
                    
-                   # adjust prim and seco from 0.1385 each
-                   stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                   stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                   
                    syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                    syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
                    syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
@@ -80,7 +76,12 @@ init <- init_msm(nwstats = st,
                  prev.uct = 0.015,
                  prev.rct = 0.015,
                  prev.syph.B = 0.020,
-                 prev.syph.W = 0.020)
+                 prev.syph.W = 0.020,
+                 
+                 # adjust prim and seco from 0.1385 each
+                 # Incubating, primary, secondary, early latent, late latent, late late latent, tertiary
+                 stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
+                 stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
 
 control <- control_msm(simno = 0.253,
                        nsteps = 2600,

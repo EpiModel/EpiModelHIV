@@ -750,6 +750,15 @@ init_status_sti_msm <- function(dat) {
     nInfsyphB <- round(dat$init$prev.syph.B * num.B)
     nInfsyphW <- round(dat$init$prev.syph.W * num.W)
     
+    # Syphilis stage-specific starting prevalence (among cases)
+    stage.syph.B.prob <- dat$init$stage.syph.B.prob
+    stage.syph.W.prob <- dat$init$stage.syph.W.prob
+
+    if (dat$param$race.method == 1) {
+        stage.syph.B.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
+        stage.syph.W.prob = (stage.syph.W.prob + stage.syph.W.prob)/2
+    }
+    
     # Infection-related attributes
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
@@ -832,9 +841,9 @@ init_status_sti_msm <- function(dat) {
     
     # Stage of infection
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
-                                          dat$param$stage.syph.B.prob))
+                                          stage.syph.B.prob))
     stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7),
-                                          dat$param$stage.syph.W.prob))
+                                          stage.syph.W.prob))
     dat$attr$stage.syph <- stage.syph
     
     # Assign duration of untreated infection and symptomatic at beginning
