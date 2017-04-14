@@ -361,13 +361,11 @@ sti_trans <- function(dat, at) {
                     disc.syph.rp[trans.syph.rp == 1, "ptype"])
       
       syphilis[infected.syph] <- 1
-      syph.infTime[infected.syph] <- syph.lastinfTime[infected.syph] <- syph.infTime
+      syph.infTime[infected.syph] <- syph.lastinfTime[infected.syph] <- at
       stage.syph[infected.syph] <- 1
       stage.time.syph[infected.syph] <- 0
       diag.status.syph[infected.syph] <- 0
       syph.timesInf[infected.syph] <- syph.timesInf[infected.syph] + 1
-      inf.role.syph[infected.syph] <- inf.role.syph
-      inf.type.syph[infected.syph] <- inf.type.syph
       
   }
   
@@ -416,8 +414,8 @@ sti_trans <- function(dat, at) {
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$diag.status.syph <- diag.status.syph
   dat$attr$syph.timesInf <- syph.timesInf
-  dat$attr$inf.role.syph <- inf.role.syph
-  dat$attr$inf.type.syph <- inf.type.syph
+  dat$attr$inf.role.syph[infected.syph] <- inf.role.syph
+  dat$attr$inf.type.syph[infected.syph] <- inf.type.syph
   dat$attr$syph.cease <- syph.cease
   dat$attr$diag.status.syph <- diag.status.syph
   
@@ -461,15 +459,15 @@ sti_trans <- function(dat, at) {
   dat$epi$incid.syph.prep[at] <- length(intersect(unique(infected.syph), which(dat$attr$prepStat == 1)))
 
   # Check all infected have all STI attributes
-  stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
-            all(!is.na(rGC.sympt[rGC == 1])),
-            all(!is.na(uGC.infTime[uGC == 1])),
-            all(!is.na(uGC.sympt[uGC == 1])),
-            all(!is.na(rCT.infTime[rCT == 1])),
-            all(!is.na(rCT.sympt[rCT == 1])),
-            all(!is.na(uCT.infTime[uCT == 1])),
-            all(!is.na(uCT.sympt[uCT == 1])),
-            all(!is.na(syph.infTime[syphilis == 1]))
+  stopifnot(all(!is.na(dat$attr$rGC.infTime[dat$attr$rGC == 1])),
+            all(!is.na(dat$attr$rGC.sympt[dat$attr$rGC == 1])),
+            all(!is.na(dat$attr$uGC.infTime[dat$attr$uGC == 1])),
+            all(!is.na(dat$attr$uGC.sympt[dat$attr$uGC == 1])),
+            all(!is.na(dat$attr$rCT.infTime[dat$attr$rCT == 1])),
+            all(!is.na(dat$attr$rCT.sympt[dat$attr$rCT == 1])),
+            all(!is.na(dat$attr$uCT.infTime[dat$attr$uCT == 1])),
+            all(!is.na(dat$attr$uCT.sympt[dat$attr$uCT == 1])),
+            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1]))
             )
 
   if (is.null(dat$epi$times.rgc)) {
