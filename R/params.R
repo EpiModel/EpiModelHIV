@@ -413,13 +413,6 @@ param_msm <- function(nwstats,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
-                      
-                      #Average of 2001 - 2015 syphilis data from CDC surveillance
-                      # P and S: 27.7%, Early latent = 27.8%, later: 44.6%
-                      #Was c(0.30, 0.20, 0.20, 0.13, 0.13, 0.02, 0.02)
-                      # Incub, Primary, Secondary, Early latent, Late Latent, Late Late Latent, Tertiary
-                      stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                      stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,

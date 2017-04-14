@@ -254,11 +254,8 @@ progress_syph_msm <- function(dat, at) {
     # Attributes
     active <- dat$attr$active
     syphilis <- dat$attr$syphilis
-    time.since.inf.syph <- at - dat$attr$syph.infTime
     stage.syph <- dat$attr$stage.syph
     stage.time.syph <- dat$attr$stage.time.syph
-    syph.tx <- dat$attr$syph.tx
-    syph.tx.prep <- dat$attr$syph.tx.prep
     
     # Parameters
     time.unit <- dat$param$time.unit
@@ -267,8 +264,6 @@ progress_syph_msm <- function(dat, at) {
     seco.syph.int <- dat$param$seco.syph.int
     earlat.syph.int <- dat$param$earlat.syph.int
     latelat.syph.int <- dat$param$latelat.syph.int
-    latelatelat.syph.int <- dat$param$latelatelat.syph.int
-    tert.syph.int <- dat$param$tert.syph.int
     
     syph.prim.sympt.prob <- dat$param$syph.prim.sympt.prob
     syph.seco.sympt.prob <- dat$param$syph.seco.sympt.prob
@@ -290,61 +285,47 @@ progress_syph_msm <- function(dat, at) {
     stage.time.syph[active == 1] <- stage.time.syph[active == 1] + time.unit/365
   
     # Change stage to Primary and assign symptoms
-    toPrim <- which(active == 1 & time.since.inf.syph == (incu.syph.int + 1) & 
-                                    stage.syph == 1)
+    toPrim <- which(active == 1 & stage.time.syph == (incu.syph.int + 1) & 
+                                    stage.syph == 1 & syphilis == 1)
     stage.syph[toPrim] <- 2
     stage.time.syph[toPrim] <- 0
     stage.prim.sympt[toPrim] <- rbinom(length(toPrim), 1, syph.prim.sympt.prob)
 
     # Change stage to Secondary and assign symptoms
-    toSeco <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
-                                                           prim.syph.int + 1) & 
-                                    stage.syph == 2)
+    toSeco <- which(active == 1 & stage.time.syph == (prim.syph.int + 1) & 
+                                    stage.syph == 2 & syphilis == 1)
     stage.syph[toSeco] <- 3
     stage.time.syph[toSeco] <- 0
     stage.seco.sympt[toSeco] <- rbinom(length(toSeco), 1, syph.seco.sympt.prob)
     stage.prim.sympt[toSeco] <- NA
     
     # Change stage to Early Latent and assign symptoms
-    toEarLat <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
-                                                              prim.syph.int +
-                                                                seco.syph.int + 1) & 
-                                    stage.syph == 3)
+    toEarLat <- which(active == 1 & stage.time.syph == (seco.syph.int + 1) & 
+                                    stage.syph == 3 & syphilis == 1)
     stage.syph[toEarLat] <- 4
     stage.time.syph[toEarLat] <- 0
     stage.earlat.sympt[toEarLat] <- rbinom(length(toEarLat), 1, syph.earlat.sympt.prob)
     stage.seco.sympt[toEarLat] <- NA
     
     # Change stage to Late Latent and assign symptoms
-    toLateLat <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
-                                                                prim.syph.int +
-                                                                seco.syph.int + 
-                                                                earlat.syph.int + 1) & 
-                                    stage.syph == 4)
+    toLateLat <- which(active == 1 & stage.time.syph == (earlat.syph.int + 1) & 
+                                    stage.syph == 4 & syphilis == 1)
     stage.syph[toLateLat] <- 5
     stage.time.syph[toLateLat] <- 0
     stage.latelat.sympt[toLateLat] <- rbinom(length(toLateLat), 1, syph.latelat.sympt.prob)
     stage.earlat.sympt[toLateLat] <- NA
     
     # Change stage to late late latent (functions the same way as late latent)
-    tolatelate <- which(active == 1 & time.since.inf.syph == (incu.syph.int +
-                                                                 prim.syph.int +
-                                                                 seco.syph.int + 
-                                                                 earlat.syph.int +
-                                                                 latelat.syph.int + 1) & 
-                                    stage.syph == 5)
+    tolatelate <- which(active == 1 & stage.time.syph == (latelat.syph.int + 1) & 
+                                    stage.syph == 5 & syphilis == 1)
     stage.syph[tolatelate] <- 6
     stage.time.syph[tolatelate] <- 0
     stage.latelatelat.sympt[tolatelate] <- rbinom(length(tolatelate), 1, syph.latelat.sympt.prob)
     stage.latelat.sympt[tolatelate] <- NA
     
     # Change stage to tertiary for fraction of those in late late latent at any time
-    toTert <- which(active == 1 & time.since.inf.syph >= (incu.syph.int +
-                                                                  prim.syph.int +
-                                                                  seco.syph.int + 
-                                                                  earlat.syph.int +
-                                                                  latelat.syph.int + 1) & 
-                                    stage.syph == 6)
+    toTert <- which(active == 1 & stage.time.syph >= 1 & 
+                    stage.syph == 6 & syphilis == 1)
     toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
     stage.syph[toTert] <- 7
     stage.time.syph[toTert] <- 0

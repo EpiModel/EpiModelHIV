@@ -735,16 +735,15 @@ init_status_msm <- function(dat) {
 #'
 init_status_sti_msm <- function(dat) {
     
+    ## Initial values and attributes -------------------------------------------
+    
     num.B <- dat$init$num.B
     num.W <- dat$init$num.W
     num <- num.B + num.W
     ids.B <- which(dat$attr$race == "B")
     ids.W <- which(dat$attr$race == "W")
     age <- dat$attr$age
-    race <- dat$attr$race
-    ins.quot <- dat$attr$ins.quot
     role.class <- dat$attr$role.class
-    active <- dat$attr$active
 
     # Infection Status
     nInfsyphB <- round(dat$init$prev.syph.B * num.B)
@@ -760,39 +759,18 @@ init_status_sti_msm <- function(dat) {
     }
     
     # Infection-related attributes
+    # Syphilis
+    syphilis <- rep(0, num)
+    syph.lastinfTime <- rep(NA, num)
+    syph.infTime <- rep(NA, num)
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
-    syph.infTime <- rep(NA, num)
-    syph.lastinfTime <- rep(NA, num)
     syph.timesInf <- rep(0, num)
-    syph.cease <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
-    diag.status.gc <- rep(NA, num)
-    diag.status.ct <- rep(NA, num)
     lastdiag.time.syph <- rep(NA, num)
-    lastdiag.time.gc <- rep(NA, num)
-    lastdiag.time.ct <- rep(NA, num)
     last.neg.test.syph <- rep(NA, num)
-    last.neg.test.rgc <- rep(NA, num)
-    last.neg.test.ugc <- rep(NA, num)
-    last.neg.test.rct <- rep(NA, num)
-    last.neg.test.uct <- rep(NA, num)
     last.tx.time.syph <- rep(NA, num)
-    last.tx.time.rgc <- rep(NA, num)
-    last.tx.time.ugc <- rep(NA, num)
-    last.tx.time.rct <- rep(NA, num)
-    last.tx.time.uct <- rep(NA, num)
     last.tx.time.syph.prep <- rep(NA, num)
-    last.tx.time.rct.prep <- rep(NA, num)
-    last.tx.time.uct.prep <- rep(NA, num)
-    last.tx.time.rgc.prep <- rep(NA, num)
-    last.tx.time.ugc.prep <- rep(NA, num)
-    infector.syph <- rep(NA, num)
-    inf.role.syph <- rep(NA, num)
-    inf.type.syph <- rep(NA, num)
-    inf.diag.syph <- rep(NA, num)
-    inf.tx.syph <- rep(NA, num)
-    inf.stage.syph <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
     stage.prim.sympt <- rep(NA, num) 
@@ -801,27 +779,58 @@ init_status_sti_msm <- function(dat) {
     stage.latelat.sympt <- rep(NA, num)
     stage.latelatelat.sympt <- rep(NA, num)
     stage.tert.sympt <- rep(NA, num)
-    tt.traj.syph <- rep(NA, num)
-    tt.traj.gc <- rep(NA, num)
-    tt.traj.ct <- rep(NA, num)
-    eptElig <- rep(NA, num)
-    eptStat <- rep(NA, num)
-    eptEligdate <- rep(NA, num)
-    eptStartTime <- rep(NA, num)
-    eptTx <- rep(NA, num)
-    eptEligTx <- rep(NA, num)
-    stianntestLastElig <- rep(NA, num)
-    stihighrisktestLastElig <- rep(NA, num)
     
-    time.sex.active <- pmax(1,
-                            round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
-                                      min(dat$init$ages), 0))
+    # Gonorrhea
+    uGC <- rep(0, num)
+    rGC <- rep(0, num)
+    rGC.infTime <- rep(NA, num)
+    uGC.infTime <- rep(NA, num)
+    rGC.lastinfTime <- rep(NA, num)
+    uGC.lastinfTime <- rep(NA, num)
+    rGC.timesInf <- rep(0, num)
+    uGC.timesInf <- rep(0, num)
+    rGC.sympt <- rep(NA, num)
+    uGC.sympt <- rep(NA, num)
+    diag.status.gc <- rep(NA, num)
+    lastdiag.time.gc <- rep(NA, num)
+    last.neg.test.rgc <- rep(NA, num)
+    last.neg.test.ugc <- rep(NA, num)
+    last.tx.time.rgc <- rep(NA, num)
+    last.tx.time.ugc <- rep(NA, num)
+    last.tx.time.rgc.prep <- rep(NA, num)
+    last.tx.time.ugc.prep <- rep(NA, num)
+    
+    # Chlamydia
+    uCT <- rep(0, num)
+    rCT <- rep(0, num)
+    rCT.infTime <- rep(NA, num)
+    uCT.infTime <- rep(NA, num)
+    rCT.lastinfTime <- rep(NA, num)
+    uCT.lastinfTime <- rep(NA, num)
+    rCT.timesInf <- rep(0, num)
+    uCT.timesInf <- rep(0, num)
+    rCT.sympt <- rep(NA, num)
+    uCT.sympt <- rep(NA, num)
+    diag.status.ct <- rep(NA, num)
+    lastdiag.time.ct <- rep(NA, num)
+    last.neg.test.rct <- rep(NA, num)
+    last.neg.test.uct <- rep(NA, num)
+    last.tx.time.rct <- rep(NA, num)
+    last.tx.time.uct <- rep(NA, num)
+    last.tx.time.rct.prep <- rep(NA, num)
+    last.tx.time.uct.prep <- rep(NA, num)
+    
+    # Testing attributes
     sexactive <- rep(NA, num)
     sexnewedge <- rep(NA, num)
     recentpartners <- rep(0, num)
-
+    time.sex.active <- pmax(1,
+                            round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
+                                      min(dat$init$ages), 0))
+    
+    
+    ## Syphilis ----------------------------------------------------------------
     # Infection status for syphilis
-    syphilis <- rep(0, num)
     while (sum(syphilis[ids.B]) != nInfsyphB) {
         syphilis[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
     }
@@ -829,89 +838,80 @@ init_status_sti_msm <- function(dat) {
     syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
        }
     syph.timesInf[syphilis == 1] <- 1
-    syph.infTime[syphilis ==  1] <- dat$attr$syph.lastinfTime[syphilis == 1] <- 1
-    dat$attr$syphilis <- syphilis
+    syph.infTime[syphilis ==  1] <- syph.lastinfTime[syphilis == 1] <- 1
         
     inf.ids.B <- which(syphilis[ids.B] == 1)
     inf.ids.W <- which(syphilis[ids.W] == 1)
     inf.ids <- c(inf.ids.B, inf.ids.W)
-    
-    notinf.ids.B <- which(syphilis[ids.B] == 0)
-    notinf.ids.W <- which(syphilis[ids.B] == 0)
-    
+
     # Stage of infection
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7),
                                           stage.syph.B.prob))
     stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7),
                                           stage.syph.W.prob))
-    dat$attr$stage.syph <- stage.syph
     
     # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
     selected <- which(stage.syph[inf.ids] == 1)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.incub.syph
     syph.tx[selected] <- 0
     
     # Primary
     selected <- which(stage.syph[inf.ids] == 2)
     stage.prim.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.prim.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.prim.syph
     syph.tx[selected] <- 0
     
     # Secondary
     selected <- which(stage.syph[inf.ids] == 3)
     stage.seco.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.seco.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.seco.syph
     syph.tx[selected] <- 0
     
     # Early latent
     selected <- which(stage.syph[inf.ids] == 4)
     stage.earlat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.earlat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.earlat.syph
     syph.tx[selected] <- 0
     
     # Late latent
     selected <- which(stage.syph[inf.ids] == 5)
     stage.latelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.latelat.syph
     syph.tx[selected] <- 0
     
     # Late late latent
     selected <- which(stage.syph[inf.ids] == 6)
     stage.latelatelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.latelatelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.latelatelat.syph
     syph.tx[selected] <- 0
-    
     
     # Tertiary
     selected <- which(stage.syph[inf.ids] == 7)
     stage.tert.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
-    time.since.inf <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.since.inf
+    time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.tert.syph
     syph.tx[selected] <- 0
     
     # Set diagnosis status for syphilis 
     diag.status.syph[syphilis == 1] <- 0
     
-    ## GC/CT status
+    ## Gonorrhea (GC) ----------------------------------------------------------
     idsUreth <- which(role.class %in% c("I", "V"))
     idsRect <- which(role.class %in% c("R", "V"))
-    
-    uGC <- rGC <- rep(0, num)
-    uCT <- rCT <- rep(0, num)
     
     # Initialize GC infection at both sites
     idsUGC <- sample(idsUreth, size = round(dat$init$prev.ugc * num), FALSE)
@@ -920,113 +920,133 @@ init_status_sti_msm <- function(dat) {
     idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(dat$init$prev.rgc * num), FALSE)
     rGC[idsRGC] <- 1
     
-    dat$attr$rGC <- rGC
-    dat$attr$uGC <- uGC
+    rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
+    uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
     
-    dat$attr$rGC.sympt <- dat$attr$uGC.sympt <- rep(NA, num)
-    dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
-    dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
+    rGC.infTime[rGC == 1] <- rGC.lastinfTime[rGC == 1] <- 1
+    uGC.infTime[uGC == 1] <- uGC.lastinfTime[uGC == 1] <- 1
     
-    dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- dat$attr$rGC.lastinfTime <- dat$attr$uGC.lastinfTime <- rep(NA, num)
-    dat$attr$rGC.infTime[rGC == 1] <- dat$attr$rGC.lastinfTime[rGC == 1] <- 1
-    dat$attr$uGC.infTime[uGC == 1] <- dat$attr$uGC.lastinfTime[uGC == 1] <- 1
+    rGC.timesInf[rGC == 1] <- 1
+    uGC.timesInf[uGC == 1] <- 1
     
-    dat$attr$rGC.timesInf <- rep(0, num)
-    dat$attr$rGC.timesInf[rGC == 1] <- 1
-    dat$attr$uGC.timesInf <- rep(0, num)
-    dat$attr$uGC.timesInf[uGC == 1] <- 1
-    dat$attr$diag.status.gc[uGC == 1 | rGC == 1] <- 0
+    diag.status.gc[uGC == 1 | rGC == 1] <- 0
     
-    dat$attr$rGC.tx <- rep(NA, num)
-    dat$attr$uGC.tx <- rep(NA, num)
-    dat$attr$rGC.tx.prep <- rep(NA, num)
-    dat$attr$uGC.tx.prep <- rep(NA, num)
-    dat$attr$GC.cease <- rep(NA, num)
+    ## Chlamydia (CT) ----------------------------------------------------------
+    idsUreth <- which(role.class %in% c("I", "V"))
+    idsRect <- which(role.class %in% c("R", "V"))
     
-    # Initialize CT infection at both sites
     idsUCT <- sample(idsUreth, size = round(dat$init$prev.uct * num), FALSE)
     uCT[idsUCT] <- 1
     
     idsRCT <- sample(setdiff(idsRect, idsUCT), size = round(dat$init$prev.rct * num), FALSE)
     rCT[idsRCT] <- 1
+
+    rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
+    uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
     
-    dat$attr$rCT <- rCT
-    dat$attr$uCT <- uCT
+    rCT.infTime[rCT == 1] <- rCT.lastinfTime[rCT == 1] <- 1
+    uCT.infTime[uCT == 1] <- uCT.lastinfTime[uCT == 1] <- 1
     
-    dat$attr$rCT.sympt <- dat$attr$uCT.sympt <- rep(NA, num)
-    dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
-    dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
-    
-    dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- dat$attr$rCT.lastinfTime <- dat$attr$uCT.lastinfTime <- rep(NA, num)
-    dat$attr$rCT.infTime[dat$attr$rCT == 1] <- dat$attr$rCT.lastinfTime[dat$attr$rCT == 1] <- 1
-    dat$attr$uCT.infTime[dat$attr$uCT == 1] <- dat$attr$uCT.lastinfTime[dat$attr$uCT == 1] <- 1
-    
-    dat$attr$rCT.timesInf <- rep(0, num)
-    dat$attr$rCT.timesInf[rCT == 1] <- 1
-    dat$attr$uCT.timesInf <- rep(0, num)
-    dat$attr$uCT.timesInf[uCT == 1] <- 1
-    dat$attr$diag.status.ct[uCT == 1 | rCT == 1] <- 0
-    
-    dat$attr$rCT.tx <- rep(NA, num)
-    dat$attr$uCT.tx <- rep(NA, num)
-    dat$attr$rCT.tx.prep <- rep(NA, num)
-    dat$attr$uCT.tx.prep <- rep(NA, num)
-    dat$attr$CT.cease <- rep(NA, num)
+    rCT.timesInf <- rep(0, num)
+    rCT.timesInf[rCT == 1] <- 1
+    uCT.timesInf <- rep(0, num)
+    uCT.timesInf[uCT == 1] <- 1
+    diag.status.ct[uCT == 1 | rCT == 1] <- 0
     
 
-    # Set all onto dat$attr
+    ## Set all attributes onto dat$attr -----------------------------------------
+    
+    # Syphilis
+    dat$attr$syphilis <- syphilis 
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
-    dat$attr$syph.infTime <- syph.infTime
     dat$attr$diag.status.syph <- diag.status.syph
-    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
-    dat$attr$last.neg.test.syph <- last.neg.test.syph
-    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
-    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
-    dat$attr$last.neg.test.rct <- last.neg.test.rct
-    dat$attr$last.neg.test.uct <- last.neg.test.uct
-    dat$attr$infector.syph <- infector.syph
-    dat$attr$inf.role.syph <- inf.role.syph
-    dat$attr$inf.type.syph <- inf.type.syph
-    dat$attr$inf.diag.syph <- inf.diag.syph
-    dat$attr$inf.tx.syph <- inf.tx.syph
-    dat$attr$inf.stage.syph <- inf.stage.syph
+    dat$attr$syph.infTime <- syph.infTime
+    dat$attr$syph.lastinfTime <- syph.lastinfTime
     dat$attr$syph.timesInf <- syph.timesInf
-    dat$attr$syph.cease <- syph.cease
-    dat$attr$syph.tx <- syph.tx
-    dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$stage.prim.sympt <- stage.prim.sympt 
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt
     dat$attr$stage.latelat.sympt <- stage.latelat.sympt
     dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
     dat$attr$stage.tert.sympt <- stage.tert.sympt
-    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
-    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    dat$attr$syph.tx <- syph.tx
+    dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$last.tx.time.syph <- last.tx.time.syph
+    dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
+    dat$attr$tt.traj.syph <- rep(NA, num)
+    dat$attr$syph.cease <- rep(NA, num)
+    dat$attr$inf.role.syph <- rep(NA, num)
+    dat$attr$inf.type.syph <- rep(NA, num)
+    
+    # Gonorrhea
+    dat$attr$rGC <- rGC
+    dat$attr$uGC <- uGC
+    dat$attr$diag.status.gc <- diag.status.gc
+    dat$attr$rGC.infTime <- rGC.infTime
+    dat$attr$uGC.infTime <- uGC.infTime
+    dat$attr$rGC.lastinfTime <- rGC.lastinfTime
+    dat$attr$uGC.lastinfTime <- uGC.lastinfTime
+    dat$attr$rGC.timesInf <- rGC.timesInf
+    dat$attr$uGC.timesInf <- uGC.timesInf
+    dat$attr$rGC.sympt <- rGC.sympt
+    dat$attr$uGC.sympt <- uGC.sympt
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$rGC.tx <- rep(NA, num)
+    dat$attr$uGC.tx <- rep(NA, num)
+    dat$attr$rGC.tx.prep <- rep(NA, num)
+    dat$attr$uGC.tx.prep <- rep(NA, num)
     dat$attr$last.tx.time.rgc <- last.tx.time.rgc
     dat$attr$last.tx.time.ugc <- last.tx.time.ugc
-    dat$attr$last.tx.time.rct <- last.tx.time.rct
-    dat$attr$last.tx.time.uct <- last.tx.time.uct
-    dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
-    dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
-    dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
     dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
-    dat$attr$tt.traj.syph <- tt.traj.syph
-    dat$attr$tt.traj.gc <- tt.traj.gc
-    dat$attr$tt.traj.ct <- tt.traj.ct
-    dat$attr$eptElig <- eptElig
-    dat$attr$eptStat <- eptStat
-    dat$attr$eptEligdate <- eptEligdate
-    dat$attr$eptEligTx <- eptEligTx
-    dat$attr$eptStartTime <- eptStartTime
-    dat$attr$eptTx <- eptTx
+    dat$attr$tt.traj.gc <- rep(NA, num)
+    dat$attr$GC.cease <- rep(NA, num)
+    
+    # Chlamydia
+    dat$attr$rCT <- rCT
+    dat$attr$uCT <- uCT
+    dat$attr$diag.status.ct <- diag.status.ct
+    dat$attr$rCT.infTime <- rCT.infTime
+    dat$attr$uCT.infTime <- uCT.infTime
+    dat$attr$rCT.lastinfTime <- rCT.lastinfTime
+    dat$attr$uCT.lastinfTime <- uCT.lastinfTime
+    dat$attr$rCT.timesInf <- rCT.timesInf
+    dat$attr$uCT.timesInf <- uCT.timesInf
+    dat$attr$rCT.sympt <- rCT.sympt
+    dat$attr$uCT.sympt <- uCT.sympt
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct    
+    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$rCT.tx <- rep(NA, num)
+    dat$attr$uCT.tx <- rep(NA, num)
+    dat$attr$rCT.tx.prep <- rep(NA, num)
+    dat$attr$uCT.tx.prep <- rep(NA, num)
+    dat$attr$last.tx.time.rct <- last.tx.time.rct
+    dat$attr$last.tx.time.uct <- last.tx.time.uct
+    dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
+    dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
+    dat$attr$tt.traj.ct <- rep(NA, num)
+    dat$attr$CT.cease <- rep(NA, num)
+    
+    # EPT variables
+    dat$attr$eptElig <- rep(NA, num)
+    dat$attr$eptStat <- rep(NA, num)
+    dat$attr$eptEligdate <- rep(NA, num)
+    dat$attr$eptEligTx <- rep(NA, num)
+    dat$attr$eptStartTime <- rep(NA, num)
+    dat$attr$eptTx <- rep(NA, num)
+
+    # Testing variables
     dat$attr$sexactive <- sexactive
     dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners
-    dat$attr$stianntestLastElig <- stianntestLastElig
-    dat$attr$stihighrisktestLastElig <- stihighrisktestLastElig
+    dat$attr$stianntestLastElig <- rep(NA, num)
+    dat$attr$stihighrisktestLastElig <- rep(NA, num)
     
     return(dat)
     
