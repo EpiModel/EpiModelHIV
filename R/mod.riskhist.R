@@ -23,6 +23,7 @@ riskhist_msm <- function(dat, at) {
   ## Attributes
   uid <- dat$attr$uid
   active <- dat$attr$active
+  race <- dat$attr$race
   dx <- dat$attr$diag.status
   since.test <- at - dat$attr$last.neg.test
   rGC.tx <- dat$attr$rGC.tx
@@ -154,7 +155,7 @@ riskhist_msm <- function(dat, at) {
   idsactive <- which((at - sexactive) <= stitest.active.int)
   dat$attr$stitest.ind.active[idsactive] <- at
   
-  # High-risk: CDC definition of increased risk for women - Add these indications to top of this module
+  # High-risk: CDC definition of increased risk for women 
   
   ### Have a new sex partner in last x months
   idsnewpartners <- which((at - sexnewedge) <= sti.highrisktest.int)
@@ -169,27 +170,27 @@ riskhist_msm <- function(dat, at) {
   
   #	Have more than one sex partner in last x months
   idspartlist <- which(uid %in% part.list[, 1:2])
-  idsnotpartlist <- setdiff(which(dat$attr$active == 1), idspartlist)
+  idsnotpartlist <- setdiff(which(race %in% c("B","W")), idspartlist)
   # these are relative ids of nodes in partner list
   
   # Number of partners in last x months (0 for those not in active list)
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
-  # For those who had partners, calculate # of times that they occur in partner list
+  # For those who had partners, calculate # of occurrences in partner list
   part.count <- as.data.frame(table(part.list[, 1:2]))
   
-  # relative ids get values of listing of partner count for uid for length of active ids
+  # relative ids get values of partner count for uid for length of active ids
   dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, 1]), 2]
   
   # Choose those who have had more than 1 partner in last x months
   idsrecentpartners <- which(dat$attr$recentpartners > 1)
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
   
-  # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS ------------------------------------------------------------------------------
+  # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS --------------------
   ### Partner has multiple sex partners
   
   # Partner 1 has multiple partners, Partner 2 indicated
-  part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1) , , drop = FALSE]
+  part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1), , drop = FALSE]
 
   # Partner 2 indicated
   uidspartlistmult1 <- part.listmult1[, 2]
@@ -205,17 +206,19 @@ riskhist_msm <- function(dat, at) {
   # Combine into one list for indication
   idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
   dat$attr$stitest.ind.concurrpartner[idspartmult] <- at
-  # #------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------
   
-  # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS ------------------------------------------------------------------------------
+  # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS --------------------
   
   ### Have a sex partner who has a treated sexually transmitted infection in the last interval
   # Partner 1 has a STI, Partner 2 indicated
-  part.liststi1 <- part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 1]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.uct[part.list[, 1]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.rgc[part.list[, 1]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.ugc[part.list[, 1]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.syph[part.list[, 1]]) <= sti.highrisktest.int), , drop = FALSE]
+  part.liststi1 <- 
+    part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 1]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.uct[part.list[, 1]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.rgc[part.list[, 1]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.ugc[part.list[, 1]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.syph[part.list[, 1]]) <= sti.highrisktest.int), , drop = FALSE]
+  
   # Partner 2 indicated
   uidspartliststi1 <- part.liststi1[, 2]
   idspartliststi1 <- which(uid %in% uidspartliststi1)
@@ -249,8 +252,10 @@ riskhist_msm <- function(dat, at) {
   
   
   ### Previous or coexisting STIs (treated) in a time interval
-  idsSTI <- which((at - dat$attr$last.tx.time.syph) <= sti.highrisktest.int | (at - dat$attr$last.tx.time.rgc) <= sti.highrisktest.int |
-                      (at - dat$attr$last.tx.time.ugc) <= sti.highrisktest.int | (at - dat$attr$last.tx.time.rct) <= sti.highrisktest.int | 
+  idsSTI <- which((at - dat$attr$last.tx.time.syph) <= sti.highrisktest.int | 
+                    (at - dat$attr$last.tx.time.rgc) <= sti.highrisktest.int |
+                      (at - dat$attr$last.tx.time.ugc) <= sti.highrisktest.int | 
+                    (at - dat$attr$last.tx.time.rct) <= sti.highrisktest.int | 
                       (at - dat$attr$last.tx.time.uct) <= sti.highrisktest.int)
   dat$attr$stitest.ind.sti[idsSTI] <- at
   
@@ -261,14 +266,14 @@ riskhist_msm <- function(dat, at) {
   
   # Update epi to show prevalence of STI testing indications
   if (at >= dat$param$stitest.start) {
-      dat$epi$stiactiveind[at] <- length(idsactive) / sum(active == 1, na.rm = TRUE)
-      dat$epi$newpartner[at] <- length(idsnewpartners) / sum(active == 1, na.rm = TRUE)
-      dat$epi$recentpartners[at] <- length(idsrecentpartners) / sum(active == 1, na.rm = TRUE)
-      dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) / sum(active == 1, na.rm = TRUE)
-      dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) / sum(active == 1, na.rm = TRUE)
-      dat$epi$uai.nmain[at] <- length(uai.nmain) / sum(active == 1, na.rm = TRUE)
-      dat$epi$uai.any[at] <- length(uai.any) / sum(active == 1, na.rm = TRUE)
-      dat$epi$recentSTI[at] <- length(idsSTI) / sum(active == 1, na.rm = TRUE)
+      dat$epi$stiactiveind[at] <- length(idsactive) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$newpartner[at] <- length(idsnewpartners) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$recentpartners[at] <- length(idsrecentpartners) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$uai.nmain[at] <- length(uai.nmain) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$uai.any[at] <- length(uai.any) / sum(race %in% c("B", "W"), na.rm = TRUE)
+      dat$epi$recentSTI[at] <- length(idsSTI) / sum(race %in% c("B", "W"), na.rm = TRUE)
   }
   
   
@@ -281,7 +286,7 @@ riskhist_msm <- function(dat, at) {
   # Subset partner list to those active within an EPT interval - last active date within 60 days
   part.list <- part.list[which((at - (part.list[, 5]) <= ept.risk.int)), , drop = FALSE]
   
-  # Subset partner list to alive
+  # Subset partner list to alive ---> may need to remove! Could still be indicated even if partner is dead
   part.list <- part.list[which(active[part.list[, 1]] == 1 & active[part.list[, 2]] == 1), , drop = FALSE]
   
   # Partner 1 was recently treated, so partner 2 would be eligible to be treated through EPT if not currently being treated for anything
@@ -450,54 +455,71 @@ riskhist_msm <- function(dat, at) {
   idspartlistsept2.inst.long <- part.listept2.inst.long[, 1]
   
   # All EPT eligible IDs (partners of index)
-  idsept <- unique(c(idspartlistsept1.main.short, idspartlistsept1.casl.short, idspartlistsept1.inst.short, 
-                     idspartlistsept2.main.short, idspartlistsept2.casl.short, idspartlistsept2.inst.short,
-                     idspartlistsept1.main.med, idspartlistsept1.casl.med, idspartlistsept1.inst.med, 
-                     idspartlistsept2.main.med, idspartlistsept2.casl.med, idspartlistsept2.inst.med,
-                     idspartlistsept1.main.long, idspartlistsept1.casl.long, idspartlistsept1.inst.long, 
-                     idspartlistsept2.main.long, idspartlistsept2.casl.long, idspartlistsept2.inst.long))
+  idsept <- unique(c(idspartlistsept1.main.short, idspartlistsept1.casl.short, 
+                     idspartlistsept1.inst.short, idspartlistsept2.main.short, 
+                     idspartlistsept2.casl.short, idspartlistsept2.inst.short,
+                     idspartlistsept1.main.med, idspartlistsept1.casl.med, 
+                     idspartlistsept1.inst.med, idspartlistsept2.main.med, 
+                     idspartlistsept2.casl.med, idspartlistsept2.inst.med,
+                     idspartlistsept1.main.long, idspartlistsept1.casl.long, 
+                     idspartlistsept1.inst.long, idspartlistsept2.main.long, 
+                     idspartlistsept2.casl.long, idspartlistsept2.inst.long))
   
-  idsept.main.short <- unique(c(idspartlistsept1.main.short, idspartlistsept2.main.short))
-  idsept.casl.short <- unique(c(idspartlistsept1.casl.short, idspartlistsept2.casl.short))
-  idsept.inst.short <- unique(c(idspartlistsept1.inst.short, idspartlistsept2.inst.short))
+  idsept.main.short <- unique(c(idspartlistsept1.main.short, 
+                                idspartlistsept2.main.short))
+  idsept.casl.short <- unique(c(idspartlistsept1.casl.short, 
+                                idspartlistsept2.casl.short))
+  idsept.inst.short <- unique(c(idspartlistsept1.inst.short, 
+                                idspartlistsept2.inst.short))
   
-  idsept.main.med <- unique(c(idspartlistsept1.main.med, idspartlistsept2.main.med))
-  idsept.casl.med <- unique(c(idspartlistsept1.casl.med, idspartlistsept2.casl.med))
-  idsept.inst.med <- unique(c(idspartlistsept1.inst.med, idspartlistsept2.inst.med))
+  idsept.main.med <- unique(c(idspartlistsept1.main.med, 
+                              idspartlistsept2.main.med))
+  idsept.casl.med <- unique(c(idspartlistsept1.casl.med, 
+                              idspartlistsept2.casl.med))
+  idsept.inst.med <- unique(c(idspartlistsept1.inst.med, 
+                              idspartlistsept2.inst.med))
  
-  idsept.main.long <- unique(c(idspartlistsept1.main.long, idspartlistsept2.main.long))
-  idsept.casl.long <- unique(c(idspartlistsept1.casl.long, idspartlistsept2.casl.long))
-  idsept.inst.long <- unique(c(idspartlistsept1.inst.long, idspartlistsept2.inst.long))
+  idsept.main.long <- unique(c(idspartlistsept1.main.long, 
+                               idspartlistsept2.main.long))
+  idsept.casl.long <- unique(c(idspartlistsept1.casl.long, 
+                               idspartlistsept2.casl.long))
+  idsept.inst.long <- unique(c(idspartlistsept1.inst.long, 
+                               idspartlistsept2.inst.long))
   
   ## Provision to and uptake of partners (to be treated at next time step)
   idsprovided.main.short <- idsept.main.short[which(rbinom(length(idsept.main.short), 1,
-                                               ept.provision.main * ept.provision.short.main.rr) == 1)]
+                            ept.provision.main * ept.provision.short.main.rr) == 1)]
   idsprovided.casl.short <- idsept.casl.short[which(rbinom(length(idsept.casl.short), 1,
-                                               ept.provision.casl * ept.provision.short.casl.rr) == 1)]
+                            ept.provision.casl * ept.provision.short.casl.rr) == 1)]
   idsprovided.inst.short <- idsept.inst.short[which(rbinom(length(idsept.inst.short), 1,
-                                               ept.provision.inst * ept.provision.short.inst.rr) == 1)]
+                            ept.provision.inst * ept.provision.short.inst.rr) == 1)]
   idsprovided.main.med <- idsept.main.med[which(rbinom(length(idsept.main.med), 1,
-                                               ept.provision.main * ept.provision.med.main.rr) == 1)]
+                          ept.provision.main * ept.provision.med.main.rr) == 1)]
   idsprovided.casl.med <- idsept.casl.med[which(rbinom(length(idsept.casl.med), 1,
-                                               ept.provision.casl * ept.provision.med.casl.rr) == 1)]
+                          ept.provision.casl * ept.provision.med.casl.rr) == 1)]
   idsprovided.inst.med <- idsept.inst.med[which(rbinom(length(idsept.inst.med), 1,
-                                               ept.provision.inst * ept.provision.med.inst.rr) == 1)]
+                          ept.provision.inst * ept.provision.med.inst.rr) == 1)]
   idsprovided.main.long <- idsept.main.long[which(rbinom(length(idsept.main.long), 1,
-                                               ept.provision.main * ept.provision.long.main.rr) == 1)]
+                           ept.provision.main * ept.provision.long.main.rr) == 1)]
   idsprovided.casl.long <- idsept.casl.long[which(rbinom(length(idsept.casl.long), 1,
-                                               ept.provision.casl * ept.provision.long.casl.rr) == 1)]
+                           ept.provision.casl * ept.provision.long.casl.rr) == 1)]
   idsprovided.inst.long <- idsept.inst.long[which(rbinom(length(idsept.inst.long), 1,
-                                               ept.provision.inst * ept.provision.long.inst.rr) == 1)]
+                           ept.provision.inst * ept.provision.long.inst.rr) == 1)]
   
-  idsprovided_ept <- unique(c(idsprovided.main.short, idsprovided.casl.short, idsprovided.inst.short,
-                              idsprovided.main.med, idsprovided.casl.med, idsprovided.inst.med,
-                              idsprovided.main.long, idsprovided.casl.long, idsprovided.inst.long))
+  idsprovided_ept <- unique(c(idsprovided.main.short, idsprovided.casl.short,
+                              idsprovided.inst.short, idsprovided.main.med, 
+                              idsprovided.casl.med, idsprovided.inst.med,
+                              idsprovided.main.long, idsprovided.casl.long, 
+                              idsprovided.inst.long))
   
-  idsprovided.main_ept <- unique(c(idsprovided.main.short, idsprovided.main.med, idsprovided.main.long))
+  idsprovided.main_ept <- unique(c(idsprovided.main.short, idsprovided.main.med, 
+                                   idsprovided.main.long))
   
-  idsprovided.casl_ept <- unique(c(idsprovided.casl.short, idsprovided.casl.med, idsprovided.casl.long))
+  idsprovided.casl_ept <- unique(c(idsprovided.casl.short, idsprovided.casl.med, 
+                                   idsprovided.casl.long))
   
-  idsprovided.inst_ept <- unique(c(idsprovided.inst.short, idsprovided.inst.med, idsprovided.inst.long))
+  idsprovided.inst_ept <- unique(c(idsprovided.inst.short, idsprovided.inst.med, 
+                                   idsprovided.inst.long))
   
   # Uptake
   idsept_tx.main <- idsprovided.main_ept[which(rbinom(length(idsprovided.main_ept), 1,

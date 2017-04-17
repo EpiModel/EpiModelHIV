@@ -1,20 +1,21 @@
 
 #' @title Partnership tracking Module
 #'
-#' @description Module function for tracking partnerships for STD testing and EPT.
+#' @description Module function for tracking partnerships for STD testing 
+#'              and EPT.
 #'
 #' @inheritParams aging_msm
 #'
 #' @details
 #' Partnerships are tracked in a persistent edge list that allows for easy
 #' reference to determine if a participant has been in a particular type of
-#' relationship within a defined time frame
-#' infected; or post diagnosis for one recently infected. The rates of disclosure
-#' vary at these three points, and also by the partnership type.
+#' relationship within a defined time frame infected; or post diagnosis for 
+#' one recently infected. The rates of disclosure vary at these three points, 
+#' and also by the partnership type.
 #'
 #' @return
-#' This function returns the \code{dat} object with the updated master partnership list,
-#' on \code{temp$part.list}.
+#' This function returns the \code{dat} object with the updated master 
+#' partnership list, on \code{temp$part.list}.
 #'
 #' @keywords module msm
 #' @export
@@ -26,7 +27,7 @@ part_msm <- function(dat, at){
     }
     for (type in c("main", "pers", "inst")) {
         
-        # Variables --------------------------------------------------------------
+        # Variables -----------------------------------------------------------
         
         # Attributes
         uid <- dat$attr$uid
@@ -47,7 +48,7 @@ part_msm <- function(dat, at){
         }
         
         
-        # Processes --------------------------------------------------------------
+        # Processes -----------------------------------------------------------
         # STI tracking - start with existing edge list
         # Order with lowest uid value first - just to create matrix
         highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
@@ -79,8 +80,8 @@ part_msm <- function(dat, at){
                     parttype = 3
                 }
                 
-                # new.edges matrix is expressed in uid, so check notyet vs. new.edges
-                new.edges <- dat$temp$new.edges #only includes types 1 and 2 so far
+                # new.edges matrix is expressed in uid, notyet vs new.edges
+                new.edges <- dat$temp$new.edges #only includes types 1 and 2 
                 new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
                                 (new.edges[, 1] * 1e7 + new.edges[, 2])) |
                     ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
@@ -101,8 +102,10 @@ part_msm <- function(dat, at){
             
             if (type %in% "inst") {
                 
-            # Instantaneous - last.active.time and end.time columns get value of start.time
-                dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <- dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
+            # Instantaneous - last.active.time and end.time columns get value of
+            # start.time
+                dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <-
+                  dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
         }
         }
     }
@@ -122,27 +125,28 @@ part_msm <- function(dat, at){
         dead.edges.p <- dead.edges.p[dead.edges.p[, "to"] == 0, 1:2, drop = FALSE]
         dead.edges <- rbind(dead.edges.m, dead.edges.p)
         
-        dead.rel <- ((uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) %in%
-                        (part.list[, 1] * 1e7 + part.list[, 2])) |
-            ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in%
-                 (part.list[, 1] * 1e7 + part.list[, 2]))
+        dead.rel <- (
+          (uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) %in% (part.list[, 1] * 1e7 + part.list[, 2])) |
+            ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in% (part.list[, 1] * 1e7 + part.list[, 2]))
         
         # Set dead edges to have ended at this timepoint
         if (length(dead.rel) > 0) {
-            part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
-                             uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |
-                           match(part.list[, 2] * 1e7 + part.list[, 1],
-                                 uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]))), 6] <- at
+            part.list[which(
+              (match(part.list[, 1] * 1e7 + part.list[, 2], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |
+               match(part.list[, 2] * 1e7 + part.list[, 1], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]))), 6] <- at
         }
         
-        # Select matching ((currently in both edgelist and existing temp$part.list) and no end date yet) partnerships to update last active date of partnership
-        part.list[which((match(part.list[, 1] * 1e7 + part.list[, 2],
-                              uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-                          match(part.list[, 2] * 1e7 + part.list[, 1],
-                                uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) & is.na(part.list[, 6])), 5] <- at
+        # Select matching ((currently in both edgelist and existing 
+        # dat$temp$part.list) and no end date yet) partnerships to update 
+        # last active date of partnership
+        part.list[which(
+          (match(part.list[, 1] * 1e7 + part.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
+           match(part.list[, 2] * 1e7 + part.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) & 
+           is.na(part.list[, 6])), 5] <- at
           
         # Subset part.list to include only partnerships active in last x months
-        part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , drop = FALSE]
+        part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , 
+                               drop = FALSE]
         dat$temp$part.list <- part.list
     }
 return(dat)    

@@ -6,7 +6,9 @@
 \usage{
 init_msm(nwstats, prev.B = 0.1, prev.W = 0.1, prev.ugc = 0.015,
   prev.rgc = 0.015, prev.uct = 0.015, prev.rct = 0.015,
-  prev.syph.B = 0.02, prev.syph.W = 0.02, ...)
+  prev.syph.B = 0.02, prev.syph.W = 0.02, stage.syph.B.prob = c(0, 0.2,
+  0.077, 0.277, 0.22, 0.22, 0.006), stage.syph.W.prob = c(0, 0.2, 0.077,
+  0.277, 0.22, 0.22, 0.006), ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -27,6 +29,14 @@ init_msm(nwstats, prev.B = 0.1, prev.W = 0.1, prev.ugc = 0.015,
 \item{prev.syph.B}{Initial prevalence of syphilis among black MSM}
 
 \item{prev.syph.W}{Initial prevalence of syphilis among white MSM}
+
+\item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
+active stages of syphilis: incubating, primary, secondary, early 
+latent, late latent, late late latent, and tertiary.}
+
+\item{stage.syph.W.prob}{Proportion of white MSM who enter one of the seven
+active stages of syphilis: incubating, primary, secondary, early 
+latent, late latent, late late latent, and tertiary.}
 
 \item{...}{Additional arguments passed to function.}
 }

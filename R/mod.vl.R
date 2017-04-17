@@ -16,9 +16,9 @@
 #' \code{4}), VL changes depending on current ART use in that time step.
 #' Current use is associated with a reduction in VL, with the rates of decline
 #' and nadirs dependent on partial or full suppression levels. Current
-#' non-adherence is associated with an equal level of increase to VL. All persons
-#' who have reached AIDS, regardless of how they arrived, have a similar rate of
-#' VL increase.
+#' non-adherence is associated with an equal level of increase to VL. All 
+#' persons who have reached AIDS, regardless of how they arrived, have a 
+#' similar rate of VL increase.
 #'
 #' @return
 #' This function returns the \code{dat} object with updated \code{vl} attribute.
@@ -27,7 +27,7 @@
 #'
 #' @export
 #'
-vl_msm <- function(dat, at) {
+hiv_vl_msm <- function(dat, at) {
 
   ## Variables
 

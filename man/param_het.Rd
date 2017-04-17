@@ -49,13 +49,15 @@ AIDS above impact of heightened viral load.}
 \item{act.rate.cd4}{CD4 count at which the \code{act.rate.late} applies.}
 
 \item{acts.rand}{If \code{TRUE}, will draw number of total and unprotected
-acts from a binomial distribution parameterized by the \code{act.rate}.}
+acts from a binomial distribution parameterized by the 
+\code{act.rate}.}
 
 \item{circ.prob.birth}{Proportion of men circumcised at birth.}
 
 \item{circ.eff}{Efficacy of circumcision per act in HIV prevention.}
 
-\item{tx.elig.cd4}{CD4 count at which a person becomes eligible for treatment.}
+\item{tx.elig.cd4}{CD4 count at which a person becomes eligible for 
+treatment.}
 
 \item{tx.init.cd4.mean}{Mean CD4 count at which person presents for care.}
 
@@ -64,10 +66,11 @@ acts from a binomial distribution parameterized by the \code{act.rate}.}
 \item{tx.adhere.full}{Proportion of people who start treatment who are fully
 adherent.}
 
-\item{tx.adhere.part}{Of the not fully adherent proportion, the percent of time
-they are on medication.}
+\item{tx.adhere.part}{Of the not fully adherent proportion, the percent of 
+time they are on medication.}
 
-\item{tx.vlsupp.time}{Time in days from treatment initiation to viral suppression.}
+\item{tx.vlsupp.time}{Time in days from treatment initiation to 
+viral suppression.}
 
 \item{tx.vlsupp.level}{Log 10 viral load level at suppression.}
 
@@ -81,18 +84,18 @@ for females.}
 \item{tx.cd4.decrat.male}{Rate of CD4 decline under periods of non-adherence
 for males.}
 
-\item{tx.coverage}{Proportion of treatment-eligible persons who have initiated
-treatment.}
+\item{tx.coverage}{Proportion of treatment-eligible persons who have 
+initiated treatment.}
 
 \item{tx.prev.eff}{Proportional amount by which treatment reduces infectivity
 of infected partner.}
 
 \item{b.rate}{General entry rate per day for males and females specified.}
 
-\item{b.rate.method}{Method for assigning birth rates, with options of "totpop"
-for births as a function of the total population size, "fpop" for births
-as a function of the female population size, and "stgrowth" for a constant
-stable growth rate.}
+\item{b.rate.method}{Method for assigning birth rates, with options of 
+"totpop" for births as a function of the total population size, 
+"fpop" for births as a function of the female population size, and 
+"stgrowth" for a constant stable growth rate.}
 
 \item{b.propmale}{Proportion of entries assigned as male. If NULL, then set
 adaptively based on the proportion at time 1.}

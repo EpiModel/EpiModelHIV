@@ -15,8 +15,8 @@
 #' vectors that are not stored external to the module.
 #'
 #' @return
-#' This function returns the \code{dat} object with an updated summary of current
-#' attributes stored in \code{dat$epi}.
+#' This function returns the \code{dat} object with an updated summary of 
+#' current attributes stored in \code{dat$epi}.
 #'
 #' @keywords module msm
 #'
@@ -285,7 +285,7 @@ prevalence_msm <- function(dat, at) {
     ##########
   }
 
-  dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
+  dat$epi$num[at] <- sum(race %in% c("B","W"), na.rm = TRUE)
   dat$epi$num.B[at] <- sum(race == "B", na.rm = TRUE)
   dat$epi$num.W[at] <- sum(race == "W", na.rm = TRUE)
   dat$epi$s.num[at] <- sum(status == 0, na.rm = TRUE)
@@ -295,14 +295,15 @@ prevalence_msm <- function(dat, at) {
   dat$epi$i.prev[at] <- dat$epi$i.num[at] / dat$epi$num[at]
   dat$epi$i.prev.B[at] <- dat$epi$i.num.B[at] / dat$epi$num.B[at]
   dat$epi$i.prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
-  dat$epi$ir100[at] <- (dat$epi$incid[at] / sum(status == 0, na.rm = TRUE)) * 5200
+  dat$epi$ir100[at] <- (dat$epi$incid[at] / 
+                          sum(status == 0, na.rm = TRUE)) * 5200
 
   dat$epi$prepCurr[at] <- sum(prepStat == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(prepElig == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum((is.na(prepStat) | prepStat == 0) & status == 1, na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(prepStat == 1 & status == 1, na.rm = TRUE)
-  dat$epi$i.prev.prep0[at] <- dat$epi$i.num.prep0[at] /
-    sum((is.na(prepStat) | prepStat == 0), na.rm = TRUE)
+  dat$epi$i.prev.prep0[at] <- dat$epi$i.num.prep0[at] / sum((is.na(prepStat) | prepStat == 0), na.rm = TRUE)
+  
   if (at == 1) {
     dat$epi$i.prev.prep1[1] <- 0
   } else {
@@ -311,16 +312,22 @@ prevalence_msm <- function(dat, at) {
   
   dat$epi$time.on.prep[at] <- length(which(dat$attr$prepStat == 1))
   dat$epi$time.off.prep[at] <- length(which(dat$attr$prepStat == 0))
-  dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
-  dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
-  dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
-  dat$epi$stiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], dat$epi$GCasympttests.pos[at], na.rm = TRUE)
-  dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at], dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
+  dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], 
+                                   dat$epi$GCsympttests[at], na.rm = TRUE)
+  dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], 
+                                    dat$epi$GCasympttests[at], na.rm = TRUE)
+  dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], 
+                                         dat$epi$GCasympttests.prep[at], na.rm = TRUE)
+  dat$epi$stiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], 
+                                        dat$epi$GCasympttests.pos[at], na.rm = TRUE)
+  dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at], 
+                                           dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
   
   # Number of tests: Total resets at PrEP or STI testing start time
   if (at == 2 | at == dat$param$prep.start | at == dat$param$stitest.start) {
       
-      dat$epi$totalhivtests[at] <- sum(dat$epi$hivtests.prep[at], dat$epi$hivtests.nprep[at])
+      dat$epi$totalhivtests[at] <- sum(dat$epi$hivtests.prep[at], 
+                                       dat$epi$hivtests.nprep[at])
       dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at]
       dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at]
       
@@ -331,7 +338,8 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at]
       dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at]
       dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at]
-      dat$epi$totalstisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], dat$epi$GCsympttests[at], na.rm = TRUE)
+      dat$epi$totalstisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at], 
+                                            dat$epi$GCsympttests[at], na.rm = TRUE)
       
       dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at]
       dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at]
@@ -350,8 +358,12 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
       dat$epi$totalsyphasympttests.pos[at] <- dat$epi$syphasympttests.pos[at]
       
-      dat$epi$totalstiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at], dat$epi$GCasympttests[at], na.rm = TRUE)
-      dat$epi$totalstiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], dat$epi$GCasympttests.pos[at], na.rm = TRUE)
+      dat$epi$totalstiasympttests[at] <- sum(dat$epi$syphasympttests[at], 
+                                             dat$epi$CTasympttests[at], 
+                                             dat$epi$GCasympttests[at], 
+                                             na.rm = TRUE)
+      dat$epi$totalstiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at], 
+                                                dat$epi$GCasympttests.pos[at], na.rm = TRUE)
       
       dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
       dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
@@ -370,44 +382,48 @@ prevalence_msm <- function(dat, at) {
       dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at]
       dat$epi$totalsyphasympttests.pos.prep[at] <- dat$epi$syphasympttests.pos.prep[at]
       
-      dat$epi$totalstiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at], dat$epi$GCasympttests.prep[at], na.rm = TRUE)
-      dat$epi$totalstiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at], dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
+      dat$epi$totalstiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], 
+                                                  dat$epi$CTasympttests.prep[at], 
+                                                  dat$epi$GCasympttests.prep[at], na.rm = TRUE)
+      dat$epi$totalstiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], 
+                                                      dat$epi$CTasympttests.pos.prep[at], 
+                                                      dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
       
   }
   if ((at > 2 & at < dat$param$prep.start) | (at > dat$param$prep.start) |
-      (at > 2 & at < dat$param$stitest.start) | (at > dat$param$stitest.start)) {
+     (at > 2 & at < dat$param$stitest.start) | (at > dat$param$stitest.start)) {
       
-      dat$epi$totalhivtests[at] <- dat$epi$hivtests.nprep[at] + dat$epi$hivtests.prep[at] + dat$epi$totalhivtests[at - 1]
-      dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at] + dat$epi$totalhivtests.prep[at - 1]
-      dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at] + dat$epi$totalhivtests.pos[at - 1]
+        dat$epi$totalhivtests[at] <- dat$epi$hivtests.nprep[at] + dat$epi$hivtests.prep[at] + dat$epi$totalhivtests[at - 1]
+        dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at] + dat$epi$totalhivtests.prep[at - 1]
+        dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at] + dat$epi$totalhivtests.pos[at - 1]
       
-      dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at] + dat$epi$totalrGCsympttests[at - 1] 
-      dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at] + dat$epi$totaluGCsympttests[at - 1]
-      dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at] + dat$epi$totalGCsympttests[at - 1]
-      dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at] + dat$epi$totalrCTsympttests[at - 1]
-      dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at] + dat$epi$totaluCTsympttests[at - 1]
-      dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at] + dat$epi$totalCTsympttests[at - 1]
-      dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at] + dat$epi$totalsyphsympttests[at - 1]
-      dat$epi$totalstisympttests[at] <- dat$epi$stisympttests[at] + dat$epi$totalstisympttests[at - 1]
-      
-      dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$totalrGCasympttests[at - 1]
-      dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$totaluGCasympttests[at - 1]
-      dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at] + dat$epi$totalGCasympttests[at - 1]
-      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
-      dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$totaluCTasympttests[at - 1]
-      dat$epi$totalCTasympttests[at] <- dat$epi$CTasympttests[at] + dat$epi$totalCTasympttests[at - 1]
-      dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$totalsyphasympttests[at - 1]
-      dat$epi$totalstiasympttests[at] <- dat$epi$stiasympttests[at] + dat$epi$totalstiasympttests[at - 1]
-      
-      dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at] + dat$epi$totalrGCasympttests.prep[at - 1]
-      dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at] + dat$epi$totaluGCasympttests.prep[at - 1]
-      dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at] + dat$epi$totalGCasympttests.prep[at - 1]
-      dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at] + dat$epi$totalrCTasympttests.prep[at - 1] 
-      dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at] + dat$epi$totaluCTasympttests.prep[at - 1]
-      dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at] + dat$epi$totalCTasympttests.prep[at - 1]
-      dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at] + dat$epi$totalsyphasympttests.prep[at - 1]
-      dat$epi$totalstiasympttests.prep[at] <- dat$epi$stiasympttests.prep[at] + dat$epi$totalstiasympttests.prep[at - 1]
-      
+        dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at] + dat$epi$totalrGCsympttests[at - 1] 
+        dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at] + dat$epi$totaluGCsympttests[at - 1]
+        dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at] + dat$epi$totalGCsympttests[at - 1]
+        dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at] + dat$epi$totalrCTsympttests[at - 1]
+        dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at] + dat$epi$totaluCTsympttests[at - 1]
+        dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at] + dat$epi$totalCTsympttests[at - 1]
+        dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at] + dat$epi$totalsyphsympttests[at - 1]
+        dat$epi$totalstisympttests[at] <- dat$epi$stisympttests[at] + dat$epi$totalstisympttests[at - 1]
+        
+        dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$totalrGCasympttests[at - 1]
+        dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$totaluGCasympttests[at - 1]
+        dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at] + dat$epi$totalGCasympttests[at - 1]
+        dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
+        dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$totaluCTasympttests[at - 1]
+        dat$epi$totalCTasympttests[at] <- dat$epi$CTasympttests[at] + dat$epi$totalCTasympttests[at - 1]
+        dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$totalsyphasympttests[at - 1]
+        dat$epi$totalstiasympttests[at] <- dat$epi$stiasympttests[at] + dat$epi$totalstiasympttests[at - 1]
+        
+        dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at] + dat$epi$totalrGCasympttests.prep[at - 1]
+        dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at] + dat$epi$totaluGCasympttests.prep[at - 1]
+        dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at] + dat$epi$totalGCasympttests.prep[at - 1]
+        dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at] + dat$epi$totalrCTasympttests.prep[at - 1] 
+        dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at] + dat$epi$totaluCTasympttests.prep[at - 1]
+        dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at] + dat$epi$totalCTasympttests.prep[at - 1]
+        dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at] + dat$epi$totalsyphasympttests.prep[at - 1]
+        dat$epi$totalstiasympttests.prep[at] <- dat$epi$stiasympttests.prep[at] + dat$epi$totalstiasympttests.prep[at - 1]
+        
   }
  
   # STI Prevalence
@@ -427,17 +443,28 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rgcct[at] <- sum(rGC == 1 | rCT == 1, na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ugcct[at] <- sum(uGC == 1 | uCT == 1, na.rm = TRUE) / dat$epi$num[at]
   
-  dat$epi$prev.stage.incub[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 1)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.prim[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 2)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.incubprim[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 1 | stage.syph == 2)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.seco[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 3)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.earlat[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 4)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.latelat[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 5)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.latelatelat[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 6)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.alllatelat[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 5 | stage.syph == 6)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.stage.tert[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph == 7)) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.earlysyph[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph %in% c(1, 2, 3, 4))) / length(which(syphilis == 1)), 0)
-  dat$epi$prev.latesyph[at] <- ifelse(length(which(syphilis == 1)), length(which(stage.syph %in% c(5, 6, 7))) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.incub[at] <- ifelse(length(which(syphilis == 1)),
+                                         length(which(stage.syph == 1)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.prim[at] <- ifelse(length(which(syphilis == 1)), 
+                                        length(which(stage.syph == 2)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.incubprim[at] <- ifelse(length(which(syphilis == 1)), 
+                                             length(which(stage.syph == 1 | stage.syph == 2)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.seco[at] <- ifelse(length(which(syphilis == 1)), 
+                                        length(which(stage.syph == 3)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.earlat[at] <- ifelse(length(which(syphilis == 1)), 
+                                          length(which(stage.syph == 4)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.latelat[at] <- ifelse(length(which(syphilis == 1)), 
+                                           length(which(stage.syph == 5)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.latelatelat[at] <- ifelse(length(which(syphilis == 1)), 
+                                               length(which(stage.syph == 6)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.alllatelat[at] <- ifelse(length(which(syphilis == 1)), 
+                                              length(which(stage.syph == 5 | stage.syph == 6)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.stage.tert[at] <- ifelse(length(which(syphilis == 1)), 
+                                        length(which(stage.syph == 7)) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.earlysyph[at] <- ifelse(length(which(syphilis == 1)), 
+                                       length(which(stage.syph %in% c(1, 2, 3, 4))) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.latesyph[at] <- ifelse(length(which(syphilis == 1)), 
+                                      length(which(stage.syph %in% c(5, 6, 7))) / length(which(syphilis == 1)), 0)
   dat$epi$prev.syph[at] <- length(which(syphilis == 1)) / dat$epi$num[at]
   dat$epi$prev.primsecosyph[at] <- length(which(stage.syph %in% c(1, 2, 3))) / dat$epi$num[at]
   
@@ -447,46 +474,62 @@ prevalence_msm <- function(dat, at) {
   rCT.prev <- which(rCT == 1 & rCT.infTime < at)
 
   # Prevalence of HIV/STI overlap (conditional denominators)
-  dat$epi$prev.primsecosyph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.primsecosyph.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at], 0)
-  dat$epi$prev.syph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.syph.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(syphilis == 1))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.primsecosyph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                                 length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.primsecosyph.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                            length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.syph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                         length(intersect(which(status == 0), which(syphilis == 1))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.syph.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                         length(intersect(which(status == 1), which(syphilis == 1))) / dat$epi$i.num[at], 0)
   
-  dat$epi$prev.gc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which((rGC == 1 | uGC == 1)))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.gc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.gc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0,
+                                       length(intersect(which(status == 0), which((rGC == 1 | uGC == 1)))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.gc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                       length(intersect(which(status == 1), which((rGC == 1 |  uGC == 1)))) / dat$epi$i.num[at], 0)
   
-  dat$epi$prev.ct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 0), which((rCT == 1 | uCT == 1)))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.ct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.ct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                       length(intersect(which(status == 0),  which((rCT == 1 | uCT == 1)))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.ct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                       length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / dat$epi$i.num[at], 0)
   
-  dat$epi$prev.hiv.primsecosyphpos[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0, length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
-                                    length(which(stage.syph %in% c(1, 2, 3))), 0)
-  dat$epi$prev.hiv.primsecosyphneg[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0, length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) /
-      length(which(stage.syph %in% c(1, 2, 3))), 0)
+  dat$epi$prev.hiv.primsecosyphpos[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0, 
+                                            length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / length(which(stage.syph %in% c(1, 2, 3))), 0)
+  dat$epi$prev.hiv.primsecosyphneg[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0, 
+                                            length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / length(which(stage.syph %in% c(1, 2, 3))), 0)
   
-  dat$epi$prev.hiv.syphpos[at] <- ifelse(length(which(syphilis == 1)) > 0, length(intersect(which(status == 1), which(syphilis == 1))) /
-      length(which(syphilis == 1)), 0)
-  dat$epi$prev.hiv.syphneg[at] <- ifelse(length(which(syphilis == 0)) > 0, length(intersect(which(status == 1), which(syphilis == 1))) /
-                                             length(which(syphilis == 0)), 0)
+  dat$epi$prev.hiv.syphpos[at] <- ifelse(length(which(syphilis == 1)) > 0, 
+                                         length(intersect(which(status == 1), which(syphilis == 1))) / length(which(syphilis == 1)), 0)
+  dat$epi$prev.hiv.syphneg[at] <- ifelse(length(which(syphilis == 0)) > 0, 
+                                         length(intersect(which(status == 1), which(syphilis == 1))) / length(which(syphilis == 0)), 0)
   
-  dat$epi$prev.hiv.gcpos[at] <- ifelse(sum((rGC == 1 | uGC == 1)) > 0, length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) /
-                                sum((rGC == 1 | uGC == 1), na.rm = TRUE), 0)
-  dat$epi$prev.hiv.gcneg[at] <- ifelse(sum((rGC == 0 & uGC == 0)) > 0,length(intersect(which(status == 1), which((rGC == 0 & uGC == 0)))) /
-      sum((rGC == 0 & uGC == 0), na.rm = TRUE), 0)
+  dat$epi$prev.hiv.gcpos[at] <- ifelse(sum((rGC == 1 | uGC == 1)) > 0, 
+                                       length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) / sum((rGC == 1 | uGC == 1), na.rm = TRUE), 0)
+  dat$epi$prev.hiv.gcneg[at] <- ifelse(sum((rGC == 0 & uGC == 0)) > 0, 
+                                       length(intersect(which(status == 1), which((rGC == 0 & uGC == 0)))) / sum((rGC == 0 & uGC == 0), na.rm = TRUE), 0)
   
-  dat$epi$prev.hiv.ctpos[at] <- ifelse(sum((rCT == 1 | uCT == 1)) > 0, length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / 
-                                sum((rCT == 1 | uCT == 1), na.rm = TRUE), 0)
-  dat$epi$prev.hiv.ctneg[at] <- ifelse(sum((rCT == 0 & uCT == 0)) > 0, length(intersect(which(status == 1), which((rCT == 0 & uCT == 0)))) / 
-      sum((rCT == 0 & uCT == 0), na.rm = TRUE), 0)
+  dat$epi$prev.hiv.ctpos[at] <- ifelse(sum((rCT == 1 | uCT == 1)) > 0, 
+                                       length(intersect(which(status == 1), which((rCT == 1 | uCT == 1)))) / sum((rCT == 1 | uCT == 1), na.rm = TRUE), 0)
+  dat$epi$prev.hiv.ctneg[at] <- ifelse(sum((rCT == 0 & uCT == 0)) > 0, 
+                                       length(intersect(which(status == 1), which((rCT == 0 & uCT == 0)))) / sum((rCT == 0 & uCT == 0), na.rm = TRUE), 0)
   
-  dat$epi$prev.rgc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(rGC == 1))) / dat$epi$i.num[at], 0)
-  dat$epi$prev.ugc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(uGC == 1))) / dat$epi$i.num[at], 0)
-  dat$epi$prev.rct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(rCT == 1))) / dat$epi$i.num[at], 0)
-  dat$epi$prev.uct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.rgc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0,
+                                        length(intersect(which(status == 1), which(rGC == 1))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.ugc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                        length(intersect(which(status == 1),  which(uGC == 1))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.rct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(rCT == 1))) / dat$epi$i.num[at], 0)
+  dat$epi$prev.uct.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$i.num[at], 0)
   
-  dat$epi$prev.rgc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(rGC == 1))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.ugc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(uGC == 1))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.rct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(rCT == 1))) / dat$epi$s.num[at], 0)
-  dat$epi$prev.uct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.rgc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(rGC == 1))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.ugc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(uGC == 1))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.rct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(rCT == 1))) / dat$epi$s.num[at], 0)
+  dat$epi$prev.uct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0, 
+                                        length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$s.num[at], 0)
   
   # Co-infection prevalence
   dat$epi$prev.primsecosyph.hiv[at] <- (length(intersect(which(stage.syph %in% c(1, 2)), which(status == 1)))) / dat$epi$num[at]
@@ -500,7 +543,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rct.uct[at] <- (length(intersect(which(rCT == 1), which(uCT == 1)))) / dat$epi$num[at]
   dat$epi$prev.rgc.ugc[at] <- (length(intersect(which(rGC == 1), which(uGC == 1)))) / dat$epi$num[at]
   dat$epi$prev.rct.rgc[at] <- (length(intersect(which(rGC == 1), which(rCT == 1))))  / dat$epi$num[at]
-  dat$epi$prev.uct.ugc[at] <- (length(intersect(which(uCT == 1), which(uGC == 1))))  / dat$epi$num[at]
+  dat$epi$prev.uct.ugc[at] <- (length(intersect(which(uCT == 1), which(uGC == 1)))) / dat$epi$num[at]
   dat$epi$prev.gc.syph[at] <- (length(intersect(which(rGC == 1 | uGC == 1), which(syphilis == 1)))) / dat$epi$num[at]
   dat$epi$prev.ct.syph[at] <- (length(intersect(which(rCT == 1 | uCT == 1), which(syphilis == 1)))) / dat$epi$num[at]
   dat$epi$prev.gc.primsecosyph[at] <- (length(intersect(which(rGC == 1 | uGC == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at]
@@ -509,33 +552,24 @@ prevalence_msm <- function(dat, at) {
   # Site-specific STI incidence rates        
   dat$epi$ir100.rgc[at] <- (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.ugc[at] <- (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200
-  dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at] /
-                             (sum(rGC == 0, na.rm = TRUE) +
-                                sum(uGC == 0, na.rm = TRUE))) * 5200
+  dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at] / (sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE))) * 5200
 
   dat$epi$ir100.rct[at] <- (dat$epi$incid.rct[at] / sum(rCT == 0, na.rm = TRUE)) * 5200
   dat$epi$ir100.uct[at] <- (dat$epi$incid.uct[at] / sum(uCT == 0, na.rm = TRUE)) * 5200
-  dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at] /
-                             (sum(rCT == 0, na.rm = TRUE) +
-                                sum(uCT == 0, na.rm = TRUE))) * 5200
+  dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at] / (sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE))) * 5200
   
   dat$epi$ir100.syph[at] <- (dat$epi$incid.syph[at] / sum(syphilis == 0 , na.rm = TRUE)) * 5200
 
-  dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 |
-                                rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) / dat$epi$num[at]
+  dat$epi$prev.sti[at] <- sum(rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) / dat$epi$num[at]
   dat$epi$ir100.sti[at] <- ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at] + dat$epi$incid.syph[at]) /
-                              (sum(rGC == 0, na.rm = TRUE) +
-                                 sum(uGC == 0, na.rm = TRUE) +
-                                 sum(rCT == 0, na.rm = TRUE) +
-                                 sum(uCT == 0, na.rm = TRUE) +
+                                (sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE) +
+                                 sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE) +
                                  sum(syphilis == 0, na.rm = TRUE))) * 5200
 
   dat$epi$ir100.sti.prep[at] <- (dat$epi$incid.gcct.prep[at] + dat$epi$incid.syph.prep[at] /
-                                  (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) +
-                                   sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
-                                   sum(rCT == 0 & prepStat == 1, na.rm = TRUE) +
-                                   sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
-                                       sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
+                                  (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) + sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
+                                   sum(rCT == 0 & prepStat == 1, na.rm = TRUE) + sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
+                                   sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200
 
   # PAF
   syph.prev <- which(syphilis == 1 & syph.infTime < at)
@@ -551,7 +585,8 @@ prevalence_msm <- function(dat, at) {
   r.sti.sympt <- which(rGC.sympt == 1 | rCT.sympt == 1)
   r.sti.asympt <- setdiff(r.sti.prev, r.sti.sympt)
   
-  syph.sympt <- which(stage.prim.sympt == 1 | stage.seco.sympt == 1 | stage.earlat.sympt == 1 | stage.latelat.sympt == 1 | stage.latelatelat.sympt == 1 | stage.tert.sympt == 1)
+  syph.sympt <- which(stage.prim.sympt == 1 | stage.seco.sympt == 1 | stage.earlat.sympt == 1 | 
+                        stage.latelat.sympt == 1 | stage.latelatelat.sympt == 1 | stage.tert.sympt == 1)
   syph.asympt <- setdiff(syph.prev, syph.sympt)
   
   # PAF values
@@ -636,10 +671,8 @@ prevalence_het <- function(dat, at) {
 
   dat$epi$i.num.male[at] <- sum(status == 1 & male == 1, na.rm = TRUE)
   dat$epi$i.num.feml[at] <- sum(status == 1 & male == 0, na.rm = TRUE)
-  dat$epi$i.prev.male[at] <- sum(status == 1 & male == 1, na.rm = TRUE) /
-    sum(male == 1, na.rm = TRUE)
-  dat$epi$i.prev.feml[at] <- sum(status == 1 & male == 0, na.rm = TRUE) /
-    sum(male == 0, na.rm = TRUE)
+  dat$epi$i.prev.male[at] <- sum(status == 1 & male == 1, na.rm = TRUE) / sum(male == 1, na.rm = TRUE)
+  dat$epi$i.prev.feml[at] <- sum(status == 1 & male == 0, na.rm = TRUE) / sum(male == 0, na.rm = TRUE)
 
   dat$epi$num.male[at] <- sum(male == 1, na.rm = TRUE)
   dat$epi$num.feml[at] <- sum(male == 0, na.rm = TRUE)
@@ -653,6 +686,5 @@ prevalence_het <- function(dat, at) {
 whichVlSupp <- function(attr, param) {
   which(attr$status == 1 &
         attr$vlLevel <= log10(50) &
-        (attr$age - attr$ageInf) * (365 / param$time.unit) >
-        (param$vl.acute.topeak + param$vl.acute.toset))
+        (attr$age - attr$ageInf) * (365 / param$time.unit) > (param$vl.acute.topeak + param$vl.acute.toset))
 }

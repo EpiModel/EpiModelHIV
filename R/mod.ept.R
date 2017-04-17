@@ -12,7 +12,7 @@
 #'
 #' @export
 #'
-ept_msm <- function(dat, at) {
+sti_ept_msm <- function(dat, at) {
     
     if (at < dat$param$ept.start) {
         return(dat)
@@ -26,8 +26,10 @@ ept_msm <- function(dat, at) {
     rCT <- dat$attr$rCT
     uCT <- dat$attr$uCT
     
-    # Fix this - these tx vars are NA after recovery - can only be eligible to provide medication at one time step?
-    # Or, change this variable to a day and have a x-week interval where EPT could be provided?
+    # Fix this - these tx vars are NA after recovery - can only be eligible to 
+    # provide medication at one time step?
+    # Or, change this variable to a day and have a x-week interval where EPT 
+    # could be provided?
     # Add a last tx time attribute and set to at
     
     active <- dat$attr$active
@@ -45,20 +47,17 @@ ept_msm <- function(dat, at) {
 
     part.list <- dat$temp$part.list
     
-    ## Stoppage (Index) ---------------------------------------------------------------
+    ## Stoppage (Index) -------------------------------------------------------
     
     # Index no longer eligible(> 60 days since treatment time)
-    idseptExpired <- which(at - eptEligdate > ept.risk.int)
-    
-    # Death
-    idsStpDth <- which(active == 0 & eptStat == 1)
+    idseptExpired <- which(at - eptEligdate > ept.risk.int & eptStat == 1)
     
     # Reset EPT status
-    idsStp <- c(idseptExpired, idsStpDth)
+    idsStp <- c(idseptExpired)
     eptStat[idsStp] <- NA
     eptElig[idsStp] <- NA
     
-    ## Initiation (index) -------------------------------------------------------------
+    ## Initiation (index) -----------------------------------------------------
     
     eptCov <- sum(eptStat == 1, na.rm = TRUE) / sum(eptElig == 1, na.rm = TRUE)
     eptCov <- ifelse(is.nan(eptCov), 0, eptCov)
@@ -66,8 +65,7 @@ ept_msm <- function(dat, at) {
     idsEligSt <- which(eptElig == 1)
     nEligSt <- length(idsEligSt)
     
-    nStart <- max(0, min(nEligSt, round((ept.coverage - eptCov) *
-                                            sum(eptElig == 1, na.rm = TRUE))))
+    nStart <- max(0, min(nEligSt, round((ept.coverage - eptCov) * sum(eptElig == 1, na.rm = TRUE))))
     idsStart <- NULL
     if (nStart > 0) {
         if (ept.cov.rate >= 1) {
@@ -79,11 +77,11 @@ ept_msm <- function(dat, at) {
     
     # Update attributes of index
     if (length(idsStart) > 0) {
-        eptStat[idsStart] <- 1
-        eptStartTime[idsStart] <- at
+            eptStat[idsStart] <- 1
+            eptStartTime[idsStart] <- at
     }
     
-    ## Output --------------------------------------------------------------------
+    ## Output -----------------------------------------------------------------
     
     # Attributes
     dat$attr$eptElig <- eptElig

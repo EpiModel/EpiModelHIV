@@ -39,6 +39,7 @@ prep_msm <- function(dat, at) {
 
   # Attributes
   active <- dat$attr$active
+  race <- dat$attr$race
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
   diag.status.syph <- dat$attr$diag.status.syph
@@ -70,26 +71,26 @@ prep_msm <- function(dat, at) {
 
   if (at == dat$param$prep.start) {
       dat$attr$time.hivneg[status == 0] <- 0
-      dat$attr$time.off.prep[active == 1] <- 0
-      dat$attr$stage.time[active == 1] <- 0
-      dat$attr$stage.time.ar.ndx[active == 1] <- 0
-      dat$attr$stage.time.ar.dx[active == 1] <- 0
-      dat$attr$stage.time.ar.art[active == 1] <- 0
-      dat$attr$stage.time.af.ndx[active == 1] <- 0
-      dat$attr$stage.time.af.dx[active == 1] <- 0
-      dat$attr$stage.time.af.art[active == 1] <- 0
-      dat$attr$stage.time.chronic.ndx[active == 1] <- 0
-      dat$attr$stage.time.chronic.dx[active == 1] <- 0
-      dat$attr$stage.time.chronic.art[active == 1] <- 0
-      dat$attr$stage.time.aids.ndx[active == 1] <- 0
-      dat$attr$stage.time.aids.dx[active == 1] <- 0
-      dat$attr$stage.time.aids.art[active == 1] <- 0
+      dat$attr$time.off.prep[status == 0] <- 0
+      dat$attr$stage.time[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.ar.ndx[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.ar.dx[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.ar.art[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.af.ndx[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.af.dx[sum(race %in% c("B","W"))] <- 0
+      dat$attr$stage.time.af.art[status == 1] <- 0
+      dat$attr$stage.time.chronic.ndx[status == 1] <- 0
+      dat$attr$stage.time.chronic.dx[status == 1] <- 0
+      dat$attr$stage.time.chronic.art[status == 1] <- 0
+      dat$attr$stage.time.aids.ndx[status == 1] <- 0
+      dat$attr$stage.time.aids.dx[status == 1] <- 0
+      dat$attr$stage.time.aids.art[status == 1] <- 0
   }
 
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
+  idsEligStart <- which(status == 0 & prepStat == 0 & lnt == at)
 
   # Core eligiblity
   ind1 <- dat$attr$prep.ind.uai.mono
@@ -105,10 +106,10 @@ prep_msm <- function(dat, at) {
   prepElig[idsEligStart] <- 1
 
 
-  ## Stoppage ------------------------------------------------------------------
+  ## Stoppage -----------------------------------------------------------------
 
   # No indications
-  idsRiskAssess <- which(active == 1 & prepStat == 1 & lnt == at & (at - prepLastRisk) >= 52)
+  idsRiskAssess <- which(prepStat == 1 & lnt == at & (at - prepLastRisk) >= 52)
   prepLastRisk[idsRiskAssess] <- at
 
   idsEligStop <- intersect(which(ind1 < twind & ind2 < twind &
@@ -118,13 +119,10 @@ prep_msm <- function(dat, at) {
   prepElig[idsEligStop] <- 0
 
   # Diagnosis
-  idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
-
-  # Death
-  idsStpDth <- which(active == 0 & prepStat == 1)
+  idsStpDx <- which(prepStat == 1 & diag.status == 1)
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpDth, idsEligStop)
+  idsStp <- c(idsStpDx, idsEligStop)
   prepStat[idsStp] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
@@ -134,7 +132,7 @@ prep_msm <- function(dat, at) {
   time.on.prep[prepStat == 1] <- time.on.prep[prepStat == 1] + 1
 
 
-  ## Initiation ----------------------------------------------------------------
+  ## Initiation ---------------------------------------------------------------
 
   prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
   prepCov <- ifelse(is.nan(prepCov), 0, prepCov)
@@ -167,10 +165,11 @@ prep_msm <- function(dat, at) {
 
   # Update time off PrEP for those not starting PrEP (housed in PrEP module starting at PrEP start time)
   if (at > dat$param$prep.start) {
-      dat$attr$time.off.prep[prepStat == 0] <- dat$attr$time.off.prep[prepStat == 0] + 1
+      dat$attr$time.off.prep[prepStat == 0] <-
+          dat$attr$time.off.prep[prepStat == 0] + 1
   }
 
-  ## STI Testing on PrEP -------------------------------------------------------
+  ## STI Testing on PrEP ------------------------------------------------------
 
   if (is.null(dat$epi$num.asympt.tx)) {
       dat$epi$rGCasympttests.prep <- rep(0, length(dat$control$nsteps))
@@ -222,7 +221,6 @@ prep_msm <- function(dat, at) {
   tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
   tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
   tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
-  tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
   
   # CT non-PrEP testing
   tst.rct <- tst.ct.prep[dat$attr$role.class %in% c("R", "V")]
@@ -233,7 +231,6 @@ prep_msm <- function(dat, at) {
   tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
   tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
   tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
-  tst.ct.neg <- unique(c(tst.rct.neg, tst.uct.neg))
   
   # Syphilis Attributes
   dat$attr$last.neg.test.syph[tst.syph.neg] <- at
@@ -277,10 +274,13 @@ prep_msm <- function(dat, at) {
   dat$epi$syphasympttests.prep[at] <- length(c(tst.syph.prep))
   dat$epi$syphasympttests.pos.prep[at] <- length(c(tst.syph.pos))
   
-  dat$epi$totalstiasympttests.prep[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.prep))
-  dat$epi$totalstiasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos, tst.rgc.pos, tst.ugc.pos, tst.syph.pos))
+  dat$epi$totalstiasympttests.prep[at] <- length(c(tst.rct, tst.uct, tst.rgc, 
+                                                   tst.ugc, tst.syph.prep))
+  dat$epi$totalstiasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos,
+                                                       tst.rgc.pos, tst.ugc.pos,
+                                                       tst.syph.pos))
   
-  ## Output --------------------------------------------------------------------
+  ## Output -------------------------------------------------------------------
 
   # Attributes
   dat$attr$prepElig <- prepElig

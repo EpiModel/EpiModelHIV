@@ -53,14 +53,14 @@ param <- param_msm(nwstats = st,
                    syph.tert.asympt.prob.tx = 1,
                    
                    hivdx.syph.sympt.tx.rr = 1.45,
-
+ 
                    prep.coverage = 0.0,
                    ept.coverage = 0.0,
                    stianntest.coverage = 0.5,
                    stihighrisktest.coverage = 0.8,
 
                    prep.start = 5000,
-                   stitest.start = 200,
+                   stitest.start = 5000,
                    ept.start = 5000,
                    
                    stitest.elig.model = "sti",
@@ -101,29 +101,29 @@ at <- at + 1
 dat <- aging_msm(dat, at)
 dat <- deaths_msm(dat, at)
 dat <- births_msm(dat, at)
-dat <- test_msm(dat, at)
-dat <- test_sti_msm(dat, at)
-dat <- tx_msm(dat, at)
+dat <- hiv_test_msm(dat, at)
+dat <- sti_test_msm(dat, at)
+dat <- hiv_tx_msm(dat, at)
 dat <- prep_msm(dat, at)
-dat <- ept_msm(dat, at)
-dat <- progress_msm(dat, at)
-dat <- progress_syph_msm(dat, at)
-dat <- vl_msm(dat, at)
+dat <- sti_ept_msm(dat, at)
+dat <- hiv_progress_msm(dat, at)
+dat <- syph_progress_msm(dat, at)
+dat <- hiv_vl_msm(dat, at)
 #dat <- update_vl_msm(dat, at)
 dat <- update_aiclass_msm(dat, at)
 dat <- update_roleclass_msm(dat, at)
 dat <- edges_correct_msm(dat, at)
 dat <- simnet_msm(dat, at)
-dat <- disclose_msm(dat, at)
+dat <- hiv_disclose_msm(dat, at)
 dat <- part_msm(dat, at)
 dat <- acts_msm(dat, at)
 dat <- condoms_msm(dat, at)
 dat <- riskhist_msm(dat, at)
 dat <- position_msm(dat, at)
-dat <- trans_msm(dat, at)
-dat <- sti_trans(dat, at)
-dat <- sti_recov(dat, at)
-dat <- sti_tx(dat, at)
+dat <- hiv_trans_msm(dat, at)
+dat <- sti_trans_msm(dat, at)
+dat <- sti_recov_msm(dat, at)
+dat <- sti_tx_msm(dat, at)
 dat <- prevalence_msm(dat, at)
 verbose_msm(dat, type = "progress", s = 1, at)
 

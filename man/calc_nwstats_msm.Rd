@@ -13,8 +13,8 @@ calc_nwstats_msm(time.unit = 7, method = 2, num.B, num.W, deg.mp.B,
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}
 
-\item{method}{Method for calculating target statistics by race, with options of
-\code{2} for preserving race-specific statistics and \code{1} for
+\item{method}{Method for calculating target statistics by race, with options 
+of \code{2} for preserving race-specific statistics and \code{1} for
 averaging over the statistics and dropping the race-specific terms.}
 
 \item{num.B}{Population size of black MSM.}
@@ -39,16 +39,16 @@ for white MSM.}
 \item{qnts.W}{Means of one-off rates split into quintiles for black MSM. Use
 \code{NA} to ignore these quantiles in the target statistics.}
 
-\item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, casual,
-and one-off partnerships in same race for black MSM.}
+\item{prop.hom.mpi.B}{A vector of length 3 for the proportion of main, 
+casual, and one-off partnerships in same race for black MSM.}
 
-\item{prop.hom.mpi.W}{A vector of length 3 for the proportion of main, casual,
-and one-off partnerships in same race for white MSM.}
+\item{prop.hom.mpi.W}{A vector of length 3 for the proportion of main, 
+casual, and one-off partnerships in same race for white MSM.}
 
 \item{balance}{Method for balancing of edges by race for number of mixed-race
-partnerships, with options of \code{"black"} to apply black MSM counts,
-\code{"white"} to apply white MSM counts, and \code{"mean"} to take
-the average of the two expectations.}
+partnerships, with options of \code{"black"} to apply black MSM 
+counts, \code{"white"} to apply white MSM counts, and \code{"mean"} to
+take the average of the two expectations.}
 
 \item{sqrt.adiff.BB}{Vector of length 3 with the mean absolute differences
 in the square root of ages in main, casual, and one-off black-black
@@ -88,8 +88,9 @@ insertive, receptive, and versatile, for black MSM.}
 insertive, receptive, and versatile, for white MSM.}
 }
 \description{
-Calculates the target statistics for the formation and dissolution
-             components of the network model to be estimated with \code{netest}.
+Calculates the target statistics for the formation and 
+             dissolution components of the network model to be estimated 
+             with \code{netest}.
 }
 \details{
 This function performs basic calculations to determine the components of the

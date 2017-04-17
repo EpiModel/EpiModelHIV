@@ -8,18 +8,18 @@
 #' @details
 #' This testing module supports two testing parameterizations, input via the
 #' \code{testing.pattern} parameter: memoryless for stochastic and
-#' geometrically-distributed waiting times to test (constant hazard); and interval
-#' for deterministic tested after defined waiting time intervals.
+#' geometrically-distributed waiting times to test (constant hazard); and 
+#' interval for deterministic tested after defined waiting time intervals.
 #'
 #' @return
-#' This function returns the \code{dat} object with updated \code{last.neg.test},
-#' \code{diag.status} and \code{diag.time} attributes.
+#' This function returns the \code{dat} object with updated 
+#' \code{last.neg.test}, \code{diag.status} and \code{diag.time} attributes.
 #'
 #' @keywords module msm
 #'
 #' @export
 #'
-test_msm <- function(dat, at) {
+hiv_test_msm <- function(dat, at) {
 
   ## Variables
 
@@ -109,18 +109,19 @@ test_msm <- function(dat, at) {
 #' @details
 #' This testing module supports two testing parameterizations, input via the
 #' \code{testing.pattern} parameter: memoryless for stochastic and
-#' geometrically-distributed waiting times to test (constant hazard); and interval
-#' for deterministic tested after defined waiting time intervals.
+#' geometrically-distributed waiting times to test (constant hazard); and 
+#' interval for deterministic tested after defined waiting time intervals.
 #'
 #' @return
-#' This function returns the \code{dat} object with updated \code{last.neg.test},
-#' \code{diag.status} and \code{diag.time} attributes for each STI.
+#' This function returns the \code{dat} object with updated 
+#' \code{last.neg.test}, \code{diag.status} and \code{diag.time} attributes for 
+#' each STI.
 #'
 #' @keywords module msm
 #'
 #' @export
 #'
-test_sti_msm <- function(dat, at) {
+sti_test_msm <- function(dat, at) {
     
     if (at < dat$param$stitest.start) {
         return(dat)
@@ -130,8 +131,7 @@ test_sti_msm <- function(dat, at) {
     ## Variables
     
     # Attributes
-    active <- dat$attr$active
-    uid <- dat$attr$uid
+    race <- dat$attr$race
     diag.status.syph <- dat$attr$diag.status.syph
     diag.status.gc <- dat$attr$diag.status.gc
     diag.status.ct <- dat$attr$diag.status.ct
@@ -172,7 +172,7 @@ test_sti_msm <- function(dat, at) {
 
     # Eligibility and trajectory
     # Base eligibility
-    idsEligTest <- which(active == 1)
+    idsEligTest <- which(race %in% c("B", "W"))
     
     # Annual indications- sexually active in last year
     stitestind1 <- dat$attr$stitest.ind.active
@@ -197,12 +197,15 @@ test_sti_msm <- function(dat, at) {
         c6 <- dat$attr$stitest.ind.uai.nmain
         c7 <- dat$attr$stitest.ind.uai.any
         
-        idshighrisk <- which((at - c1 <= hrindwindow) | (at - c2 <= hrindwindow) |
-                             (at - c3 <= hrindwindow) | (at - c4 <= hrindwindow) |
-                             (at - c5 <= hrindwindow) | (at - c6 <= hrindwindow) |
-                             (at - c7 <= hrindwindow))
+        idshighrisk <- which((at - c1 <= hrindwindow) | 
+                               (at - c2 <= hrindwindow) | 
+                               (at - c3 <= hrindwindow) | 
+                               (at - c4 <= hrindwindow) |
+                               (at - c5 <= hrindwindow) | 
+                               (at - c6 <= hrindwindow) |
+                               (at - c7 <= hrindwindow))
         
-        idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+        idsnottestelig <- which(tt.traj.syph == 2 & (
                             (at - c1 > hrindwindow) & (at - c2 > hrindwindow) &
                             (at - c3 > hrindwindow) & (at - c4 > hrindwindow) &
                             (at - c5 > hrindwindow) & (at - c6 > hrindwindow) &
@@ -219,7 +222,7 @@ test_sti_msm <- function(dat, at) {
                 idshighrisk <- which((at - c1) <= hrindwindow |
                                      (at - c2) <= hrindwindow)
                 
-                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                idsnottestelig <- which(tt.traj.syph == 2 & (
                                         (at - c1 > hrindwindow) & 
                                         (at - c2 > hrindwindow)))
             
@@ -232,7 +235,7 @@ test_sti_msm <- function(dat, at) {
                                      (at - c2) <= hrindwindow |
                                      (at - c3) <= hrindwindow)
                 
-                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                idsnottestelig <- which(tt.traj.syph == 2 & (
                                         (at - c1 > hrindwindow) & 
                                         (at - c2 > hrindwindow) &
                                         (at - c3 > hrindwindow)))
@@ -244,7 +247,7 @@ test_sti_msm <- function(dat, at) {
                 idshighrisk <- which((at - c1) <= hrindwindow |
                                      (at - c2) <= hrindwindow)
                 
-                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                idsnottestelig <- which(tt.traj.syph == 2 & (
                                         (at - c1 > hrindwindow) & 
                                         (at - c2 > hrindwindow)))
                 
@@ -255,7 +258,7 @@ test_sti_msm <- function(dat, at) {
                 idshighrisk <- which((at - c1) <= hrindwindow |
                                      (at - c2) <= hrindwindow)
 
-                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & (
+                idsnottestelig <- which(tt.traj.syph == 2 & (
                                         (at - c1 > hrindwindow) & 
                                         (at - c2 > hrindwindow)))
                 
@@ -266,7 +269,7 @@ test_sti_msm <- function(dat, at) {
         
                 idshighrisk <- which((at - c1) <= hrindwindow)
         
-                idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+                idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
                 
         }  else if (stitest.elig.model == "recentpartners") {
@@ -275,7 +278,7 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
             
         }  else if (stitest.elig.model == "newpartners") {
@@ -284,7 +287,7 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
         } else if (stitest.elig.model == "concurrpartner") {
             
@@ -292,7 +295,7 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
             
         } else if (stitest.elig.model == "partnersti") {
@@ -301,7 +304,7 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
             
         } else if (stitest.elig.model == "uai.nmain") {
@@ -310,7 +313,7 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
             
         } else if (stitest.elig.model == "uai.any") {
@@ -319,30 +322,33 @@ test_sti_msm <- function(dat, at) {
             
             idshighrisk <- which((at - c1) <= hrindwindow)
             
-            idsnottestelig <- which(active == 1 & tt.traj.syph == 2 & 
+            idsnottestelig <- which(tt.traj.syph == 2 & 
                                         (at - c1 > hrindwindow))
             
         } else if (stitest.elig.model == "none") {
           
             idshighrisk <- NULL
-            idsnottestelig <- which(active == 1)
+            idsnottestelig <- which(race %in% c("B", "W"))
             
         }
     }
     
-    ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------------------------------------
-    
-    # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
+    ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------
+    # Reduce testing trajectory to NA if no longer indicated for more frequent 
+    # high-risk testing
     dat$attr$stihighrisktestLastElig[idsnottestelig] <- at
     tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
     
-    # Remove testing trajectory if no longer indicated for annual testing (idsannual includes high-risk)
-    idsnottestelig <- which(active == 1 & tt.traj.syph == 1 & (at - stitestind1 >= activeindwindow))
+    # Remove testing trajectory if no longer indicated for annual testing 
+    # (idsannual includes high-risk)
+    idsnottestelig <- which(tt.traj.syph == 1 & 
+                              (at - stitestind1 >= activeindwindow))
     dat$attr$stianntestLastElig[idsnottestelig] <- at
-    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <- tt.traj.ct[idsnottestelig] <- NA
+    tt.traj.syph[idsnottestelig] <- tt.traj.gc[idsnottestelig] <-
+          tt.traj.ct[idsnottestelig] <- NA
     
     
-    ## Initiation ----------------------------------------------------------------
+    ## Initiation -------------------------------------------------------------
     
     ### Testing coverage for high risk
     stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
@@ -364,11 +370,13 @@ test_sti_msm <- function(dat, at) {
     
     ## Update testing trajectory
     if (length(idsStart) > 0) {
-        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
+        tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <-tt.traj.ct[idsStart] <- 2
     }   
     
     ### Testing coverage for annual
-    # Make this only the sum of where tt.traj.ct == 1? - would need to change denominator to be those who are in not in intersect of idsactive and idshighrisk
+    # Make this only the sum of where tt.traj.ct == 1? - would need to change 
+    # denominator to be those who are in not in intersect of idsactive and 
+    # idshighrisk
     stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(setdiff(idsactive, idshighrisk))
     stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
     
@@ -377,7 +385,7 @@ test_sti_msm <- function(dat, at) {
     nEligSt <- length(setdiff(idsactive, idshighrisk))
     
     nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
-                                            length(setdiff(idsactive, idshighrisk)))))
+                                      length(setdiff(idsactive, idshighrisk)))))
     idsStart <- NULL
     if (nStart > 0) {
         if (stianntest.cov.rate >= 1) {
@@ -409,15 +417,18 @@ test_sti_msm <- function(dat, at) {
     tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
     
     # Testing Rates by serostatus/race?
-    # All MSM with HIV infection entering care should be screened for gonorrhea and 
-    # chlamydia at appropriate anatomic sites of exposure, as well as for syphilis
-    # For sexually active individuals, screen at first HIV evaluation, and at least annually thereafter
+    # All MSM with HIV infection entering care should be screened for GC and CT
+    # ct appropriate anatomic sites of exposure, as well as for syphilis
+    # For sexually active individuals, screen at first HIV evaluation, 
+    # and at least annually thereafter
     
     # More frequent STD screening (i.e., for syphilis, gonorrhea, and chlamydia) 
-    # at 3–6-month intervals is indicated for MSM, including those with HIV infection 
-    # if risk behaviors persist or if they or their sexual partners have multiple partners.
+    # at 3–6-month intervals is indicated for MSM, including those with HIV 
+    # infection if risk behaviors persist or if they or their sexual partners 
+    # have multiple partners.
     
-    # Mostly asymptomatic testing handled here - symptomatic testing is equated to probability of symptomatic treatment
+    # Mostly asymptomatic testing handled here - symptomatic testing is equated 
+    # to probability of symptomatic treatment
 
     ## Process for syphilis
     if (testing.pattern.sti == "memoryless") {
@@ -471,7 +482,7 @@ test_sti_msm <- function(dat, at) {
     
          tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                       tsincelntst.gc >= 2*(sti.highrisktest.int) &
+                                          tsincelntst.gc >= 2*(sti.highrisktest.int) &
                                        prepStat == 0)
     
          tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
@@ -509,7 +520,8 @@ test_sti_msm <- function(dat, at) {
      }
      
     # Syphilis non-PrEP testing
-    tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 & stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
+    tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 & 
+                                     stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
     tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
     
     # GC non-PrEP testing
@@ -521,7 +533,6 @@ test_sti_msm <- function(dat, at) {
     tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
     tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
     tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
-    tst.gc.neg <- unique(c(tst.rgc.neg, tst.ugc.neg))
     
     # CT non-PrEP testing
     tst.rct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("R", "V")]
@@ -532,7 +543,6 @@ test_sti_msm <- function(dat, at) {
     tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
     tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
     tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
-    tst.ct.neg <- unique(c(tst.rct.neg, tst.uct.neg))
     
     # Syphilis Attributes
     last.neg.test.syph[tst.syph.neg] <- at
@@ -595,11 +605,14 @@ test_sti_msm <- function(dat, at) {
     dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
     dat$epi$syphasympttests.pos[at] <- length(c(tst.syph.pos))
     
-    dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc, tst.ugc, tst.syph.nprep))
-    dat$epi$totalstiasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos, tst.rct.pos, tst.uct.pos, tst.syph.pos))
+    dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc, 
+                                                tst.ugc, tst.syph.nprep))
+    dat$epi$totalstiasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos, 
+                                                    tst.rct.pos, tst.uct.pos, 
+                                                    tst.syph.pos))
     
     
-    ## Output --------------------------------------------------------------------
+    ## Output -----------------------------------------------------------------
     
     # Attributes
     

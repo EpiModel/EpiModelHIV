@@ -7,10 +7,10 @@
 #' @inheritParams aging_msm
 #'
 #' @details
-#' For each act on the discordant edgelist, condom use is stochastically simulated
-#' based on the partnership type and racial combination of the dyad. Other
-#' modifiers for the probability of condom use in that pair are diagnosis of
-#' disease, disclosure of status, and full or partial HIV viral suppression
+#' For each act on the discordant edgelist, condom use is stochastically 
+#' simulated based on the partnership type and racial combination of the dyad. 
+#' Other modifiers for the probability of condom use in that pair are diagnosis 
+#' of disease, disclosure of status, and full or partial HIV viral suppression
 #' given HIV anti-retroviral therapy.
 #'
 #' @return
@@ -134,8 +134,9 @@ condoms_msm <- function(dat, at) {
     # PrEP Status (risk compensation)
     if (rcomp.prob > 0) {
 
-      idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
-                       (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+      idsRC <- which(
+        (prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
+        (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
 
       if (rcomp.main.only == TRUE & ptype > 1) {
         idsRC <- NULL

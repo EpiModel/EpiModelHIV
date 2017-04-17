@@ -19,14 +19,16 @@ init_het(i.prev.male = 0.05, i.prev.feml = 0.05, ages.male = seq(18, 55,
 \item{ages.feml}{initial ages of females in the population.}
 
 \item{inf.time.dist}{Probability distribution for setting time of infection
-for nodes infected at T1, with options of \code{"geometric"} for randomly
-distributed on a geometric distribution with a probability of the
-reciprocal of the average length of infection, \code{"uniform"} for a
-uniformly distributed time over that same interval, or \code{"allacute"} for
-placing all infections in the acute stage at the start.}
+for nodes infected at T1, with options of \code{"geometric"} for 
+randomly distributed on a geometric distribution with a probability 
+of the reciprocal of the average length of infection, \code{"uniform"}
+for a uniformly distributed time over that same interval, or 
+\code{"allacute"} for placing all infections in the acute stage at 
+the start.}
 
-\item{max.inf.time}{Maximum infection time in days for infection at initialization,
-used when \code{inf.time.dist} is \code{"geometric"} or \code{"uniform"}.}
+\item{max.inf.time}{Maximum infection time in days for infection at 
+initialization, used when \code{inf.time.dist} is \code{"geometric"} 
+or \code{"uniform"}.}
 
 \item{...}{additional arguments to be passed into model.}
 }

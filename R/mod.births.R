@@ -9,10 +9,10 @@
 #' @details
 #' New population members are added based on expected numbers of entries among
 #' black and white MSM, stochastically determined with draws from Poisson
-#' distributions. For each new entry, a set of attributes is added for that node,
-#' and the nodes are added onto the network objects. Only attributes that are
-#' a part of the network model formulae are updated as vertex attributes on the
-#' network objects.
+#' distributions. For each new entry, a set of attributes is added for that 
+#' node, and the nodes are added onto the network objects. Only attributes that 
+#' are a part of the network model formulae are updated as vertex attributes on 
+#' the network objects.
 #'
 #' @return
 #' This function updates the \code{attr} list with new attributes for each new
@@ -162,11 +162,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$ccr5[newIds[newB]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.B, replace = TRUE,
                                         prob = c(1 - sum(ccr5.B.prob),
-                                                 ccr5.B.prob[2], ccr5.B.prob[1]))
+                                                 ccr5.B.prob[2], 
+                                                 ccr5.B.prob[1]))
   dat$attr$ccr5[newIds[newW]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.W, replace = TRUE,
                                         prob = c(1 - sum(ccr5.W.prob),
-                                                 ccr5.W.prob[2], ccr5.W.prob[1]))
+                                                 ccr5.W.prob[2], 
+                                                 ccr5.W.prob[1]))
 
 
   # Degree
@@ -180,7 +182,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   p1 <- dat$param$cond.pers.always.prob
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = 
+                                  (1 - rho) * diag(2) + rho)
   dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
@@ -194,8 +197,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
 #' @title Births Module
 #'
-#' @description Module for simulating births/entries into the population, including
-#'              initialization of attributes for incoming nodes.
+#' @description Module for simulating births/entries into the population, 
+#'              including initialization of attributes for incoming nodes.
 #'
 #' @inheritParams aging_het
 #'
@@ -208,14 +211,14 @@ births_het <- function(dat, at) {
   # Variables
   b.rate.method <- dat$param$b.rate.method
   b.rate <- dat$param$b.rate
-  active <- dat$attr$active
+  race <- dat$attr$race
 
 
   # Process
   nBirths <- 0
   if (b.rate.method == "stgrowth") {
     exptPopSize <- dat$epi$num[1] * (1 + b.rate*at)
-    numNeeded <- exptPopSize - sum(active == 1)
+    numNeeded <- exptPopSize - sum(race %in% c("B","W"))
     if (numNeeded > 0) {
       nBirths <- rpois(1, numNeeded)
     }

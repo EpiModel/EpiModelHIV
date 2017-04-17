@@ -18,8 +18,8 @@ initialize_msm(x, param, init, control, s)
 \item{s}{Simulation number, used for restarting dependent simulations.}
 }
 \value{
-This function returns the updated \code{dat} object with the initialized values
-for demographics and disease-related variables.
+This function returns the updated \code{dat} object with the initialized 
+values or demographics and disease-related variables.
 }
 \description{
 This function initializes the master \code{dat} object on which

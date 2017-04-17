@@ -7,17 +7,18 @@
 #' @inheritParams aging_msm
 #'
 #' @details
-#' The number of acts at each time step is specified as a function of the race of
-#' both members in a pair and the expected values within black-black, black-white,
-#' and white-white combinations. For one-off partnerships, this is deterministically
-#' set at 1, whereas for main and causal partnerships it is a stochastic draw
-#' from a Poisson distribution. The number of total acts may further be modified
-#' by the level of HIV viral suppression in an infected person.
+#' The number of acts at each time step is specified as a function of the race 
+#' of both members in a pair and the expected values within black-black, 
+#' black-white,and white-white combinations. For one-off partnerships, this is 
+#' deterministically set at 1, whereas for main and causal partnerships it is a 
+#' stochastic draw from a Poisson distribution. The number of total acts may 
+#' further be modified by the level of HIV viral suppression in an infected 
+#' person.
 #'
 #' @return
 #' This function returns the \code{dat} object with the updated discordant act
-#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
-#' discordant pair repeated the number of times they have AI.
+#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids 
+#' of the discordant pair repeated the number of times they have AI.
 #'
 #' @keywords module msm
 #' @export
@@ -117,7 +118,7 @@ acts_msm <- function(dat, at) {
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
-  # Set most recent active edge as today for both partners from an active edge list
+  # Set most recent active edge as today for both active partners
   dat$attr$sexactive[dat$temp$el[, 1:2]] <- at
   
   return(dat)

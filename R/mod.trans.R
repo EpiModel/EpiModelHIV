@@ -32,7 +32,7 @@
 #'
 #' @export
 #'
-trans_msm <- function(dat, at) {
+hiv_trans_msm <- function(dat, at) {
 
   # Variables -----------------------------------------------------------
 
@@ -440,7 +440,6 @@ discord_edgelist_het <- function(dat, at) {
       if (length(disc) > 0) {
         tmp.del <- el[disc, ]
         tmp.del[status[tmp.del[, 2]] == 1, ] <- tmp.del[status[tmp.del[, 2]] == 1, 2:1]
-
         del <- list()
         del$sus <- tmp.del[, 2]
         del$inf <- tmp.del[, 1]

@@ -13,8 +13,8 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \description{
-Module for simulating births/entries into the population, including
-             initialization of attributes for incoming nodes.
+Module for simulating births/entries into the population, 
+             including initialization of attributes for incoming nodes.
 }
 \keyword{het}
 \keyword{module}

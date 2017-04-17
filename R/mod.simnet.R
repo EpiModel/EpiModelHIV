@@ -151,7 +151,7 @@ calc_resim_nwstats <- function(dat, at) {
 edges_correct_msm <- function(dat, at) {
 
   old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
+  new.num <- sum(dat$attr$race %in% c("B", "W"), na.rm = TRUE)
   adjust <- log(old.num) - log(new.num)
 
   coef.form.m <- get_nwparam(dat, network = 1)$coef.form
@@ -294,7 +294,7 @@ edges_correct_het <- function(dat, at) {
 
   # Popsize
   old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
+  new.num <- sum(dat$attr$race %in% c("B", "W"), na.rm = TRUE)
 
   # New Coefs
   coef.form <- get_nwparam(dat)$coef.form

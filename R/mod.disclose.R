@@ -10,8 +10,8 @@
 #' Persons who are infected may disclose their status to partners at three
 #' distinct time points: at relationship onset for newly formed discordant
 #' pairs; at diagnosis for pairs starting as both negative but with one newly
-#' infected; or post diagnosis for one recently infected. The rates of disclosure
-#' vary at these three points, and also by the partnership type.
+#' infected; or post diagnosis for one recently infected. The rates of 
+#' disclosure vary at these three points, and also by the partnership type.
 #'
 #' @return
 #' This function returns the \code{dat} object with the updated disclosure list,
@@ -20,7 +20,7 @@
 #' @keywords module msm
 #' @export
 #'
-disclose_msm <- function(dat, at){
+hiv_disclose_msm <- function(dat, at){
 
   for (type in c("main", "pers", "inst")) {
 
@@ -137,10 +137,9 @@ disclose_msm <- function(dat, at){
   if (at > 2) {
     discl.list <- dat$temp$discl.list
     master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-    m <- which(match(discl.list[, 1] * 1e7 + discl.list[, 2],
-                     uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-               match(discl.list[, 2] * 1e7 + discl.list[, 1],
-                     uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
+    m <- which(
+      match(discl.list[, 1] * 1e7 + discl.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
+      match(discl.list[, 2] * 1e7 + discl.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
     dat$temp$discl.list <- discl.list[m, ]
   }
 

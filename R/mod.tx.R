@@ -18,13 +18,14 @@
 #'
 #' @return
 #' This function returns the \code{dat} object with updated \code{tx.status},
-#' \code{tx.init.time}, \code{cum.time.on.tx}, \code{cum.time.off.tx} attributes.
+#' \code{tx.init.time}, \code{cum.time.on.tx}, 
+#' \code{cum.time.off.tx} attributes.
 #'
 #' @keywords module msm
 #'
 #' @export
 #'
-tx_msm <- function(dat, at) {
+hiv_tx_msm <- function(dat, at) {
 
   ## Variables
 
