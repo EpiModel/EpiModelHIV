@@ -50,9 +50,9 @@ asmr.W <- c(rep(0, 17),
 role.B.prob <- c(0.242, 0.321, 0.437)
 role.W.prob <- c(0.228, 0.228, 0.544)
 
-st <- calc_nwstats_msm(
+st <- calc_nwstats.mard(
   time.unit = time.unit,
-  method = 2,
+  #method = 2,
   num.B = num.B,
   num.W = num.W,
   deg.mp.B = deg.mp.B,
@@ -79,7 +79,7 @@ st <- calc_nwstats_msm(
 expect_is(st, "nwstats")
 
 
-nw <- base_nw_msm(st)
+nw <- base_nw.mard(st)
 expect_is(nw, "network")
 expect_identical(list.vertex.attributes(nw),
                  c("na", "race", "riskg", "role.class", "sqrt.age", "vertex.names"))
