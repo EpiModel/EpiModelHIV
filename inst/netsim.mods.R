@@ -85,12 +85,7 @@ init <- init_msm(nwstats = st,
                  stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                  stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
 
-control <- control_msm(simno = 0.253,
-                       nsteps = 2600,
-                       nsims = 1,
-                       ncores = 1,
-                       save.nwstats = TRUE,
-                       verbose.int = 1)
+control <- control_msm(nsteps = 2600)
 
 sim <- netsim(est, param, init, control)
 
