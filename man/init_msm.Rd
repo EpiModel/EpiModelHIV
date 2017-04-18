@@ -31,11 +31,11 @@ init_msm(nwstats, prev.B = 0.1, prev.W = 0.1, prev.ugc = 0.015,
 \item{prev.syph.W}{Initial prevalence of syphilis among white MSM}
 
 \item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
-active stages of syphilis: incubating, primary, secondary, early 
+active stages of syphilis: incubating, primary, secondary, early
 latent, late latent, late late latent, and tertiary.}
 
 \item{stage.syph.W.prob}{Proportion of white MSM who enter one of the seven
-active stages of syphilis: incubating, primary, secondary, early 
+active stages of syphilis: incubating, primary, secondary, early
 latent, late latent, late late latent, and tertiary.}
 
 \item{...}{Additional arguments passed to function.}

@@ -16,11 +16,11 @@
 #' @param last.neg.test.W.int Time range in days for last negative test for
 #'        white men.
 #' @param mean.test.W.int Mean intertest interval (days) for white MSM who test.
-#' @param testing.pattern Method for HIV testing, with options 
-#'        \code{"memoryless"} for constant hazard without regard to time since 
+#' @param testing.pattern Method for HIV testing, with options
+#'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
-#' @param testing.pattern.sti Method for STI testing, with options 
-#'        \code{"memoryless"} for constant hazard without regard to time since    
+#' @param testing.pattern.sti Method for STI testing, with options
+#'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
 #' @param test.window.int Length of the HIV test window period in days.
 #' @param tt.traj.B.prob Proportion of black MSM who enter one of four
@@ -64,7 +64,7 @@
 #' @param vl.full.supp Log10 viral load at full suppression on ART.
 #' @param vl.part.supp Log10 viral load at partial suppression on ART.
 #' @param full.supp.down.slope For full suppressors, number of log10 units that
-#'        viral load falls per time step from treatment initiation or 
+#'        viral load falls per time step from treatment initiation or
 #'        re-initiation until the level in \code{vl.full.supp}.
 #' @param full.supp.up.slope For full suppressors, number of log10 units that
 #'        viral load rises per time step from treatment halting until expected
@@ -73,18 +73,18 @@
 #'        that viral load falls per time step from treatment initiation or
 #'        re-initiation until the level in \code{vl.part.supp}.
 #' @param part.supp.up.slope For partial suppressors, number of log10 units that
-#'        viral load rises per time step from treatment halting until 
+#'        viral load rises per time step from treatment halting until
 #'        expected value.
-#'        
+#'
 #' @param incu.syph.int Number of days in incubation stage of syphilis.
 #' @param prim.syph.int Number of days in primary stage of syphilis.
 #' @param seco.syph.int Number of days in secondary stage of syphilis.
 #' @param earlat.syph.int Number of days in early latent stage of syphilis.
 #' @param latelat.syph.int Number of days in first late latent stage of syphilis.
-#' @param latelatelat.syph.int Number of days in second stage of late latent 
+#' @param latelatelat.syph.int Number of days in second stage of late latent
 #'        syphilis for those who will not progress to tertiary infection.
 #' @param tert.syph.int Number of days in tertiary stage of syphilis.
-#' @param syph.tert.prog.prob Probability of progression from late latent stage 
+#' @param syph.tert.prog.prob Probability of progression from late latent stage
 #'        of syphilis to tertiary stage at any point in time during late latent.
 #' @param b.B.rate Rate at which black MSM enter the population.
 #' @param b.W.rate Rate at which white MSM enter the population.
@@ -104,13 +104,13 @@
 #'        negative insertive partner is circumcised.
 #' @param condom.rr Relative risk of infection from anal sex when a condom is
 #'        used.
-#' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM 
+#' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM
 #'        will disclose his status at the start of a main partnership.
-#' @param disc.outset.main.W.prob Probability that an HIV-infected white MSM 
+#' @param disc.outset.main.W.prob Probability that an HIV-infected white MSM
 #'        will disclose his status at the start of a main partnership.
-#' @param disc.at.diag.main.B.prob Probability that a black MSM already in a 
+#' @param disc.at.diag.main.B.prob Probability that a black MSM already in a
 #'        main partnership will disclose at the time of diagnosis.
-#' @param disc.at.diag.main.W.prob Probability that a white MSM already in a 
+#' @param disc.at.diag.main.W.prob Probability that a white MSM already in a
 #'        main partnership will disclose at the time of diagnosis.
 #' @param disc.post.diag.main.B.prob Probability that an HIV-infected black MSM
 #'        in a main partnership will disclose his status, assuming he didn't
@@ -118,9 +118,9 @@
 #' @param disc.post.diag.main.W.prob Probability that an HIV-infected white MSM
 #'        in a main partnership will disclose his status, assuming he didn't
 #'        at the start of the partnership or at diagnosis.
-#' @param disc.outset.pers.B.prob Probability that an HIV-infected black MSM 
+#' @param disc.outset.pers.B.prob Probability that an HIV-infected black MSM
 #'        will disclose his status at the start of a casual partnership.
-#' @param disc.outset.pers.W.prob Probability that an HIV-infected white MSM 
+#' @param disc.outset.pers.W.prob Probability that an HIV-infected white MSM
 #'        will disclose his status at the start of a casual partnership.
 #' @param disc.at.diag.pers.B.prob Probability that a black MSM already in a
 #'        casual partnership will disclose at the time of diagnosis.
@@ -146,7 +146,7 @@
 #' @param ccr5.W.prob Vector of length two of frequencies of the Delta 32
 #'        mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 #'        among white MSM.
-#' @param ccr5.heteroz.rr Relative risk of infection for men who are 
+#' @param ccr5.heteroz.rr Relative risk of infection for men who are
 #'        heterozygous in the CCR5 mutation.
 #' @param num.inst.ai.classes Number of quantiles into which men should be
 #'        divided in determining their levels of one-off anal intercourse.
@@ -170,7 +170,7 @@
 #'        partnership.
 #' @param cond.main.WW.prob Probability of condom use in a white-white main
 #'        partnership.
-#' @param cond.pers.always.prob Fraction of men in casual partnerships who 
+#' @param cond.pers.always.prob Fraction of men in casual partnerships who
 #'        always use condoms in those partnerships.
 #' @param cond.pers.BB.prob Of men who are not consistent condom users, per-act
 #'        probability of condom use in a black-black casual partnerships.
@@ -178,7 +178,7 @@
 #'        probability of condom use in a black-white casual partnerships.
 #' @param cond.pers.WW.prob Of men who are not consistent condom users, per-act
 #'        probability of condom use in a white-white casual partnerships.
-#' @param cond.inst.always.prob Fraction of men in instant partnerships who 
+#' @param cond.inst.always.prob Fraction of men in instant partnerships who
 #'        always use condoms in those partnerships.
 #' @param cond.inst.BB.prob Of men who are not consistent condom users, per-act
 #'        probability of condom use in a black-black one-off partnerships.
@@ -186,7 +186,7 @@
 #'        probability of condom use in a black-white one-off partnerships.
 #' @param cond.inst.WW.prob Of men who are not consistent condom users, per-act
 #'        probability of condom use in a white-white one-off partnerships.
-#' @param cond.always.prob.corr Correlation coefficient for probability of 
+#' @param cond.always.prob.corr Correlation coefficient for probability of
 #'        always using condoms in both casual and one-off
 #' @param cond.rr.BB Condom probability scaler for black-black partnerships for
 #'        model calibration purposes.
@@ -227,13 +227,13 @@
 #'        have never been on PrEP and are disease-susceptible.
 #' @param prep.class.prob The probability of adherence class in non-adherent,
 #'        low adherence, medium adherence, or high adherence groups (from Liu).
-#' @param prep.class.hr The hazard ratio for infection per act associated with 
+#' @param prep.class.hr The hazard ratio for infection per act associated with
 #'        each level of adherence (from Grant).
 #' @param prep.coverage The proportion of the eligible population who are start
 #'        PrEP once they become eligible.
 #' @param prep.cov.method The method for calculating PrEP coverage, with options
-#'        of \code{"curr"} to base the numerator on the number of people 
-#'        currently on PrEP and \code{"ever"} to base it on the number of people 
+#'        of \code{"curr"} to base the numerator on the number of people
+#'        currently on PrEP and \code{"ever"} to base it on the number of people
 #'        ever on PrEP.
 #' @param prep.cov.rate The rate at which persons initiate PrEP conditional on
 #'        their eligibility, with 1 equal to instant start.
@@ -243,18 +243,18 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
-#' @param stitest.active.int Interval in which individuals need to be sexually 
+#' @param stitest.active.int Interval in which individuals need to be sexually
 #'        active for STI Testing Guidelines.
-#' @param stitest.start Time step at which the STI testing guidelines 
+#' @param stitest.start Time step at which the STI testing guidelines
 #'        intervention should start.
 #' @param ept.start Time step at which the EPT intervention should start.
-#' @param ept.risk.int Time window for assessment of risk eligibility for EPT 
+#' @param ept.risk.int Time window for assessment of risk eligibility for EPT
 #'        in days.
-#' @param ept.coverage The proportion of the eligible population who are 
+#' @param ept.coverage The proportion of the eligible population who are
 #'        starting EPT once they become eligible.
 #' @param ept.cov.method The method for calculating EPT coverage, with options
-#'        of \code{"curr"} to base the numerator on the number of people 
-#'        currently on EPT and \code{"ever"} to base it on the number of people 
+#'        of \code{"curr"} to base the numerator on the number of people
+#'        currently on EPT and \code{"ever"} to base it on the number of people
 #'        ever on EPT.
 #' @param ept.cov.rate The rate at which persons initiate EPT conditional on
 #'        their eligibility, with 1 equal to instant start.
@@ -270,48 +270,48 @@
 #'        provided to them by a casual index partner.
 #' @param ept.uptake.partner.inst The likelihood of a partner taking medication
 #'        provided to them by a one-off index partner.
-#' @param ept.gc.success The probability of effective treatment for GC in a 
+#' @param ept.gc.success The probability of effective treatment for GC in a
 #'        partner given EPT medication.
-#' @param ept.ct.success The probability of effective treatment for CT in a 
+#' @param ept.ct.success The probability of effective treatment for CT in a
 #'        partner given EPT medication.
-#' @param ept.provision.short.main.rr Relative risk for provision to a main 
-#'        partner with whom the last sexual act was a short time ago 
+#' @param ept.provision.short.main.rr Relative risk for provision to a main
+#'        partner with whom the last sexual act was a short time ago
 #'        (1-20 days).
-#' @param ept.provision.short.casl.rr Relative risk for provision to a casual 
-#'        partner with whom the last sexual act was a short time ago 
+#' @param ept.provision.short.casl.rr Relative risk for provision to a casual
+#'        partner with whom the last sexual act was a short time ago
 #'        (21-40 days).
-#' @param ept.provision.short.inst.rr Relative risk for provision to a one-off 
-#'        partner with whom the last sexual act was a short time ago 
+#' @param ept.provision.short.inst.rr Relative risk for provision to a one-off
+#'        partner with whom the last sexual act was a short time ago
 #'        (41-60 days).
-#' @param ept.provision.med.main.rr Relative risk for provision to a main 
-#'        partner with whom the last sexual act was a medium time ago 
+#' @param ept.provision.med.main.rr Relative risk for provision to a main
+#'        partner with whom the last sexual act was a medium time ago
 #'        (1-20 days).
-#' @param ept.provision.med.casl.rr Relative risk for provision to a casual 
-#'        partner with whom the last sexual act was a medium time ago 
+#' @param ept.provision.med.casl.rr Relative risk for provision to a casual
+#'        partner with whom the last sexual act was a medium time ago
 #'        (21-40 days).
-#' @param ept.provision.med.inst.rr Relative risk for provision to a one-off 
-#'        partner with whom the last sexual act was a medium time ago 
+#' @param ept.provision.med.inst.rr Relative risk for provision to a one-off
+#'        partner with whom the last sexual act was a medium time ago
 #'        (41-60 days).
-#' @param ept.provision.long.main.rr Relative risk for provision to a main 
-#'        partner with whom the last sexual act was a long time ago 
+#' @param ept.provision.long.main.rr Relative risk for provision to a main
+#'        partner with whom the last sexual act was a long time ago
 #'        (1-20 days).
-#' @param ept.provision.long.casl.rr Relative risk for provision to a casual 
-#'        partner with whom the last sexual act was a long time ago 
+#' @param ept.provision.long.casl.rr Relative risk for provision to a casual
+#'        partner with whom the last sexual act was a long time ago
 #'        (21-40 days).
-#' @param ept.provision.long.inst.rr Relative risk for provision to a one-off 
-#'        partner with whom the last sexual act was a long time ago 
+#' @param ept.provision.long.inst.rr Relative risk for provision to a one-off
+#'        partner with whom the last sexual act was a long time ago
 #'        (41-60 days).
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
 #'        per act, and 1 is a complete cessation of condom use following PrEP
 #'        initiation.
 #' @param rcomp.adh.groups PrEP adherence groups for whom risk compensation
-#'        occurs, as a vector with values 0, 1, 2, 3 corresponding to 
-#'        non-adherent,low adherence, medium adherence, and high adherence 
+#'        occurs, as a vector with values 0, 1, 2, 3 corresponding to
+#'        non-adherent,low adherence, medium adherence, and high adherence
 #'        to PrEP.
 #' @param rcomp.main.only Logical, if risk compensation is limited to main
 #'        partnerships only, versus all partnerships.
-#' @param rcomp.discl.only Logical, if risk compensation is limited 
+#' @param rcomp.discl.only Logical, if risk compensation is limited
 #'        known-discordant partnerships only, versus all partnerships.
 #'
 #' @param rgc.tprob Probability of rectal gonorrhea infection per act.
@@ -320,9 +320,9 @@
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
 #' @param rsyph.tprob Base probability of rectal syphilis infection per act.
 #' @param usyph.tprob Base probability of urethral syphilis infection per act.
-#' @param syph.earlat.rr Multiplier for reduced infection probability in early 
+#' @param syph.earlat.rr Multiplier for reduced infection probability in early
 #'        latent stage of syphilis infection.
-#' @param syph.late.rr Multiplier for reduced infection probability in late 
+#' @param syph.late.rr Multiplier for reduced infection probability in late
 #'        stages of syphilis infection.
 #' @param rgc.sympt.prob Probability of symptoms given infection with rectal
 #'        gonorrhea.
@@ -332,135 +332,135 @@
 #'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
 #'        chlamydia.
-#'        
-#' @param syph.prim.sympt.prob Probability of symptoms given primary stage 
+#'
+#' @param syph.prim.sympt.prob Probability of symptoms given primary stage
 #'        syphilis infection.
-#' @param syph.seco.sympt.prob Probability of symptoms given secondary stage 
+#' @param syph.seco.sympt.prob Probability of symptoms given secondary stage
 #'        syphilis infection.
-#' @param syph.earlat.sympt.prob Probability of symptoms given early latent 
+#' @param syph.earlat.sympt.prob Probability of symptoms given early latent
 #'        stage syphilis infection.
-#' @param syph.latelat.sympt.prob Probability of symptoms given late latent 
+#' @param syph.latelat.sympt.prob Probability of symptoms given late latent
 #'        stage syphilis infection.
-#' @param syph.tert.sympt.prob Probability of symptoms given tertiary stage 
+#' @param syph.tert.sympt.prob Probability of symptoms given tertiary stage
 #'        syphilis infection.
-#' @param rgc.asympt.int Average duration in days of asymptomatic rectal 
+#' @param rgc.asympt.int Average duration in days of asymptomatic rectal
 #'        gonorrhea.
-#' @param ugc.asympt.int Average duration in days of asymptomatic urethral 
+#' @param ugc.asympt.int Average duration in days of asymptomatic urethral
 #'        gonorrhea.
 #' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
-#' @param gc.ntx.int Average duration in days of untreated, symptomatic 
-#'        gonorrhea (both sites). If \code{NA}, uses site-specific durations 
+#' @param gc.ntx.int Average duration in days of untreated, symptomatic
+#'        gonorrhea (both sites). If \code{NA}, uses site-specific durations
 #'        for asymptomatic infections.
-#' @param rct.asympt.int Average in days duration of asymptomatic rectal 
+#' @param rct.asympt.int Average in days duration of asymptomatic rectal
 #'        chlamydia.
-#' @param uct.asympt.int Average in days duration of asymptomatic urethral 
+#' @param uct.asympt.int Average in days duration of asymptomatic urethral
 #'        chlamydia.
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
-#' @param ct.ntx.int Average in days duration of untreated, symptomatic 
-#'        chlamydia (both sites). If \code{NA}, uses site-specific durations 
+#' @param ct.ntx.int Average in days duration of untreated, symptomatic
+#'        chlamydia (both sites). If \code{NA}, uses site-specific durations
 #'        for asymptomatic infections.
-#' @param syph.early.tx.int Average in days duration of treatment for early 
-#'        syphilis. 
-#' @param syph.late.tx.int Average in days duration of treatment for late 
+#' @param syph.early.tx.int Average in days duration of treatment for early
 #'        syphilis.
-#' @param gc.prob.cease Probability of ceasing sexual activity during 
+#' @param syph.late.tx.int Average in days duration of treatment for late
+#'        syphilis.
+#' @param gc.prob.cease Probability of ceasing sexual activity during
 #'        symptomatic infection with gonorrhea.
-#' @param ct.prob.cease Probability of ceasing sexual activity during 
+#' @param ct.prob.cease Probability of ceasing sexual activity during
 #'        symptomatic infection with chlamydia.
-#' @param syph.prob.cease Probability of ceasing sexual activity during 
+#' @param syph.prob.cease Probability of ceasing sexual activity during
 #'        symptomatic infection with syphilis.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
 #' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
-#' @param gc.asympt.prob.tx Probability of treatment, given diagnosis, for 
+#' @param gc.asympt.prob.tx Probability of treatment, given diagnosis, for
 #'        asymptomatic gonorrhea.
-#' @param ct.asympt.prob.tx Probability of treatment, given diagnosis, for 
+#' @param ct.asympt.prob.tx Probability of treatment, given diagnosis, for
 #'        asymptomatic chlamydia.
-#' @param syph.prim.sympt.prob.tx Probability of treatment for symptomatic 
+#' @param syph.prim.sympt.prob.tx Probability of treatment for symptomatic
 #'        primary stage syphilis infection.
-#' @param syph.prim.asympt.prob.tx Probability of treatment, given diagnosis, 
+#' @param syph.prim.asympt.prob.tx Probability of treatment, given diagnosis,
 #'        for asymptomatic primary stage syphilis infection.
-#' @param syph.seco.sympt.prob.tx Probability of treatment for symptomatic 
+#' @param syph.seco.sympt.prob.tx Probability of treatment for symptomatic
 #'        secondary stage syphilis infection.
-#' @param syph.seco.asympt.prob.tx Probability of treatment, given diagnosis, 
+#' @param syph.seco.asympt.prob.tx Probability of treatment, given diagnosis,
 #'        for asymptomatic secondary stage syphilis infection.
-#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic 
+#' @param syph.earlat.sympt.prob.tx Probability of treatment for symptomatic
 #'        early latent stage syphilis infection.
-#' @param syph.earlat.asympt.prob.tx Probability of treatment, given diagnosis, 
-#'        for asymptomatic early latent stage syphilis infection.      
-#' @param syph.latelat.sympt.prob.tx Probability of treatment for symptomatic 
+#' @param syph.earlat.asympt.prob.tx Probability of treatment, given diagnosis,
+#'        for asymptomatic early latent stage syphilis infection.
+#' @param syph.latelat.sympt.prob.tx Probability of treatment for symptomatic
 #'        late latent stage syphilis infection.
-#' @param syph.latelat.asympt.prob.tx Probability of treatment, given diagnosis, 
+#' @param syph.latelat.asympt.prob.tx Probability of treatment, given diagnosis,
 #'        for asymptomatic late latent stage syphilis infection.
-#' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic 
+#' @param syph.tert.sympt.prob.tx Probability of treatment for symptomatic
 #'        tertiary stage syphilis infection.
-#' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis, 
+#' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis,
 #'        for asymptomatic tertiary stage syphilis infection.
-#' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to 
-#'        urethral testing among those selected to be tested.        
-#' @param sti.highrisktest.int Interval in which individuals need to be engaged 
+#' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to
+#'        urethral testing among those selected to be tested.
+#' @param sti.highrisktest.int Interval in which individuals need to be engaged
 #'        in high-risk behavior for STI screening for high-risk testers.
-#' @param stitest.elig.model Modeling approach for determining who is eligible 
-#'        for high-risk STI testing. Current options are limited to: 
+#' @param stitest.elig.model Modeling approach for determining who is eligible
+#'        for high-risk STI testing. Current options are limited to:
 #'        \code{"all"}.
-#' @param stianntest.coverage The proportion of the eligible population who are 
-#'        starting annual STI testing once they become eligible. This is not 
-#'        inclusive of those who are simultaneously indicated for more frequent 
+#' @param stianntest.coverage The proportion of the eligible population who are
+#'        starting annual STI testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
 #'        testing.
-#' @param stianntest.cov.method The method for calculating STI annual testing, 
-#'        with options of \code{"curr"} to base the numerator  on the number of 
+#' @param stianntest.cov.method The method for calculating STI annual testing,
+#'        with options of \code{"curr"} to base the numerator  on the number of
 #'        people currently annually testing for STI and \code{"ever"} to base it
-#'        on the number of people who have ever been annually tested for STI. 
-#'        This is not inclusive of those who are simultaneously indicated for 
+#'        on the number of people who have ever been annually tested for STI.
+#'        This is not inclusive of those who are simultaneously indicated for
 #'        more frequent testing.
-#' @param stianntest.cov.rate The rate at which persons initiate annual STI 
-#'        testing conditional on their eligibility, with 1 equal to instant 
+#' @param stianntest.cov.rate The rate at which persons initiate annual STI
+#'        testing conditional on their eligibility, with 1 equal to instant
 #'        start.
-#' @param stihighrisktest.coverage The proportion of the eligible population 
+#' @param stihighrisktest.coverage The proportion of the eligible population
 #'        who are starting high-risk STI testing once they become eligible.
-#' @param stihighrisktest.cov.method The method for calculating STI high-risk 
-#'        testing, with options of \code{"curr"} to base the numerator on the 
+#' @param stihighrisktest.cov.method The method for calculating STI high-risk
+#'        testing, with options of \code{"curr"} to base the numerator on the
 #'        number of people currently high-risk testing for STI and \code{"ever"}
 #'        to base it on the number of people who have ever been high-risk tested
 #'        for STI.
-#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk 
-#'        STI testing conditional on their eligibility, with 1 equal to instant 
+#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
+#'        STI testing conditional on their eligibility, with 1 equal to instant
 #'        start.
-#' @param prep.sti.screen.int Interval in days between STI screening at PrEP 
+#' @param prep.sti.screen.int Interval in days between STI screening at PrEP
 #'        visits.
-#' @param prep.sti.prob.tx Probability of treatment given positive screening 
+#' @param prep.sti.prob.tx Probability of treatment given positive screening
 #'        during PrEP visit.
 #' @param prep.continue.stand.tx Logical, if \code{TRUE} will continue standard
 #'        STI treatment of symptomatic cases even after PrEP initiation.
 #' @param sti.cond.rr Relative risk of STI infection (in either direction) given
 #'        a condom used by the insertive partner.
-#' @param hiv.rgc.rr Relative risk of HIV infection given current rectal 
+#' @param hiv.rgc.rr Relative risk of HIV infection given current rectal
 #'        gonorrhea in the HIV-negative partner.
-#' @param hiv.ugc.rr Relative risk of HIV infection given current urethral 
+#' @param hiv.ugc.rr Relative risk of HIV infection given current urethral
 #'        gonorrhea in the HIV-negative partner.
-#' @param hiv.rct.rr Relative risk of HIV infection given current rectal 
+#' @param hiv.rct.rr Relative risk of HIV infection given current rectal
 #'        chlamydia in the HIV-negative partner.
-#' @param hiv.uct.rr Relative risk of HIV infection given current urethral 
+#' @param hiv.uct.rr Relative risk of HIV infection given current urethral
 #'        chlamydia in the HIV-negative partner.
 #' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
 #'        given dual infection with both gonorrhea and chlamydia.
-#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal 
+#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal
 #'        syphilis infection in the HIV-negative partner.
-#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral 
+#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral
 #'        syphilis infection in the HIV-negative partner.
-#' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV 
+#' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV
 #'        infection in the receptive syphilis-negative partner.
-#' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV 
+#' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV
 #'        infection in the insertive syphilis-negative partner.
-#' @param rgc.hiv.rr Relative risk of acquiring rectal gonorrhea given current 
+#' @param rgc.hiv.rr Relative risk of acquiring rectal gonorrhea given current
 #'        HIV infection in the receptive partner.
 #' @param ugc.hiv.rr Relative risk of acquiring urethral gonorrhea given current
 #'        HIV infection in the insertive partner.
-#' @param rct.hiv.rr Relative risk of acquiring rectal chlamydia given current 
+#' @param rct.hiv.rr Relative risk of acquiring rectal chlamydia given current
 #'        HIV infection in the receptive partner.
-#' @param uct.hiv.rr Relative risk of acquiring rectal chlamydia given current 
+#' @param uct.hiv.rr Relative risk of acquiring rectal chlamydia given current
 #'        HIV infection in the insertive partner.
-#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic 
-#'        syphilis given diagnosed HIV infection. This is implemented as an 
+#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic
+#'        syphilis given diagnosed HIV infection. This is implemented as an
 #'        inverse, 1 / this value for those who do not have diagnosed infection,
 #'        so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
@@ -511,7 +511,7 @@ param_msm <- function(nwstats,
                       full.supp.up.slope = 0.25,
                       part.supp.down.slope = 0.25,
                       part.supp.up.slope = 0.25,
-                      
+
                       incu.syph.int = 27,
                       prim.syph.int = 60,
                       seco.syph.int = 120,
@@ -519,8 +519,8 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress by the end of 20 years 
-                      
+                      syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress by the end of 20 years
+
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
                       birth.age = 18,
@@ -638,12 +638,12 @@ param_msm <- function(nwstats,
                       usyph.tprob = 0.03598792,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
-                      
+
                       rgc.sympt.prob = 0.16, # Beck
                       ugc.sympt.prob = 0.90, # Beck
                       rct.sympt.prob = 0.14, # Beck
                       uct.sympt.prob = 0.58, # Beck
-                      
+
                       syph.prim.sympt.prob = 0.50,
                       syph.seco.sympt.prob = 0.85,
                       syph.earlat.sympt.prob = 0,
@@ -671,7 +671,7 @@ param_msm <- function(nwstats,
                       ct.sympt.prob.tx = 0.85,
                       gc.asympt.prob.tx = 1,
                       ct.asympt.prob.tx = 1,
-                      
+
                       syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 1,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
@@ -682,7 +682,7 @@ param_msm <- function(nwstats,
                       syph.latelat.asympt.prob.tx = 1,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 1,
-                      
+
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
                       stitest.elig.model = "all",
@@ -692,7 +692,7 @@ param_msm <- function(nwstats,
                       stihighrisktest.coverage = 0,
                       stihighrisktest.cov.method = "curr",
                       stihighrisktest.cov.rate = 1,
-                     
+
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
@@ -707,16 +707,15 @@ param_msm <- function(nwstats,
                       hiv.dual.rr = 0.2,
                       hiv.rsyph.rr = 2.98876572,
                       hiv.usyph.rr = 1.7456618,
-                      
+
                       syph.rhiv.rr = 6.54189295,
                       syph.uhiv.rr = 5.09641658,
                       rgc.hiv.rr = 1,
                       ugc.hiv.rr = 1,
                       rct.hiv.rr = 1,
                       uct.hiv.rr = 1,
-                      
+
                       # Transmission
-                      
                       hivdx.syph.sympt.tx.rr = 1.45,
                       
                       partlist.start = min((stitest.start - sti.highrisktest.int - 1), (ept.start - ept.risk.int - 1)),
@@ -825,10 +824,10 @@ param_msm <- function(nwstats,
 #' @param prev.syph.B Initial prevalence of syphilis among black MSM
 #' @param prev.syph.W Initial prevalence of syphilis among white MSM
 #' @param stage.syph.B.prob Proportion of black MSM who enter one of the seven
-#'        active stages of syphilis: incubating, primary, secondary, early 
+#'        active stages of syphilis: incubating, primary, secondary, early
 #'        latent, late latent, late late latent, and tertiary.
 #' @param stage.syph.W.prob Proportion of white MSM who enter one of the seven
-#'        active stages of syphilis: incubating, primary, secondary, early 
+#'        active stages of syphilis: incubating, primary, secondary, early
 #'        latent, late latent, late late latent, and tertiary.
 #' @param ... Additional arguments passed to function.
 #'
@@ -849,7 +848,7 @@ init_msm <- function(nwstats,
                      prev.syph.B = 0.02,
                      prev.syph.W = 0.02,
                      # adjust prim and seco from 0.1385 each
-                     # Incubating, primary, secondary, early latent, late latent, 
+                     # Incubating, primary, secondary, early latent, late latent,
                      #late late latent, tertiary
                      stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                      stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
@@ -865,7 +864,7 @@ init_msm <- function(nwstats,
 
   p$init.prev.age.slope.B <- prev.B / 12
   p$init.prev.age.slope.W <- prev.W / 12
-  
+
   p$nwstats <- NULL
 
   class(p) <- "init.net"
@@ -888,7 +887,7 @@ init_msm <- function(nwstats,
 #'        simulation. This may also be set to 1 greater than the final time
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
-#' @param initialize.FUN Module function to use for initialization of the 
+#' @param initialize.FUN Module function to use for initialization of the
 #'        epidemicmodel.
 #' @param aging.FUN Module function for aging.
 #' @param deaths.FUN Module function for general and disease-realted deaths.
@@ -915,9 +914,9 @@ init_msm <- function(nwstats,
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param hiv_trans.FUN Module function to stochastically simulate HIV transmission
 #'        over acts given individual and dyadic attributes.
-#' @param sti_trans.FUN Module function to simulate GC/CT transmission over 
+#' @param sti_trans.FUN Module function to simulate GC/CT transmission over
 #'        current edgelist.
-#' @param sti_recov.FUN Module function to simulate recovery from GC/CT, 
+#' @param sti_recov.FUN Module function to simulate recovery from GC/CT,
 #'        heterogeneous by disease, site, symptoms, and treatment status.
 #' @param sti_tx.FUN Module function to simulate treatment of GC/CT.
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
@@ -927,7 +926,7 @@ init_msm <- function(nwstats,
 #'        \code{simnet} modules.
 #' @param verbose If \code{TRUE}, print out simulation progress to the console
 #'        if in interactive mode or text files if in batch mode.
-#' @param verbose.int Integer specifying the interval between time steps at 
+#' @param verbose.int Integer specifying the interval between time steps at
 #'        which progress is printed.
 #' @param ... Additional arguments passed to the function.
 #'
@@ -983,7 +982,7 @@ control_msm <- function(simno = 1,
   p$save.transmat <- FALSE
 
   bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
-  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))), 
+  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))),
                                   USE.NAMES = FALSE) == TRUE)]
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
@@ -1028,21 +1027,21 @@ control_msm <- function(simno = 1,
 #' @param act.rate.late Daily per-partnership act rate in late disease.
 #' @param act.rate.cd4 CD4 count at which the \code{act.rate.late} applies.
 #' @param acts.rand If \code{TRUE}, will draw number of total and unprotected
-#'        acts from a binomial distribution parameterized by the 
+#'        acts from a binomial distribution parameterized by the
 #'        \code{act.rate}.
 #'
 #' @param circ.prob.birth Proportion of men circumcised at birth.
 #' @param circ.eff Efficacy of circumcision per act in HIV prevention.
 #'
-#' @param tx.elig.cd4 CD4 count at which a person becomes eligible for 
+#' @param tx.elig.cd4 CD4 count at which a person becomes eligible for
 #'        treatment.
 #' @param tx.init.cd4.mean Mean CD4 count at which person presents for care.
 #' @param tx.init.cd4.sd SD of CD4 count at which person presents for care.
 #' @param tx.adhere.full Proportion of people who start treatment who are fully
 #'        adherent.
-#' @param tx.adhere.part Of the not fully adherent proportion, the percent of 
+#' @param tx.adhere.part Of the not fully adherent proportion, the percent of
 #'        time they are on medication.
-#' @param tx.vlsupp.time Time in days from treatment initiation to 
+#' @param tx.vlsupp.time Time in days from treatment initiation to
 #'        viral suppression.
 #' @param tx.vlsupp.level Log 10 viral load level at suppression.
 #' @param tx.cd4.recrat.feml Rate of CD4 recovery under treatment for males.
@@ -1051,14 +1050,14 @@ control_msm <- function(simno = 1,
 #'        for females.
 #' @param tx.cd4.decrat.male Rate of CD4 decline under periods of non-adherence
 #'        for males.
-#' @param tx.coverage Proportion of treatment-eligible persons who have 
+#' @param tx.coverage Proportion of treatment-eligible persons who have
 #'        initiated treatment.
 #' @param tx.prev.eff Proportional amount by which treatment reduces infectivity
 #'        of infected partner.
 #' @param b.rate General entry rate per day for males and females specified.
-#' @param b.rate.method Method for assigning birth rates, with options of 
-#'        "totpop" for births as a function of the total population size, 
-#'        "fpop" for births as a function of the female population size, and 
+#' @param b.rate.method Method for assigning birth rates, with options of
+#'        "totpop" for births as a function of the total population size,
+#'        "fpop" for births as a function of the female population size, and
 #'        "stgrowth" for a constant stable growth rate.
 #' @param b.propmale Proportion of entries assigned as male. If NULL, then set
 #'        adaptively based on the proportion at time 1.
@@ -1205,14 +1204,14 @@ param_het <- function(time.unit = 7,
 #' @param ages.male initial ages of males in the population.
 #' @param ages.feml initial ages of females in the population.
 #' @param inf.time.dist Probability distribution for setting time of infection
-#'        for nodes infected at T1, with options of \code{"geometric"} for 
-#'        randomly distributed on a geometric distribution with a probability 
+#'        for nodes infected at T1, with options of \code{"geometric"} for
+#'        randomly distributed on a geometric distribution with a probability
 #'        of the reciprocal of the average length of infection, \code{"uniform"}
-#'        for a uniformly distributed time over that same interval, or 
-#'        \code{"allacute"} for placing all infections in the acute stage at 
+#'        for a uniformly distributed time over that same interval, or
+#'        \code{"allacute"} for placing all infections in the acute stage at
 #'        the start.
-#' @param max.inf.time Maximum infection time in days for infection at 
-#'        initialization, used when \code{inf.time.dist} is \code{"geometric"} 
+#' @param max.inf.time Maximum infection time in days for infection at
+#'        initialization, used when \code{inf.time.dist} is \code{"geometric"}
 #'        or \code{"uniform"}.
 #' @param ... additional arguments to be passed into model.
 #'
@@ -1263,13 +1262,13 @@ init_het <- function(i.prev.male = 0.05,
 #'              network models in the \code{epimethods} package.
 #'
 #' @param simno Simulation ID number.
-#' @param nsteps Number of time steps to simulate the model over in whatever 
+#' @param nsteps Number of time steps to simulate the model over in whatever
 #'        unit implied by \code{time.unit}.
 #' @param start Starting time step for simulation
 #' @param nsims Number of simulations.
 #' @param ncores Number of parallel cores to use for simulation jobs, if using
 #'        the \code{EpiModel.hpc} package.
-#' @param par.type Parallelization type, either of \code{"single"} for 
+#' @param par.type Parallelization type, either of \code{"single"} for
 #'        multi-core or \code{"mpi"} for multi-node MPI threads.
 #' @param initialize.FUN Module to initialize the model at time 1.
 #' @param aging.FUN Module to age active nodes.
@@ -1289,7 +1288,7 @@ init_het <- function(i.prev.male = 0.05,
 #'        order in which they should be evaluated within each time step. If
 #'        \code{NULL}, the modules will be evaluated as follows: first any
 #'        new modules supplied through \code{...} in the order in which they are
-#'        listed, then the built-in modules in their order of the function 
+#'        listed, then the built-in modules in their order of the function
 #'        listing. The \code{initialize.FUN} will always be run first and the
 #'        \code{verbose.FUN} always last.
 #' @param save.nwstats Save out network statistics.
@@ -1347,7 +1346,7 @@ control_het <- function(simno = 1,
   }
 
   bi.mods <- grep(".FUN", names(formal.args), value = TRUE)
-  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))), 
+  bi.mods <- bi.mods[which(sapply(bi.mods, function(x) !is.null(eval(parse(text = x))),
                                   USE.NAMES = FALSE) == TRUE)]
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names.dot.args, value = TRUE)

@@ -36,7 +36,7 @@ simulation. This may also be set to 1 greater than the final time
 step of a previous simulation to resume the simulation with different
 parameters.}
 
-\item{initialize.FUN}{Module function to use for initialization of the 
+\item{initialize.FUN}{Module function to use for initialization of the
 epidemicmodel.}
 
 \item{aging.FUN}{Module function for aging.}
@@ -85,10 +85,10 @@ persons in the population.}
 \item{hiv_trans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}
 
-\item{sti_trans.FUN}{Module function to simulate GC/CT transmission over 
+\item{sti_trans.FUN}{Module function to simulate GC/CT transmission over
 current edgelist.}
 
-\item{sti_recov.FUN}{Module function to simulate recovery from GC/CT, 
+\item{sti_recov.FUN}{Module function to simulate recovery from GC/CT,
 heterogeneous by disease, site, symptoms, and treatment status.}
 
 \item{sti_tx.FUN}{Module function to simulate treatment of GC/CT.}
@@ -104,7 +104,7 @@ external text files.}
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}
 
-\item{verbose.int}{Integer specifying the interval between time steps at 
+\item{verbose.int}{Integer specifying the interval between time steps at
 which progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
