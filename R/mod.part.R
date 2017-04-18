@@ -58,19 +58,21 @@ part_msm <- function(dat, at){
     notyet <- part.el[notpartlist, , drop = FALSE]
 
     # If there are any eligible pairs to add
+    # TODO: why checking against new.edges matrix? Shouldn't notyet be it?
+    #       this also doesn't work if at == 1
     if (nrow(notyet) > 0) {
 
-      if (type %in% 1:3) { #TODO: is that conditional check necessary?
-
+      # TODO: is that conditional check necessary?
+      if (type %in% 1:3) {
           # Assign partnership type
           parttype <- type
 
           # new.edges matrix is expressed in uid, notyet vs new.edges
-          new.edges <- dat$temp$new.edges #only includes types 1 and 2
+          new.edges <- dat$temp$new.edges # only includes types 1 and 2
           new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
-                          (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-              ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
-                   (new.edges[, 1] * 1e7 + new.edges[, 2]))
+                        (new.edges[, 1] * 1e7 + new.edges[, 2])) |
+                     ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
+                        (new.edges[, 1] * 1e7 + new.edges[, 2]))
       }
     }
 
@@ -86,10 +88,9 @@ part_msm <- function(dat, at){
 
       if (type == 3) {
 
-      # Instantaneous - last.active.time and end.time columns get value of
-      # start.time
-          dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <-
-            dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
+        # One-off: last.active.time and end.time columns get value of start.time
+        dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <-
+                      dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
       }
     }
   }
@@ -130,11 +131,9 @@ part_msm <- function(dat, at){
        is.na(part.list[, 6])), 5] <- at
 
     # Subset part.list to include only partnerships active in last x months
-    part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), ,
-                           drop = FALSE]
+    part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , drop = FALSE]
     dat$temp$part.list <- part.list
   }
 
   return(dat)
 }
-
