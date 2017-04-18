@@ -10,7 +10,7 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   hiv_test.FUN = hiv_test_msm, sti_test.FUN = sti_test_msm,
   hiv_tx.FUN = hiv_tx_msm, prep.FUN = prep_msm, sti_ept.FUN = sti_ept_msm,
   hiv_progress.FUN = hiv_progress_msm,
-  syph_progress.FUN = syph_progress_msm, vl.FUN = hiv_vl_msm,
+  syph_progress.FUN = syph_progress_msm, hiv_vl.FUN = hiv_vl_msm,
   aiclass.FUN = NULL, roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
   hiv_disclose.FUN = hiv_disclose_msm, part.FUN = part_msm,
   acts.FUN = acts_msm, condoms.FUN = condoms_msm,
@@ -59,7 +59,7 @@ epidemicmodel.}
 
 \item{syph_progress.FUN}{Module function for syphilis disease progression}
 
-\item{vl.FUN}{Module function for HIV viral load evolution.}
+\item{hiv_vl.FUN}{Module function for HIV viral load evolution.}
 
 \item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
 

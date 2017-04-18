@@ -910,7 +910,7 @@ init_msm <- function(nwstats,
 #' @param sti_ept.FUN Module function for EPT intervention
 #' @param hiv_progress.FUN Module function for HIV disease progression.
 #' @param syph_progress.FUN Module function for syphilis disease progression
-#' @param vl.FUN Module function for HIV viral load evolution.
+#' @param hiv_vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
 #' @param roleclass.FUN Module function for transitions in sexual roles.
 #' @param resim_nets.FUN Module function for network resimulation at each time
@@ -964,7 +964,7 @@ control_msm <- function(simno = 1,
                         sti_ept.FUN = sti_ept_msm,
                         hiv_progress.FUN = hiv_progress_msm,
                         syph_progress.FUN = syph_progress_msm,
-                        vl.FUN = hiv_vl_msm,
+                        hiv_vl.FUN = hiv_vl_msm,
                         aiclass.FUN = NULL,
                         roleclass.FUN = NULL,
                         resim_nets.FUN = simnet_msm,
