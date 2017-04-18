@@ -166,6 +166,10 @@ initialize_msm <- function(x, param, init, control, s) {
   colnames(dat$temp$part.list) <- c("uid1", "uid2", "ptype", "start.time",
                                     "last.active.time", "end.time")
 
+  if (dat$param$partlist.start == 1) {
+    dat <- part_msm(dat, at = 1)
+  }
+
   dat <- prevalence_msm(dat, at = 1)
 
   class(dat) <- "dat"
