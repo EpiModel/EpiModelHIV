@@ -589,7 +589,8 @@ param_msm <- function(nwstats,
                       vv.iev.BW.prob = 0.56,
                       vv.iev.WW.prob = 0.49,
 
-                      prep.start = 5000,
+                      # PrEP intervention
+                      prep.start = Inf,
                       prep.elig.model = "base",
                       prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
                       prep.class.hr = c(1, 0.69, 0.19, 0.05),
@@ -599,9 +600,13 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+
+                      # STD testing intervention
                       stitest.active.int = 364,
-                      stitest.start = 5000,
-                      ept.start = 5000,
+                      stitest.start = Inf,
+
+                      # EPT intervention
+                      ept.start = Inf,
                       ept.risk.int = 60,
                       ept.coverage = 0,
                       ept.cov.method = "curr",
