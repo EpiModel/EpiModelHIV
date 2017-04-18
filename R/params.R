@@ -717,9 +717,10 @@ param_msm <- function(nwstats,
 
                       # Transmission
                       hivdx.syph.sympt.tx.rr = 1.45,
-                      
-                      partlist.start = min((stitest.start - sti.highrisktest.int - 1), (ept.start - ept.risk.int - 1)),
-                      
+
+                      # Cumulative partnership list
+                      partlist.start = NULL,
+
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -794,6 +795,11 @@ param_msm <- function(nwstats,
   p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
   p$riskh.stitest.start <- max(1, stitest.start - sti.highrisktest.int - 1)
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
+
+  if (is.null(p$partlist.start)) {
+    p$partlist.start <- min((p$stitest.start - p$sti.highrisktest.int - 1),
+                            (p$ept.start - p$ept.risk.int - 1))
+  }
 
   p$method <- nwstats$method
   p$modes <- 1

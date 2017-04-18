@@ -93,8 +93,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.usyph.rr = 1.7456618, syph.rhiv.rr = 6.54189295,
   syph.uhiv.rr = 5.09641658, rgc.hiv.rr = 1, ugc.hiv.rr = 1,
   rct.hiv.rr = 1, uct.hiv.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
-  partlist.start = min((stitest.start - sti.highrisktest.int - 1), (ept.start
-  - ept.risk.int - 1)), ...)
+  partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
