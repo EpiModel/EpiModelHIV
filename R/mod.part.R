@@ -1,7 +1,7 @@
 
 #' @title Partnership tracking Module
 #'
-#' @description Module function for tracking partnerships for STD testing 
+#' @description Module function for tracking partnerships for STD testing
 #'              and EPT.
 #'
 #' @inheritParams aging_msm
@@ -9,12 +9,12 @@
 #' @details
 #' Partnerships are tracked in a persistent edge list that allows for easy
 #' reference to determine if a participant has been in a particular type of
-#' relationship within a defined time frame infected; or post diagnosis for 
-#' one recently infected. The rates of disclosure vary at these three points, 
+#' relationship within a defined time frame infected; or post diagnosis for
+#' one recently infected. The rates of disclosure vary at these three points,
 #' and also by the partnership type.
 #'
 #' @return
-#' This function returns the \code{dat} object with the updated master 
+#' This function returns the \code{dat} object with the updated master
 #' partnership list, on \code{temp$part.list}.
 #'
 #' @keywords module msm
@@ -152,4 +152,3 @@ part_msm <- function(dat, at){
 return(dat)    
 }
 
-    

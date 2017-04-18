@@ -18,7 +18,7 @@ initialize_het(x, param, init, control, s)
 \item{s}{Simulation number, used for restarting dependent simulations.}
 }
 \value{
-This function returns the updated \code{dat} object with the initialized 
+This function returns the updated \code{dat} object with the initialized
 values for demographics and disease-related variables.
 }
 \description{

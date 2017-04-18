@@ -13,18 +13,18 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-This function returns the \code{dat} object with the updated master 
+This function returns the \code{dat} object with the updated master
 partnership list, on \code{temp$part.list}.
 }
 \description{
-Module function for tracking partnerships for STD testing 
+Module function for tracking partnerships for STD testing
              and EPT.
 }
 \details{
 Partnerships are tracked in a persistent edge list that allows for easy
 reference to determine if a participant has been in a particular type of
-relationship within a defined time frame infected; or post diagnosis for 
-one recently infected. The rates of disclosure vary at these three points, 
+relationship within a defined time frame infected; or post diagnosis for
+one recently infected. The rates of disclosure vary at these three points,
 and also by the partnership type.
 }
 \keyword{module}
