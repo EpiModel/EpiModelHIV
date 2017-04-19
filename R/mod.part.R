@@ -44,6 +44,8 @@ part_msm <- function(dat, at){
     # Processes -----------------------------------------------------------
     # STI tracking - start with existing edge list
     # Order with lowest uid value first - just to create matrix
+    # TODO: I like this approach to standarizing the matrix order;
+    #       we should do this for the new.edges list too; would simplify queries
     highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
     lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
     part.el <- rbind(highlow[, 2:1], lowhigh)
@@ -80,17 +82,19 @@ part_msm <- function(dat, at){
     if (length(new.rel) > 0) {
       new.part <- cbind(uid1 = uid[notyet[, 1]],
                         uid2 = uid[notyet[, 2]],
-                        ptype = parttype, # TODO: can you just input type here, instead of creating new parttype?
+                        # TODO: can you just input type here, instead of creating new parttype?
+                        ptype = parttype,
                         start.time = at,
                         last.active.time = at,
                         end.time = NA)
       dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
 
+      # One-off: last.active.time and end.time columns get value of start.time
+      # TODO: seems like could be simplified a lot by doing this. Equivalent?
+      #       also note, indexing by column name has a number of advantages; discussion point
       if (type == 3) {
-
-        # One-off: last.active.time and end.time columns get value of start.time
-        dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 5:6] <-
-                      dat$temp$part.list[which(dat$temp$part.list[, 3] == 3), 4]
+        selected <- which(dat$temp$part.list[, "ptype"] == 3)
+        dat$temp$part.list[selected, c("last.active.time", "end.time")] <- at
       }
     }
   }
