@@ -49,15 +49,10 @@ part_msm <- function(dat, at){
     highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
     lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
     part.el <- rbind(highlow[, 2:1], lowhigh)
+    part.el <- matrix(uid[part.el], ncol = 2)
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
-    exist.partel <- part.list[, 1] * 1e7 + part.list[, 2]
-    check.partel <- uid[part.el[, 1]] * 1e7 + uid[part.el[, 2]]
-    notpartlist <- !(check.partel %in% exist.partel)
-
-    # data frame of pairs not yet in edgelist
-    notyet <- part.el[notpartlist, , drop = FALSE]
 
     # If there are any eligible pairs to add
     # TODO: why checking against new.edges matrix? Shouldn't notyet be it?
@@ -77,13 +72,18 @@ part_msm <- function(dat, at){
                         (new.edges[, 1] * 1e7 + new.edges[, 2]))
       }
     }
+    exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
+    check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
+    new.part.ids <- !(check.partel.ids %in% exist.partel.ids)
+
+    # matrix of dyads not yet in cumulative edgelist
+    new.part.el <- part.el[new.part.ids, , drop = FALSE]
 
     # Write output
-    if (length(new.rel) > 0) {
-      new.part <- cbind(uid1 = uid[notyet[, 1]],
-                        uid2 = uid[notyet[, 2]],
-                        # TODO: can you just input type here, instead of creating new parttype?
-                        ptype = parttype,
+    if (nrow(new.part.el) > 0) {
+      new.part <- cbind(uid1 = new.part.el[, 1],
+                        uid2 = new.part.el[, 2],
+                        ptype = type,
                         start.time = at,
                         last.active.time = at,
                         end.time = NA)
