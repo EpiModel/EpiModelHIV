@@ -169,7 +169,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$recentpartners <- rep(0, length(dat$attr$active))
   
   #	Have more than one sex partner in last x months
-  idspartlist <- which(uid %in% part.list[, 1:2])
+  idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
   idsnotpartlist <- setdiff(which(race %in% c("B","W")), idspartlist)
   # these are relative ids of nodes in partner list
   
@@ -177,7 +177,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$recentpartners[idsnotpartlist] <- 0
   
   # For those who had partners, calculate # of occurrences in partner list
-  part.count <- as.data.frame(table(part.list[, 1:2]))
+  part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
   
   # relative ids get values of partner count for uid for length of active ids
   dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, 1]), 2]
@@ -190,17 +190,17 @@ riskhist_msm <- function(dat, at) {
   ### Partner has multiple sex partners
   
   # Partner 1 has multiple partners, Partner 2 indicated
-  part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 1])]) > 1), , drop = FALSE]
+  part.listmult1 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, "uid1"])]) > 1), , drop = FALSE]
 
   # Partner 2 indicated
-  uidspartlistmult1 <- part.listmult1[, 2]
+  uidspartlistmult1 <- part.listmult1[, "uid2"]
   idspartlistmult1 <- which(uid %in% uidspartlistmult1)
   
   # Partner 2 has multiple partners, so partner 1 is indicated
-  part.listmult2 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, 2])]) > 1) , , drop = FALSE]
+  part.listmult2 <- part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, "uid2"])]) > 1) , , drop = FALSE]
   
   # Partner 1 indicated
-  uidspartlistmult2 <- part.listmult2[, 1]
+  uidspartlistmult2 <- part.listmult2[, "uid1"]
   idspartlistmult2 <- which(uid %in% uidspartlistmult2)
 
   # Combine into one list for indication
@@ -213,24 +213,24 @@ riskhist_msm <- function(dat, at) {
   ### Have a sex partner who has a treated sexually transmitted infection in the last interval
   # Partner 1 has a STI, Partner 2 indicated
   part.liststi1 <- 
-    part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 1]]) <= sti.highrisktest.int |
-                    (at - dat$attr$last.tx.time.uct[part.list[, 1]]) <= sti.highrisktest.int |
-                    (at - dat$attr$last.tx.time.rgc[part.list[, 1]]) <= sti.highrisktest.int |
-                    (at - dat$attr$last.tx.time.ugc[part.list[, 1]]) <= sti.highrisktest.int |
-                    (at - dat$attr$last.tx.time.syph[part.list[, 1]]) <= sti.highrisktest.int), , drop = FALSE]
+    part.list[which((at - dat$attr$last.tx.time.rct[part.list[, "uid1"]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.uct[part.list[, "uid1"]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.rgc[part.list[, "uid1"]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.ugc[part.list[, "uid1"]]) <= sti.highrisktest.int |
+                    (at - dat$attr$last.tx.time.syph[part.list[, "uid1"]]) <= sti.highrisktest.int), , drop = FALSE]
   
   # Partner 2 indicated
-  uidspartliststi1 <- part.liststi1[, 2]
+  uidspartliststi1 <- part.liststi1[, "uid2"]
   idspartliststi1 <- which(uid %in% uidspartliststi1)
   
   # Partner 2 has a STI, so partner 1 is indicated
-  part.liststi2 <- part.list[which((at - dat$attr$last.tx.time.rct[part.list[, 2]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.uct[part.list[, 2]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.rgc[part.list[, 2]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.ugc[part.list[, 2]]) <= sti.highrisktest.int |
-                                       (at - dat$attr$last.tx.time.syph[part.list[, 2]]) <= sti.highrisktest.int), , drop = FALSE]
+  part.liststi2 <- part.list[which((at - dat$attr$last.tx.time.rct[part.list[, "uid2"]]) <= sti.highrisktest.int |
+                                       (at - dat$attr$last.tx.time.uct[part.list[, "uid2"]]) <= sti.highrisktest.int |
+                                       (at - dat$attr$last.tx.time.rgc[part.list[, "uid2"]]) <= sti.highrisktest.int |
+                                       (at - dat$attr$last.tx.time.ugc[part.list[, "uid2"]]) <= sti.highrisktest.int |
+                                       (at - dat$attr$last.tx.time.syph[part.list[, "uid2"]]) <= sti.highrisktest.int), , drop = FALSE]
   # Partner 1 indicated
-  uidspartliststi2 <- part.liststi2[, 1]
+  uidspartliststi2 <- part.liststi2[, "uid1"]
   idspartliststi2 <- which(uid %in% uidspartliststi2)
   
   # Combine into one list for indication
@@ -284,175 +284,175 @@ riskhist_msm <- function(dat, at) {
   ## Eligibility of partners---------------------------------------------------------------
   
   # Subset partner list to those active within an EPT interval - last active date within 60 days
-  part.list <- part.list[which((at - (part.list[, 5]) <= ept.risk.int)), , drop = FALSE]
+  part.list <- part.list[which((at - (part.list[, "last.active.time"]) <= ept.risk.int)), , drop = FALSE]
   
   # Subset partner list to alive ---> may need to remove! Could still be indicated even if partner is dead
-  part.list <- part.list[which(active[part.list[, 1]] == 1 & active[part.list[, 2]] == 1), , drop = FALSE]
+  part.list <- part.list[which(active[part.list[, "uid1"]] == 1 & active[part.list[, "uid2"]] == 1), , drop = FALSE]
   
   # Partner 1 was recently treated, so partner 2 would be eligible to be treated through EPT if not currently being treated for anything
-  part.listept1.main.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept1.main.short <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
   
-  part.listept1.casl.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept1.casl.short <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
   
-  part.listept1.inst.short <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept1.inst.short <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
 
-  part.listept1.main.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 21 &
-                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept1.main.med <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) >= 21 &
+                                            (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept1.casl.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 21 &
-                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept1.casl.med <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) >= 21 &
+                                            (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept1.inst.med <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                             eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 21 &
-                                             (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept1.inst.med <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                             eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "last.active.time"]) >= 21 &
+                                             (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept1.main.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                             eptStat[part.list[, 1]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 41 &
-                                             (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept1.main.long <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                             eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) >= 41 &
+                                             (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  part.listept1.casl.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 41 &
-                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept1.casl.long <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) >= 41 &
+                                            (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  part.listept1.inst.long <- part.list[which((at - eptEligdate[part.list[, 1]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 2]]) %in% c(0, NA) | (uGC.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 2]]) %in% c(0, NA) | (uCT.tx[part.list[, 2]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 2]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 2]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 2]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 1]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 41 &
-                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept1.inst.long <- part.list[which((at - eptEligdate[part.list[, "uid1"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "uid2"]) >= 41 &
+                                            (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  idspartlistsept1.main.short <- part.listept1.main.short[, 2]
-  idspartlistsept1.casl.short <- part.listept1.casl.short[, 2]
-  idspartlistsept1.inst.short <- part.listept1.inst.short[, 2]
+  idspartlistsept1.main.short <- part.listept1.main.short[, "uid2"]
+  idspartlistsept1.casl.short <- part.listept1.casl.short[, "uid2"]
+  idspartlistsept1.inst.short <- part.listept1.inst.short[, "uid2"]
   
-  idspartlistsept1.main.med <- part.listept1.main.med[, 2]
-  idspartlistsept1.casl.med <- part.listept1.casl.med[, 2]
-  idspartlistsept1.inst.med <- part.listept1.inst.med[, 2]
+  idspartlistsept1.main.med <- part.listept1.main.med[, "uid2"]
+  idspartlistsept1.casl.med <- part.listept1.casl.med[, "uid2"]
+  idspartlistsept1.inst.med <- part.listept1.inst.med[, "uid2"]
   
-  idspartlistsept1.main.long <- part.listept1.main.long[, 2]
-  idspartlistsept1.casl.long <- part.listept1.casl.long[, 2]
-  idspartlistsept1.inst.long <- part.listept1.inst.long[, 2]
+  idspartlistsept1.main.long <- part.listept1.main.long[, "uid2"]
+  idspartlistsept1.casl.long <- part.listept1.casl.long[, "uid2"]
+  idspartlistsept1.inst.long <- part.listept1.inst.long[, "uid2"]
   
   
   # Partner 2 was recently treated, so partner 1 would be eligible to be treated through EPT if not currently being treated for anything
-  part.listept2.main.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept2.main.short <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
   
-  part.listept2.casl.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept2.casl.short <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
   
-  part.listept2.inst.short <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                            ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                            (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                            (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                            eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) <= 20), , drop = FALSE]
+  part.listept2.inst.short <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                            ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                            (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                            eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "last.active.time"]) <= 20), , drop = FALSE]
   
-  part.listept2.main.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 21 &
-                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept2.main.med <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) >= 21 &
+                                            (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept2.casl.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 21 &
-                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept2.casl.med <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) >= 21 &
+                                            (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept2.inst.med <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 21 &
-                                            (at - part.list[, 5]) <= 40), , drop = FALSE]
+  part.listept2.inst.med <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "last.active.time"]) >= 21 &
+                                            (at - part.list[, "last.active.time"]) <= 40), , drop = FALSE]
   
-  part.listept2.main.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 1 & (at - part.list[, 5]) >= 41 &
-                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept2.main.long <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 & (at - part.list[, "last.active.time"]) >= 41 &
+                                              (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  part.listept2.casl.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 2 & (at - part.list[, 5]) >= 41 &
-                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept2.casl.long <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 & (at - part.list[, "last.active.time"]) >= 41 &
+                                              (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  part.listept2.inst.long <- part.list[which((at - eptEligdate[part.list[, 2]]) <= ept.risk.int & 
-                                          ((rGC.tx[part.list[, 1]]) %in% c(0, NA) | (uGC.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx[part.list[, 1]]) %in% c(0, NA) | (uCT.tx[part.list[, 1]]) %in% c(0, NA) |
-                                             (rGC.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, 1]]) %in% c(0, NA) |
-                                             (rCT.tx.prep[part.list[, 1]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, 1]]) %in% c(0, NA)) &
-                                          eptStat[part.list[, 2]] == 1 & part.list[, 3] == 3 & (at - part.list[, 5]) >= 41 &
-                                            (at - part.list[, 5]) <= 60), , drop = FALSE]
+  part.listept2.inst.long <- part.list[which((at - eptEligdate[part.list[, "uid2"]]) <= ept.risk.int & 
+                                          ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
+                                             (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) | (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                          eptStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 3 & (at - part.list[, "last.active.time"]) >= 41 &
+                                              (at - part.list[, "last.active.time"]) <= 60), , drop = FALSE]
   
-  idspartlistsept2.main.short <- part.listept2.main.short[, 1]
-  idspartlistsept2.casl.short <- part.listept2.casl.short[, 1]
-  idspartlistsept2.inst.short <- part.listept2.inst.short[, 1]
+  idspartlistsept2.main.short <- part.listept2.main.short[, "uid1"]
+  idspartlistsept2.casl.short <- part.listept2.casl.short[, "uid1"]
+  idspartlistsept2.inst.short <- part.listept2.inst.short[, "uid1"]
   
-  idspartlistsept2.main.med <- part.listept2.main.med[, 1]
-  idspartlistsept2.casl.med <- part.listept2.casl.med[, 1]
-  idspartlistsept2.inst.med <- part.listept2.inst.med[, 1]
+  idspartlistsept2.main.med <- part.listept2.main.med[, "uid1"]
+  idspartlistsept2.casl.med <- part.listept2.casl.med[, "uid1"]
+  idspartlistsept2.inst.med <- part.listept2.inst.med[, "uid1"]
   
-  idspartlistsept2.main.long <- part.listept2.main.long[, 1]
-  idspartlistsept2.casl.long <- part.listept2.casl.long[, 1]
-  idspartlistsept2.inst.long <- part.listept2.inst.long[, 1]
+  idspartlistsept2.main.long <- part.listept2.main.long[, "uid1"]
+  idspartlistsept2.casl.long <- part.listept2.casl.long[, "uid1"]
+  idspartlistsept2.inst.long <- part.listept2.inst.long[, "uid1"]
   
   # All EPT eligible IDs (partners of index)
   idsept <- unique(c(idspartlistsept1.main.short, idspartlistsept1.casl.short, 

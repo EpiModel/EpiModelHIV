@@ -57,11 +57,11 @@ deaths_msm <- function(dat, at) {
   
   if (at >= dat$param$partlist.start) {
         # Dead uid 1
-        dat$temp$part.list[dat$temp$part.list[, 1] %in% uid[dth.all] & 
-                             is.na(dat$temp$part.list[, 6]), 6] <- at
+        dat$temp$part.list[dat$temp$part.list[, "uid1"] %in% uid[dth.all] & 
+                             is.na(dat$temp$part.list[, "end.time"]), "end.time"] <- at
         # Dead uid 2
-        dat$temp$part.list[dat$temp$part.list[, 2] %in% uid[dth.all] & 
-                             is.na(dat$temp$part.list[, 6]), 6] <- at
+        dat$temp$part.list[dat$temp$part.list[, "uid2"] %in% uid[dth.all] & 
+                             is.na(dat$temp$part.list[, "end.time"]), "end.time"] <- at
   }
   
   if (length(dth.all) > 0) {
