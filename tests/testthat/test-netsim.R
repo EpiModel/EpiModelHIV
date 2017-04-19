@@ -1,6 +1,6 @@
 context("Model Runs")
 
-travis_wait test_that("Burnin model", {
+test_that("Burnin model", {
 
   data(st)
   data(est)
@@ -14,7 +14,7 @@ travis_wait test_that("Burnin model", {
 
 })
 
-travis_wait test_that("Follow-up model", {
+test_that("Follow-up model", {
 
   data(st)
   data(est)
