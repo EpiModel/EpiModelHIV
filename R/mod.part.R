@@ -54,24 +54,6 @@ part_msm <- function(dat, at){
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
 
-    # If there are any eligible pairs to add
-    # TODO: why checking against new.edges matrix? Shouldn't notyet be it?
-    #       this also doesn't work if at == 1
-    if (nrow(notyet) > 0) {
-
-      # TODO: is that conditional check necessary?
-      if (type %in% 1:3) {
-          # Assign partnership type
-          parttype <- type
-
-          # new.edges matrix is expressed in uid, notyet vs new.edges
-          new.edges <- dat$temp$new.edges # only includes types 1 and 2
-          new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
-                        (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-                     ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
-                        (new.edges[, 1] * 1e7 + new.edges[, 2]))
-      }
-    }
     exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
     check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
     new.part.ids <- !(check.partel.ids %in% exist.partel.ids)
