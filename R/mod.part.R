@@ -89,9 +89,7 @@ part_msm <- function(dat, at){
                         end.time = NA)
       dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
 
-      # One-off: last.active.time and end.time columns get value of start.time
-      # TODO: seems like could be simplified a lot by doing this. Equivalent?
-      #       also note, indexing by column name has a number of advantages; discussion point
+      # One-off: last.active.time and end.time columns get value of at
       if (type == 3) {
         selected <- which(dat$temp$part.list[, "ptype"] == 3)
         dat$temp$part.list[selected, c("last.active.time", "end.time")] <- at
