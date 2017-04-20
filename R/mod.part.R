@@ -67,8 +67,10 @@ part_msm <- function(dat, at){
                         ptype = type,
                         start.time = at,
                         last.active.time = at,
-                        end.time = NA)
-      dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
+                        end.time = NA,
+                        ncont = 0)
+      part.list <- rbind(part.list, new.part)
+      part.list[, "ncont"] <- part.list[, "ncont"] + 1
 
       # One-off: last.active.time and end.time columns get value of at
       if (type == 3) {
