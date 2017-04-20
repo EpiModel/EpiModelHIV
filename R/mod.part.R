@@ -69,59 +69,50 @@ part_msm <- function(dat, at){
                         last.active.time = at,
                         end.time = NA,
                         ncont = 0)
-      part.list <- rbind(part.list, new.part)
-      part.list[, "ncont"] <- part.list[, "ncont"] + 1
 
-      # One-off: last.active.time and end.time columns get value of at
-      if (type == 3) {
-        part.list[, c("last.active.time", "end.time")] <- at
+
+      if (type %in% 1:2) {
+        # Dissolved dyads: in part.list but not in part.el
+        # For those, set the end.time to now
+        diss.part.ids <- !(exist.partel.ids %in% check.partel.ids)
+        part.list[diss.part.ids, "end.time"] <- at
+
+        # Active dyads: end.time is now or have no end.time yet
+        # For those, set last.active.time to now
+        selected <- which(part.list[, "end.time"] == at | is.na(part.list[, "end.time"]))
+        part.list[selected, "last.active.time"] <- at
       }
+
+      if (type == 3) {
+        # Set end.time for all one-offs to now
+        new.part[, "end.time"] <- at
+
+        # Newly re-active one-offs: of those in current EL, also in existing PL
+        # For those, reset last.active.time and end.time to now
+        update.oneoff.ids <- (check.partel.ids %in% exist.partel.ids)
+        if (sum(update.oneoff.ids) > 0) {
+          part.list[update.oneoff.ids, c("last.active.time", "end.time")] <- at
+        }
+      }
+
+      # Bind old PL and new PL
+      part.list <- rbind(part.list, new.part)
     }
 
-    # Update on dat$temp
+    # Increment active partnerships 1 contact (week)
+    selected <- which(part.list[, "end.time"] == at | is.na(part.list[, "end.time"]))
+    part.list[selected, "ncont"] <- part.list[selected, "ncont"] + 1
+
+    # Update PL on dat$temp
     toRemove <- dat$temp$part.list[, "ptype"] == type
     dat$temp$part.list <- dat$temp$part.list[!toRemove, ]
     dat$temp$part.list <- rbind(dat$temp$part.list, part.list)
   }
 
-  # if partlist already exists, update it
+  # Subset PL to current observation window
   if (at > (dat$param$partlist.start)) {
-
-    # Existing edges to reference against partnership list
-    master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-
-    # Partnership tracking - last x months
-    part.list <- dat$temp$part.list
-
-    # Add partnership end dates for non-instantaneous
-    dead.edges.m <- attributes(dat$el[[1]])$changes
-    dead.edges.m <- dead.edges.m[dead.edges.m[, "to"] == 0, 1:2, drop = FALSE]
-    dead.edges.p <- attributes(dat$el[[2]])$changes
-    dead.edges.p <- dead.edges.p[dead.edges.p[, "to"] == 0, 1:2, drop = FALSE]
-    dead.edges <- rbind(dead.edges.m, dead.edges.p)
-
-    dead.rel <- (
-      (uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) %in% (part.list[, 1] * 1e7 + part.list[, 2])) |
-        ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in% (part.list[, 1] * 1e7 + part.list[, 2]))
-
-    # Set dead edges to have ended at this timepoint
-    if (length(dead.rel) > 0) {
-        part.list[which(
-          (match(part.list[, 1] * 1e7 + part.list[, 2], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |
-           match(part.list[, 2] * 1e7 + part.list[, 1], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]))), 6] <- at
-    }
-
-    # Select matching ((currently in both edgelist and existing
-    # dat$temp$part.list) and no end date yet) partnerships to update
-    # last active date of partnership
-    part.list[which(
-      (match(part.list[, 1] * 1e7 + part.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-       match(part.list[, 2] * 1e7 + part.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) &
-       is.na(part.list[, 6])), 5] <- at
-
-    # Subset part.list to include only partnerships active in last x months
-    part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , drop = FALSE]
-    dat$temp$part.list <- part.list
+    selected <- which((at - (dat$temp$part.list[, "last.active.time"]) <= part.int))
+    dat$temp$part.list <- dat$temp$part.list[selected, , drop = FALSE]
   }
 
   return(dat)
