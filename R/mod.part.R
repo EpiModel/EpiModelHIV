@@ -37,19 +37,16 @@ part_msm <- function(dat, at){
     # Parameters and network
     part.int <- dat$param$sti.highrisktest.int
 
-    # pull edgelist
+    # pull edgelist, expressed as uid
     el <- dat$el[[type]]
+    el <- matrix(uid[el], ncol = 2)
 
 
     # Processes -----------------------------------------------------------
     # STI tracking - start with existing edge list
-    # Order with lowest uid value first - just to create matrix
-    # TODO: I like this approach to standarizing the matrix order;
-    #       we should do this for the new.edges list too; would simplify queries
-    highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
-    lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
+    highlow <- el[which(el[, 1] > el[, 2]), , drop = FALSE]
+    lowhigh <- el[which(el[, 1] < el[, 2]), , drop = FALSE]
     part.el <- rbind(highlow[, 2:1], lowhigh)
-    part.el <- matrix(uid[part.el], ncol = 2)
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
