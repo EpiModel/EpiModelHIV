@@ -43,6 +43,7 @@ part_msm <- function(dat, at){
 
 
     # Processes -----------------------------------------------------------
+
     # STI tracking - start with existing edge list
     highlow <- el[which(el[, 1] > el[, 2]), , drop = FALSE]
     lowhigh <- el[which(el[, 1] < el[, 2]), , drop = FALSE]
@@ -50,6 +51,7 @@ part_msm <- function(dat, at){
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
+    part.list <- part.list[which(part.list[, "ptype"] == type), ]
 
     exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
     check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
@@ -74,6 +76,11 @@ part_msm <- function(dat, at){
         dat$temp$part.list[selected, c("last.active.time", "end.time")] <- at
       }
     }
+
+    # Update on dat$temp
+    toRemove <- dat$temp$part.list[, "ptype"] == type
+    dat$temp$part.list <- dat$temp$part.list[!toRemove, ]
+    dat$temp$part.list <- rbind(dat$temp$part.list, part.list)
   }
 
   # if partlist already exists, update it
