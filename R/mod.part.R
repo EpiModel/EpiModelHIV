@@ -67,8 +67,7 @@ part_msm <- function(dat, at){
                         ptype = type,
                         start.time = at,
                         last.active.time = at,
-                        end.time = NA,
-                        ncont = 0)
+                        end.time = NA)
 
 
       if (type %in% 1:2) {
@@ -98,10 +97,6 @@ part_msm <- function(dat, at){
       # Bind old PL and new PL
       part.list <- rbind(part.list, new.part)
     }
-
-    # Increment active partnerships 1 contact (week)
-    selected <- which(part.list[, "end.time"] == at | is.na(part.list[, "end.time"]))
-    part.list[selected, "ncont"] <- part.list[selected, "ncont"] + 1
 
     # Update PL on dat$temp
     toRemove <- dat$temp$part.list[, "ptype"] == type
