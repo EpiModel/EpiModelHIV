@@ -89,7 +89,7 @@ part_msm <- function(dat, at){
 
         # Newly re-active one-offs: of those in current EL, also in existing PL
         # For those, reset last.active.time and end.time to now
-        update.oneoff.ids <- (check.partel.ids %in% exist.partel.ids)
+        update.oneoff.ids <- (exist.partel.ids %in% check.partel.ids)
         if (sum(update.oneoff.ids) > 0) {
           part.list[update.oneoff.ids, c("last.active.time", "end.time")] <- at
         }
