@@ -37,106 +37,77 @@ part_msm <- function(dat, at){
     # Parameters and network
     part.int <- dat$param$sti.highrisktest.int
 
-    # pull edgelist
+    # pull edgelist, expressed as uid
     el <- dat$el[[type]]
+    el <- matrix(uid[el], ncol = 2)
 
 
     # Processes -----------------------------------------------------------
+
     # STI tracking - start with existing edge list
-    # Order with lowest uid value first - just to create matrix
-    # TODO: I like this approach to standarizing the matrix order;
-    #       we should do this for the new.edges list too; would simplify queries
-    highlow <- el[which(uid[el[, 1]] > uid[el[, 2]]), , drop = FALSE]
-    lowhigh <- el[which(uid[el[, 1]] < uid[el[, 2]]), , drop = FALSE]
+    highlow <- el[which(el[, 1] > el[, 2]), , drop = FALSE]
+    lowhigh <- el[which(el[, 1] < el[, 2]), , drop = FALSE]
     part.el <- rbind(highlow[, 2:1], lowhigh)
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
-    exist.partel <- part.list[, 1] * 1e7 + part.list[, 2]
-    check.partel <- uid[part.el[, 1]] * 1e7 + uid[part.el[, 2]]
-    notpartlist <- !(check.partel %in% exist.partel)
+    part.list <- part.list[which(part.list[, "ptype"] == type), ]
 
-    # data frame of pairs not yet in edgelist
-    notyet <- part.el[notpartlist, , drop = FALSE]
+    exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
+    check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
+    new.part.ids <- !(check.partel.ids %in% exist.partel.ids)
 
-    # If there are any eligible pairs to add
-    # TODO: why checking against new.edges matrix? Shouldn't notyet be it?
-    #       this also doesn't work if at == 1
-    if (nrow(notyet) > 0) {
-
-      # TODO: is that conditional check necessary?
-      if (type %in% 1:3) {
-          # Assign partnership type
-          parttype <- type
-
-          # new.edges matrix is expressed in uid, notyet vs new.edges
-          new.edges <- dat$temp$new.edges # only includes types 1 and 2
-          new.rel <- ((uid[notyet[, 1]] * 1e7 + uid[notyet[, 2]]) %in%
-                        (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-                     ((uid[notyet[, 2]] * 1e7 + uid[notyet[, 1]]) %in%
-                        (new.edges[, 1] * 1e7 + new.edges[, 2]))
-      }
-    }
+    # matrix of dyads not yet in cumulative edgelist
+    new.part.el <- part.el[new.part.ids, , drop = FALSE]
 
     # Write output
-    if (length(new.rel) > 0) {
-      new.part <- cbind(uid1 = uid[notyet[, 1]],
-                        uid2 = uid[notyet[, 2]],
-                        # TODO: can you just input type here, instead of creating new parttype?
-                        ptype = parttype,
+    if (nrow(new.part.el) > 0) {
+      new.part <- cbind(uid1 = new.part.el[, 1],
+                        uid2 = new.part.el[, 2],
+                        ptype = type,
                         start.time = at,
                         last.active.time = at,
                         end.time = NA)
-      dat$temp$part.list <- rbind(dat$temp$part.list, new.part)
 
-      # One-off: last.active.time and end.time columns get value of start.time
-      # TODO: seems like could be simplified a lot by doing this. Equivalent?
-      #       also note, indexing by column name has a number of advantages; discussion point
-      if (type == 3) {
-        selected <- which(dat$temp$part.list[, "ptype"] == 3)
-        dat$temp$part.list[selected, c("last.active.time", "end.time")] <- at
+
+      if (type %in% 1:2) {
+        # Dissolved dyads: in part.list but not in part.el
+        # For those, set the end.time to now
+        diss.part.ids <- !(exist.partel.ids %in% check.partel.ids)
+        part.list[diss.part.ids, "end.time"] <- at
+
+        # Active dyads: end.time is now or have no end.time yet
+        # For those, set last.active.time to now
+        selected <- which(part.list[, "end.time"] == at | is.na(part.list[, "end.time"]))
+        part.list[selected, "last.active.time"] <- at
       }
+
+      if (type == 3) {
+        # Set end.time for all one-offs to now
+        new.part[, "end.time"] <- at
+
+        # Newly re-active one-offs: of those in current EL, also in existing PL
+        # For those, reset last.active.time and end.time to now
+        update.oneoff.ids <- (exist.partel.ids %in% check.partel.ids)
+        if (sum(update.oneoff.ids) > 0) {
+          part.list[update.oneoff.ids, c("last.active.time", "end.time")] <- at
+        }
+      }
+
+      # Bind old PL and new PL
+      part.list <- rbind(part.list, new.part)
     }
+
+    # Update PL on dat$temp
+    toRemove <- dat$temp$part.list[, "ptype"] == type
+    dat$temp$part.list <- dat$temp$part.list[!toRemove, ]
+    dat$temp$part.list <- rbind(dat$temp$part.list, part.list)
   }
 
-  # if partlist already exists, update it
+  # Subset PL to current observation window
   if (at > (dat$param$partlist.start)) {
-
-    # Existing edges to reference against partnership list
-    master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-
-    # Partnership tracking - last x months
-    part.list <- dat$temp$part.list
-
-    # Add partnership end dates for non-instantaneous
-    dead.edges.m <- attributes(dat$el[[1]])$changes
-    dead.edges.m <- dead.edges.m[dead.edges.m[, "to"] == 0, 1:2, drop = FALSE]
-    dead.edges.p <- attributes(dat$el[[2]])$changes
-    dead.edges.p <- dead.edges.p[dead.edges.p[, "to"] == 0, 1:2, drop = FALSE]
-    dead.edges <- rbind(dead.edges.m, dead.edges.p)
-
-    dead.rel <- (
-      (uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) %in% (part.list[, 1] * 1e7 + part.list[, 2])) |
-        ((uid[dead.edges[, 2]] * 1e7 + uid[dead.edges[, 1]]) %in% (part.list[, 1] * 1e7 + part.list[, 2]))
-
-    # Set dead edges to have ended at this timepoint
-    if (length(dead.rel) > 0) {
-        part.list[which(
-          (match(part.list[, 1] * 1e7 + part.list[, 2], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]) |
-           match(part.list[, 2] * 1e7 + part.list[, 1], uid[dead.edges[, 1]] * 1e7 + uid[dead.edges[, 2]]))), 6] <- at
-    }
-
-    # Select matching ((currently in both edgelist and existing
-    # dat$temp$part.list) and no end date yet) partnerships to update
-    # last active date of partnership
-    part.list[which(
-      (match(part.list[, 1] * 1e7 + part.list[, 2], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]) |
-       match(part.list[, 2] * 1e7 + part.list[, 1], uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]])) &
-       is.na(part.list[, 6])), 5] <- at
-
-    # Subset part.list to include only partnerships active in last x months
-    part.list <- part.list[which((at - (part.list[, 5]) <= part.int)), , drop = FALSE]
-    dat$temp$part.list <- part.list
+    selected <- which((at - (dat$temp$part.list[, "last.active.time"]) <= part.int))
+    dat$temp$part.list <- dat$temp$part.list[selected, , drop = FALSE]
   }
 
   return(dat)
