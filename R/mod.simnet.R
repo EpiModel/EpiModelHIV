@@ -37,12 +37,16 @@ simnet_msm <- function(dat, at) {
 
   dat$temp$new.edges <- NULL
   if (at == 2) {
-    new.edges.m <- matrix(dat$el[[1]], ncol = 2)
+    new.edges.m <- matrix(dat$attr$uid[dat$el[[1]]], ncol = 2)
+    highlow <- new.edges.m[which(new.edges.m[, 1] > new.edges.m[, 2]), , drop = FALSE]
+    lowhigh <- new.edges.m[which(new.edges.m[, 1] < new.edges.m[, 2]), , drop = FALSE]
+    new.edges.m <- rbind(highlow[, 2:1], lowhigh)
   } else {
     new.edges.m <- attributes(dat$el[[1]])$changes
     new.edges.m <- new.edges.m[new.edges.m[, "to"] == 1, 1:2, drop = FALSE]
+    new.edges.m <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
   }
-  dat$temp$new.edges <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
+  dat$temp$new.edges <- matrix(new.edges.m, ncol = 2)
 
 
   ## Casual network
@@ -62,13 +66,18 @@ simnet_msm <- function(dat, at) {
                                              save.changes = TRUE)
 
   if (at == 2) {
-    new.edges.p <- matrix(dat$el[[2]], ncol = 2)
+    new.edges.p <- matrix(dat$attr$uid[dat$el[[2]]], ncol = 2)
+    highlow <- new.edges.p[which(new.edges.p[, 1] > new.edges.p[, 2]), , drop = FALSE]
+    lowhigh <- new.edges.p[which(new.edges.p[, 1] < new.edges.p[, 2]), , drop = FALSE]
+    new.edges.p <- rbind(highlow[, 2:1], lowhigh)
+    
   } else {
     new.edges.p <- attributes(dat$el[[2]])$changes
     new.edges.p <- new.edges.p[new.edges.p[, "to"] == 1, 1:2, drop = FALSE]
+    new.edges.p <- matrix(dat$attr$uid[new.edges.p], ncol = 2)
   }
   dat$temp$new.edges <- rbind(dat$temp$new.edges,
-                              matrix(dat$attr$uid[new.edges.p], ncol = 2))
+                              matrix(new.edges.p, ncol = 2))
 
 
   ## One-off network
