@@ -25,7 +25,7 @@ param <- param_msm(nwstats = st,
                    latelat.syph.int = 9 * 52 * 7,
                    latelatelat.syph.int = 20 * 52 * 7,
                    tert.syph.int = 20 * 52 * 7,
-                   syph.tert.prog.prob = 0.15 / (52 * 7 * 20),
+                   syph.tert.prog.prob = 0.00015625599,
 
                    rgc.tprob = 0.424,
                    ugc.tprob = 0.312,

@@ -518,9 +518,10 @@ param_msm <- function(nwstats,
                       earlat.syph.int = 365 - 27 - 60 - 120,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
-                      tert.syph.int = 20 * 52 * 7,
-                      syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress by the end of 20 years
-
+                      syph.tert.prog.prob = 0.00015625599, 
+                      #15% progress by the end of 20 years = 
+                      # 0.15 = 1 - (1 - per week prob)^(# of weeks)
+                      
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
                       birth.age = 18,

@@ -20,20 +20,19 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
   incu.syph.int = 27, prim.syph.int = 60, seco.syph.int = 120,
   earlat.syph.int = 365 - 27 - 60 - 120, latelat.syph.int = 9 * 52 * 7,
-  latelatelat.syph.int = 20 * 52 * 7, tert.syph.int = 20 * 52 * 7,
-  syph.tert.prog.prob = 0.15/(52 * 7 * 20), b.B.rate = 0.001/7,
-  b.W.rate = 0.001/7, birth.age = 18, b.method = "fixed",
-  URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 * 1.09, acute.rr = 6,
-  circ.rr = 0.4, condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  latelatelat.syph.int = 20 * 52 * 7, syph.tert.prog.prob = 0.00015625599,
+  b.B.rate = 0.001/7, b.W.rate = 0.001/7, birth.age = 18,
+  b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
+  1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
+  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
+  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
@@ -210,8 +209,6 @@ expected value.}
 
 \item{latelatelat.syph.int}{Number of days in second stage of late latent
 syphilis for those who will not progress to tertiary infection.}
-
-\item{tert.syph.int}{Number of days in tertiary stage of syphilis.}
 
 \item{syph.tert.prog.prob}{Probability of progression from late latent stage
 of syphilis to tertiary stage at any point in time during late latent.}
@@ -763,6 +760,8 @@ so it is a boost to get to 0.35.}
 accumulating for eventual STI testing indications.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{tert.syph.int}{Number of days in tertiary stage of syphilis.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to
