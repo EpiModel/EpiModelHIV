@@ -18,4 +18,3 @@ Module function to track the risk history of uninfected persons
 }
 \keyword{module}
 \keyword{msm}
-

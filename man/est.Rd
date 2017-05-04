@@ -10,4 +10,3 @@ A dataset containing a list of three outputs from \code{netest}, one for each
 network. This would be used primarily for more efficient package testing.
 }
 \keyword{datasets}
-

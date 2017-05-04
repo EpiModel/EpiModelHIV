@@ -32,4 +32,3 @@ based on binomial statistical models.
 }
 \keyword{module}
 \keyword{msm}
-

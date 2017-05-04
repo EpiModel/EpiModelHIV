@@ -160,10 +160,10 @@ deaths_het <- function(dat, at) {
 
   ## 4. Update Population Structure ##
   inactive <- which(dat$attr$active == 0)
-  dat$el <- tergmLite::delete_vertices(dat$el, inactive)
+  dat$el[[1]] <- tergmLite::delete_vertices(dat$el[[1]], inactive)
   dat$attr <- deleteAttr(dat$attr, inactive)
 
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {
+  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
     stop("mismatch between el and attr length in death mod")
   }
 

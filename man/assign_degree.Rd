@@ -26,4 +26,3 @@ target network given a bivariate degree mixing matrix of main, casual, and
 one-partnerships contained in the \code{nwstats} data.
 }
 \keyword{msm}
-

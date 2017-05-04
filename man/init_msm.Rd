@@ -34,4 +34,3 @@ Sets the initial conditions for a stochastic epidemic models
              simulated with \code{\link{netsim}}.
 }
 \keyword{msm}
-

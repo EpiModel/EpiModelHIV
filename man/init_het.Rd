@@ -38,4 +38,3 @@ This function sets the initial conditions for the stochastic
 This function sets the initial conditions for the models.
 }
 \keyword{het}
-

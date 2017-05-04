@@ -17,4 +17,3 @@ Initializes the CCR5-delta-32 genetic allele of the men in the
 \keyword{initiation}
 \keyword{msm}
 \keyword{utility}
-

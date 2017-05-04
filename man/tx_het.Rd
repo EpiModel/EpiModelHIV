@@ -18,4 +18,3 @@ Module function for simulating HIV therapy after diagnosis,
 }
 \keyword{het}
 \keyword{module}
-
