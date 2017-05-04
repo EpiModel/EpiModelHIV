@@ -51,9 +51,8 @@ sti_trans_msm <- function(dat, at) {
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
   syphilis <- dat$attr$syphilis
-  syph.infTime <- dat$attr$la
   stage.syph <- dat$attr$stage.syph
-  stage.time.syph <- dat$attr$stage.syph
+  stage.time.syph <- dat$attr$stage.time.syph
   inf.role.syph <- dat$attr$inf.role.syph
   inf.type.syph <- dat$attr$inf.type.syph
 

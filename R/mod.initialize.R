@@ -788,7 +788,7 @@ init_status_sti_msm <- function(dat) {
         syphilis[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
     }
     while (sum(syphilis[ids.W]) != nInfsyphW) {
-      syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
+        syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
     }
     syph.timesInf[syphilis == 1] <- 1
     syph.infTime[syphilis ==  1] <- syph.lastinfTime[syphilis == 1] <- 1
