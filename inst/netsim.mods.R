@@ -87,14 +87,13 @@ init <- init_msm(nwstats = st,
 
 control <- control_msm(nsteps = 2600)
 
-sim <- netsim(est, param, init, control)
-
+# sim <- netsim(est, param, init, control)
 
 at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debugonce(deaths_msm)
+debugonce(syph_progress_msm)
 
 at <- at + 1
 dat <- aging_msm(dat, at)
