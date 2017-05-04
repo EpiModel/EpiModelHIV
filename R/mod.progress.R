@@ -277,10 +277,11 @@ syph_progress_msm <- function(dat, at) {
   stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
   stage.tert.sympt <- dat$attr$stage.tert.sympt
 
+
   ## Process
 
   # Increment time unit
-  stage.time.syph[syphilis == 1] <- stage.time.syph[syphilis == 1] + 1
+  stage.time.syph[which(syphilis == 1)] <- stage.time.syph[which(syphilis == 1)] + 1
 
   # Change stage to Primary and assign symptoms
   toPrim <- which(stage.time.syph == (incu.syph.int + 1) &
@@ -338,6 +339,7 @@ syph_progress_msm <- function(dat, at) {
 
 
   ## Output
+
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$stage.prim.sympt <- stage.prim.sympt
