@@ -40,9 +40,9 @@ param <- param_msm(nwstats = st,
                    hiv.rct.rr = 2.35,
                    hiv.uct.rr = 1.35,
 
-                   syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                   syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                   syph.prim.sympt.prob.tx = 0.35,
+                   syph.seco.sympt.prob.tx = 0.60,
+                   syph.earlat.sympt.prob.tx = 0.15,
                    syph.latelat.sympt.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 0.90,
 
@@ -66,7 +66,8 @@ param <- param_msm(nwstats = st,
                    stitest.elig.model = "sti",
 
                    stitest.active.int = 364,
-                   sti.highrisktest.int = 182) # adjustable for 3 or 6 months
+                   sti.highrisktest.int = 182,
+                   partlist.start = Inf)
 
 param$partlist.start
 
@@ -80,7 +81,6 @@ init <- init_msm(nwstats = st,
                  prev.syph.B = 0.020,
                  prev.syph.W = 0.020,
 
-                 # adjust prim and seco from 0.1385 each
                  # Incubating, primary, secondary, early latent, late latent, late late latent, tertiary
                  stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                  stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
@@ -108,8 +108,6 @@ dat <- sti_ept_msm(dat, at)
 dat <- hiv_progress_msm(dat, at)
 dat <- syph_progress_msm(dat, at)
 dat <- hiv_vl_msm(dat, at)
-# dat <- update_aiclass_msm(dat, at)
-# dat <- update_roleclass_msm(dat, at)
 dat <- simnet_msm(dat, at)
 dat <- hiv_disclose_msm(dat, at)
 dat <- part_msm(dat, at)
@@ -122,5 +120,3 @@ dat <- sti_trans_msm(dat, at)
 dat <- sti_recov_msm(dat, at)
 dat <- sti_tx_msm(dat, at)
 dat <- prevalence_msm(dat, at)
-verbose_msm(dat, type = "progress", s = 1, at)
-
