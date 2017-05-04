@@ -12,13 +12,13 @@ st
 param <- param_msm(nwstats = st,
                    ai.scale = 1.11,
 
-                   rsyph.tprob = 0.04668348,
-                   usyph.tprob = 0.03598792,
+                   rsyph.tprob = 0.013,
+                   usyph.tprob = 0.008,
 
-                   hiv.rsyph.rr = 2.98876572,
-                   hiv.usyph.rr = 1.7456618,
-                   syph.rhiv.rr = 6.54189295,
-                   syph.uhiv.rr = 5.09641658,
+                   hiv.rsyph.rr = 2.85,
+                   hiv.usyph.rr = 2.15,
+                   syph.rhiv.rr = 1,
+                   syph.uhiv.rr = 1,
 
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
@@ -30,19 +30,19 @@ param <- param_msm(nwstats = st,
                    tert.syph.int = 20 * 52 * 7,
                    syph.tert.prog.prob = 0.15 / (52 * 7 * 20),
 
-                   rgc.tprob = 0.4133300,
-                   ugc.tprob = 0.31404720,
-                   rct.tprob = 0.1907554,
-                   uct.tprob = 0.16394697,
+                   rgc.tprob = 0.424,
+                   ugc.tprob = 0.312,
+                   rct.tprob = 0.197,
+                   uct.tprob = 0.165,
 
-                   hiv.rgc.rr = 2.35,
-                   hiv.ugc.rr = 1.35,
-                   hiv.rct.rr = 2.35,
-                   hiv.uct.rr = 1.35,
+                   hiv.rgc.rr = 2.55,
+                   hiv.ugc.rr = 1.87,
+                   hiv.rct.rr = 2.55,
+                   hiv.uct.rr = 1.87,
 
-                   syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
-                   syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                   syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                   syph.prim.sympt.prob.tx = 0.35,
+                   syph.seco.sympt.prob.tx = 0.60,
+                   syph.earlat.sympt.prob.tx = 0.15,
                    syph.latelat.sympt.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 0.90,
 
@@ -66,35 +66,34 @@ param <- param_msm(nwstats = st,
                    stitest.elig.model = "sti",
 
                    stitest.active.int = 364,
-                   sti.highrisktest.int = 182) # adjustable for 3 or 6 months
+                   sti.highrisktest.int = 182,
+                   partlist.start = Inf)
 
 param$partlist.start
 
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
                  prev.W = 0.10,
-                 prev.ugc = 0.015,
-                 prev.rgc = 0.015,
-                 prev.uct = 0.015,
-                 prev.rct = 0.015,
+                 prev.ugc = 0.010,
+                 prev.rgc = 0.010,
+                 prev.uct = 0.010,
+                 prev.rct = 0.010,
                  prev.syph.B = 0.020,
                  prev.syph.W = 0.020,
 
-                 # adjust prim and seco from 0.1385 each
                  # Incubating, primary, secondary, early latent, late latent, late late latent, tertiary
                  stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
                  stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
 
 control <- control_msm(nsteps = 2600)
 
-sim <- netsim(est, param, init, control)
-
+# sim <- netsim(est, param, init, control)
 
 at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debugonce(deaths_msm)
+debugonce(syph_progress_msm)
 
 at <- at + 1
 dat <- aging_msm(dat, at)
@@ -108,8 +107,6 @@ dat <- sti_ept_msm(dat, at)
 dat <- hiv_progress_msm(dat, at)
 dat <- syph_progress_msm(dat, at)
 dat <- hiv_vl_msm(dat, at)
-# dat <- update_aiclass_msm(dat, at)
-# dat <- update_roleclass_msm(dat, at)
 dat <- simnet_msm(dat, at)
 dat <- hiv_disclose_msm(dat, at)
 dat <- part_msm(dat, at)
@@ -122,5 +119,3 @@ dat <- sti_trans_msm(dat, at)
 dat <- sti_recov_msm(dat, at)
 dat <- sti_tx_msm(dat, at)
 dat <- prevalence_msm(dat, at)
-verbose_msm(dat, type = "progress", s = 1, at)
-
