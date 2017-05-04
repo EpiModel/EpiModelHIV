@@ -1,14 +1,11 @@
 rm(list = ls())
 suppressMessages(library("EpiModelHIV"))
-suppressMessages(library("EpiModelHPC"))
 suppressMessages(library("dplyr"))
-# sourceDir("R/")
 devtools::load_all()
 
 data(est)
 data(st)
-est
-st
+
 param <- param_msm(nwstats = st,
                    ai.scale = 1.11,
 
