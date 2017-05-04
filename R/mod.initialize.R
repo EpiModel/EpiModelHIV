@@ -41,7 +41,7 @@ initialize_msm <- function(x, param, init, control, s) {
     nw[[i]] <- remove_bad_roles_msm(nw[[i]])
   }
 
-  ## ergm_prep here
+  ## Build initial edgelists
   dat$el <- list()
   dat$p <- list()
   for (i in 1:2) {
@@ -114,6 +114,9 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepElig <- rep(NA, num)
   dat$attr$prepStat <- rep(0, num)
+  dat$attr$prepStartTime <- rep(NA, num)
+  dat$attr$prepLastRisk <- rep(NA, num)
+  dat$attr$prepLastStiScreen <- rep(NA, num)
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -136,6 +139,68 @@ initialize_msm <- function(x, param, init, control, s) {
   # HIV-related attributes
   dat <- init_status_msm(dat)
 
+  ## GC/CT status
+  idsUreth <- which(role.class %in% c("I", "V"))
+  idsRect <- which(role.class %in% c("R", "V"))
+
+  uGC <- rGC <- rep(0, num)
+  uCT <- rCT <- rep(0, num)
+
+  # Initialize GC infection at both sites
+  idsUGC <- sample(idsUreth, size = round(init$prev.ugc * num), FALSE)
+  uGC[idsUGC] <- 1
+
+  idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(init$prev.rgc * num), FALSE)
+  rGC[idsRGC] <- 1
+
+  dat$attr$rGC <- rGC
+  dat$attr$uGC <- uGC
+
+  dat$attr$rGC.sympt <- dat$attr$uGC.sympt <- rep(NA, num)
+  dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
+  dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
+
+  dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- rep(NA, length(dat$attr$active))
+  dat$attr$rGC.infTime[rGC == 1] <- 1
+  dat$attr$uGC.infTime[uGC == 1] <- 1
+
+  dat$attr$rGC.timesInf <- rep(0, num)
+  dat$attr$rGC.timesInf[rGC == 1] <- 1
+  dat$attr$uGC.timesInf <- rep(0, num)
+  dat$attr$uGC.timesInf[uGC == 1] <- 1
+
+  dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
+  dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
+  dat$attr$GC.cease <- rep(NA, num)
+
+  # Initialize CT infection at both sites
+  idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
+  uCT[idsUCT] <- 1
+
+  idsRCT <- sample(setdiff(idsRect, idsUCT), size = round(init$prev.rct * num), FALSE)
+  rCT[idsRCT] <- 1
+
+  dat$attr$rCT <- rCT
+  dat$attr$uCT <- uCT
+
+  dat$attr$rCT.sympt <- dat$attr$uCT.sympt <- rep(NA, num)
+  dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
+  dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
+
+  dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- rep(NA, num)
+  dat$attr$rCT.infTime[dat$attr$rCT == 1] <- 1
+  dat$attr$uCT.infTime[dat$attr$uCT == 1] <- 1
+
+  dat$attr$rCT.timesInf <- rep(0, num)
+  dat$attr$rCT.timesInf[rCT == 1] <- 1
+  dat$attr$uCT.timesInf <- rep(0, num)
+  dat$attr$uCT.timesInf[uCT == 1] <- 1
+
+  dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
+  dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
+  dat$attr$CT.cease <- rep(NA, num)
+
+
   # CCR5
   dat <- init_ccr5_msm(dat)
 
@@ -148,12 +213,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
-
-  if (control$save.nwstats == TRUE) {
-    dat$stats <- list()
-    dat$stats$nwstats <- list()
-
-  }
 
   dat <- prevalence_msm(dat, at = 1)
 

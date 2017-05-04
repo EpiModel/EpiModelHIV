@@ -32,7 +32,7 @@
 #'
 #' @export
 #'
-trans_msm <- function(dat, at){
+trans_msm <- function(dat, at) {
 
   # Variables -----------------------------------------------------------
 
@@ -41,10 +41,13 @@ trans_msm <- function(dat, at){
   stage <- dat$attr$stage
   ccr5 <- dat$attr$ccr5
   circ <- dat$attr$circ
-  diag.status <- dat$attr$diag.status
-  tx.status <- dat$attr$tx.status
+  status <- dat$attr$status
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
+  rGC <- dat$attr$rGC
+  uGC <- dat$attr$uGC
+  rCT <- dat$attr$rCT
+  uCT <- dat$attr$uCT
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
@@ -54,9 +57,16 @@ trans_msm <- function(dat, at){
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
   prep.hr <- dat$param$prep.class.hr
+  hiv.ugc.rr <- dat$param$hiv.ugc.rr
+  hiv.uct.rr <- dat$param$hiv.uct.rr
+  hiv.rgc.rr <- dat$param$hiv.rgc.rr
+  hiv.rct.rr <- dat$param$hiv.rct.rr
+  hiv.dual.rr <- dat$param$hiv.dual.rr
+
 
   # Data
-  dal <- dat$temp$dal
+  al <- dat$temp$al
+  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
@@ -64,12 +74,10 @@ trans_msm <- function(dat, at){
     return(dat)
   }
 
-  ## Reorder by role: ins on the left, rec on the right,
-  ##                  with flippers represented twice
+  ## Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
   disc.rp <- dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
-  colnames(disc.ip)[1:2] <- c("i", "r")
-  colnames(disc.rp)[1:2] <- c("i", "r")
+  colnames(disc.ip)[1:2] <- colnames(disc.rp)[1:2] <- c("ins", "rec")
 
 
   # PATP: Insertive Man Infected (Col 1) --------------------------------
@@ -82,6 +90,8 @@ trans_msm <- function(dat, at){
   ip.ccr5 <- ccr5[disc.ip[, 2]]
   ip.prep <- prepStat[disc.ip[, 2]]
   ip.prepcl <- prepClass[disc.ip[, 2]]
+  ip.rGC <- rGC[disc.ip[, 2]]
+  ip.rCT <- rCT[disc.ip[, 2]]
 
   # Base TP from VL
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
@@ -104,10 +114,26 @@ trans_msm <- function(dat, at){
   }
 
   # Acute-stage multipliers
-  isAcute <- which(ip.stage %in% c(1, 2))
+  isAcute <- which(ip.stage %in% 1:2)
   ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
 
-  # Retransformation to probability
+  ## Multiplier for STI
+  is.rGC <- which(ip.rGC == 1)
+
+  is.rCT <- which(ip.rCT == 1)
+
+  is.rect.dual <- intersect(is.rGC, is.rCT)
+
+  is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
+  is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
+
+  ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
+  ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
+
+  ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
+    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
+
   ip.tprob <- plogis(ip.tlo)
   stopifnot(ip.tprob >= 0, ip.tprob <= 1)
 
@@ -123,6 +149,8 @@ trans_msm <- function(dat, at){
   rp.ccr5 <- ccr5[disc.rp[, 1]]
   rp.prep <- prepStat[disc.rp[, 1]]
   rp.prepcl <- prepClass[disc.rp[, 1]]
+  rp.uGC <- uGC[disc.rp[, 1]]
+  rp.uCT <- uCT[disc.rp[, 1]]
 
   # Base TP from VL
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
@@ -148,12 +176,30 @@ trans_msm <- function(dat, at){
   }
 
   # Acute-stage multipliers
-  isAcute <- which(rp.stage %in% c(1, 2))
+  isAcute <- which(rp.stage %in% 1:2)
   rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
+
+  ## Multiplier for STI
+  is.uGC <- which(rp.uGC == 1)
+
+  is.uCT <- which(rp.uCT == 1)
+
+  is.ureth.dual <- intersect(is.uGC, is.uCT)
+
+  is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
+  is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
+
+  rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
+  rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
+
+  rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
+    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
 
   # Retransformation to probability
   rp.tprob <- plogis(rp.tlo)
   stopifnot(rp.tprob >= 0, rp.tprob <= 1)
+
 
   # Transmission --------------------------------------------------------
 
@@ -164,22 +210,17 @@ trans_msm <- function(dat, at){
 
   # Output --------------------------------------------------------------
 
+
   # Update attributes
 
-  infected <- infector <- inf.type <- NULL
+  infected <- inf.type <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
                   disc.rp[trans.rp == 1, 1])
-    infector <- c(disc.ip[trans.ip == 1, 1],
-                  disc.rp[trans.rp == 1, 2])
     inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
     inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
                   disc.rp[trans.rp == 1, "ptype"])
-
-    inf.stage <- stage[infector]
-    inf.diag <- diag.status[infector]
-    inf.tx <- tx.status[infector]
 
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
@@ -189,12 +230,8 @@ trans_msm <- function(dat, at){
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
 
-    dat$attr$infector[infected] <- infector
     dat$attr$inf.role[infected] <- inf.role
     dat$attr$inf.type[infected] <- inf.type
-    dat$attr$inf.diag[infected] <- inf.diag
-    dat$attr$inf.tx[infected] <- inf.tx
-    dat$attr$inf.stage[infected] <- inf.stage
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
@@ -203,6 +240,9 @@ trans_msm <- function(dat, at){
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
+  dat$epi$trans.main[at] <- sum(inf.type == 1)
+  dat$epi$trans.casl[at] <- sum(inf.type == 2)
+  dat$epi$trans.inst[at] <- sum(inf.type == 3)
 
   return(dat)
 }

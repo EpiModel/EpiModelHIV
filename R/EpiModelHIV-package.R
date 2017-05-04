@@ -1,10 +1,10 @@
-#' HIV Transmission Dynamics among MSM and Heterosexuals
+#' Network-Based Epidemic Modeling of HIV Transmission among MSM and Heterosexual Populations
 #'
 #' \tabular{ll}{
 #'    Package: \tab EpiModelHIV\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 1.0.0\cr
-#'    Date: \tab 2016-06-25\cr
+#'    Version: \tab 1.5.0\cr
+#'    Date: \tab 2017-05-04\cr
 #'    License: \tab GPL-3\cr
 #'    LazyLoad: \tab yes\cr
 #' }
@@ -18,9 +18,8 @@
 #' @name EpiModelHIV-package
 #' @aliases EpiModelHIV
 #'
-#' @import EpiModel network networkDynamic tergmLite tergm ergm bindata
+#' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
 #' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
-#' @importFrom Rcpp sourceCpp
 #' @importFrom dplyr group_by summarise
 #'
 #' @useDynLib EpiModelHIV

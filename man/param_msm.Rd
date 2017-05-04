@@ -32,8 +32,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
-  base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14, ai.scale = 1,
-  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
+  ai.scale = 1.15, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
   cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
   cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
   cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
@@ -47,7 +47,20 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
   prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
-  prep.risk.int = 182, prep.risk.reassess = TRUE, ...)
+  prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
+  rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
+  rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
+  ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
+  uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
+  ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
+  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0, prep.sti.screen.int = 182,
+  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
+  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -372,6 +385,95 @@ in days.}
 
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
+
+\item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
+compensation, 0.5 is a 50% reduction in the probability of condom use
+per act, and 1 is a complete cessation of condom use following PrEP
+initiation.}
+
+\item{rcomp.adh.groups}{PrEP adherence groups for whom risk compensation
+occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+low adherence, medium adherence, and high adherence to PrEP.}
+
+\item{rcomp.main.only}{Logical, if risk compensation is limited to main
+partnerships only, versus all partnerships.}
+
+\item{rcomp.discl.only}{Logical, if risk compensation is limited known-discordant
+partnerships only, versus all partnerships.}
+
+\item{rgc.tprob}{Probability of rectal gonorrhea infection per act.}
+
+\item{ugc.tprob}{Probability of urethral gonorrhea infection per act.}
+
+\item{rct.tprob}{Probability of rectal chlamydia infection per act.}
+
+\item{uct.tprob}{Probability of urethral chlamydia infection per act.}
+
+\item{rgc.sympt.prob}{Probability of symptoms given infection with rectal
+gonorrhea.}
+
+\item{ugc.sympt.prob}{Probability of symptoms given infection with urethral
+gonorrhea.}
+
+\item{rct.sympt.prob}{Probability of symptoms given infection with rectal
+chlamydia.}
+
+\item{uct.sympt.prob}{Probability of symptoms given infection with urethral
+chlamydia.}
+
+\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
+
+\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
+
+\item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
+
+\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
+
+\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
+
+\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
+
+\item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
+
+\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
+If \code{NA}, uses site-specific durations for asymptomatic infections.}
+
+\item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
+infection with gonorrhea.}
+
+\item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
+infection with chlamydia.}
+
+\item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
+
+\item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
+
+\item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
+
+\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+
+\item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
+
+\item{prep.sti.prob.tx}{Probability of treatment given positive screening during
+PrEP visit.}
+
+\item{prep.continue.stand.tx}{Logical, if \code{TRUE} will continue standard
+STI treatment of symptomatic cases even after PrEP initiation.}
+
+\item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
+a condom used by the insertive partner.}
+
+\item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
+
+\item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral gonorrhea.}
+
+\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chlamydia.}
+
+\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chlamydia.}
+
+\item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
+given dual infection with both gonorrhea and chlamydia.}
 
 \item{...}{Additional arguments passed to the function.}
 }

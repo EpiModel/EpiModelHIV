@@ -12,7 +12,8 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
   acts.FUN = acts_msm, condoms.FUN = condoms_msm,
   riskhist.FUN = riskhist_msm, position.FUN = position_msm,
-  trans.FUN = trans_msm, prev.FUN = prevalence_msm,
+  trans.FUN = trans_msm, stitrans.FUN = sti_trans,
+  stirecov.FUN = sti_recov, stitx.FUN = sti_tx, prev.FUN = prevalence_msm,
   verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
   verbose.int = 1, ...)
 }
@@ -70,8 +71,16 @@ persons in the population.}
 
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 
-\item{trans.FUN}{Module function to stochastically simulate disease transmission
+\item{trans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}
+
+\item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
+edgelist.}
+
+\item{stirecov.FUN}{Module function to simulate recovery from GC/CT, heterogeneous
+by disease, site, symptoms, and treatment status.}
+
+\item{stitx.FUN}{Module function to simulate treatment of GC/CT.}
 
 \item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 

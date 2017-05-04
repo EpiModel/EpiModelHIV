@@ -205,6 +205,7 @@
 #' @param vv.iev.WW.prob Probability that in a white-white partnership of
 #'        two versatile men, they will engage in intra-event versatility
 #'        ("flipping") given that they're having AI.
+#'
 #' @param prep.start Time step at which the PrEP intervention should start.
 #' @param prep.elig.model Modeling approach for determining who is eligible for
 #'        PrEP. Current options are limited to: \code{"all"} for all persons who
@@ -227,6 +228,63 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
+#'
+#' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
+#'        compensation, 0.5 is a 50% reduction in the probability of condom use
+#'        per act, and 1 is a complete cessation of condom use following PrEP
+#'        initiation.
+#' @param rcomp.adh.groups PrEP adherence groups for whom risk compensation
+#'        occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+#'        low adherence, medium adherence, and high adherence to PrEP.
+#' @param rcomp.main.only Logical, if risk compensation is limited to main
+#'        partnerships only, versus all partnerships.
+#' @param rcomp.discl.only Logical, if risk compensation is limited known-discordant
+#'        partnerships only, versus all partnerships.
+#'
+#' @param rgc.tprob Probability of rectal gonorrhea infection per act.
+#' @param ugc.tprob Probability of urethral gonorrhea infection per act.
+#' @param rct.tprob Probability of rectal chlamydia infection per act.
+#' @param uct.tprob Probability of urethral chlamydia infection per act.
+#' @param rgc.sympt.prob Probability of symptoms given infection with rectal
+#'        gonorrhea.
+#' @param ugc.sympt.prob Probability of symptoms given infection with urethral
+#'        gonorrhea.
+#' @param rct.sympt.prob Probability of symptoms given infection with rectal
+#'        chlamydia.
+#' @param uct.sympt.prob Probability of symptoms given infection with urethral
+#'        chlamydia.
+#' @param rgc.asympt.int Average duration in days of asymptomatic rectal gonorrhea.
+#' @param ugc.asympt.int Average duration in days of asymptomatic urethral gonorrhea.
+#' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
+#' @param gc.ntx.int Average duration in days of untreated, symptomatic gonorrhea (both sites).
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
+#' @param rct.asympt.int Average in days duration of asymptomatic rectal chlamydia.
+#' @param uct.asympt.int Average in days duration of asymptomatic urethral chlamydia.
+#' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
+#' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
+#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
+#' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
+#'        infection with gonorrhea.
+#' @param ct.prob.cease Probability of ceasing sexual activity during symptomatic
+#'        infection with chlamydia.
+#' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
+#' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
+#' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
+#' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chlamydia.
+#' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
+#' @param prep.sti.prob.tx Probability of treatment given positive screening during
+#'        PrEP visit.
+#' @param prep.continue.stand.tx Logical, if \code{TRUE} will continue standard
+#'        STI treatment of symptomatic cases even after PrEP initiation.
+#' @param sti.cond.rr Relative risk of STI infection (in either direction) given
+#'        a condom used by the insertive partner.
+#' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
+#' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
+#' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia.
+#' @param hiv.uct.rr Relative risk of HIV infection given current urethral chlamydia.
+#' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
+#'        given dual infection with both gonorrhea and chlamydia.
+#'
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -236,6 +294,7 @@
 #' @keywords msm
 #'
 #' @export
+#'
 param_msm <- function(nwstats,
                       race.method = 1,
                       last.neg.test.B.int = 301,
@@ -312,7 +371,7 @@ param_msm <- function(nwstats,
                       base.ai.pers.BB.rate = 0.11,
                       base.ai.pers.BW.rate = 0.16,
                       base.ai.pers.WW.rate = 0.14,
-                      ai.scale = 1,
+                      ai.scale = 1.15,
 
                       cond.main.BB.prob = 0.38,
                       cond.main.BW.prob = 0.10,
@@ -350,6 +409,51 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+
+                      rcomp.prob = 0,
+                      rcomp.adh.groups = 0:3,
+                      rcomp.main.only = FALSE,
+                      rcomp.discl.only = FALSE,
+
+                      rgc.tprob = 0.357698,
+                      ugc.tprob = 0.248095,
+                      rct.tprob = 0.321597,
+                      uct.tprob = 0.212965,
+
+                      rgc.sympt.prob = 0.076975,
+                      ugc.sympt.prob = 0.824368,
+                      rct.sympt.prob = 0.103517,
+                      uct.sympt.prob = 0.885045,
+
+                      rgc.asympt.int = 35.11851 * 7,
+                      ugc.asympt.int = 35.11851 * 7,
+                      gc.tx.int = 2 * 7,
+                      gc.ntx.int = NA,
+
+                      rct.asympt.int = 44.24538 * 7,
+                      uct.asympt.int = 44.24538 * 7,
+                      ct.tx.int = 2 * 7,
+                      ct.ntx.int = NA,
+
+                      gc.prob.cease = 0,
+                      ct.prob.cease = 0,
+
+                      gc.sympt.prob.tx = 0.90,
+                      ct.sympt.prob.tx = 0.85,
+                      gc.asympt.prob.tx = 0,
+                      ct.asympt.prob.tx = 0,
+
+                      prep.sti.screen.int = 182,
+                      prep.sti.prob.tx = 1,
+                      prep.continue.stand.tx = TRUE,
+
+                      sti.cond.rr = 0.3,
+
+                      hiv.rgc.rr = 2.780673,
+                      hiv.ugc.rr = 1.732363,
+                      hiv.rct.rr = 2.780673,
+                      hiv.uct.rr = 1.732363,
+                      hiv.dual.rr = 0.2,
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -451,6 +555,10 @@ param_msm <- function(nwstats,
 #'        \code{nwstats} output from \code{\link{calc_nwstats_msm}}.
 #' @param prev.B Initial disease prevalence among black MSM.
 #' @param prev.W Initial disease prevalence among white MSM.
+#' @param prev.ugc Initial prevalence of urethral gonorrhea.
+#' @param prev.rgc Initial prevalence of rectal gonorrhea.
+#' @param prev.uct Initial prevalence of urethral chlamydia.
+#' @param prev.rct Initial prevalence of rectal chlamydia.
 #' @param ... Additional arguments passed to function.
 #'
 #' @return
@@ -461,8 +569,12 @@ param_msm <- function(nwstats,
 #'
 #' @export
 init_msm <- function(nwstats,
-                     prev.B = 0.15,
-                     prev.W = 0.15,
+                     prev.B = 0.253,
+                     prev.W = 0.253,
+                     prev.ugc = 0.005,
+                     prev.rgc = 0.005,
+                     prev.uct = 0.013,
+                     prev.rct = 0.013,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -519,8 +631,13 @@ init_msm <- function(nwstats,
 #' @param riskhist.FUN Module function to calculate risk history for uninfected
 #'        persons in the population.
 #' @param position.FUN Module function to simulate sexual position within acts.
-#' @param trans.FUN Module function to stochastically simulate disease transmission
+#' @param trans.FUN Module function to stochastically simulate HIV transmission
 #'        over acts given individual and dyadic attributes.
+#' @param stitrans.FUN Module function to simulate GC/CT transmission over current
+#'        edgelist.
+#' @param stirecov.FUN Module function to simulate recovery from GC/CT, heterogeneous
+#'        by disease, site, symptoms, and treatment status.
+#' @param stitx.FUN Module function to simulate treatment of GC/CT.
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
@@ -562,6 +679,9 @@ control_msm <- function(simno = 1,
                         riskhist.FUN = riskhist_msm,
                         position.FUN = position_msm,
                         trans.FUN = trans_msm,
+                        stitrans.FUN = sti_trans,
+                        stirecov.FUN = sti_recov,
+                        stitx.FUN = sti_tx,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         save.nwstats = FALSE,
