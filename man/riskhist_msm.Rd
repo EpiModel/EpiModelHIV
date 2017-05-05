@@ -14,7 +14,7 @@ individual-level attributes, and summary statistics.}
 }
 \description{
 Module function to track the risk history of uninfected persons
-             for purpose of intervention targeting.
+             for purpose of HIV/STI prevention intervention targeting.
 }
 \keyword{module}
 \keyword{msm}

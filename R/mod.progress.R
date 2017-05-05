@@ -349,5 +349,5 @@ syph_progress_msm <- function(dat, at) {
   dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
   dat$attr$stage.tert.sympt <- stage.tert.sympt
 
-    return(dat)
+  return(dat)
 }
