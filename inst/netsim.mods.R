@@ -56,15 +56,15 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0.5,
                    stihighrisktest.coverage = 0.8,
 
-                   prep.start = Inf,
-                   stitest.start = Inf,
-                   ept.start = Inf,
+                   prep.start = 500,
+                   stitest.start = 500,
+                   ept.start = 64,
 
                    stitest.elig.model = "sti",
 
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182,
-                   partlist.start = Inf)
+                   ept.risk.int = 60)
 
 param$partlist.start
 
@@ -84,7 +84,7 @@ init <- init_msm(nwstats = st,
 
 control <- control_msm(nsteps = 2600)
 
-# sim <- netsim(est, param, init, control)
+sim <- netsim(est, param, init, control)
 
 at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
@@ -109,10 +109,13 @@ dat <- hiv_disclose_msm(dat, at)
 dat <- part_msm(dat, at)
 dat <- acts_msm(dat, at)
 dat <- condoms_msm(dat, at)
-dat <- riskhist_msm(dat, at)
+dat <- riskhist_prep_msm(dat, at)
+dat <- riskhist_stitest_msm(dat, at)
+dat <- riskhist_ept_msm(dat, at)
 dat <- position_msm(dat, at)
 dat <- hiv_trans_msm(dat, at)
 dat <- sti_trans_msm(dat, at)
 dat <- sti_recov_msm(dat, at)
 dat <- sti_tx_msm(dat, at)
 dat <- prevalence_msm(dat, at)
+
