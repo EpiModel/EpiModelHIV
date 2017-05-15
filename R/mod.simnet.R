@@ -94,9 +94,12 @@ simnet_msm <- function(dat, at) {
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
   
+  #Need to represent one-offs in uid
+  new.edges.inst <- matrix(dat$attr$uid[dat$el[[3]]], ncol = 2)
+  
   # Timing of newest edge
   dat$attr$sexnewedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])] <- at
-  dat$attr$sexnewedge[which(dat$attr$uid %in% dat$el[[3]][, 1:2])] <- at
+  dat$attr$sexnewedge[which(dat$attr$uid %in% new.edges.inst[, 1:2])] <- at
   
 
   if (dat$control$save.nwstats == TRUE) {
