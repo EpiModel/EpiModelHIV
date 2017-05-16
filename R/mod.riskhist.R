@@ -96,8 +96,9 @@ riskhist_prep_msm <- function(dat, at) {
 
   # Disclosure
   discl.list <- dat$temp$discl.list
+  disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
   delt.cdl <- uid[el2.cond3[, 1]] * 1e7 + uid[el2.cond3[, 2]]
-  discl <- (delt.cdl %in% discl.list)
+  discl <- (delt.cdl %in% disclose.cdl)
   ai.sd <- el2.cond3$p2[discl == TRUE]
   dat$attr$prep.ind.ai.sd[ai.sd] <- at
 

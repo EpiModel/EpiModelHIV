@@ -61,12 +61,8 @@ hiv_disclose_msm <- function(dat, at){
     }
 
 
-
     # Processes --------------------------------------------------------------
 
-    # Represent EL in uids
-    el <- matrix(uid[el], ncol = 2)
-    
     # Check for discordant rels
     posneg <- el[which(status[el[, 1]] - status[el[, 2]] == 1), , drop = FALSE]
     negpos <- el[which(status[el[, 2]] - status[el[, 1]] == 1), , drop = FALSE]
@@ -74,8 +70,9 @@ hiv_disclose_msm <- function(dat, at){
 
     # Check for not already disclosed
     discl.list <- dat$temp$discl.list
-    discord.cdl <- disc.el[, 1] * 1e7 + disc.el[, 2]
-    notdiscl <- !(discord.cdl %in% discl.list)
+    disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
+    discord.cdl <- uid[disc.el[, 1]] * 1e7 + uid[disc.el[, 2]]
+    notdiscl <- !(discord.cdl %in% disclose.cdl)
 
 
     # data frame of non-disclosed pairs
@@ -96,11 +93,11 @@ hiv_disclose_msm <- function(dat, at){
       if (type %in% c("main", "pers")) {
 
         # Check that rel is new
-        # new.edges matrix is expressed in uid, so is nd.dx
+        # new.edges matrix is expressed in uid, so need to transform nd.dx
         new.edges <- dat$temp$new.edges
-        new.rel <- ((nd.dx[, 1] * 1e7 + nd.dx[, 2]) %in%
+        new.rel <- ((uid[nd.dx[, 1]] * 1e7 + uid[nd.dx[, 2]]) %in%
                       (new.edges[, 1] * 1e7 + new.edges[, 2])) |
-                   ((nd.dx[, 2] * 1e7 + nd.dx[, 1]) %in%
+                   ((uid[nd.dx[, 2]] * 1e7 + uid[nd.dx[, 1]]) %in%
                       (new.edges[, 1] * 1e7 + new.edges[, 2]))
 
         # Check if diag is new
@@ -128,7 +125,8 @@ hiv_disclose_msm <- function(dat, at){
 
       # Write output
       if (length(discl) > 0) {
-        discl.mat <- cbind(pid = nd.dx[discl, 1] * 1e7 + nd.dx[discl, 2],
+        discl.mat <- cbind(pos = uid[nd.dx[discl, 1]],
+                           neg = uid[nd.dx[discl, 2]],
                            discl.time = at)
         dat$temp$discl.list <- rbind(dat$temp$discl.list, discl.mat)
       }

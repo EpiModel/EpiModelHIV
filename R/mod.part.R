@@ -48,19 +48,22 @@ part_msm <- function(dat, at){
     highlow <- el[which(el[, 1] > el[, 2]), , drop = FALSE]
     lowhigh <- el[which(el[, 1] < el[, 2]), , drop = FALSE]
     part.el <- rbind(highlow[, 2:1], lowhigh)
-    part.el <- matrix(part.el[, 1] * 1e7 + part.el[, 2], ncol = 1)
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
     part.list <- part.list[which(part.list[, "ptype"] == type), ]
-    new.part.ids <- !(part.el %in% part.list[, 1])
+
+    exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
+    check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
+    new.part.ids <- !(check.partel.ids %in% exist.partel.ids)
 
     # matrix of dyads not yet in cumulative edgelist
     new.part.el <- part.el[new.part.ids, , drop = FALSE]
 
     # Write output
     if (nrow(new.part.el) > 0) {
-      new.part <- cbind(pid = new.part.el[, 1],
+      new.part <- cbind(uid1 = new.part.el[, 1],
+                        uid2 = new.part.el[, 2],
                         ptype = type,
                         start.time = at,
                         last.active.time = at,
@@ -70,7 +73,7 @@ part_msm <- function(dat, at){
       if (type %in% 1:2) {
         # Dissolved dyads: in part.list but not in part.el
         # For those, set the end.time to now
-        diss.part.ids <- !(part.list[, 1] %in% part.el)
+        diss.part.ids <- !(exist.partel.ids %in% check.partel.ids)
         part.list[diss.part.ids, "end.time"] <- at
 
         # Active dyads: end.time is now or have no end.time yet
@@ -85,12 +88,12 @@ part_msm <- function(dat, at){
 
         # Newly re-active one-offs: of those in current EL, also in existing PL
         # For those, reset last.active.time and end.time to now
-        update.oneoff.ids <- (part.list[, 1] %in% part.el)
+        update.oneoff.ids <- (exist.partel.ids %in% check.partel.ids)
         if (sum(update.oneoff.ids) > 0) {
           part.list[update.oneoff.ids, c("last.active.time", "end.time")] <- at
         }
       }
-      
+
       # Bind old PL and new PL
       part.list <- rbind(part.list, new.part)
     }

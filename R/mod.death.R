@@ -30,6 +30,7 @@ deaths_msm <- function(dat, at) {
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
+  uid <- dat$attr$uid
 
   alive.B <- which(race == "B")
   age.B <- age[alive.B]
