@@ -9,11 +9,11 @@ data(st)
 param <- param_msm(nwstats = st,
                    ai.scale = 1.11,
 
-                   rsyph.tprob = 0.013,
-                   usyph.tprob = 0.008,
+                   rsyph.tprob = 0.0675,
+                   usyph.tprob = 0.0495,
 
-                   hiv.rsyph.rr = 2.85,
-                   hiv.usyph.rr = 2.15,
+                   hiv.rsyph.rr = 2.77,
+                   hiv.usyph.rr = 2.045,
                    syph.rhiv.rr = 1,
                    syph.uhiv.rr = 1,
 
@@ -27,15 +27,15 @@ param <- param_msm(nwstats = st,
                    tert.syph.int = 20 * 52 * 7,
                    syph.tert.prog.prob = 0.00015625599,
 
-                   rgc.tprob = 0.424,
-                   ugc.tprob = 0.312,
-                   rct.tprob = 0.197,
-                   uct.tprob = 0.165,
+                   rgc.tprob = 0.4207,
+                   ugc.tprob = 0.3095,
+                   rct.tprob = 0.1960,
+                   uct.tprob = 0.1654,
 
-                   hiv.rgc.rr = 2.55,
-                   hiv.ugc.rr = 1.87,
-                   hiv.rct.rr = 2.55,
-                   hiv.uct.rr = 1.87,
+                   hiv.rgc.rr = 2.548,
+                   hiv.ugc.rr = 1.855,
+                   hiv.rct.rr = 2.548,
+                   hiv.uct.rr = 1.855,
 
                    syph.prim.sympt.prob.tx = 0.35,
                    syph.seco.sympt.prob.tx = 0.60,
@@ -56,9 +56,9 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0.5,
                    stihighrisktest.coverage = 0.8,
 
-                   prep.start = 500,
-                   stitest.start = 500,
-                   ept.start = 64,
+                   prep.start = 5000,
+                   stitest.start = 1500,
+                   ept.start = 5000,
 
                    stitest.elig.model = "sti",
 
@@ -75,12 +75,8 @@ init <- init_msm(nwstats = st,
                  prev.rgc = 0.010,
                  prev.uct = 0.010,
                  prev.rct = 0.010,
-                 prev.syph.B = 0.020,
-                 prev.syph.W = 0.020,
-
-                 # Incubating, primary, secondary, early latent, late latent, late late latent, tertiary
-                 stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                 stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
+                 prev.syph.B = 0.015,
+                 prev.syph.W = 0.015)
 
 control <- control_msm(nsteps = 2600)
 
@@ -90,7 +86,7 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debugonce(syph_progress_msm)
+debug(simnet_msm)
 
 at <- at + 1
 dat <- aging_msm(dat, at)
@@ -118,4 +114,5 @@ dat <- sti_trans_msm(dat, at)
 dat <- sti_recov_msm(dat, at)
 dat <- sti_tx_msm(dat, at)
 dat <- prevalence_msm(dat, at)
+
 
