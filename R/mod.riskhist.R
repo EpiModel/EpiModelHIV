@@ -124,20 +124,10 @@ riskhist_stitest_msm <- function(dat, at) {
     ## Attributes
     uid <- dat$attr$uid
     race <- dat$attr$race
-    last.tx.time.rct <- dat$attr$last.tx.time.rct
-    last.tx.time.uct <- dat$attr$last.tx.time.uct
-    last.tx.time.rgc <- dat$attr$last.tx.time.rgc
-    last.tx.time.ugc <- dat$attr$last.tx.time.ugc
-    last.tx.time.syph <- dat$attr$last.tx.time.syph
     sexactive <- dat$attr$sexactive
-    sexnewedge <- dat$attr$sexnewedge
-    tt.traj.ct <- dat$attr$tt.traj.ct
-    tt.traj.gc <- dat$attr$tt.traj.gc
-    tt.traj.syph <- dat$attr$tt.traj.syph
 
     ## Parameters
     stitest.active.int <- dat$param$stitest.active.int
-    sti.highrisktest.int <- dat$param$sti.highrisktest.int
 
     ## Edgelist, adds uai summation per partnership from act list
     pid <- NULL # For R CMD Check
@@ -150,11 +140,6 @@ riskhist_stitest_msm <- function(dat, at) {
     if (is.null(dat$attr$stitest.ind.active)) {
         dat$attr$stitest.ind.active <- rep(NA, length(uid))
         dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
-        dat$attr$stitest.ind.sti <- rep(NA, length(uid))
-        dat$attr$stitest.ind.newpartners <- rep(NA, length(uid))
-        dat$attr$stitest.ind.concurrpartner <- rep(NA, length(uid))
-        dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
-        dat$attr$stitest.ind.uai.nmain <- rep(NA, length(uid))
         dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
     }
 
@@ -164,21 +149,9 @@ riskhist_stitest_msm <- function(dat, at) {
 
     part.list <- dat$temp$part.list
 
-    # Sexually active: annual testing for syphilis, CT, GC
-    idsactive <- which((at - sexactive) <= stitest.active.int)
-    dat$attr$stitest.ind.active[idsactive] <- at
-
-    # High-risk: CDC definition of increased risk for women
-
-    ### Have a new sex partner in last x months
-    idsnewpartners <- which((at - sexnewedge) <= sti.highrisktest.int)
-    dat$attr$stitest.ind.newpartners[idsnewpartners] <- at
-
-    # Partner-list related attributes
-
-    ### Multiple sex partners
-
-    # Reset # of partners
+    ### High-risk: # of partners, CAI
+    ## Number of partners
+    # Reset # of partners - length of "recent" interval is drawn from interval of partner list lookback
     dat$attr$recentpartners <- rep(0, length(dat$attr$active))
 
     #	Have more than one sex partner in last x months
@@ -186,119 +159,23 @@ riskhist_stitest_msm <- function(dat, at) {
     idsnotpartlist <- setdiff(which(race %in% c("B","W")), idspartlist)
     # these are relative ids of nodes in partner list
 
-    # Number of partners in last x months (0 for those not in active list)
-    dat$attr$recentpartners[idsnotpartlist] <- 0
-
     # For those who had partners, calculate # of occurrences in partner list
     part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
-    # relative ids get values of partner count for uid for length of active ids
+    # Calculate # of recent partners: 0 for those
+    dat$attr$recentpartners[idsnotpartlist] <- 0
     dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, 1]), 2]
 
     # Choose those who have had more than 1 partner in last x months
     idsrecentpartners <- which(dat$attr$recentpartners > 1)
-    dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
 
-    # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS --------------------
-    ### Partner has multiple sex partners
-
-    # Partner 1 has multiple partners, Partner 2 indicated
-    part.listmult1 <-
-        part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, "uid1"])]) > 1), ,
-                  drop = FALSE]
-
-    # Partner 2 indicated
-    uidspartlistmult1 <- part.listmult1[, "uid2"]
-    idspartlistmult1 <- which(uid %in% uidspartlistmult1)
-
-    # Partner 2 has multiple partners, so partner 1 is indicated
-    part.listmult2 <-
-        part.list[which((dat$attr$recentpartners[which(uid %in% part.list[, "uid2"])]) > 1) , ,
-                  drop = FALSE]
-
-    # Partner 1 indicated
-    uidspartlistmult2 <- part.listmult2[, "uid1"]
-    idspartlistmult2 <- which(uid %in% uidspartlistmult2)
-
-    # Combine into one list for indication
-    idspartmult <- unique(c(idspartlistmult1, idspartlistmult2))
-    dat$attr$stitest.ind.concurrpartner[idspartmult] <- at
-
-    # HAD SOME PROBLEMS WITH THIS COMPONENT - MADE SOME EDITS --------------------
-
-    ### Have a sex partner who has a treated sexually transmitted infection in the last interval
-    # Partner 1 has a STI, Partner 2 indicated
-    part.liststi1 <-
-        part.list[which((at - last.tx.time.rct[part.list[, "uid1"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.uct[part.list[, "uid1"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.rgc[part.list[, "uid1"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.ugc[part.list[, "uid1"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.syph[part.list[, "uid1"]]) <= sti.highrisktest.int), ,
-                  drop = FALSE]
-
-    # Partner 2 indicated
-    uidspartliststi1 <- part.liststi1[, "uid2"]
-    idspartliststi1 <- which(uid %in% uidspartliststi1)
-
-    # Partner 2 has a STI, so partner 1 is indicated
-    part.liststi2 <-
-        part.list[which((at - last.tx.time.rct[part.list[, "uid2"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.uct[part.list[, "uid2"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.rgc[part.list[, "uid2"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.ugc[part.list[, "uid2"]]) <= sti.highrisktest.int |
-                            (at - last.tx.time.syph[part.list[, "uid2"]]) <= sti.highrisktest.int), ,
-                  drop = FALSE]
-
-    # Partner 1 indicated
-    uidspartliststi2 <- part.liststi2[, "uid1"]
-    idspartliststi2 <- which(uid %in% uidspartliststi2)
-
-    # Combine into one list for indication
-    idspartsti <- unique(c(idspartliststi1, idspartliststi2))
-    idspartsti <-  uid[which(uid %in% idspartsti)]
-    dat$attr$stitest.ind.partnersti[which(uid %in% idspartsti)] <- at
-
-    ### Inconsistent condom use among persons who are not in mutually monogamous
-    #   relationships - includes concordant HIV
-    # Using PrEP logic for UAI in non-main relationships: Could there be a closer approximation?
-    uai.nmain <- unique(c(el$p1[el$uai > 0 & el$ptype %in% 2:3],
-                          el$p2[el$uai > 0 & el$ptype %in% 2:3]))
-    dat$attr$stitest.ind.uai.nmain[uai.nmain] <- at
-
-    ## Any CAI
+    ## Any CAI (copied from PrEP module)
     uai.any <- unique(c(el$p1[el$uai > 0], el$p2[el$uai > 0]))
+
+    ### Update STI indication attributes
+    dat$attr$stitest.ind.active <- sexactive
+    dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
     dat$attr$stitest.ind.uai.any[uai.any] <- at
-
-    ### Previous or coexisting STIs (treated) in a time interval
-    idsSTI <- which((at - last.tx.time.syph) <= sti.highrisktest.int |
-                        (at - last.tx.time.rgc) <= sti.highrisktest.int |
-                        (at - last.tx.time.ugc) <= sti.highrisktest.int |
-                        (at - last.tx.time.rct) <= sti.highrisktest.int |
-                        (at - last.tx.time.uct) <= sti.highrisktest.int)
-    dat$attr$stitest.ind.sti[idsSTI] <- at
-
-    # Update attributes
-    dat$attr$tt.traj.ct <- tt.traj.ct
-    dat$attr$tt.traj.gc <- tt.traj.gc
-    dat$attr$tt.traj.syph <- tt.traj.syph
-
-    # Update epi to show prevalence of STI testing indications
-    if (at >= dat$param$stitest.start) {
-        dat$epi$stiactiveind[at] <- length(idsactive) /
-            sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$newpartner[at] <- length(idsnewpartners) /
-            sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$recentpartners[at] <- length(idsrecentpartners) /
-            sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$concurrpart[at] <- length(which(uid %in% idspartmult)) /
-            sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$partnersti[at] <- length(which(uid %in% idspartsti)) /
-            sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$uai.nmain[at] <- length(uai.nmain) / sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$uai.any[at] <- length(uai.any) / sum(race %in% c("B", "W"), na.rm = TRUE)
-        dat$epi$recentSTI[at] <- length(idsSTI) / sum(race %in% c("B", "W"), na.rm = TRUE)
-    }
-
 
     return(dat)
 }
