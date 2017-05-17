@@ -57,7 +57,7 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.coverage = 0.8,
 
                    prep.start = 5000,
-                   stitest.start = 1500,
+                   stitest.start = 250,
                    ept.start = 5000,
 
                    stitest.elig.model = "sti",
@@ -65,8 +65,6 @@ param <- param_msm(nwstats = st,
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182,
                    ept.risk.int = 60)
-
-param$partlist.start
 
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
@@ -86,33 +84,34 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debug(simnet_msm)
+# debug(simnet_msm)
 
-at <- at + 1
-dat <- aging_msm(dat, at)
-dat <- deaths_msm(dat, at)
-dat <- births_msm(dat, at)
-dat <- hiv_test_msm(dat, at)
-dat <- sti_test_msm(dat, at)
-dat <- hiv_tx_msm(dat, at)
-dat <- prep_msm(dat, at)
-dat <- sti_ept_msm(dat, at)
-dat <- hiv_progress_msm(dat, at)
-dat <- syph_progress_msm(dat, at)
-dat <- hiv_vl_msm(dat, at)
-dat <- simnet_msm(dat, at)
-dat <- hiv_disclose_msm(dat, at)
-dat <- part_msm(dat, at)
-dat <- acts_msm(dat, at)
-dat <- condoms_msm(dat, at)
-dat <- riskhist_prep_msm(dat, at)
-dat <- riskhist_stitest_msm(dat, at)
-dat <- riskhist_ept_msm(dat, at)
-dat <- position_msm(dat, at)
-dat <- hiv_trans_msm(dat, at)
-dat <- sti_trans_msm(dat, at)
-dat <- sti_recov_msm(dat, at)
-dat <- sti_tx_msm(dat, at)
-dat <- prevalence_msm(dat, at)
-
-
+# at <- at + 1
+for (at in 2:control$nsteps) {
+  dat <- aging_msm(dat, at)
+  dat <- deaths_msm(dat, at)
+  dat <- births_msm(dat, at)
+  dat <- hiv_test_msm(dat, at)
+  dat <- sti_test_msm(dat, at)
+  dat <- hiv_tx_msm(dat, at)
+  dat <- prep_msm(dat, at)
+  dat <- sti_ept_msm(dat, at)
+  dat <- hiv_progress_msm(dat, at)
+  dat <- syph_progress_msm(dat, at)
+  dat <- hiv_vl_msm(dat, at)
+  dat <- simnet_msm(dat, at)
+  dat <- hiv_disclose_msm(dat, at)
+  dat <- part_msm(dat, at)
+  dat <- acts_msm(dat, at)
+  dat <- condoms_msm(dat, at)
+  dat <- riskhist_prep_msm(dat, at)
+  dat <- riskhist_stitest_msm(dat, at)
+  dat <- riskhist_ept_msm(dat, at)
+  dat <- position_msm(dat, at)
+  dat <- hiv_trans_msm(dat, at)
+  dat <- sti_trans_msm(dat, at)
+  dat <- sti_recov_msm(dat, at)
+  dat <- sti_tx_msm(dat, at)
+  dat <- prevalence_msm(dat, at)
+  cat("\t", at)
+}

@@ -164,7 +164,7 @@ riskhist_stitest_msm <- function(dat, at) {
 
     part.list <- dat$temp$part.list
 
-    # Sexually active - annual testing for syphilis, CT, GC
+    # Sexually active: annual testing for syphilis, CT, GC
     idsactive <- which((at - sexactive) <= stitest.active.int)
     dat$attr$stitest.ind.active[idsactive] <- at
 
