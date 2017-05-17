@@ -14,7 +14,9 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   aiclass.FUN = NULL, roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
   hiv_disclose.FUN = hiv_disclose_msm, part.FUN = part_msm,
   acts.FUN = acts_msm, condoms.FUN = condoms_msm,
-  riskhist.FUN = riskhist_msm, position.FUN = position_msm,
+  riskhist_prep.FUN = riskhist_prep_msm,
+  riskhist_stitest.FUN = riskhist_stitest_msm,
+  riskhist_ept.FUN = riskhist_ept_msm, position.FUN = position_msm,
   hiv_trans.FUN = hiv_trans_msm, sti_trans.FUN = sti_trans_msm,
   sti_recov.FUN = sti_recov_msm, sti_tx.FUN = sti_tx_msm,
   prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
@@ -77,8 +79,14 @@ partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
 
-\item{riskhist.FUN}{Module function to calculate risk history for uninfected
-persons in the population.}
+\item{riskhist_prep.FUN}{Module function to calculate risk history for uninfected
+persons in the population within a PrEP intervention.}
+
+\item{riskhist_stitest.FUN}{Module function to calculate risk history for uninfected
+persons in the population within a STI testing intervention.}
+
+\item{riskhist_ept.FUN}{Module function to calculate risk history for uninfected
+persons in the population within an EPT intervention.}
 
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 

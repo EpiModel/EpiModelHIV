@@ -519,7 +519,9 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      syph.tert.prog.prob = 0.15 / (52 * 7 * 20), #15% progress by the end of 20 years
+                      syph.tert.prog.prob = 0.00015625599,
+                      #15% progress by the end of 20 years =
+                      # 0.15 = 1 - (1 - per week prob)^(# of weeks)
 
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
@@ -797,13 +799,13 @@ param_msm <- function(nwstats,
                                 nrow = 3)
 
 
-  p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  p$riskh.prep.start <- max(1, prep.start - prep.risk.int - 1)
   p$riskh.stitest.start <- max(1, stitest.start - sti.highrisktest.int - 1)
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 
   if (is.null(p$partlist.start)) {
-    p$partlist.start <- min((p$stitest.start - p$sti.highrisktest.int - 1),
-                            (p$ept.start - p$ept.risk.int - 1))
+    p$partlist.start <- min((p$riskh.stitest.start - 1),
+                            (p$riskh.ept.start - 1))
   }
 
   p$method <- nwstats$method
@@ -920,8 +922,12 @@ init_msm <- function(nwstats,
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
 #' @param condoms.FUN Module function to simulate condom use within acts.
-#' @param riskhist.FUN Module function to calculate risk history for uninfected
-#'        persons in the population.
+#' @param riskhist_prep.FUN Module function to calculate risk history for uninfected
+#'        persons in the population within a PrEP intervention.
+#' @param riskhist_stitest.FUN Module function to calculate risk history for uninfected
+#'        persons in the population within a STI testing intervention.
+#' @param riskhist_ept.FUN Module function to calculate risk history for uninfected
+#'        persons in the population within an EPT intervention.
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param hiv_trans.FUN Module function to stochastically simulate HIV transmission
 #'        over acts given individual and dyadic attributes.
@@ -972,7 +978,9 @@ control_msm <- function(simno = 1,
                         part.FUN = part_msm,
                         acts.FUN = acts_msm,
                         condoms.FUN = condoms_msm,
-                        riskhist.FUN = riskhist_msm,
+                        riskhist_prep.FUN = riskhist_prep_msm,
+                        riskhist_stitest.FUN = riskhist_stitest_msm,
+                        riskhist_ept.FUN = riskhist_ept_msm,
                         position.FUN = position_msm,
                         hiv_trans.FUN = hiv_trans_msm,
                         sti_trans.FUN = sti_trans_msm,
