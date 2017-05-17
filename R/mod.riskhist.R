@@ -53,9 +53,7 @@ riskhist_prep_msm <- function(dat, at) {
   inst.deg <- get_degree(dat$el[[3]])
 
 
-  ############################
-  ## HIV PrEP Indications   ##
-  ############################
+  # Indications -------------------------------------------------------------
 
   # Any UAI
   uai.any <- unique(c(el2$p1[el2$uai > 0],
@@ -143,9 +141,8 @@ riskhist_stitest_msm <- function(dat, at) {
         dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
     }
 
-    ############################
-    ## STI Testing Conditions ##
-    ############################
+    # Indications -------------------------------------------------------------
+
 
     part.list <- dat$temp$part.list
 
@@ -237,9 +234,8 @@ riskhist_ept_msm <- function(dat, at) {
     by_pid <- group_by(al, pid)
     uai <- summarise(by_pid, uai = sum(uai))[, 2]
 
-    #####################
-    ## EPT  Conditions ##
-    #####################
+
+    # Indications -------------------------------------------------------------
 
     ## Eligibility of partners
     part.list <- dat$temp$part.list
