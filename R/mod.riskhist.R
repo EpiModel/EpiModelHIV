@@ -45,14 +45,6 @@ riskhist_prep_msm <- function(dat, at) {
     dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
     dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
     dat$attr$prep.ind.sti <- rep(NA, length(uid))
-    dat$attr$stitest.ind.active <- rep(NA, length(uid))
-    dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
-    dat$attr$stitest.ind.sti <- rep(NA, length(uid))
-    dat$attr$stitest.ind.newpartners <- rep(NA, length(uid))
-    dat$attr$stitest.ind.concurrpartner <- rep(NA, length(uid))
-    dat$attr$stitest.ind.partnersti <- rep(NA, length(uid))
-    dat$attr$stitest.ind.uai.nmain <- rep(NA, length(uid))
-    dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
   }
 
   ## Degree ##
@@ -154,12 +146,8 @@ riskhist_stitest_msm <- function(dat, at) {
     uai <- summarise(by_pid, uai = sum(uai))[, 2]
     el <- as.data.frame(cbind(dat$temp$el, uai))
 
-    # Initialize attributes
-    if (is.null(dat$attr$prep.ind.uai.mono)) {
-        dat$attr$prep.ind.uai.mono <- rep(NA, length(uid))
-        dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
-        dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
-        dat$attr$prep.ind.sti <- rep(NA, length(uid))
+    # Initialize indication attributes
+    if (is.null(dat$attr$stitest.ind.active)) {
         dat$attr$stitest.ind.active <- rep(NA, length(uid))
         dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
         dat$attr$stitest.ind.sti <- rep(NA, length(uid))
