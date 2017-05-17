@@ -243,10 +243,42 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
-#' @param stitest.active.int Interval in which individuals need to be sexually
-#'        active for STI Testing Guidelines.
+#' @param riskhist.int Interval of look-back period in which risk history is
+#'        assessed for PrEP, STI testing, and EPT interventions.
 #' @param stitest.start Time step at which the STI testing guidelines
 #'        intervention should start.
+#' @param stitest.active.int Intertest interval for lower-risk group in STI
+#'        testing intervention.
+#' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to
+#'        urethral testing among those selected to be tested.
+#' @param sti.highrisktest.int Intertest interval for higher-risk group in STI
+#'        testing intervention.
+#' @param stitest.elig.model Modeling approach for determining who is eligible
+#'        for high-risk STI testing. Current options are limited to:
+#'        \code{"all"}.
+#' @param stianntest.coverage The proportion of the eligible population who are
+#'        starting annual STI testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.cov.method The method for calculating STI annual testing,
+#'        with options of \code{"curr"} to base the numerator  on the number of
+#'        people currently annually testing for STI and \code{"ever"} to base it
+#'        on the number of people who have ever been annually tested for STI.
+#'        This is not inclusive of those who are simultaneously indicated for
+#'        more frequent testing.
+#' @param stianntest.cov.rate The rate at which persons initiate annual STI
+#'        testing conditional on their eligibility, with 1 equal to instant
+#'        start.
+#' @param stihighrisktest.coverage The proportion of the eligible population
+#'        who are starting high-risk STI testing once they become eligible.
+#' @param stihighrisktest.cov.method The method for calculating STI high-risk
+#'        testing, with options of \code{"curr"} to base the numerator on the
+#'        number of people currently high-risk testing for STI and \code{"ever"}
+#'        to base it on the number of people who have ever been high-risk tested
+#'        for STI.
+#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
+#'        STI testing conditional on their eligibility, with 1 equal to instant
+#'        start.
 #' @param ept.start Time step at which the EPT intervention should start.
 #' @param ept.risk.int Time window for assessment of risk eligibility for EPT
 #'        in days.
@@ -395,36 +427,6 @@
 #'        tertiary stage syphilis infection.
 #' @param syph.tert.asympt.prob.tx Probability of treatment, given diagnosis,
 #'        for asymptomatic tertiary stage syphilis infection.
-#' @param tst.rect.sti.rr Relative likelihood of rectal STI testing compared to
-#'        urethral testing among those selected to be tested.
-#' @param sti.highrisktest.int Interval in which individuals need to be engaged
-#'        in high-risk behavior for STI screening for high-risk testers.
-#' @param stitest.elig.model Modeling approach for determining who is eligible
-#'        for high-risk STI testing. Current options are limited to:
-#'        \code{"all"}.
-#' @param stianntest.coverage The proportion of the eligible population who are
-#'        starting annual STI testing once they become eligible. This is not
-#'        inclusive of those who are simultaneously indicated for more frequent
-#'        testing.
-#' @param stianntest.cov.method The method for calculating STI annual testing,
-#'        with options of \code{"curr"} to base the numerator  on the number of
-#'        people currently annually testing for STI and \code{"ever"} to base it
-#'        on the number of people who have ever been annually tested for STI.
-#'        This is not inclusive of those who are simultaneously indicated for
-#'        more frequent testing.
-#' @param stianntest.cov.rate The rate at which persons initiate annual STI
-#'        testing conditional on their eligibility, with 1 equal to instant
-#'        start.
-#' @param stihighrisktest.coverage The proportion of the eligible population
-#'        who are starting high-risk STI testing once they become eligible.
-#' @param stihighrisktest.cov.method The method for calculating STI high-risk
-#'        testing, with options of \code{"curr"} to base the numerator on the
-#'        number of people currently high-risk testing for STI and \code{"ever"}
-#'        to base it on the number of people who have ever been high-risk tested
-#'        for STI.
-#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
-#'        STI testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP
 #'        visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening
@@ -604,8 +606,18 @@ param_msm <- function(nwstats,
                       prep.risk.reassess = TRUE,
 
                       # STD testing intervention
-                      stitest.active.int = 364,
+                      riskhist.int = 182,
                       stitest.start = Inf,
+                      stitest.active.int = 364,
+                      tst.rect.sti.rr = 1,
+                      sti.highrisktest.int = 182,
+                      stitest.elig.model = "all",
+                      stianntest.coverage = 0,
+                      stianntest.cov.method = "curr",
+                      stianntest.cov.rate = 1,
+                      stihighrisktest.coverage = 0,
+                      stihighrisktest.cov.method = "curr",
+                      stihighrisktest.cov.rate = 1,
 
                       # EPT intervention
                       ept.start = Inf,
@@ -690,16 +702,6 @@ param_msm <- function(nwstats,
                       syph.tert.sympt.prob.tx = 0.90,
                       syph.tert.asympt.prob.tx = 1,
 
-                      tst.rect.sti.rr = 1,
-                      sti.highrisktest.int = 182,
-                      stitest.elig.model = "all",
-                      stianntest.coverage = 0,
-                      stianntest.cov.method = "curr",
-                      stianntest.cov.rate = 1,
-                      stihighrisktest.coverage = 0,
-                      stihighrisktest.cov.method = "curr",
-                      stihighrisktest.cov.rate = 1,
-
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
@@ -735,7 +737,7 @@ param_msm <- function(nwstats,
 
   if (!(testing.pattern %in% c("memoryless", "interval"))) {
     stop("testing.pattern must be \"memoryless\" or \"interval\" ",
-          call. = FALSE)
+         call. = FALSE)
   }
 
   if (race.method == 1) {

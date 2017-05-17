@@ -51,49 +51,48 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
   prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
-  prep.risk.int = 182, prep.risk.reassess = TRUE,
-  stitest.active.int = 364, stitest.start = Inf, ept.start = Inf,
-  ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
-  ept.cov.rate = 1, ept.provision.partner.main = 0.5,
-  ept.provision.partner.casl = 0.5, ept.provision.partner.inst = 0.5,
-  ept.uptake.partner.main = 0.5, ept.uptake.partner.casl = 0.5,
-  ept.uptake.partner.inst = 0.5, ept.gc.success = 1, ept.ct.success = 1,
-  ept.provision.short.main.rr = 1, ept.provision.short.casl.rr = 1,
-  ept.provision.short.inst.rr = 1, ept.provision.med.main.rr = 1,
-  ept.provision.med.casl.rr = 1, ept.provision.med.inst.rr = 1,
-  ept.provision.long.main.rr = 1, ept.provision.long.casl.rr = 1,
-  ept.provision.long.inst.rr = 1, rcomp.prob = 0, rcomp.adh.groups = 0:3,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.41333,
-  ugc.tprob = 0.3140472, rct.tprob = 0.1907554, uct.tprob = 0.16394697,
-  rsyph.tprob = 0.04668348, usyph.tprob = 0.03598792,
-  syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
-  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
-  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
-  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
-  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
-  syph.late.tx.int = 15, gc.prob.cease = 0, ct.prob.cease = 0,
-  syph.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
+  prep.risk.int = 182, prep.risk.reassess = TRUE, riskhist.int = 182,
+  stitest.start = Inf, stitest.active.int = 364, tst.rect.sti.rr = 1,
+  sti.highrisktest.int = 182, stitest.elig.model = "all",
+  stianntest.coverage = 0, stianntest.cov.method = "curr",
+  stianntest.cov.rate = 1, stihighrisktest.coverage = 0,
+  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
+  ept.start = Inf, ept.risk.int = 60, ept.coverage = 0,
+  ept.cov.method = "curr", ept.cov.rate = 1,
+  ept.provision.partner.main = 0.5, ept.provision.partner.casl = 0.5,
+  ept.provision.partner.inst = 0.5, ept.uptake.partner.main = 0.5,
+  ept.uptake.partner.casl = 0.5, ept.uptake.partner.inst = 0.5,
+  ept.gc.success = 1, ept.ct.success = 1, ept.provision.short.main.rr = 1,
+  ept.provision.short.casl.rr = 1, ept.provision.short.inst.rr = 1,
+  ept.provision.med.main.rr = 1, ept.provision.med.casl.rr = 1,
+  ept.provision.med.inst.rr = 1, ept.provision.long.main.rr = 1,
+  ept.provision.long.casl.rr = 1, ept.provision.long.inst.rr = 1,
+  rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, rgc.tprob = 0.41333, ugc.tprob = 0.3140472,
+  rct.tprob = 0.1907554, uct.tprob = 0.16394697, rsyph.tprob = 0.04668348,
+  usyph.tprob = 0.03598792, syph.earlat.rr = 0.5, syph.late.rr = 0,
+  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
+  uct.sympt.prob = 0.58, syph.prim.sympt.prob = 0.5,
+  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
+  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
+  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
+  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
+  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
+  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
+  ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
+  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
   syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 1,
   syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 1,
   syph.earlat.sympt.prob.tx = 0.15, syph.earlat.asympt.prob.tx = 1,
   syph.latelat.sympt.prob.tx = 0.1, syph.latelat.asympt.prob.tx = 1,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 1,
-  tst.rect.sti.rr = 1, sti.highrisktest.int = 182,
-  stitest.elig.model = "all", stianntest.coverage = 0,
-  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
-  stihighrisktest.coverage = 0, stihighrisktest.cov.method = "curr",
-  stihighrisktest.cov.rate = 1, prep.sti.screen.int = 182,
-  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.35, hiv.ugc.rr = 1.35, hiv.rct.rr = 2.35,
-  hiv.uct.rr = 1.35, hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572,
-  hiv.usyph.rr = 1.7456618, syph.rhiv.rr = 6.54189295,
-  syph.uhiv.rr = 5.09641658, rgc.hiv.rr = 1, ugc.hiv.rr = 1,
-  rct.hiv.rr = 1, uct.hiv.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
-  partlist.start = NULL, ...)
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
+  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.35,
+  hiv.ugc.rr = 1.35, hiv.rct.rr = 2.35, hiv.uct.rr = 1.35,
+  hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572, hiv.usyph.rr = 1.7456618,
+  syph.rhiv.rr = 6.54189295, syph.uhiv.rr = 5.09641658, rgc.hiv.rr = 1,
+  ugc.hiv.rr = 1, rct.hiv.rr = 1, uct.hiv.rr = 1,
+  hivdx.syph.sympt.tx.rr = 1.45, partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -442,11 +441,53 @@ in days.}
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
 
-\item{stitest.active.int}{Interval in which individuals need to be sexually
-active for STI Testing Guidelines.}
+\item{riskhist.int}{Interval of look-back period in which risk history is
+assessed for PrEP, STI testing, and EPT interventions.}
 
 \item{stitest.start}{Time step at which the STI testing guidelines
 intervention should start.}
+
+\item{stitest.active.int}{Intertest interval for lower-risk group in STI
+testing intervention.}
+
+\item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to
+urethral testing among those selected to be tested.}
+
+\item{sti.highrisktest.int}{Intertest interval for higher-risk group in STI
+testing intervention.}
+
+\item{stitest.elig.model}{Modeling approach for determining who is eligible
+for high-risk STI testing. Current options are limited to:
+\code{"all"}.}
+
+\item{stianntest.coverage}{The proportion of the eligible population who are
+starting annual STI testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.cov.method}{The method for calculating STI annual testing,
+with options of \code{"curr"} to base the numerator  on the number of
+people currently annually testing for STI and \code{"ever"} to base it
+on the number of people who have ever been annually tested for STI.
+This is not inclusive of those who are simultaneously indicated for
+more frequent testing.}
+
+\item{stianntest.cov.rate}{The rate at which persons initiate annual STI
+testing conditional on their eligibility, with 1 equal to instant
+start.}
+
+\item{stihighrisktest.coverage}{The proportion of the eligible population
+who are starting high-risk STI testing once they become eligible.}
+
+\item{stihighrisktest.cov.method}{The method for calculating STI high-risk
+testing, with options of \code{"curr"} to base the numerator on the
+number of people currently high-risk testing for STI and \code{"ever"}
+to base it on the number of people who have ever been high-risk tested
+for STI.}
+
+\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
+STI testing conditional on their eligibility, with 1 equal to instant
+start.}
 
 \item{ept.start}{Time step at which the EPT intervention should start.}
 
@@ -663,45 +704,6 @@ tertiary stage syphilis infection.}
 
 \item{syph.tert.asympt.prob.tx}{Probability of treatment, given diagnosis,
 for asymptomatic tertiary stage syphilis infection.}
-
-\item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to
-urethral testing among those selected to be tested.}
-
-\item{sti.highrisktest.int}{Interval in which individuals need to be engaged
-in high-risk behavior for STI screening for high-risk testers.}
-
-\item{stitest.elig.model}{Modeling approach for determining who is eligible
-for high-risk STI testing. Current options are limited to:
-\code{"all"}.}
-
-\item{stianntest.coverage}{The proportion of the eligible population who are
-starting annual STI testing once they become eligible. This is not
-inclusive of those who are simultaneously indicated for more frequent
-testing.}
-
-\item{stianntest.cov.method}{The method for calculating STI annual testing,
-with options of \code{"curr"} to base the numerator  on the number of
-people currently annually testing for STI and \code{"ever"} to base it
-on the number of people who have ever been annually tested for STI.
-This is not inclusive of those who are simultaneously indicated for
-more frequent testing.}
-
-\item{stianntest.cov.rate}{The rate at which persons initiate annual STI
-testing conditional on their eligibility, with 1 equal to instant
-start.}
-
-\item{stihighrisktest.coverage}{The proportion of the eligible population
-who are starting high-risk STI testing once they become eligible.}
-
-\item{stihighrisktest.cov.method}{The method for calculating STI high-risk
-testing, with options of \code{"curr"} to base the numerator on the
-number of people currently high-risk testing for STI and \code{"ever"}
-to base it on the number of people who have ever been high-risk tested
-for STI.}
-
-\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
-STI testing conditional on their eligibility, with 1 equal to instant
-start.}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP
 visits.}

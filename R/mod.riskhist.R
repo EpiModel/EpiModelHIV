@@ -124,9 +124,6 @@ riskhist_stitest_msm <- function(dat, at) {
   race <- dat$attr$race
   sexactive <- dat$attr$sexactive
 
-  ## Parameters
-  stitest.active.int <- dat$param$stitest.active.int # DBNU
-
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
   al <- as.data.frame(dat$temp$al)
