@@ -519,10 +519,10 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      syph.tert.prog.prob = 0.00015625599, 
-                      #15% progress by the end of 20 years = 
+                      syph.tert.prog.prob = 0.00015625599,
+                      #15% progress by the end of 20 years =
                       # 0.15 = 1 - (1 - per week prob)^(# of weeks)
-                      
+
                       b.B.rate = 1e-3 / 7,
                       b.W.rate = 1e-3 / 7,
                       birth.age = 18,
@@ -799,7 +799,7 @@ param_msm <- function(nwstats,
                                 nrow = 3)
 
 
-  p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  p$riskh.prep.start <- max(1, prep.start - prep.risk.int - 1)
   p$riskh.stitest.start <- max(1, stitest.start - sti.highrisktest.int - 1)
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 

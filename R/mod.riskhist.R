@@ -12,7 +12,7 @@
 #'
 riskhist_prep_msm <- function(dat, at) {
 
-  if (at < dat$param$riskh.start) {
+  if (at < dat$param$riskh.prep.start) {
     return(dat)
   }
 
