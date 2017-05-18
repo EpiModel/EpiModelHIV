@@ -243,6 +243,7 @@
 #'        in days.
 #' @param prep.risk.reassess If \code{TRUE}, reassess eligibility for PrEP at
 #'        each testing visit.
+#'
 #' @param riskhist.int Interval of look-back period in which risk history is
 #'        assessed for PrEP, STI testing, and EPT interventions.
 #' @param stitest.start Time step at which the STI testing guidelines
@@ -279,6 +280,9 @@
 #' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
 #'        STI testing conditional on their eligibility, with 1 equal to instant
 #'        start.
+#' @param partnercutoff The cutoff point for STI high-risk indication, above
+#'        which person would be indicated for higher-risk testing schedules.
+#'
 #' @param ept.start Time step at which the EPT intervention should start.
 #' @param ept.risk.int Time window for assessment of risk eligibility for EPT
 #'        in days.
@@ -333,6 +337,7 @@
 #' @param ept.provision.long.inst.rr Relative risk for provision to a one-off
 #'        partner with whom the last sexual act was a long time ago
 #'        (41-60 days).
+#'
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
 #'        per act, and 1 is a complete cessation of condom use following PrEP
@@ -618,6 +623,7 @@ param_msm <- function(nwstats,
                       stihighrisktest.coverage = 0,
                       stihighrisktest.cov.method = "curr",
                       stihighrisktest.cov.rate = 1,
+                      partnercutoff = 1,
 
                       # EPT intervention
                       ept.start = Inf,
@@ -802,7 +808,7 @@ param_msm <- function(nwstats,
 
 
   p$riskh.prep.start <- max(1, prep.start - prep.risk.int - 1)
-  p$riskh.stitest.start <- max(1, stitest.start - sti.highrisktest.int - 1)
+  p$riskh.stitest.start <- max(1, stitest.start - riskhist.int - 1)
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 
   if (is.null(p$partlist.start)) {

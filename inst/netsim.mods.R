@@ -57,7 +57,7 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.coverage = 0.8,
 
                    prep.start = 5000,
-                   stitest.start = 250,
+                   stitest.start = 100,
                    ept.start = 5000,
 
                    stitest.elig.model = "sti",
@@ -76,7 +76,7 @@ init <- init_msm(nwstats = st,
                  prev.syph.B = 0.015,
                  prev.syph.W = 0.015)
 
-control <- control_msm(nsteps = 2600)
+control <- control_msm(nsteps = 100)
 
 sim <- netsim(est, param, init, control)
 

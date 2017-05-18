@@ -119,6 +119,9 @@ riskhist_stitest_msm <- function(dat, at) {
       return(dat)
   }
 
+  ## Parameters
+  partnercutoff <- dat$param$partnercutoff
+
   ## Attributes
   uid <- dat$attr$uid
   race <- dat$attr$race
@@ -145,7 +148,7 @@ riskhist_stitest_msm <- function(dat, at) {
   ### High-risk: # of partners, CAI
   ## Number of partners
   # Reset # of partners - length of "recent" interval is drawn from interval of partner list lookback
-  dat$attr$recentpartners <- rep(0, length(dat$attr$active))
+  dat$attr$recentpartners <- rep(0, length(which(race %in% c("B","W"))))
 
   #	Have more than one sex partner in last x months
   idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
@@ -157,10 +160,10 @@ riskhist_stitest_msm <- function(dat, at) {
 
   # Calculate # of recent partners: 0 for those
   dat$attr$recentpartners[idsnotpartlist] <- 0
-  dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, 1]), 2]
+  dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, "Var1"]), 2]
 
-  # Choose those who have had more than 1 partner in last x months
-  idsrecentpartners <- which(dat$attr$recentpartners > 1)
+  # Choose those who have had more than X partners in last x months
+  idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
 
   ## Any CAI (copied from PrEP module)
   uai.any <- unique(c(el$p1[el$uai > 0], el$p2[el$uai > 0]))

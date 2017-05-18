@@ -57,8 +57,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   stianntest.coverage = 0, stianntest.cov.method = "curr",
   stianntest.cov.rate = 1, stihighrisktest.coverage = 0,
   stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  ept.start = Inf, ept.risk.int = 60, ept.coverage = 0,
-  ept.cov.method = "curr", ept.cov.rate = 1,
+  partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
+  ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
   ept.provision.partner.main = 0.5, ept.provision.partner.casl = 0.5,
   ept.provision.partner.inst = 0.5, ept.uptake.partner.main = 0.5,
   ept.uptake.partner.casl = 0.5, ept.uptake.partner.inst = 0.5,
@@ -488,6 +488,9 @@ for STI.}
 \item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
 STI testing conditional on their eligibility, with 1 equal to instant
 start.}
+
+\item{partnercutoff}{The cutoff point for STI high-risk indication, above
+which person would be indicated for higher-risk testing schedules.}
 
 \item{ept.start}{Time step at which the EPT intervention should start.}
 
