@@ -64,11 +64,6 @@ sti_trans_msm <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
   syph.infTime <- dat$attr$syph.infTime
-  rGC.lastinfTime <- dat$attr$rGC.lastinfTime
-  uGC.lastinfTime <- dat$attr$uGC.lastinfTime
-  rCT.lastinfTime <- dat$attr$rCT.lastinfTime
-  uCT.lastinfTime <- dat$attr$uCT.lastinfTime
-  syph.lastinfTime <- dat$attr$syph.lastinfTime
 
   # GC/CT Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
@@ -117,7 +112,6 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes
   rGC[idsInf_rgc] <- 1
   rGC.infTime[idsInf_rgc] <- at
-  rGC.lastinfTime[idsInf_rgc] <- at
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   diag.status.gc[idsInf_rgc] <- 0
 
@@ -149,7 +143,6 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes
   uGC[idsInf_ugc] <- 1
   uGC.infTime[idsInf_ugc] <- at
-  uGC.lastinfTime[idsInf_ugc] <- at
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
   diag.status.gc[idsInf_ugc] <- 0
 
@@ -182,7 +175,6 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes
   rCT[idsInf_rct] <- 1
   rCT.infTime[idsInf_rct] <- at
-  rCT.lastinfTime[idsInf_rct] <- at
   rCT.sympt[idsInf_rct] <- rbinom(length(idsInf_rct), 1, rct.sympt.prob)
   diag.status.ct[idsInf_rct] <- 0
 
@@ -215,7 +207,6 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes
   uCT[idsInf_uct] <- 1
   uCT.infTime[idsInf_uct] <- at
-  uCT.lastinfTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   diag.status.ct[idsInf_uct] <- 0
 
@@ -333,7 +324,7 @@ sti_trans_msm <- function(dat, at) {
     infected.syph <- c(disc.syph.ip[trans.syph.ip == 1, 2],
                        disc.syph.rp[trans.syph.rp == 1, 1])
     syphilis[infected.syph] <- 1
-    syph.infTime[infected.syph] <- syph.lastinfTime[infected.syph] <- at
+    syph.infTime[infected.syph] <- at
     stage.syph[infected.syph] <- 1
     stage.time.syph[infected.syph] <- 0
     diag.status.syph[infected.syph] <- 0
@@ -341,7 +332,6 @@ sti_trans_msm <- function(dat, at) {
 
   uCT[idsInf_uct] <- 1
   uCT.infTime[idsInf_uct] <- at
-  uCT.lastinfTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   diag.status.ct[idsInf_uct] <- 0
 
@@ -350,7 +340,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Syphilis
   dat$attr$syphilis <- syphilis
-  dat$attr$syph.infTime <- dat$attr$syph.lastinfTime <- syph.infTime
+  dat$attr$syph.infTime <- syph.infTime
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$diag.status.syph <- diag.status.syph
@@ -359,8 +349,8 @@ sti_trans_msm <- function(dat, at) {
   # Gonorrhea
   dat$attr$rGC <- rGC
   dat$attr$uGC <- uGC
-  dat$attr$rGC.infTime <- dat$attr$rGC.lastinfTime <- rGC.infTime
-  dat$attr$uGC.infTime <- dat$attr$uGC.infTime <- uGC.infTime
+  dat$attr$rGC.infTime <- rGC.infTime
+  dat$attr$uGC.infTime <- uGC.infTime
   dat$attr$rGC.sympt <- rGC.sympt
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$diag.status.gc <- diag.status.gc
@@ -368,8 +358,8 @@ sti_trans_msm <- function(dat, at) {
   # Chlamydia
   dat$attr$rCT <- rCT
   dat$attr$uCT <- uCT
-  dat$attr$rCT.infTime <- dat$attr$rCT.infTime <- rCT.infTime
-  dat$attr$uCT.infTime <- dat$attr$uCT.infTime <- uCT.infTime
+  dat$attr$rCT.infTime <- rCT.infTime
+  dat$attr$uCT.infTime <- uCT.infTime
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
   dat$attr$diag.status.ct <- diag.status.ct

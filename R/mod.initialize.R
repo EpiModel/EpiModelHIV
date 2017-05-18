@@ -714,7 +714,6 @@ init_status_sti_msm <- function(dat) {
     # Infection-related attributes
     # Syphilis
     syphilis <- rep(0, num)
-    syph.lastinfTime <- rep(NA, num)
     syph.infTime <- rep(NA, num)
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
@@ -737,8 +736,6 @@ init_status_sti_msm <- function(dat) {
     rGC <- rep(0, num)
     rGC.infTime <- rep(NA, num)
     uGC.infTime <- rep(NA, num)
-    rGC.lastinfTime <- rep(NA, num)
-    uGC.lastinfTime <- rep(NA, num)
     rGC.sympt <- rep(NA, num)
     uGC.sympt <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
@@ -755,8 +752,6 @@ init_status_sti_msm <- function(dat) {
     rCT <- rep(0, num)
     rCT.infTime <- rep(NA, num)
     uCT.infTime <- rep(NA, num)
-    rCT.lastinfTime <- rep(NA, num)
-    uCT.lastinfTime <- rep(NA, num)
     rCT.sympt <- rep(NA, num)
     uCT.sympt <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
@@ -785,7 +780,7 @@ init_status_sti_msm <- function(dat) {
     while (sum(syphilis[ids.W]) != nInfsyphW) {
         syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
     }
-    syph.infTime[syphilis ==  1] <- syph.lastinfTime[syphilis == 1] <- 1
+    syph.infTime[syphilis ==  1] <- 1
 
     inf.ids.B <- intersect(ids.B, which(syphilis == 1))
     inf.ids.W <- intersect(ids.W, which(syphilis == 1))
@@ -868,8 +863,8 @@ init_status_sti_msm <- function(dat) {
     rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
     uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
 
-    rGC.infTime[rGC == 1] <- rGC.lastinfTime[rGC == 1] <- 1
-    uGC.infTime[uGC == 1] <- uGC.lastinfTime[uGC == 1] <- 1
+    rGC.infTime[rGC == 1] <- 1
+    uGC.infTime[uGC == 1] <- 1
 
     diag.status.gc[uGC == 1 | rGC == 1] <- 0
 
@@ -887,8 +882,8 @@ init_status_sti_msm <- function(dat) {
     rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
     uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
 
-    rCT.infTime[rCT == 1] <- rCT.lastinfTime[rCT == 1] <- 1
-    uCT.infTime[uCT == 1] <- uCT.lastinfTime[uCT == 1] <- 1
+    rCT.infTime[rCT == 1] <- 1
+    uCT.infTime[uCT == 1] <- 1
 
     diag.status.ct[uCT == 1 | rCT == 1] <- 0
 
@@ -901,7 +896,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$syph.infTime <- syph.infTime
-    dat$attr$syph.lastinfTime <- syph.lastinfTime
     dat$attr$stage.prim.sympt <- stage.prim.sympt
     dat$attr$stage.seco.sympt <- stage.seco.sympt
     dat$attr$stage.earlat.sympt <- stage.earlat.sympt
@@ -922,8 +916,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$diag.status.gc <- diag.status.gc
     dat$attr$rGC.infTime <- rGC.infTime
     dat$attr$uGC.infTime <- uGC.infTime
-    dat$attr$rGC.lastinfTime <- rGC.lastinfTime
-    dat$attr$uGC.lastinfTime <- uGC.lastinfTime
     dat$attr$rGC.sympt <- rGC.sympt
     dat$attr$uGC.sympt <- uGC.sympt
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
@@ -945,8 +937,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$rCT.infTime <- rCT.infTime
     dat$attr$uCT.infTime <- uCT.infTime
-    dat$attr$rCT.lastinfTime <- rCT.lastinfTime
-    dat$attr$uCT.lastinfTime <- uCT.lastinfTime
     dat$attr$rCT.sympt <- rCT.sympt
     dat$attr$uCT.sympt <- uCT.sympt
     dat$attr$last.neg.test.rct <- last.neg.test.rct
