@@ -164,7 +164,6 @@ sti_test_msm <- function(dat, at) {
   stihighrisktest.coverage <- dat$param$stihighrisktest.coverage
   stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
   testing.pattern.sti <- dat$param$testing.pattern.sti
-  riskhist.int <- dat$param$riskhist.int
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
   tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
@@ -175,27 +174,20 @@ sti_test_msm <- function(dat, at) {
 
   # Annual indications- sexually active in last year
   stitestind1 <- dat$attr$stitest.ind.active
-
-  # Annual - testing trajectory update
-  idsactive <- intersect(which(at - stitestind1 <= riskhist.int), idsEligTest)
-
-  # High-risk - testing trajectory update
+  idsactive <- intersect(which(stitestind1 == 1), idsEligTest)
 
   # STI testing higher-risk eligibility scenarios
-  c1 <- dat$attr$stitest.ind.recentpartners
-  idshighrisk <- which((at - c1 <= riskhist.int))
-  idsnothighriskelig <- which(tt.traj.syph == 2 & ((at - c1 > riskhist.int)))
+  stitestind2 <- dat$attr$stitest.ind.recentpartners
+  idshighrisk <- which(stitestind2 == 1)
+
 
   ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------
-
-  # Reduce testing trajectory to NA if no longer indicated for more frequent
-  # high-risk testing
+  # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
+  idsnothighriskelig <- which(tt.traj.syph == 2 & stitestind2 != 1)
   tt.traj.syph[idsnothighriskelig] <- tt.traj.gc[idsnothighriskelig] <- tt.traj.ct[idsnothighriskelig] <- NA
 
-  # Remove testing trajectory if no longer indicated for annual testing
-  # (idsannual includes high-risk)
-  idsnotactiveelig <- which(tt.traj.syph == 1 & (at - stitestind1 >= riskhist.int))
-  dat$attr$stianntestLastElig[idsnotactiveelig] <- at
+  # Reduce testing trajectory to NA if no longer indicated for lower-risk testing
+  idsnotactiveelig <- which(tt.traj.syph == 1 & stitestind1 != 1)
   tt.traj.syph[idsnotactiveelig] <- tt.traj.gc[idsnotactiveelig] <- tt.traj.ct[idsnotactiveelig] <- NA
 
   ## Initiation -------------------------------------------------------------
@@ -218,7 +210,7 @@ sti_test_msm <- function(dat, at) {
     }
   }
 
-  ## Update testing trajectory
+  ## Update testing trajectory for higher-risk
   if (length(idsStart) > 0) {
     tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
   }
@@ -228,7 +220,6 @@ sti_test_msm <- function(dat, at) {
   stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
 
   idsEligSt <- setdiff(idsactive, idshighrisk)
-
   nEligSt <- length(setdiff(idsactive, idshighrisk))
 
   nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
@@ -242,7 +233,7 @@ sti_test_msm <- function(dat, at) {
     }
   }
 
-  ## Update testing trajectory
+  ## Update testing trajectory for lower-risk
   if (length(idsStart) > 0) {
     tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
   }
@@ -458,7 +449,6 @@ sti_test_msm <- function(dat, at) {
                                                   tst.rct.pos, tst.uct.pos,
                                                   tst.syph.pos))
 
-
   ## Output -----------------------------------------------------------------
 
   # Attributes
@@ -490,6 +480,7 @@ sti_test_msm <- function(dat, at) {
 
   return(dat)
 }
+
 
 
 #' @title HIV Diagnosis Module

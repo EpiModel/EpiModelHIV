@@ -116,7 +116,7 @@ riskhist_prep_msm <- function(dat, at) {
 riskhist_stitest_msm <- function(dat, at) {
 
   if (at < dat$param$riskh.stitest.start) {
-      return(dat)
+    return(dat)
   }
 
   ## Parameters
@@ -125,56 +125,45 @@ riskhist_stitest_msm <- function(dat, at) {
   ## Attributes
   uid <- dat$attr$uid
   race <- dat$attr$race
-  sexactive <- dat$attr$sexactive
-
-  ## Edgelist, adds uai summation per partnership from act list
-  pid <- NULL # For R CMD Check
-  al <- as.data.frame(dat$temp$al)
-  by_pid <- group_by(al, pid)
-  uai <- summarise(by_pid, uai = sum(uai))[, 2]
-  el <- as.data.frame(cbind(dat$temp$el, uai))
 
   # Initialize indication attributes
   if (is.null(dat$attr$stitest.ind.active)) {
-    dat$attr$stitest.ind.active <- rep(NA, length(uid))
-    dat$attr$stitest.ind.recentpartners <- rep(NA, length(uid))
-    dat$attr$stitest.ind.uai.any <- rep(NA, length(uid))
+    dat$attr$stitest.ind.active <- rep(0, length(uid))
+    dat$attr$stitest.ind.recentpartners <- rep(0, length(uid))
   }
 
   # Indications -------------------------------------------------------------
 
   part.list <- dat$temp$part.list
 
-  ### High-risk: # of partners, CAI
-  ## Number of partners
-  # Reset # of partners - length of "recent" interval is drawn from interval of partner list lookback
-  dat$attr$recentpartners <- rep(0, length(which(race %in% c("B","W"))))
-
-  #	Have more than one sex partner in last x months
+  ### Lower risk - existing in partner list (6 month look back)
   idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
   idsnotpartlist <- setdiff(which(race %in% c("B","W")), idspartlist)
   # these are relative ids of nodes in partner list
 
+  ### High-risk: Have more than one sex partner in last x months
+  # Reset # of partners at each time step- length of "recent" interval is drawn from interval of partner list lookback
+  dat$attr$recentpartners <- rep(0, length(which(race %in% c("B","W"))))
+
   # For those who had partners, calculate # of occurrences in partner list
   part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
-  # Calculate # of recent partners: 0 for those
-  dat$attr$recentpartners[idsnotpartlist] <- 0
+  # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
   dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, "Var1"]), 2]
 
   # Choose those who have had more than X partners in last x months
   idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
-
-  ## Any CAI (copied from PrEP module)
-  uai.any <- unique(c(el$p1[el$uai > 0], el$p2[el$uai > 0]))
+  idsnotrecentpartners <- setdiff(which(race %in% c("B","W")), idsrecentpartners)
 
   ### Update STI indication attributes
-  dat$attr$stitest.ind.active <- sexactive
-  dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- at
-  dat$attr$stitest.ind.uai.any[uai.any] <- at
+  dat$attr$stitest.ind.active[idspartlist] <- 1
+  dat$attr$stitest.ind.active[idsnotpartlist] <- 0
+  dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
+  dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
 
   return(dat)
 }
+
 
 
 #' @title Risk History for EPT Module

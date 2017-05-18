@@ -812,8 +812,8 @@ param_msm <- function(nwstats,
   p$riskh.ept.start <- max(1, ept.start - ept.risk.int - 1)
 
   if (is.null(p$partlist.start)) {
-    p$partlist.start <- min((p$riskh.stitest.start - 1),
-                            (p$riskh.ept.start - 1))
+    p$partlist.start <- min((p$riskh.stitest.start),
+                            (p$riskh.ept.start))
   }
 
   p$method <- nwstats$method
