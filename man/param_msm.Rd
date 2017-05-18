@@ -78,8 +78,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
   gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
   uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.prob.cease = 0,
-  ct.prob.cease = 0, syph.prob.cease = 0, gc.sympt.prob.tx = 0.9,
+  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
   syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 1,
   syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 1,
@@ -658,15 +657,6 @@ syphilis.}
 
 \item{syph.late.tx.int}{Average in days duration of treatment for late
 syphilis.}
-
-\item{gc.prob.cease}{Probability of ceasing sexual activity during
-symptomatic infection with gonorrhea.}
-
-\item{ct.prob.cease}{Probability of ceasing sexual activity during
-symptomatic infection with chlamydia.}
-
-\item{syph.prob.cease}{Probability of ceasing sexual activity during
-symptomatic infection with syphilis.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 

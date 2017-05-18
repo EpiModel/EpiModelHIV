@@ -7,17 +7,17 @@
 #' @inheritParams aging_msm
 #'
 #' @details
-#' The number of acts at each time step is specified as a function of the race 
-#' of both members in a pair and the expected values within black-black, 
-#' black-white,and white-white combinations. For one-off partnerships, this is 
-#' deterministically set at 1, whereas for main and causal partnerships it is a 
-#' stochastic draw from a Poisson distribution. The number of total acts may 
-#' further be modified by the level of HIV viral suppression in an infected 
+#' The number of acts at each time step is specified as a function of the race
+#' of both members in a pair and the expected values within black-black,
+#' black-white,and white-white combinations. For one-off partnerships, this is
+#' deterministically set at 1, whereas for main and causal partnerships it is a
+#' stochastic draw from a Poisson distribution. The number of total acts may
+#' further be modified by the level of HIV viral suppression in an infected
 #' person.
 #'
 #' @return
 #' This function returns the \code{dat} object with the updated discordant act
-#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids 
+#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids
 #' of the discordant pair repeated the number of times they have AI.
 #'
 #' @keywords module msm
@@ -32,11 +32,6 @@ acts_msm <- function(dat, at) {
     # Attributes
     status <- dat$attr$status
     race <- dat$attr$race
-    syphilis <- dat$attr$syphilis
-    rGC <- dat$attr$rGC
-    uGC <- dat$attr$uGC
-    rCT <- dat$attr$rCT
-    uCT <- dat$attr$uCT
 
     # Parameters
     ai.scale <- dat$param$ai.scale
@@ -71,7 +66,7 @@ acts_msm <- function(dat, at) {
 
     st1 <- status[el[, 1]]
     st2 <- status[el[, 2]]
-    
+
     # HIV discordancy
     disc <- abs(st1 - st2) == 1
     el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
@@ -89,11 +84,6 @@ acts_msm <- function(dat, at) {
                  (num.B == 1) * base.ai.BW.rate +
                  (num.B == 0) * base.ai.WW.rate
       ai.rate <- ai.rate * ai.scale
-
-      ## STI associated cessation of activity
-      idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
-      noActs <- el[, "p1"] %in% idsCease | el[, "p2"] %in% idsCease
-      ai.rate[noActs] <- 0
 
       # Final act number
       if (fixed == FALSE) {
@@ -120,6 +110,6 @@ acts_msm <- function(dat, at) {
 
   # Set most recent active edge as today for both active partners
   dat$attr$sexactive[dat$temp$el[, 1:2]] <- at
-  
+
   return(dat)
 }

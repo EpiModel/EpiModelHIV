@@ -400,12 +400,6 @@
 #'        syphilis.
 #' @param syph.late.tx.int Average in days duration of treatment for late
 #'        syphilis.
-#' @param gc.prob.cease Probability of ceasing sexual activity during
-#'        symptomatic infection with gonorrhea.
-#' @param ct.prob.cease Probability of ceasing sexual activity during
-#'        symptomatic infection with chlamydia.
-#' @param syph.prob.cease Probability of ceasing sexual activity during
-#'        symptomatic infection with syphilis.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
 #' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
 #' @param gc.asympt.prob.tx Probability of treatment, given diagnosis, for
@@ -687,10 +681,6 @@ param_msm <- function(nwstats,
 
                       syph.early.tx.int = 7, #2
                       syph.late.tx.int = 15,
-
-                      gc.prob.cease = 0,
-                      ct.prob.cease = 0,
-                      syph.prob.cease = 0,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,
