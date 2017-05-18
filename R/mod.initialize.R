@@ -930,8 +930,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
     dat$attr$tt.traj.syph <- rep(NA, num)
     dat$attr$syph.cease <- rep(NA, num)
-    dat$attr$inf.role.syph <- rep(NA, num)
-    dat$attr$inf.type.syph <- rep(NA, num)
 
     # Gonorrhea
     dat$attr$rGC <- rGC
