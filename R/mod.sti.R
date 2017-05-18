@@ -115,6 +115,7 @@ sti_trans_msm <- function(dat, at) {
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   diag.status.gc[idsInf_rgc] <- 0
 
+
   # Urethral GC ---------------------------------------------------------
 
   # Requires: rGC in receptive man, and no uGC in insertive man
@@ -212,6 +213,7 @@ sti_trans_msm <- function(dat, at) {
 
 
   # Syphilis ---------------------------------------------------------
+
   p1Inf_syph <- al[which(syphilis[al[, "p1"]] == 1 & syph.infTime[al[, "p1"]] < at &
                          syphilis[al[, "p2"]] == 0), , drop = FALSE]
   p2Inf_syph <- al[which(syphilis[al[, "p2"]] == 1 & syph.infTime[al[, "p2"]] < at &
@@ -225,98 +227,95 @@ sti_trans_msm <- function(dat, at) {
 
   ###### Insertive Man Infected with Syphilis (Col 1)
   if (is.null(dim(disc.syph.ip)[1])) {
-      trans.syph.ip <- NULL
-  }  else {
-  colnames(disc.syph.ip)[1:2] <- c("ins","rec")
+    trans.syph.ip <- NULL
+  } else {
+    colnames(disc.syph.ip)[1:2] <- c("ins","rec")
 
-  # Attributes of infected
-  ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
+    # Attributes of infected
+    ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
 
-  # Base TP from VL
-  ip.syph.tprob <- rep(rsyph.tprob, length(ip.stage.syph))
+    # Base TP from VL
+    ip.syph.tprob <- rep(rsyph.tprob, length(ip.stage.syph))
 
-  # Transform to log odds
-  ip.syph.tlo <- log(ip.syph.tprob/(1 - ip.syph.tprob))
+    # Transform to log odds
+    ip.syph.tlo <- log(ip.syph.tprob/(1 - ip.syph.tprob))
 
-  # Condom use multiplier
-  not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
-  ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(sti.cond.rr)
+    # Condom use multiplier
+    not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
+    ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(sti.cond.rr)
 
-  # Early latent-stage multipliers
-  isearlat <- which(ip.stage.syph %in% 4)
-  ip.syph.tlo[isearlat] <- ip.syph.tlo[isearlat] + log(syph.earlat.rr)
+    # Early latent-stage multipliers
+    isearlat <- which(ip.stage.syph %in% 4)
+    ip.syph.tlo[isearlat] <- ip.syph.tlo[isearlat] + log(syph.earlat.rr)
 
-  # Multiplier for syphilis transmission if receptive partner is HIV+ (infectee)
-  is.HIV.infectee <- which(status[disc.syph.ip[, 2]] == 1)
+    # Multiplier for syphilis transmission if receptive partner is HIV+ (infectee)
+    is.HIV.infectee <- which(status[disc.syph.ip[, 2]] == 1)
 
-  # Multiplier for syphilis transmission if insertive partner is HIV+ (infector)
-  #is.HIV.infector <- which(status[disc.syph.ip[, 1]] == 1)
+    # Multiplier for syphilis transmission if insertive partner is HIV+ (infector)
+    #is.HIV.infector <- which(status[disc.syph.ip[, 1]] == 1)
 
-  ip.syph.tlo[is.HIV.infectee] <- ip.syph.tlo[is.HIV.infectee] + log(syph.rhiv.rr)
-  #ip.syph.tlo[is.HIV.infector] <- ip.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
+    ip.syph.tlo[is.HIV.infectee] <- ip.syph.tlo[is.HIV.infectee] + log(syph.rhiv.rr)
+    #ip.syph.tlo[is.HIV.infector] <- ip.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
 
-  # Retransformation to probability
-  ip.syph.tprob <- plogis(ip.syph.tlo)
+    # Retransformation to probability
+    ip.syph.tprob <- plogis(ip.syph.tlo)
 
-  # Late stage multiplier (not log odds b/c log 0 = undefined)
-  islate <- which(ip.stage.syph %in% c(5, 6, 7))
-  ip.syph.tprob[islate] <- ip.syph.tprob[islate] * syph.late.rr
+    # Late stage multiplier (not log odds b/c log 0 = undefined)
+    islate <- which(ip.stage.syph %in% c(5, 6, 7))
+    ip.syph.tprob[islate] <- ip.syph.tprob[islate] * syph.late.rr
 
 
-  # Check for valid probabilities
-  stopifnot(ip.syph.tprob >= 0, ip.syph.tprob <= 1)
+    # Check for valid probabilities
+    stopifnot(ip.syph.tprob >= 0, ip.syph.tprob <= 1)
 
-  ## Bernoulli Transmission Events
-  trans.syph.ip <- rbinom(length(ip.syph.tprob), 1, ip.syph.tprob)
-
+    ## Bernoulli Transmission Events
+    trans.syph.ip <- rbinom(length(ip.syph.tprob), 1, ip.syph.tprob)
   }
 
   ##### Receptive Man Infected with Syphilis (Col 2)
   if (is.null(dim(disc.syph.rp)[1])) {
-          trans.syph.rp <- NULL
-      }  else {
-  colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
-  # Attributes of infected
-  rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
+    trans.syph.rp <- NULL
+  } else {
+    colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
+    # Attributes of infected
+    rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
 
-  # Base TP from VL
-  rp.syph.tprob <- rep(usyph.tprob, length(rp.stage.syph))
+    # Base TP from VL
+    rp.syph.tprob <- rep(usyph.tprob, length(rp.stage.syph))
 
-  # Transform to log odds
-  rp.syph.tlo <- log(rp.syph.tprob/(1 - rp.syph.tprob))
+    # Transform to log odds
+    rp.syph.tlo <- log(rp.syph.tprob/(1 - rp.syph.tprob))
 
-  # Condom use multiplier
-  not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
-  rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(sti.cond.rr)
+    # Condom use multiplier
+    not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
+    rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(sti.cond.rr)
 
-  # Early latent stage multipliers
-  isearlat <- which(rp.stage.syph %in% 4)
-  rp.syph.tlo[isearlat] <- rp.syph.tlo[isearlat] + log(syph.earlat.rr)
+    # Early latent stage multipliers
+    isearlat <- which(rp.stage.syph %in% 4)
+    rp.syph.tlo[isearlat] <- rp.syph.tlo[isearlat] + log(syph.earlat.rr)
 
-  # Multiplier for syphilis transmission if insertive partner is HIV+ (infectee)
-  is.HIV.infectee <- which(status[disc.syph.rp[, 1]] == 1)
+    # Multiplier for syphilis transmission if insertive partner is HIV+ (infectee)
+    is.HIV.infectee <- which(status[disc.syph.rp[, 1]] == 1)
 
-  # Multiplier for syphilis transmission if receptive partner is HIV+ (infector)
-  #is.HIV.infector <- which(status[disc.syph.rp[, 2]] == 1)
+    # Multiplier for syphilis transmission if receptive partner is HIV+ (infector)
+    #is.HIV.infector <- which(status[disc.syph.rp[, 2]] == 1)
 
-  rp.syph.tlo[is.HIV.infectee] <- rp.syph.tlo[is.HIV.infectee] + log(syph.uhiv.rr)
-  #rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
+    rp.syph.tlo[is.HIV.infectee] <- rp.syph.tlo[is.HIV.infectee] + log(syph.uhiv.rr)
+    #rp.syph.tlo[is.HIV.infector] <- rp.syph.tlo[is.HIV.infector] + log(syph.hiv.rr)
 
-  # Retransformation to probability
-  rp.syph.tprob <- plogis(rp.syph.tlo)
+    # Retransformation to probability
+    rp.syph.tprob <- plogis(rp.syph.tlo)
 
-  # Late stage multiplier (not log odds b/c log 0 = undefined)
-  islate <- which(rp.stage.syph %in% c(5, 6, 7))
-  rp.syph.tprob[islate] <- rp.syph.tprob[islate] * (syph.late.rr)
+    # Late stage multiplier (not log odds b/c log 0 = undefined)
+    islate <- which(rp.stage.syph %in% c(5, 6, 7))
+    rp.syph.tprob[islate] <- rp.syph.tprob[islate] * (syph.late.rr)
 
-  # Check for valid probabilities
-  stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
+    # Check for valid probabilities
+    stopifnot(rp.syph.tprob >= 0, rp.syph.tprob <= 1)
 
-  # Bernoulli transmission events
-  trans.syph.rp <- rbinom(length(rp.syph.tprob), 1, rp.syph.tprob)
-
+    # Bernoulli transmission events
+    trans.syph.rp <- rbinom(length(rp.syph.tprob), 1, rp.syph.tprob)
   }
-
 
   # Update attributes for newly infected
   infected.syph <- NULL
@@ -338,7 +337,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Output --------------------------------------------------------------
 
-  # Syphilis
+  # Syphilis attributes
   dat$attr$syphilis <- syphilis
   dat$attr$syph.infTime <- syph.infTime
   dat$attr$stage.syph <- stage.syph
@@ -346,7 +345,7 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$diag.status.syph <- diag.status.syph
   dat$attr$diag.status.syph <- diag.status.syph
 
-  # Gonorrhea
+  # Gonorrhea attributes
   dat$attr$rGC <- rGC
   dat$attr$uGC <- uGC
   dat$attr$rGC.infTime <- rGC.infTime
@@ -355,7 +354,7 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$diag.status.gc <- diag.status.gc
 
-  # Chlamydia
+  # Chlamydia attributes
   dat$attr$rCT <- rCT
   dat$attr$uCT <- uCT
   dat$attr$rCT.infTime <- rCT.infTime
@@ -365,7 +364,7 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$diag.status.ct <- diag.status.ct
 
 
-  # Summary statistics
+  # Summary incidence statistics
   dat$epi$incid.rgc[at] <- length(idsInf_rgc)
   dat$epi$incid.ugc[at] <- length(idsInf_ugc)
   dat$epi$incid.gc[at] <- length(idsInf_rgc) + length(idsInf_ugc)
@@ -374,12 +373,13 @@ sti_trans_msm <- function(dat, at) {
   dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
   dat$epi$incid.syph[at] <- length(infected.syph)
 
-  dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc, idsInf_rct, idsInf_uct)),
+  dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
+                                                           idsInf_rct, idsInf_uct)),
                                                   which(dat$attr$prepStat == 1)))
   dat$epi$incid.syph.prep[at] <- length(intersect(unique(infected.syph),
                                                   which(dat$attr$prepStat == 1)))
 
-  # Check all infected have all STI attributes
+  # Stop check for STI attributes
   stopifnot(all(!is.na(dat$attr$rGC.infTime[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$rGC.sympt[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$uGC.infTime[dat$attr$uGC == 1])),
@@ -420,6 +420,7 @@ sti_recov_msm <- function(dat, at) {
 
   syph.early.tx.int <- dat$param$syph.early.tx.int
   syph.late.tx.int <- dat$param$syph.late.tx.int
+
 
   # Attributes ----------------------------------------------------------
 
