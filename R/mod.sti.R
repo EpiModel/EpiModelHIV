@@ -14,7 +14,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Parameters ----------------------------------------------------------
 
-  # Acquisition probabilities given contact with infected man
+  # Acquisition probability | exposure
   rgc.tprob <- dat$param$rgc.tprob
   ugc.tprob <- dat$param$ugc.tprob
   rct.tprob <- dat$param$rct.tprob
@@ -22,25 +22,21 @@ sti_trans_msm <- function(dat, at) {
   rsyph.tprob <- dat$param$rsyph.tprob
   usyph.tprob <- dat$param$usyph.tprob
 
-  #Multiplier for syphilis infection
+  # Relative risk by syphilis stage
   syph.earlat.rr <- dat$param$syph.earlat.rr
   syph.late.rr <- dat$param$syph.late.rr
   syph.rhiv.rr <- dat$param$syph.rhiv.rr
   syph.uhiv.rr <- dat$param$syph.uhiv.rr
 
-  # Probability of symptoms given infection
+  # Probability of symptoms | infection
   rgc.sympt.prob <- dat$param$rgc.sympt.prob
   ugc.sympt.prob <- dat$param$ugc.sympt.prob
   rct.sympt.prob <- dat$param$rct.sympt.prob
   uct.sympt.prob <- dat$param$uct.sympt.prob
 
-  # Relative risk of infection given condom use during act
+  # Relative risk of infection | condom use
   sti.cond.rr <- dat$param$sti.cond.rr
 
-  # Cessation
-  gc.prob.cease <- dat$param$gc.prob.cease
-  ct.prob.cease <- dat$param$ct.prob.cease
-  syph.prob.cease <- dat$param$syph.prob.cease
 
   # Attributes ----------------------------------------------------------
 
@@ -54,7 +50,7 @@ sti_trans_msm <- function(dat, at) {
   stage.syph <- dat$attr$stage.syph
   stage.time.syph <- dat$attr$stage.time.syph
 
-  # Set disease status to 0 for new births
+  # Set status = 0 for new births
   newBirths <- which(dat$attr$arrival.time == at)
   rGC[newBirths] <- 0
   uGC[newBirths] <- 0
@@ -79,11 +75,6 @@ sti_trans_msm <- function(dat, at) {
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
-
-  # Men who cease sexual activity during symptomatic infection
-  GC.cease <- dat$attr$GC.cease
-  CT.cease <- dat$attr$CT.cease
-  syph.cease <- dat$attr$syph.cease
 
   # Diagnosis status
   diag.status.gc <- dat$attr$diag.status.gc
@@ -354,34 +345,6 @@ sti_trans_msm <- function(dat, at) {
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   diag.status.ct[idsInf_uct] <- 0
 
-  # Set activity cessation attribute for newly infected -----------------
-
-  # Symptomatic GC
-  GC.sympt <- which(is.na(GC.cease) & (rGC.sympt == 1 | uGC.sympt == 1))
-  idsGC.cease <- GC.sympt[which(rbinom(length(GC.sympt),
-                                       1, gc.prob.cease) == 1)]
-  GC.cease[GC.sympt] <- 0
-  GC.cease[idsGC.cease] <- 1
-
-  # Symptomatic CT
-  CT.sympt <- which(is.na(CT.cease) & (rCT.sympt == 1 | uCT.sympt == 1))
-  idsCT.cease <- CT.sympt[which(rbinom(length(CT.sympt),
-                                       1, ct.prob.cease) == 1)]
-  CT.cease[CT.sympt] <- 0
-  CT.cease[idsCT.cease] <- 1
-
-
-  # Symptomatic syphilis
-  syphilis.sympt <- which(is.na(syph.cease) & (dat$attr$stage.prim.sympt == 1 |
-                                               dat$attr$stage.seco.sympt == 1 |
-                                              dat$attr$stage.earlat.sympt == 1 |
-                                             dat$attr$stage.latelat.sympt == 1 |
-                                         dat$attr$stage.latelatelat.sympt == 1 |
-                                                dat$attr$stage.tert.sympt == 1))
-  idssyph.cease <- syphilis.sympt[which(rbinom(length(syphilis.sympt),
-                                        1, syph.prob.cease) == 1)]
-  syph.cease[syphilis.sympt] <- 0
-  syph.cease[idssyph.cease] <- 1
 
   # Output --------------------------------------------------------------
 
@@ -391,7 +354,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$diag.status.syph <- diag.status.syph
-  dat$attr$syph.cease <- syph.cease
   dat$attr$diag.status.syph <- diag.status.syph
 
   # Gonorrhea
@@ -401,7 +363,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uGC.infTime <- dat$attr$uGC.infTime <- uGC.infTime
   dat$attr$rGC.sympt <- rGC.sympt
   dat$attr$uGC.sympt <- uGC.sympt
-  dat$attr$GC.cease <- GC.cease
   dat$attr$diag.status.gc <- diag.status.gc
 
   # Chlamydia
@@ -411,7 +372,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uCT.infTime <- dat$attr$uCT.infTime <- uCT.infTime
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
-  dat$attr$CT.cease <- CT.cease
   dat$attr$diag.status.ct <- diag.status.ct
 
 
@@ -645,7 +605,6 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$diag.status.syph[recovsyph] <- NA
   dat$attr$syph.tx[recovsyph] <- NA
   dat$attr$syph.tx.prep[recovsyph] <- NA
-  dat$attr$syph.cease[recovsyph] <- NA
 
   # Gonorrhea
   dat$attr$rGC[recovRGC] <- 0
@@ -660,7 +619,6 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
   dat$attr$diag.status.gc[recovUGC] <- NA
-  dat$attr$GC.cease[c(recovRGC, recovUGC)] <- NA
 
   # Chlamydia
   dat$attr$rCT[recovRCT] <- 0
@@ -675,7 +633,6 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
   dat$attr$diag.status.ct[recovUCT] <- NA
-  dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
 
   # Summary stats
   dat$epi$recov.rgc[at] <- length(unique(recovRGC))

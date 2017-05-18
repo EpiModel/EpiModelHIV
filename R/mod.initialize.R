@@ -915,7 +915,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.syph <- last.tx.time.syph
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
     dat$attr$tt.traj.syph <- rep(NA, num)
-    dat$attr$syph.cease <- rep(NA, num)
 
     # Gonorrhea
     dat$attr$rGC <- rGC
@@ -939,7 +938,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
     dat$attr$tt.traj.gc <- rep(NA, num)
-    dat$attr$GC.cease <- rep(NA, num)
 
     # Chlamydia
     dat$attr$rCT <- rCT
@@ -963,7 +961,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
     dat$attr$tt.traj.ct <- rep(NA, num)
-    dat$attr$CT.cease <- rep(NA, num)
 
     # EPT variables
     dat$attr$eptElig <- rep(NA, num)
