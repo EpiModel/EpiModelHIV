@@ -9,9 +9,9 @@
 #' @details
 #' New population members are added based on expected numbers of entries among
 #' black and white MSM, stochastically determined with draws from Poisson
-#' distributions. For each new entry, a set of attributes is added for that 
-#' node, and the nodes are added onto the network objects. Only attributes that 
-#' are a part of the network model formulae are updated as vertex attributes on 
+#' distributions. For each new entry, a set of attributes is added for that
+#' node, and the nodes are added onto the network objects. Only attributes that
+#' are a part of the network model formulae are updated as vertex attributes on
 #' the network objects.
 #'
 #' @return
@@ -105,7 +105,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
-  
+
   # Non-NA HIV variables
   dat$attr$time.hivneg[newIds] <- rep(0, nBirths)
   dat$attr$time.off.prep[newIds] <- rep(0, nBirths)
@@ -123,18 +123,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$stage.time.aids.ndx[newIds] <- rep(0, nBirths)
   dat$attr$stage.time.aids.dx[newIds] <- rep(0, nBirths)
   dat$attr$stage.time.aids.art[newIds] <- rep(0, nBirths)
-  
+
   # Non-NA STI variables
   dat$attr$syphilis[newIds] <- rep(0, nBirths)
   dat$attr$rGC[newIds] <- rep(0, nBirths)
   dat$attr$rCT[newIds] <- rep(0, nBirths)
   dat$attr$uGC[newIds] <- rep(0, nBirths)
   dat$attr$uCT[newIds] <- rep(0, nBirths)
-  dat$attr$syph.timesInf[newIds] <- rep(0, nBirths)
-  dat$attr$rGC.timesInf[newIds] <- rep(0, nBirths)
-  dat$attr$rCT.timesInf[newIds] <- rep(0, nBirths)
-  dat$attr$uGC.timesInf[newIds] <- rep(0, nBirths)
-  dat$attr$uCT.timesInf[newIds] <- rep(0, nBirths)
   dat$attr$recentpartners[newIds] <- rep(0, nBirths)
 
   # Circumcision
@@ -162,12 +157,12 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$ccr5[newIds[newB]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.B, replace = TRUE,
                                         prob = c(1 - sum(ccr5.B.prob),
-                                                 ccr5.B.prob[2], 
+                                                 ccr5.B.prob[2],
                                                  ccr5.B.prob[1]))
   dat$attr$ccr5[newIds[newW]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.W, replace = TRUE,
                                         prob = c(1 - sum(ccr5.W.prob),
-                                                 ccr5.W.prob[2], 
+                                                 ccr5.W.prob[2],
                                                  ccr5.W.prob[1]))
 
 
@@ -182,7 +177,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   p1 <- dat$param$cond.pers.always.prob
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = 
+  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr =
                                   (1 - rho) * diag(2) + rho)
   dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
@@ -197,7 +192,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
 #' @title Births Module
 #'
-#' @description Module for simulating births/entries into the population, 
+#' @description Module for simulating births/entries into the population,
 #'              including initialization of attributes for incoming nodes.
 #'
 #' @inheritParams aging_het

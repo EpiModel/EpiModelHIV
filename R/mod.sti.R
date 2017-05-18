@@ -54,20 +54,13 @@ sti_trans_msm <- function(dat, at) {
   stage.syph <- dat$attr$stage.syph
   stage.time.syph <- dat$attr$stage.time.syph
 
-  # n Times infected
-  rGC.timesInf <- dat$attr$rGC.timesInf
-  uGC.timesInf <- dat$attr$uGC.timesInf
-  rCT.timesInf <- dat$attr$rCT.timesInf
-  uCT.timesInf <- dat$attr$uCT.timesInf
-  syph.timesInf <- dat$attr$syph.timesInf
-
   # Set disease status to 0 for new births
   newBirths <- which(dat$attr$arrival.time == at)
-  rGC[newBirths] <- rGC.timesInf[newBirths] <- 0
-  uGC[newBirths] <- uGC.timesInf[newBirths] <- 0
-  rCT[newBirths] <- rCT.timesInf[newBirths] <- 0
-  uCT[newBirths] <- uCT.timesInf[newBirths] <- 0
-  syphilis[newBirths] <- syph.timesInf[newBirths] <- 0
+  rGC[newBirths] <- 0
+  uGC[newBirths] <- 0
+  rCT[newBirths] <- 0
+  uCT[newBirths] <- 0
+  syphilis[newBirths] <- 0
 
   # Infection time
   rGC.infTime <- dat$attr$rGC.infTime
@@ -135,7 +128,6 @@ sti_trans_msm <- function(dat, at) {
   rGC.infTime[idsInf_rgc] <- at
   rGC.lastinfTime[idsInf_rgc] <- at
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
-  rGC.timesInf[idsInf_rgc] <- rGC.timesInf[idsInf_rgc] + 1
   diag.status.gc[idsInf_rgc] <- 0
 
   # Urethral GC ---------------------------------------------------------
@@ -168,7 +160,6 @@ sti_trans_msm <- function(dat, at) {
   uGC.infTime[idsInf_ugc] <- at
   uGC.lastinfTime[idsInf_ugc] <- at
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
-  uGC.timesInf[idsInf_ugc] <- uGC.timesInf[idsInf_ugc] + 1
   diag.status.gc[idsInf_ugc] <- 0
 
 
@@ -202,7 +193,6 @@ sti_trans_msm <- function(dat, at) {
   rCT.infTime[idsInf_rct] <- at
   rCT.lastinfTime[idsInf_rct] <- at
   rCT.sympt[idsInf_rct] <- rbinom(length(idsInf_rct), 1, rct.sympt.prob)
-  rCT.timesInf[idsInf_rct] <- rCT.timesInf[idsInf_rct] + 1
   diag.status.ct[idsInf_rct] <- 0
 
 
@@ -236,7 +226,6 @@ sti_trans_msm <- function(dat, at) {
   uCT.infTime[idsInf_uct] <- at
   uCT.lastinfTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
-  uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
   diag.status.ct[idsInf_uct] <- 0
 
 
@@ -350,23 +339,19 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes for newly infected
   infected.syph <- NULL
   if (sum(trans.syph.ip, trans.syph.rp, na.rm = TRUE) > 0) {
-
-      infected.syph <- c(disc.syph.ip[trans.syph.ip == 1, 2],
-                         disc.syph.rp[trans.syph.rp == 1, 1])
-      syphilis[infected.syph] <- 1
-      syph.infTime[infected.syph] <- syph.lastinfTime[infected.syph] <- at
-      stage.syph[infected.syph] <- 1
-      stage.time.syph[infected.syph] <- 0
-      diag.status.syph[infected.syph] <- 0
-      syph.timesInf[infected.syph] <- syph.timesInf[infected.syph] + 1
-
+    infected.syph <- c(disc.syph.ip[trans.syph.ip == 1, 2],
+                       disc.syph.rp[trans.syph.rp == 1, 1])
+    syphilis[infected.syph] <- 1
+    syph.infTime[infected.syph] <- syph.lastinfTime[infected.syph] <- at
+    stage.syph[infected.syph] <- 1
+    stage.time.syph[infected.syph] <- 0
+    diag.status.syph[infected.syph] <- 0
   }
 
   uCT[idsInf_uct] <- 1
   uCT.infTime[idsInf_uct] <- at
   uCT.lastinfTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
-  uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
   diag.status.ct[idsInf_uct] <- 0
 
   # Set activity cessation attribute for newly infected -----------------
@@ -406,7 +391,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$diag.status.syph <- diag.status.syph
-  dat$attr$syph.timesInf <- syph.timesInf
   dat$attr$syph.cease <- syph.cease
   dat$attr$diag.status.syph <- diag.status.syph
 
@@ -415,8 +399,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uGC <- uGC
   dat$attr$rGC.infTime <- dat$attr$rGC.lastinfTime <- rGC.infTime
   dat$attr$uGC.infTime <- dat$attr$uGC.infTime <- uGC.infTime
-  dat$attr$rGC.timesInf <- rGC.timesInf
-  dat$attr$uGC.timesInf <- uGC.timesInf
   dat$attr$rGC.sympt <- rGC.sympt
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$GC.cease <- GC.cease
@@ -427,8 +409,6 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uCT <- uCT
   dat$attr$rCT.infTime <- dat$attr$rCT.infTime <- rCT.infTime
   dat$attr$uCT.infTime <- dat$attr$uCT.infTime <- uCT.infTime
-  dat$attr$rCT.timesInf <- rCT.timesInf
-  dat$attr$uCT.timesInf <- uCT.timesInf
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
   dat$attr$CT.cease <- CT.cease
@@ -458,21 +438,7 @@ sti_trans_msm <- function(dat, at) {
             all(!is.na(dat$attr$rCT.sympt[dat$attr$rCT == 1])),
             all(!is.na(dat$attr$uCT.infTime[dat$attr$uCT == 1])),
             all(!is.na(dat$attr$uCT.sympt[dat$attr$uCT == 1])),
-            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1]))
-            )
-
-  if (is.null(dat$epi$times.rgc)) {
-    dat$epi$times.rgc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.ugc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.rct <- rep(NA, length(dat$epi$num))
-    dat$epi$times.uct <- rep(NA, length(dat$epi$num))
-    dat$epi$times.syph <- rep(NA, length(dat$epi$num))
-  }
-  dat$epi$times.rgc[at] <- mean(rGC.timesInf, na.rm = TRUE)
-  dat$epi$times.ugc[at] <- mean(uGC.timesInf, na.rm = TRUE)
-  dat$epi$times.rct[at] <- mean(rCT.timesInf, na.rm = TRUE)
-  dat$epi$times.uct[at] <- mean(uCT.timesInf, na.rm = TRUE)
-  dat$epi$times.syph[at] <- mean(syph.timesInf, na.rm = TRUE)
+            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1])))
 
   return(dat)
 }

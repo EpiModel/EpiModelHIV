@@ -23,9 +23,9 @@ Module function for births or entries into the sexually active
 \details{
 New population members are added based on expected numbers of entries among
 black and white MSM, stochastically determined with draws from Poisson
-distributions. For each new entry, a set of attributes is added for that 
-node, and the nodes are added onto the network objects. Only attributes that 
-are a part of the network model formulae are updated as vertex attributes on 
+distributions. For each new entry, a set of attributes is added for that
+node, and the nodes are added onto the network objects. Only attributes that
+are a part of the network model formulae are updated as vertex attributes on
 the network objects.
 }
 \keyword{module}
