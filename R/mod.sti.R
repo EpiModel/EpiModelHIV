@@ -88,9 +88,9 @@ sti_trans_msm <- function(dat, at) {
 
   # Requires: uGC in insertive man, and no rGC in receptive man
   p1Inf_rgc <- which(uGC[al[, "p1"]] == 1 & uGC.infTime[al[, "p1"]] < at &
-                       rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
   p2Inf_rgc <- which(uGC[al[, "p2"]] == 1 & uGC.infTime[al[, "p2"]] < at &
-                       rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rgc <- c(p1Inf_rgc, p2Inf_rgc)
 
   # UAI modifier
@@ -120,9 +120,9 @@ sti_trans_msm <- function(dat, at) {
 
   # Requires: rGC in receptive man, and no uGC in insertive man
   p1Inf_ugc <- which(rGC[al[, "p1"]] == 1 & rGC.infTime[al[, "p1"]] < at &
-                       uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
   p2Inf_ugc <- which(rGC[al[, "p2"]] == 1 & rGC.infTime[al[, "p2"]] < at &
-                       uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_ugc <- c(p1Inf_ugc, p2Inf_ugc)
 
   # UAI modifier
@@ -152,9 +152,9 @@ sti_trans_msm <- function(dat, at) {
 
   # Requires: uCT in insertive man, and no rCT in receptive man
   p1Inf_rct <- which(uCT[al[, "p1"]] == 1 & uCT.infTime[al[, "p1"]] < at &
-                       rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
   p2Inf_rct <- which(uCT[al[, "p2"]] == 1 & uCT.infTime[al[, "p2"]] < at &
-                       rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rct <- c(p1Inf_rct, p2Inf_rct)
 
   # UAI modifier
@@ -184,9 +184,9 @@ sti_trans_msm <- function(dat, at) {
 
   # Requires: rCT in receptive man, and no uCT in insertive man
   p1Inf_uct <- which(rCT[al[, "p1"]] == 1 & rCT.infTime[al[, "p1"]] < at &
-                       uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
   p2Inf_uct <- which(rCT[al[, "p2"]] == 1 & rCT.infTime[al[, "p2"]] < at &
-                       uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_uct <- c(p1Inf_uct, p2Inf_uct)
 
   # UAI modifier
@@ -219,13 +219,13 @@ sti_trans_msm <- function(dat, at) {
   p2Inf_syph <- al[which(syphilis[al[, "p2"]] == 1 & syph.infTime[al[, "p2"]] < at &
                          syphilis[al[, "p1"]] == 0), , drop = FALSE]
   allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
-  ncols <- dim(allActs_syph)[2]
+  ncols <- ncol(allActs_syph)
 
   # Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, , drop = FALSE]
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop = FALSE]
 
-  ###### Insertive Man Infected with Syphilis (Col 1)
+  ## Insertive Man Infected with Syphilis (Col 1)
   if (is.null(dim(disc.syph.ip)[1])) {
     trans.syph.ip <- NULL
   } else {
@@ -272,7 +272,7 @@ sti_trans_msm <- function(dat, at) {
     trans.syph.ip <- rbinom(length(ip.syph.tprob), 1, ip.syph.tprob)
   }
 
-  ##### Receptive Man Infected with Syphilis (Col 2)
+  ## Receptive Man Infected with Syphilis (Col 2)
   if (is.null(dim(disc.syph.rp)[1])) {
     trans.syph.rp <- NULL
   } else {
