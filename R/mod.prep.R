@@ -13,28 +13,28 @@
 prep_msm <- function(dat, at) {
 
   if (at < dat$param$prep.start) {
-      
-      # Update # of PrEP asymptomatic STI tests to 0 
+
+      # Update # of PrEP asymptomatic STI tests to 0
       dat$epi$rGCasympttests.prep[at] <- 0
       dat$epi$uGCasympttests.prep[at] <- 0
       dat$epi$GCasympttests.prep[at] <- 0
       dat$epi$rGCasympttests.pos.prep[at] <- 0
       dat$epi$uGCasympttests.pos.prep[at] <- 0
       dat$epi$GCasympttests.pos.prep[at] <- 0
-      
+
       dat$epi$rCTasympttests.prep[at] <- 0
       dat$epi$uCTasympttests.prep[at] <- 0
       dat$epi$CTasympttests.prep[at] <- 0
       dat$epi$rCTasympttests.pos.prep[at] <- 0
       dat$epi$uCTasympttests.pos.prep[at] <- 0
       dat$epi$CTasympttests.pos.prep[at] <- 0
-      
+
       dat$epi$syphasympttests.prep[at] <- 0
       dat$epi$syphasympttests.pos.prep[at] <- 0
-      
+
     return(dat)
   }
-    
+
   ## Variables
 
   # Attributes
@@ -62,7 +62,7 @@ prep_msm <- function(dat, at) {
   prep.tst.int <- dat$param$prep.tst.int
   time.on.prep <- dat$attr$time.on.prep
 
-  
+
   # Parameters
 
   prep.coverage <- dat$param$prep.coverage
@@ -127,7 +127,7 @@ prep_msm <- function(dat, at) {
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
   prepLastStiScreen[idsStp] <- NA
-  
+
   # Update time on PrEP after people stop
   time.on.prep[prepStat == 1] <- time.on.prep[prepStat == 1] + 1
 
@@ -180,23 +180,23 @@ prep_msm <- function(dat, at) {
       dat$epi$CTasympttests.prep <- rep(0, length(dat$control$nsteps))
       dat$epi$syphasympttests.prep <- rep(0, length(dat$control$nsteps))
   }
-  
+
     ## Testing
   tsincelntst.syph <- at - dat$attr$last.neg.test.syph
   tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
-  
+
   tsincelntst.rgc <- at - dat$attr$last.neg.test.rgc
   tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
   tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
   tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
   tsincelntst.gc <- min(tsincelntst.rgc, tsincelntst.ugc)
-  
+
   tsincelntst.rct <- at - dat$attr$last.neg.test.rct
   tsincelntst.uct <- at - dat$attr$last.neg.test.uct
   tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
   tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
   tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
-  
+
   # PrEP STI testing
   tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
                              prepStat == 1 &
@@ -207,11 +207,11 @@ prep_msm <- function(dat, at) {
   tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
                            prepStat == 1 &
                            tsincelntst.ct >= prep.tst.int)
-  
+
   # Syphilis non-PrEP testing
   tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6, 7)]
   tst.syph.neg <- setdiff(tst.syph.prep, tst.syph.pos)
-  
+
   # GC non-PrEP testing
   tst.rgc <- tst.gc.prep[dat$attr$role.class %in% c("R", "V")]
   tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
@@ -221,7 +221,7 @@ prep_msm <- function(dat, at) {
   tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
   tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
   tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
-  
+
   # CT non-PrEP testing
   tst.rct <- tst.ct.prep[dat$attr$role.class %in% c("R", "V")]
   tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
@@ -231,13 +231,13 @@ prep_msm <- function(dat, at) {
   tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
   tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
   tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
-  
+
   # Syphilis Attributes
   dat$attr$last.neg.test.syph[tst.syph.neg] <- at
   dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
   dat$attr$diag.status.syph[tst.syph.pos] <- 1
   dat$attr$lastdiag.time.syph[tst.syph.pos] <- at
-  
+
   # GC Attributes
   dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
   dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
@@ -245,7 +245,7 @@ prep_msm <- function(dat, at) {
   dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
   dat$attr$diag.status.gc[tst.gc.pos] <- 1
   dat$attr$lastdiag.time.gc[tst.gc.pos] <- at
-  
+
   # CT Attributes
   dat$attr$last.neg.test.rct[tst.rct.neg] <- at
   dat$attr$last.neg.test.uct[tst.uct.neg] <- at
@@ -253,33 +253,27 @@ prep_msm <- function(dat, at) {
   dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
   dat$attr$diag.status.ct[tst.ct.pos] <- 1
   dat$attr$lastdiag.time.ct[tst.ct.pos] <- at
-  
+
   # Count number of tests due to PrEP
   dat$epi$rGCasympttests.prep[at] <- length(tst.rgc)
   dat$epi$uGCasympttests.prep[at] <- length(tst.ugc)
   dat$epi$GCasympttests.prep[at] <- length(c(tst.rgc, tst.ugc))
-  
+
   dat$epi$rGCasympttests.pos.prep[at] <- length(tst.rgc)
   dat$epi$uGCasympttests.pos.prep[at] <- length(tst.ugc)
   dat$epi$GCasympttests.pos.prep[at] <- length(c(tst.rgc.pos, tst.ugc.pos))
-  
+
   dat$epi$rCTasympttests.prep[at] <- length(tst.rct)
   dat$epi$uCTasympttests.prep[at] <- length(tst.uct)
   dat$epi$CTasympttests.prep[at] <- length(c(tst.rct, tst.uct))
-  
+
   dat$epi$rCTasympttests.pos.prep[at] <- length(tst.rct)
   dat$epi$uCTasympttests.pos.prep[at] <- length(tst.uct)
   dat$epi$CTasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos))
-  
+
   dat$epi$syphasympttests.prep[at] <- length(c(tst.syph.prep))
   dat$epi$syphasympttests.pos.prep[at] <- length(c(tst.syph.pos))
-  
-  dat$epi$totalstiasympttests.prep[at] <- length(c(tst.rct, tst.uct, tst.rgc, 
-                                                   tst.ugc, tst.syph.prep))
-  dat$epi$totalstiasympttests.pos.prep[at] <- length(c(tst.rct.pos, tst.uct.pos,
-                                                       tst.rgc.pos, tst.ugc.pos,
-                                                       tst.syph.pos))
-  
+
   ## Output -------------------------------------------------------------------
 
   # Attributes
@@ -290,11 +284,11 @@ prep_msm <- function(dat, at) {
   dat$attr$prepLastRisk <- prepLastRisk
   dat$attr$prepLastStiScreen <- prepLastStiScreen
   dat$attr$time.on.prep <- time.on.prep
-  
+
   # Summary Statistics
   dat$epi$prepCov[at] <- prepCov
   dat$epi$prepStart[at] <- length(idsStart)
-  
+
 
 
 

@@ -10,7 +10,7 @@
 #' Persons who are infected may disclose their status to partners at three
 #' distinct time points: at relationship onset for newly formed discordant
 #' pairs; at diagnosis for pairs starting as both negative but with one newly
-#' infected; or post diagnosis for one recently infected. The rates of 
+#' infected; or post diagnosis for one recently infected. The rates of
 #' disclosure vary at these three points, and also by the partnership type.
 #'
 #' @return
@@ -131,9 +131,9 @@ hiv_disclose_msm <- function(dat, at){
         dat$temp$discl.list <- rbind(dat$temp$discl.list, discl.mat)
       }
     }
-      
+
   }
-    
+
   if (at > 2) {
     discl.list <- dat$temp$discl.list
     master.el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
