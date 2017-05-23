@@ -65,7 +65,9 @@ hiv_trans_msm <- function(dat, at) {
   hiv.dual.rr <- dat$param$hiv.dual.rr
   hiv.rsyph.rr <- dat$param$hiv.rsyph.rr
   hiv.usyph.rr <- dat$param$hiv.usyph.rr
-  syph.hiv.rr <- dat$param$syph.hiv.rr
+  hiv.trans.syph.rr <- dat$param$hiv.trans.syph.rr
+  hiv.trans.gc.rr <- dat$param$hiv.trans.gc.rr
+  hiv.trans.ct.rr <- dat$param$hiv.trans.ct.rr
 
 
   # Data
@@ -90,6 +92,8 @@ hiv_trans_msm <- function(dat, at) {
   ip.vl <- vl[disc.ip[, 1]]
   ip.stage <- stage[disc.ip[, 1]]
   ip.syph.infector <- syphilis[disc.ip[, 1]]
+  ip.uGC.infector <- uGC[disc.ip[, 1]]
+  ip.uCT.infector <- uCT[disc.ip[, 1]]
 
   # Attributes of susceptible
   ip.ccr5 <- ccr5[disc.ip[, 2]]
@@ -123,27 +127,31 @@ hiv_trans_msm <- function(dat, at) {
   isAcute <- which(ip.stage %in% 1:2)
   ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for STI
+  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
   is.rGC <- which(ip.rGC == 1)
-
   is.rCT <- which(ip.rCT == 1)
-  
   is.syph.infectee <- which(ip.syph.infectee == 1)
-  #is.syph.infector <- which(ip.syph.infector == 1)
-  is.rect.dual <- intersect(is.rGC, is.rCT)
 
+  is.rect.dual <- intersect(is.rGC, is.rCT)
   is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
   is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
 
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
   ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.rsyph.rr)
-  #ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.usyph.rr)
-  
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
     min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
 
+  ## Multiplier for HIV transmission due to STI in HIV-positive partner
+  is.syph.infector <- which(ip.syph.infector == 1)
+  is.uGC.infector <- which(ip.uGC.infector == 1)
+  is.uCT.infector <- which(ip.uCT.infector == 1)
+  ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.trans.syph.rr)
+  ip.tlo[is.uGC.infector] <- ip.tlo[is.uGC.infector] + log(hiv.trans.gc.rr)
+  ip.tlo[is.uCT.infector] <- ip.tlo[is.uCT.infector] + log(hiv.trans.syph.rr)
+
+  # Re-transform back to probability
   ip.tprob <- plogis(ip.tlo)
   stopifnot(ip.tprob >= 0, ip.tprob <= 1)
 
@@ -153,7 +161,9 @@ hiv_trans_msm <- function(dat, at) {
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
-  #rp.syph.infector <- syphilis[disc.rp[, 2]]
+  rp.syph.infector <- syphilis[disc.rp[, 2]]
+  rp.rGC.infector <- rGC[disc.rp[, 2]]
+  rp.rCT.infector <- rCT[disc.rp[, 2]]
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
@@ -168,7 +178,7 @@ hiv_trans_msm <- function(dat, at) {
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Transform to log odds
-  rp.tlo <- log(rp.tprob/(1-rp.tprob))
+  rp.tlo <- log(rp.tprob/(1 - rp.tprob))
 
   # Circumcision
   rp.tlo[rp.circ == 1] <- rp.tlo[rp.circ == 1] + log(circ.rr)
@@ -191,27 +201,29 @@ hiv_trans_msm <- function(dat, at) {
   isAcute <- which(rp.stage %in% 1:2)
   rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for STI
+  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
   is.uGC <- which(rp.uGC == 1)
-
   is.uCT <- which(rp.uCT == 1)
-  
   is.syph.infectee <- which(rp.syph.infectee == 1)
-  #is.syph.infector <- which(rp.syph.infector == 1)
 
   is.ureth.dual <- intersect(is.uGC, is.uCT)
-
   is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
   is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
 
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
   rp.tlo[is.syph.infectee] <- rp.tlo[is.syph.infectee] + log(hiv.usyph.rr)
-  #rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.rsyph.rr)
-  
   rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
     min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
+
+  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
+  is.syph.infector <- which(rp.syph.infector == 1)
+  is.rGC.infector <- which(rp.rGC.infector == 1)
+  is.rCT.infector <- which(rp.rCT.infector == 1)
+  rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.trans.syph.rr)
+  rp.tlo[is.rGC.infector] <- rp.tlo[is.rGC.infector] + log(hiv.trans.gc.rr)
+  rp.tlo[is.rCT.infector] <- rp.tlo[is.rCT.infector] + log(hiv.trans.ct.rr)
 
   # Retransformation to probability
   rp.tprob <- plogis(rp.tlo)
@@ -255,7 +267,7 @@ hiv_trans_msm <- function(dat, at) {
     dat$attr$cum.time.off.tx[infected] <- 0
   }
   dat$attr$time.hivneg[status == 0] <- dat$attr$time.hivneg[status == 0] + 1
-  
+
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 

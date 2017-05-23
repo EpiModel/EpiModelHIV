@@ -448,22 +448,16 @@
 #'        syphilis infection in the HIV-negative partner.
 #' @param hiv.usyph.rr Relative risk of HIV infection given current urethral
 #'        syphilis infection in the HIV-negative partner.
-#' @param syph.rhiv.rr Relative risk of syphilis infection given current HIV
-#'        infection in the receptive syphilis-negative partner.
-#' @param syph.uhiv.rr Relative risk of syphilis infection given current HIV
-#'        infection in the insertive syphilis-negative partner.
-#' @param rgc.hiv.rr Relative risk of acquiring rectal gonorrhea given current
-#'        HIV infection in the receptive partner.
-#' @param ugc.hiv.rr Relative risk of acquiring urethral gonorrhea given current
-#'        HIV infection in the insertive partner.
-#' @param rct.hiv.rr Relative risk of acquiring rectal chlamydia given current
-#'        HIV infection in the receptive partner.
-#' @param uct.hiv.rr Relative risk of acquiring rectal chlamydia given current
-#'        HIV infection in the insertive partner.
 #' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic
 #'        syphilis given diagnosed HIV infection. This is implemented as an
 #'        inverse, 1 / this value for those who do not have diagnosed infection,
 #'        so it is a boost to get to 0.35.
+#' @param hiv.trans.gc.rr Relative risk for HIV transmission given prevalent
+#'        relevant site-specific gonorrhea infection in HIV-positive partner
+#' @param hiv.trans.ct.rr Relative risk for HIV transmission given prevalent
+#'        relevant site-specific chlamydia infection in HIV-positive partner
+#' @param hiv.trans.syph.rr Relative risk for HIV transmission given prevalent
+#'        relevant syphilis infection in HIV-positive partner
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -713,14 +707,12 @@ param_msm <- function(nwstats,
                       hiv.rsyph.rr = 2.98876572,
                       hiv.usyph.rr = 1.7456618,
 
-                      syph.rhiv.rr = 6.54189295,
-                      syph.uhiv.rr = 5.09641658,
-                      rgc.hiv.rr = 1,
-                      ugc.hiv.rr = 1,
-                      rct.hiv.rr = 1,
-                      uct.hiv.rr = 1,
-
                       # Transmission
+                      hiv.trans.gc.rr = 1,
+                      hiv.trans.ct.rr = 1,
+                      hiv.trans.syph.rr = 1,
+
+                      # Treatment
                       hivdx.syph.sympt.tx.rr = 1.45,
 
                       # Cumulative partnership list
