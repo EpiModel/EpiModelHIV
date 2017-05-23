@@ -51,7 +51,7 @@ simnet_msm <- function(dat, at) {
 
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
-  
+
   if (dat$param$method == 1) {
       dat$attr$deg.main <- get_degree(dat$el[[1]])
   } else {
@@ -70,7 +70,7 @@ simnet_msm <- function(dat, at) {
     highlow <- new.edges.p[which(new.edges.p[, 1] > new.edges.p[, 2]), , drop = FALSE]
     lowhigh <- new.edges.p[which(new.edges.p[, 1] < new.edges.p[, 2]), , drop = FALSE]
     new.edges.p <- rbind(highlow[, 2:1], lowhigh)
-    
+
   } else {
     new.edges.p <- attributes(dat$el[[2]])$changes
     new.edges.p <- new.edges.p[new.edges.p[, "to"] == 1, 1:2, drop = FALSE]
@@ -82,7 +82,7 @@ simnet_msm <- function(dat, at) {
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
-  
+
   if (dat$param$method == 1) {
       dat$attr$deg.pers <- get_degree(dat$el[[2]])
   } else {
@@ -93,14 +93,6 @@ simnet_msm <- function(dat, at) {
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
-  
-  #Need to represent one-offs in uid
-  new.edges.inst <- matrix(dat$attr$uid[dat$el[[3]]], ncol = 2)
-  
-  # Timing of newest edge
-  dat$attr$sexnewedge[which(dat$attr$uid %in% dat$temp$new.edges[, 1:2])] <- at
-  dat$attr$sexnewedge[which(dat$attr$uid %in% new.edges.inst[, 1:2])] <- at
-  
 
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)

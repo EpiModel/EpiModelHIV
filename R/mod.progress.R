@@ -19,7 +19,7 @@
 #' is \code{3}), time to AIDS depends on the sum of two ratios: time on
 #' treatment over maximum time on treatment plus time off treatment over maximum
 #' time off treatment. For persons ever on ART who fall into the fully
-#' suppressed cateogry (\code{tt.traj=4}), time to AIDS depends on whether the
+#' suppressed category (\code{tt.traj=4}), time to AIDS depends on whether the
 #' cumulative time off treatment exceeds a time threshold specified in the
 #' \code{max.time.off.tx.full} parameter.
 #'
@@ -122,10 +122,10 @@ hiv_progress_msm <- function(dat, at) {
   stage[toAF.ndx] <- 2
   stage[toAF.dx] <- 2
   stage[toAF.art] <- 2
-  stage.time[toAF] <- 1
-  stage.time.af.ndx[toAF.ndx] <- 1
-  stage.time.af.dx[toAF.dx] <- 1
-  stage.time.af.art[toAF.art] <- 1
+  stage.time[toAF] <- 0
+  stage.time.af.ndx[toAF.ndx] <- 0
+  stage.time.af.dx[toAF.dx] <- 0
+  stage.time.af.art[toAF.art] <- 0
 
   # Change stage to Chronic
   toC <- which(time.since.inf == (vl.acute.rise.int + vl.acute.fall.int + 1))
@@ -136,10 +136,10 @@ hiv_progress_msm <- function(dat, at) {
   stage[toC.ndx] <- 3
   stage[toC.dx] <- 3
   stage[toC.art] <- 3
-  stage.time[toC] <- 1
-  stage.time.chronic.ndx[toC.ndx] <- 1
-  stage.time.chronic.dx[toC.dx] <- 1
-  stage.time.chronic.art[toC.art] <- 1
+  stage.time[toC] <- 0
+  stage.time.chronic.ndx[toC.ndx] <- 0
+  stage.time.chronic.dx[toC.dx] <- 0
+  stage.time.chronic.art[toC.art] <- 0
 
   # Change stage to AIDS
   aids.tx.naive.ndx <- which(status == 1 & cum.time.on.tx == 0 &
@@ -165,32 +165,27 @@ hiv_progress_msm <- function(dat, at) {
 
   aids.off.tx.full.escape.ndx <- which(tx.status == 0 & tt.traj == 4 &
                                         cum.time.on.tx > 0 & cum.time.off.tx >= max.time.off.tx.full &
-                                        stage != 4)
+                                        stage != 4 & diag.status == 0)
   aids.off.tx.full.escape.dx <- which(tx.status == 0 & tt.traj == 4 &
                                         cum.time.on.tx > 0 & cum.time.off.tx >= max.time.off.tx.full &
-                                        stage != 4 & diag.status == 1 & tx.status == 0)
-  aids.off.tx.full.escape.art <- which(tx.status == 0 & tt.traj == 4 & cum.time.on.tx > 0 &
-                                        cum.time.off.tx >= max.time.off.tx.full &
-                                        stage != 4 & diag.status == 1 & tx.status == 1)
+                                        stage != 4 & diag.status == 1)
 
   isAIDS <- c(aids.tx.naive.ndx, aids.tx.naive.dx, aids.tx.naive.art,
               aids.part.escape.ndx, aids.part.escape.dx, aids.part.escape.art,
-              aids.off.tx.full.escape.ndx, aids.off.tx.full.escape.dx,
-              aids.off.tx.full.escape.art)
+              aids.off.tx.full.escape.ndx, aids.off.tx.full.escape.dx)
   isAIDS.ndx <- c(aids.tx.naive.ndx, aids.part.escape.ndx,
                   aids.off.tx.full.escape.ndx)
   isAIDS.dx <- c(aids.tx.naive.dx, aids.part.escape.dx,
                  aids.off.tx.full.escape.dx)
-  isAIDS.art <- c(aids.tx.naive.art, aids.part.escape.art,
-                  aids.off.tx.full.escape.art)
+  isAIDS.art <- c(aids.tx.naive.art, aids.part.escape.art)
 
   stage[isAIDS.ndx] <- 4
   stage[isAIDS.dx] <- 4
   stage[isAIDS.art] <- 4
-  stage.time[isAIDS] <- 1
-  stage.time.aids.ndx[isAIDS.ndx] <- 1
-  stage.time.aids.dx[isAIDS.dx] <- 1
-  stage.time.aids.art[isAIDS.art] <- 1
+  stage.time[isAIDS] <- 0
+  stage.time.aids.ndx[isAIDS.ndx] <- 0
+  stage.time.aids.dx[isAIDS.dx] <- 0
+  stage.time.aids.art[isAIDS.art] <- 0
 
   ## Output
   # Individual attribute: time in stage
@@ -234,7 +229,7 @@ hiv_progress_msm <- function(dat, at) {
 #' is \code{3}), time to AIDS depends on the sum of two ratios: time on
 #' treatment over maximum time on treatment plus time off treatment over maximum
 #' time off treatment.
-#' For persons ever on ART who fall into the fully suppressed cateogry
+#' For persons ever on ART who fall into the fully suppressed category
 #' (\code{tt.traj=4}), time to AIDS depends on whether the cumulative time
 #' off treatment exceeds a time threshold specified in the
 #' \code{max.time.off.tx.full} parameter.

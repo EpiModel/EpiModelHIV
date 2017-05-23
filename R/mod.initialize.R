@@ -764,12 +764,9 @@ init_status_sti_msm <- function(dat) {
     last.tx.time.uct.prep <- rep(NA, num)
 
     # Testing attributes
-    sexactive <- rep(NA, num)
-    sexnewedge <- rep(NA, num)
     recentpartners <- rep(0, num)
     time.sex.active <- pmax(1, round((365 / dat$param$time.unit) * age -
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
-
 
     ## Syphilis ----------------------------------------------------------------
 
@@ -796,7 +793,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.incub.syph
-    syph.tx[selected] <- 0
 
     # Primary
     selected <- intersect(inf.ids, which(stage.syph == 2))
@@ -804,7 +800,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.prim.syph
-    syph.tx[selected] <- 0
 
     # Secondary
     selected <- intersect(inf.ids, which(stage.syph == 3))
@@ -812,7 +807,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.seco.syph
-    syph.tx[selected] <- 0
 
     # Early latent
     selected <- intersect(inf.ids, which(stage.syph == 4))
@@ -820,7 +814,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.earlat.syph
-    syph.tx[selected] <- 0
 
     # Late latent
     selected <- intersect(inf.ids, which(stage.syph == 5))
@@ -828,7 +821,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelat.syph
-    syph.tx[selected] <- 0
 
     # Late late latent
     selected <- intersect(inf.ids, which(stage.syph == 6))
@@ -836,7 +828,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
     time.in.latelatelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelatelat.syph
-    syph.tx[selected] <- 0
 
     # Tertiary
     selected <- intersect(inf.ids, which(stage.syph == 7))
@@ -844,7 +835,6 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.tert.syph
-    syph.tx[selected] <- 0
 
     # Set diagnosis status for syphilis
     diag.status.syph[syphilis == 1] <- 0
@@ -961,11 +951,11 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptTx <- rep(NA, num)
 
     # Testing variables
-    dat$attr$sexactive <- sexactive
-    dat$attr$sexnewedge <- sexnewedge
     dat$attr$recentpartners <- recentpartners
     dat$attr$stianntestLastElig <- rep(NA, num)
     dat$attr$stihighrisktestLastElig <- rep(NA, num)
+    dat$attr$stitest.ind.active <- rep(0, num)
+    dat$attr$stitest.ind.recentpartners <- rep(0, num)
 
     return(dat)
 
