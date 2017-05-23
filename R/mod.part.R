@@ -35,7 +35,7 @@ part_msm <- function(dat, at){
     uid <- dat$attr$uid
 
     # Parameters and network
-    part.int <- dat$param$sti.highrisktest.int
+    part.int <- dat$param$riskhist.int
 
     # pull edgelist, expressed as uid
     el <- dat$el[[type]]

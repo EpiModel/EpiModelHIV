@@ -126,14 +126,7 @@ riskhist_stitest_msm <- function(dat, at) {
   uid <- dat$attr$uid
   race <- dat$attr$race
 
-  # Initialize indication attributes
-  if (is.null(dat$attr$stitest.ind.active)) {
-    dat$attr$stitest.ind.active <- rep(0, length(uid))
-    dat$attr$stitest.ind.recentpartners <- rep(0, length(uid))
-  }
-
   # Indications -------------------------------------------------------------
-
   part.list <- dat$temp$part.list
 
   ### Lower risk - existing in partner list (6 month look back)
@@ -149,7 +142,7 @@ riskhist_stitest_msm <- function(dat, at) {
   part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
   # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
-  dat$attr$recentpartners[idspartlist] <- part.count[which(uid %in% part.count[, "Var1"]), 2]
+  dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% uid), 2]
 
   # Choose those who have had more than X partners in last x months
   idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
