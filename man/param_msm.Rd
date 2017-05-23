@@ -89,8 +89,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.35,
   hiv.ugc.rr = 1.35, hiv.rct.rr = 2.35, hiv.uct.rr = 1.35,
   hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572, hiv.usyph.rr = 1.7456618,
-  syph.rhiv.rr = 6.54189295, syph.uhiv.rr = 5.09641658, rgc.hiv.rr = 1,
-  ugc.hiv.rr = 1, rct.hiv.rr = 1, uct.hiv.rr = 1,
+  hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1,
   hivdx.syph.sympt.tx.rr = 1.45, partlist.start = NULL, ...)
 }
 \arguments{
@@ -731,23 +730,14 @@ syphilis infection in the HIV-negative partner.}
 \item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral
 syphilis infection in the HIV-negative partner.}
 
-\item{syph.rhiv.rr}{Relative risk of syphilis infection given current HIV
-infection in the receptive syphilis-negative partner.}
+\item{hiv.trans.gc.rr}{Relative risk for HIV transmission given prevalent
+relevant site-specific gonorrhea infection in HIV-positive partner}
 
-\item{syph.uhiv.rr}{Relative risk of syphilis infection given current HIV
-infection in the insertive syphilis-negative partner.}
+\item{hiv.trans.ct.rr}{Relative risk for HIV transmission given prevalent
+relevant site-specific chlamydia infection in HIV-positive partner}
 
-\item{rgc.hiv.rr}{Relative risk of acquiring rectal gonorrhea given current
-HIV infection in the receptive partner.}
-
-\item{ugc.hiv.rr}{Relative risk of acquiring urethral gonorrhea given current
-HIV infection in the insertive partner.}
-
-\item{rct.hiv.rr}{Relative risk of acquiring rectal chlamydia given current
-HIV infection in the receptive partner.}
-
-\item{uct.hiv.rr}{Relative risk of acquiring rectal chlamydia given current
-HIV infection in the insertive partner.}
+\item{hiv.trans.syph.rr}{Relative risk for HIV transmission given prevalent
+relevant syphilis infection in HIV-positive partner}
 
 \item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic
 syphilis given diagnosed HIV infection. This is implemented as an

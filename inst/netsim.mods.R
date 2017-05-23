@@ -9,14 +9,6 @@ data(st)
 param <- param_msm(nwstats = st,
                    ai.scale = 1.11,
 
-                   rsyph.tprob = 0.0675,
-                   usyph.tprob = 0.0495,
-
-                   hiv.rsyph.rr = 2.77,
-                   hiv.usyph.rr = 2.045,
-                   syph.rhiv.rr = 1,
-                   syph.uhiv.rr = 1,
-
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
                    prim.syph.int = 60,
@@ -27,15 +19,26 @@ param <- param_msm(nwstats = st,
                    tert.syph.int = 20 * 52 * 7,
                    syph.tert.prog.prob = 0.00015625599,
 
+                   # STI acquisition
                    rgc.tprob = 0.4207,
                    ugc.tprob = 0.3095,
                    rct.tprob = 0.1960,
                    uct.tprob = 0.1654,
+                   rsyph.tprob = 0.11,
+                   usyph.tprob = 0.08,
 
+                   # HIV acquisition
                    hiv.rgc.rr = 2.548,
                    hiv.ugc.rr = 1.855,
                    hiv.rct.rr = 2.548,
                    hiv.uct.rr = 1.855,
+                   hiv.rsyph.rr = 2.77,
+                   hiv.usyph.rr = 2.05,
+
+                   # HIV transmission
+                   hiv.trans.gc.rr = 1,
+                   hiv.trans.ct.rr = 1,
+                   hiv.trans.syph.rr = 1,
 
                    syph.prim.sympt.prob.tx = 0.35,
                    syph.seco.sympt.prob.tx = 0.60,
@@ -57,7 +60,7 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.coverage = 0.8,
 
                    prep.start = 5000,
-                   stitest.start = 100,
+                   stitest.start = 2601,
                    ept.start = 5000,
 
                    stitest.elig.model = "sti",
@@ -69,14 +72,14 @@ param <- param_msm(nwstats = st,
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
                  prev.W = 0.10,
-                 prev.ugc = 0.010,
-                 prev.rgc = 0.010,
-                 prev.uct = 0.010,
-                 prev.rct = 0.010,
+                 prev.ugc = 0.015,
+                 prev.rgc = 0.015,
+                 prev.uct = 0.015,
+                 prev.rct = 0.015,
                  prev.syph.B = 0.015,
                  prev.syph.W = 0.015)
 
-control <- control_msm(nsteps = 100)
+control <- control_msm(nsteps = 2600)
 
 sim <- netsim(est, param, init, control)
 
@@ -86,7 +89,7 @@ dat <- initialize_msm(est, param, init, control, s = 1)
 
 # debug(simnet_msm)
 
-# at <- at + 1
+at <- at + 1
 for (at in 2:control$nsteps) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)

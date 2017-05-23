@@ -13,7 +13,7 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-This function returns the \code{dat} object with an updated summary of 
+This function returns the \code{dat} object with an updated summary of
 current attributes stored in \code{dat$epi}.
 }
 \description{
