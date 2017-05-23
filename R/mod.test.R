@@ -246,13 +246,13 @@ sti_test_msm <- function(dat, at) {
   tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
   tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
   tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
-  tsincelntst.gc <- min(tsincelntst.rgc, tsincelntst.ugc)
+  tsincelntst.gc <- pmin(tsincelntst.rgc, tsincelntst.ugc)
 
   tsincelntst.rct <- at - dat$attr$last.neg.test.rct
   tsincelntst.uct <- at - dat$attr$last.neg.test.uct
   tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
   tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
-  tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
+  tsincelntst.ct <- pmin(tsincelntst.rct, tsincelntst.uct)
 
   # Testing Rates by serostatus/race?
   # All MSM with HIV infection entering care should be screened for GC and CT
@@ -404,25 +404,6 @@ sti_test_msm <- function(dat, at) {
   diag.status.ct[tst.ct.pos] <- 1
   lastdiag.time.ct[tst.ct.pos] <- at
 
-  if (is.null(dat$epi$num.asympt.tx)) {
-    dat$epi$rGCasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$uGCasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$GCasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$rCTasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$uCTasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$CTasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$syphasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$totalstiasympttests <- rep(0, length(dat$control$nsteps))
-    dat$epi$rGCasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$uGCasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$GCasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$rCTasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$uCTasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$CTasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$syphasympttests.pos <- rep(0, length(dat$control$nsteps))
-    dat$epi$totalstiasympttests.pos <- rep(0, length(dat$control$nsteps))
-  }
-
   # Number of tests for asymptomatic
   dat$epi$rGCasympttests[at] <- length(tst.rgc)
   dat$epi$uGCasympttests[at] <- length(tst.ugc)
@@ -442,12 +423,6 @@ sti_test_msm <- function(dat, at) {
 
   dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
   dat$epi$syphasympttests.pos[at] <- length(c(tst.syph.pos))
-
-  dat$epi$totalstiasympttests[at] <- length(c(tst.rct, tst.uct, tst.rgc,
-                                              tst.ugc, tst.syph.nprep))
-  dat$epi$totalstiasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos,
-                                                  tst.rct.pos, tst.uct.pos,
-                                                  tst.syph.pos))
 
   ## Output -----------------------------------------------------------------
 
