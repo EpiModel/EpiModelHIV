@@ -239,7 +239,9 @@ sti_trans_msm <- function(dat, at) {
     colnames(disc.syph.ip)[1:2] <- c("ins","rec")
 
     # Attributes of infected
+    # Syphilis stage of infected partner
     ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
+    stopifnot(all(!is.na(ip.stage.syph)))
 
     # Base TP from VL
     ip.syph.tprob <- rep(rsyph.tprob, length(ip.stage.syph))
@@ -275,7 +277,9 @@ sti_trans_msm <- function(dat, at) {
   } else {
     colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
     # Attributes of infected
+    # Syphilis stage of infected partner
     rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
+    stopifnot(all(!is.na(rp.stage.syph)))
 
     # Base TP from VL
     rp.syph.tprob <- rep(usyph.tprob, length(rp.stage.syph))
