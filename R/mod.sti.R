@@ -437,6 +437,7 @@ sti_recov_msm <- function(dat, at) {
   syph.tx <- dat$attr$syph.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
 
+
   # GC Recovery ---------------------------------------------------------
 
   ## Recovery for asymptomatic untreated (natural clearance)
@@ -488,7 +489,6 @@ sti_recov_msm <- function(dat, at) {
 
   recovRGC <- c(recovRGC_asympt_ntx, recovRGC_sympt_ntx, recovRGC_tx)
   recovUGC <- c(recovUGC_asympt_ntx, recovUGC_sympt_ntx, recovUGC_tx)
-
 
 
   # CT Recovery ---------------------------------------------------------
@@ -545,7 +545,7 @@ sti_recov_msm <- function(dat, at) {
 
 
   # Syphilis Recovery -------------------------------------------------
-browser()
+
   ## Recovery for treated
   idssyph_prim_tx <- which(syphilis == 1 &
                            stage.syph == 2 &
