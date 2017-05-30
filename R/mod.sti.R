@@ -638,14 +638,7 @@ sti_recov_msm <- function(dat, at) {
   dat$epi$recov.rct[at] <- length(unique(recovRCT))
   dat$epi$recov.uct[at] <- length(unique(recovUCT))
   dat$epi$recov.syphilis[at] <- length(unique(recovsyph))
-  dat$epi$recov.prim.syph[at] <- length(unique(recovsyph_prim_tx))
-  dat$epi$recov.seco.syph[at] <- length(unique(recovsyph_seco_tx))
-  dat$epi$recov.earlat.syph[at] <- length(unique(recovsyph_earlat_tx))
-  dat$epi$recov.latelat.syph[at] <- length(unique(recovsyph_latelat_tx))
-  dat$epi$recov.latelatelat.syph[at] <- length(unique(recovsyph_latelatelat_tx))
-  dat$epi$recov.tert.syph[at] <- length(unique(recovsyph_tert_tx))
   dat$epi$recov.earlysyph[at] <- length(unique(recovsyph_early_tx))
-  dat$epi$recov.latesyph[at] <- length(unique(recovsyph_late_tx))
 
   return(dat)
 }

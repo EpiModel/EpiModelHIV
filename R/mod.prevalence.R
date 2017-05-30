@@ -278,14 +278,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$recov.ugc <- rNA
     dat$epi$recov.rct <- rNA
     dat$epi$recov.uct <- rNA
-    dat$epi$recov.prim.syph <- rNA
-    dat$epi$recov.seco.syph <- rNA
-    dat$epi$recov.earlat.syph <- rNA
-    dat$epi$recov.latelat.syph <- rNA
-    dat$epi$recov.latelatelat.syph <- rNA
-    dat$epi$recov.tert.syph <- rNA
     dat$epi$recov.earlysyph <- rNA
-    dat$epi$recov.latesyph <- rNA
     dat$epi$recov.syphilis <- rNA
 
     dat$epi$trans.main <- rNA
@@ -312,8 +305,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptTx <- rNA
     dat$epi$eptprop_provided <- rNA
     dat$epi$eptprop_tx <- rNA
-
-    ##########
   }
 
   dat$epi$num[at] <- sum(race %in% c("B","W"), na.rm = TRUE)
