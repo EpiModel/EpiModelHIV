@@ -231,14 +231,12 @@ sti_trans_msm <- function(dat, at) {
   # Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.syph.ip <- allActs_syph[allActs_syph[, "ins"] %in% 1:2, , drop = FALSE]
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop = FALSE]
+  colnames(disc.syph.ip)[1:2] <- colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
 
   ## Insertive Man Infected with Syphilis (Col 1)
   if (nrow(disc.syph.ip) == 0) {
     trans.syph.ip <- NULL
   } else {
-    colnames(disc.syph.ip)[1:2] <- c("ins","rec")
-
-    # Attributes of infected
     # Syphilis stage of infected partner
     ip.stage.syph <- stage.syph[disc.syph.ip[, 1]]
     stopifnot(all(!is.na(ip.stage.syph)))
@@ -275,8 +273,6 @@ sti_trans_msm <- function(dat, at) {
   if (nrow(disc.syph.rp) == 0) {
     trans.syph.rp <- NULL
   } else {
-    colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
-    # Attributes of infected
     # Syphilis stage of infected partner
     rp.stage.syph <- stage.syph[disc.syph.rp[, 2]]
     stopifnot(all(!is.na(rp.stage.syph)))
