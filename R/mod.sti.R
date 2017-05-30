@@ -439,7 +439,7 @@ sti_recov_msm <- function(dat, at) {
 
   # GC Recovery ---------------------------------------------------------
 
-  # Asymptomatic untreated
+  ## Recovery for asymptomatic untreated (natural clearance)
   idsRGC_asympt_ntx <- which(rGC == 1 &
                              rGC.infTime < at &
                              rGC.sympt == 0 &
@@ -454,15 +454,19 @@ sti_recov_msm <- function(dat, at) {
   recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1, 1/rgc.asympt.int) == 1)]
   recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1, 1/ugc.asympt.int) == 1)]
 
-  # Symptomatic untreated
-  idsRGC_sympt_ntx <- which(rGC == 1 &  rGC.infTime < at & rGC.sympt == 1 &
+  ## Recovery for symptomatic untreated (natural clearance)
+  idsRGC_sympt_ntx <- which(rGC == 1 &
+                            rGC.infTime < at &
+                            rGC.sympt == 1 &
                             (is.na(rGC.tx) | rGC.tx == 0) &
                             (is.na(rGC.tx.prep) | rGC.tx.prep == 0))
-  idsUGC_sympt_ntx <- which(uGC == 1 & uGC.infTime < at & uGC.sympt == 1 &
+  idsUGC_sympt_ntx <- which(uGC == 1 &
+                            uGC.infTime < at &
+                            uGC.sympt == 1 &
                             (is.na(uGC.tx) | uGC.tx == 0) &
                             (is.na(uGC.tx.prep) | uGC.tx.prep == 0))
 
-  # If parameter is null, uses recovery rate of asymptomatic untreated
+  # If NA, recovery rate for symptomatic untreated = rate for asymptomatic untreated
   if (!is.na(gc.ntx.int)) {
     recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1, 1/gc.ntx.int) == 1)]
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1, 1/gc.ntx.int) == 1)]
@@ -471,10 +475,12 @@ sti_recov_msm <- function(dat, at) {
     recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1, 1/ugc.asympt.int) == 1)]
   }
 
-  # Treated (asymptomatic and symptomatic)
-  idsRGC_tx <- which(rGC == 1 & rGC.infTime < at &
+  ## Recovery for treated (both asymptomatic and symptomatic)
+  idsRGC_tx <- which(rGC == 1 &
+                     rGC.infTime < at &
                      (rGC.tx == 1 | rGC.tx.prep == 1))
-  idsUGC_tx <- which(uGC == 1 & uGC.infTime < at &
+  idsUGC_tx <- which(uGC == 1 &
+                     uGC.infTime < at &
                      (uGC.tx == 1 | uGC.tx.prep == 1))
 
   recovRGC_tx <- idsRGC_tx[which(rbinom(length(idsRGC_tx), 1, 1/gc.tx.int) == 1)]
@@ -487,25 +493,34 @@ sti_recov_msm <- function(dat, at) {
 
   # CT Recovery ---------------------------------------------------------
 
-  # Asymptomatic untreated
-  idsRCT_asympt_ntx <- which(rCT == 1 & rCT.infTime < at & rCT.sympt == 0 &
+  ## Recovery for asymptomatic untreated (natural clearance)
+  idsRCT_asympt_ntx <- which(rCT == 1 &
+                             rCT.infTime < at &
+                             rCT.sympt == 0 &
                              (is.na(rCT.tx) | rCT.tx == 0) &
                              (is.na(rCT.tx.prep) | rCT.tx.prep == 0))
-  idsUCT_asympt_ntx <- which(uCT == 1 & uCT.infTime < at & uCT.sympt == 0 &
+  idsUCT_asympt_ntx <- which(uCT == 1 &
+                             uCT.infTime < at &
+                             uCT.sympt == 0 &
                              (is.na(uCT.tx) | uCT.tx == 0) &
                              (is.na(uCT.tx.prep) | uCT.tx.prep == 0))
 
   recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx), 1, 1/rct.asympt.int) == 1)]
   recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx), 1, 1/uct.asympt.int) == 1)]
 
-  # Symptomatic untreated
-  idsRCT_sympt_ntx <- which(rCT == 1 & rCT.infTime < at & rCT.sympt == 1 &
+  ## Recovery for symptomatic untreated (natural clearance)
+  idsRCT_sympt_ntx <- which(rCT == 1 &
+                            rCT.infTime < at &
+                            rCT.sympt == 1 &
                             (is.na(rCT.tx) | rCT.tx == 0) &
                             (is.na(rCT.tx.prep) | rCT.tx.prep == 0))
-  idsUCT_sympt_ntx <- which(uCT == 1 & uCT.infTime < at & uCT.sympt == 1 &
+  idsUCT_sympt_ntx <- which(uCT == 1 &
+                            uCT.infTime < at &
+                            uCT.sympt == 1 &
                             (is.na(uCT.tx) | uCT.tx == 0) &
                             (is.na(uCT.tx.prep) | uCT.tx.prep == 0))
 
+  # If NA, recovery rate for symptomatic untreated = rate for asymptomatic untreated
   if (!is.na(ct.ntx.int)) {
     recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx), 1, 1/ct.ntx.int) == 1)]
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx), 1, 1/ct.ntx.int) == 1)]
@@ -514,10 +529,12 @@ sti_recov_msm <- function(dat, at) {
     recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx), 1, 1/uct.asympt.int) == 1)]
   }
 
-  # Treated (asymptomatic and symptomatic)
-  idsRCT_tx <- which(rCT == 1 & rCT.infTime < at &
+  ## Recovery for treated (both asymptomatic and symptomatic)
+  idsRCT_tx <- which(rCT == 1 &
+                     rCT.infTime < at &
                      (rCT.tx == 1 | rCT.tx.prep == 1))
-  idsUCT_tx <- which(uCT == 1 & uCT.infTime < at &
+  idsUCT_tx <- which(uCT == 1 &
+                     uCT.infTime < at &
                      (uCT.tx == 1 | uCT.tx.prep == 1))
 
   recovRCT_tx <- idsRCT_tx[which(rbinom(length(idsRCT_tx), 1, 1/ct.tx.int) == 1)]
@@ -528,24 +545,34 @@ sti_recov_msm <- function(dat, at) {
 
 
   # Syphilis Recovery -------------------------------------------------
-
-  # Spontaneous untreated recovery during early stages ((a)symptomatic)
-
-  # Treated (asymptomatic and symptomatic)
-  idssyph_prim_tx <- which(syphilis == 1 & stage.syph == 2 & syph.infTime < at &
-                            (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_seco_tx <- which(syphilis == 1 & stage.syph == 3 & syph.infTime < at &
-                            (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_earlat_tx <- which(syphilis == 1 & stage.syph == 4 & syph.infTime < at &
+browser()
+  ## Recovery for treated
+  idssyph_prim_tx <- which(syphilis == 1 &
+                           stage.syph == 2 &
+                           syph.infTime < at &
+                           (syph.tx == 1 | syph.tx.prep == 1))
+  idssyph_seco_tx <- which(syphilis == 1 &
+                           stage.syph == 3 &
+                           syph.infTime < at &
+                           (syph.tx == 1 | syph.tx.prep == 1))
+  idssyph_earlat_tx <- which(syphilis == 1 &
+                             stage.syph == 4 &
+                             syph.infTime < at &
+                             (syph.tx == 1 | syph.tx.prep == 1))
+  idssyph_latelat_tx <- which(syphilis == 1 &
+                              stage.syph == 5 &
+                              syph.infTime < at &
                               (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_latelat_tx <- which(syphilis == 1 & stage.syph == 5 & syph.infTime < at &
-                               (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_latelatelat_tx <- which(syphilis == 1 & stage.syph == 6 & syph.infTime < at &
+  idssyph_latelatelat_tx <- which(syphilis == 1 &
+                                  stage.syph == 6 &
+                                  syph.infTime < at &
                                   (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_tert_tx <- which(syphilis == 1 & stage.syph == 7 & syph.infTime < at &
+  idssyph_tert_tx <- which(syphilis == 1 &
+                           stage.syph == 7 &
+                           syph.infTime < at &
                            (syph.tx == 1 | syph.tx.prep == 1))
 
-  # Move stage-specific treated to recovered
+  ## Move stage-specific treated to recovered
   recovsyph_prim_tx <- idssyph_prim_tx[which(rbinom(length(idssyph_prim_tx), 1, 1/syph.early.tx.int) == 1)]
   recovsyph_seco_tx <- idssyph_seco_tx[which(rbinom(length(idssyph_seco_tx), 1, 1/syph.early.tx.int) == 1)]
   recovsyph_earlat_tx <- idssyph_earlat_tx[which(rbinom(length(idssyph_earlat_tx), 1, 1/syph.early.tx.int) == 1)]
@@ -554,7 +581,7 @@ sti_recov_msm <- function(dat, at) {
   recovsyph_tert_tx <- idssyph_tert_tx[which(rbinom(length(idssyph_tert_tx), 1, 1/syph.late.tx.int) == 1)]
 
 
-  # Recovery by early, late, and all
+  ## Aggregate recovery by early, late, and all
   recovsyph_early_tx <- c(recovsyph_prim_tx, recovsyph_seco_tx, recovsyph_earlat_tx)
   recovsyph_late_tx <- c(recovsyph_latelat_tx, recovsyph_latelatelat_tx, recovsyph_tert_tx)
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
@@ -638,6 +665,7 @@ sti_recov_msm <- function(dat, at) {
 sti_tx_msm <- function(dat, at) {
 
   # Parameters ------------------------------------------------------------
+
   hivdx.syph.sympt.tx.rr <- dat$param$hivdx.syph.sympt.tx.rr
   gc.sympt.prob.tx <- dat$param$gc.sympt.prob.tx
   ct.sympt.prob.tx <- dat$param$ct.sympt.prob.tx
@@ -660,7 +688,7 @@ sti_tx_msm <- function(dat, at) {
   prep.sti.prob.tx <- dat$param$prep.sti.prob.tx
   ept.gc.success <- dat$param$ept.gc.success
   ept.ct.success <- dat$param$ept.ct.success
-  ##### Need to work on these still!
+  ## TODO: further develop these
 
   prep.cont.stand.tx <- dat$param$prep.continue.stand.tx
   if (prep.cont.stand.tx == TRUE) {
@@ -720,8 +748,10 @@ sti_tx_msm <- function(dat, at) {
   diag.status.ct <- dat$attr$diag.status.ct
   diag.status <- dat$attr$diag.status
 
+
   # Syphilis --------------------------------------------------------------
-  # symptomatic syphilis treatment
+
+  ## Symptomatic syphilis treatment
   idssyph_tx_sympt_prim <- which(syphilis == 1 & syph.infTime < at & stage.syph == 2 &
                                  stage.prim.sympt == 1 & is.na(syph.tx) &
                                  prepStat %in% prep.stand.tx.grp)
@@ -784,7 +814,7 @@ sti_tx_msm <- function(dat, at) {
                     txsyph_sympt_latelat, txsyph_sympt_tert)
 
 
-  # Asymptomatic syphilis treatment
+  ## Asymptomatic syphilis treatment
   idssyph_tx_asympt_prim <- which(syph.infTime < at & stage.syph == 2 & stage.prim.sympt == 0 &
                                   diag.status.syph == 1 & is.na(syph.tx))
 
@@ -830,7 +860,7 @@ sti_tx_msm <- function(dat, at) {
   idssyph_tx <- union(idssyph_tx_sympt, idssyph_tx_asympt)
 
 
-  ## Gonorrhea (GC) ------------------------------------------------------------
+  # Gonorrhea ---------------------------------------------------------------
 
   # symptomatic gc treatment
   idsRGC_tx_sympt <- which(rGC == 1 & rGC.infTime < at & rGC.sympt == 1 &
@@ -865,7 +895,8 @@ sti_tx_msm <- function(dat, at) {
   idsUGC_tx <- union(idsUGC_tx_sympt, idsUGC_tx_asympt)
 
 
-  ## Chlamydia ------------------------------------------------------------
+  # Chlamydia ---------------------------------------------------------------
+
   # symptomatic ct treatment
   idsRCT_tx_sympt <- which(rCT == 1 & rCT.infTime < at & rCT.sympt == 1 &
                            is.na(rCT.tx) & prepStat %in% prep.stand.tx.grp)
@@ -897,6 +928,7 @@ sti_tx_msm <- function(dat, at) {
   idsRCT_tx <- union(idsRCT_tx_sympt, idsRCT_tx_asympt)
   idsUCT_tx <- union(idsUCT_tx_sympt, idsUCT_tx_asympt)
 
+
   # PrEP-related treatment for all STIs --------------------------------------
 
   # Interval-based treatment for MSM on PrEP
@@ -922,6 +954,7 @@ sti_tx_msm <- function(dat, at) {
   txRCT_all <- union(txRCT, txRCT_prep)
   txUCT_all <- union(txUCT, txUCT_prep)
   txsyph_all <- union(txsyph, txsyph_prep)
+
 
   # Output ---------------------------------------------------------------------
 
