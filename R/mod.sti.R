@@ -319,13 +319,6 @@ sti_trans_msm <- function(dat, at) {
 
   # Output --------------------------------------------------------------
 
-  # Syphilis attributes
-  dat$attr$syphilis <- syphilis
-  dat$attr$syph.infTime <- syph.infTime
-  dat$attr$stage.syph <- stage.syph
-  dat$attr$stage.time.syph <- stage.time.syph
-  dat$attr$diag.status.syph <- diag.status.syph
-
   # Gonorrhea attributes
   dat$attr$rGC <- rGC
   dat$attr$uGC <- uGC
@@ -344,6 +337,12 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uCT.sympt <- uCT.sympt
   dat$attr$diag.status.ct <- diag.status.ct
 
+  # Syphilis attributes
+  dat$attr$syphilis <- syphilis
+  dat$attr$syph.infTime <- syph.infTime
+  dat$attr$stage.syph <- stage.syph
+  dat$attr$stage.time.syph <- stage.time.syph
+  dat$attr$diag.status.syph <- diag.status.syph
 
   # Summary incidence statistics
   dat$epi$incid.rgc[at] <- length(idsInf_rgc)
