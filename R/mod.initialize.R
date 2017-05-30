@@ -708,7 +708,7 @@ init_status_sti_msm <- function(dat) {
 
     if (dat$param$race.method == 1) {
         stage.syph.B.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
-        stage.syph.W.prob = (stage.syph.W.prob + stage.syph.W.prob)/2
+        stage.syph.W.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
     }
 
     # Infection-related attributes
