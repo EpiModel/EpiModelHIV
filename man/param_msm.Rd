@@ -85,12 +85,12 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.earlat.sympt.prob.tx = 0.15, syph.earlat.asympt.prob.tx = 1,
   syph.latelat.sympt.prob.tx = 0.1, syph.latelat.asympt.prob.tx = 1,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 1,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.35,
-  hiv.ugc.rr = 1.35, hiv.rct.rr = 2.35, hiv.uct.rr = 1.35,
-  hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572, hiv.usyph.rr = 1.7456618,
-  hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1,
-  hivdx.syph.sympt.tx.rr = 1.45, partlist.start = NULL, ...)
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.35, hiv.ugc.rr = 1.35, hiv.rct.rr = 2.35,
+  hiv.uct.rr = 1.35, hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.98876572,
+  hiv.usyph.rr = 1.7456618, hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1,
+  hiv.trans.syph.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
+  partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -702,9 +702,6 @@ visits.}
 
 \item{prep.sti.prob.tx}{Probability of treatment given positive screening
 during PrEP visit.}
-
-\item{prep.continue.stand.tx}{Logical, if \code{TRUE} will continue standard
-STI treatment of symptomatic cases even after PrEP initiation.}
 
 \item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
 a condom used by the insertive partner.}

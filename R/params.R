@@ -430,8 +430,6 @@
 #'        visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening
 #'        during PrEP visit.
-#' @param prep.continue.stand.tx Logical, if \code{TRUE} will continue standard
-#'        STI treatment of symptomatic cases even after PrEP initiation.
 #' @param sti.cond.rr Relative risk of STI infection (in either direction) given
 #'        a condom used by the insertive partner.
 #' @param hiv.rgc.rr Relative risk of HIV infection given current rectal
@@ -694,7 +692,6 @@ param_msm <- function(nwstats,
 
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,
-                      prep.continue.stand.tx = TRUE,
 
                       sti.cond.rr = 0.3,
 
