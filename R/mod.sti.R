@@ -547,43 +547,20 @@ sti_recov_msm <- function(dat, at) {
   # Syphilis Recovery -------------------------------------------------
 
   ## Recovery for treated
-  idssyph_prim_tx <- which(syphilis == 1 &
-                           stage.syph == 2 &
-                           syph.infTime < at &
-                           (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_seco_tx <- which(syphilis == 1 &
-                           stage.syph == 3 &
-                           syph.infTime < at &
-                           (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_earlat_tx <- which(syphilis == 1 &
-                             stage.syph == 4 &
-                             syph.infTime < at &
-                             (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_latelat_tx <- which(syphilis == 1 &
-                              stage.syph == 5 &
-                              syph.infTime < at &
-                              (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_latelatelat_tx <- which(syphilis == 1 &
-                                  stage.syph == 6 &
-                                  syph.infTime < at &
-                                  (syph.tx == 1 | syph.tx.prep == 1))
-  idssyph_tert_tx <- which(syphilis == 1 &
-                           stage.syph == 7 &
+  idssyph_early_tx <- which(syphilis == 1 &
+                            stage.syph %in% 2:4 &
+                            syph.infTime < at &
+                            (syph.tx == 1 | syph.tx.prep == 1))
+  idssyph_late_tx <- which(syphilis == 1 &
+                           stage.syph %in% 5:7 &
                            syph.infTime < at &
                            (syph.tx == 1 | syph.tx.prep == 1))
 
   ## Move stage-specific treated to recovered
-  recovsyph_prim_tx <- idssyph_prim_tx[which(rbinom(length(idssyph_prim_tx), 1, 1/syph.early.tx.int) == 1)]
-  recovsyph_seco_tx <- idssyph_seco_tx[which(rbinom(length(idssyph_seco_tx), 1, 1/syph.early.tx.int) == 1)]
-  recovsyph_earlat_tx <- idssyph_earlat_tx[which(rbinom(length(idssyph_earlat_tx), 1, 1/syph.early.tx.int) == 1)]
-  recovsyph_latelat_tx <- idssyph_latelat_tx[which(rbinom(length(idssyph_latelat_tx), 1, 1/syph.late.tx.int) == 1)]
-  recovsyph_latelatelat_tx <- idssyph_latelatelat_tx[which(rbinom(length(idssyph_latelatelat_tx), 1, 1/syph.late.tx.int) == 1)]
-  recovsyph_tert_tx <- idssyph_tert_tx[which(rbinom(length(idssyph_tert_tx), 1, 1/syph.late.tx.int) == 1)]
+  recovsyph_early_tx <- idssyph_early_tx[which(rbinom(length(idssyph_early_tx), 1, 1/syph.early.tx.int) == 1)]
+  recovsyph_late_tx <- idssyph_late_tx[which(rbinom(length(idssyph_late_tx), 1, 1/syph.late.tx.int) == 1)]
 
-
-  ## Aggregate recovery by early, late, and all
-  recovsyph_early_tx <- c(recovsyph_prim_tx, recovsyph_seco_tx, recovsyph_earlat_tx)
-  recovsyph_late_tx <- c(recovsyph_latelat_tx, recovsyph_latelatelat_tx, recovsyph_tert_tx)
+  ## Aggregate recovery by stage
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
 
 
