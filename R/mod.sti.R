@@ -233,7 +233,7 @@ sti_trans_msm <- function(dat, at) {
   disc.syph.rp <- allActs_syph[allActs_syph[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop = FALSE]
 
   ## Insertive Man Infected with Syphilis (Col 1)
-  if (is.null(dim(disc.syph.ip)[1])) {
+  if (nrow(disc.syph.ip) == 0) {
     trans.syph.ip <- NULL
   } else {
     colnames(disc.syph.ip)[1:2] <- c("ins","rec")
@@ -270,7 +270,7 @@ sti_trans_msm <- function(dat, at) {
   }
 
   ## Receptive Man Infected with Syphilis (Col 2)
-  if (is.null(dim(disc.syph.rp)[1])) {
+  if (nrow(disc.syph.rp) == 0) {
     trans.syph.rp <- NULL
   } else {
     colnames(disc.syph.rp)[1:2] <- c("ins", "rec")
