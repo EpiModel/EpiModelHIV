@@ -369,7 +369,9 @@
 #'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
 #'        chlamydia.
-#'
+
+#' @param syph.incub.sympt.prob Probability of symptoms given incubating stage
+#'        syphilis infection.
 #' @param syph.prim.sympt.prob Probability of symptoms given primary stage
 #'        syphilis infection.
 #' @param syph.seco.sympt.prob Probability of symptoms given secondary stage
@@ -406,6 +408,10 @@
 #'        asymptomatic gonorrhea.
 #' @param ct.asympt.prob.tx Probability of treatment, given diagnosis, for
 #'        asymptomatic chlamydia.
+#' @param syph.incub.sympt.prob.tx Probability of treatment for symptomatic
+#'        incubating stage syphilis infection.
+#' @param syph.incub.asympt.prob.tx Probability of treatment, given diagnosis,
+#'        for asymptomatic incubating stage syphilis infection.
 #' @param syph.prim.sympt.prob.tx Probability of treatment for symptomatic
 #'        primary stage syphilis infection.
 #' @param syph.prim.asympt.prob.tx Probability of treatment, given diagnosis,
@@ -655,6 +661,7 @@ param_msm <- function(nwstats,
                       rct.sympt.prob = 0.14, # Beck
                       uct.sympt.prob = 0.58, # Beck
 
+                      syph.incub.sympt.prob = 0,
                       syph.prim.sympt.prob = 0.50,
                       syph.seco.sympt.prob = 0.85,
                       syph.earlat.sympt.prob = 0,
@@ -679,6 +686,8 @@ param_msm <- function(nwstats,
                       gc.asympt.prob.tx = 1,
                       ct.asympt.prob.tx = 1,
 
+                      syph.incub.sympt.prob.tx = 0,
+                      syph.incub.asympt.prob.tx = 0,
                       syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
                       syph.prim.asympt.prob.tx = 1,
                       syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
@@ -845,8 +854,8 @@ init_msm <- function(nwstats,
                      prev.rgc = 0.015,
                      prev.uct = 0.015,
                      prev.rct = 0.015,
-                     prev.syph.B = 0.02,
-                     prev.syph.W = 0.02,
+                     prev.syph.B = 0.015,
+                     prev.syph.W = 0.015,
                      # adjust prim and seco from 0.1385 each
                      # Incubating, primary, secondary, early latent, late latent,
                      #late late latent, tertiary

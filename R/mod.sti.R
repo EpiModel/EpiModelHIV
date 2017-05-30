@@ -31,6 +31,7 @@ sti_trans_msm <- function(dat, at) {
   ugc.sympt.prob <- dat$param$ugc.sympt.prob
   rct.sympt.prob <- dat$param$rct.sympt.prob
   uct.sympt.prob <- dat$param$uct.sympt.prob
+  syph.incub.sympt.prob <- dat$param$syph.incub.sympt.prob
 
   # Relative risk of infection | condom use
   sti.cond.rr <- dat$param$sti.cond.rr
@@ -45,6 +46,7 @@ sti_trans_msm <- function(dat, at) {
   uCT <- dat$attr$uCT
   syphilis <- dat$attr$syphilis
   stage.syph <- dat$attr$stage.syph
+  syph.sympt <- dat$attr$syph.sympt
   stage.time.syph <- dat$attr$stage.time.syph
 
   # Infection time
@@ -315,6 +317,7 @@ sti_trans_msm <- function(dat, at) {
     stage.syph[idsInf_syph] <- 1
     stage.time.syph[idsInf_syph] <- 0
     diag.status.syph[idsInf_syph] <- 0
+    syph.sympt[idsInf_syph] <- rbinom(length(idsInf_syph), 1, syph.incub.sympt.prob)
   }
 
   # Output --------------------------------------------------------------
@@ -341,6 +344,7 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$syphilis <- syphilis
   dat$attr$syph.infTime <- syph.infTime
   dat$attr$stage.syph <- stage.syph
+  dat$attr$syph.sympt <- syph.sympt
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$diag.status.syph <- diag.status.syph
 
@@ -570,12 +574,7 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$syphilis[recovsyph] <- 0
   dat$attr$stage.syph[recovsyph] <- NA
   dat$attr$stage.time.syph[recovsyph] <- NA
-  dat$attr$stage.prim.sympt[recovsyph] <- NA
-  dat$attr$stage.seco.sympt[recovsyph] <- NA
-  dat$attr$stage.earlat.sympt[recovsyph] <- NA
-  dat$attr$stage.latelat.sympt[recovsyph] <- NA
-  dat$attr$stage.latelatelat.sympt[recovsyph] <- NA
-  dat$attr$stage.tert.sympt[recovsyph] <- NA
+  dat$attr$syph.sympt[recovsyph] <- NA
   dat$attr$syph.infTime[recovsyph] <- NA
   dat$attr$diag.status.syph[recovsyph] <- NA
   dat$attr$syph.tx[recovsyph] <- NA
@@ -643,6 +642,8 @@ sti_tx_msm <- function(dat, at) {
   gc.asympt.prob.tx <- dat$param$gc.asympt.prob.tx
   ct.asympt.prob.tx <- dat$param$ct.asympt.prob.tx
 
+  syph.incub.sympt.prob.tx <- dat$param$syph.incub.sympt.prob.tx
+  syph.incub.asympt.prob.tx <- dat$param$syph.incub.asympt.prob.tx
   syph.prim.sympt.prob.tx <- dat$param$syph.prim.sympt.prob.tx
   syph.prim.asympt.prob.tx <- dat$param$syph.prim.asympt.prob.tx
   syph.seco.sympt.prob.tx <- dat$param$syph.seco.sympt.prob.tx
@@ -683,12 +684,7 @@ sti_tx_msm <- function(dat, at) {
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
-  stage.prim.sympt <- dat$attr$stage.prim.sympt
-  stage.seco.sympt <- dat$attr$stage.seco.sympt
-  stage.earlat.sympt <- dat$attr$stage.earlat.sympt
-  stage.latelat.sympt <- dat$attr$stage.latelat.sympt
-  stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
-  stage.tert.sympt <- dat$attr$stage.tert.sympt
+  syph.sympt <- dat$attr$syph.sympt
 
   # Tx
   uGC.tx <- dat$attr$uGC.tx
@@ -701,7 +697,6 @@ sti_tx_msm <- function(dat, at) {
   rCT.tx.prep <- dat$attr$rCT.tx.prep
   syph.tx <- dat$attr$syph.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
-  prepStat <- dat$attr$prepStat
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
 
@@ -715,129 +710,203 @@ sti_tx_msm <- function(dat, at) {
   # Syphilis --------------------------------------------------------------
 
   ## Symptomatic syphilis treatment
+  # Select those in incubating stage who are eligible to be treated
+  idssyph_tx_sympt_incub <- which(syphilis == 1 &
+                                   syph.infTime < at &
+                                   stage.syph == 1 &
+                                   syph.sympt == 1 &
+                                   is.na(syph.tx))
+
+  # Choose those in incubating stage who are diagnosed with HIV
+  idssyph_tx_sympt_incub_hivdx <- idssyph_tx_sympt_incub[which(diag.status[idssyph_tx_sympt_incub] == 1)]
+
+  # Choose those in incubating stage who are not diagnosed with HIV
+  idssyph_tx_sympt_incub_hivnotdx <- setdiff(idssyph_tx_sympt_incub, idssyph_tx_sympt_incub_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
+  txsyph_sympt_incub <- c(idssyph_tx_sympt_incub_hivnotdx[which(rbinom(length(idssyph_tx_sympt_incub_hivnotdx),
+                                                                     1, ((1 / hivdx.syph.sympt.tx.rr) * syph.incub.sympt.prob.tx)) == 1)],
+                          idssyph_tx_sympt_incub_hivdx[which(rbinom(length(idssyph_tx_sympt_incub_hivdx),
+                                                                  1, syph.prim.sympt.prob.tx) == 1)])
+
+
+
+  # Select those in primary stage who are eligible to be treated
   idssyph_tx_sympt_prim <- which(syphilis == 1 &
                                  syph.infTime < at &
                                  stage.syph == 2 &
-                                 stage.prim.sympt == 1 &
+                                 syph.sympt == 1 &
                                  is.na(syph.tx))
 
+  # Choose those in primary stage who are diagnosed with HIV
   idssyph_tx_sympt_prim_hivdx <- idssyph_tx_sympt_prim[which(diag.status[idssyph_tx_sympt_prim] == 1)]
+
+  # Choose those in primary stage who are not diagnosed with HIV
   idssyph_tx_sympt_prim_hivnotdx <- setdiff(idssyph_tx_sympt_prim, idssyph_tx_sympt_prim_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
   txsyph_sympt_prim <- c(idssyph_tx_sympt_prim_hivnotdx[which(rbinom(length(idssyph_tx_sympt_prim_hivnotdx),
                                                                      1, ((1 / hivdx.syph.sympt.tx.rr) * syph.prim.sympt.prob.tx)) == 1)],
                          idssyph_tx_sympt_prim_hivdx[which(rbinom(length(idssyph_tx_sympt_prim_hivdx),
                                                                   1, syph.prim.sympt.prob.tx) == 1)])
 
+  # Select those in secondary stage who are eligible to be treated
   idssyph_tx_sympt_seco <- which(syphilis == 1 &
                                  syph.infTime < at &
                                  stage.syph == 3 &
-                                 stage.seco.sympt == 1 &
+                                 syph.sympt == 1 &
                                  is.na(syph.tx))
 
+  # Choose those in secondary stage who are diagnosed with HIV
   idssyph_tx_sympt_seco_hivdx <- idssyph_tx_sympt_seco[which(diag.status[idssyph_tx_sympt_seco] == 1)]
+
+  # Choose those in secondary stage who are not diagnosed with HIV
   idssyph_tx_sympt_seco_hivnotdx <- setdiff(idssyph_tx_sympt_seco, idssyph_tx_sympt_seco_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
   txsyph_sympt_seco <- c(idssyph_tx_sympt_seco_hivnotdx[which(rbinom(length(idssyph_tx_sympt_seco_hivnotdx),
                                                                     1, ((1 / hivdx.syph.sympt.tx.rr) * syph.seco.sympt.prob.tx)) == 1)],
                          idssyph_tx_sympt_seco_hivdx[which(rbinom(length(idssyph_tx_sympt_seco_hivdx),
                                                                   1, syph.seco.sympt.prob.tx) == 1)])
 
+  # Select those in early latent stage who are eligible to be treated
   idssyph_tx_sympt_earlat <- which(syphilis == 1 &
                                    syph.infTime < at &
                                    stage.syph == 4 &
-                                   stage.earlat.sympt == 1 &
+                                   syph.sympt == 1 &
                                    is.na(syph.tx))
 
+  # Choose those in early latent stage who are diagnosed with HIV
   idssyph_tx_sympt_earlat_hivdx <- idssyph_tx_sympt_earlat[which(diag.status[idssyph_tx_sympt_earlat] == 1)]
+
+  # Choose those in early latent stage who are not diagnosed with HIV
   idssyph_tx_sympt_earlat_hivnotdx <- setdiff(idssyph_tx_sympt_earlat, idssyph_tx_sympt_earlat_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
   txsyph_sympt_earlat <- c(idssyph_tx_sympt_earlat_hivnotdx[which(rbinom(length(idssyph_tx_sympt_earlat_hivnotdx),
                                                                           1, ((1 / hivdx.syph.sympt.tx.rr) * syph.earlat.sympt.prob.tx)) == 1)],
                          idssyph_tx_sympt_earlat_hivdx[which(rbinom(length(idssyph_tx_sympt_earlat_hivdx),
                                                                     1, syph.earlat.sympt.prob.tx) == 1)])
 
+  # Select those in late latent stage who are eligible to be treated
   idssyph_tx_sympt_latelat <- which(syphilis == 1 &
                                     syph.infTime < at &
                                     (stage.syph == 5 | stage.syph == 6) &
-                                    (stage.latelat.sympt == 1 | stage.latelatelat.sympt == 1) &
+                                    (syph.sympt == 1 | syph.sympt == 1) &
                                     is.na(syph.tx))
 
+  # Choose those in late latent stage who are diagnosed with HIV
   idssyph_tx_sympt_latelat_hivdx <- idssyph_tx_sympt_latelat[which(diag.status[idssyph_tx_sympt_latelat] == 1)]
+
+  # Choose those in late latent stage who are not diagnosed with HIV
   idssyph_tx_sympt_latelat_hivnotdx <- setdiff(idssyph_tx_sympt_latelat, idssyph_tx_sympt_latelat_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
   txsyph_sympt_latelat <- c(idssyph_tx_sympt_latelat_hivnotdx[which(rbinom(length(idssyph_tx_sympt_latelat_hivnotdx),
                                                                            1, ((1 / hivdx.syph.sympt.tx.rr) * syph.latelat.sympt.prob.tx)) == 1)],
                             idssyph_tx_sympt_latelat_hivdx[which(rbinom(length(idssyph_tx_sympt_latelat_hivdx),
                                                                         1, syph.latelat.sympt.prob.tx) == 1)])
 
+  # Select those in tertiary stage who are eligible to be treated
   idssyph_tx_sympt_tert <- which(syphilis == 1 &
                                  syph.infTime < at &
                                  stage.syph == 7 &
-                                 stage.tert.sympt == 1 &
+                                 syph.sympt == 1 &
                                  is.na(syph.tx))
 
+  # Choose those in tertiary stage who are not diagnosed with HIV
   idssyph_tx_sympt_tert_hivdx <- idssyph_tx_sympt_tert[which(diag.status[idssyph_tx_sympt_tert] == 1)]
+
+  # Choose those in tertiary stage who are not diagnosed with HIV
   idssyph_tx_sympt_tert_hivnotdx <- setdiff(idssyph_tx_sympt_tert, idssyph_tx_sympt_tert_hivdx)
+
+  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
   txsyph_sympt_tert <- c(idssyph_tx_sympt_tert_hivnotdx[which(rbinom(length(idssyph_tx_sympt_tert_hivnotdx),
                                                                      1, syph.tert.sympt.prob.tx) == 1)],
                          idssyph_tx_sympt_tert_hivdx[which(rbinom(length(idssyph_tx_sympt_tert_hivdx),
                                                                   1, (hivdx.syph.sympt.tx.rr * syph.tert.sympt.prob.tx)) == 1)])
 
-  idssyph_tx_sympt <- c(idssyph_tx_sympt_prim, idssyph_tx_sympt_seco, idssyph_tx_sympt_earlat,
+  # Aggregate all those eligible to be treated
+  idssyph_tx_sympt <- c(idssyph_tx_sympt_incub, idssyph_tx_sympt_prim, idssyph_tx_sympt_seco, idssyph_tx_sympt_earlat,
                         idssyph_tx_sympt_latelat, idssyph_tx_sympt_tert)
-  txsyph_sympt <- c(txsyph_sympt_prim, txsyph_sympt_seco, txsyph_sympt_earlat,
+
+  # Aggregate all those selected to be treated
+  txsyph_sympt <- c(txsyph_sympt_incub, txsyph_sympt_prim, txsyph_sympt_seco, txsyph_sympt_earlat,
                     txsyph_sympt_latelat, txsyph_sympt_tert)
 
 
   ## Asymptomatic syphilis treatment
+  # Select those in primary stage who are eligible to be treated
+  idssyph_tx_asympt_incub <- which(syph.infTime < at &
+                                    stage.syph == 1 &
+                                    syph.sympt == 0 &
+                                    diag.status.syph == 1 &
+                                    is.na(syph.tx))
+
+  # Select those to be treated
+  txsyph_asympt_incub <- idssyph_tx_asympt_incub[which(rbinom(length(idssyph_tx_asympt_incub),
+                                                            1, syph.incub.asympt.prob.tx) == 1)]
+  # Select those in primary stage who are eligible to be treated
   idssyph_tx_asympt_prim <- which(syph.infTime < at &
                                   stage.syph == 2 &
-                                  stage.prim.sympt == 0 &
+                                  syph.sympt == 0 &
                                   diag.status.syph == 1 &
                                   is.na(syph.tx))
 
+  # Select those to be treated
   txsyph_asympt_prim <- idssyph_tx_asympt_prim[which(rbinom(length(idssyph_tx_asympt_prim),
                                                             1, syph.prim.asympt.prob.tx) == 1)]
 
+  # Select those in secondary stage who are eligible to be treated
   idssyph_tx_asympt_seco <- which(syph.infTime < at &
                                   stage.syph == 3 &
-                                  stage.seco.sympt == 0 &
+                                  syph.sympt == 0 &
                                   diag.status.syph == 1 &
                                   is.na(syph.tx))
 
+  # Select those to be treated
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco),
                                                             1, syph.seco.asympt.prob.tx) == 1)]
 
 
+  # Select those in early latent stage who are eligible to be treated
   idssyph_tx_asympt_earlat <- which(syph.infTime < at &
                                     stage.syph == 4 &
-                                    stage.earlat.sympt == 0 &
+                                    syph.sympt == 0 &
                                     diag.status.syph == 1 &
                                     is.na(syph.tx))
 
+  # Select those to be treated
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_earlat),
                                                                 1, syph.earlat.asympt.prob.tx) == 1)]
 
+  # Select those in late latent stage who are eligible to be treated
   idssyph_tx_asympt_latelat <- which(syph.infTime < at &
                                      (stage.syph == 5 | stage.syph == 6) &
-                                     (stage.latelat.sympt == 0 | stage.latelatelat.sympt == 0) &
+                                     (syph.sympt == 0 | syph.sympt == 0) &
                                      diag.status.syph == 1 & is.na(syph.tx))
 
+  # Select those to be treated
   txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_latelat),
                                                                   1, syph.latelat.asympt.prob.tx) == 1)]
-
+  # Select those in tertiary stage who are eligible to be treated
   idssyph_tx_asympt_tert <- which(syph.infTime < at &
                                   stage.syph == 7 &
-                                  stage.tert.sympt == 0 &
+                                  syph.sympt == 0 &
                                   diag.status.syph == 1 &
                                   is.na(syph.tx))
 
+  # Select those to be treated
   txsyph_asympt_tert <- idssyph_tx_asympt_tert[which(rbinom(length(idssyph_tx_asympt_tert),
                                                             1, syph.tert.asympt.prob.tx) == 1)]
 
-  idssyph_tx_asympt <- c(idssyph_tx_asympt_prim, idssyph_tx_asympt_seco, idssyph_tx_asympt_earlat,
+  # Aggregate all those eligible to be treated
+  idssyph_tx_asympt <- c(idssyph_tx_asympt_incub, idssyph_tx_asympt_prim, idssyph_tx_asympt_seco, idssyph_tx_asympt_earlat,
                          idssyph_tx_asympt_latelat, idssyph_tx_asympt_tert)
 
-  txsyph_asympt <- c(txsyph_asympt_prim, txsyph_asympt_seco, txsyph_asympt_earlat,
+  # Aggregate all those selected to be treated
+  txsyph_asympt <- c(txsyph_asympt_incub, txsyph_asympt_prim, txsyph_asympt_seco, txsyph_asympt_earlat,
                      txsyph_asympt_latelat, txsyph_asympt_tert)
-
 
   # All treated syphilis
   txsyph <- union(txsyph_sympt, txsyph_asympt)
@@ -1044,48 +1113,28 @@ sti_tx_msm <- function(dat, at) {
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
                  intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)),
-                 intersect(txsyph_all, which(dat$attr$stage.prim.sympt == 0 |
-                                             dat$attr$stage.seco.sympt == 0 |
-                                             dat$attr$stage.earlat.sympt == 0 |
-                                             dat$attr$stage.latelat.sympt == 0 |
-                                             dat$attr$stage.latelatelat.sympt |
-                                             dat$attr$stage.tert.sympt == 0)))
+                 intersect(txsyph_all, which(dat$attr$syph.sympt == 0)))
 
   dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
   asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
                     idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
-                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which(dat$attr$stage.prim.sympt == 0 |
-                                                dat$attr$stage.seco.sympt == 0 |
-                                              dat$attr$stage.earlat.sympt == 0 |
-                                             dat$attr$stage.latelat.sympt == 0 |
-                                              dat$attr$stage.latelatelat.sympt |
-                                               dat$attr$stage.tert.sympt == 0)))
+                    idssyph_tx_asympt, intersect(idssyph_prep_tx, which(dat$attr$syph.sympt == 0)))
   dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
 
   asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
                       intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
                       intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
                       intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)),
-                      intersect(txsyph_prep, which(dat$attr$stage.prim.sympt == 0 |
-                                                dat$attr$stage.seco.sympt == 0 |
-                                              dat$attr$stage.earlat.sympt == 0 |
-                                             dat$attr$stage.latelat.sympt == 0 |
-                                              dat$attr$stage.latelatelat.sympt |
-                                               dat$attr$stage.tert.sympt == 0)))
+                      intersect(txsyph_prep, which(dat$attr$syph.sympt == 0)))
   dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
 
   asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                          intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                          intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
                          intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)),
-                         intersect(idssyph_prep_tx, which(dat$attr$stage.prim.sympt == 0 |
-                                                dat$attr$stage.seco.sympt == 0 |
-                                              dat$attr$stage.earlat.sympt == 0 |
-                                             dat$attr$stage.latelat.sympt == 0 |
-                                              dat$attr$stage.latelatelat.sympt |
-                                               dat$attr$stage.tert.sympt == 0)))
+                         intersect(idssyph_prep_tx, which(dat$attr$syph.sympt == 0)))
   dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
 
   rect.tx <- c(txRGC_all, txRCT_all)

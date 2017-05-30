@@ -50,12 +50,7 @@ prevalence_msm <- function(dat, at) {
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
   stage.syph <- dat$attr$stage.syph
-  stage.prim.sympt <- dat$attr$stage.prim.sympt
-  stage.seco.sympt <- dat$attr$stage.seco.sympt
-  stage.earlat.sympt <- dat$attr$stage.earlat.sympt
-  stage.latelat.sympt <- dat$attr$stage.latelat.sympt
-  stage.latelatelat.sympt <- dat$attr$stage.latelatelat.sympt
-  stage.tert.sympt <- dat$attr$stage.tert.sympt
+  syph.sympt <- dat$attr$syph.sympt
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -614,8 +609,7 @@ prevalence_msm <- function(dat, at) {
   r.sti.sympt <- which(rGC.sympt == 1 | rCT.sympt == 1)
   r.sti.asympt <- setdiff(r.sti.prev, r.sti.sympt)
 
-  syph.sympt <- which(stage.prim.sympt == 1 | stage.seco.sympt == 1 | stage.earlat.sympt == 1 |
-                        stage.latelat.sympt == 1 | stage.latelatelat.sympt == 1 | stage.tert.sympt == 1)
+  syph.sympt <- which(syph.sympt == 1)
   syph.asympt <- setdiff(syph.prev, syph.sympt)
 
   # PAF values

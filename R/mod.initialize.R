@@ -724,12 +724,7 @@ init_status_sti_msm <- function(dat) {
     last.tx.time.syph.prep <- rep(NA, num)
     syph.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
-    stage.prim.sympt <- rep(NA, num)
-    stage.seco.sympt <- rep(NA, num)
-    stage.earlat.sympt <- rep(NA, num)
-    stage.latelat.sympt <- rep(NA, num)
-    stage.latelatelat.sympt <- rep(NA, num)
-    stage.tert.sympt <- rep(NA, num)
+    syph.sympt <- rep(NA, num)
 
     # Gonorrhea
     uGC <- rep(0, num)
@@ -790,48 +785,49 @@ init_status_sti_msm <- function(dat) {
     # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
     selected <- intersect(inf.ids, which(stage.syph == 1))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.incub.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.incub.syph
 
     # Primary
     selected <- intersect(inf.ids, which(stage.syph == 2))
-    stage.prim.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.prim.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.prim.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.prim.syph
 
     # Secondary
     selected <- intersect(inf.ids, which(stage.syph == 3))
-    stage.seco.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.seco.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.seco.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.seco.syph
 
     # Early latent
     selected <- intersect(inf.ids, which(stage.syph == 4))
-    stage.earlat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.earlat.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.earlat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.earlat.syph
 
     # Late latent
     selected <- intersect(inf.ids, which(stage.syph == 5))
-    stage.latelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelat.syph
 
     # Late late latent
     selected <- intersect(inf.ids, which(stage.syph == 6))
-    stage.latelatelat.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
     time.in.latelatelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelatelat.syph
 
     # Tertiary
     selected <- intersect(inf.ids, which(stage.syph == 7))
-    stage.tert.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.tert.syph
@@ -886,12 +882,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$syph.infTime <- syph.infTime
-    dat$attr$stage.prim.sympt <- stage.prim.sympt
-    dat$attr$stage.seco.sympt <- stage.seco.sympt
-    dat$attr$stage.earlat.sympt <- stage.earlat.sympt
-    dat$attr$stage.latelat.sympt <- stage.latelat.sympt
-    dat$attr$stage.latelatelat.sympt <- stage.latelatelat.sympt
-    dat$attr$stage.tert.sympt <- stage.tert.sympt
+    dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$lastdiag.time.syph <- lastdiag.time.syph
     dat$attr$syph.tx <- syph.tx

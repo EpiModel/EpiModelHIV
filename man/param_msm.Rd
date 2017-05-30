@@ -72,14 +72,16 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rct.tprob = 0.1907554, uct.tprob = 0.16394697, rsyph.tprob = 0.04668348,
   usyph.tprob = 0.03598792, syph.earlat.rr = 0.5, syph.late.rr = 0,
   rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
-  uct.sympt.prob = 0.58, syph.prim.sympt.prob = 0.5,
-  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
-  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 0.9,
-  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
-  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
-  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  syph.early.tx.int = 7, syph.late.tx.int = 15, gc.sympt.prob.tx = 0.9,
-  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
+  uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
+  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
+  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
+  syph.tert.sympt.prob = 0.9, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
+  syph.late.tx.int = 15, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
+  gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
+  syph.incub.sympt.prob.tx = 0, syph.incub.asympt.prob.tx = 0,
   syph.prim.sympt.prob.tx = 0.35, syph.prim.asympt.prob.tx = 1,
   syph.seco.sympt.prob.tx = 0.6, syph.seco.asympt.prob.tx = 1,
   syph.earlat.sympt.prob.tx = 0.15, syph.earlat.asympt.prob.tx = 1,
@@ -612,6 +614,9 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
+\item{syph.incub.sympt.prob}{Probability of symptoms given incubating stage
+syphilis infection.}
+
 \item{syph.prim.sympt.prob}{Probability of symptoms given primary stage
 syphilis infection.}
 
@@ -666,6 +671,12 @@ asymptomatic gonorrhea.}
 
 \item{ct.asympt.prob.tx}{Probability of treatment, given diagnosis, for
 asymptomatic chlamydia.}
+
+\item{syph.incub.sympt.prob.tx}{Probability of treatment for symptomatic
+incubating stage syphilis infection.}
+
+\item{syph.incub.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic incubating stage syphilis infection.}
 
 \item{syph.prim.sympt.prob.tx}{Probability of treatment for symptomatic
 primary stage syphilis infection.}
