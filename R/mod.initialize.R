@@ -758,6 +758,13 @@ init_status_sti_msm <- function(dat) {
     last.tx.time.rct.prep <- rep(NA, num)
     last.tx.time.uct.prep <- rep(NA, num)
 
+    # Syphilis infection parameters
+    incu.syph.int <- dat$param$incu.syph.int
+    prim.syph.int <- dat$param$prim.syph.int
+    seco.syph.int <- dat$param$seco.syph.int
+    earlat.syph.int <- dat$param$earlat.syph.int
+    latelat.syph.int <- dat$param$latelat.syph.int
+
     # Testing attributes
     recentpartners <- rep(0, num)
     time.sex.active <- pmax(1, round((365 / dat$param$time.unit) * age -
@@ -772,7 +779,6 @@ init_status_sti_msm <- function(dat) {
     while (sum(syphilis[ids.W]) != nInfsyphW) {
         syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
     }
-    syph.infTime[syphilis ==  1] <- 1
 
     inf.ids.B <- intersect(ids.B, which(syphilis == 1))
     inf.ids.W <- intersect(ids.W, which(syphilis == 1))
@@ -789,6 +795,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.incub.syph
+    syph.infTime[selected] <- 1 - time.in.incub.syph
 
     # Primary
     selected <- intersect(inf.ids, which(stage.syph == 2))
@@ -796,6 +803,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.prim.syph
+    syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
 
     # Secondary
     selected <- intersect(inf.ids, which(stage.syph == 3))
@@ -803,6 +811,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.seco.syph
+    syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
 
     # Early latent
     selected <- intersect(inf.ids, which(stage.syph == 4))
@@ -810,6 +819,8 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.earlat.syph
+    syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
+                                  prim.syph.int - incu.syph.int
 
     # Late latent
     selected <- intersect(inf.ids, which(stage.syph == 5))
@@ -817,6 +828,8 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelat.syph
+    syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
+                                  seco.syph.int - prim.syph.int - incu.syph.int
 
     # Late late latent
     selected <- intersect(inf.ids, which(stage.syph == 6))
@@ -824,6 +837,9 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
     time.in.latelatelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelatelat.syph
+    syph.infTime[selected] <- 1 - time.in.latelatelat.syph - latelat.syph.int -
+                                  earlat.syph.int - seco.syph.int - prim.syph.int -
+                                  incu.syph.int
 
     # Tertiary
     selected <- intersect(inf.ids, which(stage.syph == 7))
@@ -831,6 +847,9 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.tert.syph
+    syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
+                                  earlat.syph.int - seco.syph.int - prim.syph.int -
+                                  incu.syph.int
 
     # Set diagnosis status for syphilis
     diag.status.syph[syphilis == 1] <- 0
