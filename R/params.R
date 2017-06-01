@@ -709,6 +709,7 @@ param_msm <- function(nwstats,
                       hiv.ugc.rr = 1.425,
                       hiv.rct.rr = 2.175,
                       hiv.uct.rr = 1.425,
+                      hiv.dual.rr = 0.2,
                       hiv.rsyph.rr = 2.325,
                       hiv.usyph.rr = 1.525,
 

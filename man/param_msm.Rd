@@ -89,9 +89,10 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 1,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.175, hiv.ugc.rr = 1.425, hiv.rct.rr = 2.175,
-  hiv.uct.rr = 1.425, hiv.rsyph.rr = 2.325, hiv.usyph.rr = 1.525,
-  hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1,
-  hivdx.syph.sympt.tx.rr = 1.45, partlist.start = NULL, ...)
+  hiv.uct.rr = 1.425, hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.325,
+  hiv.usyph.rr = 1.525, hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1,
+  hiv.trans.syph.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
+  partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -728,6 +729,9 @@ chlamydia in the HIV-negative partner.}
 \item{hiv.uct.rr}{Relative risk of HIV infection given current urethral
 chlamydia in the HIV-negative partner.}
 
+\item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
+given dual infection with both gonorrhea and chlamydia.}
+
 \item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal
 syphilis infection in the HIV-negative partner.}
 
@@ -752,9 +756,6 @@ so it is a boost to get to 0.35.}
 accumulating for eventual STI testing indications.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
-given dual infection with both gonorrhea and chlamydia.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to
