@@ -567,21 +567,21 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.ct.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rCT == 1 | uCT == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at], 0)
 
   # Site-specific STI incidence rates
-  dat$epi$ir100.rgc[at] <- ifelse(sum(rGC == 0, na.rm = TRUE), (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200, 0)
-  dat$epi$ir100.ugc[at] <- ifelse(sum(uGC == 0, na.rm = TRUE), (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200, 0)
-  dat$epi$ir100.gc[at] <- ifelse((sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE)), (dat$epi$incid.gc[at] / (sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE))) * 5200, 0)
+  dat$epi$ir100.rgc[at] <- ifelse(sum(rGC == 0, na.rm = TRUE) > 0, (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200, 0)
+  dat$epi$ir100.ugc[at] <- ifelse(sum(uGC == 0, na.rm = TRUE) > 0, (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200, 0)
+  dat$epi$ir100.gc[at] <- ifelse((sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE)) > 0, (dat$epi$incid.gc[at] / (sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE))) * 5200, 0)
 
-  dat$epi$ir100.rct[at] <- ifelse(sum(rCT == 0, na.rm = TRUE), (dat$epi$incid.rct[at] / sum(rCT == 0, na.rm = TRUE)) * 5200, 0)
-  dat$epi$ir100.uct[at] <- ifelse(sum(uCT == 0, na.rm = TRUE), (dat$epi$incid.uct[at] / sum(uCT == 0, na.rm = TRUE)) * 5200, 0)
-  dat$epi$ir100.ct[at] <- ifelse((sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE)), (dat$epi$incid.ct[at] / (sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE))) * 5200, 0)
+  dat$epi$ir100.rct[at] <- ifelse(sum(rCT == 0, na.rm = TRUE) > 0, (dat$epi$incid.rct[at] / sum(rCT == 0, na.rm = TRUE)) * 5200, 0)
+  dat$epi$ir100.uct[at] <- ifelse(sum(uCT == 0, na.rm = TRUE) > 0, (dat$epi$incid.uct[at] / sum(uCT == 0, na.rm = TRUE)) * 5200, 0)
+  dat$epi$ir100.ct[at] <- ifelse((sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE)) > 0, (dat$epi$incid.ct[at] / (sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE))) * 5200, 0)
 
-  dat$epi$ir100.syph[at] <- ifelse(sum(syphilis == 0, na.rm = TRUE), (dat$epi$incid.syph[at] / sum(syphilis == 0 , na.rm = TRUE)) * 5200, 0)
+  dat$epi$ir100.syph[at] <- ifelse(sum(syphilis == 0, na.rm = TRUE) > 0, (dat$epi$incid.syph[at] / sum(syphilis == 0 , na.rm = TRUE)) * 5200, 0)
 
   dat$epi$prev.sti[at] <- ifelse(sum(rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) > 0,
                                  sum(rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) / dat$epi$num[at], 0)
   dat$epi$ir100.sti[at] <- ifelse((sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE) +
                                      sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE) +
-                                     sum(syphilis == 0, na.rm = TRUE)),
+                                     sum(syphilis == 0, na.rm = TRUE)) > 0,
                                 ((dat$epi$incid.ct[at] + dat$epi$incid.gc[at] + dat$epi$incid.syph[at]) /
                                 (sum(rGC == 0, na.rm = TRUE) + sum(uGC == 0, na.rm = TRUE) +
                                  sum(rCT == 0, na.rm = TRUE) + sum(uCT == 0, na.rm = TRUE) +
@@ -589,7 +589,7 @@ prevalence_msm <- function(dat, at) {
 
   dat$epi$ir100.sti.prep[at] <- ifelse((sum(rGC == 0 & prepStat == 1, na.rm = TRUE) + sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                           sum(rCT == 0 & prepStat == 1, na.rm = TRUE) + sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
-                                          sum(syphilis == 0 & prepStat == 1, na.rm = TRUE)),
+                                          sum(syphilis == 0 & prepStat == 1, na.rm = TRUE)) > 0,
                                   (dat$epi$incid.gcct.prep[at] + dat$epi$incid.syph.prep[at] /
                                   (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) + sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) + sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
@@ -619,10 +619,10 @@ prevalence_msm <- function(dat, at) {
       dat$epi$sti_u_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.prev] == at & inf.role[u.sti.prev] == 1)) / length(which(inf.time == at)), 0)
       dat$epi$sti_r_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.prev] == at & inf.role[r.sti.prev] == 0)) / length(which(inf.time == at)), 0)
       dat$epi$sti_syph_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[syph.prev] == at)) / length(which(inf.time == at)), 0)
-      dat$epi$sti_u_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.sympt] == at)) / length(which(inf.time == at)), 0)
-      dat$epi$sti_u_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.asympt] == at)) / length(which(inf.time == at)), 0)
-      dat$epi$sti_r_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.sympt] == at)) / length(which(inf.time == at)), 0)
-      dat$epi$sti_r_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.asympt] == at)) / length(which(inf.time == at)), 0)
+      dat$epi$sti_u_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.sympt] == at & inf.role[u.sti.sympt] == 1)) / length(which(inf.time == at)), 0)
+      dat$epi$sti_u_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.asympt] == at & inf.role[u.sti.asympt] == 1)) / length(which(inf.time == at)), 0)
+      dat$epi$sti_r_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.sympt] == at & inf.role[r.sti.sympt] == 0)) / length(which(inf.time == at)), 0)
+      dat$epi$sti_r_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.asympt] == at & inf.role[r.sti.asympt] == 0)) / length(which(inf.time == at)), 0)
       dat$epi$sti_syph_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[syph.sympt] == at)) / length(which(inf.time == at)), 0)
       dat$epi$sti_syph_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[syph.asympt] == at)) / length(which(inf.time == at)), 0)
 
