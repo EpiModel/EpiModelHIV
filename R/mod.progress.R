@@ -99,7 +99,7 @@ hiv_progress_msm <- function(dat, at) {
   dat$epi$stage.time.aids.art[at] <- length(aids.art)
   dat$epi$time.hivneg[at] <- length(which(status == 0))
 
-  # Increment day
+  # Increment time step
   stage.time[status == 1] <- stage.time[status == 1] + 1
   stage.time.ar.ndx[AR.ndx] <- stage.time.ar.ndx[AR.ndx] + 1
   stage.time.ar.dx[AR.dx] <- stage.time.ar.dx[AR.dx] + 1
@@ -123,9 +123,6 @@ hiv_progress_msm <- function(dat, at) {
   stage[toAF.dx] <- 2
   stage[toAF.art] <- 2
   stage.time[toAF] <- 0
-  stage.time.af.ndx[toAF.ndx] <- 0
-  stage.time.af.dx[toAF.dx] <- 0
-  stage.time.af.art[toAF.art] <- 0
 
   # Change stage to Chronic
   toC <- which(time.since.inf == (vl.acute.rise.int + vl.acute.fall.int + 1))
@@ -137,13 +134,11 @@ hiv_progress_msm <- function(dat, at) {
   stage[toC.dx] <- 3
   stage[toC.art] <- 3
   stage.time[toC] <- 0
-  stage.time.chronic.ndx[toC.ndx] <- 0
-  stage.time.chronic.dx[toC.dx] <- 0
-  stage.time.chronic.art[toC.art] <- 0
 
   # Change stage to AIDS
   aids.tx.naive.ndx <- which(status == 1 & cum.time.on.tx == 0 &
-                         (time.since.inf >= vl.aids.onset) & stage != 4 & diag.status == 0)
+                         (time.since.inf >= vl.aids.onset) & stage != 4 &
+                           diag.status == 0)
   aids.tx.naive.dx <- which(status == 1 & cum.time.on.tx == 0 &
                                  (time.since.inf >= vl.aids.onset) & stage != 4
                                   & diag.status == 1 & tx.status == 0)
@@ -155,7 +150,8 @@ hiv_progress_msm <- function(dat, at) {
                    (cum.time.on.tx / max.time.on.tx.part)
 
   aids.part.escape.ndx <- which(cum.time.on.tx > 0 & tt.traj == 3 &
-                                stage == 3 & part.tx.score >= 1 & stage != 4)
+                                stage == 3 & part.tx.score >= 1 & stage != 4 &
+                                diag.status == 0)
   aids.part.escape.dx <- which(cum.time.on.tx > 0 & tt.traj == 3 &
                                 stage == 3 & part.tx.score >= 1 & stage != 4 &
                                 diag.status == 1 & tx.status == 0)
@@ -169,6 +165,9 @@ hiv_progress_msm <- function(dat, at) {
   aids.off.tx.full.escape.dx <- which(tx.status == 0 & tt.traj == 4 &
                                         cum.time.on.tx > 0 & cum.time.off.tx >= max.time.off.tx.full &
                                         stage != 4 & diag.status == 1)
+  aids.off.tx.full.escape.art <- which(tx.status == 1 & tt.traj == 4 &
+                                        cum.time.on.tx > 0 & cum.time.off.tx >= max.time.off.tx.full &
+                                        stage != 4 & diag.status == 1)
 
   isAIDS <- c(aids.tx.naive.ndx, aids.tx.naive.dx, aids.tx.naive.art,
               aids.part.escape.ndx, aids.part.escape.dx, aids.part.escape.art,
@@ -177,15 +176,12 @@ hiv_progress_msm <- function(dat, at) {
                   aids.off.tx.full.escape.ndx)
   isAIDS.dx <- c(aids.tx.naive.dx, aids.part.escape.dx,
                  aids.off.tx.full.escape.dx)
-  isAIDS.art <- c(aids.tx.naive.art, aids.part.escape.art)
+  isAIDS.art <- c(aids.tx.naive.art, aids.part.escape.art, aids.off.tx.full.escape.art)
 
   stage[isAIDS.ndx] <- 4
   stage[isAIDS.dx] <- 4
   stage[isAIDS.art] <- 4
   stage.time[isAIDS] <- 0
-  stage.time.aids.ndx[isAIDS.ndx] <- 0
-  stage.time.aids.dx[isAIDS.dx] <- 0
-  stage.time.aids.art[isAIDS.art] <- 0
 
   ## Output
   # Individual attribute: time in stage

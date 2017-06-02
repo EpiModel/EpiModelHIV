@@ -208,11 +208,11 @@ prep_msm <- function(dat, at) {
                            prepStat == 1 &
                            tsincelntst.ct >= prep.tst.int)
 
-  # Syphilis non-PrEP testing
+  # Syphilis PrEP testing
   tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6, 7)]
   tst.syph.neg <- setdiff(tst.syph.prep, tst.syph.pos)
 
-  # GC non-PrEP testing
+  # GC PrEP testing
   tst.rgc <- tst.gc.prep[dat$attr$role.class %in% c("R", "V")]
   tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
   tst.ugc <- tst.gc.prep[dat$attr$role.class %in% c("I", "V")]
@@ -222,7 +222,7 @@ prep_msm <- function(dat, at) {
   tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
   tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
 
-  # CT non-PrEP testing
+  # CT PrEP testing
   tst.rct <- tst.ct.prep[dat$attr$role.class %in% c("R", "V")]
   tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
   tst.uct <- tst.ct.prep[dat$attr$role.class %in% c("I", "V")]
