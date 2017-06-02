@@ -46,7 +46,7 @@
 #' @param max.time.off.tx.full.int Number of days off treatment for a full
 #'        suppressor before onset of AIDS, including time before diagnosis.
 #' @param max.time.on.tx.part.int Number of days on treatment for a
-#'        partial suppressor beofre onset of AIDS.
+#'        partial suppressor before onset of AIDS.
 #' @param max.time.off.tx.part.int Nnumber of days off treatment for a
 #'        partial suppressor before onset of AIDS, including time before
 #'        diagnosis.
@@ -446,22 +446,58 @@
 #'        chlamydia in the HIV-negative partner.
 #' @param hiv.uct.rr Relative risk of HIV infection given current urethral
 #'        chlamydia in the HIV-negative partner.
-#' @param hiv.dual.rr Additive proportional risk, from 0 to 1, for HIV infection
-#'        given dual infection with both gonorrhea and chlamydia.
 #' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal
 #'        syphilis infection in the HIV-negative partner.
 #' @param hiv.usyph.rr Relative risk of HIV infection given current urethral
 #'        syphilis infection in the HIV-negative partner.
+#' @param hiv.rgc.rct.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both rectal gonorrhea and
+#'        rectal chlamydia in the HIV-negative partner.
+#' @param hiv.rgc.rsyph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both rectal gonorrhea and
+#'        syphilis in the HIV-negative partner.
+#' @param hiv.rct.rsyph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both rectal chlamydia and
+#'        syphilis in the HIV-negative partner.
+#' @param hiv.ugc.uct.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both urethral gonorrhea and
+#'        urethral chlamydia in the HIV-negative partner.
+#' @param hiv.ugc.usyph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both urethral gonorrhea and
+#'        syphilis in the HIV-negative partner.
+#' @param hiv.uct.usyph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given dual infection with both urethral chlamydia and
+#'        syphilis in the HIV-negative partner.
+#' @param hiv.all.ureth.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given triple infection with urethral chlamydia, urethral
+#'        gonorrhea, and syphilis in the HIV-negative partner.
+#' @param hiv.all.rect.rr Additive proportional risk, from 0 to 1, for HIV
+#'        acquisition given triple infection with rectal chlamydia, rectal
+#'        gonorrhea, and syphilis.
+#' @param hiv.trans.gc.rr Relative risk for HIV transmission given prevalent
+#'        relevant site-specific gonorrhea infection in HIV-positive partner.
+#' @param hiv.trans.ct.rr Relative risk for HIV transmission given prevalent
+#'        relevant site-specific chlamydia infection in HIV-positive partner.
+#' @param hiv.trans.syph.rr Relative risk for HIV transmission given prevalent
+#'        relevant syphilis infection in HIV-positive partner.
+#' @param hiv.trans.gc.ct.rr Additive proportional risk, from 0 to 1, for HIV
+#'        transmission given prevalent relevant site-specific gonorrhea
+#'        infection and relevant site-specific chlamydia infection in
+#'        HIV-positive partner.
+#' @param hiv.trans.gc.syph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        transmission given prevalent relevant site-specific gonorrhea
+#'        infection and syphilis infection in HIV-positive partner.
+#' @param hiv.trans.ct.syph.rr Additive proportional risk, from 0 to 1, for HIV
+#'        transmission given prevalent relevant site-specific chlamydia
+#'        infection and syphilis infection in HIV-positive partner.
+#' @param hiv.trans.allsti.rr Additive proportional risk, from 0 to 1, for HIV
+#'        transmission given prevalent relevant site-specific gonorrhea
+#'        infection, relevant site-specific chlamydia infection, and syphilis
+#'        infection in HIV-positive partner.
 #' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic
 #'        syphilis given diagnosed HIV infection. This is implemented as an
 #'        inverse, 1 / this value for those who do not have diagnosed infection,
 #'        so it is a boost to get to 0.35.
-#' @param hiv.trans.gc.rr Relative risk for HIV transmission given prevalent
-#'        relevant site-specific gonorrhea infection in HIV-positive partner
-#' @param hiv.trans.ct.rr Relative risk for HIV transmission given prevalent
-#'        relevant site-specific chlamydia infection in HIV-positive partner
-#' @param hiv.trans.syph.rr Relative risk for HIV transmission given prevalent
-#'        relevant syphilis infection in HIV-positive partner
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -709,14 +745,25 @@ param_msm <- function(nwstats,
                       hiv.ugc.rr = 1.425,
                       hiv.rct.rr = 2.175,
                       hiv.uct.rr = 1.425,
-                      hiv.dual.rr = 0.2,
                       hiv.rsyph.rr = 2.325,
                       hiv.usyph.rr = 1.525,
+                      hiv.rgc.rct.rr = 0.2,
+                      hiv.rgc.rsyph.rr = 0.2,
+                      hiv.rct.rsyph.rr = 0.2,
+                      hiv.ugc.uct.rr = 0.2,
+                      hiv.ugc.usyph.rr = 0.2,
+                      hiv.uct.usyph.rr = 0.2,
+                      hiv.all.ureth.rr = 0.2,
+                      hiv.all.rect.rr = 0.2,
 
                       # Transmission
                       hiv.trans.gc.rr = 1,
                       hiv.trans.ct.rr = 1,
                       hiv.trans.syph.rr = 1,
+                      hiv.trans.gc.ct.rr = 0.2,
+                      hiv.trans.gc.syph.rr = 0.2,
+                      hiv.trans.ct.syph.rr = 0.2,
+                      hiv.trans.allsti.rr = 0.2,
 
                       # Treatment
                       hivdx.syph.sympt.tx.rr = 1.45,

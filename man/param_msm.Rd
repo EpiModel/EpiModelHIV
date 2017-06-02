@@ -89,9 +89,13 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.tert.sympt.prob.tx = 0.9, syph.tert.asympt.prob.tx = 1,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1, sti.cond.rr = 0.3,
   hiv.rgc.rr = 2.175, hiv.ugc.rr = 1.425, hiv.rct.rr = 2.175,
-  hiv.uct.rr = 1.425, hiv.dual.rr = 0.2, hiv.rsyph.rr = 2.325,
-  hiv.usyph.rr = 1.525, hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1,
-  hiv.trans.syph.rr = 1, hivdx.syph.sympt.tx.rr = 1.45,
+  hiv.uct.rr = 1.425, hiv.rsyph.rr = 2.325, hiv.usyph.rr = 1.525,
+  hiv.rgc.rct.rr = 0.2, hiv.rgc.rsyph.rr = 0.2, hiv.rct.rsyph.rr = 0.2,
+  hiv.ugc.uct.rr = 0.2, hiv.ugc.usyph.rr = 0.2, hiv.uct.usyph.rr = 0.2,
+  hiv.all.ureth.rr = 0.2, hiv.all.rect.rr = 0.2, hiv.trans.gc.rr = 1,
+  hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
+  hiv.trans.gc.syph.rr = 0.2, hiv.trans.ct.syph.rr = 0.2,
+  hiv.trans.allsti.rr = 0.2, hivdx.syph.sympt.tx.rr = 1.45,
   partlist.start = NULL, ...)
 }
 \arguments{
@@ -153,7 +157,7 @@ re-initiate treatment.}
 suppressor before onset of AIDS, including time before diagnosis.}
 
 \item{max.time.on.tx.part.int}{Number of days on treatment for a
-partial suppressor beofre onset of AIDS.}
+partial suppressor before onset of AIDS.}
 
 \item{max.time.off.tx.part.int}{Nnumber of days off treatment for a
 partial suppressor before onset of AIDS, including time before
@@ -729,23 +733,70 @@ chlamydia in the HIV-negative partner.}
 \item{hiv.uct.rr}{Relative risk of HIV infection given current urethral
 chlamydia in the HIV-negative partner.}
 
-\item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
-given dual infection with both gonorrhea and chlamydia.}
-
 \item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal
 syphilis infection in the HIV-negative partner.}
 
 \item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral
 syphilis infection in the HIV-negative partner.}
 
+\item{hiv.rgc.rct.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal gonorrhea and
+rectal chlamydia in the HIV-negative partner.}
+
+\item{hiv.rgc.rsyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal gonorrhea and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.rct.rsyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal chlamydia and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.ugc.uct.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral gonorrhea and
+urethral chlamydia in the HIV-negative partner.}
+
+\item{hiv.ugc.usyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral gonorrhea and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.uct.usyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral chlamydia and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.all.ureth.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given triple infection with urethral chlamydia, urethral
+gonorrhea, and syphilis in the HIV-negative partner.}
+
+\item{hiv.all.rect.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given triple infection with rectal chlamydia, rectal
+gonorrhea, and syphilis.}
+
 \item{hiv.trans.gc.rr}{Relative risk for HIV transmission given prevalent
-relevant site-specific gonorrhea infection in HIV-positive partner}
+relevant site-specific gonorrhea infection in HIV-positive partner.}
 
 \item{hiv.trans.ct.rr}{Relative risk for HIV transmission given prevalent
-relevant site-specific chlamydia infection in HIV-positive partner}
+relevant site-specific chlamydia infection in HIV-positive partner.}
 
 \item{hiv.trans.syph.rr}{Relative risk for HIV transmission given prevalent
-relevant syphilis infection in HIV-positive partner}
+relevant syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.gc.ct.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection and relevant site-specific chlamydia infection in
+HIV-positive partner.}
+
+\item{hiv.trans.gc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection and syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.ct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific chlamydia
+infection and syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.allsti.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection, relevant site-specific chlamydia infection, and syphilis
+infection in HIV-positive partner.}
 
 \item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic
 syphilis given diagnosed HIV infection. This is implemented as an

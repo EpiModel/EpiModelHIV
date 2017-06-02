@@ -48,11 +48,12 @@ hiv_trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
-  syphilis <- dat$attr$syphilis
+  stage.syph <- dat$attr$stage.syph
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
+
   acute.rr <- dat$param$acute.rr
   condom.rr <- dat$param$condom.rr
   circ.rr <- dat$param$circ.rr
@@ -62,12 +63,24 @@ hiv_trans_msm <- function(dat, at) {
   hiv.uct.rr <- dat$param$hiv.uct.rr
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
   hiv.rct.rr <- dat$param$hiv.rct.rr
-  hiv.dual.rr <- dat$param$hiv.dual.rr
   hiv.rsyph.rr <- dat$param$hiv.rsyph.rr
   hiv.usyph.rr <- dat$param$hiv.usyph.rr
+  hiv.rgc.rct.rr <- dat$param$hiv.rgc.rct.rr
+  hiv.rgc.rsyph.rr <- dat$param$hiv.rgc.rsyph.rr
+  hiv.rct.rsyph.rr <- dat$param$hiv.rct.rsyph.rr
+  hiv.ugc.uct.rr <- dat$param$hiv.ugc.uct.rr
+  hiv.ugc.usyph.rr <- dat$param$hiv.ugc.usyph.rr
+  hiv.uct.usyph.rr <- dat$param$hiv.uct.usyph.rr
+  hiv.all.ureth.rr <- dat$param$hiv.all.ureth.rr
+  hiv.all.rect.rr <- dat$param$hiv.all.rect.rr
+
   hiv.trans.syph.rr <- dat$param$hiv.trans.syph.rr
   hiv.trans.gc.rr <- dat$param$hiv.trans.gc.rr
   hiv.trans.ct.rr <- dat$param$hiv.trans.ct.rr
+  hiv.trans.gc.ct.rr <- dat$param$hiv.trans.ct.rr
+  hiv.trans.gc.syph.rr <- dat$param$hiv.trans.gc.syph.rr
+  hiv.trans.ct.syph.rr <- dat$param$hiv.trans.ct.syph.rr
+  hiv.trans.allsti.rr <- dat$param$hiv.trans.allsti.rr
 
 
   # Data
@@ -91,7 +104,7 @@ hiv_trans_msm <- function(dat, at) {
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
   ip.stage <- stage[disc.ip[, 1]]
-  ip.syph.infector <- syphilis[disc.ip[, 1]]
+  ip.stage.syph.infector <- stage.syph[disc.ip[, 1]]
   ip.uGC.infector <- uGC[disc.ip[, 1]]
   ip.uCT.infector <- uCT[disc.ip[, 1]]
 
@@ -101,7 +114,7 @@ hiv_trans_msm <- function(dat, at) {
   ip.prepcl <- prepClass[disc.ip[, 2]]
   ip.rGC <- rGC[disc.ip[, 2]]
   ip.rCT <- rCT[disc.ip[, 2]]
-  ip.syph.infectee <- syphilis[disc.ip[, 2]]
+  ip.stage.syph.infectee <- stage.syph[disc.ip[, 2]]
 
   # Base TP from VL
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
@@ -127,31 +140,124 @@ hiv_trans_msm <- function(dat, at) {
   isAcute <- which(ip.stage %in% 1:2)
   ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
+  ## Multiplier for HIV acquisition due to rectal STI in HIV-negative partner
   is.rGC <- which(ip.rGC == 1)
   is.rCT <- which(ip.rCT == 1)
-  is.syph.infectee <- which(ip.syph.infectee == 1)
+  is.syph.infectee <- which(ip.stage.syph.infectee %in%  c(1, 2, 3))
 
-  is.rect.dual <- intersect(is.rGC, is.rCT)
-  is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
-  is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
+  ### Single infections
+  # NG
+  is.rGC.sing <- setdiff(is.rGC, is.rCT)
+  is.rGC.sing <- setdiff(is.rGC.sing, is.syph.infectee)
 
+  # CT
+  is.rCT.sing <- setdiff(is.rCT, is.rGC)
+  is.rCT.sing <- setdiff(is.rCT.sing, is.syph.infectee)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infectee, is.rGC)
+  is.syph.sing <- setdiff(is.syph.sing, is.rCT)
+
+  ### Coinfections
+  # NG and CT
+  is.rGC.rCT <- intersect(is.rGC, is.rCT)
+  is.rGC.rCT <- setdiff(is.rGC.rCT, is.syph.infectee)
+
+  # NG and Syph
+  is.rGC.syph <- intersect(is.rGC, is.syph.infectee)
+  is.rGC.syph <- setdiff(is.rGC.syph, is.rCT)
+
+  # CT and Syph
+  is.rCT.syph <- intersect(is.rCT, is.syph.infectee)
+  is.rCT.syph <- setdiff(is.rCT.syph, is.rGC)
+
+  # All three infections
+  is.all <- intersect(is.rGC.rCT, is.syph.infectee)
+
+  ## Add relative risks
+  # Single infections
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
-  ip.tlo[is.syph.infectee] <- ip.tlo[is.syph.infectee] + log(hiv.rsyph.rr)
-  ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
-    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
+  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.rsyph.rr)
 
-  ## Multiplier for HIV transmission due to STI in HIV-positive partner
-  is.syph.infector <- which(ip.syph.infector == 1)
+  # Two infections
+  ip.tlo[is.rGC.rCT] <- ip.tlo[is.rGC.rCT] +
+    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.rgc.rct.rr
+
+  ip.tlo[is.rGC.syph] <- ip.tlo[is.rGC.syph] +
+    max(log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.rgc.rsyph.rr
+
+  ip.tlo[is.rCT.syph] <- ip.tlo[is.rCT.syph] +
+    max(log(hiv.rct.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rsyph.rr)) * hiv.rct.rsyph.rr
+
+  # Three infections
+  ip.tlo[is.all] <- ip.tlo[is.all] +
+    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.all.rect.rr
+
+  ## Multiplier for HIV transmission due to urethral STI in HIV-positive partner
+  is.syph.infector <- which(ip.stage.syph.infector %in% c(1, 2, 3))
   is.uGC.infector <- which(ip.uGC.infector == 1)
   is.uCT.infector <- which(ip.uCT.infector == 1)
-  ip.tlo[is.syph.infector] <- ip.tlo[is.syph.infector] + log(hiv.trans.syph.rr)
-  ip.tlo[is.uGC.infector] <- ip.tlo[is.uGC.infector] + log(hiv.trans.gc.rr)
-  ip.tlo[is.uCT.infector] <- ip.tlo[is.uCT.infector] + log(hiv.trans.syph.rr)
 
-  # Re-transform back to probability
+  ### Single infections
+  # NG
+  is.uGC.sing <- setdiff(is.uGC.infector, is.uCT.infector)
+  is.uGC.sing <- setdiff(is.uGC.sing, is.syph.infector)
+
+  # CT
+  is.uCT.sing <- setdiff(is.uCT.infector, is.uGC.infector)
+  is.uCT.sing <- setdiff(is.uGC.sing, is.syph.infector)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infector, is.uGC.infector)
+  is.syph.sing <- setdiff(is.syph.sing, is.uCT.infector)
+
+  ### Coinfections
+  # NG and CT
+  is.uGC.uCT <- intersect(is.uGC.infector, is.uCT.infector)
+  is.uGC.uCT <- setdiff(is.uGC.uCT, is.syph.infector)
+
+  # NG and Syph
+  is.uGC.syph <- intersect(is.uGC.infector, is.syph.infector)
+  is.uGC.syph <- setdiff(is.uGC.syph, is.uCT.infector)
+
+  # CT and Syph
+  is.uCT.syph <- intersect(is.uCT.infector, is.syph.infector)
+  is.uCT.syph <- setdiff(is.uCT.syph, is.uGC.infector)
+
+  # All three infections
+  is.all <- intersect(is.uGC.uCT, is.syph.infector)
+
+  ## Add relative risks
+  # Single infections
+  ip.tlo[is.uGC.sing] <- ip.tlo[is.uGC.sing] + log(hiv.trans.gc.rr)
+  ip.tlo[is.uCT.sing] <- ip.tlo[is.uCT.sing] + log(hiv.trans.ct.rr)
+  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.trans.syph.rr)
+
+  # Two infections
+  ip.tlo[is.uGC.uCT] <- ip.tlo[is.uGC.rCT] +
+    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.trans.gc.ct.rr
+
+  ip.tlo[is.uGC.syph] <- ip.tlo[is.rGC.syph] +
+    max(log(hiv.ugc.rr), log(hiv.usyph.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.trans.gc.syph.rr
+
+  ip.tlo[is.uCT.syph] <- ip.tlo[is.rCT.syph] +
+    max(log(hiv.uct.rr), log(hiv.usyph.rr)) +
+    min(log(hiv.uct.rr), log(hiv.usyph.rr)) * hiv.trans.ct.syph.rr
+
+  # Three infections
+  ip.tlo[is.all] <- ip.tlo[is.all] +
+    max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) +
+    min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.trans.allsti.rr
+
+
+  ## Re-transform back to probability
   ip.tprob <- plogis(ip.tlo)
   stopifnot(ip.tprob >= 0, ip.tprob <= 1)
 
@@ -161,7 +267,7 @@ hiv_trans_msm <- function(dat, at) {
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
-  rp.syph.infector <- syphilis[disc.rp[, 2]]
+  rp.stage.syph.infector <- stage.syph[disc.rp[, 2]]
   rp.rGC.infector <- rGC[disc.rp[, 2]]
   rp.rCT.infector <- rCT[disc.rp[, 2]]
 
@@ -172,7 +278,7 @@ hiv_trans_msm <- function(dat, at) {
   rp.prepcl <- prepClass[disc.rp[, 1]]
   rp.uGC <- uGC[disc.rp[, 1]]
   rp.uCT <- uCT[disc.rp[, 1]]
-  rp.syph.infectee <- syphilis[disc.rp[, 1]]
+  rp.stage.syph.infectee <- stage.syph[disc.rp[, 1]]
 
   # Base TP from VL
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
@@ -201,31 +307,121 @@ hiv_trans_msm <- function(dat, at) {
   isAcute <- which(rp.stage %in% 1:2)
   rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
+  ## Multiplier for HIV acquisition due to urethral STI in HIV-negative partner
   is.uGC <- which(rp.uGC == 1)
   is.uCT <- which(rp.uCT == 1)
-  is.syph.infectee <- which(rp.syph.infectee == 1)
+  is.syph.infectee <- which(rp.stage.syph.infectee %in% c(1, 2, 3))
 
-  is.ureth.dual <- intersect(is.uGC, is.uCT)
-  is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
-  is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
+  ### Single infections
+  # NG
+  is.uGC.sing <- setdiff(is.uGC, is.uCT)
+  is.uGC.sing <- setdiff(is.uGC.sing, is.syph.infectee)
 
+  # CT
+  is.uCT.sing <- setdiff(is.uCT, is.uGC)
+  is.uCT.sing <- setdiff(is.uCT.sing, is.syph.infectee)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infectee, is.uGC)
+  is.syph.sing <- setdiff(is.syph.sing, is.uCT)
+
+  ### Coinfections
+  # NG and CT
+  is.uGC.uCT <- intersect(is.uGC, is.uCT)
+  is.uGC.uCT <- setdiff(is.uGC.uCT, is.syph.infectee)
+
+  # NG and Syph
+  is.uGC.syph <- intersect(is.uGC, is.syph.infectee)
+  is.uGC.syph <- setdiff(is.uGC.syph, is.uCT)
+
+  # CT and Syph
+  is.uCT.syph <- intersect(is.uCT, is.syph.infectee)
+  is.uCT.syph <- setdiff(is.uCT.syph, is.uGC)
+
+  # All three infections
+  is.all <- intersect(is.uGC.uCT, is.syph.infectee)
+
+  # Single infections
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-  rp.tlo[is.syph.infectee] <- rp.tlo[is.syph.infectee] + log(hiv.usyph.rr)
-  rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
-    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
+  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.usyph.rr)
 
-  ## Multiplier for HIV acquisition due to STI in HIV-negative partner
-  is.syph.infector <- which(rp.syph.infector == 1)
+  # Two infections
+  rp.tlo[is.uGC.uCT] <- rp.tlo[is.uGC.uCT] +
+    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.ugc.uct.rr
+
+  rp.tlo[is.uGC.syph] <- rp.tlo[is.uGC.syph] +
+    max(log(hiv.ugc.rr), log(hiv.usyph.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.ugc.usyph.rr
+
+  rp.tlo[is.uCT.syph] <- rp.tlo[is.uCT.syph] +
+    max(log(hiv.uct.rr), log(hiv.usyph.rr)) +
+    min(log(hiv.uct.rr), log(hiv.usyph.rr)) * hiv.uct.usyph.rr
+
+  # Three infections
+  rp.tlo[is.all] <- rp.tlo[is.all] +
+     max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) +
+     min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.all.ureth.rr
+
+  ## Multiplier for HIV transmission due to rectal STI in HIV-positive partner
+  is.syph.infector <- which(rp.stage.syph.infector %in% c(1, 2, 3))
   is.rGC.infector <- which(rp.rGC.infector == 1)
   is.rCT.infector <- which(rp.rCT.infector == 1)
-  rp.tlo[is.syph.infector] <- rp.tlo[is.syph.infector] + log(hiv.trans.syph.rr)
-  rp.tlo[is.rGC.infector] <- rp.tlo[is.rGC.infector] + log(hiv.trans.gc.rr)
-  rp.tlo[is.rCT.infector] <- rp.tlo[is.rCT.infector] + log(hiv.trans.ct.rr)
 
-  # Retransformation to probability
+  ### Single infections
+  # NG
+  is.rGC.sing <- setdiff(is.rGC.infector, is.rCT.infector)
+  is.rGC.sing <- setdiff(is.rGC.sing, is.syph.infector)
+
+  # CT
+  is.rCT.sing <- setdiff(is.rCT.infector, is.rGC.infector)
+  is.rCT.sing <- setdiff(is.rGC.sing, is.syph.infector)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infector, is.rGC.infector)
+  is.syph.sing <- setdiff(is.syph.sing, is.rCT.infector)
+
+  ### Coinfections
+  # NG and CT
+  is.rGC.rCT <- intersect(is.rGC.infector, is.rCT.infector)
+  is.rGC.rCT <- setdiff(is.rGC.rCT, is.syph.infector)
+
+  # NG and Syph
+  is.rGC.syph <- intersect(is.rGC.infector, is.syph.infector)
+  is.rGC.syph <- setdiff(is.rGC.syph, is.rCT.infector)
+
+  # CT and Syph
+  is.rCT.syph <- intersect(is.rCT.infector, is.syph.infector)
+  is.rCT.syph <- setdiff(is.rCT.syph, is.rGC.infector)
+
+  # All three infections
+  is.all <- intersect(is.rGC.rCT, is.syph.infector)
+
+  # Single infections
+  rp.tlo[is.rGC.sing] <- rp.tlo[is.rGC.sing] + log(hiv.trans.gc.rr)
+  rp.tlo[is.rCT.sing] <- rp.tlo[is.rCT.sing] + log(hiv.trans.ct.rr)
+  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.trans.syph.rr)
+
+  # Two infections
+  rp.tlo[is.rGC.rCT] <- rp.tlo[is.rGC.rCT] +
+    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.trans.gc.ct.rr
+
+  rp.tlo[is.rGC.syph] <- rp.tlo[is.rGC.syph] +
+    max(log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.trans.gc.syph.rr
+
+  rp.tlo[is.rCT.syph] <- rp.tlo[is.rCT.syph] +
+    max(log(hiv.rct.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rsyph.rr)) * hiv.trans.ct.syph.rr
+
+  # Three infections
+  rp.tlo[is.all] <- rp.tlo[is.all] +
+    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.trans.allsti.rr
+
+  ## Retransformation to probability
   rp.tprob <- plogis(rp.tlo)
   stopifnot(rp.tprob >= 0, rp.tprob <= 1)
 
