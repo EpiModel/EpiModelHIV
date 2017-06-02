@@ -239,15 +239,15 @@ hiv_trans_msm <- function(dat, at) {
   ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.trans.syph.rr)
 
   # Two infections
-  ip.tlo[is.uGC.uCT] <- ip.tlo[is.uGC.rCT] +
+  ip.tlo[is.uGC.uCT] <- ip.tlo[is.uGC.uCT] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
     min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.trans.gc.ct.rr
 
-  ip.tlo[is.uGC.syph] <- ip.tlo[is.rGC.syph] +
+  ip.tlo[is.uGC.syph] <- ip.tlo[is.uGC.syph] +
     max(log(hiv.ugc.rr), log(hiv.usyph.rr)) +
     min(log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.trans.gc.syph.rr
 
-  ip.tlo[is.uCT.syph] <- ip.tlo[is.rCT.syph] +
+  ip.tlo[is.uCT.syph] <- ip.tlo[is.uCT.syph] +
     max(log(hiv.uct.rr), log(hiv.usyph.rr)) +
     min(log(hiv.uct.rr), log(hiv.usyph.rr)) * hiv.trans.ct.syph.rr
 

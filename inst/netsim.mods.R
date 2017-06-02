@@ -20,10 +20,10 @@ param <- param_msm(nwstats = st,
                    syph.tert.prog.prob = 0.00015625599,
 
                    # STI acquisition
-                   rgc.tprob = 0.4230,
-                   ugc.tprob = 0.3115,
-                   rct.tprob = 0.1950,
-                   uct.tprob = 0.1648,
+                   rgc.tprob = 0.4245,
+                   ugc.tprob = 0.3135,
+                   rct.tprob = 0.1944,
+                   uct.tprob = 0.1640,
                    rsyph.tprob = 0.1350,
                    usyph.tprob = 0.1140,
 
@@ -77,7 +77,9 @@ init <- init_msm(nwstats = st,
                  prev.uct = 0.015,
                  prev.rct = 0.015,
                  prev.syph.B = 0.015,
-                 prev.syph.W = 0.015)
+                 prev.syph.W = 0.015,
+                 stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
+                 stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
 
 control <- control_msm(nsteps = 2600)
 
