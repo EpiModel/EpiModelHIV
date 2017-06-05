@@ -142,8 +142,10 @@ sti_test_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
-  gc.sympt <- dat$attr$gc.sympt
-  ct.sympt <- dat$attr$ct.sympt
+  rGC.sympt <- dat$attr$rGC.sympt
+  uGC.sympt <- dat$attr$uGC.sympt
+  rCT.sympt <- dat$attr$rCT.sympt
+  uCT.sympt <- dat$attr$uCT.sympt
   syph.sympt <- dat$attr$syph.sympt
   stage.syph <- dat$attr$stage.syph
   role.class <- dat$attr$role.class
@@ -164,16 +166,15 @@ sti_test_msm <- function(dat, at) {
   screen.rates.syph <- rep(syph.asympt.screen.prob, length(screen.elig.syph))
   screen.syph <- screen.elig.syph[rbinom(length(screen.elig.syph), 1, screen.rates.syph) == 1]
 
-
   # CT
   screen.elig.ct <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
-                   (rCT == 1 | uCT == 1) & ct.sympt == 0)
+                   (rCT == 1 | uCT == 1) & (rCT.sympt == 0 | uCT.sympt == 0))
   screen.rates.ct <- rep(ct.asympt.screen.prob, length(screen.elig.ct))
   screen.ct <- screen.elig.ct[rbinom(length(screen.elig.ct), 1, screen.rates.ct) == 1]
 
   # GC
   screen.elig.gc <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
-                     (rGC == 1 | uGC == 1) & gc.sympt == 0)
+                     (rGC == 1 | uGC == 1) & (rGC.sympt == 0 | uGC.sympt == 0))
   screen.rates.gc <- rep(gc.asympt.screen.prob, length(screen.elig.gc))
   screen.gc <- screen.elig.gc[rbinom(length(screen.elig.gc), 1, screen.rates.gc) == 1]
 
