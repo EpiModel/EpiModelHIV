@@ -231,21 +231,18 @@ sti_test_msm <- function(dat, at) {
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$lastdiag.time.syph <- lastdiag.time.syph
-    dat$attr$tt.traj.syph <- tt.traj.syph
 
     # GC Attributes
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
     dat$attr$last.neg.test.ugc <- last.neg.test.ugc
     dat$attr$diag.status.gc <- diag.status.gc
     dat$attr$lastdiag.time.gc <- lastdiag.time.gc
-    dat$attr$tt.traj.gc <- tt.traj.gc
 
     # CT Attributes
     dat$attr$last.neg.test.rct <- last.neg.test.rct
     dat$attr$last.neg.test.uct <- last.neg.test.uct
     dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$lastdiag.time.ct <- lastdiag.time.ct
-    dat$attr$tt.traj.ct <- tt.traj.ct
 
     # Number of tests for asymptomatic
     dat$epi$rGCasympttests[at] <- length(screen.rgc)
