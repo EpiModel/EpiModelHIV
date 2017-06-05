@@ -123,23 +123,30 @@ hiv_test_msm <- function(dat, at) {
 #'
 sti_test_msm <- function(dat, at) {
 
-  if (at < dat$param$stitest.start) {
-    return(dat)
-  }
-
-  ## Variables
+  ## Baseline asymptomatic screening ---------------------------------------
+  # Parameters
+  syph.asympt.screen.prob <- dat$param$syph.asympt.screen.prob
+  gc.asympt.screen.prob <- dat$param$gc.asympt.screen.prob
+  ct.asympt.screen.prob <- dat$param$ct.asympt.screen.prob
+  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
 
   # Attributes
-  race <- dat$attr$race
-  diag.status.syph <- dat$attr$diag.status.syph
+  tt.traj.ct <- dat$attr$tt.traj.ct
+  tt.traj.gc <- dat$attr$tt.traj.gc
+  tt.traj.syph <- dat$attr$tt.traj.syph
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
+  diag.status.syph <- dat$attr$diag.status.syph
   syphilis <- dat$attr$syphilis
   rGC <- dat$attr$rGC
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
-
+  gc.sympt <- dat$attr$gc.sympt
+  ct.sympt <- dat$attr$ct.sympt
+  syph.sympt <- dat$attr$syph.sympt
+  stage.syph <- dat$attr$stage.syph
+  role.class <- dat$attr$role.class
   last.neg.test.rgc <- dat$attr$last.neg.test.rgc
   last.neg.test.ugc <- dat$attr$last.neg.test.ugc
   last.neg.test.rct <- dat$attr$last.neg.test.rct
@@ -149,13 +156,124 @@ sti_test_msm <- function(dat, at) {
   lastdiag.time.ct <- dat$attr$lastdiag.time.ct
   lastdiag.time.syph <- dat$attr$lastdiag.time.syph
 
-  role.class <- dat$attr$role.class
-  stage.syph <- dat$attr$stage.syph
 
-  tt.traj.ct <- dat$attr$tt.traj.ct
-  tt.traj.gc <- dat$attr$tt.traj.gc
-  tt.traj.syph <- dat$attr$tt.traj.syph
+  # Eligibility for diagnosis of asymptomatic infection (pre-intervention)
+  # Syphilis
+  screen.elig.syph <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
+                       syphilis == 1 & syph.sympt == 0)
+  screen.rates.syph <- rep(syph.asympt.screen.prob, length(screen.elig.syph))
+  screen.syph <- screen.elig.syph[rbinom(length(screen.elig.syph), 1, screen.rates.syph) == 1]
 
+
+  # CT
+  screen.elig.ct <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
+                   (rCT == 1 | uCT == 1) & ct.sympt == 0)
+  screen.rates.ct <- rep(ct.asympt.screen.prob, length(screen.elig.ct))
+  screen.ct <- screen.elig.ct[rbinom(length(screen.elig.ct), 1, screen.rates.ct) == 1]
+
+  # GC
+  screen.elig.gc <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
+                     (rGC == 1 | uGC == 1) & gc.sympt == 0)
+  screen.rates.gc <- rep(gc.asympt.screen.prob, length(screen.elig.gc))
+  screen.gc <- screen.elig.gc[rbinom(length(screen.elig.gc), 1, screen.rates.gc) == 1]
+
+
+  # Syphilis screening
+  screen.syph.pos <- screen.syph[syphilis[screen.syph] == 1 &
+                                   stage.syph[screen.syph] %in% c(2, 3, 4, 5, 6, 7)]
+  screen.syph.neg <- setdiff(screen.syph, screen.syph.pos)
+
+  # GC screening
+  screen.rgc <- screen.gc[role.class[screen.gc] %in% c("R", "V")]
+  screen.rgc <- sample(screen.rgc, tst.rect.sti.rr * length(screen.rgc))
+  screen.ugc <- screen.gc[role.class[screen.gc] %in% c("I", "V")]
+  screen.rgc.pos <- screen.rgc[rGC[screen.rgc] == 1]
+  screen.ugc.pos <- screen.ugc[uGC[screen.ugc] == 1]
+  screen.rgc.neg <- setdiff(screen.rgc, screen.rgc.pos)
+  screen.ugc.neg <- setdiff(screen.ugc, screen.ugc.pos)
+  screen.gc.pos <- unique(c(screen.rgc.pos, screen.ugc.pos))
+
+  # CT screening
+  screen.rct <- screen.ct[role.class[screen.gc] %in% c("R", "V")]
+  screen.rct <- sample(screen.rct, tst.rect.sti.rr * length(screen.rct))
+  screen.uct <- screen.ct[role.class[screen.ct] %in% c("I", "V")]
+  screen.rct.pos <- screen.rct[rCT[screen.rct] == 1]
+  screen.uct.pos <- screen.uct[uCT[screen.uct] == 1]
+  screen.rct.neg <- setdiff(screen.rct, screen.rct.pos)
+  screen.uct.neg <- setdiff(screen.uct, screen.uct.pos)
+  screen.ct.pos <- unique(c(screen.rct.pos, screen.uct.pos))
+
+  # Syphilis Attributes
+  last.neg.test.syph[screen.syph.neg] <- at
+  last.neg.test.syph[screen.syph.pos] <- NA
+  diag.status.syph[screen.syph.pos] <- 1
+  lastdiag.time.syph[screen.syph.pos] <- at
+
+  # GC Attributes
+  last.neg.test.rgc[screen.rgc.neg] <- at
+  last.neg.test.ugc[screen.ugc.neg] <- at
+  last.neg.test.rgc[screen.rgc.pos] <- NA
+  last.neg.test.ugc[screen.ugc.pos] <- NA
+  diag.status.gc[screen.gc.pos] <- 1
+  lastdiag.time.gc[screen.gc.pos] <- at
+
+  # CT Attributes
+  last.neg.test.rct[screen.rct.neg] <- at
+  last.neg.test.uct[screen.uct.neg] <- at
+  last.neg.test.rct[screen.rct.pos] <- NA
+  last.neg.test.uct[screen.uct.pos] <- NA
+  diag.status.ct[screen.ct.pos] <- 1
+  lastdiag.time.ct[screen.ct.pos] <- at
+
+  if (at < dat$param$stitest.start) {
+
+    # Syphilis Attributes
+    dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$diag.status.syph <- diag.status.syph
+    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    dat$attr$tt.traj.syph <- tt.traj.syph
+
+    # GC Attributes
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$diag.status.gc <- diag.status.gc
+    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$tt.traj.gc <- tt.traj.gc
+
+    # CT Attributes
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct
+    dat$attr$diag.status.ct <- diag.status.ct
+    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$tt.traj.ct <- tt.traj.ct
+
+    # Number of tests for asymptomatic
+    dat$epi$rGCasympttests[at] <- length(screen.rgc)
+    dat$epi$uGCasympttests[at] <- length(screen.ugc)
+    dat$epi$GCasympttests[at] <- length(screen.rgc) + length(screen.ugc)
+
+    dat$epi$rGCasympttests.pos[at] <- length(screen.rgc.pos)
+    dat$epi$uGCasympttests.pos[at] <- length(screen.ugc.pos)
+    dat$epi$GCasympttests.pos[at] <- length(screen.rgc.pos) + length(screen.ugc.pos)
+
+    dat$epi$rCTasympttests[at] <- length(screen.rct)
+    dat$epi$uCTasympttests[at] <- length(screen.uct)
+    dat$epi$CTasympttests[at] <- length(screen.rct) + length(screen.uct)
+
+    dat$epi$rCTasympttests.pos[at] <- length(screen.rct.pos)
+    dat$epi$uCTasympttests.pos[at] <- length(screen.uct.pos)
+    dat$epi$CTasympttests.pos[at] <- length(screen.rct.pos) + length(screen.uct.pos)
+
+    dat$epi$syphasympttests[at] <- length(screen.syph)
+    dat$epi$syphasympttests.pos[at] <- length(screen.syph.pos)
+
+    return(dat)
+  }
+
+  ## Intervention -------------------------------------------------------------
+
+  # Additional attributes
+  race <- dat$attr$race
   prepStat <- dat$attr$prepStat
 
   # Parameters
@@ -166,7 +284,6 @@ sti_test_msm <- function(dat, at) {
   testing.pattern.sti <- dat$param$testing.pattern.sti
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
-  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
 
   # Eligibility and trajectory
   # Base eligibility
@@ -180,8 +297,7 @@ sti_test_msm <- function(dat, at) {
   stitestind2 <- dat$attr$stitest.ind.recentpartners
   idshighrisk <- which(stitestind2 == 1)
 
-
-  ## Stoppage (tt.traj.gc/.ct/.syph <- NA------------------------------------
+  ## Stoppage (tt.traj.gc/.ct/.syph <- NA ------------------------------------
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
   idsnothighriskelig <- which(tt.traj.syph == 2 & stitestind2 != 1)
   tt.traj.syph[idsnothighriskelig] <- tt.traj.gc[idsnothighriskelig] <- tt.traj.ct[idsnothighriskelig] <- NA
@@ -273,12 +389,20 @@ sti_test_msm <- function(dat, at) {
     elig.syph.ann <- which(tt.traj.syph == 1 &
                              (diag.status.syph == 0 | is.na(diag.status.syph)) &
                              prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.syph.ann <- setdiff(elig.syph.ann, screen.syph)
+
     rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
     tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
     elig.syph.highrisk <- which(tt.traj.syph == 2 &
                                   (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                   prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.syph.highrisk <- setdiff(elig.syph.highrisk, screen.syph)
+
     rates.syph <- rep(1/sti.highrisktest.int, length(elig.syph.highrisk))
     tst.syph.nprep.highrisk <- elig.syph.highrisk[rbinom(length(elig.syph.highrisk), 1, rates.syph) == 1]
     tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
@@ -289,10 +413,17 @@ sti_test_msm <- function(dat, at) {
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                         tsincelntst.syph >= 2*(stitest.active.int) &
                                         prepStat == 0)
+    # Remove those already randomly screened today from this eligibility
+    tst.syph.annual.interval <- setdiff(tst.syph.annual.interval, screen.syph)
+
     tst.syph.highrisk.interval <- which(tt.traj.syph == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                           tsincelntst.syph >= 2*(sti.highrisktest.int) &
                                           prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    tst.syph.highrisk.interval <- setdiff(tst.syph.highrisk.interval, screen.syph)
+
     tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
 
@@ -301,12 +432,20 @@ sti_test_msm <- function(dat, at) {
     elig.gc.ann <- which(tt.traj.gc == 1 &
                            (diag.status.gc == 0 | is.na(diag.status.gc)) &
                            prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.gc.ann <- setdiff(elig.gc.ann, screen.gc)
+
     rates.gc <- rep(1/stitest.active.int, length(elig.gc.ann))
     tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
 
     elig.gc.highrisk <- which(tt.traj.gc == 2 &
                                 (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                 prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.gc.highrisk <- setdiff(elig.gc.highrisk, screen.gc)
+
     rates.gc <- rep(1/sti.highrisktest.int, length(elig.gc.highrisk))
     tst.gc.nprep.highrisk <- elig.gc.highrisk[rbinom(length(elig.gc.highrisk), 1, rates.gc) == 1]
     tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
@@ -318,10 +457,16 @@ sti_test_msm <- function(dat, at) {
                                       tsincelntst.gc >= 2*(stitest.active.int) &
                                       prepStat == 0)
 
+    # Remove those already randomly screened today from this eligibility
+    tst.gc.annual.interval <- setdiff(tst.gc.annual.interval, screen.gc)
+
     tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                         tsincelntst.gc >= 2*(sti.highrisktest.int) &
                                         prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    tst.gc.highrisk.interval <- setdiff(tst.gc.highrisk.interval, screen.gc)
 
     tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
@@ -331,12 +476,20 @@ sti_test_msm <- function(dat, at) {
     elig.ct.ann <- which(tt.traj.ct == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
                            prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.ct.ann <- setdiff(elig.ct.ann, screen.ct)
+
     rates.ct <- rep(1/stitest.active.int, length(elig.ct.ann))
     tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
 
     elig.ct.highrisk <- which(tt.traj.ct == 2 &
                                 (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                 prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    elig.ct.highrisk <- setdiff(elig.ct.highrisk, screen.ct)
+
     rates.ct <- rep(1/sti.highrisktest.int, length(elig.ct.highrisk))
     tst.ct.nprep.highrisk <- elig.ct.highrisk[rbinom(length(elig.ct.highrisk), 1, rates.ct) == 1]
 
@@ -349,10 +502,16 @@ sti_test_msm <- function(dat, at) {
                                       tsincelntst.ct >= 2*(stitest.active.int) &
                                       prepStat == 0)
 
+    # Remove those already randomly screened today from this eligibility
+    tst.ct.annual.interval <- setdiff(tst.ct.annual.interval, screen.ct)
+
     tst.ct.highrisk.interval <- which(tt.traj.ct == 2 &
                                         (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                         tsincelntst.ct >= 2*(sti.highrisktest.int) &
                                         prepStat == 0)
+
+    # Remove those already randomly screened today from this eligibility
+    tst.ct.highrisk.interval <- setdiff(tst.ct.highrisk.interval, screen.ct)
 
     tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
@@ -405,24 +564,28 @@ sti_test_msm <- function(dat, at) {
   lastdiag.time.ct[tst.ct.pos] <- at
 
   # Number of tests for asymptomatic
-  dat$epi$rGCasympttests[at] <- length(tst.rgc)
-  dat$epi$uGCasympttests[at] <- length(tst.ugc)
-  dat$epi$GCasympttests[at] <- length(c(tst.rgc, tst.ugc))
+  dat$epi$rGCasympttests[at] <- length(tst.rgc) + length(screen.rgc)
+  dat$epi$uGCasympttests[at] <- length(tst.ugc) + length(screen.ugc)
+  dat$epi$GCasympttests[at] <- length(tst.rgc) + length(tst.ugc) +
+                                length(screen.rgc) + length(screen.ugc)
 
-  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos)
-  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos)
-  dat$epi$GCasympttests.pos[at] <- length(c(tst.rgc.pos, tst.ugc.pos))
+  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos) + length(screen.rgc.pos)
+  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos) + length(screen.ugc.pos)
+  dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos) + length(tst.ugc.pos) +
+                                   length(screen.rgc.pos) + length(screen.ugc.pos)
 
-  dat$epi$rCTasympttests[at] <- length(tst.rct)
-  dat$epi$uCTasympttests[at] <- length(tst.uct)
-  dat$epi$CTasympttests[at] <- length(c(tst.rct, tst.uct))
+  dat$epi$rCTasympttests[at] <- length(tst.rct) + length(screen.rct)
+  dat$epi$uCTasympttests[at] <- length(tst.uct) + length(screen.uct)
+  dat$epi$CTasympttests[at] <- length(tst.rct) + length(tst.uct) +
+                                length(screen.rct) + length(screen.uct)
 
-  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos)
-  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos)
-  dat$epi$CTasympttests.pos[at] <- length(c(tst.rct.pos, tst.uct.pos))
+  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos) + length(screen.rct.pos)
+  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos) + length(screen.uct.pos)
+  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos) + length(tst.uct.pos) +
+                                    length(screen.rct.pos) + length(screen.uct.pos)
 
-  dat$epi$syphasympttests[at] <- length(c(tst.syph.nprep))
-  dat$epi$syphasympttests.pos[at] <- length(c(tst.syph.pos))
+  dat$epi$syphasympttests[at] <- length(tst.syph.nprep) + length(screen.syph)
+  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos) + length(screen.syph.pos)
 
   ## Output -----------------------------------------------------------------
 
