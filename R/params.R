@@ -500,6 +500,12 @@
 #'        so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
+#' @param syph.asympt.screen.prob Per-time step probability of baseline screening
+#'        for identifying asymptomatic syphilis infection (pre-intervention)
+#' @param gc.asympt.screen.prob Per-time step probability of baseline screening
+#'        for identifying asymptomatic GC infection (pre-intervention)
+#' @param ct.asympt.screen.prob Per-time step probability of baseline screening
+#'        for identifying asymptomatic CT infection (pre-intervention)
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -770,6 +776,24 @@ param_msm <- function(nwstats,
 
                       # Cumulative partnership list
                       partlist.start = NULL,
+
+                      # Per-step probability of testing/tx asympt infection
+                      # 0.10 = 1 - (1 - per time step prob)^weeks of infection
+                      # Syphilis: 365.25 days * 30 years * 52 = 1565.35714
+                      # -0.90 = - (1 - prob)^1565.35714 =  0.9 = (1-prob)^1565..
+                      # 1565th root of 0.9 = 1 - prob = prob = 1 - (1565th root of 0.9)
+                      # syphilis prob = 1 - 0.9999326485
+                      # GC: 35.11851 weeks
+                      # -0.90 = - (1 - prob)^35.11851 =  0.9 = (1-prob)^35.11851
+                      # 35th root of 0.9 = 1 - prob = prob = 1 - (35th root of 0.9)
+                      # GC  prob = 1 - 0.9920043539
+                      # CT: 44.24538 weeks
+                      # -0.90 = - (1 - prob)^35.11851 =  0.9 = (1-prob)^44.24538
+                      # 44th root of 0.9 = 1 - prob = prob = 1 - (44th root of 0.9)
+                      # CT  prob = 1 - 0.9976215558
+                      syph.asympt.screen.prob = 1 - 0.99993264851373, #0.00006735148
+                      gc.asympt.screen.prob = 1 - 0.99700435396198, #0.00299564603
+                      ct.asympt.screen.prob = 1 - 0.99762155576753, #0.00237844423
 
                       ...) {
 
