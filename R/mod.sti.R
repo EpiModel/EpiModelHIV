@@ -814,17 +814,10 @@ sti_tx_msm <- function(dat, at) {
                                  syph.sympt == 1 &
                                  is.na(syph.tx))
 
-  # Choose those in tertiary stage who are not diagnosed with HIV
-  idssyph_tx_sympt_tert_hivdx <- idssyph_tx_sympt_tert[which(diag.status[idssyph_tx_sympt_tert] == 1)]
-
-  # Choose those in tertiary stage who are not diagnosed with HIV
-  idssyph_tx_sympt_tert_hivnotdx <- setdiff(idssyph_tx_sympt_tert, idssyph_tx_sympt_tert_hivdx)
-
+  # 100% tx in tertiary stage, so remove stratification by serostatus
   # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_tert <- c(idssyph_tx_sympt_tert_hivnotdx[which(rbinom(length(idssyph_tx_sympt_tert_hivnotdx),
-                                                                     1, syph.tert.sympt.prob.tx) == 1)],
-                         idssyph_tx_sympt_tert_hivdx[which(rbinom(length(idssyph_tx_sympt_tert_hivdx),
-                                                                  1, (hivdx.syph.sympt.tx.rr * syph.tert.sympt.prob.tx)) == 1)])
+  txsyph_sympt_tert <- idssyph_tx_sympt_tert[which(rbinom(length(idssyph_tx_sympt_tert),
+                                                                  1, (syph.tert.sympt.prob.tx)) == 1)]
 
   # Aggregate all those eligible to be treated
   idssyph_tx_sympt <- c(idssyph_tx_sympt_incub, idssyph_tx_sympt_prim, idssyph_tx_sympt_seco, idssyph_tx_sympt_earlat,
