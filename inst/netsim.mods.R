@@ -7,7 +7,7 @@ data(est)
 data(st)
 
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.11,
+                   ai.scale = 1.05, #1.11
 
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
@@ -20,14 +20,16 @@ param <- param_msm(nwstats = st,
                    syph.tert.prog.prob = 0.00015625599,
 
                    # STI acquisition
-                   rgc.tprob = 0.4245,
-                   ugc.tprob = 0.3135,
-                   rct.tprob = 0.1944,
-                   uct.tprob = 0.1640,
-                   rsyph.tprob = 0.1350,
-                   usyph.tprob = 0.1140,
+                   rgc.tprob = 0.43,
+                   ugc.tprob = 0.33,
+                   rct.tprob = 0.212,
+                   uct.tprob = 0.172,
+                   rsyph.tprob = 0.14,
+                   usyph.tprob = 0.12,
 
                    # HIV acquisition
+                   URAI.prob = 0.0082 * 1.09,
+                   UIAI.prob = 0.0031 * 1.09,
                    hiv.rgc.rr = 2.175,
                    hiv.ugc.rr = 1.425,
                    hiv.rct.rr = 2.175,

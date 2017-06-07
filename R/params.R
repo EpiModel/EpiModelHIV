@@ -708,7 +708,7 @@ param_msm <- function(nwstats,
                       syph.seco.sympt.prob = 0.85,
                       syph.earlat.sympt.prob = 0,
                       syph.latelat.sympt.prob = 0,
-                      syph.tert.sympt.prob = 0.90,
+                      syph.tert.sympt.prob = 1.0,
 
                       rgc.asympt.int = 35.11851*7,
                       ugc.asympt.int = 35.11851*7,
@@ -720,25 +720,47 @@ param_msm <- function(nwstats,
                       ct.tx.int = 2*7,
                       ct.ntx.int = NA,
 
-                      syph.early.tx.int = 7, #2
-                      syph.late.tx.int = 15,
+                      syph.early.tx.int = 7,
+                      syph.late.tx.int = 21,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,
                       gc.asympt.prob.tx = 1,
                       ct.asympt.prob.tx = 1,
 
+                      # Weighted averages to get to Tuite numbers:
+                      # y = 10% background screening
+                      # Primary = 0.35 overall
+                      # 50% symptomatic
+                      # 0.50 (x) + 0.50 (y) = 0.35
+                      # x = 0.60
+                      #
+                      # Secondary = 0.60 overall
+                      # 85% symptomatic
+                      # 0.85 (x) + 0.15 (y) = 0.60
+                      # x = 0.688235
+                      #
+                      # Latent stage = 0.10 overall
+                      # 0% symptomatic
+                      # 0.00 (x) + 1.00 (y) = 0.10
+                      # x = 0
+                      #
+                      # Tertiary = 1.00 overall
+                      # 100% symptomatic
+                      # 1.00 (x) + 0.00 (y) = 1.0
+                      # x = 1.00
+
                       syph.incub.sympt.prob.tx = 0,
                       syph.incub.asympt.prob.tx = 0,
-                      syph.prim.sympt.prob.tx = 0.35, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008 use 0.45
+                      syph.prim.sympt.prob.tx = 0.60,
                       syph.prim.asympt.prob.tx = 1,
-                      syph.seco.sympt.prob.tx = 0.60, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.seco.sympt.prob.tx = 0.688235,
                       syph.seco.asympt.prob.tx = 1,
-                      syph.earlat.sympt.prob.tx = 0.15, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
-                      syph.earlat.asympt.prob.tx = 1, # Tuite PLoS One 2014, Bissessor AIDS 2010, Kourbatova STD 2008
+                      syph.earlat.sympt.prob.tx = 0.10,
+                      syph.earlat.asympt.prob.tx = 1,
                       syph.latelat.sympt.prob.tx = 0.10,
                       syph.latelat.asympt.prob.tx = 1,
-                      syph.tert.sympt.prob.tx = 0.90,
+                      syph.tert.sympt.prob.tx = 1,
                       syph.tert.asympt.prob.tx = 1,
 
                       prep.sti.screen.int = 182,
