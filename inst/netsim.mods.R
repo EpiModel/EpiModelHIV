@@ -58,11 +58,11 @@ param <- param_msm(nwstats = st,
 
                    prep.coverage = 0.0,
                    ept.coverage = 0.0,
-                   stianntest.coverage = 0.5,
-                   stihighrisktest.coverage = 0.8,
+                   stianntest.coverage = 0.1,
+                   stihighrisktest.coverage = 0.1,
 
                    prep.start = 5000,
-                   stitest.start = 2601,
+                   stitest.start = 2,
                    ept.start = 5000,
 
                    stitest.elig.model = "sti",
