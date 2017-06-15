@@ -847,13 +847,15 @@ initialize_het <- function(x, param, init, control, s) {
   dat$temp <- list()
   nw <- simulate(x$fit, control = control.simulate.ergm(MCMC.burnin = 1e6))
 
-  dat$el <- as.edgelist(nw)
+  dat$el <- list()
+  dat$el[[1]] <- as.edgelist(nw)
   attributes(dat$el)$vnames <- NULL
   p <- tergmLite::stergm_prep(nw, x$formation, x$coef.diss$dissolution, x$coef.form,
                               x$coef.diss$coef.adj, x$constraints)
   p$model.form$formula <- NULL
   p$model.diss$formula <- NULL
-  dat$p <- p
+  dat$p <- list()
+  dat$p[[1]] <- p
 
   ## Network Model Parameters
   dat$nwparam <- list(x[-which(names(x) == "fit")])
@@ -932,20 +934,43 @@ initialize_het <- function(x, param, init, control, s) {
 #' @export
 #'
 reinit_het <- function(x, param, init, control, s) {
+
+  need.for.reinit <- c("param", "control", "nwparam", "epi",
+                       "attr", "temp", "el", "p")
+  if (!all(need.for.reinit %in% names(x))) {
+    stop("x must contain the following elements for restarting: ",
+         "param, control, nwparam, epi, attr, temp, el, p",
+         call. = FALSE)
+  }
+
+  if (length(x$el) == 1) {
+    s <- 1
+  }
+
   dat <- list()
-  dat$el <- x$el[[s]]
+
   dat$param <- param
   dat$param$modes <- 1
   dat$control <- control
   dat$nwparam <- x$nwparam
+
   dat$epi <- sapply(x$epi, function(var) var[s])
   names(dat$epi) <- names(x$epi)
-  dat$attr <- x$attr[[s]]
-  dat$stats <- list()
-  dat$stats$nwstats <- x$stats$nwstats[[s]]
-  dat$temp <- list()
 
-  dat$param$modes <- 1
+  dat$el <- x$el[[s]]
+  dat$p <- x$p[[s]]
+
+  dat$attr <- x$attr[[s]]
+
+  if (!is.null(x$stats)) {
+    dat$stats <- list()
+    if (!is.null(x$stats$nwstats)) {
+      dat$stats$nwstats <- x$stats$nwstats[[s]]
+    }
+  }
+
+  dat$temp <- x$temp[[s]]
+
   class(dat) <- "dat"
 
   return(dat)

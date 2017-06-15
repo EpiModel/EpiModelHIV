@@ -38,4 +38,3 @@ on the per-act probability.
 }
 \keyword{module}
 \keyword{msm}
-

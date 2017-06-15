@@ -22,4 +22,3 @@ Module function for updating act class in main and casual
 }
 \keyword{module}
 \keyword{msm}
-

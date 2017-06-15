@@ -25,4 +25,3 @@ This function calculates the target statistics for the formation
              and dissolution models estimated in \code{netest}.
 }
 \keyword{het}
-

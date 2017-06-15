@@ -17,4 +17,3 @@ Stochastically simulates GC/CT recovery.
 }
 \keyword{module}
 \keyword{msm}
-

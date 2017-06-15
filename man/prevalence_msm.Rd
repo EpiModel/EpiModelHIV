@@ -30,4 +30,3 @@ vectors that are not stored external to the module.
 }
 \keyword{module}
 \keyword{msm}
-

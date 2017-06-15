@@ -206,10 +206,10 @@ births_het <- function(dat, at) {
   # Update Population Structure
   if (nBirths > 0) {
     dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el <- tergmLite::add_vertices(dat$el, nBirths)
+    dat$el[[1]] <- tergmLite::add_vertices(dat$el[[1]], nBirths)
   }
 
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {
+  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
     stop("mismatch between el and attr length in births mod")
   }
 

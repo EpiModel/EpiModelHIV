@@ -18,4 +18,3 @@ Module function to simulate transmission over an active
 }
 \keyword{het}
 \keyword{module}
-

@@ -25,4 +25,3 @@ formation that is asymetric by sex. The absdiff component targets age homophily
 while the by component allows that to be structed by a binary attribute such
 as "male", in order to enforce an offset in the average difference.
 }
-

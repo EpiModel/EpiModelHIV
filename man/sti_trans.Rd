@@ -18,4 +18,3 @@ Stochastically simulates GC/CT transmission given the current
 }
 \keyword{module}
 \keyword{msm}
-

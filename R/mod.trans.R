@@ -408,11 +408,7 @@ discord_edgelist_het <- function(dat, at) {
 
   if (nInft > 0) {
 
-    if (is.null(dat$el)) {
-      el <- get.dyads.active(dat$nw, at = at)
-    } else {
-      el <- dat$el
-    }
+    el <- dat$el[[1]]
 
     if (nrow(el) > 0) {
       el <- el[sample(1:nrow(el)), , drop = FALSE]
