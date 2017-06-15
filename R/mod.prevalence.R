@@ -95,23 +95,12 @@ prevalence_msm <- function(dat, at) {
     dat$epi$hivtests.prep <- rep(0, nsteps)
     dat$epi$hivtests.nprep <- rep(0, nsteps)
     dat$epi$hivtests.pos <- rep(0, nsteps)
-    dat$epi$totalhivtests.prep <- rep(0, nsteps)
-    dat$epi$totalhivtests <- rep(0, nsteps)
-    dat$epi$totalhivtests.pos <- rep(0, nsteps)
 
     dat$epi$rGCsympttests <- rep(0, nsteps)
     dat$epi$uGCsympttests <- rep(0, nsteps)
     dat$epi$rCTsympttests <- rep(0, nsteps)
     dat$epi$rCTsympttests <- rep(0, nsteps)
     dat$epi$syphsympttests <- rep(0, nsteps)
-    dat$epi$totalrGCsympttests <- rep(0, nsteps)
-    dat$epi$totaluGCsympttests <- rep(0, nsteps)
-    dat$epi$totalGCsympttests <- rep(0, nsteps)
-    dat$epi$totalrCTsympttests <- rep(0, nsteps)
-    dat$epi$totaluCTsympttests <- rep(0, nsteps)
-    dat$epi$totalCTsympttests <- rep(0, nsteps)
-    dat$epi$totalsyphsympttests <- rep(0, nsteps)
-    dat$epi$totalstisympttests <- rep(0, nsteps)
 
     dat$epi$rGCasympttests <- rep(0, nsteps)
     dat$epi$uGCasympttests <- rep(0, nsteps)
@@ -119,15 +108,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rGCasympttests.pos <- rep(0, nsteps)
     dat$epi$uGCasympttests.pos <- rep(0, nsteps)
     dat$epi$GCasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalrGCasympttests <- rep(0, nsteps)
-    dat$epi$totaluGCasympttests <- rep(0, nsteps)
-    dat$epi$totalGCasympttests <- rep(0, nsteps)
-    dat$epi$totalrGCasympttests.pos <- rep(0, nsteps)
-    dat$epi$totaluGCasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalGCasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalrGCasympttests.prep <- rep(0, nsteps)
-    dat$epi$totaluGCasympttests.prep <- rep(0, nsteps)
-    dat$epi$totalGCasympttests.prep <- rep(0, nsteps)
 
     dat$epi$rCTasympttests <- rep(0, nsteps)
     dat$epi$uCTasympttests <- rep(0, nsteps)
@@ -135,27 +115,12 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rCTasympttests.pos <- rep(0, nsteps)
     dat$epi$uCTasympttests.pos <- rep(0, nsteps)
     dat$epi$CTasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalrCTasympttests <- rep(0, nsteps)
-    dat$epi$totaluCTasympttests <- rep(0, nsteps)
-    dat$epi$totalCTasympttests <- rep(0, nsteps)
-    dat$epi$totalrCTasympttests.pos <- rep(0, nsteps)
-    dat$epi$totaluCTasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalCTasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalrCTasympttests.prep <- rep(0, nsteps)
-    dat$epi$totaluCTasympttests.prep <- rep(0, nsteps)
-    dat$epi$totalCTasympttests.prep <- rep(0, nsteps)
 
     dat$epi$syphasympttests <- rep(0, nsteps)
     dat$epi$syphasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalsyphasympttests <- rep(0, nsteps)
-    dat$epi$totalsyphasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalsyphasympttests.prep <- rep(0, nsteps)
 
     dat$epi$stiasympttests <- rep(0, nsteps)
     dat$epi$stiasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalstiasympttests <- rep(0, nsteps)
-    dat$epi$totalstiasympttests.pos <- rep(0, nsteps)
-    dat$epi$totalstiasympttests.prep <- rep(0, nsteps)
 
     dat$epi$prev.rgc <- rNA
     dat$epi$prev.ugc <- rNA
@@ -339,110 +304,7 @@ prevalence_msm <- function(dat, at) {
                                         dat$epi$GCasympttests.pos[at], na.rm = TRUE)
   dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at],
                                            dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
-
-  # Number of tests: Total resets at PrEP or STI testing start time
-  if (at == 2 | at == dat$param$prep.start | at == dat$param$stitest.start) {
-
-      dat$epi$totalhivtests[at] <- sum(dat$epi$hivtests.prep[at],
-                                       dat$epi$hivtests.nprep[at])
-      dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at]
-      dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at]
-
-      dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at]
-      dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at]
-      dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at]
-      dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at]
-      dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at]
-      dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at]
-      dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at]
-      dat$epi$totalstisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at],
-                                            dat$epi$GCsympttests[at], na.rm = TRUE)
-
-      dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at]
-      dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at]
-      dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at]
-      dat$epi$totalrGCasympttests.pos[at] <- dat$epi$rGCasympttests.pos[at]
-      dat$epi$totaluGCasympttests.pos[at] <- dat$epi$uGCasympttests.pos[at]
-      dat$epi$totalGCasympttests.pos[at] <- dat$epi$GCasympttests.pos[at]
-
-      dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at]
-      dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at]
-      dat$epi$totalCTasympttests[at] <- dat$epi$CTsympttests[at]
-      dat$epi$totalrCTasympttests.pos[at] <- dat$epi$rCTasympttests.pos[at]
-      dat$epi$totaluCTasympttests.pos[at] <- dat$epi$uCTasympttests.pos[at]
-      dat$epi$totalCTasympttests.pos[at] <- dat$epi$CTasympttests.pos[at]
-
-      dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at]
-      dat$epi$totalsyphasympttests.pos[at] <- dat$epi$syphasympttests.pos[at]
-
-      dat$epi$totalstiasympttests[at] <- sum(dat$epi$syphasympttests[at],
-                                             dat$epi$CTasympttests[at],
-                                             dat$epi$GCasympttests[at],
-                                             na.rm = TRUE)
-      dat$epi$totalstiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at],
-                                                dat$epi$GCasympttests.pos[at], na.rm = TRUE)
-
-      dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at]
-      dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at]
-      dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at]
-      dat$epi$totalrGCasympttests.pos.prep[at] <- dat$epi$rGCasympttests.pos.prep[at]
-      dat$epi$totaluGCasympttests.pos.prep[at] <- dat$epi$uGCasympttests.pos.prep[at]
-      dat$epi$totalGCasympttests.pos.prep[at] <- dat$epi$GCasympttests.pos.prep[at]
-
-      dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at]
-      dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at]
-      dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at]
-      dat$epi$totalrCTasympttests.pos.prep[at] <- dat$epi$rCTasympttests.pos.prep[at]
-      dat$epi$totaluCTasympttests.pos.prep[at] <- dat$epi$uCTasympttests.pos.prep[at]
-      dat$epi$totalCTasympttests.pos.prep[at] <- dat$epi$CTasympttests.pos.prep[at]
-
-      dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at]
-      dat$epi$totalsyphasympttests.pos.prep[at] <- dat$epi$syphasympttests.pos.prep[at]
-
-      dat$epi$totalstiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at],
-                                                  dat$epi$CTasympttests.prep[at],
-                                                  dat$epi$GCasympttests.prep[at], na.rm = TRUE)
-      dat$epi$totalstiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at],
-                                                      dat$epi$CTasympttests.pos.prep[at],
-                                                      dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
-
-  }
-  if ((at > 2 & at < dat$param$prep.start) | (at > dat$param$prep.start) |
-     (at > 2 & at < dat$param$stitest.start) | (at > dat$param$stitest.start)) {
-
-        dat$epi$totalhivtests[at] <- dat$epi$hivtests.nprep[at] + dat$epi$hivtests.prep[at] + dat$epi$totalhivtests[at - 1]
-        dat$epi$totalhivtests.prep[at] <- dat$epi$hivtests.prep[at] + dat$epi$totalhivtests.prep[at - 1]
-        dat$epi$totalhivtests.pos[at] <- dat$epi$hivtests.pos[at] + dat$epi$totalhivtests.pos[at - 1]
-
-        dat$epi$totalrGCsympttests[at] <- dat$epi$rGCsympttests[at] + dat$epi$totalrGCsympttests[at - 1]
-        dat$epi$totaluGCsympttests[at] <- dat$epi$uGCsympttests[at] + dat$epi$totaluGCsympttests[at - 1]
-        dat$epi$totalGCsympttests[at] <- dat$epi$GCsympttests[at] + dat$epi$totalGCsympttests[at - 1]
-        dat$epi$totalrCTsympttests[at] <- dat$epi$rCTsympttests[at] + dat$epi$totalrCTsympttests[at - 1]
-        dat$epi$totaluCTsympttests[at] <- dat$epi$uCTsympttests[at] + dat$epi$totaluCTsympttests[at - 1]
-        dat$epi$totalCTsympttests[at] <- dat$epi$CTsympttests[at] + dat$epi$totalCTsympttests[at - 1]
-        dat$epi$totalsyphsympttests[at] <- dat$epi$syphsympttests[at] + dat$epi$totalsyphsympttests[at - 1]
-        dat$epi$totalstisympttests[at] <- dat$epi$stisympttests[at] + dat$epi$totalstisympttests[at - 1]
-
-        dat$epi$totalrGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$totalrGCasympttests[at - 1]
-        dat$epi$totaluGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$totaluGCasympttests[at - 1]
-        dat$epi$totalGCasympttests[at] <- dat$epi$GCasympttests[at] + dat$epi$totalGCasympttests[at - 1]
-        dat$epi$totalrCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$totalrCTasympttests[at - 1]
-        dat$epi$totaluCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$totaluCTasympttests[at - 1]
-        dat$epi$totalCTasympttests[at] <- dat$epi$CTasympttests[at] + dat$epi$totalCTasympttests[at - 1]
-        dat$epi$totalsyphasympttests[at] <- dat$epi$syphasympttests[at] + dat$epi$totalsyphasympttests[at - 1]
-        dat$epi$totalstiasympttests[at] <- dat$epi$stiasympttests[at] + dat$epi$totalstiasympttests[at - 1]
-
-        dat$epi$totalrGCasympttests.prep[at] <- dat$epi$rGCasympttests.prep[at] + dat$epi$totalrGCasympttests.prep[at - 1]
-        dat$epi$totaluGCasympttests.prep[at] <- dat$epi$uGCasympttests.prep[at] + dat$epi$totaluGCasympttests.prep[at - 1]
-        dat$epi$totalGCasympttests.prep[at] <- dat$epi$GCasympttests.prep[at] + dat$epi$totalGCasympttests.prep[at - 1]
-        dat$epi$totalrCTasympttests.prep[at] <- dat$epi$rCTasympttests.prep[at] + dat$epi$totalrCTasympttests.prep[at - 1]
-        dat$epi$totaluCTasympttests.prep[at] <- dat$epi$uCTasympttests.prep[at] + dat$epi$totaluCTasympttests.prep[at - 1]
-        dat$epi$totalCTasympttests.prep[at] <- dat$epi$CTasympttests.prep[at] + dat$epi$totalCTasympttests.prep[at - 1]
-        dat$epi$totalsyphasympttests.prep[at] <- dat$epi$syphasympttests.prep[at] + dat$epi$totalsyphasympttests.prep[at - 1]
-        dat$epi$totalstiasympttests.prep[at] <- dat$epi$stiasympttests.prep[at] + dat$epi$totalstiasympttests.prep[at - 1]
-
-  }
-
+  
   # STI Prevalence
 
   dat$epi$prev.rgc[at] <- ifelse(dat$epi$num[at] > 0, sum(rGC == 1, na.rm = TRUE) / dat$epi$num[at], 0)
