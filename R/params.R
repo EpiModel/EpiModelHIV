@@ -47,7 +47,7 @@
 #'        suppressor before onset of AIDS, including time before diagnosis.
 #' @param max.time.on.tx.part.int Number of days on treatment for a
 #'        partial suppressor before onset of AIDS.
-#' @param max.time.off.tx.part.int Nnumber of days off treatment for a
+#' @param max.time.off.tx.part.int Number of days off treatment for a
 #'        partial suppressor before onset of AIDS, including time before
 #'        diagnosis.
 #' @param vl.acute.rise.int Number of days to peak viremia during acute
@@ -794,7 +794,7 @@ param_msm <- function(nwstats,
 
                       # Cumulative partnership list
                       partlist.start = NULL,
-                      
+
                       # Per-step probability of testing/tx asympt infection
                       # 0.10 = 1 - (1 - per time step prob)^weeks
                       # Annual testing for all: 52 time steps
@@ -803,7 +803,7 @@ param_msm <- function(nwstats,
                       # screen prob = 1 - 0.9979758875214996048300
 
                       asympt.screen.prob = 1 - 0.9979758875214996048300, #0.00202411
-                      
+
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),

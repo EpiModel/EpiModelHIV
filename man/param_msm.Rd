@@ -96,7 +96,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
   hiv.trans.gc.syph.rr = 0.2, hiv.trans.ct.syph.rr = 0.2,
   hiv.trans.allsti.rr = 0.2, hivdx.syph.sympt.tx.rr = 1.45,
-  partlist.start = NULL, asympt.screen.prob = 1 - 0.99993264851373, ...)
+  partlist.start = NULL, asympt.screen.prob = 1 - 0.9979758875215, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -159,7 +159,7 @@ suppressor before onset of AIDS, including time before diagnosis.}
 \item{max.time.on.tx.part.int}{Number of days on treatment for a
 partial suppressor before onset of AIDS.}
 
-\item{max.time.off.tx.part.int}{Nnumber of days off treatment for a
+\item{max.time.off.tx.part.int}{Number of days off treatment for a
 partial suppressor before onset of AIDS, including time before
 diagnosis.}
 
