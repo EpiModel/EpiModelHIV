@@ -96,7 +96,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
   hiv.trans.gc.syph.rr = 0.2, hiv.trans.ct.syph.rr = 0.2,
   hiv.trans.allsti.rr = 0.2, hivdx.syph.sympt.tx.rr = 1.45,
-  partlist.start = NULL, ...)
+  partlist.start = NULL, asympt.screen.prob = 1 - 0.99993264851373, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -805,6 +805,9 @@ so it is a boost to get to 0.35.}
 
 \item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}
+
+\item{asympt.screen.prob}{Per-time step probability of baseline screening
+for identifying asymptomatic infection (pre-intervention)}
 
 \item{...}{Additional arguments passed to the function.}
 }

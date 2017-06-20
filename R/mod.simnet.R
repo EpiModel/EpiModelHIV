@@ -97,6 +97,12 @@ simnet_msm <- function(dat, at) {
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
   }
+  
+  # Set last sexually active date
+  #NEEDS MORE!
+  #idsactive <- which(dat$attr$uid %in% dat$el)
+  #dat$attr$sexactive[dat$temp$el[, 1:2]] <- at
+  #dat$attr$sexactive[idsactive] <- at
 
   return(dat)
 }

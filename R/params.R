@@ -500,6 +500,8 @@
 #'        so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
+#' @param asympt.screen.prob Per-time step probability of baseline screening
+#'        for identifying asymptomatic infection (pre-intervention)
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -792,7 +794,16 @@ param_msm <- function(nwstats,
 
                       # Cumulative partnership list
                       partlist.start = NULL,
+                      
+                      # Per-step probability of testing/tx asympt infection
+                      # 0.10 = 1 - (1 - per time step prob)^weeks
+                      # Annual testing for all: 52 time steps
+                      # -0.90 = - (1 - prob)^52 =  0.9 = (1-prob)^52
+                      # 52nd root of 0.9 = 1 - prob = prob = 1 - (52nd root of 0.9)
+                      # screen prob = 1 - 0.9979758875214996048300
 
+                      asympt.screen.prob = 1 - 0.9979758875214996048300, #0.00202411
+                      
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),

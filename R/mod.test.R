@@ -111,6 +111,7 @@ hiv_test_msm <- function(dat, at) {
 #' \code{testing.pattern} parameter: memoryless for stochastic and
 #' geometrically-distributed waiting times to test (constant hazard); and
 #' interval for deterministic tested after defined waiting time intervals.
+#' Symptomatic testing is handled in the STI treatment module.
 #'
 #' @return
 #' This function returns the \code{dat} object with updated
@@ -124,6 +125,139 @@ hiv_test_msm <- function(dat, at) {
 sti_test_msm <- function(dat, at) {
 
   if (at < dat$param$stitest.start) {
+    
+    ## Background screening
+    # Attributes
+    tt.traj.ct <- dat$attr$tt.traj.ct
+    tt.traj.gc <- dat$attr$tt.traj.gc
+    tt.traj.syph <- dat$attr$tt.traj.syph
+    diag.status.gc <- dat$attr$diag.status.gc
+    diag.status.ct <- dat$attr$diag.status.ct
+    diag.status.syph <- dat$attr$diag.status.syph
+    syphilis <- dat$attr$syphilis
+    rGC <- dat$attr$rGC
+    uGC <- dat$attr$uGC
+    rCT <- dat$attr$rCT
+    uCT <- dat$attr$uCT
+    stage.syph <- dat$attr$stage.syph
+    role.class <- dat$attr$role.class
+    last.neg.test.rgc <- dat$attr$last.neg.test.rgc
+    last.neg.test.ugc <- dat$attr$last.neg.test.ugc
+    last.neg.test.rct <- dat$attr$last.neg.test.rct
+    last.neg.test.uct <- dat$attr$last.neg.test.uct
+    last.neg.test.syph <- dat$attr$last.neg.test.syph
+    lastdiag.time.gc <- dat$attr$lastdiag.time.gc
+    lastdiag.time.ct <- dat$attr$lastdiag.time.ct
+    lastdiag.time.syph <- dat$attr$lastdiag.time.syph
+    
+    # Parameters
+    tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
+    asympt.screen.prob <- dat$param$asympt.screen.prob
+    
+    # Eligibility for diagnosis of asymptomatic infection (pre-intervention)
+    # Syphilis
+    screen.elig.syph <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
+                               syphilis == 1)
+    screen.rates.syph <- rep(asympt.screen.prob, length(screen.elig.syph))
+    screen.syph <- screen.elig.syph[rbinom(length(screen.elig.syph), 1, screen.rates.syph) == 1]
+    
+    # CT
+    screen.elig.ct <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
+                             (rCT == 1 | uCT == 1))
+    screen.rates.ct <- rep(asympt.screen.prob, length(screen.elig.ct))
+    screen.ct <- screen.elig.ct[rbinom(length(screen.elig.ct), 1, screen.rates.ct) == 1]
+    
+    # GC
+    screen.elig.gc <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
+                             (rGC == 1 | uGC == 1))
+    screen.rates.gc <- rep(asympt.screen.prob, length(screen.elig.gc))
+    screen.gc <- screen.elig.gc[rbinom(length(screen.elig.gc), 1, screen.rates.gc) == 1]
+    
+    # Syphilis screening
+    screen.syph.pos <- screen.syph[syphilis[screen.syph] == 1 &
+                                   stage.syph[screen.syph] %in% c(2, 3, 4, 5, 6, 7)]
+    screen.syph.neg <- setdiff(screen.syph, screen.syph.pos)
+    
+    # GC screening
+    screen.rgc <- screen.gc[role.class[screen.gc] %in% c("R", "V")]
+    screen.rgc <- sample(screen.rgc, tst.rect.sti.rr * length(screen.rgc))
+    screen.ugc <- screen.gc[role.class[screen.gc] %in% c("I", "V")]
+    screen.rgc.pos <- screen.rgc[rGC[screen.rgc] == 1]
+    screen.ugc.pos <- screen.ugc[uGC[screen.ugc] == 1]
+    screen.rgc.neg <- setdiff(screen.rgc, screen.rgc.pos)
+    screen.ugc.neg <- setdiff(screen.ugc, screen.ugc.pos)
+    screen.gc.pos <- unique(c(screen.rgc.pos, screen.ugc.pos))
+    
+    # CT screening
+    screen.rct <- screen.ct[role.class[screen.gc] %in% c("R", "V")]
+    screen.rct <- sample(screen.rct, tst.rect.sti.rr * length(screen.rct))
+    screen.uct <- screen.ct[role.class[screen.ct] %in% c("I", "V")]
+    screen.rct.pos <- screen.rct[rCT[screen.rct] == 1]
+    screen.uct.pos <- screen.uct[uCT[screen.uct] == 1]
+    screen.rct.neg <- setdiff(screen.rct, screen.rct.pos)
+    screen.uct.neg <- setdiff(screen.uct, screen.uct.pos)
+    screen.ct.pos <- unique(c(screen.rct.pos, screen.uct.pos))
+    
+    # Syphilis Attributes
+    last.neg.test.syph[screen.syph.neg] <- at
+    last.neg.test.syph[screen.syph.pos] <- NA
+    diag.status.syph[screen.syph.pos] <- 1
+    lastdiag.time.syph[screen.syph.pos] <- at
+    
+    # GC Attributes
+    last.neg.test.rgc[screen.rgc.neg] <- at
+    last.neg.test.ugc[screen.ugc.neg] <- at
+    last.neg.test.rgc[screen.rgc.pos] <- NA
+    last.neg.test.ugc[screen.ugc.pos] <- NA
+    diag.status.gc[screen.gc.pos] <- 1
+    lastdiag.time.gc[screen.gc.pos] <- at
+    
+    # CT Attributes
+    last.neg.test.rct[screen.rct.neg] <- at
+    last.neg.test.uct[screen.uct.neg] <- at
+    last.neg.test.rct[screen.rct.pos] <- NA
+    last.neg.test.uct[screen.uct.pos] <- NA
+    diag.status.ct[screen.ct.pos] <- 1
+    lastdiag.time.ct[screen.ct.pos] <- at
+  
+    ## Output
+    # Syphilis Attributes
+    dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$diag.status.syph <- diag.status.syph
+    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    
+    # GC Attributes
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$diag.status.gc <- diag.status.gc
+    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+                            
+    # CT Attributes
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct
+    dat$attr$diag.status.ct <- diag.status.ct
+    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    
+    # Number of tests for asymptomatic
+    dat$epi$rGCasympttests[at] <- length(screen.rgc)
+    dat$epi$uGCasympttests[at] <- length(screen.ugc)
+    dat$epi$GCasympttests[at] <- length(screen.rgc) + length(screen.ugc)
+    
+    dat$epi$rGCasympttests.pos[at] <- length(screen.rgc.pos)
+    dat$epi$uGCasympttests.pos[at] <- length(screen.ugc.pos)
+    dat$epi$GCasympttests.pos[at] <- length(screen.rgc.pos) + length(screen.ugc.pos)
+    
+    dat$epi$rCTasympttests[at] <- length(screen.rct)
+    dat$epi$uCTasympttests[at] <- length(screen.uct)
+    dat$epi$CTasympttests[at] <- length(screen.rct) + length(screen.uct)
+    
+    dat$epi$rCTasympttests.pos[at] <- length(screen.rct.pos)
+    dat$epi$uCTasympttests.pos[at] <- length(screen.uct.pos)
+    dat$epi$CTasympttests.pos[at] <- length(screen.rct.pos) + length(screen.uct.pos)
+    
+    dat$epi$syphasympttests[at] <- length(screen.syph)
+    dat$epi$syphasympttests.pos[at] <- length(screen.syph.pos)
+    
     return(dat)
   }
 
@@ -162,7 +296,6 @@ sti_test_msm <- function(dat, at) {
   testing.pattern.sti <- dat$param$testing.pattern.sti
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
-  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
   
   # Eligibility and trajectory
   # Base eligibility
@@ -255,15 +388,7 @@ sti_test_msm <- function(dat, at) {
   # For sexually active individuals, screen at first HIV evaluation,
   # and at least annually thereafter
 
-  # More frequent STD screening (i.e., for syphilis, gonorrhea, and chlamydia)
-  # at 3–6-month intervals is indicated for MSM, including those with HIV
-  # infection if risk behaviors persist or if they or their sexual partners
-  # have multiple partners.
-
-  # Mostly asymptomatic testing handled here - symptomatic testing is equated
-  # to probability of symptomatic treatment
-
-  ## Process for syphilis
+  ## Process for asymptomatic syphilis screening
   if (testing.pattern.sti == "memoryless") {
     elig.syph.ann <- which(tt.traj.syph == 1 &
                              (diag.status.syph == 0 | is.na(diag.status.syph)) &
@@ -291,7 +416,7 @@ sti_test_msm <- function(dat, at) {
     tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
 
-  ## Process for GC
+  ## Process for GC asymptomatic screening
   if (testing.pattern.sti == "memoryless") {
     elig.gc.ann <- which(tt.traj.gc == 1 &
                            (diag.status.gc == 0 | is.na(diag.status.gc)) &
@@ -319,7 +444,7 @@ sti_test_msm <- function(dat, at) {
     tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
 
-  ## Process for CT
+  ## Process for CT asymptomatic screening
   if (testing.pattern.sti == "memoryless") {
     elig.ct.ann <- which(tt.traj.ct == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &

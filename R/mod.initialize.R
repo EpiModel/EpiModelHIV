@@ -961,6 +961,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptTx <- rep(NA, num)
 
     # Testing variables
+    dat$attr$sexactive <- rep(NA, num)
     dat$attr$recentpartners <- recentpartners
     dat$attr$stianntestLastElig <- rep(NA, num)
     dat$attr$stihighrisktestLastElig <- rep(NA, num)

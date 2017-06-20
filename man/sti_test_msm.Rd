@@ -25,6 +25,7 @@ This testing module supports two testing parameterizations, input via the
 \code{testing.pattern} parameter: memoryless for stochastic and
 geometrically-distributed waiting times to test (constant hazard); and
 interval for deterministic tested after defined waiting time intervals.
+Symptomatic testing is handled in the STI treatment module.
 }
 \keyword{module}
 \keyword{msm}
