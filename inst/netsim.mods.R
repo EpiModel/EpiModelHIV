@@ -6,20 +6,6 @@ devtools::load_all()
 data(est)
 data(st)
 
-# Must have the following:
-# Person-time acute HIV, undiagnosed
-# Person-time acute HIV, diagnosed
-# Person-time early chronic HIV, undiagnosed
-# Person-time early chronic HIV, diagnosed year 1
-# Person-time early chronic HIV, diagnosed years 2 - late stage
-# Person-time early chronic HIV, on ART
-# Person-time late chronic HIV, undiagnosed
-# Person-time late chronic HIV, diagnosed
-# Person-time late chronic HIV, on ART
-# Person-time AIDS, undiagnosed
-# Person-time AIDS, diagnosed
-# Person-time AIDS, on ART
-
 # Switch from intervention in burn-in to 10% coverage of annual screening only
 # Need new attribute for last sexually active date --> search old code
 

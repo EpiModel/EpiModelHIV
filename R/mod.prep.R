@@ -72,19 +72,22 @@ prep_msm <- function(dat, at) {
   if (at == dat$param$prep.start) {
       dat$attr$time.hivneg[status == 0] <- 0
       dat$attr$time.off.prep[status == 0] <- 0
-      dat$attr$stage.time[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.ar.ndx[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.ar.dx[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.ar.art[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.af.ndx[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.af.dx[sum(race %in% c("B","W"))] <- 0
-      dat$attr$stage.time.af.art[status == 1] <- 0
-      dat$attr$stage.time.chronic.ndx[status == 1] <- 0
-      dat$attr$stage.time.chronic.dx[status == 1] <- 0
-      dat$attr$stage.time.chronic.art[status == 1] <- 0
+      dat$attr$stage.time[status == 1] <- 0
+      dat$attr$stage.time.ar.ndx[status == 1] <- 0
+      dat$attr$stage.time.ar.dx[status == 1] <- 0
+      dat$attr$stage.time.af.ndx[status == 1] <- 0
+      dat$attr$stage.time.af.dx[status == 1] <- 0
+      dat$epi$stage.time.early.chronic.ndx[status == 1] <- 0
+      dat$epi$stage.time.early.chronic.dx.yrone[status == 1] <- 0
+      dat$epi$stage.time.early.chronic.dx.yrstwotolate[status == 1] <- 0
+      dat$epi$stage.time.early.chronic.art[status == 1] <- 0
+      dat$epi$stage.time.late.chronic.ndx[status == 1] <- 0
+      dat$epi$stage.time.late.chronic.dx[status == 1] <- 0
+      dat$epi$stage.time.late.chronic.art[status == 1] <- 0
       dat$attr$stage.time.aids.ndx[status == 1] <- 0
       dat$attr$stage.time.aids.dx[status == 1] <- 0
       dat$attr$stage.time.aids.art[status == 1] <- 0
+
   }
 
   ## Eligibility ---------------------------------------------------------------

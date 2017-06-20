@@ -81,13 +81,15 @@ prevalence_msm <- function(dat, at) {
     dat$epi$time.off.prep <- rep(0, nsteps)
     dat$epi$stage.time.ar.ndx <- rep(0, nsteps)
     dat$epi$stage.time.ar.dx <- rep(0, nsteps)
-    dat$epi$stage.time.ar.art <- rep(0, nsteps)
     dat$epi$stage.time.af.ndx <- rep(0, nsteps)
     dat$epi$stage.time.af.dx <- rep(0, nsteps)
-    dat$epi$stage.time.af.art <- rep(0, nsteps)
-    dat$epi$stage.time.chronic.ndx <- rep(0, nsteps)
-    dat$epi$stage.time.chronic.dx <- rep(0, nsteps)
-    dat$epi$stage.time.chronic.art <- rep(0, nsteps)
+    dat$epi$stage.time.early.chronic.ndx <- rep(0, nsteps)
+    dat$epi$stage.time.early.chronic.dx.yrone <- rep(0, nsteps)
+    dat$epi$stage.time.early.chronic.dx.yrstwotolate <- rep(0, nsteps)
+    dat$epi$stage.time.early.chronic.art <- rep(0, nsteps)
+    dat$epi$stage.time.late.chronic.ndx <- rep(0, nsteps)
+    dat$epi$stage.time.late.chronic.dx <- rep(0, nsteps)
+    dat$epi$stage.time.late.chronic.art <- rep(0, nsteps)
     dat$epi$stage.time.aids.ndx <- rep(0, nsteps)
     dat$epi$stage.time.aids.dx <- rep(0, nsteps)
     dat$epi$stage.time.aids.art <- rep(0, nsteps)
@@ -304,7 +306,7 @@ prevalence_msm <- function(dat, at) {
                                         dat$epi$GCasympttests.pos[at], na.rm = TRUE)
   dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at],
                                            dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
-  
+
   # STI Prevalence
 
   dat$epi$prev.rgc[at] <- ifelse(dat$epi$num[at] > 0, sum(rGC == 1, na.rm = TRUE) / dat$epi$num[at], 0)

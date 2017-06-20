@@ -26,7 +26,7 @@ secondary, early latent, late latent, tertiary, and remission.
 
 The time spent in chronic stage infection, and thus the time from infection
 to AIDS, depends on ART history. For ART-naive persons, time to AIDS is
-established by the \code{vl.aids.onset} parameter. For persons ever on ART
+established by the \code{vl.aids.onset.int} parameter. For persons ever on ART
 who fall into the partially suppressed category (the \code{tt.traj} attribute
 is \code{3}), time to AIDS depends on the sum of two ratios: time on
 treatment over maximum time on treatment plus time off treatment over maximum
