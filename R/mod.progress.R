@@ -70,7 +70,7 @@ hiv_progress_msm <- function(dat, at) {
   max.time.off.tx.full <- dat$param$max.time.off.tx.full
 
   # Seventy percent value for early/late chronic split
-  early.chronic.int <- floor(0.7 * max.time.off.tx.full.int)
+  early.chronic.int <- floor(0.7 * dat$param$max.time.off.tx.full.int)
 
   ## Process
   # Current stage
