@@ -337,13 +337,13 @@ init_status_hiv_msm <- function(dat) {
   # HIV stage times
   stage.time.ar.ndx[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1]
   stage.time.af.ndx[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] - vlar.int
-  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] <= early.chronic.full.int] <-
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <-
                                                                                                               time.since.inf[stage[selected] == 3 &
                                                                                                               cum.time.off.tx[selected] <= early.chronic.full.int] -
-                                                                                                                vl.acute.int
-  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] > early.chronic.full.int] <- time.since.inf[stage[selected] == 3 &
-                                                                                                                 cum.time.off.tx[selected] <= early.chronic.full.int] -
-                                                                                      vl.acute.int - early.chronic.full.int
+                                                                                        vl.acute.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.full.int] <- time.since.inf[stage[selected] == 3 &
+                                                                                                                                       cum.time.off.tx[selected] > early.chronic.full.int] -
+                                                                                            vl.acute.int - early.chronic.full.int
   stage.time.aids.ndx[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] - vldo.int
 
   # Assign time spent in earlier stages for those initialized into later stages
@@ -436,9 +436,9 @@ init_status_hiv_msm <- function(dat) {
   # HIV stage times
   stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
   stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
-  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                    cum.time.off.tx[selected] <= early.chronic.full.int]
-  stage.time.late.chronic.ndx[selected][stage[selected] == 4 & stage.time[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 4 &
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4 & cum.time.off.tx[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 4 &
                                                                                                                    cum.time.off.tx[selected] > early.chronic.full.int] -
                                                                                                                  early.chronic.full.int
   stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
@@ -472,9 +472,9 @@ init_status_hiv_msm <- function(dat) {
   # HIV stage times - 7 years for early chronic, 3 years for late chronic
   stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
   stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
-  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                              cum.time.off.tx[selected] <= early.chronic.full.int]
-  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                               cum.time.off.tx[selected] > early.chronic.full.int] -
                                                                                                                   early.chronic.full.int
   stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
@@ -570,9 +570,9 @@ init_status_hiv_msm <- function(dat) {
   # HIV stage times
   stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
   stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
-  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                             cum.time.off.tx[selected] <= early.chronic.part.int]
-  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                           cum.time.off.tx[selected] > early.chronic.part.int] -
                                                                                                                  early.chronic.part.int
   stage.time.aids.ndx[selected][stage[selected] == 4]  <- stage.time[selected][stage[selected] == 4]
@@ -606,9 +606,9 @@ init_status_hiv_msm <- function(dat) {
   # HIV stage times
   stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
   stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
-  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                             cum.time.off.tx[selected] <= early.chronic.part.int]
-  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & stage.time[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
                                                                                                                           cum.time.off.tx[selected] > early.chronic.part.int] -
                                                                                                                   early.chronic.part.int
   stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
@@ -996,7 +996,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptTx <- rep(NA, num)
 
     # Testing variables
-    dat$attr$sexactive <- rep(NA, num)
+    dat$attr$time.last.sex <- rep(NA, num)
     dat$attr$recentpartners <- recentpartners
     dat$attr$stianntestLastElig <- rep(NA, num)
     dat$attr$stihighrisktestLastElig <- rep(NA, num)
