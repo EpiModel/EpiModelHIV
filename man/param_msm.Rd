@@ -446,7 +446,7 @@ in days.}
 each testing visit.}
 
 \item{riskhist.int}{Interval of look-back period in which risk history is
-assessed for PrEP, STI testing, and EPT interventions.}
+assessed for the STI testing interventions.}
 
 \item{stitest.start}{Time step at which the STI testing guidelines
 intervention should start.}

@@ -245,7 +245,7 @@
 #'        each testing visit.
 #'
 #' @param riskhist.int Interval of look-back period in which risk history is
-#'        assessed for PrEP, STI testing, and EPT interventions.
+#'        assessed for the STI testing interventions.
 #' @param stitest.start Time step at which the STI testing guidelines
 #'        intervention should start.
 #' @param stitest.active.int Intertest interval for lower-risk group in STI

@@ -116,6 +116,14 @@ riskhist_prep_msm <- function(dat, at) {
 riskhist_stitest_msm <- function(dat, at) {
 
   if (at < dat$param$riskh.stitest.start) {
+
+    # Anyone sexually active in last year is eligible to be screened
+    idsactive <- which(at - dat$attr$time.last.sex <= 52)
+    idsnotactive <- setdiff(which(dat$attr$race %in% c("B","W")), idsactive)
+
+    dat$attr$stitest.ind.active[idsactive] <- 1
+    dat$attr$stitest.ind.active[idsnotactive] <- 0
+
     return(dat)
   }
 

@@ -6,7 +6,6 @@ devtools::load_all()
 data(est)
 data(st)
 
-# Switch from intervention in burn-in to 10% coverage of annual screening only
 # Need new attribute for last sexually active date --> search old code
 
 param <- param_msm(nwstats = st,
@@ -65,7 +64,7 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.coverage = 0.1,
 
                    prep.start = 5000,
-                   stitest.start = 2,
+                   stitest.start = 2601,
                    ept.start = 5000,
 
                    stitest.elig.model = "sti",
@@ -94,7 +93,7 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-# debug(simnet_msm)
+debug(simnet_msm)
 
 at <- at + 1
 for (at in 2:control$nsteps) {

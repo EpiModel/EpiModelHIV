@@ -149,24 +149,27 @@ sti_test_msm <- function(dat, at) {
     lastdiag.time.gc <- dat$attr$lastdiag.time.gc
     lastdiag.time.ct <- dat$attr$lastdiag.time.ct
     lastdiag.time.syph <- dat$attr$lastdiag.time.syph
+    stitestind1 <- dat$attr$stitest.ind.active
 
     # Parameters
     tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
     asympt.screen.prob <- dat$param$asympt.screen.prob
 
     # Eligibility for diagnosis of asymptomatic infection (pre-intervention)
+    #         Undiagnosed and have been sexually active in the last year
+
     # Syphilis
-    screen.elig.syph <- which((diag.status.syph == 0 | is.na(diag.status.syph)))
+    screen.elig.syph <- which((diag.status.syph == 0 | is.na(diag.status.syph)) & (stitestind1 == 1))
     screen.rates.syph <- rep(asympt.screen.prob, length(screen.elig.syph))
     screen.syph <- screen.elig.syph[rbinom(length(screen.elig.syph), 1, screen.rates.syph) == 1]
 
     # CT
-    screen.elig.ct <- which((diag.status.ct == 0 | is.na(diag.status.ct)))
+    screen.elig.ct <- which((diag.status.ct == 0 | is.na(diag.status.ct)) & (stitestind1 == 1))
     screen.rates.ct <- rep(asympt.screen.prob, length(screen.elig.ct))
     screen.ct <- screen.elig.ct[rbinom(length(screen.elig.ct), 1, screen.rates.ct) == 1]
 
     # GC
-    screen.elig.gc <- which((diag.status.gc == 0 | is.na(diag.status.gc)))
+    screen.elig.gc <- which((diag.status.gc == 0 | is.na(diag.status.gc)) & (stitestind1 == 1))
     screen.rates.gc <- rep(asympt.screen.prob, length(screen.elig.gc))
     screen.gc <- screen.elig.gc[rbinom(length(screen.elig.gc), 1, screen.rates.gc) == 1]
 
@@ -293,6 +296,7 @@ sti_test_msm <- function(dat, at) {
   testing.pattern.sti <- dat$param$testing.pattern.sti
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
+  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
 
   # Eligibility and trajectory
   # Base eligibility
