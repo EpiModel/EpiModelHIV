@@ -310,8 +310,8 @@ sti_trans_msm <- function(dat, at) {
   # Update attributes for newly infected
   idsInf_syph <- NULL
   if (sum(trans.syph.ip, trans.syph.rp, na.rm = TRUE) > 0) {
-    idsInf_syph <- c(disc.syph.ip[trans.syph.ip == 1, 2],
-                       disc.syph.rp[trans.syph.rp == 1, 1])
+    idsInf_syph <- unique(c(disc.syph.ip[trans.syph.ip == 1, 2],
+                       disc.syph.rp[trans.syph.rp == 1, 1]))
     syphilis[idsInf_syph] <- 1
     syph.infTime[idsInf_syph] <- at
     stage.syph[idsInf_syph] <- 1
@@ -360,7 +360,7 @@ sti_trans_msm <- function(dat, at) {
   dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
                                                            idsInf_rct, idsInf_uct)),
                                                   which(dat$attr$prepStat == 1)))
-  dat$epi$incid.syph.prep[at] <- length(intersect(unique(idsInf_syph),
+  dat$epi$incid.syph.prep[at] <- length(intersect(idsInf_syph,
                                                   which(dat$attr$prepStat == 1)))
 
   # Stop check for STI attributes
