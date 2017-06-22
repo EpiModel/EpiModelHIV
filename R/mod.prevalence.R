@@ -214,7 +214,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.syph.prep <- rNA
 
     #PAF
-    dat$epi$
+    dat$epi$sum_GC <- rNA
+    dat$epi$sum_CT <- rNA
+    dat$epi$sum_syph <- rNA
+    dat$epi$sum_urethral <- rNA
+    dat$epi$sum_rectal <- rNA
     # dat$epi$sti_paf <- rNA
     # dat$epi$sti_u_paf <- rNA
     # dat$epi$sti_r_paf <- rNA
