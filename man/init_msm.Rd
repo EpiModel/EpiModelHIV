@@ -6,9 +6,9 @@
 \usage{
 init_msm(nwstats, prev.B = 0.1, prev.W = 0.1, prev.ugc = 0.015,
   prev.rgc = 0.015, prev.uct = 0.015, prev.rct = 0.015,
-  prev.syph.B = 0.015, prev.syph.W = 0.015, stage.syph.B.prob = c(0, 0.2,
-  0.077, 0.277, 0.22, 0.22, 0.006), stage.syph.W.prob = c(0, 0.2, 0.077,
-  0.277, 0.22, 0.22, 0.006), ...)
+  prev.syph.B = 0.015, prev.syph.W = 0.015, stage.syph.B.prob = c(0, 0.01,
+  0.01, 0.1, 0.44, 0.44, 0), stage.syph.W.prob = c(0, 0.01, 0.01, 0.1, 0.44,
+  0.44, 0), ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class

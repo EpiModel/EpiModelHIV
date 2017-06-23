@@ -939,8 +939,8 @@ init_msm <- function(nwstats,
                      # adjust prim and seco from 0.1385 each
                      # Incubating, primary, secondary, early latent, late latent,
                      #late late latent, tertiary
-                     stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                     stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
+                     stage.syph.B.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
+                     stage.syph.W.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
