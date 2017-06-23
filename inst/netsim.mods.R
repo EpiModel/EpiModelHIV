@@ -6,8 +6,6 @@ devtools::load_all()
 data(est)
 data(st)
 
-# Need new attribute for last sexually active date --> search old code
-
 param <- param_msm(nwstats = st,
                    ai.scale = 1.05, #1.11
 
@@ -44,17 +42,17 @@ param <- param_msm(nwstats = st,
                    hiv.trans.ct.rr = 1,
                    hiv.trans.syph.rr = 1,
 
-                   syph.prim.sympt.prob.tx = 0.35,
-                   syph.seco.sympt.prob.tx = 0.60,
-                   syph.earlat.sympt.prob.tx = 0.15,
+                   syph.prim.sympt.prob.tx = 0.60,
+                   syph.seco.sympt.prob.tx = 0.688235,
+                   syph.earlat.sympt.prob.tx = 0.10,
                    syph.latelat.sympt.prob.tx = 0.10,
-                   syph.tert.sympt.prob.tx = 0.90,
-
-                   syph.prim.asympt.prob.tx = 1,
-                   syph.seco.asympt.prob.tx = 1,
-                   syph.earlat.asympt.prob.tx = 1,
-                   syph.latelat.asympt.prob.tx = 1,
-                   syph.tert.asympt.prob.tx = 1,
+                   syph.tert.sympt.prob.tx = 1.0,
+                   
+                   syph.prim.asympt.prob.tx = 1.0,
+                   syph.seco.asympt.prob.tx = 1.0,
+                   syph.earlat.asympt.prob.tx = 1.0,
+                   syph.latelat.asympt.prob.tx = 1.0,
+                   syph.tert.asympt.prob.tx = 1.0,
 
                    hivdx.syph.sympt.tx.rr = 1.45,
 
@@ -82,8 +80,8 @@ init <- init_msm(nwstats = st,
                  prev.rct = 0.015,
                  prev.syph.B = 0.015,
                  prev.syph.W = 0.015,
-                 stage.syph.B.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006),
-                 stage.syph.W.prob = c(0.00, 0.20, 0.077, 0.277, 0.22, 0.22, 0.006))
+                 stage.syph.B.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
+                 stage.syph.W.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00))
 
 control <- control_msm(nsteps = 2600)
 

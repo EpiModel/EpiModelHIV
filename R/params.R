@@ -286,7 +286,7 @@
 #' @param ept.start Time step at which the EPT intervention should start.
 #' @param ept.risk.int Time window for assessment of risk eligibility for EPT
 #'        in days.
-#' @param ept.coverage The proportion of the eligible population who are
+#' @param ept.coverage The proportion of the eligible population (index) who are
 #'        starting EPT once they become eligible.
 #' @param ept.cov.method The method for calculating EPT coverage, with options
 #'        of \code{"curr"} to base the numerator on the number of people

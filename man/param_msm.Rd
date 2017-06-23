@@ -501,7 +501,7 @@ which person would be indicated for higher-risk testing schedules.}
 \item{ept.risk.int}{Time window for assessment of risk eligibility for EPT
 in days.}
 
-\item{ept.coverage}{The proportion of the eligible population who are
+\item{ept.coverage}{The proportion of the eligible population (index) who are
 starting EPT once they become eligible.}
 
 \item{ept.cov.method}{The method for calculating EPT coverage, with options
