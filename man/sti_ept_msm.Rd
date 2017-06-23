@@ -15,7 +15,7 @@ individual-level attributes, and summary statistics.}
 \description{
 Module function for implementation of expedited
              partner therapy (EPT) in index partner to prevent 
-             STI infection. Eligbility is handled in the risk history
+             STI infection. Eligibility is handled in the risk history
              module.
 }
 \keyword{module}

@@ -3,7 +3,7 @@
 #'
 #' @description Module function for implementation of expedited
 #'              partner therapy (EPT) in index partner to prevent 
-#'              STI infection. Eligbility is handled in the risk history
+#'              STI infection. Eligibility is handled in the risk history
 #'              module.
 #'
 #' @inheritParams aging_msm
@@ -19,6 +19,8 @@ sti_ept_msm <- function(dat, at) {
     }
     
     ## Variables
+  
+#Need to convert uid to regular id?
     
     # Attributes
     rGC <- dat$attr$rGC
@@ -32,13 +34,12 @@ sti_ept_msm <- function(dat, at) {
     # could be provided?
     # Add a last tx time attribute and set to at
     
-    active <- dat$attr$active
-    
-    eptElig <- dat$attr$eptElig
-    eptStat <- dat$attr$eptStat
-    eptEligdate <- dat$attr$eptEligdate
-    eptTx <- dat$attr$eptTx
-    eptStartTime <- dat$attr$eptStartTime
+    eptindexElig <- dat$attr$eptindexElig
+    eptindexStat <- dat$attr$eptindexStat
+    eptindexEligdate <- dat$attr$eptindexEligdate
+    eptpartEligTx <- dat$attr$eptpartEligTx
+    eptpartTx <- dat$attr$eptTx
+    eptindexStartTime <- dat$attr$eptindexStartTime
 
     # Parameters
     ept.risk.int <- dat$param$ept.risk.int
@@ -50,22 +51,22 @@ sti_ept_msm <- function(dat, at) {
     ## Stoppage (Index) -------------------------------------------------------
     
     # Index no longer eligible(> 60 days since treatment time)
-    idseptExpired <- which(at - eptEligdate > ept.risk.int & eptStat == 1)
+    idseptExpired <- which(((at - eptindexEligdate) > ept.risk.int) & eptindexStat == 1)
     
     # Reset EPT status
     idsStp <- c(idseptExpired)
-    eptStat[idsStp] <- NA
-    eptElig[idsStp] <- NA
+    eptindexStat[idsStp] <- NA
+    eptindexElig[idsStp] <- NA
     
     ## Initiation (index) -----------------------------------------------------
     
-    eptCov <- sum(eptStat == 1, na.rm = TRUE) / sum(eptElig == 1, na.rm = TRUE)
+    eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / sum(eptindexElig == 1, na.rm = TRUE)
     eptCov <- ifelse(is.nan(eptCov), 0, eptCov)
     
-    idsEligSt <- which(eptElig == 1)
+    idsEligSt <- which(eptindexElig == 1)
     nEligSt <- length(idsEligSt)
     
-    nStart <- max(0, min(nEligSt, round((ept.coverage - eptCov) * sum(eptElig == 1, na.rm = TRUE))))
+    nStart <- max(0, min(nEligSt, round((ept.coverage - eptCov) * sum(eptindexElig == 1, na.rm = TRUE))))
     idsStart <- NULL
     if (nStart > 0) {
         if (ept.cov.rate >= 1) {
@@ -77,21 +78,22 @@ sti_ept_msm <- function(dat, at) {
     
     # Update attributes of index
     if (length(idsStart) > 0) {
-            eptStat[idsStart] <- 1
-            eptStartTime[idsStart] <- at
+            eptindexStat[idsStart] <- 1
+            eptindexStartTime[idsStart] <- at
     }
     
     ## Output -----------------------------------------------------------------
     
     # Attributes
-    dat$attr$eptElig <- eptElig
-    dat$attr$eptStat <- eptStat
-    dat$attr$eptTX <- eptTx
-    dat$attr$eptStartTime <- eptStartTime
+    dat$attr$eptindexElig <- eptindexElig
+    dat$attr$eptindexStat <- eptindexStat
+    dat$attr$eptpartEligTX <- eptpartEligTx
+    dat$attr$eptpartTX <- eptpartTx
+    dat$attr$eptindexStartTime <- eptindexStartTime
     
     # Summary Statistics
     dat$epi$eptCov[at] <- eptCov
-    dat$epi$eptStart[at] <- length(idsStart)
+    dat$epi$eptindexStart[at] <- length(idsStart)
 
     return(dat)
 }

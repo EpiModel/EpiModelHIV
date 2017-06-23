@@ -988,12 +988,12 @@ init_status_sti_msm <- function(dat) {
     dat$attr$tt.traj.ct <- rep(NA, num)
 
     # EPT variables
-    dat$attr$eptElig <- rep(NA, num)
-    dat$attr$eptStat <- rep(NA, num)
-    dat$attr$eptEligdate <- rep(NA, num)
-    dat$attr$eptEligTx <- rep(NA, num)
-    dat$attr$eptStartTime <- rep(NA, num)
-    dat$attr$eptTx <- rep(NA, num)
+    dat$attr$eptindexElig <- rep(NA, num)
+    dat$attr$eptindexStat <- rep(NA, num)
+    dat$attr$eptindexEligdate <- rep(NA, num)
+    dat$attr$eptpartEligTx <- rep(NA, num)
+    dat$attr$eptindexStartTime <- rep(NA, num)
+    dat$attr$eptpartTx <- rep(NA, num)
 
     # Testing variables
     dat$attr$time.last.sex <- rep(NA, num)

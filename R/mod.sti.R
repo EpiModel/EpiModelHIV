@@ -1066,18 +1066,18 @@ sti_tx_msm <- function(dat, at) {
 
   # Adding EPT eligibility here - if treated at this time step, can provide EPT
   # but may not cause uptake
-  dat$attr$eptElig[txRGC_all] <- 1
-  dat$attr$eptStat[txRGC_all] <- 0
-  dat$attr$eptElig[txUGC_all] <- 1
-  dat$attr$eptStat[txUGC_all] <- 0
-  dat$attr$eptElig[txRCT_all] <- 1
-  dat$attr$eptStat[txRCT_all] <- 0
-  dat$attr$eptElig[txUCT_all] <- 1
-  dat$attr$eptStat[txUCT_all] <- 0
-  dat$attr$eptEligdate[txRGC_all] <- at
-  dat$attr$eptEligdate[txUGC_all] <- at
-  dat$attr$eptEligdate[txRCT_all] <- at
-  dat$attr$eptEligdate[txUCT_all] <- at
+  dat$attr$eptindexElig[txRGC_all] <- 1
+  dat$attr$eptindexStat[txRGC_all] <- 0
+  dat$attr$eptindexElig[txUGC_all] <- 1
+  dat$attr$eptindexStat[txUGC_all] <- 0
+  dat$attr$eptindexElig[txRCT_all] <- 1
+  dat$attr$eptindexStat[txRCT_all] <- 0
+  dat$attr$eptindexElig[txUCT_all] <- 1
+  dat$attr$eptindexStat[txUCT_all] <- 0
+  dat$attr$eptindexEligdate[txRGC_all] <- at
+  dat$attr$eptindexEligdate[txUGC_all] <- at
+  dat$attr$eptindexEligdate[txRCT_all] <- at
+  dat$attr$eptindexEligdate[txUCT_all] <- at
 
   # summary statistics
   if (is.null(dat$epi$num.asympt.tx)) {
