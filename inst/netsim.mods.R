@@ -7,7 +7,7 @@ data(est)
 data(st)
 
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.05, #1.11
+                   ai.scale = 1.04, #1.11
 
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
@@ -47,7 +47,7 @@ param <- param_msm(nwstats = st,
                    syph.earlat.sympt.prob.tx = 0.10,
                    syph.latelat.sympt.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 1.0,
-                   
+
                    syph.prim.asympt.prob.tx = 1.0,
                    syph.seco.asympt.prob.tx = 1.0,
                    syph.earlat.asympt.prob.tx = 1.0,
@@ -63,7 +63,7 @@ param <- param_msm(nwstats = st,
 
                    prep.start = 5000,
                    stitest.start = 2601,
-                   ept.start = 5000,
+                   ept.start = 10,
 
                    stitest.elig.model = "sti",
 

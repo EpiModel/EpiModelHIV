@@ -13,9 +13,11 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \description{
-Module function for implementation of expedited
-             partner therapy (EPT) in index partner to prevent 
-             STI infection. Eligibility is handled in the risk history
+Module function for provision  of expedited
+             partner therapy (EPT) from index partner to non-index partner
+             and uptake by non-index partner to prevent STI infection.
+             Eligibility for index partner is handled in the STI treatment
+             module and eligibility for non-index handled in risk history
              module.
 }
 \keyword{module}

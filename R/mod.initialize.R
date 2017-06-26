@@ -994,6 +994,11 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptpartEligTx <- rep(NA, num)
     dat$attr$eptindexStartTime <- rep(NA, num)
     dat$attr$eptpartTx <- rep(NA, num)
+    dat$attr$eptpartTxStartTime <- rep(NA, num)
+    dat$attr$rCT.tx.ept <- rep(NA, num)
+    dat$attr$uCT.tx.ept <- rep(NA, num)
+    dat$attr$rGC.tx.ept <- rep(NA, num)
+    dat$attr$uGC.tx.ept <- rep(NA, num)
 
     # Testing variables
     dat$attr$time.last.sex <- rep(NA, num)

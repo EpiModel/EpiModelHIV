@@ -185,6 +185,7 @@ riskhist_ept_msm <- function(dat, at) {
   }
 
   ## Attributes
+  uid <- dat$attr$uid
   rGC.tx <- dat$attr$rGC.tx
   uGC.tx <- dat$attr$uGC.tx
   rCT.tx <- dat$attr$rCT.tx
@@ -217,26 +218,19 @@ riskhist_ept_msm <- function(dat, at) {
   ept.provision.long.casl.rr <- dat$param$ept.provision.long.casl.rr
   ept.provision.long.inst.rr <- dat$param$ept.provision.long.inst.rr
 
-  ## Edgelist, adds uai summation per partnership from act list
-  pid <- NULL # For R CMD Check
-  al <- as.data.frame(dat$temp$al)
-  by_pid <- group_by(al, pid)
-  uai <- summarise(by_pid, uai = sum(uai))[, 2]
-
-
   # Indications -------------------------------------------------------------
 
   ## Eligibility of partners
   part.list <- dat$temp$part.list
 
-  # Subset partner list to those active within an EPT interval - last active date within 60 days
+  # Subset partner list to partnerships active within an EPT interval - last active date within 60 days
   part.list <- part.list[which((at - (part.list[, "last.active.time"]) <= ept.risk.int)), , drop = FALSE]
-  
-  # Convert uid to regular ids?
+
+  # Convert uid to regular ids in partnership list
   #idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
-  
+
   #### Partner 1  recently treated, so partner 2 eligible for EPT
-  
+
   # Criteria: eligible within EPT risk interval, currently untreated, partner
   # received EPT, main partnership, and last active within last 20 days
   part.listept1.main.short <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
@@ -383,7 +377,7 @@ riskhist_ept_msm <- function(dat, at) {
 
 
   ### Partner 1  recently treated, so partner 2 eligible for EPT
-  
+
   # Criteria: eligible within EPT risk interval, currently untreated, partner
   # received EPT, main partnership, and last active within last 20 days
   part.listept2.main.short <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
@@ -608,13 +602,9 @@ riskhist_ept_msm <- function(dat, at) {
   eptTx[idsuptake_ept] <- 1
 
   # Update Epi
-  if (at >= dat$param$riskh.ept.start) {
-    dat$epi$eptpartelig[at] <- length(idsept)
-    dat$epi$eptprovided[at] <- length(idsprovided_ept)
-    dat$epi$eptTx[at] <- length(idsuptake_ept)
-    dat$epi$eptprop_provided[at] <- dat$epi$eptprovided[at] / dat$epi$eptpartelig[at]
-    dat$epi$eptprop_tx[at] <- dat$epi$eptTx[at] / dat$epi$eptprovided[at]
-  }
+  # if (at >= dat$param$riskh.ept.start) {
+  #
+  # }
 
   return(dat)
 }

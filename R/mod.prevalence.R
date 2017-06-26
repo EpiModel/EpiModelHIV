@@ -267,6 +267,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$uai.nmain <- rNA
     dat$epi$uai.any <- rNA
 
+    dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
     dat$epi$eptprovided <- rNA
     dat$epi$eptTx <- rNA
@@ -477,13 +478,13 @@ prevalence_msm <- function(dat, at) {
   # u.sti.asympt <- setdiff(u.sti.prev, u.sti.sympt)
   # r.sti.sympt <- which(rGC.sympt == 1 | rCT.sympt == 1)
   # r.sti.asympt <- setdiff(r.sti.prev, r.sti.sympt)
-  # 
+  #
   # syph.sympt <- which(syph.sympt == 1)
   # syph.asympt <- setdiff(syph.prev, syph.sympt)
-  # 
+  #
   # # PAF values
   # if (at >= 2) {
-  # 
+  #
   #     dat$epi$sti_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[sti.prev] == at)) / length(which(inf.time == at)), 0)
   #     dat$epi$sti_u_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[u.sti.prev] == at & inf.role[u.sti.prev] == 1)) / length(which(inf.time == at)), 0)
   #     dat$epi$sti_r_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.prev] == at & inf.role[r.sti.prev] == 0)) / length(which(inf.time == at)), 0)
@@ -494,14 +495,14 @@ prevalence_msm <- function(dat, at) {
   #     dat$epi$sti_r_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[r.sti.asympt] == at & inf.role[r.sti.asympt] == 0)) / length(which(inf.time == at)), 0)
   #     dat$epi$sti_syph_sympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[syph.sympt] == at)) / length(which(inf.time == at)), 0)
   #     dat$epi$sti_syph_asympt_paf[at] <- ifelse(length(which(inf.time == at)) > 0, length(which(inf.time[syph.asympt] == at)) / length(which(inf.time == at)), 0)
-  # 
+  #
   # # Sums at each time step (numerators from paf formulae)
   #     dat$epi$sti_hiv_sum[at] <- length(which(inf.time[sti.prev] == at))
   #     dat$epi$sti_u_hiv_sum[at] <- length(which(inf.time[u.sti.prev] == at & inf.role[u.sti.prev] == 1))
   #     dat$epi$sti_r_hiv_sum[at] <- length(which(inf.time[r.sti.prev] == at & inf.role[r.sti.prev] == 0))
   #     dat$epi$sti_syph_hiv_sum[at] <- length(which(inf.time[syph.prev] == at))
   #     dat$epi$hiv_sum[at] <- length(which(inf.time == at))
-  # 
+  #
   #     dat$epi$sti_u_sympt_hiv_sum[at] <- length(which(inf.time[u.sti.sympt] == at))
   #     dat$epi$sti_u_asympt_hiv_sum[at] <- length(which(inf.time[u.sti.asympt] == at))
   #     dat$epi$sti_r_sympt_hiv_sum[at] <- length(which(inf.time[r.sti.sympt] == at))
