@@ -431,12 +431,16 @@ sti_recov_msm <- function(dat, at) {
   # Tx
   uGC.tx <- dat$attr$uGC.tx
   uGC.tx.prep <- dat$attr$uGC.tx.prep
+  uGC.tx.ept <- dat$attr$uGC.tx.ept
   rGC.tx <- dat$attr$rGC.tx
   rGC.tx.prep <- dat$attr$rGC.tx.prep
+  rGC.tx.ept <- dat$attr$rGC.tx.ept
   uCT.tx <- dat$attr$uCT.tx
   uCT.tx.prep <- dat$attr$uCT.tx.prep
+  uCT.tx.ept <- dat$attr$uCT.tx.ept
   rCT.tx <- dat$attr$rCT.tx
   rCT.tx.prep <- dat$attr$rCT.tx.prep
+  rCT.tx.ept <- dat$attr$rCT.tx.ept
   syph.tx <- dat$attr$syph.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
 
@@ -447,12 +451,14 @@ sti_recov_msm <- function(dat, at) {
                              rGC.infTime < at &
                              rGC.sympt == 0 &
                              (is.na(rGC.tx) | rGC.tx == 0) &
-                             (is.na(rGC.tx.prep) | rGC.tx.prep == 0))
+                             (is.na(rGC.tx.prep) | rGC.tx.prep == 0) &
+                             (is.na(rGC.tx.ept) | rGC.tx.ept == 0))
   idsUGC_asympt_ntx <- which(uGC == 1 &
                              uGC.infTime < at &
                              uGC.sympt == 0 &
                              (is.na(uGC.tx) | uGC.tx == 0) &
-                             (is.na(uGC.tx.prep) | uGC.tx.prep == 0))
+                             (is.na(uGC.tx.prep) | uGC.tx.prep == 0) &
+                             (is.na(uGC.tx.ept) | uGC.tx.ept == 0))
 
   recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1, 1/rgc.asympt.int) == 1)]
   recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1, 1/ugc.asympt.int) == 1)]
@@ -462,12 +468,14 @@ sti_recov_msm <- function(dat, at) {
                             rGC.infTime < at &
                             rGC.sympt == 1 &
                             (is.na(rGC.tx) | rGC.tx == 0) &
-                            (is.na(rGC.tx.prep) | rGC.tx.prep == 0))
+                            (is.na(rGC.tx.prep) | rGC.tx.prep == 0) &
+                            (is.na(rGC.tx.ept) | rGC.tx.ept == 0))
   idsUGC_sympt_ntx <- which(uGC == 1 &
                             uGC.infTime < at &
                             uGC.sympt == 1 &
                             (is.na(uGC.tx) | uGC.tx == 0) &
-                            (is.na(uGC.tx.prep) | uGC.tx.prep == 0))
+                            (is.na(uGC.tx.prep) | uGC.tx.prep == 0) &
+                            (is.na(uGC.tx.ept) | uGC.tx.ept == 0))
 
   # If NA, recovery rate for symptomatic untreated = rate for asymptomatic untreated
   if (!is.na(gc.ntx.int)) {
@@ -481,10 +489,10 @@ sti_recov_msm <- function(dat, at) {
   ## Recovery for treated (both asymptomatic and symptomatic)
   idsRGC_tx <- which(rGC == 1 &
                      rGC.infTime < at &
-                     (rGC.tx == 1 | rGC.tx.prep == 1))
+                     (rGC.tx == 1 | rGC.tx.prep == 1 | rGC.tx.ept == 1))
   idsUGC_tx <- which(uGC == 1 &
                      uGC.infTime < at &
-                     (uGC.tx == 1 | uGC.tx.prep == 1))
+                     (uGC.tx == 1 | uGC.tx.prep == 1 | uGC.tx.ept == 1))
 
   recovRGC_tx <- idsRGC_tx[which(rbinom(length(idsRGC_tx), 1, 1/gc.tx.int) == 1)]
   recovUGC_tx <- idsUGC_tx[which(rbinom(length(idsUGC_tx), 1, 1/gc.tx.int) == 1)]
@@ -500,12 +508,14 @@ sti_recov_msm <- function(dat, at) {
                              rCT.infTime < at &
                              rCT.sympt == 0 &
                              (is.na(rCT.tx) | rCT.tx == 0) &
-                             (is.na(rCT.tx.prep) | rCT.tx.prep == 0))
+                             (is.na(rCT.tx.prep) | rCT.tx.prep == 0) &
+                             (is.na(rCT.tx.ept) | rCT.tx.ept == 0))
   idsUCT_asympt_ntx <- which(uCT == 1 &
                              uCT.infTime < at &
                              uCT.sympt == 0 &
                              (is.na(uCT.tx) | uCT.tx == 0) &
-                             (is.na(uCT.tx.prep) | uCT.tx.prep == 0))
+                             (is.na(uCT.tx.prep) | uCT.tx.prep == 0) &
+                             (is.na(uCT.tx.ept) | uCT.tx.ept == 0))
 
   recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx), 1, 1/rct.asympt.int) == 1)]
   recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx), 1, 1/uct.asympt.int) == 1)]
@@ -515,12 +525,14 @@ sti_recov_msm <- function(dat, at) {
                             rCT.infTime < at &
                             rCT.sympt == 1 &
                             (is.na(rCT.tx) | rCT.tx == 0) &
-                            (is.na(rCT.tx.prep) | rCT.tx.prep == 0))
+                            (is.na(rCT.tx.prep) | rCT.tx.prep == 0) &
+                            (is.na(rCT.tx.ept) | rCT.tx.ept == 0))
   idsUCT_sympt_ntx <- which(uCT == 1 &
                             uCT.infTime < at &
                             uCT.sympt == 1 &
                             (is.na(uCT.tx) | uCT.tx == 0) &
-                            (is.na(uCT.tx.prep) | uCT.tx.prep == 0))
+                            (is.na(uCT.tx.prep) | uCT.tx.prep == 0) &
+                            (is.na(rCT.tx.ept) | rCT.tx.ept == 0))
 
   # If NA, recovery rate for symptomatic untreated = rate for asymptomatic untreated
   if (!is.na(ct.ntx.int)) {
@@ -534,10 +546,10 @@ sti_recov_msm <- function(dat, at) {
   ## Recovery for treated (both asymptomatic and symptomatic)
   idsRCT_tx <- which(rCT == 1 &
                      rCT.infTime < at &
-                     (rCT.tx == 1 | rCT.tx.prep == 1))
+                     (rCT.tx == 1 | rCT.tx.prep == 1 | rCT.tx.ept == 1))
   idsUCT_tx <- which(uCT == 1 &
                      uCT.infTime < at &
-                     (uCT.tx == 1 | uCT.tx.prep == 1))
+                     (uCT.tx == 1 | uCT.tx.prep == 1 | uCT.tx.ept == 1))
 
   recovRCT_tx <- idsRCT_tx[which(rbinom(length(idsRCT_tx), 1, 1/ct.tx.int) == 1)]
   recovUCT_tx <- idsUCT_tx[which(rbinom(length(idsUCT_tx), 1, 1/ct.tx.int) == 1)]
@@ -584,12 +596,14 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$rGC.infTime[recovRGC] <- NA
   dat$attr$rGC.tx[recovRGC] <- NA
   dat$attr$rGC.tx.prep[recovRGC] <- NA
+  dat$attr$rGC.tx.ept[recovRGC] <- NA
   dat$attr$diag.status.gc[recovRGC] <- NA
   dat$attr$uGC[recovUGC] <- 0
   dat$attr$uGC.sympt[recovUGC] <- NA
   dat$attr$uGC.infTime[recovUGC] <- NA
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
+  dat$attr$uGC.tx.ept[recovUGC] <- NA
   dat$attr$diag.status.gc[recovUGC] <- NA
 
   # Chlamydia
@@ -598,12 +612,14 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$rCT.infTime[recovRCT] <- NA
   dat$attr$rCT.tx[recovRCT] <- NA
   dat$attr$rCT.tx.prep[recovRCT] <- NA
+  dat$attr$rCT.tx.ept[recovRCT] <- NA
   dat$attr$diag.status.ct[recovRCT] <- NA
   dat$attr$uCT[recovUCT] <- 0
   dat$attr$uCT.sympt[recovUCT] <- NA
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
+  dat$attr$uCT.tx.ept[recovUCT] <- NA
   dat$attr$diag.status.ct[recovUCT] <- NA
 
   # Summary stats
@@ -655,7 +671,6 @@ sti_tx_msm <- function(dat, at) {
 
   prep.sti.screen.int <- dat$param$prep.sti.screen.int
   prep.sti.prob.tx <- dat$param$prep.sti.prob.tx
-  # EPT
   ept.gc.success <- dat$param$ept.gc.success
   ept.ct.success <- dat$param$ept.ct.success
   ept.coverage <- dat$param$ept.coverage
@@ -690,12 +705,16 @@ sti_tx_msm <- function(dat, at) {
   # Tx
   uGC.tx <- dat$attr$uGC.tx
   uGC.tx.prep <- dat$attr$uGC.tx.prep
+  uGC.tx.ept <- dat$attr$uGC.tx.ept
   rGC.tx <- dat$attr$rGC.tx
   rGC.tx.prep <- dat$attr$rGC.tx.prep
+  rGC.tx.ept <- dat$attr$rGC.tx.ept
   uCT.tx <- dat$attr$uCT.tx
   uCT.tx.prep <- dat$attr$uCT.tx.prep
+  uCT.tx.ept <- dat$attr$uCT.tx.ept
   rCT.tx <- dat$attr$rCT.tx
   rCT.tx.prep <- dat$attr$rCT.tx.prep
+  rCT.tx.ept <- dat$attr$rCT.tx.ept
   syph.tx <- dat$attr$syph.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
   prepStartTime <- dat$attr$prepStartTime
@@ -1022,20 +1041,49 @@ sti_tx_msm <- function(dat, at) {
   txsyph_prep <- idssyph_prep_tx[which(rbinom(length(idssyph_prep_tx), 1, prep.sti.prob.tx) == 1)]
 
   # EPT Treatment for Non-index (no test is done) ------------------------------
+  # Have prevalent infection, are eligible for tx through EPT, are untreated, and
+  # not previously assigned for EPT tx
+  idsRGC_tx_ept <- which(rGC == 1 &
+                             rGC.infTime < at &
+                             eptpartEligTx == 1 &
+                             is.na(rGC.tx) &
+                             is.na(rGC.tx.ept))
+
+  idsUGC_tx_ept <- which(uGC == 1 &
+                             uGC.infTime < at &
+                             eptpartEligTx == 1 &
+                             is.na(uGC.tx) &
+                             is.na(uGC.tx.ept))
+
+  idsGC_tx_ept <- c(idsRGC_tx_ept, idsUGC_tx_ept)
+  txGC_ept <- idsGC_tx_ept[which(rbinom(length(idsGC_tx_ept), 1, ept.gc.success) == 1)]
+  txRGC_ept <- intersect(idsRGC_tx_ept, txGC_ept)
+  txUGC_ept <- intersect(idsUGC_tx_ept, txGC_ept)
 
 
-  #ept.gc.success
-  #ept.ct.success
+  idsRCT_tx_ept <- which(rCT == 1 &
+                             rCT.infTime < at &
+                             eptpartEligTx == 1 &
+                             is.na(rCT.tx) &
+                             is.na(rCT.tx.ept))
 
-  # Summary Statistics
-  #dat$epi$eptTx <- length(unique(c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)))
+  idsUCT_tx_ept <- which(uCT == 1 &
+                             uCT.infTime < at &
+                             eptpartEligTx == 1 &
+                             is.na(uCT.tx) &
+                             is.na(uCT.tx.ept))
+  idsCT_tx_ept <- c(idsRCT_tx_ept, idsUCT_tx_ept)
+
+  txCT_ept <- idsCT_tx_ept[which(rbinom(length(idsCT_tx_ept), 1, ept.ct.success) == 1)]
+  txRCT_ept <- intersect(idsRCT_tx_ept, txCT_ept)
+  txUCT_ept <- intersect(idsUCT_tx_ept, txCT_ept)
 
   # Summarize all treated for each STI
-  txRGC_all <- union(txRGC, txRGC_prep)#, txRGC_ept)
-  txUGC_all <- union(txUGC, txUGC_prep)#, txUGC_ept)
-  txRCT_all <- union(txRCT, txRCT_prep)#, txRCT_ept)
-  txUCT_all <- union(txUCT, txUCT_prep)#, txUCT_ept)
-  txsyph_all <- union(txsyph, txsyph_prep)
+  txRGC_all <- c(txRGC, txRGC_prep, txRGC_ept)
+  txUGC_all <- c(txUGC, txUGC_prep, txUGC_ept)
+  txRCT_all <- c(txRCT, txRCT_prep, txRCT_ept)
+  txUCT_all <- c(txUCT, txUCT_prep, txUCT_ept)
+  txsyph_all <- c(txsyph, txsyph_prep)
 
   # EPT Initiation for Index Partner -------------------------------------------
   eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / sum(eptindexElig == 1, na.rm = TRUE)
@@ -1079,12 +1127,16 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uGC.tx[txUGC] <- 1
   dat$attr$rGC.tx.prep[idsRGC_prep_tx] <- 0
   dat$attr$rGC.tx.prep[txRGC_prep] <- 1
+  dat$attr$rGC.tx.ept[idsRGC_tx_ept] <- 0
+  dat$attr$rGC.tx.ept[txRGC_ept] <- 1
   dat$attr$last.tx.time.rgc[txRGC_all] <- at
   dat$attr$last.tx.time.ugc[txUGC_all] <- at
   dat$attr$last.tx.time.rgc.prep[txRGC_prep] <- at
   dat$attr$last.tx.time.ugc.prep[txUGC_prep] <- at
   dat$attr$uGC.tx.prep[idsUGC_prep_tx] <- 0
   dat$attr$uGC.tx.prep[txUGC_prep] <- 1
+  dat$attr$uGC.tx.ept[idsUGC_tx_ept] <- 0
+  dat$attr$uGC.tx.ept[txUGC_ept] <- 1
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
 
@@ -1095,21 +1147,18 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uCT.tx[txUCT] <- 1
   dat$attr$rCT.tx.prep[idsRCT_prep_tx] <- 0
   dat$attr$rCT.tx.prep[txRCT_prep] <- 1
+  dat$attr$rCT.tx.ept[idsRCT_tx_ept] <- 0
+  dat$attr$rCT.tx.ept[txRCT_ept] <- 1
   dat$attr$last.tx.time.rct[txRCT_all] <- at
   dat$attr$last.tx.time.uct[txUCT_all] <- at
   dat$attr$last.tx.time.rct.prep[txRCT_prep] <- at
   dat$attr$last.tx.time.uct.prep[txUCT_prep] <- at
   dat$attr$uCT.tx.prep[idsUCT_prep_tx] <- 0
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
+  dat$attr$uCT.tx.ept[idsUCT_tx_ept] <- 0
+  dat$attr$uCT.tx.ept[txUCT_ept] <- 1
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
-
-
-  ## EPT
-  # Number treated on EPT
-  # ##
-  # #
-  # #
 
     # Index EPT-eligible if treated, assign subset to be on EPT
   dat$attr$eptindexElig[txRGC_all] <- 1
@@ -1204,6 +1253,8 @@ sti_tx_msm <- function(dat, at) {
                                              txsyph_asympt_earlat)))
   dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                             txsyph_sympt_tert)))
+  # Includes those who won't be successfully treated - success prob for EPT
+  dat$epi$eptTx[at] <- length(unique(c(idsCT_tx_ept, idsGC_tx_ept)))
 
   return(dat)
 }
