@@ -294,10 +294,14 @@
 #'        ever on EPT.
 #' @param ept.cov.rate The rate at which persons initiate EPT conditional on
 #'        their eligibility, with 1 equal to instant start.
-#' @param ept.provision.partner.main The likelihood of a index partner providing
-#'        EPT medication to a main partner.
-#' @param ept.provision.partner.casl The likelihood of a index partner providing
-#'        EPT medication to a casual partner.
+#' @param ept.provision.partner.main.ong The likelihood of a index partner providing
+#'        EPT medication to a main partner when partnership is ongoing.
+#' @param ept.provision.partner.casl.ong The likelihood of a index partner providing
+#'        EPT medication to a casual partner when partnership is ongoing.
+#' @param ept.provision.partner.main.end The likelihood of a index partner providing
+#'        EPT medication to a main partner when partnership has ended
+#' @param ept.provision.partner.casl.end The likelihood of a index partner providing
+#'        EPT medication to a main partner when partnership has ended.
 #' @param ept.provision.partner.inst The likelihood of a index partner providing
 #'        EPT medication to a one-off partner.
 #' @param ept.uptake.partner.main The likelihood of a partner taking medication
@@ -310,33 +314,6 @@
 #'        partner given EPT medication.
 #' @param ept.ct.success The probability of effective treatment for CT in a
 #'        partner given EPT medication.
-#' @param ept.provision.short.main.rr Relative risk for provision to a main
-#'        partner with whom the last sexual act was a short time ago
-#'        (1-20 days).
-#' @param ept.provision.short.casl.rr Relative risk for provision to a casual
-#'        partner with whom the last sexual act was a short time ago
-#'        (21-40 days).
-#' @param ept.provision.short.inst.rr Relative risk for provision to a one-off
-#'        partner with whom the last sexual act was a short time ago
-#'        (41-60 days).
-#' @param ept.provision.med.main.rr Relative risk for provision to a main
-#'        partner with whom the last sexual act was a medium time ago
-#'        (1-20 days).
-#' @param ept.provision.med.casl.rr Relative risk for provision to a casual
-#'        partner with whom the last sexual act was a medium time ago
-#'        (21-40 days).
-#' @param ept.provision.med.inst.rr Relative risk for provision to a one-off
-#'        partner with whom the last sexual act was a medium time ago
-#'        (41-60 days).
-#' @param ept.provision.long.main.rr Relative risk for provision to a main
-#'        partner with whom the last sexual act was a long time ago
-#'        (1-20 days).
-#' @param ept.provision.long.casl.rr Relative risk for provision to a casual
-#'        partner with whom the last sexual act was a long time ago
-#'        (21-40 days).
-#' @param ept.provision.long.inst.rr Relative risk for provision to a one-off
-#'        partner with whom the last sexual act was a long time ago
-#'        (41-60 days).
 #'
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
@@ -661,23 +638,17 @@ param_msm <- function(nwstats,
                       ept.coverage = 0,
                       ept.cov.method = "curr",
                       ept.cov.rate = 1,
-                      ept.provision.partner.main = 0.5,
-                      ept.provision.partner.casl = 0.5,
-                      ept.provision.partner.inst = 0.5,
-                      ept.uptake.partner.main = 0.5,
-                      ept.uptake.partner.casl = 0.5,
-                      ept.uptake.partner.inst = 0.5,
-                      ept.gc.success = 1.0,
-                      ept.ct.success = 1.0,
-                      ept.provision.short.main.rr = 1.0,
-                      ept.provision.short.casl.rr = 1.0,
-                      ept.provision.short.inst.rr = 1.0,
-                      ept.provision.med.main.rr = 1.0,
-                      ept.provision.med.casl.rr = 1.0,
-                      ept.provision.med.inst.rr = 1.0,
-                      ept.provision.long.main.rr = 1.0,
-                      ept.provision.long.casl.rr = 1.0,
-                      ept.provision.long.inst.rr = 1.0,
+                      ept.provision.partner.main.ong = 0.5,
+                      ept.provision.partner.casl.ong = 0.4,
+                      ept.provision.partner.main.end = 0.4,
+                      ept.provision.partner.casl.end = 0.3,
+                      ept.provision.partner.inst = 0.2,
+                      ept.uptake.partner.main = 0.8,
+                      ept.uptake.partner.casl = 0.8,
+                      ept.uptake.partner.inst = 0.8,
+                      ept.gc.success = 0.95,
+                      ept.ct.success = 0.95,
+
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -985,7 +956,6 @@ init_msm <- function(nwstats,
 #' @param sti_test.FUN Module function for diagnostic testing for STIs
 #' @param hiv_tx.FUN Module function for ART initiation and adherence.
 #' @param prep.FUN Module function for PrEP initiation and utilization.
-#' @param sti_ept.FUN Module function for EPT intervention
 #' @param hiv_progress.FUN Module function for HIV disease progression.
 #' @param syph_progress.FUN Module function for syphilis disease progression
 #' @param hiv_vl.FUN Module function for HIV viral load evolution.
@@ -1002,8 +972,6 @@ init_msm <- function(nwstats,
 #'        persons in the population within a PrEP intervention.
 #' @param riskhist_stitest.FUN Module function to calculate risk history for uninfected
 #'        persons in the population within a STI testing intervention.
-#' @param riskhist_ept.FUN Module function to calculate risk history for uninfected
-#'        persons in the population within an EPT intervention.
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param hiv_trans.FUN Module function to stochastically simulate HIV transmission
 #'        over acts given individual and dyadic attributes.
@@ -1012,6 +980,7 @@ init_msm <- function(nwstats,
 #' @param sti_recov.FUN Module function to simulate recovery from GC/CT,
 #'        heterogeneous by disease, site, symptoms, and treatment status.
 #' @param sti_tx.FUN Module function to simulate treatment of GC/CT.
+#' @param sti_ept.FUN Module function for EPT intervention
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
@@ -1043,7 +1012,6 @@ control_msm <- function(simno = 1,
                         sti_test.FUN = sti_test_msm,
                         hiv_tx.FUN = hiv_tx_msm,
                         prep.FUN = prep_msm,
-                        sti_ept.FUN = sti_ept_msm,
                         hiv_progress.FUN = hiv_progress_msm,
                         syph_progress.FUN = syph_progress_msm,
                         hiv_vl.FUN = hiv_vl_msm,
@@ -1056,12 +1024,12 @@ control_msm <- function(simno = 1,
                         condoms.FUN = condoms_msm,
                         riskhist_prep.FUN = riskhist_prep_msm,
                         riskhist_stitest.FUN = riskhist_stitest_msm,
-                        riskhist_ept.FUN = riskhist_ept_msm,
                         position.FUN = position_msm,
                         hiv_trans.FUN = hiv_trans_msm,
                         sti_trans.FUN = sti_trans_msm,
                         sti_recov.FUN = sti_recov_msm,
                         sti_tx.FUN = sti_tx_msm,
+                        sti_ept.FUN = sti_ept_msm,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         save.nwstats = FALSE,

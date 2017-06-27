@@ -578,7 +578,20 @@ sti_recov_msm <- function(dat, at) {
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
 
 
-  # Output -----------------------------------------------------------
+    # Output -----------------------------------------------------------
+
+  ## All recovered
+  recovGCCT <- c(recovUCT, recovRCT, recovRGC, recovUGC)
+
+  # Reset EPT attributes
+  dat$attr$eptindexElig[recovGCCT] <- NA
+  dat$attr$eptindexEligdate[recovGCCT] <- NA
+  dat$attr$eptindexStat[recovGCCT] <- NA
+  dat$attr$eptindexStartTime[recovGCCT] <- NA
+  dat$attr$eptpartEligTx[recovGCCT] <- NA
+  dat$attr$eptpartTx[recovGCCT] <- NA
+  dat$attr$eptpartTxStartTime[recovGCCT] <- NA
+
 
   # Syphilis
   dat$attr$syphilis[recovsyph] <- 0
@@ -675,8 +688,6 @@ sti_tx_msm <- function(dat, at) {
   ept.ct.success <- dat$param$ept.ct.success
   ept.coverage <- dat$param$ept.coverage
   ept.cov.rate <- dat$param$ept.cov.rate
-  ## TODO: further develop these
-
 
   # Attributes ------------------------------------------------------------
 
@@ -729,11 +740,11 @@ sti_tx_msm <- function(dat, at) {
   # EPT
   eptindexElig <- dat$attr$eptindexElig
   eptindexStat <- dat$attr$eptindexStat
-  eptindexEligdate <- dat$attr$eptindexEligdate
-  eptindexStartTime <- dat$attr$eptindexStartTime
+  eptindexEligdate <- dat$attr$eptindexEligdate #DBNU
+  eptindexStartTime <- dat$attr$eptindexStartTime #DBNU
   eptpartEligTx <- dat$attr$eptpartEligTx
-  eptpartTx <- dat$attr$eptTx
-  eptpartTxStartTime <- dat$attr$eptpartTxStartTime
+  eptpartTx <- dat$attr$eptpartTx #DBNU
+  eptpartTxStartTime <- dat$attr$eptpartTxStartTime #DBNU
 
   # Syphilis --------------------------------------------------------------
 
@@ -1040,6 +1051,14 @@ sti_tx_msm <- function(dat, at) {
   txUCT_prep <- idsUCT_prep_tx[which(rbinom(length(idsUCT_prep_tx), 1, prep.sti.prob.tx) == 1)]
   txsyph_prep <- idssyph_prep_tx[which(rbinom(length(idssyph_prep_tx), 1, prep.sti.prob.tx) == 1)]
 
+  # Summarize all treated for each STI - EPT-treated not eligible to provide EPT to their partners
+  txRGC_all <- c(txRGC, txRGC_prep)
+  txUGC_all <- c(txUGC, txUGC_prep)
+  txRCT_all <- c(txRCT, txRCT_prep)
+  txUCT_all <- c(txUCT, txUCT_prep)
+  txsyph_all <- c(txsyph, txsyph_prep)
+
+
   # EPT Treatment for Non-index (no test is done) ------------------------------
   # Have prevalent infection, are eligible for tx through EPT, are untreated, and
   # not previously assigned for EPT tx
@@ -1047,12 +1066,14 @@ sti_tx_msm <- function(dat, at) {
                              rGC.infTime < at &
                              eptpartEligTx == 1 &
                              is.na(rGC.tx) &
+                             is.na(rGC.tx.prep) &
                              is.na(rGC.tx.ept))
 
   idsUGC_tx_ept <- which(uGC == 1 &
                              uGC.infTime < at &
                              eptpartEligTx == 1 &
                              is.na(uGC.tx) &
+                             is.na(uGC.tx.prep) &
                              is.na(uGC.tx.ept))
 
   idsGC_tx_ept <- c(idsRGC_tx_ept, idsUGC_tx_ept)
@@ -1065,12 +1086,14 @@ sti_tx_msm <- function(dat, at) {
                              rCT.infTime < at &
                              eptpartEligTx == 1 &
                              is.na(rCT.tx) &
+                             is.na(rCT.tx.prep) &
                              is.na(rCT.tx.ept))
 
   idsUCT_tx_ept <- which(uCT == 1 &
                              uCT.infTime < at &
                              eptpartEligTx == 1 &
                              is.na(uCT.tx) &
+                             is.na(uCT.tx.prep) &
                              is.na(uCT.tx.ept))
   idsCT_tx_ept <- c(idsRCT_tx_ept, idsUCT_tx_ept)
 
@@ -1078,12 +1101,14 @@ sti_tx_msm <- function(dat, at) {
   txRCT_ept <- intersect(idsRCT_tx_ept, txCT_ept)
   txUCT_ept <- intersect(idsUCT_tx_ept, txCT_ept)
 
-  # Summarize all treated for each STI
-  txRGC_all <- c(txRGC, txRGC_prep, txRGC_ept)
-  txUGC_all <- c(txUGC, txUGC_prep, txUGC_ept)
-  txRCT_all <- c(txRCT, txRCT_prep, txRCT_ept)
-  txUCT_all <- c(txUCT, txUCT_prep, txUCT_ept)
-  txsyph_all <- c(txsyph, txsyph_prep)
+  allidsept <- unique(c(idsCT_tx_ept, idsGC_tx_ept))
+
+  # Summarize all treated for each STI, now including EPT
+  alltxRGC <- c(txRGC, txRGC_prep, txRGC_ept)
+  alltxUGC <- c(txUGC, txUGC_prep, txUGC_ept)
+  alltxRCT <- c(txRCT, txRCT_prep, txRCT_ept)
+  alltxUCT <- c(txUCT, txUCT_prep, txUCT_ept)
+  alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
   eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / sum(eptindexElig == 1, na.rm = TRUE)
@@ -1101,13 +1126,6 @@ sti_tx_msm <- function(dat, at) {
       idsStart <- idsEligSt[rbinom(nStart, 1, ept.cov.rate) == 1]
     }
   }
-
-  # Summary Statistics
-  dat$epi$eptCov[at] <- eptCov
-  dat$epi$eptpartelig[at] <- sum(eptindexElig == 1, na.rm = TRUE)
-  dat$epi$eptprovided[at] <- length(idsStart)
-  dat$epi$eptprop_provided[at] <- dat$epi$eptprovided[at] / dat$epi$eptpartelig[at]
-  dat$epi$eptprop_tx[at] <- dat$epi$eptTx[at] / length(which(dat))
 
 #
   # Output ---------------------------------------------------------------------
@@ -1160,7 +1178,8 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
 
-    # Index EPT-eligible if treated, assign subset to be on EPT
+  # Index EPT-eligible if treated, assign subset to be on EPT
+  #  EPT-treated people not eligible to provide EPT to their partners
   dat$attr$eptindexElig[txRGC_all] <- 1
   dat$attr$eptindexStat[txRGC_all] <- 0
   dat$attr$eptindexElig[txUGC_all] <- 1
@@ -1173,15 +1192,19 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$eptindexEligdate[txUGC_all] <- at
   dat$attr$eptindexEligdate[txRCT_all] <- at
   dat$attr$eptindexEligdate[txUCT_all] <- at
+  dat$attr$eptindexStat[idsStart] <- 1
+  dat$attr$eptindexStat[idsStart] <- 1
+  dat$attr$eptindexStat[idsStart] <- 1
+  dat$attr$eptindexStat[idsStart] <- 1
+  dat$attr$eptindexStartTime[idsStart] <- at
+  dat$attr$eptindexStartTime[idsStart] <- at
+  dat$attr$eptindexStartTime[idsStart] <- at
+  dat$attr$eptindexStartTime[idsStart] <- at
 
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
+  # Non-index EPT-treated
+  dat$attr$eptpartEligTx[alltxEPT] <- NA
+  dat$attr$eptpartTx[allidsept] <- 0
+  dat$attr$eptpartTx[alltxEPT] <- 1
 
   # summary statistics
   if (is.null(dat$epi$num.asympt.tx)) {
@@ -1245,16 +1268,17 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$num.rect.cases.prep[at] <- length(unique(rect.cases.prep))
 
   # Track total number treated
-  dat$epi$txGC[at] <- length(unique(c(txRGC_all, txUGC_all)))
-  dat$epi$txCT[at] <- length(unique(c(txRCT_all, txUCT_all)))
+  dat$epi$txGC[at] <- length(unique(c(alltxRGC, alltxUGC)))
+  dat$epi$txCT[at] <- length(unique(c(alltxRCT, alltxUCT)))
   dat$epi$txsyph[at] <- length(unique(c(txsyph_all)))
   dat$epi$txearlysyph[at] <- length(unique(c(txsyph_sympt_prim, txsyph_sympt_seco,
                                              txsyph_asympt_prim, txsyph_asympt_seco,
                                              txsyph_asympt_earlat)))
   dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                             txsyph_sympt_tert)))
-  # Includes those who won't be successfully treated - success prob for EPT
-  dat$epi$eptTx[at] <- length(unique(c(idsCT_tx_ept, idsGC_tx_ept)))
+  dat$epi$eptCov[at] <- eptCov
+  dat$epi$eptTx[at] <- length(unique(alltxEPT))
+  dat$epi$eptprop_tx[at] <- dat$epi$eptTx[at] / length(unique(c(idsCT_tx_ept, idsGC_tx_ept)))
 
   return(dat)
 }

@@ -57,7 +57,7 @@ param <- param_msm(nwstats = st,
                    hivdx.syph.sympt.tx.rr = 1.45,
 
                    prep.coverage = 0.0,
-                   ept.coverage = 0.0,
+                   ept.coverage = 0.1,
                    stianntest.coverage = 0.1,
                    stihighrisktest.coverage = 0.1,
 
@@ -80,8 +80,8 @@ init <- init_msm(nwstats = st,
                  prev.rct = 0.015,
                  prev.syph.B = 0.015,
                  prev.syph.W = 0.015,
-                 stage.syph.B.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
-                 stage.syph.W.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00))
+                 stage.syph.B.prob = c(0.00, 0.10, 0.10, 0.10, 0.35, 0.35, 0.00),
+                 stage.syph.W.prob = c(0.00, 0.10, 0.10, 0.10, 0.35, 0.35, 0.00))
 
 control <- control_msm(nsteps = 2600)
 
@@ -113,7 +113,6 @@ for (at in 2:control$nsteps) {
   dat <- condoms_msm(dat, at)
   dat <- riskhist_prep_msm(dat, at)
   dat <- riskhist_stitest_msm(dat, at)
-  dat <- riskhist_ept_msm(dat, at)
   dat <- position_msm(dat, at)
   dat <- hiv_trans_msm(dat, at)
   dat <- sti_trans_msm(dat, at)

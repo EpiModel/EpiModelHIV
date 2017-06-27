@@ -269,10 +269,13 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
-    dat$epi$eptprovided <- rNA
+    dat$epi$eptpartprovided <- rNA
+    dat$epi$eptpartuptake <- rNA
     dat$epi$eptTx <- rNA
     dat$epi$eptprop_provided <- rNA
     dat$epi$eptprop_tx <- rNA
+    dat$epi$eptuninfectedprovided <- rNA
+    dat$epi$eptuninfectedprovided <- rNA
   }
 
   dat$epi$num[at] <- sum(race %in% c("B","W"), na.rm = TRUE)

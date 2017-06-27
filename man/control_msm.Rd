@@ -8,19 +8,19 @@ control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm,
   hiv_test.FUN = hiv_test_msm, sti_test.FUN = sti_test_msm,
-  hiv_tx.FUN = hiv_tx_msm, prep.FUN = prep_msm, sti_ept.FUN = sti_ept_msm,
+  hiv_tx.FUN = hiv_tx_msm, prep.FUN = prep_msm,
   hiv_progress.FUN = hiv_progress_msm,
   syph_progress.FUN = syph_progress_msm, hiv_vl.FUN = hiv_vl_msm,
   aiclass.FUN = NULL, roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
   hiv_disclose.FUN = hiv_disclose_msm, part.FUN = part_msm,
   acts.FUN = acts_msm, condoms.FUN = condoms_msm,
   riskhist_prep.FUN = riskhist_prep_msm,
-  riskhist_stitest.FUN = riskhist_stitest_msm,
-  riskhist_ept.FUN = riskhist_ept_msm, position.FUN = position_msm,
+  riskhist_stitest.FUN = riskhist_stitest_msm, position.FUN = position_msm,
   hiv_trans.FUN = hiv_trans_msm, sti_trans.FUN = sti_trans_msm,
   sti_recov.FUN = sti_recov_msm, sti_tx.FUN = sti_tx_msm,
-  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
-  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
+  sti_ept.FUN = sti_ept_msm, prev.FUN = prevalence_msm,
+  verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -55,8 +55,6 @@ epidemicmodel.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
-\item{sti_ept.FUN}{Module function for EPT intervention}
-
 \item{hiv_progress.FUN}{Module function for HIV disease progression.}
 
 \item{syph_progress.FUN}{Module function for syphilis disease progression}
@@ -85,9 +83,6 @@ persons in the population within a PrEP intervention.}
 \item{riskhist_stitest.FUN}{Module function to calculate risk history for uninfected
 persons in the population within a STI testing intervention.}
 
-\item{riskhist_ept.FUN}{Module function to calculate risk history for uninfected
-persons in the population within an EPT intervention.}
-
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 
 \item{hiv_trans.FUN}{Module function to stochastically simulate HIV transmission
@@ -100,6 +95,8 @@ current edgelist.}
 heterogeneous by disease, site, symptoms, and treatment status.}
 
 \item{sti_tx.FUN}{Module function to simulate treatment of GC/CT.}
+
+\item{sti_ept.FUN}{Module function for EPT intervention}
 
 \item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 

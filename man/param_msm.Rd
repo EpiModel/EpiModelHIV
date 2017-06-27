@@ -59,20 +59,18 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
   partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
   ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
-  ept.provision.partner.main = 0.5, ept.provision.partner.casl = 0.5,
-  ept.provision.partner.inst = 0.5, ept.uptake.partner.main = 0.5,
-  ept.uptake.partner.casl = 0.5, ept.uptake.partner.inst = 0.5,
-  ept.gc.success = 1, ept.ct.success = 1, ept.provision.short.main.rr = 1,
-  ept.provision.short.casl.rr = 1, ept.provision.short.inst.rr = 1,
-  ept.provision.med.main.rr = 1, ept.provision.med.casl.rr = 1,
-  ept.provision.med.inst.rr = 1, ept.provision.long.main.rr = 1,
-  ept.provision.long.casl.rr = 1, ept.provision.long.inst.rr = 1,
-  rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, rgc.tprob = 0.4245, ugc.tprob = 0.3135,
-  rct.tprob = 0.1944, uct.tprob = 0.164, rsyph.tprob = 0.135,
-  usyph.tprob = 0.114, syph.earlat.rr = 0.5, syph.late.rr = 0,
-  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
-  uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
+  ept.provision.partner.main.ong = 0.5,
+  ept.provision.partner.casl.ong = 0.4,
+  ept.provision.partner.main.end = 0.4,
+  ept.provision.partner.casl.end = 0.3, ept.provision.partner.inst = 0.2,
+  ept.uptake.partner.main = 0.8, ept.uptake.partner.casl = 0.8,
+  ept.uptake.partner.inst = 0.8, ept.gc.success = 0.95,
+  ept.ct.success = 0.95, rcomp.prob = 0, rcomp.adh.groups = 0:3,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.4245,
+  ugc.tprob = 0.3135, rct.tprob = 0.1944, uct.tprob = 0.164,
+  rsyph.tprob = 0.135, usyph.tprob = 0.114, syph.earlat.rr = 0.5,
+  syph.late.rr = 0, rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9,
+  rct.sympt.prob = 0.14, uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
   syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
   syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
   syph.tert.sympt.prob = 1, rgc.asympt.int = 35.11851 * 7,
@@ -512,11 +510,17 @@ ever on EPT.}
 \item{ept.cov.rate}{The rate at which persons initiate EPT conditional on
 their eligibility, with 1 equal to instant start.}
 
-\item{ept.provision.partner.main}{The likelihood of a index partner providing
-EPT medication to a main partner.}
+\item{ept.provision.partner.main.ong}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership is ongoing.}
 
-\item{ept.provision.partner.casl}{The likelihood of a index partner providing
-EPT medication to a casual partner.}
+\item{ept.provision.partner.casl.ong}{The likelihood of a index partner providing
+EPT medication to a casual partner when partnership is ongoing.}
+
+\item{ept.provision.partner.main.end}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership has ended}
+
+\item{ept.provision.partner.casl.end}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership has ended.}
 
 \item{ept.provision.partner.inst}{The likelihood of a index partner providing
 EPT medication to a one-off partner.}
@@ -535,42 +539,6 @@ partner given EPT medication.}
 
 \item{ept.ct.success}{The probability of effective treatment for CT in a
 partner given EPT medication.}
-
-\item{ept.provision.short.main.rr}{Relative risk for provision to a main
-partner with whom the last sexual act was a short time ago
-(1-20 days).}
-
-\item{ept.provision.short.casl.rr}{Relative risk for provision to a casual
-partner with whom the last sexual act was a short time ago
-(21-40 days).}
-
-\item{ept.provision.short.inst.rr}{Relative risk for provision to a one-off
-partner with whom the last sexual act was a short time ago
-(41-60 days).}
-
-\item{ept.provision.med.main.rr}{Relative risk for provision to a main
-partner with whom the last sexual act was a medium time ago
-(1-20 days).}
-
-\item{ept.provision.med.casl.rr}{Relative risk for provision to a casual
-partner with whom the last sexual act was a medium time ago
-(21-40 days).}
-
-\item{ept.provision.med.inst.rr}{Relative risk for provision to a one-off
-partner with whom the last sexual act was a medium time ago
-(41-60 days).}
-
-\item{ept.provision.long.main.rr}{Relative risk for provision to a main
-partner with whom the last sexual act was a long time ago
-(1-20 days).}
-
-\item{ept.provision.long.casl.rr}{Relative risk for provision to a casual
-partner with whom the last sexual act was a long time ago
-(21-40 days).}
-
-\item{ept.provision.long.inst.rr}{Relative risk for provision to a one-off
-partner with whom the last sexual act was a long time ago
-(41-60 days).}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
