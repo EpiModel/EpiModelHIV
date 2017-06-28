@@ -83,6 +83,7 @@ sti_ept_msm <- function(dat, at) {
     #idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
 
     #### Partner 1  recently treated, so partner 2 eligible for EPT
+    #### Currently only eligible for EPT once
 
     # Criteria: eligible within EPT risk interval, currently untreated, partner
     # received EPT, main partnership, and last active today
@@ -95,10 +96,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
@@ -113,10 +114,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
@@ -131,10 +132,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
@@ -149,10 +150,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
@@ -167,10 +168,10 @@ sti_ept_msm <- function(dat, at) {
                                                (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
                                                (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (rGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uGC.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (rCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uCT.tx.ept[part.list[, "uid2"]]) %in% c(0, NA)) &
+                                               is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+                                               is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+                                               is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+                                               is.na(uCT.tx.ept[part.list[, "uid2"]])) &
                                             eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 3), , drop = FALSE]
 
 
@@ -194,10 +195,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
@@ -212,10 +213,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
@@ -230,10 +231,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
@@ -248,10 +249,10 @@ sti_ept_msm <- function(dat, at) {
                                                    (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
+                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
@@ -266,10 +267,10 @@ sti_ept_msm <- function(dat, at) {
                                                (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
                                                (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (rGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uGC.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (rCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uCT.tx.ept[part.list[, "uid1"]]) %in% c(0, NA)) &
+                                               is.na(rGC.tx.ept[part.list[, "uid1"]]) |
+                                               is.na(uGC.tx.ept[part.list[, "uid1"]]) |
+                                               is.na(rCT.tx.ept[part.list[, "uid1"]]) |
+                                               is.na(uCT.tx.ept[part.list[, "uid1"]])) &
                                             eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 3), , drop = FALSE]
 
 
