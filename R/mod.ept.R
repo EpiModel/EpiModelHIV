@@ -298,7 +298,8 @@ sti_ept_msm <- function(dat, at) {
     idsept.inst <- unique(c(idspartlistsept1.inst,
                             idspartlistsept2.inst))
 
-    ## Provision to and uptake of partners (to be treated at next time step)
+    ## Provision to non-index partners -----------------------------------------
+    ##(to be treated at next time step) 
     idsprovided.main.ong <- idsept.main.ong[which(rbinom(length(idsept.main.ong), 1,
                                                          ept.provision.main.ong) == 1)]
     idsprovided.casl.ong <- idsept.casl.ong[which(rbinom(length(idsept.casl.ong), 1,
@@ -320,7 +321,7 @@ sti_ept_msm <- function(dat, at) {
 
     idsprovided.inst_ept <- unique(c(idsprovided.inst))
 
-    # Uptake
+    # Uptake by non-index ------------------------------------------------------
     idsept_tx.main <- idsprovided.main_ept[which(rbinom(length(idsprovided.main_ept), 1,
                                                         ept.uptake.main) == 1)]
     idsept_tx.casl <- idsprovided.casl_ept[which(rbinom(length(idsprovided.casl_ept), 1,
