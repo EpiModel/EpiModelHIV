@@ -587,10 +587,8 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$eptindexElig[recovGCCT] <- NA
   dat$attr$eptindexEligdate[recovGCCT] <- NA
   dat$attr$eptindexStat[recovGCCT] <- NA
-  dat$attr$eptindexStartTime[recovGCCT] <- NA
   dat$attr$eptpartEligTx[recovGCCT] <- NA
   dat$attr$eptpartTx[recovGCCT] <- NA
-  dat$attr$eptpartTxStartTime[recovGCCT] <- NA
 
 
   # Syphilis
@@ -741,10 +739,8 @@ sti_tx_msm <- function(dat, at) {
   eptindexElig <- dat$attr$eptindexElig
   eptindexStat <- dat$attr$eptindexStat
   eptindexEligdate <- dat$attr$eptindexEligdate #DBNU
-  eptindexStartTime <- dat$attr$eptindexStartTime #DBNU
   eptpartEligTx <- dat$attr$eptpartEligTx
   eptpartTx <- dat$attr$eptpartTx #DBNU
-  eptpartTxStartTime <- dat$attr$eptpartTxStartTime #DBNU
 
   # Syphilis --------------------------------------------------------------
 
@@ -1129,6 +1125,8 @@ sti_tx_msm <- function(dat, at) {
 
 #
   # Output ---------------------------------------------------------------------
+  # PrEP
+  dat$attr$prepLastStiScreen <- prepLastStiScreen
 
   # Syphilis
   dat$attr$syph.tx[idssyph_tx] <- 0
@@ -1196,10 +1194,6 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$eptindexStat[idsStart] <- 1
   dat$attr$eptindexStat[idsStart] <- 1
   dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
-  dat$attr$eptindexStartTime[idsStart] <- at
 
   # Non-index EPT-treated
   dat$attr$eptpartEligTx[alltxEPT] <- NA

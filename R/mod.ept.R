@@ -44,7 +44,6 @@ sti_ept_msm <- function(dat, at) {
     eptindexElig <- dat$attr$eptindexElig
     eptindexStat <- dat$attr$eptindexStat
     eptindexEligdate <- dat$attr$eptindexEligdate
-    eptindexStartTime <- dat$attr$eptindexStartTime # DBNU
 
     ## Parameters
     ept.risk.int <- dat$param$ept.risk.int
@@ -299,7 +298,7 @@ sti_ept_msm <- function(dat, at) {
                             idspartlistsept2.inst))
 
     ## Provision to non-index partners -----------------------------------------
-    ##(to be treated at next time step) 
+    ##(to be treated at next time step)
     idsprovided.main.ong <- idsept.main.ong[which(rbinom(length(idsept.main.ong), 1,
                                                          ept.provision.main.ong) == 1)]
     idsprovided.casl.ong <- idsept.casl.ong[which(rbinom(length(idsept.casl.ong), 1,
@@ -335,7 +334,7 @@ sti_ept_msm <- function(dat, at) {
     # Index attributes
     dat$attr$eptindexElig <- eptindexElig
     dat$attr$eptindexStat <- eptindexStat
-    dat$attr$eptindexStartTime <- eptindexStartTime
+    dat$attr$eptindexEligdate <- eptindexEligdate
 
     # Non-index attributes
     dat$attr$eptpartEligTx[idsprovided_ept] <- 0

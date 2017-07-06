@@ -146,9 +146,9 @@ sti_test_msm <- function(dat, at) {
     last.neg.test.rct <- dat$attr$last.neg.test.rct
     last.neg.test.uct <- dat$attr$last.neg.test.uct
     last.neg.test.syph <- dat$attr$last.neg.test.syph
-    lastdiag.time.gc <- dat$attr$lastdiag.time.gc
-    lastdiag.time.ct <- dat$attr$lastdiag.time.ct
-    lastdiag.time.syph <- dat$attr$lastdiag.time.syph
+    last.diag.time.gc <- dat$attr$last.diag.time.gc
+    last.diag.time.ct <- dat$attr$last.diag.time.ct
+    last.diag.time.syph <- dat$attr$last.diag.time.syph
     stitestind1 <- dat$attr$stitest.ind.active
 
     # Parameters
@@ -202,7 +202,7 @@ sti_test_msm <- function(dat, at) {
     last.neg.test.syph[screen.syph.neg] <- at
     last.neg.test.syph[screen.syph.pos] <- NA
     diag.status.syph[screen.syph.pos] <- 1
-    lastdiag.time.syph[screen.syph.pos] <- at
+    last.diag.time.syph[screen.syph.pos] <- at
 
     # GC Attributes
     last.neg.test.rgc[screen.rgc.neg] <- at
@@ -210,7 +210,7 @@ sti_test_msm <- function(dat, at) {
     last.neg.test.rgc[screen.rgc.pos] <- NA
     last.neg.test.ugc[screen.ugc.pos] <- NA
     diag.status.gc[screen.gc.pos] <- 1
-    lastdiag.time.gc[screen.gc.pos] <- at
+    last.diag.time.gc[screen.gc.pos] <- at
 
     # CT Attributes
     last.neg.test.rct[screen.rct.neg] <- at
@@ -218,25 +218,25 @@ sti_test_msm <- function(dat, at) {
     last.neg.test.rct[screen.rct.pos] <- NA
     last.neg.test.uct[screen.uct.pos] <- NA
     diag.status.ct[screen.ct.pos] <- 1
-    lastdiag.time.ct[screen.ct.pos] <- at
+    last.diag.time.ct[screen.ct.pos] <- at
 
     ## Output
     # Syphilis Attributes
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$diag.status.syph <- diag.status.syph
-    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    dat$attr$last.diag.time.syph <- last.diag.time.syph
 
     # GC Attributes
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
     dat$attr$last.neg.test.ugc <- last.neg.test.ugc
     dat$attr$diag.status.gc <- diag.status.gc
-    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$last.diag.time.gc <- last.diag.time.gc
 
     # CT Attributes
     dat$attr$last.neg.test.rct <- last.neg.test.rct
     dat$attr$last.neg.test.uct <- last.neg.test.uct
     dat$attr$diag.status.ct <- diag.status.ct
-    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$last.diag.time.ct <- last.diag.time.ct
 
     # Number of tests for asymptomatic
     dat$epi$rGCasympttests[at] <- length(screen.rgc)
@@ -282,9 +282,9 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.rct <- dat$attr$last.neg.test.rct
   last.neg.test.uct <- dat$attr$last.neg.test.uct
   last.neg.test.syph <- dat$attr$last.neg.test.syph
-  lastdiag.time.gc <- dat$attr$lastdiag.time.gc
-  lastdiag.time.ct <- dat$attr$lastdiag.time.ct
-  lastdiag.time.syph <- dat$attr$lastdiag.time.syph
+  last.diag.time.gc <- dat$attr$last.diag.time.gc
+  last.diag.time.ct <- dat$attr$last.diag.time.ct
+  last.diag.time.syph <- dat$attr$last.diag.time.syph
   race <- dat$attr$race
   prepStat <- dat$attr$prepStat
 
@@ -505,7 +505,7 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.syph[tst.syph.neg] <- at
   last.neg.test.syph[tst.syph.pos] <- NA
   diag.status.syph[tst.syph.pos] <- 1
-  lastdiag.time.syph[tst.syph.pos] <- at
+  last.diag.time.syph[tst.syph.pos] <- at
 
   # GC Attributes
   last.neg.test.rgc[tst.rgc.neg] <- at
@@ -513,7 +513,7 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.rgc[tst.rgc.pos] <- NA
   last.neg.test.ugc[tst.ugc.pos] <- NA
   diag.status.gc[tst.gc.pos] <- 1
-  lastdiag.time.gc[tst.gc.pos] <- at
+  last.diag.time.gc[tst.gc.pos] <- at
 
   # CT Attributes
   last.neg.test.rct[tst.rct.neg] <- at
@@ -521,7 +521,7 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.rct[tst.rct.pos] <- NA
   last.neg.test.uct[tst.uct.pos] <- NA
   diag.status.ct[tst.ct.pos] <- 1
-  lastdiag.time.ct[tst.ct.pos] <- at
+  last.diag.time.ct[tst.ct.pos] <- at
 
   # Number of tests for asymptomatic
   dat$epi$rGCasympttests[at] <- length(tst.rgc)
@@ -554,21 +554,21 @@ sti_test_msm <- function(dat, at) {
   # Syphilis Attributes
   dat$attr$last.neg.test.syph <- last.neg.test.syph
   dat$attr$diag.status.syph <- diag.status.syph
-  dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+  dat$attr$last.diag.time.syph <- last.diag.time.syph
   dat$attr$tt.traj.syph <- tt.traj.syph
 
   # GC Attributes
   dat$attr$last.neg.test.rgc <- last.neg.test.rgc
   dat$attr$last.neg.test.ugc <- last.neg.test.ugc
   dat$attr$diag.status.gc <- diag.status.gc
-  dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+  dat$attr$last.diag.time.gc <- last.diag.time.gc
   dat$attr$tt.traj.gc <- tt.traj.gc
 
   # CT Attributes
   dat$attr$last.neg.test.rct <- last.neg.test.rct
   dat$attr$last.neg.test.uct <- last.neg.test.uct
   dat$attr$diag.status.ct <- diag.status.ct
-  dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+  dat$attr$last.diag.time.ct <- last.diag.time.ct
   dat$attr$tt.traj.ct <- tt.traj.ct
 
 

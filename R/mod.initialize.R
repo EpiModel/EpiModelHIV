@@ -288,13 +288,8 @@ init_status_hiv_msm <- function(dat) {
   tx.init.time <- rep(NA, num)
   cum.time.on.tx <- rep(NA, num)
   cum.time.off.tx <- rep(NA, num)
-  infector <- rep(NA, num)
   inf.role <- rep(NA, num)
   inf.type <- rep(NA, num)
-  inf.diag <- rep(NA, num)
-  inf.tx <- rep(NA, num)
-  inf.stage <- rep(NA, num)
-
   time.sex.active <- pmax(1,round((365 / dat$param$time.unit) * age -
                                   (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
@@ -696,12 +691,8 @@ init_status_hiv_msm <- function(dat) {
   dat$attr$tx.init.time <- tx.init.time
   dat$attr$cum.time.on.tx <- cum.time.on.tx
   dat$attr$cum.time.off.tx <- cum.time.off.tx
-  dat$attr$infector <- infector
   dat$attr$inf.role <- inf.role
   dat$attr$inf.type <- inf.type
-  dat$attr$inf.diag <- inf.diag
-  dat$attr$inf.tx <- inf.tx
-  dat$attr$inf.stage <- inf.stage
 
 
   return(dat)
@@ -753,7 +744,7 @@ init_status_sti_msm <- function(dat) {
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
-    lastdiag.time.syph <- rep(NA, num)
+    last.diag.time.syph <- rep(NA, num)
     last.neg.test.syph <- rep(NA, num)
     last.tx.time.syph <- rep(NA, num)
     last.tx.time.syph.prep <- rep(NA, num)
@@ -769,7 +760,7 @@ init_status_sti_msm <- function(dat) {
     rGC.sympt <- rep(NA, num)
     uGC.sympt <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
-    lastdiag.time.gc <- rep(NA, num)
+    last.diag.time.gc <- rep(NA, num)
     last.neg.test.rgc <- rep(NA, num)
     last.neg.test.ugc <- rep(NA, num)
     last.tx.time.rgc <- rep(NA, num)
@@ -785,7 +776,7 @@ init_status_sti_msm <- function(dat) {
     rCT.sympt <- rep(NA, num)
     uCT.sympt <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
-    lastdiag.time.ct <- rep(NA, num)
+    last.diag.time.ct <- rep(NA, num)
     last.neg.test.rct <- rep(NA, num)
     last.neg.test.uct <- rep(NA, num)
     last.tx.time.rct <- rep(NA, num)
@@ -938,7 +929,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
-    dat$attr$lastdiag.time.syph <- lastdiag.time.syph
+    dat$attr$last.diag.time.syph <- last.diag.time.syph
     dat$attr$syph.tx <- syph.tx
     dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$last.tx.time.syph <- last.tx.time.syph
@@ -955,7 +946,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uGC.sympt <- uGC.sympt
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
     dat$attr$last.neg.test.ugc <- last.neg.test.ugc
-    dat$attr$lastdiag.time.gc <- lastdiag.time.gc
+    dat$attr$last.diag.time.gc <- last.diag.time.gc
     dat$attr$rGC.tx <- rep(NA, num)
     dat$attr$uGC.tx <- rep(NA, num)
     dat$attr$rGC.tx.prep <- rep(NA, num)
@@ -976,7 +967,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$uCT.sympt <- uCT.sympt
     dat$attr$last.neg.test.rct <- last.neg.test.rct
     dat$attr$last.neg.test.uct <- last.neg.test.uct
-    dat$attr$lastdiag.time.ct <- lastdiag.time.ct
+    dat$attr$last.diag.time.ct <- last.diag.time.ct
     dat$attr$rCT.tx <- rep(NA, num)
     dat$attr$uCT.tx <- rep(NA, num)
     dat$attr$rCT.tx.prep <- rep(NA, num)
@@ -992,9 +983,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptindexStat <- rep(NA, num)
     dat$attr$eptindexEligdate <- rep(NA, num)
     dat$attr$eptpartEligTx <- rep(NA, num)
-    dat$attr$eptindexStartTime <- rep(NA, num)
     dat$attr$eptpartTx <- rep(NA, num)
-    dat$attr$eptpartTxStartTime <- rep(NA, num)
     dat$attr$rCT.tx.ept <- rep(NA, num)
     dat$attr$uCT.tx.ept <- rep(NA, num)
     dat$attr$rGC.tx.ept <- rep(NA, num)

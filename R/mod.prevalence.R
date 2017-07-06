@@ -101,7 +101,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rGCsympttests <- rep(0, nsteps)
     dat$epi$uGCsympttests <- rep(0, nsteps)
     dat$epi$rCTsympttests <- rep(0, nsteps)
-    dat$epi$rCTsympttests <- rep(0, nsteps)
+    dat$epi$uCTsympttests <- rep(0, nsteps)
     dat$epi$syphsympttests <- rep(0, nsteps)
 
     dat$epi$rGCasympttests <- rep(0, nsteps)
