@@ -84,10 +84,9 @@ sti_ept_msm <- function(dat, at) {
     #### Partner 1  recently treated, so partner 2 eligible for EPT
     #### Currently only eligible for EPT once
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, main partnership, and last active today
-    part.listept1.main.ong <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # main partnership, and last active today
+    part.listept1.main.ong <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
@@ -102,10 +101,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, casual partnership, and last active today
-    part.listept1.casl.ong <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # casual partnership, and last active today
+    part.listept1.casl.ong <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
@@ -120,10 +118,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, one-off partnership, and not active today
-    part.listept1.main.end <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # main partnership, and not active today
+    part.listept1.main.end <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
@@ -138,10 +135,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, index partner
-    # received EPT, main partnership, and not active today
-    part.listept1.casl.end <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # casual partnership, and not active today
+    part.listept1.casl.end <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
@@ -156,10 +152,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, index partner
-    # received EPT, one-off
-    part.listept1.inst <- part.list[which((at - eptindexEligdate[part.list[, "uid1"]]) <= ept.risk.int &
-                                            ((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # one-off partnership
+    part.listept1.inst <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
                                                (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
@@ -183,10 +178,9 @@ sti_ept_msm <- function(dat, at) {
 
     ### Partner 1  recently treated, so partner 2 eligible for EPT
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, main partnership, and last active today
-    part.listept2.main.ong <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # main partnership, and last active today
+    part.listept2.main.ong <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
@@ -201,10 +195,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, casual partnership, and last active today
-    part.listept2.casl.ong <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # casual partnership, and last active today
+    part.listept2.casl.ong <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
@@ -219,10 +212,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (part.list[, "last.active.time"]) == at), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, partner
-    # received EPT, one-off partnership, and not active today
-    part.listept2.main.end <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # main partnership, and not active today
+    part.listept2.main.end <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
@@ -237,10 +229,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, index partner
-    # received EPT, main partnership, and not active today
-    part.listept2.casl.end <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
-                                                ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # casual partnership, and not active today
+    part.listept2.casl.end <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                    (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
@@ -255,10 +246,9 @@ sti_ept_msm <- function(dat, at) {
                                                 eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
                                                 (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
 
-    # Criteria: eligible within EPT risk interval, currently untreated, index partner
-    # received EPT, one-off
-    part.listept2.inst <- part.list[which((at - eptindexEligdate[part.list[, "uid2"]]) <= ept.risk.int &
-                                            ((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
+    # Criteria: Non-index currently untreated, partner received EPT,
+    # one-off partnership
+    part.listept2.inst <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
                                                (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
@@ -337,6 +327,7 @@ sti_ept_msm <- function(dat, at) {
     dat$attr$eptindexEligdate <- eptindexEligdate
 
     # Non-index attributes
+    dat$attr$eptpartEligReceive[idsept] <- 1
     dat$attr$eptpartEligTx[idsprovided_ept] <- 0
     dat$attr$eptpartEligTx[idsuptake_ept] <- 1
 

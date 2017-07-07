@@ -982,6 +982,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$eptindexElig <- rep(NA, num)
     dat$attr$eptindexStat <- rep(NA, num)
     dat$attr$eptindexEligdate <- rep(NA, num)
+    dat$attr$eptpartEligReceive <- rep(NA, num)
     dat$attr$eptpartEligTx <- rep(NA, num)
     dat$attr$eptpartTx <- rep(NA, num)
     dat$attr$rCT.tx.ept <- rep(NA, num)

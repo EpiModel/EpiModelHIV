@@ -587,6 +587,7 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$eptindexElig[recovGCCT] <- NA
   dat$attr$eptindexEligdate[recovGCCT] <- NA
   dat$attr$eptindexStat[recovGCCT] <- NA
+  dat$attr$eptpartEligReceive[recovGCCT] <- NA
   dat$attr$eptpartEligTx[recovGCCT] <- NA
   dat$attr$eptpartTx[recovGCCT] <- NA
 
