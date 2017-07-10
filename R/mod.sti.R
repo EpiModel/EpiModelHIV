@@ -1271,6 +1271,8 @@ sti_tx_msm <- function(dat, at) {
                                              txsyph_asympt_earlat)))
   dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                             txsyph_sympt_tert)))
+  dat$epi$txasympt[at] <- length(unique(c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
+                                          txsyph_asympt)))
   dat$epi$eptCov[at] <- eptCov
   dat$epi$eptTx[at] <- length(unique(alltxEPT))
   dat$epi$eptprop_tx[at] <- dat$epi$eptTx[at] / length(unique(c(idsCT_tx_ept, idsGC_tx_ept)))
