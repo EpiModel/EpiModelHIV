@@ -250,15 +250,16 @@ prevalence_msm <- function(dat, at) {
     dat$epi$txsyph <- rNA
     dat$epi$txearlysyph <- rNA
     dat$epi$txlatesyph <- rNA
+    dat$epi$txasympt <- rNA
 
-    dat$epi$stiactiveind <- rNA
-    dat$epi$recentpartners <- rNA
-    dat$epi$recentSTI <- rNA
-    dat$epi$newpartner <- rNA
-    dat$epi$concurrpart <- rNA
-    dat$epi$partnersti <- rNA
-    dat$epi$uai.nmain <- rNA
-    dat$epi$uai.any <- rNA
+    # dat$epi$stiactiveind <- rNA
+    # dat$epi$recentpartners <- rNA
+    # dat$epi$recentSTI <- rNA
+    # dat$epi$newpartner <- rNA
+    # dat$epi$concurrpart <- rNA
+    # dat$epi$partnersti <- rNA
+    # dat$epi$uai.nmain <- rNA
+    # dat$epi$uai.any <- rNA
 
     dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
