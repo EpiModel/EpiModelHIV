@@ -68,6 +68,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$i.prev.W <- rNA
     dat$epi$incid <- rNA
     dat$epi$ir100 <- rNA
+    dat$epi$deathage <- rNA
 
     dat$epi$prepCurr <- rNA
     dat$epi$prepCov <- rNA
@@ -176,14 +177,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.uct.hivneg <- rNA
 
     #HIV/STI coinfection prevalence
-    dat$epi$prev.primsecosyph.hiv <- rNA
-    dat$epi$prev.syph.hiv <- rNA
-    dat$epi$prev.gc.hiv <- rNA
-    dat$epi$prev.rgc.hiv <- rNA
-    dat$epi$prev.ugc.hiv <- rNA
-    dat$epi$prev.ct.hiv <- rNA
-    dat$epi$prev.rct.hiv <- rNA
-    dat$epi$prev.uct.hiv <- rNA
     dat$epi$prev.rct.uct <- rNA
     dat$epi$prev.rgc.ugc <- rNA
     dat$epi$prev.rct.rgc <- rNA
@@ -358,10 +351,10 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.syph[at] <- ifelse(dat$epi$num[at] > 0, length(which(syphilis == 1)) / dat$epi$num[at], 0)
   dat$epi$prev.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, length(which(stage.syph %in% c(1, 2, 3))) / dat$epi$num[at], 0)
 
-  uGC.prev <- which(uGC == 1 & uGC.infTime < at)
-  uCT.prev <- which(uCT == 1 & uCT.infTime < at)
-  rGC.prev <- which(rGC == 1 & rGC.infTime < at)
-  rCT.prev <- which(rCT == 1 & rCT.infTime < at)
+  # uGC.prev <- which(uGC == 1 & uGC.infTime < at)
+  # uCT.prev <- which(uCT == 1 & uCT.infTime < at)
+  # rGC.prev <- which(rGC == 1 & rGC.infTime < at)
+  # rCT.prev <- which(rCT == 1 & rCT.infTime < at)
 
   # Prevalence of HIV/STI overlap (conditional denominators)
   dat$epi$prev.primsecosyph.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0,
@@ -376,7 +369,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.gc.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0,
                                        length(intersect(which(status == 0), which((rGC == 1 | uGC == 1)))) / dat$epi$s.num[at], 0)
   dat$epi$prev.gc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0,
-                                       length(intersect(which(status == 1), which((rGC == 1 |  uGC == 1)))) / dat$epi$i.num[at], 0)
+                                       length(intersect(which(status == 1), which((rGC == 1 | uGC == 1)))) / dat$epi$i.num[at], 0)
 
   dat$epi$prev.ct.hivneg[at] <- ifelse(dat$epi$s.num[at] > 0,
                                        length(intersect(which(status == 0),  which((rCT == 1 | uCT == 1)))) / dat$epi$s.num[at], 0)
@@ -422,14 +415,6 @@ prevalence_msm <- function(dat, at) {
                                         length(intersect(which(status == 1), which(uCT == 1))) / dat$epi$s.num[at], 0)
 
   # Co-infection prevalence
-  dat$epi$prev.primsecosyph.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(stage.syph %in% c(1, 2)), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.syph.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(syphilis == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.gc.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rGC == 1 | uGC == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.rgc.hiv[at] <- ifelse(dat$epi$num[at] > 0,(length(intersect(which(rGC == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.ugc.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(uGC == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.ct.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rCT == 1 | uCT == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.rct.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rCT == 1), which(status == 1)))) / dat$epi$num[at], 0)
-  dat$epi$prev.uct.hiv[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(uCT == 1), which(status == 1)))) / dat$epi$num[at], 0)
   dat$epi$prev.rct.uct[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rCT == 1), which(uCT == 1)))) / dat$epi$num[at], 0)
   dat$epi$prev.rgc.ugc[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rGC == 1), which(uGC == 1)))) / dat$epi$num[at], 0)
   dat$epi$prev.rct.rgc[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rGC == 1), which(rCT == 1))))  / dat$epi$num[at], 0)

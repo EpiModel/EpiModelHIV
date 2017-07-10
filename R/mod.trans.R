@@ -444,7 +444,7 @@ hiv_trans_msm <- function(dat, at) {
     infected <- unique(c(disc.ip[trans.ip == 1, 2],
                   disc.rp[trans.rp == 1, 1]))
     inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
-    
+
     inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
                   disc.rp[trans.rp == 1, "ptype"])
 
@@ -464,14 +464,14 @@ hiv_trans_msm <- function(dat, at) {
     dat$attr$cum.time.off.tx[infected] <- 0
   }
   dat$attr$time.hivneg[status == 0] <- dat$attr$time.hivneg[status == 0] + 1
- 
+
   trans <- rbind(disc.ip[trans.ip == 1, ], disc.rp[trans.rp == 1, ])
-  dat$epi$sum_GC <- length(which(rGC[trans[, 2]] == 1 | uGC[trans[, 1]] == 1))
-  dat$epi$sum_CT <- length(which(rCT[trans[, 2]] == 1 | uCT[trans[, 1]] == 1))
-  dat$epi$sum_syph <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) | stage.syph[trans[, 1]] %in% c(1,2,3)))
-  dat$epi$sum_urethral <- length(which(uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1))
-  dat$epi$sum_rectal <- length(which(rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1))
-  
+  dat$epi$sum_GC[at] <- length(which(rGC[trans[, 2]] == 1 | uGC[trans[, 1]] == 1))
+  dat$epi$sum_CT[at] <- length(which(rCT[trans[, 2]] == 1 | uCT[trans[, 1]] == 1))
+  dat$epi$sum_syph[at] <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) | stage.syph[trans[, 1]] %in% c(1,2,3)))
+  dat$epi$sum_urethral[at] <- length(which(uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1))
+  dat$epi$sum_rectal[at] <- length(which(rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1))
+
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 

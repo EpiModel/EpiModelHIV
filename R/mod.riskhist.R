@@ -162,5 +162,16 @@ riskhist_stitest_msm <- function(dat, at) {
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
   dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
 
+
+  ## Prevalence of partner numbers
+  dat$epi$zeropart[at] <- length(which(dat$attr$recentpartners == 0)) / length(which(race %in% c("B","W")))
+  dat$epi$onepart[at] <- length(which(dat$attr$recentpartners == 1)) / length(which(race %in% c("B","W")))
+  dat$epi$twopart[at] <- length(which(dat$attr$recentpartners == 2)) / length(which(race %in% c("B","W")))
+  dat$epi$threepart[at] <- length(which(dat$attr$recentpartners == 3)) / length(which(race %in% c("B","W")))
+  dat$epi$fourpart[at] <- length(which(dat$attr$recentpartners == 4)) / length(which(race %in% c("B","W")))
+  dat$epi$fivepart[at] <- length(which(dat$attr$recentpartners == 5)) / length(which(race %in% c("B","W")))
+  dat$epi$gtfivepart[at] <- length(which(dat$attr$recentpartners > 5)) / length(which(race %in% c("B","W")))
+
+
   return(dat)
 }

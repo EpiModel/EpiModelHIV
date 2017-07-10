@@ -50,6 +50,7 @@ deaths_msm <- function(dat, at) {
 
   dth.all <- NULL
   dth.all <- unique(c(dth.gen, dth.dis))
+  dat$epi$deathage[at] <- mean(c(dat$attr$age[dth.all]))
 
   if (length(dth.all) > 0) {
     dat$attr$active[dth.all] <- 0

@@ -7,7 +7,7 @@ data(est)
 data(st)
 
 param <- param_msm(nwstats = st,
-                   ai.scale = 1.04, #1.11
+                   ai.scale = 1.03,
 
                    syph.earlat.rr = 0.5,
                    incu.syph.int = 27,
@@ -20,22 +20,22 @@ param <- param_msm(nwstats = st,
                    syph.tert.prog.prob = 0.00015625599,
 
                    # STI acquisition
-                   rgc.tprob = 0.43,
-                   ugc.tprob = 0.33,
-                   rct.tprob = 0.212,
-                   uct.tprob = 0.172,
-                   rsyph.tprob = 0.14,
-                   usyph.tprob = 0.12,
+                   rgc.tprob = 0.447,
+                   ugc.tprob = 0.337,
+                   rct.tprob = 0.2025,
+                   uct.tprob = 0.1825,
+                   rsyph.tprob = 0.1526957,
+                   usyph.tprob = 0.1326838,
 
                    # HIV acquisition
                    URAI.prob = 0.0082 * 1.09,
                    UIAI.prob = 0.0031 * 1.09,
-                   hiv.rgc.rr = 2.20,
-                   hiv.ugc.rr = 1.40,
-                   hiv.rct.rr = 2.20,
-                   hiv.uct.rr = 1.40,
-                   hiv.rsyph.rr = 2.20,
-                   hiv.usyph.rr = 1.40,
+                   hiv.rgc.rr = 1.80292790,
+                   hiv.ugc.rr = 1.1989083,
+                   hiv.rct.rr = 1.80292790,
+                   hiv.uct.rr = 1.1989083,
+                   hiv.rsyph.rr = 1.80292790,
+                   hiv.usyph.rr = 1.1989083,
 
                    # HIV transmission
                    hiv.trans.gc.rr = 1,
@@ -61,9 +61,9 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0.1,
                    stihighrisktest.coverage = 0.1,
 
-                   prep.start = 5000,
-                   stitest.start = 2601,
-                   ept.start = 10,
+                   prep.start = 3,
+                   stitest.start = 3,
+                   ept.start = 2600,
 
                    stitest.elig.model = "sti",
 
@@ -72,16 +72,16 @@ param <- param_msm(nwstats = st,
                    ept.risk.int = 60)
 
 init <- init_msm(nwstats = st,
-                 prev.B = 0.10,
-                 prev.W = 0.10,
-                 prev.ugc = 0.015,
-                 prev.rgc = 0.015,
+                 prev.B = 0.08,
+                 prev.W = 0.08,
+                 prev.ugc = 0.010,
+                 prev.rgc = 0.010,
                  prev.uct = 0.015,
                  prev.rct = 0.015,
-                 prev.syph.B = 0.015,
-                 prev.syph.W = 0.015,
-                 stage.syph.B.prob = c(0.00, 0.10, 0.10, 0.10, 0.35, 0.35, 0.00),
-                 stage.syph.W.prob = c(0.00, 0.10, 0.10, 0.10, 0.35, 0.35, 0.00))
+                 prev.syph.B = 0.010,
+                 prev.syph.W = 0.010,
+                 stage.syph.B.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
+                 stage.syph.W.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00))
 
 control <- control_msm(nsteps = 2600)
 
