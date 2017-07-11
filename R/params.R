@@ -87,9 +87,9 @@
 #'        elevated viral load) when positive partner is in the acute stage.
 #' @param circ.rr Relative risk of infection from insertive anal sex when the
 #'        negative insertive partner is circumcised.
-#' @param condom.eff Relative risk of infection from anal sex when a condom is
+#' @param cond.eff Relative risk of infection from anal sex when a condom is
 #'        used properly (biological efficacy)
-#' @param condom.fail.B Condom failure rates for Black MSM, as a reduction in the
+#' @param cond.fail.B Condom failure rates for Black MSM, as a reduction in the
 #'        cond.eff parameter
 #' @param cond.fail.W Condom failure rates for White MSM, as a reduction in the
 #'        cond.eff parameter

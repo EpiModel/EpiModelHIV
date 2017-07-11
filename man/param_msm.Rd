@@ -184,6 +184,12 @@ elevated viral load) when positive partner is in the acute stage.}
 \item{circ.rr}{Relative risk of infection from insertive anal sex when the
 negative insertive partner is circumcised.}
 
+\item{cond.eff}{Relative risk of infection from anal sex when a condom is
+used properly (biological efficacy)}
+
+\item{cond.fail.B}{Condom failure rates for Black MSM, as a reduction in the
+cond.eff parameter}
+
 \item{cond.fail.W}{Condom failure rates for White MSM, as a reduction in the
 cond.eff parameter}
 
@@ -476,12 +482,6 @@ a condom used by the insertive partner.}
 given dual infection with both gonorrhea and chlamydia.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{condom.eff}{Relative risk of infection from anal sex when a condom is
-used properly (biological efficacy)}
-
-\item{condom.fail.B}{Condom failure rates for Black MSM, as a reduction in the
-cond.eff parameter}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to
