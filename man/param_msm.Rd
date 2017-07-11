@@ -50,17 +50,17 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, rcomp.prob = 0,
   rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
-  rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
-  ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
-  uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
-  ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0, prep.sti.screen.int = 182,
-  prep.sti.prob.tx = 1, prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673,
-  hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2, ...)
+  rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.16,
+  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
+  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
+  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
+  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
+  gc.prob.cease = 0, ct.prob.cease = 0, gc.sympt.prob.tx = 0.9,
+  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
+  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
+  hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
+  hiv.dual.rr = 0.2, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
