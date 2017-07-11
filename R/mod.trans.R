@@ -526,7 +526,7 @@ hiv_trans_msm <- function(dat, at) {
                                            (uGC[trans[, 1] == 1] | uCT[trans[ , 1] == 0] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
                                            trans[, 6] == 1) |
                                           ((rGC[trans[, 1] == 0] | rCT[trans[ , 1] == 1] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
-                                            (uGC[trans[, 2] == 0] | uCT[trans[ , 2] == 0] | !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
+                                            (uGC[trans[, 2] == 0] & uCT[trans[ , 2] == 0] & !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
                                             trans[, 6] == 0)))
 
   dat$epi$cell4_sti[at] <- length(which(((rGC[trans[, 2] == 0] & rCT[trans[ , 2] == 0] & !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
