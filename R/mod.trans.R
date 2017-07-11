@@ -466,11 +466,75 @@ hiv_trans_msm <- function(dat, at) {
   dat$attr$time.hivneg[status == 0] <- dat$attr$time.hivneg[status == 0] + 1
 
   trans <- rbind(disc.ip[trans.ip == 1, ], disc.rp[trans.rp == 1, ])
-  dat$epi$sum_GC[at] <- length(which(rGC[trans[, 2]] == 1 | uGC[trans[, 1]] == 1))
-  dat$epi$sum_CT[at] <- length(which(rCT[trans[, 2]] == 1 | uCT[trans[, 1]] == 1))
+  dat$epi$sum_GC[at] <- length(which(((rGC[trans[, 2]] == 1 | uGC[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                       ((uGC[trans[, 2]] == 1 | rGC[trans[, 1]] == 1) & trans[, 6] == 0)))
+
+  dat$epi$sum_CT[at] <- length(which(((rCT[trans[, 2]] == 1 | uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                       ((uCT[trans[, 2]] == 1 | rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+
   dat$epi$sum_syph[at] <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) | stage.syph[trans[, 1]] %in% c(1,2,3)))
-  dat$epi$sum_urethral[at] <- length(which(uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1))
-  dat$epi$sum_rectal[at] <- length(which(rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1))
+
+  dat$epi$sum_urethral[at] <- length(which(((uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                             ((uGC[trans[, 2]] == 1 | uCT[trans[, 2]] == 1) & trans[, 6] == 0)))
+
+  dat$epi$sum_rectal[at] <- length(which(((rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1) & trans[, 6] == 1) |
+                                           ((rGC[trans[, 1]] == 1 | rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+
+  #2x2 for PAF
+  #               HIV+
+  #             STI+  STI-
+  #HIV-   STI +  1    2
+  #       STI -  3    4
+  dat$epi$cell1_gc[at] <- length(which(((rGC[trans[, 2]] == 1 & uGC[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                         ((uGC[trans[, 2]] == 1 & rGC[trans[, 1]] == 1) & trans[, 6] == 0)))
+  dat$epi$cell2_gc[at] <- length(which(((rGC[trans[, 2]] == 1 & uGC[trans[, 1]] == 0) & trans[, 6] == 1) |
+                                         ((uGC[trans[, 2]] == 1 & rGC[trans[, 1]] == 0) & trans[, 6] == 0)))
+  dat$epi$cell3_gc[at] <- length(which(((rGC[trans[, 2]] == 0 & uGC[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                         ((uGC[trans[, 2]] == 0 & rGC[trans[, 1]] == 1) & trans[, 6] == 0)))
+  dat$epi$cell4_gc[at] <- length(which(((rGC[trans[, 2]] == 0 & uGC[trans[, 1]] == 0) & trans[, 6] == 1) |
+                                         ((uGC[trans[, 2]] == 0 & rGC[trans[, 1]] == 0) & trans[, 6] == 0)))
+
+  dat$epi$cell1_ct[at] <- length(which(((rCT[trans[, 2]] == 1 & uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                         ((uCT[trans[, 2]] == 1 & rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+  dat$epi$cell2_ct[at] <- length(which(((rCT[trans[, 2]] == 1 & uCT[trans[, 1]] == 0) & trans[, 6] == 1) |
+                                         ((uCT[trans[, 2]] == 1 & rCT[trans[, 1]] == 0) & trans[, 6] == 0)))
+  dat$epi$cell3_ct[at] <- length(which(((rCT[trans[, 2]] == 0 & uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                         ((uCT[trans[, 2]] == 0 & rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+  dat$epi$cell4_ct[at] <- length(which(((rCT[trans[, 2]] == 0 & uCT[trans[, 1]] == 0) & trans[, 6] == 1) |
+                                         ((uCT[trans[, 2]] == 0 & rCT[trans[, 1]] == 0) & trans[, 6] == 0)))
+
+  dat$epi$cell1_syph[at] <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) & stage.syph[trans[, 1]] %in% c(1,2,3)))
+  dat$epi$cell2_syph[at] <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) & !(stage.syph[trans[, 1]] %in% c(1,2,3))))
+  dat$epi$cell3_syph[at] <- length(which(stage.syph[trans[, 1]] %in% c(1,2,3) & !(stage.syph[trans[, 2]] %in% c(1,2,3))))
+  dat$epi$cell4_syph[at] <- length(which(!(stage.syph[trans[, 1]] %in% c(1,2,3)) & !(stage.syph[trans[, 2]] %in% c(1,2,3))))
+
+  dat$epi$cell1_sti[at] <- length(which(((rGC[trans[, 2] == 1] | rCT[trans[ , 2] == 1] | stage.syph[trans[, 2]] %in% c(1,2,3)) &
+                                           (uGC[trans[, 1] == 1] | uCT[trans[ , 1] == 1] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
+                                           trans[, 6] == 1) |
+                                        ((rGC[trans[, 1] == 1] | rCT[trans[ , 1] == 1] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
+                                           (uGC[trans[, 2] == 1] | uCT[trans[ , 2] == 1] | stage.syph[trans[, 2]] %in% c(1,2,3)) &
+                                           trans[, 6] == 0)))
+
+  dat$epi$cell2_sti[at] <- length(which(((rGC[trans[, 2] == 1] | rCT[trans[ , 2] == 1] | stage.syph[trans[, 2]] %in% c(1,2,3)) &
+                                           (uGC[trans[, 1] == 0] & uCT[trans[ , 1] == 0] & !(stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                           trans[, 6] == 1) |
+                                          ((rGC[trans[, 1] == 1] & rCT[trans[ , 1] == 1] & !(stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                           (uGC[trans[, 2] == 1] | uCT[trans[ , 2] == 1] | stage.syph[trans[, 2]] %in% c(1,2,3)) &
+                                           trans[, 6] == 0)))
+
+  dat$epi$cell3_sti[at] <- length(which(((rGC[trans[, 2] == 0] & rCT[trans[ , 2] == 0] & !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
+                                           (uGC[trans[, 1] == 1] | uCT[trans[ , 1] == 0] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
+                                           trans[, 6] == 1) |
+                                          ((rGC[trans[, 1] == 0] | rCT[trans[ , 1] == 1] | stage.syph[trans[, 1]] %in% c(1,2,3)) &
+                                            (uGC[trans[, 2] == 0] | uCT[trans[ , 2] == 0] | !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
+                                            trans[, 6] == 0)))
+
+  dat$epi$cell4_sti[at] <- length(which(((rGC[trans[, 2] == 0] & rCT[trans[ , 2] == 0] & !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
+                                           (uGC[trans[, 1] == 0] & uCT[trans[ , 1] == 1] & !(stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                           trans[, 6] == 1) |
+                                          ((rGC[trans[, 1] == 0] & rCT[trans[ , 1] == 0] & !(stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                             (uGC[trans[, 2] == 0] & uCT[trans[ , 2] == 0] & !(stage.syph[trans[, 2]] %in% c(1,2,3))) &
+                                             trans[, 6] == 0)))
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)

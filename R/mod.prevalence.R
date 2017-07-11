@@ -212,6 +212,27 @@ prevalence_msm <- function(dat, at) {
     dat$epi$sum_syph <- rNA
     dat$epi$sum_urethral <- rNA
     dat$epi$sum_rectal <- rNA
+    #2x2 for PAF
+    #               HIV+
+    #             STI+  STI-
+    #HIV-   STI +  1    2
+    #       STI -  3    4
+    dat$epi$cell1_gc <- rNA
+    dat$epi$cell2_gc <- rNA
+    dat$epi$cell3_gc <- rNA
+    dat$epi$cell4_gc <- rNA
+    dat$epi$cell1_ct <- rNA
+    dat$epi$cell2_ct <- rNA
+    dat$epi$cell3_ct <- rNA
+    dat$epi$cell4_ct <- rNA
+    dat$epi$cell1_syph <- rNA
+    dat$epi$cell2_syph <- rNA
+    dat$epi$cell3_syph <- rNA
+    dat$epi$cell4_syph <- rNA
+    dat$epi$cell1_sti <- rNA
+    dat$epi$cell2_sti <- rNA
+    dat$epi$cell3_sti <- rNA
+    dat$epi$cell4_sti <- rNA
     # dat$epi$sti_paf <- rNA
     # dat$epi$sti_u_paf <- rNA
     # dat$epi$sti_r_paf <- rNA
