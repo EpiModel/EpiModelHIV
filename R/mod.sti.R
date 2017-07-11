@@ -275,17 +275,6 @@ sti_trans <- function(dat, at) {
             all(!is.na(uCT.infTime[uCT == 1])),
             all(!is.na(uCT.sympt[uCT == 1])))
 
-  if (is.null(dat$epi$times.rgc)) {
-    dat$epi$times.rgc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.ugc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.rct <- rep(NA, length(dat$epi$num))
-    dat$epi$times.uct <- rep(NA, length(dat$epi$num))
-  }
-  dat$epi$times.rgc[at] <- mean(rGC.timesInf, na.rm = TRUE)
-  dat$epi$times.ugc[at] <- mean(uGC.timesInf, na.rm = TRUE)
-  dat$epi$times.rct[at] <- mean(rCT.timesInf, na.rm = TRUE)
-  dat$epi$times.uct[at] <- mean(uCT.timesInf, na.rm = TRUE)
-
   return(dat)
 }
 
@@ -464,12 +453,6 @@ sti_recov <- function(dat, at) {
   dat$attr$uCT.tx.prep[recovUCT] <- NA
 
   dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
-
-  # Summary stats
-  dat$epi$recov.rgc[at] <- length(unique(recovRGC))
-  dat$epi$recov.ugc[at] <- length(unique(recovUGC))
-  dat$epi$recov.rct[at] <- length(unique(recovRCT))
-  dat$epi$recov.uct[at] <- length(unique(recovUCT))
 
   return(dat)
 }
@@ -658,57 +641,7 @@ sti_tx <- function(dat, at) {
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1) & dat$attr$uCT == 1)] <- 1
 
-  txRGC_all <- union(txRGC, txRGC_prep)
-  txUGC_all <- union(txUGC, txUGC_prep)
-  txRCT_all <- union(txRCT, txRCT_prep)
-  txUCT_all <- union(txUCT, txUCT_prep)
 
-
-  # summary stats
-  if (is.null(dat$epi$num.asympt.tx)) {
-    dat$epi$num.asympt.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$num))
-  }
-
-  asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
-                 intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
-                 intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
-                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
-  asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
-                    idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
-                    idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
-
-
-  asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
-                      intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
-                      intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
-                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
-  asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
-                         intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
-                         intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
-
-
-  rect.tx <- c(txRGC_all, txRCT_all)
-  dat$epi$num.rect.tx[at] <- length(unique(rect.tx))
-  rect.cases <- c(idsRGC_tx, idsRGC_prep_tx, idsRCT_tx, idsRCT_prep_tx)
-  dat$epi$num.rect.cases[at] <- length(unique(rect.cases))
-
-  rect.tx.prep <- c(txRGC_prep, txRCT_prep)
-  dat$epi$num.rect.tx.prep[at] <- length(unique(rect.tx.prep))
-  rect.cases.prep <- c(idsRGC_prep_tx, idsRCT_prep_tx)
-  dat$epi$num.rect.cases.prep[at] <- length(unique(rect.cases.prep))
 
   return(dat)
 }

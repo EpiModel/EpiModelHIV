@@ -239,10 +239,8 @@ trans_msm <- function(dat, at) {
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-
-  dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
-  dat$epi$trans.inst[at] <- sum(inf.type == 3)
+  dat$epi$incid.B[at] <- sum(dat$attr$race[infected] == "B")
+  dat$epi$incid.W[at] <- sum(dat$attr$race[infected] == "W")
 
   return(dat)
 }
