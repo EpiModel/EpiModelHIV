@@ -48,12 +48,12 @@ sti_ept_msm <- function(dat, at) {
     ## Parameters
     ept.risk.int <- dat$param$ept.risk.int
     ept.provision.main.ong <- dat$param$ept.provision.partner.main.ong
-    ept.provision.casl.ong <- dat$param$ept.provision.partner.casl.ong
+    ept.provision.pers.ong <- dat$param$ept.provision.partner.pers.ong
     ept.provision.main.end <- dat$param$ept.provision.partner.main.end
-    ept.provision.casl.end <- dat$param$ept.provision.partner.casl.end
+    ept.provision.pers.end <- dat$param$ept.provision.partner.pers.end
     ept.provision.inst <- dat$param$ept.provision.partner.inst
     ept.uptake.main <- dat$param$ept.uptake.partner.main
-    ept.uptake.casl <- dat$param$ept.uptake.partner.casl
+    ept.uptake.pers <- dat$param$ept.uptake.partner.pers
     ept.uptake.inst <- dat$param$ept.uptake.partner.inst
 
     # Partnership list
@@ -61,8 +61,8 @@ sti_ept_msm <- function(dat, at) {
 
     ## Stoppage for Index ------------------------------------------------------
 
-    # Index no longer eligible(> 60 days since treatment time)
-    idseptExpired <- which(((at - eptindexEligdate) > ept.risk.int) & eptindexStat == 1)
+    # Index no longer eligible(> 1 time step since treatment time)
+    idseptExpired <- which(((at - eptindexEligdate) > 1) & eptindexStat == 1)
 
     # Reset EPT status
     idsStp <- c(idseptExpired)
@@ -70,7 +70,7 @@ sti_ept_msm <- function(dat, at) {
     eptindexElig[idsStp] <- NA
 
 
-    # Indications for non-index-------------------------------------------------
+    ## Indications for non-index-------------------------------------------------
 
     ## Eligibility of partners
     part.list <- dat$temp$part.list
@@ -78,212 +78,94 @@ sti_ept_msm <- function(dat, at) {
     # Subset partner list to partnerships active within an EPT interval - last active date within risk interval
     part.list <- part.list[which((at - (part.list[, "last.active.time"]) <= ept.risk.int)), , drop = FALSE]
 
-    # Convert uid to regular ids in partnership list
-    #idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
+    # Subset partner list to where both partners are alive (a dead index can't provide EPT to alive non-index)
+    part.list <- part.list[which(part.list[, "uid1"] %in% dat$attr$uid & part.list[, "uid2"] %in% dat$attr$uid), , drop = FALSE]
 
-    #### Partner 1  recently treated, so partner 2 eligible for EPT
-    #### Currently only eligible for EPT once
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # main partnership, and last active today
-    part.listept1.main.ong <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
-                                                eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
-                                                (part.list[, "last.active.time"]) == at), , drop = FALSE]
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # casual partnership, and last active today
-    part.listept1.casl.ong <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
-                                                eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
-                                                (part.list[, "last.active.time"]) == at), , drop = FALSE]
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # main partnership, and not active today
-    part.listept1.main.end <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
-                                                eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 1 &
-                                                (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # casual partnership, and not active today
-    part.listept1.casl.end <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid2"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid2"]])) &
-                                                eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 2 &
-                                                (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # one-off partnership
-    part.listept1.inst <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
-                                               is.na(rGC.tx.ept[part.list[, "uid2"]]) |
-                                               is.na(uGC.tx.ept[part.list[, "uid2"]]) |
-                                               is.na(rCT.tx.ept[part.list[, "uid2"]]) |
-                                               is.na(uCT.tx.ept[part.list[, "uid2"]])) &
-                                            eptindexStat[part.list[, "uid1"]] == 1 & part.list[, "ptype"] == 3), , drop = FALSE]
+    # Different partnership subsets
+    part.listept.main.ong <- part.list[which((part.list[, "ptype"] == 1) &
+                                                (part.list[, "last.active.time"] == at)), , drop = FALSE]
+    part.listept.pers.ong <- part.list[which((part.list[, "ptype"] == 2) &
+                                               (part.list[, "last.active.time"] == at)), , drop = FALSE]
+    part.listept.main.end <- part.list[which((part.list[, "ptype"] == 1) &
+                                                (part.list[, "last.active.time"] < at)), , drop = FALSE]
+    part.listept.pers.end <- part.list[which((part.list[, "ptype"] == 2) &
+                                                (part.list[, "last.active.time"] < at)), , drop = FALSE]
+    part.listept.inst <- part.list[which((part.list[, "ptype"] == 3)), , drop = FALSE]
 
 
-    idspartlistsept1.main.ong <- part.listept1.main.ong[, "uid2"]
-    idspartlistsept1.casl.ong <- part.listept1.casl.ong[, "uid2"]
-    idspartlistsept1.main.end <- part.listept1.main.end[, "uid2"]
-    idspartlistsept1.casl.end <- part.listept1.casl.end[, "uid2"]
-    idspartlistsept1.inst <- part.listept1.inst[, "uid2"]
+    ### Partner 1 has been given EPT, so partner 2 eligible
+    # Return rows where partner 1 has been given EPT
+    part.listept.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])] == 1), , drop = FALSE]
+    part.listept.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])] == 1), , drop = FALSE]
+    part.listept.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid1"])] == 1), , drop = FALSE]
+    part.listept.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])] == 1), , drop = FALSE]
+    part.listept.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid1"])] == 1), , drop = FALSE]
 
+    # Choose other partner in those rows
+    part2.ept.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])
+    part2.ept.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])
+    part2.ept.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid2"])
+    part2.ept.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])
+    part2.ept.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid2"])
 
-    ### Partner 1  recently treated, so partner 2 eligible for EPT
+    # Check current Tx status for those partners - remove those currently being treated
+    # idspartlistsept2.main.ong <- part2.ept.main.ong[]
+    # idspartlistsept2.pers.ong <- part2.ept.pers.ong[]
+    # idspartlistsept2.main.end <- part2.ept.main.end[]
+    # idspartlistsept2.pers.end <- part2.ept.pers.end[]
+    # idspartlistsept2.inst <- part2.ept.inst[]
 
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # main partnership, and last active today
-    part.listept2.main.ong <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
-                                                eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
-                                                (part.list[, "last.active.time"]) == at), , drop = FALSE]
+    ### Partner 2 has been given EPT, so partner 1 eligible
+    # Return rows where partner 2 has been given EPT
+    part.listept.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])] == 1), , drop = FALSE]
+    part.listept.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])] == 1), , drop = FALSE]
+    part.listept.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid2"])] == 1), , drop = FALSE]
+    part.listept.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])] == 1), , drop = FALSE]
+    part.listept.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid2"])] == 1), , drop = FALSE]
 
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # casual partnership, and last active today
-    part.listept2.casl.ong <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
-                                                eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
-                                                (part.list[, "last.active.time"]) == at), , drop = FALSE]
+    # Choose other partner in those rows
+    part1.ept.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])
+    part1.ept.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])
+    part1.ept.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid1"])
+    part1.ept.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])
+    part1.ept.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid1"])
 
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # main partnership, and not active today
-    part.listept2.main.end <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
-                                                eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 1 &
-                                                (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
+    # Check current Tx status for those partners  - remove those currently being treated
+    # idspartlistsept1.main.ong <- part1.ept.main.ong[]
+    # idspartlistsept1.pers.ong <- part1.ept.pers.ong[]
+    # idspartlistsept1.main.end <- part1.ept.main.end[]
+    # idspartlistsept1.pers.end <- part1.ept.pers.end[]
+    # idspartlistsept1.inst <- part1.ept.inst[]
 
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # casual partnership, and not active today
-    part.listept2.casl.end <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                                   is.na(rGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uGC.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(rCT.tx.ept[part.list[, "uid1"]]) |
-                                                   is.na(uCT.tx.ept[part.list[, "uid1"]])) &
-                                                eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 2 &
-                                                (at - part.list[, "last.active.time"]) > 0), , drop = FALSE]
-
-    # Criteria: Non-index currently untreated, partner received EPT,
-    # one-off partnership
-    part.listept2.inst <- part.list[which(((rGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uGC.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (rCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uCT.tx[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (rGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uGC.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (rCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               (uCT.tx.prep[part.list[, "uid1"]]) %in% c(0, NA) |
-                                               is.na(rGC.tx.ept[part.list[, "uid1"]]) |
-                                               is.na(uGC.tx.ept[part.list[, "uid1"]]) |
-                                               is.na(rCT.tx.ept[part.list[, "uid1"]]) |
-                                               is.na(uCT.tx.ept[part.list[, "uid1"]])) &
-                                            eptindexStat[part.list[, "uid2"]] == 1 & part.list[, "ptype"] == 3), , drop = FALSE]
-
-
-    idspartlistsept2.main.ong <- part.listept2.main.ong[, "uid1"]
-    idspartlistsept2.casl.ong <- part.listept2.casl.ong[, "uid1"]
-    idspartlistsept2.main.end <- part.listept2.main.end[, "uid1"]
-    idspartlistsept2.casl.end <- part.listept2.casl.end[, "uid1"]
-    idspartlistsept2.inst <- part.listept2.inst[, "uid1"]
+    # part.listept1.main.ong <- part.list[which(((rGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (uGC.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (rCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (uCT.tx[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (rGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (uGC.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (rCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                (uCT.tx.prep[part.list[, "uid2"]]) %in% c(0, NA) |
+    #                                                is.na(rGC.tx.ept[part.list[, "uid2"]]) |
+    #                                                is.na(uGC.tx.ept[part.list[, "uid2"]]) |
+    #                                                is.na(rCT.tx.ept[part.list[, "uid2"]]) |
+    #                                                is.na(uCT.tx.ept[part.list[, "uid2"]])) &
+    #                                             eptindexStat[part.list[, "uid1"]] == 1), , drop = FALSE]
 
     # All EPT-tx eligible IDs (partners of index)
     idsept <- unique(c(idspartlistsept1.main.ong, idspartlistsept2.main.ong,
-                       idspartlistsept1.casl.ong, idspartlistsept2.casl.ong,
+                       idspartlistsept1.pers.ong, idspartlistsept2.pers.ong,
                        idspartlistsept1.main.end, idspartlistsept2.main.end,
-                       idspartlistsept1.casl.end, idspartlistsept2.casl.end,
+                       idspartlistsept1.pers.end, idspartlistsept2.pers.end,
                        idspartlistsept1.inst, idspartlistsept2.inst))
 
     idsept.main.ong <- unique(c(idspartlistsept1.main.ong,
                                 idspartlistsept2.main.ong))
-    idsept.casl.ong <- unique(c(idspartlistsept1.casl.ong,
-                                idspartlistsept2.casl.ong))
+    idsept.pers.ong <- unique(c(idspartlistsept1.pers.ong,
+                                idspartlistsept2.pers.ong))
     idsept.main.end <- unique(c(idspartlistsept1.main.end,
                                 idspartlistsept2.main.end))
-    idsept.casl.end <- unique(c(idspartlistsept1.casl.end,
-                                idspartlistsept2.casl.end))
+    idsept.pers.end <- unique(c(idspartlistsept1.pers.end,
+                                idspartlistsept2.pers.end))
     idsept.inst <- unique(c(idspartlistsept1.inst,
                             idspartlistsept2.inst))
 
@@ -291,33 +173,35 @@ sti_ept_msm <- function(dat, at) {
     ##(to be treated at next time step)
     idsprovided.main.ong <- idsept.main.ong[which(rbinom(length(idsept.main.ong), 1,
                                                          ept.provision.main.ong) == 1)]
-    idsprovided.casl.ong <- idsept.casl.ong[which(rbinom(length(idsept.casl.ong), 1,
-                                                         ept.provision.casl.ong) == 1)]
+    idsprovided.pers.ong <- idsept.pers.ong[which(rbinom(length(idsept.pers.ong), 1,
+                                                         ept.provision.pers.ong) == 1)]
     idsprovided.main.end <- idsept.main.end[which(rbinom(length(idsept.main.end), 1,
                                                          ept.provision.main.end) == 1)]
-    idsprovided.casl.end <- idsept.casl.end[which(rbinom(length(idsept.casl.end), 1,
-                                                         ept.provision.casl.end) == 1)]
+    idsprovided.pers.end <- idsept.pers.end[which(rbinom(length(idsept.pers.end), 1,
+                                                         ept.provision.pers.end) == 1)]
     idsprovided.inst <- idsept.inst[which(rbinom(length(idsept.inst), 1,
                                                  ept.provision.inst) == 1)]
 
-    idsprovided_ept <- unique(c(idsprovided.main.ong, idsprovided.casl.ong,
-                                idsprovided.main.end, idsprovided.casl.end,
+    idsprovided_ept <- unique(c(idsprovided.main.ong, idsprovided.pers.ong,
+                                idsprovided.main.end, idsprovided.pers.end,
                                 idsprovided.inst))
 
     idsprovided.main_ept <- unique(c(idsprovided.main.ong, idsprovided.main.end))
 
-    idsprovided.casl_ept <- unique(c(idsprovided.casl.ong, idsprovided.casl.end))
+    idsprovided.pers_ept <- unique(c(idsprovided.pers.ong, idsprovided.pers.end))
 
     idsprovided.inst_ept <- unique(c(idsprovided.inst))
 
     # Uptake by non-index ------------------------------------------------------
+    # Has to be a time component here - can only uptake at next time step
+    # Create partEligTxdate?
     idsept_tx.main <- idsprovided.main_ept[which(rbinom(length(idsprovided.main_ept), 1,
                                                         ept.uptake.main) == 1)]
-    idsept_tx.casl <- idsprovided.casl_ept[which(rbinom(length(idsprovided.casl_ept), 1,
-                                                        ept.uptake.casl) == 1)]
+    idsept_tx.pers <- idsprovided.pers_ept[which(rbinom(length(idsprovided.pers_ept), 1,
+                                                        ept.uptake.pers) == 1)]
     idsept_tx.inst <- idsprovided.inst_ept[which(rbinom(length(idsprovided.inst_ept), 1,
                                                         ept.uptake.inst) == 1)]
-    idsuptake_ept <- unique(c(idsept_tx.main, idsept_tx.casl, idsept_tx.inst))
+    idsuptake_ept <- unique(c(idsept_tx.main, idsept_tx.pers, idsept_tx.inst))
 
     ## Output -----------------------------------------------------------------
 

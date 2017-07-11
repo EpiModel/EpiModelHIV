@@ -1108,6 +1108,7 @@ sti_tx_msm <- function(dat, at) {
   alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
+  # NEED NEW DENOM - THOSE WITH PARTNERS - REFERENCE PARTNER LIST
   eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / sum(eptindexElig == 1, na.rm = TRUE)
   eptCov <- ifelse(is.nan(eptCov), 0, eptCov)
 

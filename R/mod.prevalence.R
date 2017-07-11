@@ -263,7 +263,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$recov.syphilis <- rNA
 
     dat$epi$trans.main <- rNA
-    dat$epi$trans.casl <- rNA
+    dat$epi$trans.pers <- rNA
     dat$epi$trans.inst <- rNA
 
     dat$epi$txGC <- rNA

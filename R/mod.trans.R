@@ -592,7 +592,7 @@ hiv_trans_msm <- function(dat, at) {
   dat$epi$incid[at] <- length(infected)
 
   dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
+  dat$epi$trans.pers[at] <- sum(inf.type == 2)
   dat$epi$trans.inst[at] <- sum(inf.type == 3)
 
   return(dat)

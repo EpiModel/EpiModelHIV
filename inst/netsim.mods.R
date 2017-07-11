@@ -57,13 +57,13 @@ param <- param_msm(nwstats = st,
                    hivdx.syph.sympt.tx.rr = 1.45,
 
                    prep.coverage = 0.0,
-                   ept.coverage = 0.1,
+                   ept.coverage = 0.9,
                    stianntest.coverage = 0.1,
                    stihighrisktest.coverage = 0.1,
 
-                   prep.start = 3,
-                   stitest.start = 3,
-                   ept.start = 2600,
+                   prep.start = 2600,
+                   stitest.start = 2600,
+                   ept.start = 2,
 
                    stitest.elig.model = "sti",
 
@@ -102,7 +102,6 @@ for (at in 2:control$nsteps) {
   dat <- sti_test_msm(dat, at)
   dat <- hiv_tx_msm(dat, at)
   dat <- prep_msm(dat, at)
-  dat <- sti_ept_msm(dat, at)
   dat <- hiv_progress_msm(dat, at)
   dat <- syph_progress_msm(dat, at)
   dat <- hiv_vl_msm(dat, at)
@@ -118,6 +117,7 @@ for (at in 2:control$nsteps) {
   dat <- sti_trans_msm(dat, at)
   dat <- sti_recov_msm(dat, at)
   dat <- sti_tx_msm(dat, at)
+  dat <- sti_ept_msm(dat, at)
   dat <- prevalence_msm(dat, at)
   cat("\t", at)
 }

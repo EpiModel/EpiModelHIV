@@ -60,10 +60,10 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
   ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
   ept.provision.partner.main.ong = 0.5,
-  ept.provision.partner.casl.ong = 0.4,
+  ept.provision.partner.pers.ong = 0.4,
   ept.provision.partner.main.end = 0.4,
-  ept.provision.partner.casl.end = 0.3, ept.provision.partner.inst = 0.2,
-  ept.uptake.partner.main = 0.8, ept.uptake.partner.casl = 0.8,
+  ept.provision.partner.pers.end = 0.3, ept.provision.partner.inst = 0.2,
+  ept.uptake.partner.main = 0.8, ept.uptake.partner.pers = 0.8,
   ept.uptake.partner.inst = 0.8, ept.gc.success = 0.95,
   ept.ct.success = 0.95, rcomp.prob = 0, rcomp.adh.groups = 0:3,
   rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.4245,
@@ -513,13 +513,13 @@ their eligibility, with 1 equal to instant start.}
 \item{ept.provision.partner.main.ong}{The likelihood of a index partner providing
 EPT medication to a main partner when partnership is ongoing.}
 
-\item{ept.provision.partner.casl.ong}{The likelihood of a index partner providing
+\item{ept.provision.partner.pers.ong}{The likelihood of a index partner providing
 EPT medication to a casual partner when partnership is ongoing.}
 
 \item{ept.provision.partner.main.end}{The likelihood of a index partner providing
 EPT medication to a main partner when partnership has ended}
 
-\item{ept.provision.partner.casl.end}{The likelihood of a index partner providing
+\item{ept.provision.partner.pers.end}{The likelihood of a index partner providing
 EPT medication to a main partner when partnership has ended.}
 
 \item{ept.provision.partner.inst}{The likelihood of a index partner providing
@@ -528,7 +528,7 @@ EPT medication to a one-off partner.}
 \item{ept.uptake.partner.main}{The likelihood of a partner taking medication
 provided to them by a main index partner.}
 
-\item{ept.uptake.partner.casl}{The likelihood of a partner taking medication
+\item{ept.uptake.partner.pers}{The likelihood of a partner taking medication
 provided to them by a casual index partner.}
 
 \item{ept.uptake.partner.inst}{The likelihood of a partner taking medication

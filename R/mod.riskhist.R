@@ -49,7 +49,7 @@ riskhist_prep_msm <- function(dat, at) {
 
   ## Degree ##
   main.deg <- get_degree(dat$el[[1]])
-  casl.deg <- get_degree(dat$el[[2]])
+  pers.deg <- get_degree(dat$el[[2]])
   inst.deg <- get_degree(dat$el[[3]])
 
 
@@ -60,7 +60,7 @@ riskhist_prep_msm <- function(dat, at) {
                       el2$p2[el2$uai > 0]))
 
   # Monogamous partnerships: 1-sided
-  tot.deg <- main.deg + casl.deg + inst.deg
+  tot.deg <- main.deg + pers.deg + inst.deg
   uai.mono1 <- intersect(which(tot.deg == 1), uai.any)
 
   # "Negative" partnerships
