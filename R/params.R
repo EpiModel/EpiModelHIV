@@ -87,8 +87,12 @@
 #'        elevated viral load) when positive partner is in the acute stage.
 #' @param circ.rr Relative risk of infection from insertive anal sex when the
 #'        negative insertive partner is circumcised.
-#' @param condom.rr Relative risk of infection from anal sex when a condom is
-#'        used.
+#' @param condom.eff Relative risk of infection from anal sex when a condom is
+#'        used properly (biological efficacy)
+#' @param condom.fail.B Condom failure rates for Black MSM, as a reduction in the
+#'        cond.eff parameter
+#' @param cond.fail.W Condom failure rates for White MSM, as a reduction in the
+#'        cond.eff parameter
 #' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
 #' @param disc.outset.main.W.prob Probability that an HIV-infected white MSM will
@@ -340,7 +344,11 @@ param_msm <- function(nwstats,
                       UIAI.prob = 0.0031 * 1.09,
                       acute.rr = 6,
                       circ.rr = 0.4,
-                      condom.rr = 0.295,
+
+                      # condom.rr = 0.295,
+                      cond.eff = 0.95,
+                      cond.fail.B = 0.35,
+                      cond.fail.W = 0.15,
 
                       disc.outset.main.B.prob = 0.685,
                       disc.outset.main.W.prob = 0.889,

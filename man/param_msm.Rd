@@ -20,16 +20,16 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   part.supp.up.slope = 0.25, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
   birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
   UIAI.prob = 0.0031 * 1.09, acute.rr = 6, circ.rr = 0.4,
-  condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  cond.eff = 0.95, cond.fail.B = 0.35, cond.fail.W = 0.15,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
+  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
+  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
@@ -184,8 +184,8 @@ elevated viral load) when positive partner is in the acute stage.}
 \item{circ.rr}{Relative risk of infection from insertive anal sex when the
 negative insertive partner is circumcised.}
 
-\item{condom.rr}{Relative risk of infection from anal sex when a condom is
-used.}
+\item{cond.fail.W}{Condom failure rates for White MSM, as a reduction in the
+cond.eff parameter}
 
 \item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
@@ -476,6 +476,12 @@ a condom used by the insertive partner.}
 given dual infection with both gonorrhea and chlamydia.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{condom.eff}{Relative risk of infection from anal sex when a condom is
+used properly (biological efficacy)}
+
+\item{condom.fail.B}{Condom failure rates for Black MSM, as a reduction in the
+cond.eff parameter}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

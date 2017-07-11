@@ -48,12 +48,17 @@ trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  race <- dat$attr$race
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
   acute.rr <- dat$param$acute.rr
-  condom.rr <- dat$param$condom.rr
+
+  cond.eff <- dat$param$cond.eff
+  cond.fail.B <- dat$param$cond.fail.B
+  cond.fail.W <- dat$param$cond.fail.W
+
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
   prep.hr <- dat$param$prep.class.hr
@@ -101,7 +106,14 @@ trans_msm <- function(dat, at) {
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
-  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr)
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.ip))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
@@ -163,7 +175,15 @@ trans_msm <- function(dat, at) {
 
   # Condom use
   not.UAI <- which(disc.rp[, "uai"] == 0)
-  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr)
+
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.rp))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
