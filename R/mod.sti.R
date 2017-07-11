@@ -80,13 +80,14 @@ sti_trans <- function(dat, at) {
   # ins = 1 : p1 is insertive
   # ins = 2 : both p1 and p2 are insertive
 
+
   # Rectal GC -----------------------------------------------------------
 
   # Requires: uGC in insertive man, and no rGC in receptive man
   p1Inf_rgc <- which(uGC[al[, "p1"]] == 1 & uGC.infTime[al[, "p1"]] < at &
-                       rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rgc <- which(uGC[al[, "p1"]] == 0 & uGC.infTime[al[, "p2"]] < at &
-                       rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+  p2Inf_rgc <- which(uGC[al[, "p2"]] == 1 & uGC.infTime[al[, "p2"]] < at &
+                     rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rgc <- c(p1Inf_rgc, p2Inf_rgc)
 
   # UAI modifier
@@ -111,13 +112,14 @@ sti_trans <- function(dat, at) {
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   rGC.timesInf[idsInf_rgc] <- rGC.timesInf[idsInf_rgc] + 1
 
+
   # Urethral GC ---------------------------------------------------------
 
   # Requires: rGC in receptive man, and no uGC in insertive man
   p1Inf_ugc <- which(rGC[al[, "p1"]] == 1 & rGC.infTime[al[, "p1"]] < at &
-                       uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_ugc <- which(rGC[al[, "p1"]] == 0 & rGC.infTime[al[, "p2"]] < at &
-                       uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+  p2Inf_ugc <- which(rGC[al[, "p2"]] == 1 & rGC.infTime[al[, "p2"]] < at &
+                     uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_ugc <- c(p1Inf_ugc, p2Inf_ugc)
 
   # UAI modifier
@@ -147,9 +149,9 @@ sti_trans <- function(dat, at) {
 
   # Requires: uCT in insertive man, and no rCT in receptive man
   p1Inf_rct <- which(uCT[al[, "p1"]] == 1 & uCT.infTime[al[, "p1"]] < at &
-                       rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rct <- which(uCT[al[, "p1"]] == 0 & uCT.infTime[al[, "p2"]] < at &
-                       rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+  p2Inf_rct <- which(uCT[al[, "p2"]] == 1 & uCT.infTime[al[, "p2"]] < at &
+                     rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rct <- c(p1Inf_rct, p2Inf_rct)
 
   # UAI modifier
@@ -179,9 +181,9 @@ sti_trans <- function(dat, at) {
 
   # Requires: rCT in receptive man, and no uCT in insertive man
   p1Inf_uct <- which(rCT[al[, "p1"]] == 1 & rCT.infTime[al[, "p1"]] < at &
-                       uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_uct <- which(rCT[al[, "p1"]] == 0 & rCT.infTime[al[, "p2"]] < at &
-                       uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+  p2Inf_uct <- which(rCT[al[, "p2"]] == 1 & rCT.infTime[al[, "p2"]] < at &
+                     uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_uct <- c(p1Inf_uct, p2Inf_uct)
 
   # UAI modifier
