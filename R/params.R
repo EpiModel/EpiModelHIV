@@ -531,7 +531,7 @@ param_msm <- function(nwstats,
                                 nrow = 3)
 
 
-  p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  p$riskh.start <- max(1, prep.start - p$prep.risk.int - 1)
 
   p$method <- nwstats$method
   p$modes <- 1
