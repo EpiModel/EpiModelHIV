@@ -58,11 +58,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.gc <- rNA
     dat$epi$prev.ct <- rNA
 
-    dat$epi$incid.gc <- rNA
-    dat$epi$incid.ct <- rNA
+    dat$epi$incid.gc <- dat$epi$incid.gc.B <- dat$epi$incid.gc.W <- rNA
+    dat$epi$incid.ct <- dat$epi$incid.ct.B <- dat$epi$incid.ct.W <- rNA
 
-    dat$epi$ir100.gc <- rNA
-    dat$epi$ir100.ct <- rNA
+    dat$epi$ir100.gc <- dat$epi$ir100.gc.B <- dat$epi$ir100.gc.W <- rNA
+    dat$epi$ir100.ct <- dat$epi$ir100.ct.B <- dat$epi$ir100.ct.W <- rNA
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -93,9 +93,21 @@ prevalence_msm <- function(dat, at) {
   dat$epi$ir100.gc[at] <- (dat$epi$incid.gc[at] /
                              (sum(rGC == 0, na.rm = TRUE) +
                                 sum(uGC == 0, na.rm = TRUE))) * 5200
+  dat$epi$ir100.gc.B[at] <- (dat$epi$incid.gc.B[at] /
+                               (sum(rGC == 0 & race == "B", na.rm = TRUE) +
+                                  sum(uGC == 0 & race == "B", na.rm = TRUE))) * 5200
+  dat$epi$ir100.gc.W[at] <- (dat$epi$incid.gc.W[at] /
+                               (sum(rGC == 0 & race == "W", na.rm = TRUE) +
+                                  sum(uGC == 0 & race == "W", na.rm = TRUE))) * 5200
   dat$epi$ir100.ct[at] <- (dat$epi$incid.ct[at] /
                              (sum(rCT == 0, na.rm = TRUE) +
                                 sum(uCT == 0, na.rm = TRUE))) * 5200
+  dat$epi$ir100.ct.B[at] <- (dat$epi$incid.ct.B[at] /
+                             (sum(rCT == 0 & race == "B", na.rm = TRUE) +
+                                sum(uCT == 0 & race == "B", na.rm = TRUE))) * 5200
+  dat$epi$ir100.ct.W[at] <- (dat$epi$incid.ct.W[at] /
+                               (sum(rCT == 0 & race == "W", na.rm = TRUE) +
+                                  sum(uCT == 0 & race == "W", na.rm = TRUE))) * 5200
 
   return(dat)
 }
