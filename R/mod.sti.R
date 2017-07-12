@@ -254,16 +254,9 @@ sti_trans <- function(dat, at) {
 
 
   # Summary stats
-  dat$epi$incid.rgc[at] <- length(idsInf_rgc)
-  dat$epi$incid.ugc[at] <- length(idsInf_ugc)
   dat$epi$incid.gc[at] <- length(idsInf_rgc) + length(idsInf_ugc)
-  dat$epi$incid.rct[at] <- length(idsInf_rct)
-  dat$epi$incid.uct[at] <- length(idsInf_uct)
   dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
 
-  dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
-                                                    idsInf_rct, idsInf_uct)),
-                                           which(dat$attr$prepStat == 1)))
 
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
