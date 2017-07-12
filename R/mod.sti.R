@@ -62,8 +62,6 @@ sti_trans <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
 
-
-
   # Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
   uGC.sympt <- dat$attr$uGC.sympt
@@ -93,7 +91,7 @@ sti_trans <- function(dat, at) {
   allActs_rgc <- c(p1Inf_rgc, p2Inf_rgc)
 
   # UAI modifier
-  uai_rgc <- al[, "uai"][allActs_rgc]
+  uai_rgc <- al[allActs_rgc, "uai"]
   tprob_rgc <- rep(rgc.tprob, length(allActs_rgc))
   tprob_rgc[uai_rgc == 0] <- tprob_rgc[uai_rgc == 0] * sti.cond.rr
 
@@ -125,7 +123,7 @@ sti_trans <- function(dat, at) {
   allActs_ugc <- c(p1Inf_ugc, p2Inf_ugc)
 
   # UAI modifier
-  uai_ugc <- al[, "uai"][allActs_ugc]
+  uai_ugc <- al[allActs_ugc, "uai"]
   tprob_ugc <- rep(ugc.tprob, length(allActs_ugc))
   tprob_ugc[uai_ugc == 0] <- tprob_ugc[uai_ugc == 0] * sti.cond.rr
 
@@ -157,7 +155,7 @@ sti_trans <- function(dat, at) {
   allActs_rct <- c(p1Inf_rct, p2Inf_rct)
 
   # UAI modifier
-  uai_rct <- al[, "uai"][allActs_rct]
+  uai_rct <- al[allActs_rct, "uai"]
   tprob_rct <- rep(rct.tprob, length(allActs_rct))
   tprob_rct[uai_rct == 0] <- tprob_rct[uai_rct == 0] * sti.cond.rr
 
@@ -189,7 +187,7 @@ sti_trans <- function(dat, at) {
   allActs_uct <- c(p1Inf_uct, p2Inf_uct)
 
   # UAI modifier
-  uai_uct <- al[, "uai"][allActs_uct]
+  uai_uct <- al[allActs_uct, "uai"]
   tprob_uct <- rep(uct.tprob, length(allActs_uct))
   tprob_uct[uai_uct == 0] <- tprob_uct[uai_uct == 0] * sti.cond.rr
 
