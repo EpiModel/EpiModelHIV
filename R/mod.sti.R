@@ -27,7 +27,9 @@ sti_trans <- function(dat, at) {
   uct.sympt.prob <- dat$param$uct.sympt.prob
 
   # Relative risk of infection given condom use during act
-  sti.cond.rr <- dat$param$sti.cond.rr
+  sti.cond.eff <- dat$param$sti.cond.eff
+  sti.cond.fail.B <- dat$param$sti.cond.fail.B
+  sti.cond.fail.W <- dat$param$sti.cond.fail.W
 
   # Cessation
   gc.prob.cease <- dat$param$gc.prob.cease
@@ -93,7 +95,20 @@ sti_trans <- function(dat, at) {
   # UAI modifier
   uai_rgc <- al[allActs_rgc, "uai"]
   tprob_rgc <- rep(rgc.tprob, length(allActs_rgc))
-  tprob_rgc[uai_rgc == 0] <- tprob_rgc[uai_rgc == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_rgc <- log(tprob_rgc/(1-tprob_rgc))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_rgc, "p1"]], race[al[p2Inf_rgc, "p2"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_rgc[uai_rgc == 0] <- tlo_rgc[uai_rgc == 0] + log(condom.rr[uai_rgc == 0])
+
+  # Back-transform to probability
+  tprob_rgc <- plogis(tlo_rgc)
 
   # Stochastic transmission
   trans_rgc <- rbinom(length(allActs_rgc), 1, tprob_rgc)
@@ -125,7 +140,20 @@ sti_trans <- function(dat, at) {
   # UAI modifier
   uai_ugc <- al[allActs_ugc, "uai"]
   tprob_ugc <- rep(ugc.tprob, length(allActs_ugc))
-  tprob_ugc[uai_ugc == 0] <- tprob_ugc[uai_ugc == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_ugc <- log(tprob_ugc/(1-tprob_ugc))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_ugc, "p2"]], race[al[p2Inf_ugc, "p1"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_ugc[uai_ugc == 0] <- tlo_ugc[uai_ugc == 0] + log(condom.rr[uai_ugc == 0])
+
+  # Back-transform to probability
+  tprob_ugc <- plogis(tlo_ugc)
 
   # Stochastic transmission
   trans_ugc <- rbinom(length(allActs_ugc), 1, tprob_ugc)
@@ -157,7 +185,20 @@ sti_trans <- function(dat, at) {
   # UAI modifier
   uai_rct <- al[allActs_rct, "uai"]
   tprob_rct <- rep(rct.tprob, length(allActs_rct))
-  tprob_rct[uai_rct == 0] <- tprob_rct[uai_rct == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_rct <- log(tprob_rct/(1-tprob_rct))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_rct, "p1"]], race[al[p2Inf_rct, "p2"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_rct[uai_rct == 0] <- tlo_rct[uai_rct == 0] + log(condom.rr[uai_rct == 0])
+
+  # Back-transform to probability
+  tprob_rct <- plogis(tlo_rct)
 
   # Stochastic transmission
   trans_rct <- rbinom(length(allActs_rct), 1, tprob_rct)
@@ -189,9 +230,22 @@ sti_trans <- function(dat, at) {
   # UAI modifier
   uai_uct <- al[allActs_uct, "uai"]
   tprob_uct <- rep(uct.tprob, length(allActs_uct))
-  tprob_uct[uai_uct == 0] <- tprob_uct[uai_uct == 0] * sti.cond.rr
 
-  # Transmission
+  # Transform to log odds
+  tlo_uct <- log(tprob_uct/(1-tprob_uct))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_uct, "p2"]], race[al[p2Inf_uct, "p1"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_uct[uai_uct == 0] <- tlo_uct[uai_uct == 0] + log(condom.rr[uai_uct == 0])
+
+  # Back-transform to probability
+  tprob_uct <- plogis(tlo_uct)
+
+  # Stochastic transmission
   trans_uct <- rbinom(length(allActs_uct), 1, tprob_uct)
 
   # Determine the newly infected partner

@@ -58,7 +58,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   gc.prob.cease = 0, ct.prob.cease = 0, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3, hiv.rgc.rr = 2.780673,
+  prep.continue.stand.tx = TRUE, sti.cond.eff = 0.95,
+  sti.cond.fail.B = 0.35, sti.cond.fail.W = 0.15, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
   hiv.dual.rr = 0.2, ...)
 }
@@ -184,14 +185,14 @@ elevated viral load) when positive partner is in the acute stage.}
 \item{circ.rr}{Relative risk of infection from insertive anal sex when the
 negative insertive partner is circumcised.}
 
-\item{cond.eff}{Relative risk of infection from anal sex when a condom is
-used properly (biological efficacy)}
+\item{cond.eff}{Relative risk of HIV infection from anal sex when a condom is
+used properly (biological efficacy).}
 
-\item{cond.fail.B}{Condom failure rates for Black MSM, as a reduction in the
-cond.eff parameter}
+\item{cond.fail.B}{Condom failure rates for HIV for Black MSM, as a reduction
+in the cond.eff parameter.}
 
-\item{cond.fail.W}{Condom failure rates for White MSM, as a reduction in the
-cond.eff parameter}
+\item{cond.fail.W}{Condom failure rates for HIV for White MSM, as a reduction
+in the cond.eff parameter.}
 
 \item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
@@ -467,8 +468,14 @@ PrEP visit.}
 \item{prep.continue.stand.tx}{Logical, if \code{TRUE} will continue standard
 STI treatment of symptomatic cases even after PrEP initiation.}
 
-\item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
-a condom used by the insertive partner.}
+\item{sti.cond.eff}{Relative risk of STI infection from anal sex when a condom is
+used properly (biological efficacy).}
+
+\item{sti.cond.fail.B}{Condom failure rates for STI for Black MSM, as a reduction
+in the cond.eff parameter.}
+
+\item{sti.cond.fail.W}{Condom failure rates for STI for White MSM, as a reduction
+in the cond.eff parameter.}
 
 \item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
 

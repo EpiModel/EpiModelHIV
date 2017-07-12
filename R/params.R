@@ -87,12 +87,12 @@
 #'        elevated viral load) when positive partner is in the acute stage.
 #' @param circ.rr Relative risk of infection from insertive anal sex when the
 #'        negative insertive partner is circumcised.
-#' @param cond.eff Relative risk of infection from anal sex when a condom is
-#'        used properly (biological efficacy)
-#' @param cond.fail.B Condom failure rates for Black MSM, as a reduction in the
-#'        cond.eff parameter
-#' @param cond.fail.W Condom failure rates for White MSM, as a reduction in the
-#'        cond.eff parameter
+#' @param cond.eff Relative risk of HIV infection from anal sex when a condom is
+#'        used properly (biological efficacy).
+#' @param cond.fail.B Condom failure rates for HIV for Black MSM, as a reduction
+#'        in the cond.eff parameter.
+#' @param cond.fail.W Condom failure rates for HIV for White MSM, as a reduction
+#'        in the cond.eff parameter.
 #' @param disc.outset.main.B.prob Probability that an HIV-infected black MSM will
 #'        disclose his status at the start of a main partnership.
 #' @param disc.outset.main.W.prob Probability that an HIV-infected white MSM will
@@ -280,8 +280,12 @@
 #'        PrEP visit.
 #' @param prep.continue.stand.tx Logical, if \code{TRUE} will continue standard
 #'        STI treatment of symptomatic cases even after PrEP initiation.
-#' @param sti.cond.rr Relative risk of STI infection (in either direction) given
-#'        a condom used by the insertive partner.
+#' @param sti.cond.eff Relative risk of STI infection from anal sex when a condom is
+#'        used properly (biological efficacy).
+#' @param sti.cond.fail.B Condom failure rates for STI for Black MSM, as a reduction
+#'        in the cond.eff parameter.
+#' @param sti.cond.fail.W Condom failure rates for STI for White MSM, as a reduction
+#'        in the cond.eff parameter.
 #' @param hiv.rgc.rr Relative risk of HIV infection given current rectal gonorrhea.
 #' @param hiv.ugc.rr Relative risk of HIV infection given current urethral gonorrhea.
 #' @param hiv.rct.rr Relative risk of HIV infection given current rectal chlamydia.
@@ -345,7 +349,6 @@ param_msm <- function(nwstats,
                       acute.rr = 6,
                       circ.rr = 0.4,
 
-                      # condom.rr = 0.295,
                       cond.eff = 0.95,
                       cond.fail.B = 0.35,
                       cond.fail.W = 0.15,
@@ -455,7 +458,9 @@ param_msm <- function(nwstats,
                       prep.sti.prob.tx = 1,
                       prep.continue.stand.tx = TRUE,
 
-                      sti.cond.rr = 0.3,
+                      sti.cond.eff = 0.95,
+                      sti.cond.fail.B = 0.35,
+                      sti.cond.fail.W = 0.15,
 
                       hiv.rgc.rr = 2.780673,
                       hiv.ugc.rr = 1.732363,
