@@ -95,18 +95,18 @@ sti_ept_msm <- function(dat, at) {
 
     ### Partner 1 has been given EPT, so partner 2 eligible
     # Return rows where partner 1 has been given EPT
-    part.listept.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])] == 1), , drop = FALSE]
-    part.listept.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])] == 1), , drop = FALSE]
-    part.listept.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid1"])] == 1), , drop = FALSE]
-    part.listept.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])] == 1), , drop = FALSE]
-    part.listept.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid1"])] == 1), , drop = FALSE]
+    part.listept1.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])] == 1), , drop = FALSE]
+    part.listept1.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])] == 1), , drop = FALSE]
+    part.listept1.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid1"])] == 1), , drop = FALSE]
+    part.listept1.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])] == 1), , drop = FALSE]
+    part.listept1.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid1"])] == 1), , drop = FALSE]
 
     # Choose other partner in those rows
-    part2.ept.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])
-    part2.ept.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])
-    part2.ept.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid2"])
-    part2.ept.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])
-    part2.ept.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid2"])
+    part2.ept.main.ong <- which(dat$attr$uid %in% part.listept1.main.ong[, "uid2"])
+    part2.ept.pers.ong <- which(dat$attr$uid %in% part.listept1.pers.ong[, "uid2"])
+    part2.ept.main.end <- which(dat$attr$uid %in% part.listept1.main.end[, "uid2"])
+    part2.ept.pers.end <- which(dat$attr$uid %in% part.listept1.pers.end[, "uid2"])
+    part2.ept.inst <- which(dat$attr$uid %in% part.listept1.inst[, "uid2"])
 
     # Check current Tx status for those partners - remove those currently being treated
     # idspartlistsept2.main.ong <- part2.ept.main.ong[]
@@ -117,18 +117,18 @@ sti_ept_msm <- function(dat, at) {
 
     ### Partner 2 has been given EPT, so partner 1 eligible
     # Return rows where partner 2 has been given EPT
-    part.listept.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])] == 1), , drop = FALSE]
-    part.listept.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])] == 1), , drop = FALSE]
-    part.listept.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid2"])] == 1), , drop = FALSE]
-    part.listept.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])] == 1), , drop = FALSE]
-    part.listept.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid2"])] == 1), , drop = FALSE]
+    part.listept2.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])] == 1), , drop = FALSE]
+    part.listept2.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])] == 1), , drop = FALSE]
+    part.listept2.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid2"])] == 1), , drop = FALSE]
+    part.listept2.pers.end <- part.listept.pers.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])] == 1), , drop = FALSE]
+    part.listept2.inst <- part.listept.inst[which(eptindexStat[which(dat$attr$uid %in% part.listept.inst[, "uid2"])] == 1), , drop = FALSE]
 
     # Choose other partner in those rows
-    part1.ept.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])
-    part1.ept.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])
-    part1.ept.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid1"])
-    part1.ept.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])
-    part1.ept.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid1"])
+    part1.ept.main.ong <- which(dat$attr$uid %in% part.listept2.main.ong[, "uid1"])
+    part1.ept.pers.ong <- which(dat$attr$uid %in% part.listept2.pers.ong[, "uid1"])
+    part1.ept.main.end <- which(dat$attr$uid %in% part.listept2.main.end[, "uid1"])
+    part1.ept.pers.end <- which(dat$attr$uid %in% part.listept2.pers.end[, "uid1"])
+    part1.ept.inst <- which(dat$attr$uid %in% part.listept2.inst[, "uid1"])
 
     # Check current Tx status for those partners  - remove those currently being treated
     # idspartlistsept1.main.ong <- part1.ept.main.ong[]

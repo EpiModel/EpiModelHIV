@@ -584,9 +584,7 @@ sti_recov_msm <- function(dat, at) {
   recovGCCT <- c(recovUCT, recovRCT, recovRGC, recovUGC)
 
   # Reset EPT attributes
-  dat$attr$eptindexElig[recovGCCT] <- NA
   dat$attr$eptindexEligdate[recovGCCT] <- NA
-  dat$attr$eptindexStat[recovGCCT] <- NA
   dat$attr$eptpartEligReceive[recovGCCT] <- NA
   dat$attr$eptpartEligTx[recovGCCT] <- NA
   dat$attr$eptpartTx[recovGCCT] <- NA
@@ -1055,6 +1053,12 @@ sti_tx_msm <- function(dat, at) {
   txUCT_all <- c(txUCT, txUCT_prep)
   txsyph_all <- c(txsyph, txsyph_prep)
 
+  # Subset all treated to treated with partners (for EPT)
+  ept_txRGC_all <- txRGC_all[dat$attr$recentpartners > 0]
+  ept_txUGC_all <- txUGC_all[dat$attr$recentpartners > 0]
+  ept_txRCT_all <- txRCT_all[dat$attr$recentpartners > 0]
+  ept_txUCT_all <- txUCT_all[dat$attr$recentpartners > 0]
+  ept_tx_all <- unique(c(ept_txRGC_all, ept_txUGC_all, ept_txRCT_all, ept_txUCT_all))
 
   # EPT Treatment for Non-index (no test is done) ------------------------------
   # Have prevalent infection, are eligible for tx through EPT, are untreated, and
@@ -1108,20 +1112,19 @@ sti_tx_msm <- function(dat, at) {
   alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
-  # NEED NEW DENOM - THOSE WITH PARTNERS - REFERENCE PARTNER LIST
-  eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / sum(eptindexElig == 1, na.rm = TRUE)
+  eptCov <- sum(eptindexStat == 1, na.rm = TRUE) / length(ept_tx_all)
   eptCov <- ifelse(is.nan(eptCov), 0, eptCov)
 
   idsEligSt <- which(eptindexElig == 1)
   nEligSt <- length(idsEligSt)
 
   nStart <- max(0, min(nEligSt, round((ept.coverage - eptCov) * sum(eptindexElig == 1, na.rm = TRUE))))
-  idsStart <- NULL
+  ept_idsStart <- NULL
   if (nStart > 0) {
     if (ept.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
+      ept_idsStart <- ssample(idsEligSt, nStart)
     } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, ept.cov.rate) == 1]
+      ept_idsStart <- idsEligSt[rbinom(nStart, 1, ept.cov.rate) == 1]
     }
   }
 
@@ -1178,24 +1181,24 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
 
-  # Index EPT-eligible if treated, assign subset to be on EPT
-  #  EPT-treated people not eligible to provide EPT to their partners
-  dat$attr$eptindexElig[txRGC_all] <- 1
-  dat$attr$eptindexStat[txRGC_all] <- 0
-  dat$attr$eptindexElig[txUGC_all] <- 1
-  dat$attr$eptindexStat[txUGC_all] <- 0
-  dat$attr$eptindexElig[txRCT_all] <- 1
-  dat$attr$eptindexStat[txRCT_all] <- 0
-  dat$attr$eptindexElig[txUCT_all] <- 1
-  dat$attr$eptindexStat[txUCT_all] <- 0
-  dat$attr$eptindexEligdate[txRGC_all] <- at
-  dat$attr$eptindexEligdate[txUGC_all] <- at
-  dat$attr$eptindexEligdate[txRCT_all] <- at
-  dat$attr$eptindexEligdate[txUCT_all] <- at
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
-  dat$attr$eptindexStat[idsStart] <- 1
+  # Index EPT-eligible if treated and have partners, assign subset to be on EPT
+  #  EPT-treated non-index partners not eligible to provide EPT to their partners
+  dat$attr$eptindexElig[ept_txRGC_all] <- 1
+  dat$attr$eptindexStat[ept_txRGC_all] <- 0
+  dat$attr$eptindexElig[ept_txUGC_all] <- 1
+  dat$attr$eptindexStat[ept_txUGC_all] <- 0
+  dat$attr$eptindexElig[ept_txRCT_all] <- 1
+  dat$attr$eptindexStat[ept_txRCT_all] <- 0
+  dat$attr$eptindexElig[ept_txUCT_all] <- 1
+  dat$attr$eptindexStat[ept_txUCT_all] <- 0
+  dat$attr$eptindexEligdate[ept_txRGC_all] <- at
+  dat$attr$eptindexEligdate[ept_txUGC_all] <- at
+  dat$attr$eptindexEligdate[ept_txRCT_all] <- at
+  dat$attr$eptindexEligdate[ept_txUCT_all] <- at
+  dat$attr$eptindexStat[ept_idsStart] <- 1
+  dat$attr$eptindexStat[ept_idsStart] <- 1
+  dat$attr$eptindexStat[ept_idsStart] <- 1
+  dat$attr$eptindexStat[ept_idsStart] <- 1
 
   # Non-index EPT-treated
   dat$attr$eptpartEligTx[alltxEPT] <- NA
