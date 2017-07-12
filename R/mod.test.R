@@ -347,7 +347,7 @@ sti_test_msm <- function(dat, at) {
   }
 
   ### Testing coverage for annual - all those sexually active without high-risk indications
-  stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(setdiff(idsactive, idshighrisk))
+  stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(setdiff(idsactive, which(tt.traj.syph == 2)))
   stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
 
   idsEligSt <- setdiff(idsactive, idshighrisk)
