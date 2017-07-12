@@ -176,8 +176,8 @@ trans_msm <- function(dat, at) {
   # Condom use
   not.UAI <- which(disc.rp[, "uai"] == 0)
 
-  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
-  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "W"))
 
   condom.rr <- rep(NA, nrow(disc.rp))
   condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
