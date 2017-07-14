@@ -20,7 +20,7 @@ sti_ept_msm <- function(dat, at) {
     }
 
     ## Variables ---------------------------------------------------------------
-
+# browser()
     # Attributes
     rGC <- dat$attr$rGC
     uGC <- dat$attr$uGC
@@ -62,7 +62,7 @@ sti_ept_msm <- function(dat, at) {
     ## Stoppage for Index ------------------------------------------------------
 
     # Index no longer eligible(> 1 time step since treatment time)
-    idseptExpired <- which(((at - eptindexEligdate) > 1) & eptindexStat == 1)
+    idseptExpired <- which((at - eptindexEligdate) > 1)
 
     # Reset EPT status
     idsStp <- c(idseptExpired)
@@ -94,7 +94,7 @@ sti_ept_msm <- function(dat, at) {
 
 
     ### Partner 1 has been given EPT, so partner 2 eligible
-    # Return rows where partner 1 has been given EPT
+    # Return rows in each subset where partner 1 has been given EPT
     part.listept1.main.ong <- part.listept.main.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])] == 1), , drop = FALSE]
     part.listept1.pers.ong <- part.listept.pers.ong[which(eptindexStat[which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])] == 1), , drop = FALSE]
     part.listept1.main.end <- part.listept.main.end[which(eptindexStat[which(dat$attr$uid %in% part.listept.main.end[, "uid1"])] == 1), , drop = FALSE]

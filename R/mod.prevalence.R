@@ -287,6 +287,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptpartprovided <- rNA
     dat$epi$eptpartuptake <- rNA
     dat$epi$eptTx <- rNA
+    dat$epi$propindexeptElig <- rNA
     dat$epi$eptprop_provided <- rNA
     dat$epi$eptprop_tx <- rNA
     dat$epi$eptuninfectedprovided <- rNA
