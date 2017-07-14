@@ -117,12 +117,23 @@ riskhist_stitest_msm <- function(dat, at) {
 
   if (at < dat$param$riskh.stitest.start) {
 
+    part.list <- dat$temp$part.list
+    
     # Anyone sexually active in last year is eligible to be screened
     idsactive <- which(at - dat$attr$time.last.sex <= 52)
     idsnotactive <- setdiff(which(dat$attr$race %in% c("B","W")), idsactive)
+    idspartlist <- which(dat$attr$uid %in% part.list[, c("uid1", "uid2")])
 
+    dat$attr$recentpartners <- rep(0, length(which(dat$attr$race %in% c("B","W"))))
+    part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
+    
+    # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
+    dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% dat$attr$uid), 2]
+    
     dat$attr$stitest.ind.active[idsactive] <- 1
     dat$attr$stitest.ind.active[idsnotactive] <- 0
+    
+    
 
     return(dat)
   }
