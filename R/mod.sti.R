@@ -351,12 +351,12 @@ sti_trans_msm <- function(dat, at) {
   # Summary incidence statistics
   dat$epi$incid.rgc[at] <- length(idsInf_rgc)
   dat$epi$incid.ugc[at] <- length(idsInf_ugc)
-  dat$epi$incid.gc[at] <- length(idsInf_rgc) + length(idsInf_ugc)
+  dat$epi$incid.gc[at] <- length(unique(c(idsInf_rgc,idsInf_ugc)))
   dat$epi$incid.rct[at] <- length(idsInf_rct)
   dat$epi$incid.uct[at] <- length(idsInf_uct)
-  dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
+  dat$epi$incid.ct[at] <- length(unique(c(idsInf_rct,idsInf_uct)))
   dat$epi$incid.syph[at] <- length(idsInf_syph)
-
+  dat$epi$incid.sti[at] <- length(unique(c(idsInf_rct,idsInf_uct, idsInf_rgc,idsInf_ugc, idsInf_syph)))
   dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
                                                            idsInf_rct, idsInf_uct)),
                                                   which(dat$attr$prepStat == 1)))
@@ -1058,7 +1058,7 @@ sti_tx_msm <- function(dat, at) {
   ept_txRCT_all <- txRCT_all[dat$attr$recentpartners[txRCT_all] > 0]
   ept_txUCT_all <- txUCT_all[dat$attr$recentpartners[txUCT_all] > 0]
   ept_tx_all <- unique(c(ept_txRGC_all, ept_txUGC_all, ept_txRCT_all, ept_txUCT_all))
-  
+
   # Update EPT index status and eligibility for GC/CT treated with partners
   dat$attr$eptindexElig[ept_tx_all] <- 1
   dat$attr$eptindexStat[ept_tx_all] <- 0
@@ -1133,7 +1133,7 @@ sti_tx_msm <- function(dat, at) {
   eptCov <- (length(ept_idsStart)) / nEligSt
   # Update EPT index status for those selected to receive EPT for their partners
   dat$attr$eptindexStat[ept_idsStart] <- 1
-  
+
 #
   # Output ---------------------------------------------------------------------
   # PrEP
@@ -1264,7 +1264,7 @@ sti_tx_msm <- function(dat, at) {
                                             txsyph_sympt_tert)))
   dat$epi$txasympt[at] <- length(unique(c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
                                           txsyph_asympt)))
-  
+
   # EPT
   # Proportion of treated GC/CT index who have partners - e.g. eligibility for EPT
   dat$epi$propindexeptElig[at] <- length(unique(ept_tx_all)) / length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all)))

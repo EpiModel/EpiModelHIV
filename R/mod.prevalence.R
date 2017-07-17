@@ -193,6 +193,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.uct <- rNA
     dat$epi$incid.ct <- rNA
     dat$epi$incid.syph <- rNA
+    dat$epi$incid.sti <- rNA
 
     dat$epi$ir100.rgc <- rNA
     dat$epi$ir100.ugc <- rNA
