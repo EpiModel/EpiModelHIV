@@ -118,7 +118,7 @@ riskhist_stitest_msm <- function(dat, at) {
   if (at < dat$param$riskh.stitest.start) {
 
     part.list <- dat$temp$part.list
-    
+
     # Anyone sexually active in last year is eligible to be screened
     idsactive <- which(at - dat$attr$time.last.sex <= 52)
     idsnotactive <- setdiff(which(dat$attr$race %in% c("B","W")), idsactive)
@@ -126,14 +126,14 @@ riskhist_stitest_msm <- function(dat, at) {
 
     dat$attr$recentpartners <- rep(0, length(which(dat$attr$race %in% c("B","W"))))
     part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
-    
+
     # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
     dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% dat$attr$uid), 2]
-    
+
     dat$attr$stitest.ind.active[idsactive] <- 1
     dat$attr$stitest.ind.active[idsnotactive] <- 0
-    
-    
+
+
 
     return(dat)
   }
@@ -181,7 +181,12 @@ riskhist_stitest_msm <- function(dat, at) {
   dat$epi$threepart[at] <- length(which(dat$attr$recentpartners == 3)) / length(which(race %in% c("B","W")))
   dat$epi$fourpart[at] <- length(which(dat$attr$recentpartners == 4)) / length(which(race %in% c("B","W")))
   dat$epi$fivepart[at] <- length(which(dat$attr$recentpartners == 5)) / length(which(race %in% c("B","W")))
-  dat$epi$gtfivepart[at] <- length(which(dat$attr$recentpartners > 5)) / length(which(race %in% c("B","W")))
+  dat$epi$sixpart[at] <- length(which(dat$attr$recentpartners == 6)) / length(which(race %in% c("B","W")))
+  dat$epi$sevenpart[at] <- length(which(dat$attr$recentpartners == 7)) / length(which(race %in% c("B","W")))
+  dat$epi$eightpart[at] <- length(which(dat$attr$recentpartners == 8)) / length(which(race %in% c("B","W")))
+  dat$epi$ninepart[at] <- length(which(dat$attr$recentpartners == 9)) / length(which(race %in% c("B","W")))
+  dat$epi$tenpart[at] <- length(which(dat$attr$recentpartners == 10)) / length(which(race %in% c("B","W")))
+  dat$epi$gttenpart[at] <- length(which(dat$attr$recentpartners > 10)) / length(which(race %in% c("B","W")))
 
 
   return(dat)
