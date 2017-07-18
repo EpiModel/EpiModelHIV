@@ -587,6 +587,7 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$eptindexEligdate[recovGCCT] <- NA
   dat$attr$eptpartEligReceive[recovGCCT] <- NA
   dat$attr$eptpartEligTx[recovGCCT] <- NA
+  dat$attr$eptpartEligTxdate[recovGCCT] <- NA
   dat$attr$eptpartTx[recovGCCT] <- NA
 
 
@@ -736,6 +737,7 @@ sti_tx_msm <- function(dat, at) {
 
   # EPT
   eptpartEligTx <- dat$attr$eptpartEligTx
+  eptpartEligTxdate <- dat$attr$eptpartEligTxdate
 
   # Syphilis --------------------------------------------------------------
 
@@ -1065,11 +1067,14 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$eptindexEligdate[ept_tx_all] <- at
 
   # EPT Treatment for Non-index (no test is done) ------------------------------
-  # Have prevalent infection, are eligible for tx through EPT, are untreated, and
-  # not previously assigned for EPT tx
+
+  # Have prevalent infection, are eligible for tx through EPT, are untreated,
+  # are not previously assigned for EPT tx, and were provided/uptake EPT last
+  # time step
   idsRGC_tx_ept <- which(rGC == 1 &
                              rGC.infTime < at &
                              eptpartEligTx == 1 &
+                             eptpartEligTxdate == (at - 1) &
                              (is.na(rGC.tx) | rGC.tx == 0) &
                              (is.na(rGC.tx.prep) | rGC.tx.prep == 0) &
                              is.na(rGC.tx.ept))
@@ -1077,6 +1082,7 @@ sti_tx_msm <- function(dat, at) {
   idsUGC_tx_ept <- which(uGC == 1 &
                              uGC.infTime < at &
                              eptpartEligTx == 1 &
+                             eptpartEligTxdate == (at - 1) &
                              (is.na(uGC.tx) | uGC.tx == 0) &
                              (is.na(uGC.tx.prep) | uGC.tx.prep == 0) &
                              is.na(uGC.tx.ept))
@@ -1090,6 +1096,7 @@ sti_tx_msm <- function(dat, at) {
   idsRCT_tx_ept <- which(rCT == 1 &
                              rCT.infTime < at &
                              eptpartEligTx == 1 &
+                             eptpartEligTxdate == (at - 1) &
                              (is.na(rCT.tx)  | rCT.tx == 0) &
                              (is.na(rCT.tx.prep) | rCT.tx.prep == 0) &
                              is.na(rCT.tx.ept))
@@ -1097,6 +1104,7 @@ sti_tx_msm <- function(dat, at) {
   idsUCT_tx_ept <- which(uCT == 1 &
                              uCT.infTime < at &
                              eptpartEligTx == 1 &
+                             eptpartEligTxdate == (at - 1) &
                              (is.na(uCT.tx)  | uCT.tx == 0) &
                              (is.na(uCT.tx.prep) | uCT.tx.prep == 0) &
                              is.na(uCT.tx.ept))
@@ -1116,6 +1124,7 @@ sti_tx_msm <- function(dat, at) {
   alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
+
   # Eligibility only lasts one time step - so coverage is 0 for current eligibles
   eptCov <- 0
   idsEligSt <- which(dat$attr$eptindexElig == 1 & dat$attr$eptindexEligdate == at)
@@ -1131,6 +1140,7 @@ sti_tx_msm <- function(dat, at) {
     }
   }
   eptCov <- (length(ept_idsStart)) / nEligSt
+
   # Update EPT index status for those selected to receive EPT for their partners
   dat$attr$eptindexStat[ept_idsStart] <- 1
 
@@ -1189,6 +1199,7 @@ sti_tx_msm <- function(dat, at) {
 
   # Non-index EPT-treated
   dat$attr$eptpartEligTx[alltxEPT] <- NA
+  dat$attr$eptpartEligTxdate[alltxEPT] <- NA
   dat$attr$eptpartTx[allidsept] <- 0
   dat$attr$eptpartTx[alltxEPT] <- 1
 
