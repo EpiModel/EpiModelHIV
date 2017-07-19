@@ -265,6 +265,24 @@
 #' @param rct.ntx.int Average in days duration of untreated rectal chlamydia.
 #' @param uct.ntx.int Average in days duration of untreated urethral chlamydia.
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
+#'
+#' @param gc.sympt.prob.tx.B Probability of treatment for symptomatic gonorrhea
+#'        for Black men.
+#' @param gc.sympt.prob.tx.W Probability of treatment for symptomatic gonorrhea
+#'        for White men.
+#' @param ct.sympt.prob.tx.B Probability of treatment for symptomatic chlamydia
+#'        for Black men.
+#' @param ct.sympt.prob.tx.W Probability of treatment for symptomatic chlamydia
+#'        for White men.
+#' @param gc.asympt.prob.tx.B Probability of treatment for asymptomatic gonorrhea
+#'        for Black men.
+#' @param gc.asympt.prob.tx.W Probability of treatment for asymptomatic gonorrhea
+#'        for White men.
+#' @param ct.asympt.prob.tx.B Probability of treatment for asymptomatic chlamydia
+#'        for Black men.
+#' @param ct.asympt.prob.tx.W Probability of treatment for asymptomatic chlamydia
+#'        for White men.
+#'
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -436,10 +454,14 @@ param_msm <- function(nwstats,
                       uct.ntx.int = 44.24538 * 7,
                       ct.tx.int = 2 * 7,
 
-                      gc.sympt.prob.tx = 0.90,
-                      ct.sympt.prob.tx = 0.85,
-                      gc.asympt.prob.tx = 0,
-                      ct.asympt.prob.tx = 0,
+                      gc.sympt.prob.tx.B = 0.90,
+                      gc.sympt.prob.tx.W = 0.90,
+                      ct.sympt.prob.tx.B = 0.85,
+                      ct.sympt.prob.tx.W = 0.85,
+                      gc.asympt.prob.tx.B = 0.10,
+                      gc.asympt.prob.tx.W = 0.10,
+                      ct.asympt.prob.tx.B = 0.10,
+                      ct.asympt.prob.tx.W = 0.10,
 
                       prep.sti.screen.int = 182,
                       prep.sti.prob.tx = 1,

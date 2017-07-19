@@ -53,11 +53,13 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
   rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.16,
   ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
-  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
-  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
-  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0,
-  ct.asympt.prob.tx = 0, prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
+  rgc.ntx.int = 35.11851 * 7, ugc.ntx.int = 35.11851 * 7, gc.tx.int = 2 *
+  7, rct.ntx.int = 44.24538 * 7, uct.ntx.int = 44.24538 * 7, ct.tx.int = 2
+  * 7, gc.sympt.prob.tx.B = 0.9, gc.sympt.prob.tx.W = 0.9,
+  ct.sympt.prob.tx.B = 0.85, ct.sympt.prob.tx.W = 0.85,
+  gc.asympt.prob.tx.B = 0.1, gc.asympt.prob.tx.W = 0.1,
+  ct.asympt.prob.tx.B = 0.1, ct.asympt.prob.tx.W = 0.1,
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.eff = 0.95,
   sti.cond.fail.B = 0.35, sti.cond.fail.W = 0.15, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
@@ -437,19 +439,35 @@ chlamydia.}
 
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
+\item{rct.ntx.int}{Average in days duration of untreated rectal chlamydia.}
 
 \item{uct.ntx.int}{Average in days duration of untreated urethral chlamydia.}
 
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
+\item{gc.sympt.prob.tx.B}{Probability of treatment for symptomatic gonorrhea
+for Black men.}
 
-\item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
+\item{gc.sympt.prob.tx.W}{Probability of treatment for symptomatic gonorrhea
+for White men.}
 
-\item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
+\item{ct.sympt.prob.tx.B}{Probability of treatment for symptomatic chlamydia
+for Black men.}
 
-\item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
+\item{ct.sympt.prob.tx.W}{Probability of treatment for symptomatic chlamydia
+for White men.}
 
-\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+\item{gc.asympt.prob.tx.B}{Probability of treatment for asymptomatic gonorrhea
+for Black men.}
+
+\item{gc.asympt.prob.tx.W}{Probability of treatment for asymptomatic gonorrhea
+for White men.}
+
+\item{ct.asympt.prob.tx.B}{Probability of treatment for asymptomatic chlamydia
+for Black men.}
+
+\item{ct.asympt.prob.tx.W}{Probability of treatment for asymptomatic chlamydia
+for White men.}
 
 \item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
 
