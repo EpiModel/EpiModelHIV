@@ -258,20 +258,13 @@
 #'        chlamydia.
 #' @param uct.sympt.prob Probability of symptoms given infection with urethral
 #'        chlamydia.
-#' @param rgc.asympt.int Average duration in days of asymptomatic rectal gonorrhea.
-#' @param ugc.asympt.int Average duration in days of asymptomatic urethral gonorrhea.
+#'
+#' @param rgc.ntx.int Average duration in days of untreated rectal gonorrhea.
+#' @param ugc.ntx.int Average duration in days of untreated urethral gonorrhea.
 #' @param gc.tx.int Average duration in days of treated gonorrhea (both sites).
-#' @param gc.ntx.int Average duration in days of untreated, symptomatic gonorrhea (both sites).
-#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
-#' @param rct.asympt.int Average in days duration of asymptomatic rectal chlamydia.
-#' @param uct.asympt.int Average in days duration of asymptomatic urethral chlamydia.
+#' @param rct.ntx.int Average in days duration of untreated rectal chlamydia.
+#' @param uct.ntx.int Average in days duration of untreated urethral chlamydia.
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
-#' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
-#'        If \code{NA}, uses site-specific durations for asymptomatic infections.
-#' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
-#' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
-#' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
-#' @param ct.asympt.prob.tx Probability of treatment for asymptomatic chlamydia.
 #' @param prep.sti.screen.int Interval in days between STI screening at PrEP visits.
 #' @param prep.sti.prob.tx Probability of treatment given positive screening during
 #'        PrEP visit.
@@ -435,15 +428,13 @@ param_msm <- function(nwstats,
                       rct.sympt.prob = 0.14,
                       uct.sympt.prob = 0.58,
 
-                      rgc.asympt.int = 35.11851 * 7,
-                      ugc.asympt.int = 35.11851 * 7,
+                      rgc.ntx.int = 35.11851 * 7,
+                      ugc.ntx.int = 35.11851 * 7,
                       gc.tx.int = 2 * 7,
-                      gc.ntx.int = NA,
 
-                      rct.asympt.int = 44.24538 * 7,
-                      uct.asympt.int = 44.24538 * 7,
+                      rct.ntx.int = 44.24538 * 7,
+                      uct.ntx.int = 44.24538 * 7,
                       ct.tx.int = 2 * 7,
-                      ct.ntx.int = NA,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,

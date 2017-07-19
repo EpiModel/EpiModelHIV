@@ -431,23 +431,17 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
+\item{rgc.ntx.int}{Average duration in days of untreated rectal gonorrhea.}
 
-\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
+\item{ugc.ntx.int}{Average duration in days of untreated urethral gonorrhea.}
 
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
-\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
-\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
-
-\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
+\item{uct.ntx.int}{Average in days duration of untreated urethral chlamydia.}
 
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 
