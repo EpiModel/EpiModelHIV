@@ -56,9 +56,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
   gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
   uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  gc.prob.cease = 0, ct.prob.cease = 0, gc.sympt.prob.tx = 0.9,
-  ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
+  gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 0,
+  ct.asympt.prob.tx = 0, prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
   prep.continue.stand.tx = TRUE, sti.cond.eff = 0.95,
   sti.cond.fail.B = 0.35, sti.cond.fail.W = 0.15, hiv.rgc.rr = 2.780673,
   hiv.ugc.rr = 1.732363, hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363,
@@ -449,12 +448,6 @@ If \code{NA}, uses site-specific durations for asymptomatic infections.}
 
 \item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
 If \code{NA}, uses site-specific durations for asymptomatic infections.}
-
-\item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with gonorrhea.}
-
-\item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with chlamydia.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 

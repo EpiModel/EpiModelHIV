@@ -84,11 +84,6 @@ acts_msm <- function(dat, at) {
                  ((num.B == 1) * base.ai.BW.rate * ai.scale.BW) +
                  ((num.B == 0) * base.ai.WW.rate * ai.scale.WW)
 
-      ## STI associated cessation of activity
-      idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
-      noActs <- el[, "p1"] %in% idsCease | el[, "p2"] %in% idsCease
-      ai.rate[noActs] <- 0
-
       # Final act number
       if (fixed == FALSE) {
         ai <- rpois(length(ai.rate), ai.rate)

@@ -31,9 +31,6 @@ sti_trans <- function(dat, at) {
   sti.cond.fail.B <- dat$param$sti.cond.fail.B
   sti.cond.fail.W <- dat$param$sti.cond.fail.W
 
-  # Cessation
-  gc.prob.cease <- dat$param$gc.prob.cease
-  ct.prob.cease <- dat$param$ct.prob.cease
 
   # Attributes ----------------------------------------------------------
 
@@ -70,9 +67,6 @@ sti_trans <- function(dat, at) {
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
 
-  # Men who cease sexual activity during symptomatic infection
-  GC.cease <- dat$attr$GC.cease
-  CT.cease <- dat$attr$CT.cease
 
   # Pull act list
   al <- dat$temp$al
@@ -263,23 +257,6 @@ sti_trans <- function(dat, at) {
   uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
 
 
-  # Set activity cessation attribute for newly infected -----------------
-
-  # Symptomatic GC
-  GC.sympt <- which(is.na(GC.cease) & (rGC.sympt == 1 | uGC.sympt == 1))
-  idsGC.cease <- GC.sympt[which(rbinom(length(GC.sympt),
-                                       1, gc.prob.cease) == 1)]
-  GC.cease[GC.sympt] <- 0
-  GC.cease[idsGC.cease] <- 1
-
-  # Symptomatic CT
-  CT.sympt <- which(is.na(CT.cease) & (rCT.sympt == 1 | uCT.sympt == 1))
-  idsCT.cease <- CT.sympt[which(rbinom(length(CT.sympt),
-                                       1, ct.prob.cease) == 1)]
-  CT.cease[CT.sympt] <- 0
-  CT.cease[idsCT.cease] <- 1
-
-
   # Output --------------------------------------------------------------
 
   # attributes
@@ -302,9 +279,6 @@ sti_trans <- function(dat, at) {
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
-
-  dat$attr$GC.cease <- GC.cease
-  dat$attr$CT.cease <- CT.cease
 
 
   # Summary stats
@@ -428,8 +402,6 @@ sti_recov <- function(dat, at) {
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
 
-  dat$attr$GC.cease[c(recovRGC, recovUGC)] <- NA
-
 
 
   # CT Recovery ---------------------------------------------------------
@@ -503,8 +475,6 @@ sti_recov <- function(dat, at) {
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
-
-  dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
 
   return(dat)
 }

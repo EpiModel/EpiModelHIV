@@ -171,7 +171,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
   dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
-  dat$attr$GC.cease <- rep(NA, num)
 
   # Initialize CT infection at both sites
   idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
@@ -198,7 +197,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
   dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
-  dat$attr$CT.cease <- rep(NA, num)
 
 
   # CCR5

@@ -268,10 +268,6 @@
 #' @param ct.tx.int Average in days duration of treated chlamydia (both sites).
 #' @param ct.ntx.int Average in days duration of untreated, symptomatic chlamydia (both sites).
 #'        If \code{NA}, uses site-specific durations for asymptomatic infections.
-#' @param gc.prob.cease Probability of ceasing sexual activity during symptomatic
-#'        infection with gonorrhea.
-#' @param ct.prob.cease Probability of ceasing sexual activity during symptomatic
-#'        infection with chlamydia.
 #' @param gc.sympt.prob.tx Probability of treatment for symptomatic gonorrhea.
 #' @param ct.sympt.prob.tx Probability of treatment for symptomatic chlamydia.
 #' @param gc.asympt.prob.tx Probability of treatment for asymptomatic gonorrhea.
@@ -448,9 +444,6 @@ param_msm <- function(nwstats,
                       uct.asympt.int = 44.24538 * 7,
                       ct.tx.int = 2 * 7,
                       ct.ntx.int = NA,
-
-                      gc.prob.cease = 0,
-                      ct.prob.cease = 0,
 
                       gc.sympt.prob.tx = 0.90,
                       ct.sympt.prob.tx = 0.85,
