@@ -33,7 +33,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.scale = 1.15, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  ai.scale.BB = 1.15, ai.scale.BW = 1.15, ai.scale.WW = 1.15,
+  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
   cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
   cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
   cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
@@ -278,8 +279,11 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.scale}{General relative scaler for all act rates for model
-calibration.}
+\item{ai.scale.BB}{Relative scaler for all BB act rates.}
+
+\item{ai.scale.BW}{Relative scaler for all BW act rates.}
+
+\item{ai.scale.WW}{Relative scaler for all WW act rates.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}

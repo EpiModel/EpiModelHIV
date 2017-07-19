@@ -33,7 +33,10 @@ acts_msm <- function(dat, at) {
     race <- dat$attr$race
 
     # Parameters
-    ai.scale <- dat$param$ai.scale
+    ai.scale.BB <- dat$param$ai.scale.BB
+    ai.scale.BW <- dat$param$ai.scale.BW
+    ai.scale.WW <- dat$param$ai.scale.WW
+
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
@@ -77,10 +80,9 @@ acts_msm <- function(dat, at) {
       race.p1 <- race[el[, 1]]
       race.p2 <- race[el[, 2]]
       num.B <- (race.p1 == "B") + (race.p2 == "B")
-      ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                 (num.B == 1) * base.ai.BW.rate +
-                 (num.B == 0) * base.ai.WW.rate
-      ai.rate <- ai.rate * ai.scale
+      ai.rate <- ((num.B == 2) * base.ai.BB.rate * ai.scale.BB) +
+                 ((num.B == 1) * base.ai.BW.rate * ai.scale.BW) +
+                 ((num.B == 0) * base.ai.WW.rate * ai.scale.WW)
 
       ## STI associated cessation of activity
       idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
