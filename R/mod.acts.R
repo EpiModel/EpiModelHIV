@@ -57,7 +57,8 @@ acts_msm <- function(dat, at) {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
-      fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
+      fixed <- ifelse(ai.scale.BB != 1 & ai.scale.BW != 1 & ai.scale.WW != 1,
+                      FALSE, TRUE)
       ptype <- 3
       el <- dat$el[[3]]
     }
