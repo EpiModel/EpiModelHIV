@@ -91,7 +91,7 @@ sti_trans <- function(dat, at) {
   tprob_rgc <- rep(rgc.tprob, length(allActs_rgc))
 
   # Transform to log odds
-  tlo_rgc <- log(tprob_rgc/(1-tprob_rgc))
+  tlo_rgc <- log(tprob_rgc/(1 - tprob_rgc))
 
   # Modify log odds by race-specific condom effectiveness
   races <- c(race[al[p1Inf_rgc, "p1"]], race[al[p2Inf_rgc, "p2"]])
@@ -136,7 +136,7 @@ sti_trans <- function(dat, at) {
   tprob_ugc <- rep(ugc.tprob, length(allActs_ugc))
 
   # Transform to log odds
-  tlo_ugc <- log(tprob_ugc/(1-tprob_ugc))
+  tlo_ugc <- log(tprob_ugc/(1 - tprob_ugc))
 
   # Modify log odds by race-specific condom effectiveness
   races <- c(race[al[p1Inf_ugc, "p2"]], race[al[p2Inf_ugc, "p1"]])
@@ -181,7 +181,7 @@ sti_trans <- function(dat, at) {
   tprob_rct <- rep(rct.tprob, length(allActs_rct))
 
   # Transform to log odds
-  tlo_rct <- log(tprob_rct/(1-tprob_rct))
+  tlo_rct <- log(tprob_rct/(1 - tprob_rct))
 
   # Modify log odds by race-specific condom effectiveness
   races <- c(race[al[p1Inf_rct, "p1"]], race[al[p2Inf_rct, "p2"]])
@@ -226,7 +226,7 @@ sti_trans <- function(dat, at) {
   tprob_uct <- rep(uct.tprob, length(allActs_uct))
 
   # Transform to log odds
-  tlo_uct <- log(tprob_uct/(1-tprob_uct))
+  tlo_uct <- log(tprob_uct/(1 - tprob_uct))
 
   # Modify log odds by race-specific condom effectiveness
   races <- c(race[al[p1Inf_uct, "p2"]], race[al[p2Inf_uct, "p1"]])
