@@ -240,21 +240,21 @@ hiv_trans_msm <- function(dat, at) {
 
   # Two infections
   ip.tlo[is.uGC.uCT] <- ip.tlo[is.uGC.uCT] +
-    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.trans.gc.ct.rr
+    max(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) * hiv.trans.gc.ct.rr
 
   ip.tlo[is.uGC.syph] <- ip.tlo[is.uGC.syph] +
-    max(log(hiv.ugc.rr), log(hiv.usyph.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.trans.gc.syph.rr
+    max(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.gc.syph.rr
 
   ip.tlo[is.uCT.syph] <- ip.tlo[is.uCT.syph] +
-    max(log(hiv.uct.rr), log(hiv.usyph.rr)) +
-    min(log(hiv.uct.rr), log(hiv.usyph.rr)) * hiv.trans.ct.syph.rr
+    max(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) * hiv.trans.ct.syph.rr
 
   # Three infections
   ip.tlo[is.all] <- ip.tlo[is.all] +
-    max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) +
-    min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.trans.allsti.rr
+    max(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.allsti.rr
 
 
   ## Re-transform back to probability
@@ -405,21 +405,21 @@ hiv_trans_msm <- function(dat, at) {
 
   # Two infections
   rp.tlo[is.rGC.rCT] <- rp.tlo[is.rGC.rCT] +
-    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.trans.gc.ct.rr
+    max(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) * hiv.trans.gc.ct.rr
 
   rp.tlo[is.rGC.syph] <- rp.tlo[is.rGC.syph] +
-    max(log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.trans.gc.syph.rr
+    max(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.gc.syph.rr
 
   rp.tlo[is.rCT.syph] <- rp.tlo[is.rCT.syph] +
-    max(log(hiv.rct.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rct.rr), log(hiv.rsyph.rr)) * hiv.trans.ct.syph.rr
+    max(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) * hiv.trans.ct.syph.rr
 
   # Three infections
   rp.tlo[is.all] <- rp.tlo[is.all] +
-    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.trans.allsti.rr
+    max(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.allsti.rr
 
   ## Retransformation to probability
   rp.tprob <- plogis(rp.tlo)
