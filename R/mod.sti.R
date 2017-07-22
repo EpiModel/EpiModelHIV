@@ -1116,11 +1116,11 @@ sti_tx_msm <- function(dat, at) {
   allidsept <- unique(c(idsCT_tx_ept, idsGC_tx_ept))
   }
   # Summarize all treated for each STI, now including EPT
-  alltxRGC <- c(txRGC, txRGC_prep, txRGC_ept)
-  alltxUGC <- c(txUGC, txUGC_prep, txUGC_ept)
-  alltxRCT <- c(txRCT, txRCT_prep, txRCT_ept)
-  alltxUCT <- c(txUCT, txUCT_prep, txUCT_ept)
-  alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
+  alltxRGC <- c(txRGC, txRGC_prep)#, txRGC_ept)
+  alltxUGC <- c(txUGC, txUGC_prep)#, txUGC_ept)
+  alltxRCT <- c(txRCT, txRCT_prep)#, txRCT_ept)
+  alltxUCT <- c(txUCT, txUCT_prep)#, txUCT_ept)
+  #alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
   if (at >= dat$param$ept.start) {
