@@ -584,11 +584,11 @@ sti_recov_msm <- function(dat, at) {
   recovGCCT <- c(recovUCT, recovRCT, recovRGC, recovUGC)
 
   # Reset EPT attributes
-  dat$attr$eptindexEligdate[recovGCCT] <- NA
-  dat$attr$eptpartEligReceive[recovGCCT] <- NA
-  dat$attr$eptpartEligTx[recovGCCT] <- NA
-  dat$attr$eptpartEligTxdate[recovGCCT] <- NA
-  dat$attr$eptpartTx[recovGCCT] <- NA
+  # dat$attr$eptindexEligdate[recovGCCT] <- NA
+  # dat$attr$eptpartEligReceive[recovGCCT] <- NA
+  # dat$attr$eptpartEligTx[recovGCCT] <- NA
+  # dat$attr$eptpartEligTxdate[recovGCCT] <- NA
+  # dat$attr$eptpartTx[recovGCCT] <- NA
 
 
   # Syphilis
@@ -607,14 +607,14 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$rGC.infTime[recovRGC] <- NA
   dat$attr$rGC.tx[recovRGC] <- NA
   dat$attr$rGC.tx.prep[recovRGC] <- NA
-  dat$attr$rGC.tx.ept[recovRGC] <- NA
+  #dat$attr$rGC.tx.ept[recovRGC] <- NA
   dat$attr$diag.status.gc[recovRGC] <- NA
   dat$attr$uGC[recovUGC] <- 0
   dat$attr$uGC.sympt[recovUGC] <- NA
   dat$attr$uGC.infTime[recovUGC] <- NA
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
-  dat$attr$uGC.tx.ept[recovUGC] <- NA
+  #dat$attr$uGC.tx.ept[recovUGC] <- NA
   dat$attr$diag.status.gc[recovUGC] <- NA
 
   # Chlamydia
@@ -623,14 +623,14 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$rCT.infTime[recovRCT] <- NA
   dat$attr$rCT.tx[recovRCT] <- NA
   dat$attr$rCT.tx.prep[recovRCT] <- NA
-  dat$attr$rCT.tx.ept[recovRCT] <- NA
+  #dat$attr$rCT.tx.ept[recovRCT] <- NA
   dat$attr$diag.status.ct[recovRCT] <- NA
   dat$attr$uCT[recovUCT] <- 0
   dat$attr$uCT.sympt[recovUCT] <- NA
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
-  dat$attr$uCT.tx.ept[recovUCT] <- NA
+  #dat$attr$uCT.tx.ept[recovUCT] <- NA
   dat$attr$diag.status.ct[recovUCT] <- NA
 
   # Summary stats
@@ -736,7 +736,7 @@ sti_tx_msm <- function(dat, at) {
   diag.status <- dat$attr$diag.status
 
   # EPT
-  eptpartEligTx <- dat$attr$eptpartEligTx
+  #eptpartEligTx <- dat$attr$eptpartEligTx
   eptpartEligTxdate <- dat$attr$eptpartEligTxdate
 
   # Syphilis --------------------------------------------------------------
