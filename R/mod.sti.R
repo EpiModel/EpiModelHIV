@@ -1052,9 +1052,8 @@ sti_tx_msm <- function(dat, at) {
   txsyph_all <- c(txsyph, txsyph_prep)
 
   # Subset all treated for GC/CT to treated with partners (for EPT)
-  # if (at >= dat$param$ept.start) {
-  #   browser()
-  # }
+  if (at >= dat$param$ept.start) {
+
   ept_txRGC_all <- txRGC_all[dat$attr$recentpartners[txRGC_all] > 0]
   ept_txUGC_all <- txUGC_all[dat$attr$recentpartners[txUGC_all] > 0]
   ept_txRCT_all <- txRCT_all[dat$attr$recentpartners[txRCT_all] > 0]
@@ -1115,7 +1114,7 @@ sti_tx_msm <- function(dat, at) {
   txUCT_ept <- intersect(idsUCT_tx_ept, txCT_ept)
 
   allidsept <- unique(c(idsCT_tx_ept, idsGC_tx_ept))
-
+  }
   # Summarize all treated for each STI, now including EPT
   alltxRGC <- c(txRGC, txRGC_prep, txRGC_ept)
   alltxUGC <- c(txUGC, txUGC_prep, txUGC_ept)
@@ -1124,7 +1123,7 @@ sti_tx_msm <- function(dat, at) {
   alltxEPT <- c(txRGC_ept, txUGC_ept, txRCT_ept, txUCT_ept)
 
   # EPT Initiation for Index Partner -------------------------------------------
-
+  if (at >= dat$param$ept.start) {
   # Eligibility only lasts one time step - so coverage is 0 for current eligibles
   eptCov <- 0
   idsEligSt <- which(dat$attr$eptindexElig == 1 & dat$attr$eptindexEligdate == at)
@@ -1143,7 +1142,7 @@ sti_tx_msm <- function(dat, at) {
 
   # Update EPT index status for those selected to receive EPT for their partners
   dat$attr$eptindexStat[ept_idsStart] <- 1
-
+  }
 #
   # Output ---------------------------------------------------------------------
   # PrEP
@@ -1164,16 +1163,16 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uGC.tx[txUGC] <- 1
   dat$attr$rGC.tx.prep[idsRGC_prep_tx] <- 0
   dat$attr$rGC.tx.prep[txRGC_prep] <- 1
-  dat$attr$rGC.tx.ept[idsRGC_tx_ept] <- 0
-  dat$attr$rGC.tx.ept[txRGC_ept] <- 1
+  #dat$attr$rGC.tx.ept[idsRGC_tx_ept] <- 0
+  #dat$attr$rGC.tx.ept[txRGC_ept] <- 1
   dat$attr$last.tx.time.rgc[txRGC_all] <- at
   dat$attr$last.tx.time.ugc[txUGC_all] <- at
   dat$attr$last.tx.time.rgc.prep[txRGC_prep] <- at
   dat$attr$last.tx.time.ugc.prep[txUGC_prep] <- at
   dat$attr$uGC.tx.prep[idsUGC_prep_tx] <- 0
   dat$attr$uGC.tx.prep[txUGC_prep] <- 1
-  dat$attr$uGC.tx.ept[idsUGC_tx_ept] <- 0
-  dat$attr$uGC.tx.ept[txUGC_ept] <- 1
+  #dat$attr$uGC.tx.ept[idsUGC_tx_ept] <- 0
+  #dat$attr$uGC.tx.ept[txUGC_ept] <- 1
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
 
@@ -1184,24 +1183,24 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uCT.tx[txUCT] <- 1
   dat$attr$rCT.tx.prep[idsRCT_prep_tx] <- 0
   dat$attr$rCT.tx.prep[txRCT_prep] <- 1
-  dat$attr$rCT.tx.ept[idsRCT_tx_ept] <- 0
-  dat$attr$rCT.tx.ept[txRCT_ept] <- 1
+  #dat$attr$rCT.tx.ept[idsRCT_tx_ept] <- 0
+  #dat$attr$rCT.tx.ept[txRCT_ept] <- 1
   dat$attr$last.tx.time.rct[txRCT_all] <- at
   dat$attr$last.tx.time.uct[txUCT_all] <- at
   dat$attr$last.tx.time.rct.prep[txRCT_prep] <- at
   dat$attr$last.tx.time.uct.prep[txUCT_prep] <- at
   dat$attr$uCT.tx.prep[idsUCT_prep_tx] <- 0
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
-  dat$attr$uCT.tx.ept[idsUCT_tx_ept] <- 0
-  dat$attr$uCT.tx.ept[txUCT_ept] <- 1
+  #dat$attr$uCT.tx.ept[idsUCT_tx_ept] <- 0
+  #dat$attr$uCT.tx.ept[txUCT_ept] <- 1
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
 
   # Non-index EPT-treated
-  dat$attr$eptpartEligTx[alltxEPT] <- NA
-  dat$attr$eptpartEligTxdate[alltxEPT] <- NA
-  dat$attr$eptpartTx[allidsept] <- 0
-  dat$attr$eptpartTx[alltxEPT] <- 1
+  #dat$attr$eptpartEligTx[alltxEPT] <- NA
+  #dat$attr$eptpartEligTxdate[alltxEPT] <- NA
+  #dat$attr$eptpartTx[allidsept] <- 0
+  #dat$attr$eptpartTx[alltxEPT] <- 1
 
   # summary statistics
   if (is.null(dat$epi$num.asympt.tx)) {
@@ -1278,13 +1277,13 @@ sti_tx_msm <- function(dat, at) {
 
   # EPT
   # Proportion of treated GC/CT index who have partners - e.g. eligibility for EPT
-  dat$epi$propindexeptElig[at] <- length(unique(ept_tx_all)) / length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all)))
+  #dat$epi$propindexeptElig[at] <- length(unique(ept_tx_all)) / length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all)))
   # Proportion of eligible index who will receive EPT - varies by sim scenario
-  dat$epi$eptCov[at] <- eptCov
+  #dat$epi$eptCov[at] <- eptCov
   # Number of non-index treated due to EPT - mix of provision, uptake, tx success
-  dat$epi$eptTx[at] <- length(unique(alltxEPT))
+  #dat$epi$eptTx[at] <- length(unique(alltxEPT))
   # Proportion of all non-index eligible to be treated who were - treatment success
-  dat$epi$eptprop_tx[at] <- length(unique(alltxEPT)) / length(unique(allidsept))
+  #dat$epi$eptprop_tx[at] <- length(unique(alltxEPT)) / length(unique(allidsept))
 
   return(dat)
 }
