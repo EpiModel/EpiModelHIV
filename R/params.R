@@ -876,7 +876,8 @@ param_het <- function(time.unit = 7,
 
 
   ## Death rate transformations
-  ltGhana <- EpiModelHIV::ltGhana
+  # ltGhana <- EpiModelHIV::ltGhana
+  ltGhana <- 1
   ds.rates <- ltGhana[ltGhana$year == 2011, ]
   ds.rates$mrate <- ds.rates$mrate / 365
   if (is.numeric(ds.exit.age)) {
