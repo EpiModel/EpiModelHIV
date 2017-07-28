@@ -110,13 +110,31 @@ initialize_msm <- function(x, param, init, control, s) {
   circ[ids.W] <- sample(apportion_lr(num.W, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
-  # PrEP Attributes
-  dat$attr$prepClass <- rep(NA, num)
+  ## PrEP Attributes (new continuum method) ##
+  # Awareness
+  prepAware <- rep(NA, num)
+  prepAware[ids.B] <- rbinom(length(ids.B), 1, dat$param$prep.aware.B)
+  prepAware[ids.W] <- rbinom(length(ids.W), 1, dat$param$prep.aware.W)
+  dat$attr$prepAware <- prepAware
+
+  # Acess
+  prepAccess <- rep(NA, num)
+  ids.B.aware <- which(dat$attr$race == "B" & prepAware == 1)
+  ids.W.aware <- which(dat$attr$race == "W" & prepAware == 1)
+  prepAccess[ids.B.aware] <- rbinom(length(ids.B.aware), 1, dat$param$prep.access.B)
+  prepAccess[ids.W.aware] <- rbinom(length(ids.W.aware), 1, dat$param$prep.access.W)
+  dat$attr$prepAccess <- prepAccess
+
+  # Indications
   dat$attr$prepElig <- rep(NA, num)
+
+  # Prescription
   dat$attr$prepStat <- rep(0, num)
+
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
+
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)

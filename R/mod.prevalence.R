@@ -51,9 +51,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ir100 <- dat$epi$ir100.B <- dat$epi$ir100.W <- rNA
 
     dat$epi$prepCurr <- rNA
-    dat$epi$prepCov <- rNA
     dat$epi$prepElig <- rNA
-    dat$epi$prepStart <- rNA
 
     dat$epi$prev.gc <- rNA
     dat$epi$prev.ct <- rNA

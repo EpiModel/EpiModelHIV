@@ -15,7 +15,6 @@ prep_msm <- function(dat, at) {
   # Function Selection ------------------------------------------------------
 
   if (at >= dat$param$riskh.start) {
-    browser()
     dat <- riskhist_msm(dat, at)
   } else {
     return(dat)
@@ -30,6 +29,7 @@ prep_msm <- function(dat, at) {
   # Attributes
   active <- dat$attr$active
   status <- dat$attr$status
+  race <- dat$attr$race
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
   prepElig <- dat$attr$prepElig
@@ -40,10 +40,13 @@ prep_msm <- function(dat, at) {
   prepLastStiScreen <- dat$attr$prepLastStiScreen
 
   # Parameters
-
-  prep.coverage <- dat$param$prep.coverage
-  prep.cov.rate <- dat$param$prep.cov.rate
-  prep.class.prob <- dat$param$prep.class.prob
+  prep.risk.reassess.method <- dat$param$prep.risk.reassess.method
+  prep.rx.B <- dat$param$prep.rx.B
+  prep.rx.W <- dat$param$prep.rx.W
+  prep.adhr.dist.B <- dat$param$prep.adhr.dist.B
+  prep.adhr.dist.W <- dat$param$prep.adhr.dist.W
+  prep.discont.rate.B <- dat$param$prep.discont.rate.B
+  prep.discont.rate.W <- dat$param$prep.discont.rate.W
 
 
   ## Eligibility ---------------------------------------------------------------
@@ -59,7 +62,7 @@ prep_msm <- function(dat, at) {
 
   twind <- at - dat$param$prep.risk.int
   idsEligStart <- intersect(which(ind1 >= twind | ind2 >= twind |
-                                    ind3 >= twind | ind4 >= twind),
+                                  ind3 >= twind | ind4 >= twind),
                             idsEligStart)
 
   prepElig[idsEligStart] <- 1
@@ -68,14 +71,30 @@ prep_msm <- function(dat, at) {
   ## Stoppage ------------------------------------------------------------------
 
   # No indications
-  idsRiskAssess <- which(active == 1 & prepStat == 1 & lnt == at & (at - prepLastRisk) >= 52)
-  prepLastRisk[idsRiskAssess] <- at
+  if (prep.risk.reassess.method == "none") {
+    idsStpInd <- NULL
+  } else if (prep.risk.reassess.method == "inst") {
+    idsRiskAssess <- which(active == 1 & prepStat == 1)
+    prepLastRisk[idsRiskAssess] <- at
+    idsStpInd <- intersect(which(ind1 < twind & ind2 < twind &
+                                 ind3 < twind & ind4 < twind),
+                             idsRiskAssess)
+  } else if (prep.risk.reassess.method == "year") {
+    idsRiskAssess <- which(active == 1 & prepStat == 1 & lnt == at & (at - prepLastRisk) >= 52)
+    prepLastRisk[idsRiskAssess] <- at
+    idsStpInd <- intersect(which(ind1 < twind & ind2 < twind &
+                                 ind3 < twind & ind4 < twind),
+                             idsRiskAssess)
+  }
 
-  idsEligStop <- intersect(which(ind1 < twind & ind2 < twind &
-                                   ind3 < twind & ind4 < twind),
-                           idsRiskAssess)
-
-  prepElig[idsEligStop] <- 0
+  # Random (memoryless) discontinuation
+  idsEligStpRand.B <- which(active == 1 & prepStat == 1 & race == "B")
+  idsEligStpRand.W <- which(active == 1 & prepStat == 1 & race == "W")
+  vecStpRand.B <- rbinom(length(idsEligStpRand.B), 1, prep.discont.rate.B)
+  vecStpRand.W <- rbinom(length(idsEligStpRand.W), 1, prep.discont.rate.W)
+  idsStpRand.B <- idsEligStpRand.B[which(vecStpRand.B == 1)]
+  idsStpRand.W <- idsEligStpRand.W[which(vecStpRand.W == 1)]
+  idsStpRand <- union(idsStpRand.B, idsStpRand.W)
 
   # Diagnosis
   idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
@@ -84,7 +103,8 @@ prep_msm <- function(dat, at) {
   idsStpDth <- which(active == 0 & prepStat == 1)
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpDth, idsEligStop)
+  idsStp <- c(idsStpInd, idsStpRand, idsStpDx, idsStpDth)
+  prepElig[idsStp] <- 0
   prepStat[idsStp] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
@@ -93,33 +113,28 @@ prep_msm <- function(dat, at) {
 
   ## Initiation ----------------------------------------------------------------
 
-  prepCov <- sum(prepStat == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
-  prepCov <- ifelse(is.nan(prepCov), 0, prepCov)
+  idsEligSt.B <- which(prepElig == 1 & race == "B")
+  idsEligSt.W <- which(prepElig == 1 & race == "W")
 
-  idsEligSt <- which(prepElig == 1)
-  nEligSt <- length(idsEligSt)
+  prepStat[idsEligSt.B] <- rbinom(length(idsEligSt.B), 1, prep.rx.B)
+  prepStat[idsEligSt.W] <- rbinom(length(idsEligSt.W), 1, prep.rx.W)
 
-  nStart <- max(0, min(nEligSt, round((prep.coverage - prepCov) *
-                                        sum(prepElig == 1, na.rm = TRUE))))
-  idsStart <- NULL
-  if (nStart > 0) {
-    if (prep.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
-    } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, prep.cov.rate) == 1]
-    }
-  }
+  idsStart.B <- intersect(idsEligSt.B, which(prepStat == 1))
+  idsStart.W <- intersect(idsEligSt.W, which(prepStat == 1))
+  idsStart <- union(idsStart.B, idsStart.W)
 
   # Attributes
   if (length(idsStart) > 0) {
-    prepStat[idsStart] <- 1
     prepStartTime[idsStart] <- at
     prepLastRisk[idsStart] <- at
 
-    # PrEP class
-    needPC <- which(is.na(prepClass[idsStart]))
-    prepClass[idsStart[needPC]] <- sample(x = 0:3, size = length(needPC),
-                                          replace = TRUE, prob = prep.class.prob)
+    # PrEP adherence class
+    needPC.B <- which(is.na(prepClass[idsStart.B]))
+    prepClass[idsStart.B[needPC.B]] <- sample(x = 1:3, size = length(needPC.B),
+                                              replace = TRUE, prob = prep.adhr.dist.B)
+    needPC.W <- which(is.na(prepClass[idsStart.W]))
+    prepClass[idsStart.W[needPC.W]] <- sample(x = 1:3, size = length(needPC.W),
+                                              replace = TRUE, prob = prep.adhr.dist.W)
   }
 
 
@@ -132,10 +147,6 @@ prep_msm <- function(dat, at) {
   dat$attr$prepClass <- prepClass
   dat$attr$prepLastRisk <- prepLastRisk
   dat$attr$prepLastStiScreen <- prepLastStiScreen
-
-  # Summary Statistics
-  dat$epi$prepCov[at] <- prepCov
-  dat$epi$prepStart[at] <- length(idsStart)
 
   return(dat)
 }

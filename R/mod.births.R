@@ -154,6 +154,23 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
   # PrEP
+
+  # Awareness
+  prepAware <- dat$attr$prepAware
+  new.B <- intersect(newIds, which(dat$attr$race == "B"))
+  new.W <- intersect(newIds, which(dat$attr$race == "W"))
+  prepAware[new.B] <- rbinom(length(new.B), 1, dat$param$prep.aware.B)
+  prepAware[new.W] <- rbinom(length(new.W), 1, dat$param$prep.aware.W)
+  dat$attr$prepAware <- prepAware
+
+  # Access
+  prepAccess <- dat$attr$prepAccess
+  ids.B.aware <- intersect(newIds, which(dat$attr$race == "B" & prepAware == 1))
+  ids.W.aware <- intersect(newIds, which(dat$attr$race == "W" & prepAware == 1))
+  prepAccess[ids.B.aware] <- rbinom(length(ids.B.aware), 1, dat$param$prep.access.B)
+  prepAccess[ids.W.aware] <- rbinom(length(ids.W.aware), 1, dat$param$prep.access.W)
+  dat$attr$prepAccess <- prepAccess
+
   dat$attr$prepStat[newIds] <- 0
 
   return(dat)
