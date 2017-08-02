@@ -128,7 +128,9 @@ riskhist_stitest_msm <- function(dat, at) {
     part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
     # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
+    if (length(idspartlist) > 0) {
     dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% dat$attr$uid), 2]
+    }
 
     dat$attr$stitest.ind.active[idsactive] <- 1
     dat$attr$stitest.ind.active[idsnotactive] <- 0
