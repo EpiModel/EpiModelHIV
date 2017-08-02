@@ -20,7 +20,7 @@ sti_ept_msm <- function(dat, at) {
     }
 
     ## Variables ---------------------------------------------------------------
-# browser()
+
     # Attributes
     rGC <- dat$attr$rGC
     uGC <- dat$attr$uGC
@@ -435,7 +435,7 @@ sti_ept_msm <- function(dat, at) {
     dat$attr$eptpartEligTx[idsprovided_ept] <- 0
     dat$attr$eptpartEligTx[idsuptake_ept] <- 1
     dat$attr$eptpartEligTxdate[idsprovided_ept] <- at
-browser()
+
     # Update Epi
     dat$epi$eptpartelig[at] <- length(idsept)
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
@@ -451,7 +451,6 @@ browser()
                                            rCT[idsuptake_ept] == 0 &
                                            uCT[idsuptake_ept] == 0) /
                                        length(idsuptake_ept)
-
 
     return(dat)
 }
