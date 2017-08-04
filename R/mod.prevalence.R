@@ -292,6 +292,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptprop_provided <- rNA
     dat$epi$eptprop_tx <- rNA
     dat$epi$eptuninfectedprovided <- rNA
+    dat$epi$eptuninfecteduptake <- rNA
+    dat$epi$eptgcinfectsti <- rNA
+    dat$epi$eptctinfectsti <- rNA
+    dat$epi$eptgcinfecthiv <- rNA
+    dat$epi$eptctinfecthiv <- rNA
 
     # Proportion with X partners
     dat$epi$zeropart <- rNA
