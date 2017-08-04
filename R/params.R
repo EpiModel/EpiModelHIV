@@ -332,8 +332,7 @@
 #' @param ugc.tprob Probability of urethral gonorrhea infection per act.
 #' @param rct.tprob Probability of rectal chlamydia infection per act.
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
-#' @param rsyph.tprob Base probability of rectal syphilis infection per act.
-#' @param usyph.tprob Base probability of urethral syphilis infection per act.
+#' @param syph.tprob Base probability of syphilis infection per act.
 #' @param syph.earlat.rr Multiplier for reduced infection probability in early
 #'        latent stage of syphilis infection.
 #' @param syph.late.rr Multiplier for reduced infection probability in late
@@ -423,26 +422,24 @@
 #'        chlamydia in the HIV-negative partner.
 #' @param hiv.uct.rr Relative risk of HIV infection given current urethral
 #'        chlamydia in the HIV-negative partner.
-#' @param hiv.rsyph.rr Relative risk of HIV infection given current rectal
-#'        syphilis infection in the HIV-negative partner.
-#' @param hiv.usyph.rr Relative risk of HIV infection given current urethral
+#' @param hiv.syph.rr Relative risk of HIV infection given current
 #'        syphilis infection in the HIV-negative partner.
 #' @param hiv.rgc.rct.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both rectal gonorrhea and
 #'        rectal chlamydia in the HIV-negative partner.
-#' @param hiv.rgc.rsyph.rr Additive proportional risk, from 0 to 1, for HIV
+#' @param hiv.rgc.syph.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both rectal gonorrhea and
 #'        syphilis in the HIV-negative partner.
-#' @param hiv.rct.rsyph.rr Additive proportional risk, from 0 to 1, for HIV
+#' @param hiv.rct.syph.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both rectal chlamydia and
 #'        syphilis in the HIV-negative partner.
 #' @param hiv.ugc.uct.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both urethral gonorrhea and
 #'        urethral chlamydia in the HIV-negative partner.
-#' @param hiv.ugc.usyph.rr Additive proportional risk, from 0 to 1, for HIV
+#' @param hiv.ugc.syph.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both urethral gonorrhea and
 #'        syphilis in the HIV-negative partner.
-#' @param hiv.uct.usyph.rr Additive proportional risk, from 0 to 1, for HIV
+#' @param hiv.uct.syph.rr Additive proportional risk, from 0 to 1, for HIV
 #'        acquisition given dual infection with both urethral chlamydia and
 #'        syphilis in the HIV-negative partner.
 #' @param hiv.all.ureth.rr Additive proportional risk, from 0 to 1, for HIV
@@ -649,7 +646,6 @@ param_msm <- function(nwstats,
                       ept.gc.success = 0.95,
                       ept.ct.success = 0.95,
 
-
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
                       rcomp.main.only = FALSE,
@@ -660,8 +656,7 @@ param_msm <- function(nwstats,
                       rct.tprob = 0.1944,
                       uct.tprob = 0.1640,
 
-                      rsyph.tprob = 0.1350,
-                      usyph.tprob = 0.1140,
+                      syph.tprob = 0.1424,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
 
@@ -736,18 +731,17 @@ param_msm <- function(nwstats,
                       sti.cond.rr = 0.3,
 
                       # Acquisition
-                      hiv.rgc.rr = 2.175,
-                      hiv.ugc.rr = 1.425,
-                      hiv.rct.rr = 2.175,
-                      hiv.uct.rr = 1.425,
-                      hiv.rsyph.rr = 2.325,
-                      hiv.usyph.rr = 1.525,
+                      hiv.rgc.rr = 1.80292790,
+                      hiv.ugc.rr = 1.1989083,
+                      hiv.rct.rr = 1.80292790,
+                      hiv.uct.rr = 1.1989083,
+                      hiv.syph.rr = 1.500918,
                       hiv.rgc.rct.rr = 0.2,
-                      hiv.rgc.rsyph.rr = 0.2,
-                      hiv.rct.rsyph.rr = 0.2,
+                      hiv.rgc.syph.rr = 0.2,
+                      hiv.rct.syph.rr = 0.2,
                       hiv.ugc.uct.rr = 0.2,
-                      hiv.ugc.usyph.rr = 0.2,
-                      hiv.uct.usyph.rr = 0.2,
+                      hiv.ugc.syph.rr = 0.2,
+                      hiv.uct.syph.rr = 0.2,
                       hiv.all.ureth.rr = 0.2,
                       hiv.all.rect.rr = 0.2,
 

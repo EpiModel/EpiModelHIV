@@ -63,14 +63,13 @@ hiv_trans_msm <- function(dat, at) {
   hiv.uct.rr <- dat$param$hiv.uct.rr
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
   hiv.rct.rr <- dat$param$hiv.rct.rr
-  hiv.rsyph.rr <- dat$param$hiv.rsyph.rr
-  hiv.usyph.rr <- dat$param$hiv.usyph.rr
+  hiv.syph.rr <- dat$param$hiv.syph.rr
   hiv.rgc.rct.rr <- dat$param$hiv.rgc.rct.rr
-  hiv.rgc.rsyph.rr <- dat$param$hiv.rgc.rsyph.rr
-  hiv.rct.rsyph.rr <- dat$param$hiv.rct.rsyph.rr
+  hiv.rgc.syph.rr <- dat$param$hiv.rgc.syph.rr
+  hiv.rct.syph.rr <- dat$param$hiv.rct.syph.rr
   hiv.ugc.uct.rr <- dat$param$hiv.ugc.uct.rr
-  hiv.ugc.usyph.rr <- dat$param$hiv.ugc.usyph.rr
-  hiv.uct.usyph.rr <- dat$param$hiv.uct.usyph.rr
+  hiv.ugc.syph.rr <- dat$param$hiv.ugc.syph.rr
+  hiv.uct.syph.rr <- dat$param$hiv.uct.syph.rr
   hiv.all.ureth.rr <- dat$param$hiv.all.ureth.rr
   hiv.all.rect.rr <- dat$param$hiv.all.rect.rr
 
@@ -178,7 +177,7 @@ hiv_trans_msm <- function(dat, at) {
   # Single infections
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
-  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.rsyph.rr)
+  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.syph.rr)
 
   # Two infections
   ip.tlo[is.rGC.rCT] <- ip.tlo[is.rGC.rCT] +
@@ -186,17 +185,17 @@ hiv_trans_msm <- function(dat, at) {
     min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.rgc.rct.rr
 
   ip.tlo[is.rGC.syph] <- ip.tlo[is.rGC.syph] +
-    max(log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.rgc.rsyph.rr
+    max(log(hiv.rgc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.syph.rr)) * hiv.rgc.syph.rr
 
   ip.tlo[is.rCT.syph] <- ip.tlo[is.rCT.syph] +
-    max(log(hiv.rct.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rct.rr), log(hiv.rsyph.rr)) * hiv.rct.rsyph.rr
+    max(log(hiv.rct.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.syph.rr)) * hiv.rct.syph.rr
 
   # Three infections
   ip.tlo[is.all] <- ip.tlo[is.all] +
-    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) +
-    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.rsyph.rr)) * hiv.all.rect.rr
+    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.syph.rr)) * hiv.all.rect.rr
 
   ## Multiplier for HIV transmission due to urethral STI in HIV-positive partner
   is.syph.infector <- which(ip.stage.syph.infector %in% c(1, 2, 3))
@@ -344,7 +343,7 @@ hiv_trans_msm <- function(dat, at) {
   # Single infections
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.usyph.rr)
+  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.syph.rr)
 
   # Two infections
   rp.tlo[is.uGC.uCT] <- rp.tlo[is.uGC.uCT] +
@@ -352,17 +351,17 @@ hiv_trans_msm <- function(dat, at) {
     min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.ugc.uct.rr
 
   rp.tlo[is.uGC.syph] <- rp.tlo[is.uGC.syph] +
-    max(log(hiv.ugc.rr), log(hiv.usyph.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.ugc.usyph.rr
+    max(log(hiv.ugc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.syph.rr)) * hiv.ugc.syph.rr
 
   rp.tlo[is.uCT.syph] <- rp.tlo[is.uCT.syph] +
-    max(log(hiv.uct.rr), log(hiv.usyph.rr)) +
-    min(log(hiv.uct.rr), log(hiv.usyph.rr)) * hiv.uct.usyph.rr
+    max(log(hiv.uct.rr), log(hiv.syph.rr)) +
+    min(log(hiv.uct.rr), log(hiv.syph.rr)) * hiv.uct.syph.rr
 
   # Three infections
   rp.tlo[is.all] <- rp.tlo[is.all] +
-     max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) +
-     min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.usyph.rr)) * hiv.all.ureth.rr
+     max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.syph.rr)) +
+     min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.syph.rr)) * hiv.all.ureth.rr
 
   ## Multiplier for HIV transmission due to rectal STI in HIV-positive partner
   is.syph.infector <- which(rp.stage.syph.infector %in% c(1, 2, 3))

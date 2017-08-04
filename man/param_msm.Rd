@@ -68,9 +68,9 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   ept.ct.success = 0.95, rcomp.prob = 0, rcomp.adh.groups = 0:3,
   rcomp.main.only = FALSE, rcomp.discl.only = FALSE, rgc.tprob = 0.4245,
   ugc.tprob = 0.3135, rct.tprob = 0.1944, uct.tprob = 0.164,
-  rsyph.tprob = 0.135, usyph.tprob = 0.114, syph.earlat.rr = 0.5,
-  syph.late.rr = 0, rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9,
-  rct.sympt.prob = 0.14, uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
+  syph.tprob = 0.1424, syph.earlat.rr = 0.5, syph.late.rr = 0,
+  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
+  uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
   syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
   syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
   syph.tert.sympt.prob = 1, rgc.asympt.int = 35.11851 * 7,
@@ -86,12 +86,12 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   syph.latelat.sympt.prob.tx = 0.1, syph.latelat.asympt.prob.tx = 1,
   syph.tert.sympt.prob.tx = 1, syph.tert.asympt.prob.tx = 1,
   prep.sti.screen.int = 182, prep.sti.prob.tx = 1, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.175, hiv.ugc.rr = 1.425, hiv.rct.rr = 2.175,
-  hiv.uct.rr = 1.425, hiv.rsyph.rr = 2.325, hiv.usyph.rr = 1.525,
-  hiv.rgc.rct.rr = 0.2, hiv.rgc.rsyph.rr = 0.2, hiv.rct.rsyph.rr = 0.2,
-  hiv.ugc.uct.rr = 0.2, hiv.ugc.usyph.rr = 0.2, hiv.uct.usyph.rr = 0.2,
-  hiv.all.ureth.rr = 0.2, hiv.all.rect.rr = 0.2, hiv.trans.gc.rr = 1,
-  hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
+  hiv.rgc.rr = 1.8029279, hiv.ugc.rr = 1.1989083, hiv.rct.rr = 1.8029279,
+  hiv.uct.rr = 1.1989083, hiv.syph.rr = 1.500918, hiv.rgc.rct.rr = 0.2,
+  hiv.rgc.syph.rr = 0.2, hiv.rct.syph.rr = 0.2, hiv.ugc.uct.rr = 0.2,
+  hiv.ugc.syph.rr = 0.2, hiv.uct.syph.rr = 0.2, hiv.all.ureth.rr = 0.2,
+  hiv.all.rect.rr = 0.2, hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1,
+  hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
   hiv.trans.gc.syph.rr = 0.2, hiv.trans.ct.syph.rr = 0.2,
   hiv.trans.allsti.rr = 0.2, hivdx.syph.sympt.tx.rr = 1.45,
   partlist.start = NULL, asympt.screen.prob = 1 - 0.9979758875215, ...)
@@ -564,9 +564,7 @@ known-discordant partnerships only, versus all partnerships.}
 
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
-\item{rsyph.tprob}{Base probability of rectal syphilis infection per act.}
-
-\item{usyph.tprob}{Base probability of urethral syphilis infection per act.}
+\item{syph.tprob}{Base probability of syphilis infection per act.}
 
 \item{syph.earlat.rr}{Multiplier for reduced infection probability in early
 latent stage of syphilis infection.}
@@ -701,21 +699,18 @@ chlamydia in the HIV-negative partner.}
 \item{hiv.uct.rr}{Relative risk of HIV infection given current urethral
 chlamydia in the HIV-negative partner.}
 
-\item{hiv.rsyph.rr}{Relative risk of HIV infection given current rectal
-syphilis infection in the HIV-negative partner.}
-
-\item{hiv.usyph.rr}{Relative risk of HIV infection given current urethral
+\item{hiv.syph.rr}{Relative risk of HIV infection given current
 syphilis infection in the HIV-negative partner.}
 
 \item{hiv.rgc.rct.rr}{Additive proportional risk, from 0 to 1, for HIV
 acquisition given dual infection with both rectal gonorrhea and
 rectal chlamydia in the HIV-negative partner.}
 
-\item{hiv.rgc.rsyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+\item{hiv.rgc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
 acquisition given dual infection with both rectal gonorrhea and
 syphilis in the HIV-negative partner.}
 
-\item{hiv.rct.rsyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+\item{hiv.rct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
 acquisition given dual infection with both rectal chlamydia and
 syphilis in the HIV-negative partner.}
 
@@ -723,11 +718,11 @@ syphilis in the HIV-negative partner.}
 acquisition given dual infection with both urethral gonorrhea and
 urethral chlamydia in the HIV-negative partner.}
 
-\item{hiv.ugc.usyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+\item{hiv.ugc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
 acquisition given dual infection with both urethral gonorrhea and
 syphilis in the HIV-negative partner.}
 
-\item{hiv.uct.usyph.rr}{Additive proportional risk, from 0 to 1, for HIV
+\item{hiv.uct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
 acquisition given dual infection with both urethral chlamydia and
 syphilis in the HIV-negative partner.}
 
