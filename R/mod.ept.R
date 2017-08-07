@@ -44,6 +44,7 @@ sti_ept_msm <- function(dat, at) {
     eptindexElig <- dat$attr$eptindexElig
     eptindexStat <- dat$attr$eptindexStat
     eptindexEligdate <- dat$attr$eptindexEligdate
+    eptpartEligReceive <- dat$attr$eptpartEligReceive
 
     ## Parameters
     ept.risk.int <- dat$param$ept.risk.int
@@ -70,8 +71,7 @@ sti_ept_msm <- function(dat, at) {
     eptindexElig[idsStp] <- NA
 
 
-    ## Indications for non-index-------------------------------------------------
-
+    ## Indications for non-index--------------------------------------
     ## Eligibility of partners
     part.list <- dat$temp$part.list
 
@@ -93,300 +93,509 @@ sti_ept_msm <- function(dat, at) {
     part.listept.inst <- part.list[which((part.list[, "ptype"] == 3)), , drop = FALSE]
 
 
+    ## Gonorrhea--------------------------------------
+
     ### Partner 1 has been given EPT, so partner 2 eligible
     ## Main, ongoing
     # List Partner 1 IDs
-    idspartlist.col1.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])
+    idspartlist.col1.main.ong.gc <- which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])
 
     # Return ID for partner 1 who has been given EPT
-    idspartlist.col1.ept.main.ong <- idspartlist.col1.main.ong[which(eptindexStat[idspartlist.col1.main.ong] == 1)]
+    idspartlist.col1.ept.main.ong.gc <- idspartlist.col1.main.ong.gc[which(eptindexStat[idspartlist.col1.main.ong.gc] == 1) &
+                                                                 (rGC.tx[idspartlist.col1.main.ong.gc] == 1 | uGC.tx[idspartlist.col1.main.ong.gc] == 1)]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col1.ept.main.ong <- part.listept.main.ong[which(part.listept.main.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong]), , drop = FALSE]
+    partlist.col1.ept.main.ong.gc <- part.listept.main.ong[which(part.listept.main.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept1.main.ong <- which(dat$attr$uid %in% partlist.col1.ept.main.ong[, "uid2"])
+    idspartlistsept1.main.ong.gc <- which(dat$attr$uid %in% partlist.col1.ept.main.ong.gc[, "uid2"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept1.main.ong <- idspartlistsept1.main.ong[which(rGC.tx[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept1.main.ong] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept1.main.ong]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept1.main.ong]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept1.main.ong]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept1.main.ong]))]
+    idspartlistsept1.main.ong.gc <- idspartlistsept1.main.ong.gc[which(rGC.tx[idspartlistsept1.main.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept1.main.ong.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept1.main.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept1.main.ong.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept1.main.ong.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept1.main.ong.gc]) &
+                                                                   is.na(eptpartEligReceive))]
     ## Casual, ongoing
     # List Partner 1 IDs
-    idspartlist.col1.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])
+    idspartlist.col1.pers.ong.gc <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])
 
     # Return ID for partner 1 who has been given EPT
-    idspartlist.col1.ept.pers.ong <- idspartlist.col1.pers.ong[which(eptindexStat[idspartlist.col1.pers.ong] == 1)]
-    eptindexStat[idspartlist.col1.ept.pers.ong]
+    idspartlist.col1.ept.pers.ong.gc <- idspartlist.col1.pers.ong.gc[which(eptindexStat[idspartlist.col1.pers.ong.gc] == 1)]
+    eptindexStat[idspartlist.col1.ept.pers.ong.gc]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col1.ept.pers.ong <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.ong]), , drop = FALSE]
+    partlist.col1.ept.pers.ong.gc <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.ong.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept1.pers.ong <- which(dat$attr$uid %in% partlist.col1.ept.pers.ong[, "uid2"])
+    idspartlistsept1.pers.ong.gc <- which(dat$attr$uid %in% partlist.col1.ept.pers.ong.gc[, "uid2"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept1.pers.ong <- idspartlistsept1.pers.ong[which(rGC.tx[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept1.pers.ong] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept1.pers.ong]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept1.pers.ong]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept1.pers.ong]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept1.pers.ong]))]
+    idspartlistsept1.pers.ong.gc <- idspartlistsept1.pers.ong.gc[which(rGC.tx[idspartlistsept1.pers.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept1.pers.ong.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept1.pers.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept1.pers.ong.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept1.pers.ong.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept1.pers.ong.gc]) &
+                                                                   is.na(eptpartEligReceive))]
 
     ## Main, ended
     # List Partner 1 IDs
-    idspartlist.col1.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid1"])
+    idspartlist.col1.main.end.gc <- which(dat$attr$uid %in% part.listept.main.end[, "uid1"])
 
     # Return ID for partner 1 who has been given EPT
-    idspartlist.col1.ept.main.end <- idspartlist.col1.main.end[which(eptindexStat[idspartlist.col1.main.end] == 1)]
-    eptindexStat[idspartlist.col1.ept.main.end]
+    idspartlist.col1.ept.main.end.gc <- idspartlist.col1.main.end.gc[which(eptindexStat[idspartlist.col1.main.end.gc] == 1)]
+    eptindexStat[idspartlist.col1.ept.main.end.gc]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col1.ept.main.end <- part.listept.main.end[which(part.listept.main.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.end]), , drop = FALSE]
+    partlist.col1.ept.main.end.gc <- part.listept.main.end[which(part.listept.main.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.end.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept1.main.end <- which(dat$attr$uid %in% partlist.col1.ept.main.end[, "uid2"])
+    idspartlistsept1.main.end.gc <- which(dat$attr$uid %in% partlist.col1.ept.main.end.gc[, "uid2"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept1.main.end <- idspartlistsept1.main.end[which(rGC.tx[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept1.main.end] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept1.main.end]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept1.main.end]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept1.main.end]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept1.main.end]))]
+    idspartlistsept1.main.end.gc <- idspartlistsept1.main.end.gc[which(rGC.tx[idspartlistsept1.main.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept1.main.end.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept1.main.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept1.main.end.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept1.main.end.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept1.main.end.gc]) &
+                                                                   is.na(eptpartEligReceive))]
     ## Casual, ended
     # List Partner 1 IDs
-    idspartlist.col1.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])
+    idspartlist.col1.pers.end.gc <- which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])
 
     # Return ID for partner 1 who has been given EPT
-    idspartlist.col1.ept.pers.end <- idspartlist.col1.pers.end[which(eptindexStat[idspartlist.col1.pers.end] == 1)]
-    eptindexStat[idspartlist.col1.ept.pers.end]
+    idspartlist.col1.ept.pers.end.gc <- idspartlist.col1.pers.end.gc[which(eptindexStat[idspartlist.col1.pers.end.gc] == 1)]
+    eptindexStat[idspartlist.col1.ept.pers.end.gc]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col1.ept.pers.end <- part.listept.pers.end[which(part.listept.pers.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.end]), , drop = FALSE]
+    partlist.col1.ept.pers.end.gc <- part.listept.pers.end[which(part.listept.pers.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.end.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept1.pers.end <- which(dat$attr$uid %in% partlist.col1.ept.pers.end[, "uid2"])
+    idspartlistsept1.pers.end.gc <- which(dat$attr$uid %in% partlist.col1.ept.pers.end.gc[, "uid2"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept1.pers.end <- idspartlistsept1.pers.end[which(rGC.tx[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept1.pers.end] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept1.pers.end]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept1.pers.end]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept1.pers.end]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept1.pers.end]))]
+    idspartlistsept1.pers.end.gc <- idspartlistsept1.pers.end.gc[which(rGC.tx[idspartlistsept1.pers.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept1.pers.end.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept1.pers.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept1.pers.end.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept1.pers.end.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept1.pers.end.gc]) &
+                                                                   is.na(eptpartEligReceive))]
 
     ## Instantaneous
     # List Partner 1 IDs
-    idspartlist.col1.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid1"])
+    idspartlist.col1.inst.gc <- which(dat$attr$uid %in% part.listept.inst[, "uid1"])
 
     # Return ID for partner 1 who has been given EPT
-    idspartlist.col1.ept.inst <- idspartlist.col1.inst[which(eptindexStat[idspartlist.col1.inst] == 1)]
-    eptindexStat[idspartlist.col1.ept.inst]
+    idspartlist.col1.ept.inst.gc <- idspartlist.col1.inst.gc[which(eptindexStat[idspartlist.col1.inst.gc] == 1)]
+    eptindexStat[idspartlist.col1.ept.inst.gc]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col1.ept.inst <- part.listept.inst[which(part.listept.inst[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.inst]), , drop = FALSE]
+    partlist.col1.ept.inst.gc <- part.listept.inst[which(part.listept.inst[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.inst.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept1.inst <- which(dat$attr$uid %in% partlist.col1.ept.inst[, "uid2"])
+    idspartlistsept1.inst.gc <- which(dat$attr$uid %in% partlist.col1.ept.inst.gc[, "uid2"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept1.inst <- idspartlistsept1.inst[which(rGC.tx[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept1.inst] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept1.inst]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept1.inst]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept1.inst]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept1.inst]))]
+    idspartlistsept1.inst.gc <- idspartlistsept1.inst.gc[which(rGC.tx[idspartlistsept1.inst.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept1.inst.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept1.inst.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept1.inst.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept1.inst.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept1.inst.gc]) &
+                                                                   is.na(eptpartEligReceive))]
 
 
     ### Partner 2 has been given EPT, so partner 1 eligible
     ## Main, ongoing
-    idspartlist.col2.main.ong <- which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])
+    idspartlist.col2.main.ong.gc <- which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])
 
     # Return ID for partner 2 who has been given EPT
-    idspartlist.col2.ept.main.ong <- idspartlist.col2.main.ong[which(eptindexStat[idspartlist.col2.main.ong] == 1)]
-    eptindexStat[idspartlist.col2.ept.main.ong]
+    idspartlist.col2.ept.main.ong.gc <- idspartlist.col2.main.ong.gc[which(eptindexStat[idspartlist.col2.main.ong.gc] == 1)]
+    eptindexStat[idspartlist.col2.ept.main.ong.gc]
 
     # Return rows in each subset where partner 2 has been given EPT
-    partlist.col2.ept.main.ong <- part.listept.main.ong[which(part.listept.main.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong]), , drop = FALSE]
+    partlist.col2.ept.main.ong.gc <- part.listept.main.ong[which(part.listept.main.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong.gc]), , drop = FALSE]
 
     # Select IDs of partner 1
-    idspartlistsept2.main.ong <- which(dat$attr$uid %in% partlist.col2.ept.main.ong[, "uid1"])
+    idspartlistsept2.main.ong.gc <- which(dat$attr$uid %in% partlist.col2.ept.main.ong.gc[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.main.ong <- idspartlistsept2.main.ong[which(rGC.tx[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept2.main.ong] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept2.main.ong]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept2.main.ong]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept2.main.ong]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept2.main.ong]))]
+    idspartlistsept2.main.ong.gc <- idspartlistsept2.main.ong.gc[which(rGC.tx[idspartlistsept2.main.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept2.main.ong.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept2.main.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept2.main.ong.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept2.main.ong.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept2.main.ong.gc]) &
+                                                                   is.na(eptpartEligReceive))]
     ## Casual, ongoing
     # List Partner 2 IDs
-    idspartlist.col2.pers.ong <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])
+    idspartlist.col2.pers.ong.gc <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])
 
     # Return ID for partner 2 who has been given EPT
-    idspartlist.col2.ept.pers.ong <- idspartlist.col2.pers.ong[which(eptindexStat[idspartlist.col2.pers.ong] == 1)]
-    eptindexStat[idspartlist.col2.ept.pers.ong]
+    idspartlist.col2.ept.pers.ong.gc <- idspartlist.col2.pers.ong.gc[which(eptindexStat[idspartlist.col2.pers.ong.gc] == 1)]
+    eptindexStat[idspartlist.col2.ept.pers.ong.gc]
 
     # Return rows in each subset where partner 2 has been given EPT
-    partlist.col2.ept.pers.ong <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.ong]), , drop = FALSE]
+    partlist.col2.ept.pers.ong.gc <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.ong.gc]), , drop = FALSE]
 
     # Select IDs of partner 1
-    idspartlistsept2.pers.ong <- which(dat$attr$uid %in% partlist.col2.ept.pers.ong[, "uid1"])
+    idspartlistsept2.pers.ong.gc <- which(dat$attr$uid %in% partlist.col2.ept.pers.ong.gc[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.pers.ong <- idspartlistsept2.pers.ong[which(rGC.tx[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept2.pers.ong] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept2.pers.ong]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept2.pers.ong]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept2.pers.ong]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept2.pers.ong]))]
+    idspartlistsept2.pers.ong.gc <- idspartlistsept2.pers.ong.gc[which(rGC.tx[idspartlistsept2.pers.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept2.pers.ong.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept2.pers.ong.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept2.pers.ong.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept2.pers.ong.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept2.pers.ong.gc]) &
+                                                                   is.na(eptpartEligReceive))]
 
     ## Main, ended
     # List Partner 2 IDs
-    idspartlist.col2.main.end <- which(dat$attr$uid %in% part.listept.main.end[, "uid2"])
+    idspartlist.col2.main.end.gc <- which(dat$attr$uid %in% part.listept.main.end[, "uid2"])
 
     # Return ID for partner 2 who has been given EPT
-    idspartlist.col2.ept.main.end <- idspartlist.col2.main.end[which(eptindexStat[idspartlist.col2.main.end] == 1)]
-    eptindexStat[idspartlist.col2.ept.main.end]
+    idspartlist.col2.ept.main.end.gc <- idspartlist.col2.main.end.gc[which(eptindexStat[idspartlist.col2.main.end.gc] == 1)]
+    eptindexStat[idspartlist.col2.ept.main.end.gc]
 
     # Return rows in each subset where partner 2 has been given EPT
-    partlist.col2.ept.main.end <- part.listept.main.end[which(part.listept.main.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.main.end]), , drop = FALSE]
+    partlist.col2.ept.main.end.gc <- part.listept.main.end[which(part.listept.main.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.main.end.gc]), , drop = FALSE]
 
     # Select IDs of partner 1
-    idspartlistsept2.main.end <- which(dat$attr$uid %in% partlist.col2.ept.main.end[, "uid1"])
+    idspartlistsept2.main.end.gc <- which(dat$attr$uid %in% partlist.col2.ept.main.end.gc[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.main.end <- idspartlistsept1.main.end[which(rGC.tx[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept2.main.end] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept2.main.end]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept2.main.end]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept2.main.end]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept2.main.end]))]
+    idspartlistsept2.main.end.gc <- idspartlistsept1.main.end.gc[which(rGC.tx[idspartlistsept2.main.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept2.main.end.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept2.main.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept2.main.end.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept2.main.end.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept2.main.end.gc]) &
+                                                                   is.na(eptpartEligReceive))]
     ## Casual, ended
     # List Partner 2 IDs
-    idspartlist.col2.pers.end <- which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])
+    idspartlist.col2.pers.end.gc <- which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])
 
     # Return ID for partner 2 who has been given EPT
-    idspartlist.col2.ept.pers.end <- idspartlist.col2.pers.end[which(eptindexStat[idspartlist.col2.pers.end] == 1)]
-    eptindexStat[idspartlist.col2.ept.pers.end]
+    idspartlist.col2.ept.pers.end.gc <- idspartlist.col2.pers.end.gc[which(eptindexStat[idspartlist.col2.pers.end.gc] == 1)]
+    eptindexStat[idspartlist.col2.ept.pers.end.gc]
 
     # Return rows in each subset where partner 2 has been given EPT
-    partlist.col2.ept.pers.end <- part.listept.pers.end[which(part.listept.pers.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.end]), , drop = FALSE]
+    partlist.col2.ept.pers.end.gc <- part.listept.pers.end[which(part.listept.pers.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.end.gc]), , drop = FALSE]
 
     # Select IDs of partner 1
-    idspartlistsept2.pers.end <- which(dat$attr$uid %in% partlist.col2.ept.pers.end[, "uid1"])
+    idspartlistsept2.pers.end.gc <- which(dat$attr$uid %in% partlist.col2.ept.pers.end.gc[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.pers.end <- idspartlistsept2.pers.end[which(rGC.tx[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   uGC.tx[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   rCT.tx[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   uCT.tx[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   rGC.tx.prep[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   uGC.tx.prep[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   rCT.tx.prep[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   uCT.tx.prep[idspartlistsept2.pers.end] %in% c(0, NA) |
-                                                                   is.na(rGC.tx.ept[idspartlistsept2.pers.end]) |
-                                                                   is.na(uGC.tx.ept[idspartlistsept2.pers.end]) |
-                                                                   is.na(rCT.tx.ept[idspartlistsept2.pers.end]) |
-                                                                   is.na(uCT.tx.ept[idspartlistsept2.pers.end]))]
+    idspartlistsept2.pers.end.gc <- idspartlistsept2.pers.end.gc[which(rGC.tx[idspartlistsept2.pers.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx[idspartlistsept2.pers.end.gc] %in% c(0, NA) |
+                                                                   rGC.tx.prep[idspartlistsept2.pers.end.gc] %in% c(0, NA) |
+                                                                   uGC.tx.prep[idspartlistsept2.pers.end.gc] %in% c(0, NA) |
+                                                                   is.na(rGC.tx.ept[idspartlistsept2.pers.end.gc]) |
+                                                                   is.na(uGC.tx.ept[idspartlistsept2.pers.end.gc]) &
+                                                                   is.na(eptpartEligReceive))]
 
     ## Instantaneous
     # List Partner 2 IDs
-    idspartlist.col2.inst <- which(dat$attr$uid %in% part.listept.inst[, "uid2"])
+    idspartlist.col2.inst.gc <- which(dat$attr$uid %in% part.listept.inst[, "uid2"])
 
     # Return ID for partner 2 who has been given EPT
-    idspartlist.col2.ept.inst <- idspartlist.col1.inst[which(eptindexStat[idspartlist.col2.inst] == 1)]
-    eptindexStat[idspartlist.col2.ept.inst]
+    idspartlist.col2.ept.inst.gc <- idspartlist.col2.inst.gc[which(eptindexStat[idspartlist.col2.inst.gc] == 1)]
+    eptindexStat[idspartlist.col2.ept.inst.gc]
 
     # Return rows in each subset where partner 1 has been given EPT
-    partlist.col2.ept.inst <- part.listept.inst[which(part.listept.inst[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.inst]), , drop = FALSE]
+    partlist.col2.ept.inst.gc <- part.listept.inst[which(part.listept.inst[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.inst.gc]), , drop = FALSE]
 
     # Select IDs of partner 2
-    idspartlistsept2.inst <- which(dat$attr$uid %in% partlist.col2.ept.inst[, "uid1"])
+    idspartlistsept2.inst.gc <- which(dat$attr$uid %in% partlist.col2.ept.inst.gc[, "uid1"])
 
     # Check STI Tx status of partner 2
-    idspartlistsept2.inst <- idspartlistsept2.inst[which(rGC.tx[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           uGC.tx[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           rCT.tx[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           uCT.tx[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           rGC.tx.prep[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           uGC.tx.prep[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           rCT.tx.prep[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           uCT.tx.prep[idspartlistsept2.inst] %in% c(0, NA) |
-                                                           is.na(rGC.tx.ept[idspartlistsept2.inst]) |
-                                                           is.na(uGC.tx.ept[idspartlistsept2.inst]) |
-                                                           is.na(rCT.tx.ept[idspartlistsept2.inst]) |
-                                                           is.na(uCT.tx.ept[idspartlistsept2.inst]))]
+    idspartlistsept2.inst.gc <- idspartlistsept2.inst.gc[which(rGC.tx[idspartlistsept2.inst.gc] %in% c(0, NA) |
+                                                           uGC.tx[idspartlistsept2.inst.gc] %in% c(0, NA) |
+                                                           rGC.tx.prep[idspartlistsept2.inst.gc] %in% c(0, NA) |
+                                                           uGC.tx.prep[idspartlistsept2.inst.gc] %in% c(0, NA) |
+                                                           is.na(rGC.tx.ept[idspartlistsept2.inst.gc]) |
+                                                           is.na(uGC.tx.ept[idspartlistsept2.inst.gc]) &
+                                                           is.na(eptpartEligReceive))]
+
+
+    ## Chlamydia--------------------------------------
+
+    ### Partner 1 has been given EPT, so partner 2 eligible
+    ## Main, ongoing
+    # List Partner 1 IDs
+    idspartlist.col1.main.ong.ct <- which(dat$attr$uid %in% part.listept.main.ong[, "uid1"])
+
+    # Return ID for partner 1 who has been given EPT
+    idspartlist.col1.ept.main.ong.ct <- idspartlist.col1.main.ong.ct[which(eptindexStat[idspartlist.col1.main.ong.ct] == 1) &
+                                                                       (rCT.tx[idspartlist.col1.main.ong.ct] == 1 | uCT.tx[idspartlist.col1.main.ong.ct] == 1)]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col1.ept.main.ong.ct <- part.listept.main.ong[which(part.listept.main.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept1.main.ong.ct <- which(dat$attr$uid %in% partlist.col1.ept.main.ong.ct[, "uid2"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept1.main.ong.ct <- idspartlistsept1.main.ong.ct[which(rCT.tx[idspartlistsept1.main.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept1.main.ong.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept1.main.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept1.main.ong.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept1.main.ong.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept1.main.ong.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+    ## Casual, ongoing
+    # List Partner 1 IDs
+    idspartlist.col1.pers.ong.ct <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid1"])
+
+    # Return ID for partner 1 who has been given EPT
+    idspartlist.col1.ept.pers.ong.ct <- idspartlist.col1.pers.ong.ct[which(eptindexStat[idspartlist.col1.pers.ong.ct] == 1)]
+    eptindexStat[idspartlist.col1.ept.pers.ong.ct]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col1.ept.pers.ong.ct <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.ong.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept1.pers.ong.ct <- which(dat$attr$uid %in% partlist.col1.ept.pers.ong.ct[, "uid2"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept1.pers.ong.ct <- idspartlistsept1.pers.ong.ct[which(rCT.tx[idspartlistsept1.pers.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept1.pers.ong.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept1.pers.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept1.pers.ong.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept1.pers.ong.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept1.pers.ong.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+
+    ## Main, ended
+    # List Partner 1 IDs
+    idspartlist.col1.main.end.ct <- which(dat$attr$uid %in% part.listept.main.end[, "uid1"])
+
+    # Return ID for partner 1 who has been given EPT
+    idspartlist.col1.ept.main.end.ct <- idspartlist.col1.main.end.ct[which(eptindexStat[idspartlist.col1.main.end.ct] == 1)]
+    eptindexStat[idspartlist.col1.ept.main.end.ct]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col1.ept.main.end.ct <- part.listept.main.end[which(part.listept.main.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.main.end.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept1.main.end.ct <- which(dat$attr$uid %in% partlist.col1.ept.main.end.ct[, "uid2"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept1.main.end.ct <- idspartlistsept1.main.end.ct[which(rCT.tx[idspartlistsept1.main.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept1.main.end.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept1.main.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept1.main.end.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept1.main.end.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept1.main.end.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+    ## Casual, ended
+    # List Partner 1 IDs
+    idspartlist.col1.pers.end.ct <- which(dat$attr$uid %in% part.listept.pers.end[, "uid1"])
+
+    # Return ID for partner 1 who has been given EPT
+    idspartlist.col1.ept.pers.end.ct <- idspartlist.col1.pers.end.ct[which(eptindexStat[idspartlist.col1.pers.end.ct] == 1)]
+    eptindexStat[idspartlist.col1.ept.pers.end.ct]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col1.ept.pers.end.ct <- part.listept.pers.end[which(part.listept.pers.end[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.pers.end.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept1.pers.end.ct <- which(dat$attr$uid %in% partlist.col1.ept.pers.end.ct[, "uid2"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept1.pers.end.ct <- idspartlistsept1.pers.end.ct[which(rCT.tx[idspartlistsept1.pers.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept1.pers.end.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept1.pers.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept1.pers.end.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept1.pers.end.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept1.pers.end.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+
+    ## Instantaneous
+    # List Partner 1 IDs
+    idspartlist.col1.inst.ct <- which(dat$attr$uid %in% part.listept.inst[, "uid1"])
+
+    # Return ID for partner 1 who has been given EPT
+    idspartlist.col1.ept.inst.ct <- idspartlist.col1.inst.ct[which(eptindexStat[idspartlist.col1.inst.ct] == 1)]
+    eptindexStat[idspartlist.col1.ept.inst.ct]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col1.ept.inst.ct <- part.listept.inst[which(part.listept.inst[, "uid1"] %in% dat$attr$uid[idspartlist.col1.ept.inst.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept1.inst.ct <- which(dat$attr$uid %in% partlist.col1.ept.inst.ct[, "uid2"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept1.inst.ct <- idspartlistsept1.inst.ct[which(rCT.tx[idspartlistsept1.inst.ct] %in% c(0, NA) |
+                                                                 uCT.tx[idspartlistsept1.inst.ct] %in% c(0, NA) |
+                                                                 rCT.tx.prep[idspartlistsept1.inst.ct] %in% c(0, NA) |
+                                                                 uCT.tx.prep[idspartlistsept1.inst.ct] %in% c(0, NA) |
+                                                                 is.na(rCT.tx.ept[idspartlistsept1.inst.ct]) |
+                                                                 is.na(uCT.tx.ept[idspartlistsept1.inst.ct]) &
+                                                                 is.na(eptpartEligReceive))]
+
+
+    ### Partner 2 has been given EPT, so partner 1 eligible
+    ## Main, ongoing
+    idspartlist.col2.main.ong.ct <- which(dat$attr$uid %in% part.listept.main.ong[, "uid2"])
+
+    # Return ID for partner 2 who has been given EPT
+    idspartlist.col2.ept.main.ong.ct <- idspartlist.col2.main.ong.ct[which(eptindexStat[idspartlist.col2.main.ong.ct] == 1)]
+    eptindexStat[idspartlist.col2.ept.main.ong.ct]
+
+    # Return rows in each subset where partner 2 has been given EPT
+    partlist.col2.ept.main.ong.ct <- part.listept.main.ong[which(part.listept.main.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col1.ept.main.ong.ct]), , drop = FALSE]
+
+    # Select IDs of partner 1
+    idspartlistsept2.main.ong.ct <- which(dat$attr$uid %in% partlist.col2.ept.main.ong.ct[, "uid1"])
+
+    # Check STI Tx status of partner 1
+    idspartlistsept2.main.ong.ct <- idspartlistsept2.main.ong.ct[which(rCT.tx[idspartlistsept2.main.ong.ct] %in% c(0, NA) |
+                                                                      uCT.tx[idspartlistsept2.main.ong.ct] %in% c(0, NA) |
+                                                                      rCT.tx.prep[idspartlistsept2.main.ong.ct] %in% c(0, NA) |
+                                                                      uCT.tx.prep[idspartlistsept2.main.ong.ct] %in% c(0, NA) |
+                                                                      is.na(rCT.tx.ept[idspartlistsept2.main.ong.ct]) |
+                                                                      is.na(uCT.tx.ept[idspartlistsept2.main.ong.ct]) &
+                                                                      is.na(eptpartEligReceive))]
+    ## Casual, ongoing
+    # List Partner 2 IDs
+    idspartlist.col2.pers.ong.ct <- which(dat$attr$uid %in% part.listept.pers.ong[, "uid2"])
+
+    # Return ID for partner 2 who has been given EPT
+    idspartlist.col2.ept.pers.ong.ct <- idspartlist.col2.pers.ong.ct[which(eptindexStat[idspartlist.col2.pers.ong.ct] == 1)]
+    eptindexStat[idspartlist.col2.ept.pers.ong.ct]
+
+    # Return rows in each subset where partner 2 has been given EPT
+    partlist.col2.ept.pers.ong.ct <- part.listept.pers.ong[which(part.listept.pers.ong[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.ong.ct]), , drop = FALSE]
+
+    # Select IDs of partner 1
+    idspartlistsept2.pers.ong.ct <- which(dat$attr$uid %in% partlist.col2.ept.pers.ong.ct[, "uid1"])
+
+    # Check STI Tx status of partner 1
+    idspartlistsept2.pers.ong.ct <- idspartlistsept2.pers.ong.ct[which(rCT.tx[idspartlistsept2.pers.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept2.pers.ong.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept2.pers.ong.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept2.pers.ong.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept2.pers.ong.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept2.pers.ong.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+
+    ## Main, ended
+    # List Partner 2 IDs
+    idspartlist.col2.main.end.ct <- which(dat$attr$uid %in% part.listept.main.end[, "uid2"])
+
+    # Return ID for partner 2 who has been given EPT
+    idspartlist.col2.ept.main.end.ct <- idspartlist.col2.main.end.ct[which(eptindexStat[idspartlist.col2.main.end.ct] == 1)]
+    eptindexStat[idspartlist.col2.ept.main.end.ct]
+
+    # Return rows in each subset where partner 2 has been given EPT
+    partlist.col2.ept.main.end.ct <- part.listept.main.end[which(part.listept.main.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.main.end.ct]), , drop = FALSE]
+
+    # Select IDs of partner 1
+    idspartlistsept2.main.end.ct <- which(dat$attr$uid %in% partlist.col2.ept.main.end.ct[, "uid1"])
+
+    # Check STI Tx status of partner 1
+    idspartlistsept2.main.end.ct <- idspartlistsept1.main.end.ct[which(rCT.tx[idspartlistsept2.main.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept2.main.end.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept2.main.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept2.main.end.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept2.main.end.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept2.main.end.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+    ## Casual, ended
+    # List Partner 2 IDs
+    idspartlist.col2.pers.end.ct <- which(dat$attr$uid %in% part.listept.pers.end[, "uid2"])
+
+    # Return ID for partner 2 who has been given EPT
+    idspartlist.col2.ept.pers.end.ct <- idspartlist.col2.pers.end.ct[which(eptindexStat[idspartlist.col2.pers.end.ct] == 1)]
+    eptindexStat[idspartlist.col2.ept.pers.end.ct]
+
+    # Return rows in each subset where partner 2 has been given EPT
+    partlist.col2.ept.pers.end.ct <- part.listept.pers.end[which(part.listept.pers.end[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.pers.end.ct]), , drop = FALSE]
+
+    # Select IDs of partner 1
+    idspartlistsept2.pers.end.ct <- which(dat$attr$uid %in% partlist.col2.ept.pers.end.ct[, "uid1"])
+
+    # Check STI Tx status of partner 1
+    idspartlistsept2.pers.end.ct <- idspartlistsept2.pers.end.ct[which(rCT.tx[idspartlistsept2.pers.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx[idspartlistsept2.pers.end.ct] %in% c(0, NA) |
+                                                                         rCT.tx.prep[idspartlistsept2.pers.end.ct] %in% c(0, NA) |
+                                                                         uCT.tx.prep[idspartlistsept2.pers.end.ct] %in% c(0, NA) |
+                                                                         is.na(rCT.tx.ept[idspartlistsept2.pers.end.ct]) |
+                                                                         is.na(uCT.tx.ept[idspartlistsept2.pers.end.ct]) &
+                                                                         is.na(eptpartEligReceive))]
+
+    ## Instantaneous
+    # List Partner 2 IDs
+    idspartlist.col2.inst.ct <- which(dat$attr$uid %in% part.listept.inst[, "uid2"])
+
+    # Return ID for partner 2 who has been given EPT
+    idspartlist.col2.ept.inst.ct <- idspartlist.col2.inst.ct[which(eptindexStat[idspartlist.col2.inst.ct] == 1)]
+    eptindexStat[idspartlist.col2.ept.inst.ct]
+
+    # Return rows in each subset where partner 1 has been given EPT
+    partlist.col2.ept.inst.ct <- part.listept.inst[which(part.listept.inst[, "uid2"] %in% dat$attr$uid[idspartlist.col2.ept.inst.ct]), , drop = FALSE]
+
+    # Select IDs of partner 2
+    idspartlistsept2.inst.ct <- which(dat$attr$uid %in% partlist.col2.ept.inst.ct[, "uid1"])
+
+    # Check STI Tx status of partner 2
+    idspartlistsept2.inst.ct <- idspartlistsept2.inst.ct[which(rCT.tx[idspartlistsept2.inst.ct] %in% c(0, NA) |
+                                                              uCT.tx[idspartlistsept2.inst.ct] %in% c(0, NA) |
+                                                              rCT.tx.prep[idspartlistsept2.inst.ct] %in% c(0, NA) |
+                                                              uCT.tx.prep[idspartlistsept2.inst.ct] %in% c(0, NA) |
+                                                              is.na(rCT.tx.ept[idspartlistsept2.inst.ct]) |
+                                                              is.na(uCT.tx.ept[idspartlistsept2.inst.ct]) &
+                                                              is.na(eptpartEligReceive))]
 
     # All EPT-tx eligible IDs (partners of index)
-    idsept <- unique(c(idspartlistsept1.main.ong, idspartlistsept2.main.ong,
-                       idspartlistsept1.pers.ong, idspartlistsept2.pers.ong,
-                       idspartlistsept1.main.end, idspartlistsept2.main.end,
-                       idspartlistsept1.pers.end, idspartlistsept2.pers.end,
-                       idspartlistsept1.inst, idspartlistsept2.inst))
+    idsept <- unique(c(idspartlistsept1.main.ong.gc, idspartlistsept2.main.ong.gc,
+                       idspartlistsept1.pers.ong.gc, idspartlistsept2.pers.ong.gc,
+                       idspartlistsept1.main.end.gc, idspartlistsept2.main.end.gc,
+                       idspartlistsept1.pers.end.gc, idspartlistsept2.pers.end.gc,
+                       idspartlistsept1.inst.gc, idspartlistsept2.inst.gc,
+                       idspartlistsept1.main.ong.ct, idspartlistsept2.main.ong.ct,
+                       idspartlistsept1.pers.ong.ct, idspartlistsept2.pers.ong.ct,
+                       idspartlistsept1.main.end.ct, idspartlistsept2.main.end.ct,
+                       idspartlistsept1.pers.end.ct, idspartlistsept2.pers.end.ct,
+                       idspartlistsept1.inst.ct, idspartlistsept2.inst.ct))
 
-    idsept.main.ong <- unique(c(idspartlistsept1.main.ong,
-                                idspartlistsept2.main.ong))
-    idsept.pers.ong <- unique(c(idspartlistsept1.pers.ong,
-                                idspartlistsept2.pers.ong))
-    idsept.main.end <- unique(c(idspartlistsept1.main.end,
-                                idspartlistsept2.main.end))
-    idsept.pers.end <- unique(c(idspartlistsept1.pers.end,
-                                idspartlistsept2.pers.end))
-    idsept.inst <- unique(c(idspartlistsept1.inst,
-                            idspartlistsept2.inst))
+    idsept.main.ong <- unique(c(idspartlistsept1.main.ong.gc,
+                                idspartlistsept2.main.ong.gc,
+                                idspartlistsept1.main.ong.ct,
+                                idspartlistsept2.main.ong.ct))
+    idsept.pers.ong <- unique(c(idspartlistsept1.pers.ong.gc,
+                                idspartlistsept2.pers.ong.gc,
+                                idspartlistsept1.pers.ong.ct,
+                                idspartlistsept2.pers.ong.ct))
+    idsept.main.end <- unique(c(idspartlistsept1.main.end.gc,
+                                idspartlistsept2.main.end.gc,
+                                idspartlistsept1.main.end.ct,
+                                idspartlistsept2.main.end.ct))
+    idsept.pers.end <- unique(c(idspartlistsept1.pers.end.gc,
+                                idspartlistsept2.pers.end.gc,
+                                idspartlistsept1.pers.end.ct,
+                                idspartlistsept2.pers.end.ct))
+    idsept.inst <- unique(c(idspartlistsept1.inst.gc,
+                            idspartlistsept2.inst.gc,
+                            idspartlistsept1.inst.ct,
+                            idspartlistsept2.inst.ct))
+    ids.ept.gc <- unique(c(idspartlistsept1.main.ong.gc, idspartlistsept2.main.ong.gc,
+                                         idspartlistsept1.pers.ong.gc, idspartlistsept2.pers.ong.gc,
+                                         idspartlistsept1.main.end.gc, idspartlistsept2.main.end.gc,
+                                         idspartlistsept1.pers.end.gc, idspartlistsept2.pers.end.gc,
+                                         idspartlistsept1.inst.gc, idspartlistsept2.inst.gc))
+    ids.ept.ct <- unique(c(idspartlistsept1.main.ong.ct, idspartlistsept2.main.ong.ct,
+                           idspartlistsept1.pers.ong.ct, idspartlistsept2.pers.ong.ct,
+                           idspartlistsept1.main.end.ct, idspartlistsept2.main.end.ct,
+                           idspartlistsept1.pers.end.ct, idspartlistsept2.pers.end.ct,
+                           idspartlistsept1.inst.ct, idspartlistsept2.inst.ct))
 
     ## Provision to non-index partners -----------------------------------------
     ##(to be treated at next time step)
@@ -423,6 +632,10 @@ sti_ept_msm <- function(dat, at) {
                                                         ept.uptake.inst) == 1)]
     idsuptake_ept <- unique(c(idsept_tx.main, idsept_tx.pers, idsept_tx.inst))
 
+    idsept_tx.gc <- intersect(idsuptake_ept, ids.ept.gc)
+    idsept_tx.ct <- intersect(idsuptake_ept, ids.ept.ct)
+
+
     ## Output -----------------------------------------------------------------
 
     # Index attributes
@@ -432,8 +645,10 @@ sti_ept_msm <- function(dat, at) {
 
     # Non-index attributes
     dat$attr$eptpartEligReceive[idsept] <- 1
-    dat$attr$eptpartEligTx[idsprovided_ept] <- 0
-    dat$attr$eptpartEligTx[idsuptake_ept] <- 1
+    dat$attr$eptpartEligTx_GC[idsprovided_ept] <- 0
+    dat$attr$eptpartEligTx_CT[idsprovided_ept] <- 0
+    dat$attr$eptpartEligTx_GC[idsept_tx.gc] <- 1
+    dat$attr$eptpartEligTx_CT[idsept_tx.ct] <- 1
     dat$attr$eptpartEligTxdate[idsprovided_ept] <- at
 
     # Update Epi
