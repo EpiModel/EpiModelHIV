@@ -209,7 +209,7 @@ hiv_trans_msm <- function(dat, at) {
 
   # CT
   is.uCT.sing <- setdiff(is.uCT.infector, is.uGC.infector)
-  is.uCT.sing <- setdiff(is.uGC.sing, is.syph.infector)
+  is.uCT.sing <- setdiff(is.uCT.sing, is.syph.infector)
 
   # Syph
   is.syph.sing <- setdiff(is.syph.infector, is.uGC.infector)
