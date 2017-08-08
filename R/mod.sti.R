@@ -1288,17 +1288,5 @@ sti_tx_msm <- function(dat, at) {
   # Proportion of all non-index eligible to be treated who had treatment success
   dat$epi$eptprop_tx[at] <- length(unique(alltxEPT)) / length(unique(allidsept))
 
-  # First pass at missed opportunities
-  dat$epi$eptgcinfectsti[at] <-  length(txGC_ept[which(dat$attr$rCT[txGC_ept] == 1 |
-                                                           dat$attr$uCT[txGC_ept] == 1 |
-                                                           dat$attr$syphilis[txGC_ept] == 1 |
-                                                           dat$attr$status[txGC_ept] == 1)]) / length(txGC_ept)
-  dat$epi$eptctinfectsti[at] <- length(txCT_ept[which(dat$attr$rGC[txCT_ept] == 1 |
-                                                          dat$attr$uGC[txCT_ept] == 1 |
-                                                          dat$attr$syphilis[txCT_ept] == 1 |
-                                                          dat$attr$status[txCT_ept] == 1)]) / length(txCT_ept)
-  dat$epi$eptgcinfecthiv[at] <- length(txGC_ept[which(dat$attr$status[txGC_ept] == 1)]) / length(txGC_ept)
-  dat$epi$eptctinfecthiv[at] <- length(txCT_ept[which(dat$attr$status[txCT_ept] == 1)]) / length(txCT_ept)
-
   return(dat)
 }

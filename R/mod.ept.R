@@ -678,6 +678,8 @@ sti_ept_msm <- function(dat, at) {
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
     dat$epi$eptpartuptake[at] <- length(idsuptake_ept)
     dat$epi$eptprop_provided[at] <- dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at]
+
+    # Wasted EPT
     dat$epi$eptuninfectedprovided[at] <- sum(rGC[idsprovided_ept] == 0 &
                                              uGC[idsprovided_ept] == 0 &
                                              rCT[idsprovided_ept] == 0 &
@@ -688,6 +690,18 @@ sti_ept_msm <- function(dat, at) {
                                            rCT[idsuptake_ept] == 0 &
                                            uCT[idsuptake_ept] == 0) /
                                        length(idsuptake_ept)
+
+    # Missed opportunities EPT
+    dat$epi$eptgcinfectsti[at] <-  length(idsept_tx.gc[which(dat$attr$rCT[idsept_tx.gc] == 1 |
+                                                           dat$attr$uCT[idsept_tx.gc] == 1 |
+                                                           dat$attr$syphilis[idsept_tx.gc] == 1 |
+                                                           dat$attr$status[idsept_tx.gc] == 1)]) / length(idsept_tx.gc)
+    dat$epi$eptctinfectsti[at] <- length(idsept_tx.ct[which(dat$attr$rGC[idsept_tx.ct] == 1 |
+                                                          dat$attr$uGC[idsept_tx.ct] == 1 |
+                                                          dat$attr$syphilis[idsept_tx.ct] == 1 |
+                                                          dat$attr$status[idsept_tx.ct] == 1)]) / length(idsept_tx.ct)
+    dat$epi$eptgcinfecthiv[at] <- length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1)]) / length(idsept_tx.gc)
+    dat$epi$eptctinfecthiv[at] <- length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1)]) / length(idsept_tx.ct)
 
     return(dat)
 }
