@@ -23,7 +23,7 @@
 part_msm <- function(dat, at){
 
   if (at < dat$param$partlist.start) {
-      return(dat)
+    return(dat)
   }
 
   # Cycle through three partnership types
@@ -51,11 +51,11 @@ part_msm <- function(dat, at){
 
     # Check for not already in partnership list
     part.list <- dat$temp$part.list
-    part.list <- part.list[which(part.list[, "ptype"] == type), ]
+    part.list <- part.list[which(part.list[, "ptype"] == type), , drop = FALSE]
 
     exist.partel.ids <- part.list[, 1] * 1e7 + part.list[, 2]
     check.partel.ids <- part.el[, 1] * 1e7 + part.el[, 2]
-    new.part.ids <- !(check.partel.ids %in% exist.partel.ids)
+    new.part.ids <- which(!(check.partel.ids %in% exist.partel.ids))
 
     # matrix of dyads not yet in cumulative edgelist
     new.part.el <- part.el[new.part.ids, , drop = FALSE]
@@ -69,17 +69,17 @@ part_msm <- function(dat, at){
                         last.active.time = at,
                         end.time = NA)
 
-
       if (type %in% 1:2) {
-        # Dissolved dyads: in part.list but not in part.el
-        # For those, set the end.time to now
-        diss.part.ids <- !(exist.partel.ids %in% check.partel.ids)
-        part.list[diss.part.ids, "end.time"] <- at
+        # Dissolved dyads: in part.list but not in part.el *that have not already ended*
+        diss.part.ids <- which(!(exist.partel.ids %in% check.partel.ids))
+        toUpdate <- intersect(diss.part.ids, which(is.na(part.list[, "end.time"])))
+        part.list[toUpdate, "end.time"] <- at
 
         # Active dyads: end.time is now or have no end.time yet
         # For those, set last.active.time to now
-        selected <- which(part.list[, "end.time"] == at | is.na(part.list[, "end.time"]))
-        part.list[selected, "last.active.time"] <- at
+        last.active.now <- which(part.list[, "end.time"] == at |
+                                 is.na(part.list[, "end.time"]))
+        part.list[last.active.now, "last.active.time"] <- at
       }
 
       if (type == 3) {
@@ -106,8 +106,9 @@ part_msm <- function(dat, at){
 
   # Subset PL to current observation window
   if (at > (dat$param$partlist.start)) {
-    selected <- which((at - (dat$temp$part.list[, "last.active.time"]) <= part.int))
-    dat$temp$part.list <- dat$temp$part.list[selected, , drop = FALSE]
+    toKeep <- which((at - (dat$temp$part.list[, "last.active.time"]) <= part.int))
+    # toDrop <- which((at - (dat$temp$part.list[, "last.active.time"]) > part.int))
+    dat$temp$part.list <- dat$temp$part.list[toKeep, , drop = FALSE]
   }
 
   return(dat)
