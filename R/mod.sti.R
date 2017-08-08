@@ -585,7 +585,8 @@ sti_recov_msm <- function(dat, at) {
   # Reset EPT attributes
   dat$attr$eptindexEligdate[recovGCCT] <- NA
   dat$attr$eptpartEligReceive[recovGCCT] <- NA
-  dat$attr$eptpartEligTx[recovGCCT] <- NA
+  dat$attr$eptpartEligTx_GC[recovGCCT] <- NA
+  dat$attr$eptpartEligTx_CT[recovGCCT] <- NA
   dat$attr$eptpartEligTxdate[recovGCCT] <- NA
   dat$attr$eptpartTx[recovGCCT] <- NA
 
@@ -735,7 +736,8 @@ sti_tx_msm <- function(dat, at) {
   diag.status <- dat$attr$diag.status
 
   # EPT
-  eptpartEligTx <- dat$attr$eptpartEligTx
+  eptpartEligTx_GC <- dat$attr$eptpartEligTx_GC
+  eptpartEligTx_CT <- dat$attr$eptpartEligTx_CT
   eptpartEligTxdate <- dat$attr$eptpartEligTxdate
 
   # Syphilis --------------------------------------------------------------
@@ -1051,7 +1053,6 @@ sti_tx_msm <- function(dat, at) {
   txsyph_all <- c(txsyph, txsyph_prep)
 
   # Subset all treated for GC/CT to treated with partners (for EPT)
-
   ept_txRGC_all <- txRGC_all[dat$attr$recentpartners[txRGC_all] > 0]
   ept_txUGC_all <- txUGC_all[dat$attr$recentpartners[txUGC_all] > 0]
   ept_txRCT_all <- txRCT_all[dat$attr$recentpartners[txRCT_all] > 0]
@@ -1070,7 +1071,7 @@ sti_tx_msm <- function(dat, at) {
   # time step
   idsRGC_tx_ept <- which(rGC == 1 &
                              rGC.infTime < at &
-                             eptpartEligTx == 1 &
+                             eptpartEligTx_GC == 1 &
                              eptpartEligTxdate == (at - 1) &
                              (is.na(rGC.tx) | rGC.tx == 0) &
                              (is.na(rGC.tx.prep) | rGC.tx.prep == 0) &
@@ -1078,7 +1079,7 @@ sti_tx_msm <- function(dat, at) {
 
   idsUGC_tx_ept <- which(uGC == 1 &
                              uGC.infTime < at &
-                             eptpartEligTx == 1 &
+                             eptpartEligTx_GC == 1 &
                              eptpartEligTxdate == (at - 1) &
                              (is.na(uGC.tx) | uGC.tx == 0) &
                              (is.na(uGC.tx.prep) | uGC.tx.prep == 0) &
@@ -1089,10 +1090,9 @@ sti_tx_msm <- function(dat, at) {
   txRGC_ept <- intersect(idsRGC_tx_ept, txGC_ept)
   txUGC_ept <- intersect(idsUGC_tx_ept, txGC_ept)
 
-
   idsRCT_tx_ept <- which(rCT == 1 &
                              rCT.infTime < at &
-                             eptpartEligTx == 1 &
+                             eptpartEligTx_CT == 1 &
                              eptpartEligTxdate == (at - 1) &
                              (is.na(rCT.tx)  | rCT.tx == 0) &
                              (is.na(rCT.tx.prep) | rCT.tx.prep == 0) &
@@ -1100,7 +1100,7 @@ sti_tx_msm <- function(dat, at) {
 
   idsUCT_tx_ept <- which(uCT == 1 &
                              uCT.infTime < at &
-                             eptpartEligTx == 1 &
+                             eptpartEligTx_CT == 1 &
                              eptpartEligTxdate == (at - 1) &
                              (is.na(uCT.tx)  | uCT.tx == 0) &
                              (is.na(uCT.tx.prep) | uCT.tx.prep == 0) &
@@ -1111,7 +1111,7 @@ sti_tx_msm <- function(dat, at) {
   txRCT_ept <- intersect(idsRCT_tx_ept, txCT_ept)
   txUCT_ept <- intersect(idsUCT_tx_ept, txCT_ept)
 
-  # All EPT-treate index ids
+  # All EPT-treated index ids
   allidsept <- unique(c(idsCT_tx_ept, idsGC_tx_ept))
 
   # Summarize all successfully treated for each STI, now including EPT
@@ -1196,7 +1196,8 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
 
   # Non-index EPT-treated
-  dat$attr$eptpartEligTx[alltxEPT] <- NA
+  dat$attr$eptpartEligTx_GC[txGC_ept] <- NA
+  dat$attr$eptpartEligTx_CT[txCT_ept] <- NA
   dat$attr$eptpartEligTxdate[alltxEPT] <- NA
   dat$attr$eptpartTx[allidsept] <- 0
   dat$attr$eptpartTx[alltxEPT] <- 1
@@ -1229,8 +1230,8 @@ sti_tx_msm <- function(dat, at) {
                  intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
                  intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)),
                  intersect(txsyph_all, which(dat$attr$syph.sympt == 0)))
-
   dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
+
   asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
                     idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
                     idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
@@ -1288,18 +1289,16 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$eptprop_tx[at] <- length(unique(alltxEPT)) / length(unique(allidsept))
 
   # First pass at missed opportunities
-  txGC_ept <- unique(c(txRGC_ept, txUGC_ept))
-  txCT_ept <- unique(c(txRGC_ept, txUGC_ept))
-  dat$epi$eptgcinfectsti[at] <-  length(txGC_ept[which(dat$attr$rCT == 1 |
-                                                           dat$attr$uCT == 1 |
-                                                           dat$attr$syphilis == 1 |
-                                                           dat$attr$status == 1)]) / length(txGC_ept)
-  dat$epi$eptctinfectsti[at] <- length(txCT_ept[which(dat$attr$rGC == 1 |
-                                                          dat$attr$uGC == 1 |
-                                                          dat$attr$syphilis == 1 |
-                                                          dat$attr$status == 1)]) / length(txCT_ept)
-  dat$epi$eptgcinfecthiv[at] <- length(txGC_ept[which(dat$attr$status == 1)]) / length(txGC_ept)
-  dat$epi$eptctinfecthiv[at] <- length(txCT_ept[which(dat$attr$status == 1)]) / length(txCT_ept)
+  dat$epi$eptgcinfectsti[at] <-  length(txGC_ept[which(dat$attr$rCT[txGC_ept] == 1 |
+                                                           dat$attr$uCT[txGC_ept] == 1 |
+                                                           dat$attr$syphilis[txGC_ept] == 1 |
+                                                           dat$attr$status[txGC_ept] == 1)]) / length(txGC_ept)
+  dat$epi$eptctinfectsti[at] <- length(txCT_ept[which(dat$attr$rGC[txCT_ept] == 1 |
+                                                          dat$attr$uGC[txCT_ept] == 1 |
+                                                          dat$attr$syphilis[txCT_ept] == 1 |
+                                                          dat$attr$status[txCT_ept] == 1)]) / length(txCT_ept)
+  dat$epi$eptgcinfecthiv[at] <- length(txGC_ept[which(dat$attr$status[txGC_ept] == 1)]) / length(txGC_ept)
+  dat$epi$eptctinfecthiv[at] <- length(txCT_ept[which(dat$attr$status[txCT_ept] == 1)]) / length(txCT_ept)
 
   return(dat)
 }
