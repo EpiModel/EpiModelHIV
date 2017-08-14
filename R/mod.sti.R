@@ -963,7 +963,7 @@ sti_tx_msm <- function(dat, at) {
                             rGC.infTime < at &
                             rGC.sympt == 0 &
                             diag.status.gc == 1 &
-                            is.na(uGC.tx))
+                            is.na(rGC.tx))
 
   idsUGC_tx_asympt <- which(uGC == 1 &
                             uGC.infTime < at &
@@ -1006,12 +1006,14 @@ sti_tx_msm <- function(dat, at) {
   idsRCT_tx_asympt <- which(rCT == 1 &
                             rCT.infTime < at &
                             rCT.sympt == 0 &
-                            diag.status.ct == 1 & is.na(rCT.tx))
+                            diag.status.ct == 1 &
+                            is.na(rCT.tx))
 
   idsUCT_tx_asympt <- which(uCT == 1 &
                             uCT.infTime < at &
                             uCT.sympt == 0 &
-                            diag.status.ct & is.na(uCT.tx))
+                            diag.status.ct &
+                            is.na(uCT.tx))
 
   idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)
   txCT_asympt <- idsCT_tx_asympt[which(rbinom(length(idsCT_tx_asympt), 1, ct.asympt.prob.tx) == 1)]
@@ -1265,15 +1267,18 @@ sti_tx_msm <- function(dat, at) {
 
   # Track total number treated
   dat$epi$txGC[at] <- length(unique(c(alltxRGC, alltxUGC)))
+  dat$epi$txGC_asympt[at] <- length(txGC_asympt)
   dat$epi$txCT[at] <- length(unique(c(alltxRCT, alltxUCT)))
+  dat$epi$txCT_asympt[at] <- length(txCT_asympt)
   dat$epi$txsyph[at] <- length(unique(c(txsyph_all)))
+  dat$epi$txsyph_asympt[at] <- length(txsyph_asympt)
   dat$epi$txearlysyph[at] <- length(unique(c(txsyph_sympt_prim, txsyph_sympt_seco,
                                              txsyph_asympt_prim, txsyph_asympt_seco,
                                              txsyph_asympt_earlat)))
   dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                             txsyph_sympt_tert)))
-  dat$epi$txasympt[at] <- length(unique(c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                          txsyph_asympt)))
+  dat$epi$txasympt[at] <- length(c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
+                                          txsyph_asympt))
 
   # EPT
   # Proportion of treated GC/CT index who have partners - e.g. eligibility for EPT

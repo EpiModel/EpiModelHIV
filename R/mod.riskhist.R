@@ -115,31 +115,6 @@ riskhist_prep_msm <- function(dat, at) {
 #'
 riskhist_stitest_msm <- function(dat, at) {
 
-  if (at < dat$param$riskh.stitest.start) {
-
-    part.list <- dat$temp$part.list
-
-    # Anyone sexually active in last year is eligible to be screened
-    idsactive <- which(at - dat$attr$time.last.sex <= 52)
-    idsnotactive <- setdiff(which(dat$attr$race %in% c("B","W")), idsactive)
-    idspartlist <- which(dat$attr$uid %in% part.list[, c("uid1", "uid2")])
-
-    dat$attr$recentpartners <- rep(0, length(which(dat$attr$race %in% c("B","W"))))
-    part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
-
-    # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
-    if (length(idspartlist) > 0) {
-    dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% dat$attr$uid), 2]
-    }
-
-    dat$attr$stitest.ind.active[idsactive] <- 1
-    dat$attr$stitest.ind.active[idsnotactive] <- 0
-
-
-
-    return(dat)
-  }
-
   ## Parameters
   partnercutoff <- dat$param$partnercutoff
 
@@ -162,6 +137,8 @@ riskhist_stitest_msm <- function(dat, at) {
   # For those who had partners, calculate # of occurrences in partner list
   part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
+  if (nrow(part.count) > 1) {
+
   # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
   dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% uid), 2]
 
@@ -169,27 +146,14 @@ riskhist_stitest_msm <- function(dat, at) {
   idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
   idsnotrecentpartners <- setdiff(which(race %in% c("B","W")), idsrecentpartners)
 
-  ### Update STI indication attributes
-  dat$attr$stitest.ind.active[idspartlist] <- 1
-  dat$attr$stitest.ind.active[idsnotpartlist] <- 0
   dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
   dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
 
+  }
 
-  ## Prevalence of partner numbers
-  dat$epi$zeropart[at] <- length(which(dat$attr$recentpartners == 0)) / length(which(race %in% c("B","W")))
-  dat$epi$onepart[at] <- length(which(dat$attr$recentpartners == 1)) / length(which(race %in% c("B","W")))
-  dat$epi$twopart[at] <- length(which(dat$attr$recentpartners == 2)) / length(which(race %in% c("B","W")))
-  dat$epi$threepart[at] <- length(which(dat$attr$recentpartners == 3)) / length(which(race %in% c("B","W")))
-  dat$epi$fourpart[at] <- length(which(dat$attr$recentpartners == 4)) / length(which(race %in% c("B","W")))
-  dat$epi$fivepart[at] <- length(which(dat$attr$recentpartners == 5)) / length(which(race %in% c("B","W")))
-  dat$epi$sixpart[at] <- length(which(dat$attr$recentpartners == 6)) / length(which(race %in% c("B","W")))
-  dat$epi$sevenpart[at] <- length(which(dat$attr$recentpartners == 7)) / length(which(race %in% c("B","W")))
-  dat$epi$eightpart[at] <- length(which(dat$attr$recentpartners == 8)) / length(which(race %in% c("B","W")))
-  dat$epi$ninepart[at] <- length(which(dat$attr$recentpartners == 9)) / length(which(race %in% c("B","W")))
-  dat$epi$tenpart[at] <- length(which(dat$attr$recentpartners == 10)) / length(which(race %in% c("B","W")))
-  dat$epi$gttenpart[at] <- length(which(dat$attr$recentpartners > 10)) / length(which(race %in% c("B","W")))
-
+  ### Update STI indication attributes
+  dat$attr$stitest.ind.active[idspartlist] <- 1
+  dat$attr$stitest.ind.active[idsnotpartlist] <- 0
 
   return(dat)
 }

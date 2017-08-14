@@ -268,8 +268,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$trans.inst <- rNA
 
     dat$epi$txGC <- rNA
+    dat$epi$txGC_asympt <- rNA
     dat$epi$txCT <- rNA
+    dat$epi$txCT_asympt <- rNA
     dat$epi$txsyph <- rNA
+    dat$epi$txsyph_asympt <- rNA
     dat$epi$txearlysyph <- rNA
     dat$epi$txlatesyph <- rNA
     dat$epi$txasympt <- rNA
