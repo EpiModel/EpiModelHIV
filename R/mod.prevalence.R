@@ -301,14 +301,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptgcinfecthiv <- rNA
     dat$epi$eptctinfecthiv <- rNA
 
-    # Proportion with X partners
-    dat$epi$zeropart <- rNA
-    dat$epi$onepart <- rNA
-    dat$epi$twopart <- rNA
-    dat$epi$threepart <- rNA
-    dat$epi$fourpart <- rNA
-    dat$epi$fivepart <- rNA
-    dat$epi$gtfivepart <- rNA
   }
 
   dat$epi$num[at] <- sum(race %in% c("B","W"), na.rm = TRUE)

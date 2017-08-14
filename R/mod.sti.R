@@ -1281,8 +1281,11 @@ sti_tx_msm <- function(dat, at) {
                                           txsyph_asympt))
 
   # EPT
-  # Proportion of treated GC/CT index who have partners - e.g. eligibility for EPT
-  dat$epi$propindexeptElig[at] <- length(unique(ept_tx_all)) / length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all)))
+  # Proportion of treated GC/CT index who have current partners - e.g. eligibility for EPT
+  dat$epi$propindexeptElig[at] <- ifelse(length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all))) > 0,
+                                         length(unique(ept_tx_all)) /
+                                           length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all))),
+                                         0)
 
   # Proportion of eligible index who will receive EPT - varies by sim scenario
   dat$epi$eptCov[at] <- eptCov
@@ -1291,7 +1294,9 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$eptTx[at] <- length(unique(alltxEPT))
 
   # Proportion of all non-index eligible to be treated who had treatment success
-  dat$epi$eptprop_tx[at] <- length(unique(alltxEPT)) / length(unique(allidsept))
+  dat$epi$eptprop_tx[at] <- ifelse(length(unique(allidsept)) > 0,
+                                   length(unique(alltxEPT)) / length(unique(allidsept)),
+                                   0)
 
   return(dat)
 }
