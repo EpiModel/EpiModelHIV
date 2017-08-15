@@ -1012,7 +1012,7 @@ sti_tx_msm <- function(dat, at) {
   idsUCT_tx_asympt <- which(uCT == 1 &
                             uCT.infTime < at &
                             uCT.sympt == 0 &
-                            diag.status.ct &
+                            diag.status.ct == 1 &
                             is.na(uCT.tx))
 
   idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)

@@ -59,9 +59,9 @@ param <- param_msm(nwstats = st,
                    stianntest.coverage = 0.1,
                    stihighrisktest.coverage = 0.1,
 
-                   prep.start = 2600,
-                   stitest.start = 2600,
-                   ept.start = 5,
+                   prep.start = 2601,
+                   stitest.start = 2601,
+                   ept.start = 2601,
 
                    stitest.elig.model = "sti",
 
@@ -70,8 +70,8 @@ param <- param_msm(nwstats = st,
                    ept.risk.int = 60)
 
 init <- init_msm(nwstats = st,
-                 prev.B = 0.08,
-                 prev.W = 0.08,
+                 prev.B = 0.10,
+                 prev.W = 0.10,
                  prev.ugc = 0.010,
                  prev.rgc = 0.010,
                  prev.uct = 0.010,
