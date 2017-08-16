@@ -31,6 +31,8 @@ prep_msm <- function(dat, at) {
 
       dat$epi$syphasympttests.prep[at] <- 0
       dat$epi$syphasympttests.pos.prep[at] <- 0
+      dat$epi$syphearlyasympttests.pos.prep[at] <- 0
+      dat$epi$syphlateasympttests.pos.prep[at] <- 0
 
     return(dat)
   }
@@ -214,6 +216,8 @@ prep_msm <- function(dat, at) {
   # Syphilis PrEP testing
   tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6, 7)]
   tst.syph.neg <- setdiff(tst.syph.prep, tst.syph.pos)
+  tst.earlysyph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4)]
+  tst.latesyph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(5, 6, 7)]
 
   # GC PrEP testing
   tst.rgc <- tst.gc.prep[dat$attr$role.class %in% c("R", "V")]
@@ -276,6 +280,8 @@ prep_msm <- function(dat, at) {
 
   dat$epi$syphasympttests.prep[at] <- length(c(tst.syph.prep))
   dat$epi$syphasympttests.pos.prep[at] <- length(c(tst.syph.pos))
+  dat$epi$syphearlyasympttests.pos.prep[at] <- length(c(tst.earlysyph.pos))
+  dat$epi$syphlateasympttests.pos.prep[at] <- length(c(tst.latesyph.pos))
 
   ## Output -------------------------------------------------------------------
 

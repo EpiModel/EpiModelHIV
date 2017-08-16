@@ -111,6 +111,12 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rGCasympttests.pos <- rep(0, nsteps)
     dat$epi$uGCasympttests.pos <- rep(0, nsteps)
     dat$epi$GCasympttests.pos <- rep(0, nsteps)
+    dat$epi$rGCasympttests.prep <- rep(0, nsteps)
+    dat$epi$uGCasympttests.prep <- rep(0, nsteps)
+    dat$epi$GCasympttests.prep <- rep(0, nsteps)
+    dat$epi$rGCasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$uGCasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$GCasympttests.pos.prep <- rep(0, nsteps)
 
     dat$epi$rCTasympttests <- rep(0, nsteps)
     dat$epi$uCTasympttests <- rep(0, nsteps)
@@ -118,12 +124,27 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rCTasympttests.pos <- rep(0, nsteps)
     dat$epi$uCTasympttests.pos <- rep(0, nsteps)
     dat$epi$CTasympttests.pos <- rep(0, nsteps)
+    dat$epi$rCTasympttests.prep <- rep(0, nsteps)
+    dat$epi$uCTasympttests.prep <- rep(0, nsteps)
+    dat$epi$CTasympttests.prep <- rep(0, nsteps)
+    dat$epi$rCTasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$uCTasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$CTasympttests.pos.prep <- rep(0, nsteps)
 
     dat$epi$syphasympttests <- rep(0, nsteps)
     dat$epi$syphasympttests.pos <- rep(0, nsteps)
+    dat$epi$syphearlyasympttests.pos <- rep(0, nsteps)
+    dat$epi$syphlateasympttests.pos <- rep(0, nsteps)
+    dat$epi$syphasympttests.prep <- rep(0, nsteps)
+    dat$epi$syphasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$syphearlyasympttests.pos.prep <- rep(0, nsteps)
+    dat$epi$syphlateasympttests.pos.prep <- rep(0, nsteps)
 
     dat$epi$stiasympttests <- rep(0, nsteps)
     dat$epi$stiasympttests.pos <- rep(0, nsteps)
+    dat$epi$stisympttests <- rep(0, nsteps)
+    dat$epi$stiasympttests.prep <- rep(0, nsteps)
+    dat$epi$stiasympttests.pos.prep <- rep(0, nsteps)
 
     dat$epi$prev.rgc <- rNA
     dat$epi$prev.ugc <- rNA

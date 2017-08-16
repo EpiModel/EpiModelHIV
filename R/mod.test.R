@@ -177,7 +177,10 @@ sti_test_msm <- function(dat, at) {
     screen.syph.pos <- screen.syph[syphilis[screen.syph] == 1 &
                                    stage.syph[screen.syph] %in% c(2, 3, 4, 5, 6, 7)]
     screen.syph.neg <- setdiff(screen.syph, screen.syph.pos)
-
+    screen.earlysyph.pos <- screen.syph[syphilis[screen.syph] == 1 &
+                                          stage.syph[screen.syph] %in% c(2, 3, 4)]
+    screen.latesyph.pos <- screen.syph[syphilis[screen.syph] == 1 &
+                                         stage.syph[screen.syph] %in% c(5, 6, 7)]
     # GC screening
     screen.rgc <- screen.gc[role.class[screen.gc] %in% c("R", "V")]
     screen.rgc <- sample(screen.rgc, tst.rect.sti.rr * length(screen.rgc))
@@ -257,6 +260,8 @@ sti_test_msm <- function(dat, at) {
 
     dat$epi$syphasympttests[at] <- length(screen.syph)
     dat$epi$syphasympttests.pos[at] <- length(screen.syph.pos)
+    dat$epi$syphearlyasympttests.pos[at] <- length(screen.earlysyph.pos)
+    dat$epi$syphlateasympttests.pos[at] <- length(screen.latesyph.pos)
 
     return(dat)
   }
@@ -480,6 +485,10 @@ sti_test_msm <- function(dat, at) {
   tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
                                    stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
   tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
+  tst.earlysyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
+                                   stage.syph[tst.syph.nprep] %in% c(2, 3, 4)]
+  tst.latesyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
+                                   stage.syph[tst.syph.nprep] %in% c(5, 6, 7)]
 
   # GC non-PrEP testing
   tst.rgc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("R", "V")]
@@ -542,6 +551,8 @@ sti_test_msm <- function(dat, at) {
 
   dat$epi$syphasympttests[at] <- length(tst.syph.nprep)
   dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos)
+  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos)
+  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos)
 
   ## Output -----------------------------------------------------------------
 
