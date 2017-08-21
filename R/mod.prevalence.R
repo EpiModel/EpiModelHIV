@@ -477,6 +477,23 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.gc.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rGC == 1 | uGC == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at], 0)
   dat$epi$prev.ct.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, (length(intersect(which(rCT == 1 | uCT == 1), which(stage.syph %in% c(1, 2))))) / dat$epi$num[at], 0)
 
+  dat$epi$prev.multsti[at] <- sum((rGC == 1 & (uGC == 1 | rCT == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (uGC == 1 & (rGC == 1 | rCT == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (rCT == 1 & (uGC == 1 | rGC == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (uCT == 1 & (uGC == 1 | rGC == 1 | rCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (stage.syph %in% c(1, 2, 3) & (uGC == 1 | rGC == 1 | rCT == 1 | uCT == 1))) / dat$epi$num[at]
+
+  dat$epi$prev.hivct[at] <- length(intersect(which(status == 1),  which((rCT == 1 | uCT == 1)))) / dat$epi$num[at]
+  dat$epi$prev.hivgc[at] <- length(intersect(which(status == 1),  which((rGC == 1 | uGC == 1)))) / dat$epi$num[at]
+  dat$epi$prev.hivipssyph[at] <- length(intersect(which(status == 1),  which(stage.syph %in% c(1, 2, 3)))) / dat$epi$num[at]
+
+  #HIV/Multiple STI
+  dat$epi$prev.hivmultsti[at] <- sum(status == 1 &
+                                    ((rGC == 1 & (uGC == 1 | rCT == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (uGC == 1 & (rGC == 1 | rCT == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (rCT == 1 & (uGC == 1 | rGC == 1 | uCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (uCT == 1 & (uGC == 1 | rGC == 1 | rCT == 1 | stage.syph %in% c(1, 2, 3))) |
+                                    (stage.syph %in% c(1, 2, 3) & (uGC == 1 | rGC == 1 | rCT == 1 | uCT == 1)))) / dat$epi$num[at]
   # Site-specific STI incidence rates
   dat$epi$ir100.rgc[at] <- ifelse(sum(rGC == 0, na.rm = TRUE) > 0, (dat$epi$incid.rgc[at] / sum(rGC == 0, na.rm = TRUE)) * 5200, 0)
   dat$epi$ir100.ugc[at] <- ifelse(sum(uGC == 0, na.rm = TRUE) > 0, (dat$epi$incid.ugc[at] / sum(uGC == 0, na.rm = TRUE)) * 5200, 0)

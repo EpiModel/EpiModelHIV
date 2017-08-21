@@ -138,6 +138,8 @@ riskhist_stitest_msm <- function(dat, at) {
   # Reset # of partners at each time step- length of "recent" interval is drawn from interval of partner list lookback
   dat$attr$recentpartners <- rep(0, length(idsEligTest))
 
+  if (at >= dat$param$stitest.start) {
+
   # For those who had partners, calculate # of occurrences in partner list
   part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
@@ -155,6 +157,7 @@ riskhist_stitest_msm <- function(dat, at) {
 
   }
 
+  }
   ### Update STI indication attributes
   dat$attr$stitest.ind.active[idsactive] <- 1
   dat$attr$stitest.ind.active[idsnotactive] <- 0
