@@ -117,43 +117,47 @@ riskhist_stitest_msm <- function(dat, at) {
 
   ## Parameters
   partnercutoff <- dat$param$partnercutoff
+  stitest.active.int <- dat$param$stitest.active.int
 
   ## Attributes
   uid <- dat$attr$uid
   race <- dat$attr$race
+  stitestind1 <- dat$attr$time.last.sex
 
   # Indications -------------------------------------------------------------
-  part.list <- dat$temp$part.list
 
-  ### Lower risk - existing in partner list (6 month look back)
-  idspartlist <- which(uid %in% part.list[, c("uid1", "uid2")])
-  idsnotpartlist <- setdiff(which(race %in% c("B","W")), idspartlist)
+  part.list <- dat$temp$part.list
+  idsEligTest <- which(race %in% c("B", "W"))
+
+  ### Lower risk - sexually active in the last year
+  idsactive <- intersect(which((at - stitestind1) <= stitest.active.int), idsEligTest)
+  idsnotactive <- setdiff(which(race %in% c("B","W")), idsactive)
   # these are relative ids of nodes in partner list
 
   ### High-risk: Have more than one sex partner in last x months
   # Reset # of partners at each time step- length of "recent" interval is drawn from interval of partner list lookback
-  dat$attr$recentpartners <- rep(0, length(which(race %in% c("B","W"))))
+  dat$attr$recentpartners <- rep(0, length(idsEligTest))
 
   # For those who had partners, calculate # of occurrences in partner list
   part.count <- as.data.frame(table(part.list[, c("uid1", "uid2")]))
 
   if (nrow(part.count) > 1) {
 
-  # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
-  dat$attr$recentpartners[idspartlist] <- part.count[which(part.count[, "Var1"] %in% uid), 2]
+    # Calculate # of recent partners: 0 for those not in part list, update numbers for only actives in part list
+    dat$attr$recentpartners[which(part.count[, "Var1"] %in% uid)] <- part.count[which(part.count[, "Var1"] %in% uid), 2]
 
-  # Choose those who have had more than X partners in last x months
-  idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
-  idsnotrecentpartners <- setdiff(which(race %in% c("B","W")), idsrecentpartners)
+    # Choose those who have had more than X partners in last x months
+    idsrecentpartners <- which(dat$attr$recentpartners > partnercutoff)
+    idsnotrecentpartners <- setdiff(which(race %in% c("B","W")), idsrecentpartners)
 
-  dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
-  dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
+    dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
+    dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
 
   }
 
   ### Update STI indication attributes
-  dat$attr$stitest.ind.active[idspartlist] <- 1
-  dat$attr$stitest.ind.active[idsnotpartlist] <- 0
+  dat$attr$stitest.ind.active[idsactive] <- 1
+  dat$attr$stitest.ind.active[idsnotactive] <- 0
 
   return(dat)
 }
