@@ -22,11 +22,11 @@ param <- param_msm(nwstats = st,
                    syph.tert.prog.prob = 0.00015625599,
 
                    # STI acquisition
-                   rgc.tprob = 0.4434,
-                   ugc.tprob = 0.3343,
-                   rct.tprob = 0.2008,
-                   uct.tprob = 0.1790,
-                   syph.tprob = 0.1424,
+                   rgc.tprob = 0.4456,
+                   ugc.tprob = 0.3341,
+                   rct.tprob = 0.1985,
+                   uct.tprob = 0.1787,
+                   syph.tprob = 0.1464,
 
                    # HIV acquisition
                    hiv.rgc.rr = 1.80292790,
@@ -89,7 +89,7 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debug(sti_ept_msm)
+debug(sti_test_msm)
 
 at <- at + 1
 for (at in 2:control$nsteps) {

@@ -651,12 +651,12 @@ param_msm <- function(nwstats,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
 
-                      rgc.tprob = 0.4337,
-                      ugc.tprob = 0.3229,
-                      rct.tprob = 0.1978,
-                      uct.tprob = 0.1654,
+                      rgc.tprob = 0.4456,
+                      ugc.tprob = 0.3341,
+                      rct.tprob = 0.1985,
+                      uct.tprob = 0.1787,
 
-                      syph.tprob = 0.1424,
+                      syph.tprob = 0.1464,
                       syph.earlat.rr = 0.5,
                       syph.late.rr = 0,
 
