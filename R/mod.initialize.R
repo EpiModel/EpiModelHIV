@@ -796,6 +796,9 @@ init_status_sti_msm <- function(dat) {
     time.sex.active <- pmax(1, round((365 / dat$param$time.unit) * age -
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
+    selected <- which(dat$attr$race %in% c("W", "B"))
+    tslaststitest <- ceiling(runif(length(selected), max = dat$param$stitest.active.int))
+
     ## Syphilis ----------------------------------------------------------------
 
     # Infection status for syphilis
@@ -918,7 +921,6 @@ init_status_sti_msm <- function(dat) {
 
     diag.status.ct[uCT == 1 | rCT == 1] <- 0
 
-
     ## Set all attributes onto dat$attr ---------------------------------------
 
     # Syphilis
@@ -935,6 +937,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.syph <- last.tx.time.syph
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
     dat$attr$tt.traj.syph <- rep(NA, num)
+    dat$attr$time.since.last.test.syph <- tslaststitest
 
     # Gonorrhea
     dat$attr$rGC <- rGC
@@ -956,6 +959,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
     dat$attr$tt.traj.gc <- rep(NA, num)
+    dat$attr$time.since.last.test.rgc <- tslaststitest
+    dat$attr$time.since.last.test.ugc <- tslaststitest
 
     # Chlamydia
     dat$attr$rCT <- rCT
@@ -977,6 +982,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
     dat$attr$tt.traj.ct <- rep(NA, num)
+    dat$attr$time.since.last.test.rct <- tslaststitest
+    dat$attr$time.since.last.test.uct <- tslaststitest
 
     # EPT variables
     dat$attr$eptindexElig <- rep(NA, num)

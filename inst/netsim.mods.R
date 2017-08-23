@@ -40,6 +40,13 @@ param <- param_msm(nwstats = st,
                    hiv.trans.ct.rr = 1,
                    hiv.trans.syph.rr = 1,
 
+                   syph.incub.sympt.prob = 0,
+                   syph.prim.sympt.prob = 0.50,
+                   syph.seco.sympt.prob = 0.85,
+                   syph.earlat.sympt.prob = 0,
+                   syph.latelat.sympt.prob = 0,
+                   syph.tert.sympt.prob = 1.0,
+
                    syph.prim.sympt.prob.tx = 0.60,
                    syph.seco.sympt.prob.tx = 0.688235,
                    syph.earlat.sympt.prob.tx = 0.10,
@@ -72,14 +79,15 @@ param <- param_msm(nwstats = st,
 init <- init_msm(nwstats = st,
                  prev.B = 0.10,
                  prev.W = 0.10,
-                 prev.ugc = 0.010,
-                 prev.rgc = 0.010,
-                 prev.uct = 0.010,
-                 prev.rct = 0.010,
-                 prev.syph.B = 0.010,
-                 prev.syph.W = 0.010,
-                 stage.syph.B.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00),
-                 stage.syph.W.prob = c(0.00, 0.01, 0.01, 0.10, 0.44, 0.44, 0.00))
+                 prev.ugc = 0.0075,
+                 prev.rgc = 0.0075,
+                 prev.uct = 0.0075,
+                 prev.rct = 0.0075,
+                 prev.syph.B = 0.015,
+                 prev.syph.W = 0.015,
+                 stage.syph.B.prob = c(0.00, 0.10, 0.10, 0.40, 0.40, 0.00, 0.00),
+                 stage.syph.W.prob = c(0.00, 0.10, 0.10, 0.40, 0.40, 0.40, 0.00))
+
 
 control <- control_msm(nsteps = 200)
 

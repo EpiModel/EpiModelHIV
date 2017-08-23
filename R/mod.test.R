@@ -148,6 +148,13 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.gc <- dat$attr$last.diag.time.gc
   last.diag.time.ct <- dat$attr$last.diag.time.ct
   last.diag.time.syph <- dat$attr$last.diag.time.syph
+  tsinceltst.syph <- dat$attr$time.since.last.test.syph
+  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc
+  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc
+  tsinceltst.rct <- dat$attr$time.since.last.test.rct
+  tsinceltst.uct <- dat$attr$time.since.last.test.uct
+  tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
+  tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
   race <- dat$attr$race
   prepStat <- dat$attr$prepStat
   stitestind1 <- dat$attr$stitest.ind.active
@@ -230,22 +237,6 @@ sti_test_msm <- function(dat, at) {
     tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
   }
 
-  ## Testing
-  tsincelntst.syph <- at - dat$attr$last.neg.test.syph
-  tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
-
-  tsincelntst.rgc <- at - dat$attr$last.neg.test.rgc
-  tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
-  tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
-  tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
-  tsincelntst.gc <- pmin(tsincelntst.rgc, tsincelntst.ugc)
-
-  tsincelntst.rct <- at - dat$attr$last.neg.test.rct
-  tsincelntst.uct <- at - dat$attr$last.neg.test.uct
-  tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
-  tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
-  tsincelntst.ct <- pmin(tsincelntst.rct, tsincelntst.uct)
-
   # Testing Rates by serostatus/race?
   # All MSM with HIV infection entering care should be screened for GC and CT
   # ct appropriate anatomic sites of exposure, as well as for syphilis
@@ -271,11 +262,11 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.syph.annual.interval <- which(tt.traj.syph == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                        tsincelntst.syph >= 2*(stitest.active.int) &
+                                        tsinceltst.syph >= (stitest.active.int) &
                                         prepStat == 0)
     tst.syph.highrisk.interval <- which(tt.traj.syph == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                          tsincelntst.syph >= 2*(sti.highrisktest.int) &
+                                          tsinceltst.syph >= (sti.highrisktest.int) &
                                           prepStat == 0)
     tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
@@ -299,11 +290,11 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.gc.annual.interval <- which(tt.traj.gc == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                      tsincelntst.gc >= 2*(stitest.active.int) &
+                                      tsinceltst.gc >= (stitest.active.int) &
                                       prepStat == 0)
     tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                        tsincelntst.gc >= 2*(sti.highrisktest.int) &
+                                        tsinceltst.gc >= (sti.highrisktest.int) &
                                         prepStat == 0)
     tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
@@ -328,11 +319,11 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.ct.annual.interval <- which(tt.traj.ct == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                      tsincelntst.ct >= 2*(stitest.active.int) &
+                                      tsinceltst.ct >= (stitest.active.int) &
                                       prepStat == 0)
     tst.ct.highrisk.interval <- which(tt.traj.ct == 2 &
                                         (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                        tsincelntst.ct >= 2*(sti.highrisktest.int) &
+                                        tsinceltst.ct >= (sti.highrisktest.int) &
                                         prepStat == 0)
     tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
@@ -348,7 +339,7 @@ sti_test_msm <- function(dat, at) {
 
   # GC non-PrEP testing
   tst.rgc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("R", "V")]
-  tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
+  #tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
   tst.ugc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("I", "V")]
   tst.rgc.pos <- tst.rgc[rGC[tst.rgc] == 1]
   tst.ugc.pos <- tst.ugc[uGC[tst.ugc] == 1]
@@ -358,7 +349,7 @@ sti_test_msm <- function(dat, at) {
 
   # CT non-PrEP testing
   tst.rct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("R", "V")]
-  tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
+  #tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
   tst.uct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("I", "V")]
   tst.rct.pos <- tst.rct[rCT[tst.rct] == 1]
   tst.uct.pos <- tst.uct[uCT[tst.uct] == 1]
@@ -371,6 +362,7 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.syph[tst.syph.pos] <- NA
   diag.status.syph[tst.syph.pos] <- 1
   last.diag.time.syph[tst.syph.pos] <- at
+  tsinceltst.syph[tst.syph.nprep] <- at
 
   # GC Attributes
   last.neg.test.rgc[tst.rgc.neg] <- at
@@ -379,6 +371,8 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.ugc[tst.ugc.pos] <- NA
   diag.status.gc[tst.gc.pos] <- 1
   last.diag.time.gc[tst.gc.pos] <- at
+  tsinceltst.rgc[tst.rgc] <- at
+  tsinceltst.ugc[tst.ugc] <- at
 
   # CT Attributes
   last.neg.test.rct[tst.rct.neg] <- at
@@ -387,6 +381,8 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.uct[tst.uct.pos] <- NA
   diag.status.ct[tst.ct.pos] <- 1
   last.diag.time.ct[tst.ct.pos] <- at
+  tsinceltst.rct[tst.rct] <- at
+  tsinceltst.uct[tst.uct] <- at
 
   # Number of tests for asymptomatic
   dat$epi$rGCasympttests[at] <- length(tst.rgc)
@@ -423,6 +419,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.syph <- diag.status.syph
   dat$attr$last.diag.time.syph <- last.diag.time.syph
   dat$attr$tt.traj.syph <- tt.traj.syph
+  dat$attr$time.since.last.test.syph <- tsinceltst.syph
 
   # GC Attributes
   dat$attr$last.neg.test.rgc <- last.neg.test.rgc
@@ -430,6 +427,8 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.gc <- diag.status.gc
   dat$attr$last.diag.time.gc <- last.diag.time.gc
   dat$attr$tt.traj.gc <- tt.traj.gc
+  dat$attr$time.since.last.test.rgc <- tsinceltst.rgc
+  dat$attr$time.since.last.test.ugc <- tsinceltst.ugc
 
   # CT Attributes
   dat$attr$last.neg.test.rct <- last.neg.test.rct
@@ -437,7 +436,8 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.ct <- diag.status.ct
   dat$attr$last.diag.time.ct <- last.diag.time.ct
   dat$attr$tt.traj.ct <- tt.traj.ct
-
+  dat$attr$time.since.last.test.rct <- tsinceltst.rct
+  dat$attr$time.since.last.test.uct <- tsinceltst.uct
 
   return(dat)
 }
