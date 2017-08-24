@@ -823,7 +823,7 @@ sti_tx_msm <- function(dat, at) {
                                     stage.syph == 1 &
                                     syph.sympt == 0 &
                                     diag.status.syph == 1 &
-                                    is.na(syph.tx))
+                                    (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_incub <- idssyph_tx_asympt_incub[which(rbinom(length(idssyph_tx_asympt_incub),
@@ -833,7 +833,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 2 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  is.na(syph.tx))
+                                  (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_prim <- idssyph_tx_asympt_prim[which(rbinom(length(idssyph_tx_asympt_prim),
@@ -844,7 +844,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 3 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  is.na(syph.tx))
+                                  (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco),
@@ -856,7 +856,7 @@ sti_tx_msm <- function(dat, at) {
                                     stage.syph == 4 &
                                     syph.sympt == 0 &
                                     diag.status.syph == 1 &
-                                    is.na(syph.tx))
+                                    (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_earlat),
@@ -866,7 +866,8 @@ sti_tx_msm <- function(dat, at) {
   idssyph_tx_asympt_latelat <- which(syph.infTime < at &
                                      (stage.syph == 5 | stage.syph == 6) &
                                      (syph.sympt == 0) &
-                                     diag.status.syph == 1 & is.na(syph.tx))
+                                     diag.status.syph == 1 &
+                                     (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_latelat),
@@ -876,7 +877,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 7 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  is.na(syph.tx))
+                                  (is.na(syph.tx) | syph.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_tert <- idssyph_tx_asympt_tert[which(rbinom(length(idssyph_tx_asympt_tert),
