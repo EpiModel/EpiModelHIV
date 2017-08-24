@@ -751,7 +751,7 @@ sti_tx_msm <- function(dat, at) {
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_incub <- idssyph_tx_sympt_incub[which(rbinom(length(idssyph_tx_sympt_incub),
-                                                            1, syph.incub.sympt.prob.tx))]
+                                                            1, syph.incub.sympt.prob.tx) == 1)]
 
   # Select those in primary stage who are eligible to be treated
   idssyph_tx_sympt_prim <- which(syphilis == 1 &
