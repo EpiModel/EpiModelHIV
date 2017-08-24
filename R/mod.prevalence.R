@@ -174,6 +174,8 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prev.primsecosyph <- rNA
     dat$epi$num.earlydiagsyph <- rNA
     dat$epi$num.latediagsyph <- rNA
+    dat$epi$num.newearlydiagsyph <- rNA
+    dat$epi$num.newlatediagsyph <- rNA
     dat$epi$early.late.syphratio <- rNA
     dat$epi$early.late.diagsyphratio <- rNA
 
@@ -409,6 +411,8 @@ prevalence_msm <- function(dat, at) {
                                       length(which(stage.syph %in% c(4, 5, 6, 7))) / length(which(syphilis == 1)), 0)
   dat$epi$num.earlydiagsyph[at] <- length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3)))
   dat$epi$num.latediagsyph[at] <- length(which(diag.status.syph == 1 & stage.syph %in% c(4, 5, 6, 7)))
+  dat$epi$num.newearlydiagsyph[at] <- length(which(last.diag.time.syph == at & stage.syph %in% c(1, 2, 3)))
+  dat$epi$num.newlatediagsyph[at] <- length(which(last.diag.time.syph == at & stage.syph %in% c(4, 5, 6, 7)))
   dat$epi$early.late.syphratio[at] <- ifelse(length(which(stage.syph %in% c(4, 5, 6, 7))) > 0,
                                              length(which(stage.syph %in% c(1, 2, 3))) /
                                                length(which(stage.syph %in% c(4, 5, 6, 7))), 0)
