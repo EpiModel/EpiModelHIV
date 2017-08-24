@@ -52,6 +52,7 @@ prevalence_msm <- function(dat, at) {
   stage.syph <- dat$attr$stage.syph
   syph.sympt <- dat$attr$syph.sympt
   diag.status.syph <- dat$attr$diag.status.syph
+  last.diag.time.syph <- dat$attr$last.diag.time.syph
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
