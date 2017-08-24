@@ -92,8 +92,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   hiv.all.rect.rr = 0.2, hiv.trans.gc.rr = 1, hiv.trans.ct.rr = 1,
   hiv.trans.syph.rr = 1, hiv.trans.gc.ct.rr = 0.2,
   hiv.trans.gc.syph.rr = 0.2, hiv.trans.ct.syph.rr = 0.2,
-  hiv.trans.allsti.rr = 0.2, hivdx.syph.sympt.tx.rr = 1.45,
-  partlist.start = NULL, ...)
+  hiv.trans.allsti.rr = 0.2, partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -759,11 +758,6 @@ infection and syphilis infection in HIV-positive partner.}
 transmission given prevalent relevant site-specific gonorrhea
 infection, relevant site-specific chlamydia infection, and syphilis
 infection in HIV-positive partner.}
-
-\item{hivdx.syph.sympt.tx.rr}{Relative risk of treatment for symptomatic
-syphilis given diagnosed HIV infection. This is implemented as an
-inverse, 1 / this value for those who do not have diagnosed infection,
-so it is a boost to get to 0.35.}
 
 \item{partlist.start}{Time step at which persisting edge list should begin
 accumulating for eventual STI testing indications.}

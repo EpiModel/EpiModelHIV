@@ -561,11 +561,11 @@ sti_recov_msm <- function(dat, at) {
 
   ## Recovery for treated
   idssyph_early_tx <- which(syphilis == 1 &
-                            stage.syph %in% 2:4 &
+                            stage.syph %in% c(1:4) &
                             syph.infTime < at &
                             (syph.tx == 1 | syph.tx.prep == 1))
   idssyph_late_tx <- which(syphilis == 1 &
-                           stage.syph %in% 5:7 &
+                           stage.syph %in% c(5:7) &
                            syph.infTime < at &
                            (syph.tx == 1 | syph.tx.prep == 1))
 
@@ -733,7 +733,6 @@ sti_tx_msm <- function(dat, at) {
   diag.status.syph <- dat$attr$diag.status.syph
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
-  diag.status <- dat$attr$diag.status
 
   # EPT
   eptpartEligTx_GC <- dat$attr$eptpartEligTx_GC
@@ -750,19 +749,9 @@ sti_tx_msm <- function(dat, at) {
                                    syph.sympt == 1 &
                                    is.na(syph.tx))
 
-  # Choose those in incubating stage who are diagnosed with HIV
-  idssyph_tx_sympt_incub_hivdx <- idssyph_tx_sympt_incub[which(diag.status[idssyph_tx_sympt_incub] == 1)]
-
-  # Choose those in incubating stage who are not diagnosed with HIV
-  idssyph_tx_sympt_incub_hivnotdx <- setdiff(idssyph_tx_sympt_incub, idssyph_tx_sympt_incub_hivdx)
-
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_incub <- c(idssyph_tx_sympt_incub_hivnotdx[which(rbinom(length(idssyph_tx_sympt_incub_hivnotdx),
-                                                                     1, ((1 / hivdx.syph.sympt.tx.rr) * syph.incub.sympt.prob.tx)) == 1)],
-                          idssyph_tx_sympt_incub_hivdx[which(rbinom(length(idssyph_tx_sympt_incub_hivdx),
-                                                                  1, syph.prim.sympt.prob.tx) == 1)])
-
-
+  # Select those who will be treated based on eligibility to be treated
+  txsyph_sympt_incub <- idssyph_tx_sympt_incub[which(rbinom(length(idssyph_tx_sympt_incub),
+                                                            1, syph.incub.sympt.prob.tx))]
 
   # Select those in primary stage who are eligible to be treated
   idssyph_tx_sympt_prim <- which(syphilis == 1 &
@@ -771,17 +760,9 @@ sti_tx_msm <- function(dat, at) {
                                  syph.sympt == 1 &
                                  is.na(syph.tx))
 
-  # Choose those in primary stage who are diagnosed with HIV
-  idssyph_tx_sympt_prim_hivdx <- idssyph_tx_sympt_prim[which(diag.status[idssyph_tx_sympt_prim] == 1)]
-
-  # Choose those in primary stage who are not diagnosed with HIV
-  idssyph_tx_sympt_prim_hivnotdx <- setdiff(idssyph_tx_sympt_prim, idssyph_tx_sympt_prim_hivdx)
-
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_prim <- c(idssyph_tx_sympt_prim_hivnotdx[which(rbinom(length(idssyph_tx_sympt_prim_hivnotdx),
-                                                                     1, ((1 / hivdx.syph.sympt.tx.rr) * syph.prim.sympt.prob.tx)) == 1)],
-                         idssyph_tx_sympt_prim_hivdx[which(rbinom(length(idssyph_tx_sympt_prim_hivdx),
-                                                                  1, syph.prim.sympt.prob.tx) == 1)])
+  # Select those who will be treated based on eligibility to be treated
+  txsyph_sympt_prim <- idssyph_tx_sympt_prim[which(rbinom(length(idssyph_tx_sympt_prim),
+                                                          1, syph.prim.sympt.prob.tx) == 1)]
 
   # Select those in secondary stage who are eligible to be treated
   idssyph_tx_sympt_seco <- which(syphilis == 1 &
@@ -790,17 +771,9 @@ sti_tx_msm <- function(dat, at) {
                                  syph.sympt == 1 &
                                  is.na(syph.tx))
 
-  # Choose those in secondary stage who are diagnosed with HIV
-  idssyph_tx_sympt_seco_hivdx <- idssyph_tx_sympt_seco[which(diag.status[idssyph_tx_sympt_seco] == 1)]
-
-  # Choose those in secondary stage who are not diagnosed with HIV
-  idssyph_tx_sympt_seco_hivnotdx <- setdiff(idssyph_tx_sympt_seco, idssyph_tx_sympt_seco_hivdx)
-
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_seco <- c(idssyph_tx_sympt_seco_hivnotdx[which(rbinom(length(idssyph_tx_sympt_seco_hivnotdx),
-                                                                    1, ((1 / hivdx.syph.sympt.tx.rr) * syph.seco.sympt.prob.tx)) == 1)],
-                         idssyph_tx_sympt_seco_hivdx[which(rbinom(length(idssyph_tx_sympt_seco_hivdx),
-                                                                  1, syph.seco.sympt.prob.tx) == 1)])
+  # Select those who will be treated based on eligibility to be treated
+  txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco),
+                                                          1, syph.seco.sympt.prob.tx) == 1)]
 
   # Select those in early latent stage who are eligible to be treated
   idssyph_tx_sympt_earlat <- which(syphilis == 1 &
@@ -809,36 +782,20 @@ sti_tx_msm <- function(dat, at) {
                                    syph.sympt == 1 &
                                    is.na(syph.tx))
 
-  # Choose those in early latent stage who are diagnosed with HIV
-  idssyph_tx_sympt_earlat_hivdx <- idssyph_tx_sympt_earlat[which(diag.status[idssyph_tx_sympt_earlat] == 1)]
-
-  # Choose those in early latent stage who are not diagnosed with HIV
-  idssyph_tx_sympt_earlat_hivnotdx <- setdiff(idssyph_tx_sympt_earlat, idssyph_tx_sympt_earlat_hivdx)
-
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_earlat <- c(idssyph_tx_sympt_earlat_hivnotdx[which(rbinom(length(idssyph_tx_sympt_earlat_hivnotdx),
-                                                                          1, ((1 / hivdx.syph.sympt.tx.rr) * syph.earlat.sympt.prob.tx)) == 1)],
-                         idssyph_tx_sympt_earlat_hivdx[which(rbinom(length(idssyph_tx_sympt_earlat_hivdx),
-                                                                    1, syph.earlat.sympt.prob.tx) == 1)])
+  # Select those who will be treated based on eligibility to be treated
+  txsyph_sympt_earlat <- idssyph_tx_sympt_earlat[which(rbinom(length(idssyph_tx_sympt_earlat),
+                                                              1, syph.earlat.sympt.prob.tx) == 1)]
 
   # Select those in late latent stage who are eligible to be treated
   idssyph_tx_sympt_latelat <- which(syphilis == 1 &
                                     syph.infTime < at &
                                     (stage.syph == 5 | stage.syph == 6) &
-                                    (syph.sympt == 1 | syph.sympt == 1) &
+                                    (syph.sympt == 1) &
                                     is.na(syph.tx))
 
-  # Choose those in late latent stage who are diagnosed with HIV
-  idssyph_tx_sympt_latelat_hivdx <- idssyph_tx_sympt_latelat[which(diag.status[idssyph_tx_sympt_latelat] == 1)]
-
-  # Choose those in late latent stage who are not diagnosed with HIV
-  idssyph_tx_sympt_latelat_hivnotdx <- setdiff(idssyph_tx_sympt_latelat, idssyph_tx_sympt_latelat_hivdx)
-
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
-  txsyph_sympt_latelat <- c(idssyph_tx_sympt_latelat_hivnotdx[which(rbinom(length(idssyph_tx_sympt_latelat_hivnotdx),
-                                                                           1, ((1 / hivdx.syph.sympt.tx.rr) * syph.latelat.sympt.prob.tx)) == 1)],
-                            idssyph_tx_sympt_latelat_hivdx[which(rbinom(length(idssyph_tx_sympt_latelat_hivdx),
-                                                                        1, syph.latelat.sympt.prob.tx) == 1)])
+  # Select those who will be treated based on eligibility to be treated
+  txsyph_sympt_latelat <- idssyph_tx_sympt_latelat[which(rbinom(length(idssyph_tx_sympt_latelat),
+                                                                1, syph.latelat.sympt.prob.tx) == 1)]
 
   # Select those in tertiary stage who are eligible to be treated
   idssyph_tx_sympt_tert <- which(syphilis == 1 &
@@ -847,10 +804,9 @@ sti_tx_msm <- function(dat, at) {
                                  syph.sympt == 1 &
                                  is.na(syph.tx))
 
-  # 100% tx in tertiary stage, so remove stratification by serostatus
-  # Select those who will be treated based on eligibility to be treated, assigning differing probabilities of syphilis treatment based on HIV diagnosis
+  # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_tert <- idssyph_tx_sympt_tert[which(rbinom(length(idssyph_tx_sympt_tert),
-                                                                  1, (syph.tert.sympt.prob.tx)) == 1)]
+                                                          1, syph.tert.sympt.prob.tx) == 1)]
 
   # Aggregate all those eligible to be treated
   idssyph_tx_sympt <- c(idssyph_tx_sympt_incub, idssyph_tx_sympt_prim, idssyph_tx_sympt_seco, idssyph_tx_sympt_earlat,
@@ -909,7 +865,7 @@ sti_tx_msm <- function(dat, at) {
   # Select those in late latent stage who are eligible to be treated
   idssyph_tx_asympt_latelat <- which(syph.infTime < at &
                                      (stage.syph == 5 | stage.syph == 6) &
-                                     (syph.sympt == 0 | syph.sympt == 0) &
+                                     (syph.sympt == 0) &
                                      diag.status.syph == 1 & is.na(syph.tx))
 
   # Select those to be treated

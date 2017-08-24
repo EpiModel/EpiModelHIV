@@ -468,10 +468,6 @@
 #'        transmission given prevalent relevant site-specific gonorrhea
 #'        infection, relevant site-specific chlamydia infection, and syphilis
 #'        infection in HIV-positive partner.
-#' @param hivdx.syph.sympt.tx.rr Relative risk of treatment for symptomatic
-#'        syphilis given diagnosed HIV infection. This is implemented as an
-#'        inverse, 1 / this value for those who do not have diagnosed infection,
-#'        so it is a boost to get to 0.35.
 #' @param partlist.start Time step at which persisting edge list should begin
 #'        accumulating for eventual STI testing indications.
 #' @param ... Additional arguments passed to the function.
@@ -751,9 +747,6 @@ param_msm <- function(nwstats,
                       hiv.trans.gc.syph.rr = 0.2,
                       hiv.trans.ct.syph.rr = 0.2,
                       hiv.trans.allsti.rr = 0.2,
-
-                      # Treatment
-                      hivdx.syph.sympt.tx.rr = 1.45,
 
                       # Cumulative partnership list
                       partlist.start = NULL,
