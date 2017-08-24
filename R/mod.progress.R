@@ -267,6 +267,12 @@ syph_progress_msm <- function(dat, at) {
   stage.syph <- dat$attr$stage.syph
   stage.time.syph <- dat$attr$stage.time.syph
   syph.sympt <- dat$attr$syph.sympt
+  syph.incub.tx <- dat$attr$syph.incub.tx
+  syph.prim.tx <- dat$attr$syph.prim.tx
+  syph.seco.tx <- dat$attr$syph.seco.tx
+  syph.earlat.tx <- dat$attr$syph.earlat.tx
+  syph.latelat.tx <- dat$attr$syph.latelat.tx
+  syph.tert.tx <- dat$attr$syph.tert.tx
 
   # Parameters
   incu.syph.int <- dat$param$incu.syph.int
@@ -294,6 +300,7 @@ syph_progress_msm <- function(dat, at) {
                   syphilis == 1)
   stage.syph[toPrim] <- 2
   stage.time.syph[toPrim] <- 0
+  syph.incub.tx[toPrim] <- NA
   syph.sympt[toPrim] <- rbinom(length(toPrim), 1, syph.prim.sympt.prob)
 
   # Change stage to Secondary and assign symptoms
@@ -302,6 +309,7 @@ syph_progress_msm <- function(dat, at) {
                   syphilis == 1)
   stage.syph[toSeco] <- 3
   stage.time.syph[toSeco] <- 0
+  syph.prim.tx[toSeco] <- 0
   syph.sympt[toSeco] <- NA
   syph.sympt[toSeco] <- rbinom(length(toSeco), 1, syph.seco.sympt.prob)
 
@@ -311,6 +319,7 @@ syph_progress_msm <- function(dat, at) {
                     syphilis == 1)
   stage.syph[toEarLat] <- 4
   stage.time.syph[toEarLat] <- 0
+  syph.seco.tx[toEarLat] <- NA
   syph.sympt[toEarLat] <- NA
   syph.sympt[toEarLat] <- rbinom(length(toEarLat), 1, syph.earlat.sympt.prob)
 
@@ -321,6 +330,7 @@ syph_progress_msm <- function(dat, at) {
                      syphilis == 1)
   stage.syph[toLateLat] <- 5
   stage.time.syph[toLateLat] <- 0
+  syph.earlat.tx[toLateLat] <- NA
   syph.sympt[toLateLat] <- NA
   syph.sympt[toLateLat] <- rbinom(length(toLateLat), 1, syph.latelat.sympt.prob)
 
@@ -341,13 +351,18 @@ syph_progress_msm <- function(dat, at) {
   toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
   stage.syph[toTert] <- 7
   stage.time.syph[toTert] <- 0
+  syph.latelat.tx[toTert] <- NA
   syph.sympt[toTert] <- NA
   syph.sympt[toTert] <- rbinom(length(toTert), 1, syph.tert.sympt.prob)
 
 
-
   ## Output
-
+  dat$attr$syph.incub.tx <- syph.incub.tx
+  dat$attr$syph.prim.tx <- syph.prim.tx
+  dat$attr$syph.seco.tx <- syph.seco.tx
+  dat$attr$syph.earlat.tx <- syph.earlat.tx
+  dat$attr$syph.latelat.tx <- syph.latelat.tx
+  dat$attr$syph.tert.tx <- syph.tert.tx
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$syph.sympt <- syph.sympt

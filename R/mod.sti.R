@@ -440,7 +440,12 @@ sti_recov_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   rCT.tx.prep <- dat$attr$rCT.tx.prep
   rCT.tx.ept <- dat$attr$rCT.tx.ept
-  syph.tx <- dat$attr$syph.tx
+  syph.incub.tx <- dat$attr$syph.incub.tx
+  syph.prim.tx <- dat$attr$syph.prim.tx
+  syph.seco.tx <- dat$attr$syph.seco.tx
+  syph.earlat.tx <- dat$attr$syph.earlat.tx
+  syph.latelat.tx <- dat$attr$syph.latelat.tx
+  syph.tert.tx <- dat$attr$syph.tert.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
 
   # GC Recovery ---------------------------------------------------------
@@ -562,12 +567,14 @@ sti_recov_msm <- function(dat, at) {
   ## Recovery for treated
   idssyph_early_tx <- which(syphilis == 1 &
                             stage.syph %in% c(1:4) &
-                            syph.infTime < at &
-                            (syph.tx == 1 | syph.tx.prep == 1))
+                            syph.infTime < at & (syph.incub.tx == 1 |
+                            syph.prim.tx == 1 | syph.seco.tx == 1 |
+                            syph.earlat.tx == 1 | syph.tx.prep == 1))
   idssyph_late_tx <- which(syphilis == 1 &
                            stage.syph %in% c(5:7) &
                            syph.infTime < at &
-                           (syph.tx == 1 | syph.tx.prep == 1))
+                           (syph.latelat.tx == 1 | syph.tert.tx == 1 |
+                              syph.tx.prep == 1))
 
   ## Move stage-specific treated to recovered
   recovsyph_early_tx <- idssyph_early_tx[which(rbinom(length(idssyph_early_tx), 1, 1/syph.early.tx.int) == 1)]
@@ -598,7 +605,12 @@ sti_recov_msm <- function(dat, at) {
   dat$attr$syph.sympt[recovsyph] <- NA
   dat$attr$syph.infTime[recovsyph] <- NA
   dat$attr$diag.status.syph[recovsyph] <- NA
-  dat$attr$syph.tx[recovsyph] <- NA
+  dat$attr$syph.incub.tx[recovsyph] <- NA
+  dat$attr$syph.prim.tx[recovsyph] <- NA
+  dat$attr$syph.seco.tx[recovsyph] <- NA
+  dat$attr$syph.earlat.tx[recovsyph] <- NA
+  dat$attr$syph.latelat.tx[recovsyph] <- NA
+  dat$attr$syph.tert.tx[recovsyph] <- NA
   dat$attr$syph.tx.prep[recovsyph] <- NA
 
   # Gonorrhea
@@ -724,7 +736,12 @@ sti_tx_msm <- function(dat, at) {
   rCT.tx <- dat$attr$rCT.tx
   rCT.tx.prep <- dat$attr$rCT.tx.prep
   rCT.tx.ept <- dat$attr$rCT.tx.ept
-  syph.tx <- dat$attr$syph.tx
+  syph.incub.tx <- dat$attr$syph.incub.tx
+  syph.prim.tx <- dat$attr$syph.prim.tx
+  syph.seco.tx <- dat$attr$syph.seco.tx
+  syph.earlat.tx <- dat$attr$syph.earlat.tx
+  syph.latelat.tx <- dat$attr$syph.latelat.tx
+  syph.tert.tx <- dat$attr$syph.tert.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
@@ -747,7 +764,7 @@ sti_tx_msm <- function(dat, at) {
                                    syph.infTime < at &
                                    stage.syph == 1 &
                                    syph.sympt == 1 &
-                                   is.na(syph.tx))
+                                   is.na(syph.incub.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_incub <- idssyph_tx_sympt_incub[which(rbinom(length(idssyph_tx_sympt_incub),
@@ -758,7 +775,7 @@ sti_tx_msm <- function(dat, at) {
                                  syph.infTime < at &
                                  stage.syph == 2 &
                                  syph.sympt == 1 &
-                                 is.na(syph.tx))
+                                 is.na(syph.prim.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_prim <- idssyph_tx_sympt_prim[which(rbinom(length(idssyph_tx_sympt_prim),
@@ -769,7 +786,7 @@ sti_tx_msm <- function(dat, at) {
                                  syph.infTime < at &
                                  stage.syph == 3 &
                                  syph.sympt == 1 &
-                                 is.na(syph.tx))
+                                 is.na(syph.seco.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_seco <- idssyph_tx_sympt_seco[which(rbinom(length(idssyph_tx_sympt_seco),
@@ -780,7 +797,7 @@ sti_tx_msm <- function(dat, at) {
                                    syph.infTime < at &
                                    stage.syph == 4 &
                                    syph.sympt == 1 &
-                                   is.na(syph.tx))
+                                   is.na(syph.earlat.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_earlat <- idssyph_tx_sympt_earlat[which(rbinom(length(idssyph_tx_sympt_earlat),
@@ -791,7 +808,7 @@ sti_tx_msm <- function(dat, at) {
                                     syph.infTime < at &
                                     (stage.syph == 5 | stage.syph == 6) &
                                     (syph.sympt == 1) &
-                                    is.na(syph.tx))
+                                    is.na(syph.latelat.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_latelat <- idssyph_tx_sympt_latelat[which(rbinom(length(idssyph_tx_sympt_latelat),
@@ -802,7 +819,7 @@ sti_tx_msm <- function(dat, at) {
                                  syph.infTime < at &
                                  stage.syph == 7 &
                                  syph.sympt == 1 &
-                                 is.na(syph.tx))
+                                 is.na(syph.tert.tx))
 
   # Select those who will be treated based on eligibility to be treated
   txsyph_sympt_tert <- idssyph_tx_sympt_tert[which(rbinom(length(idssyph_tx_sympt_tert),
@@ -823,7 +840,7 @@ sti_tx_msm <- function(dat, at) {
                                     stage.syph == 1 &
                                     syph.sympt == 0 &
                                     diag.status.syph == 1 &
-                                    (is.na(syph.tx) | syph.tx == 0))
+                                    (is.na(syph.incub.tx) | syph.incub.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_incub <- idssyph_tx_asympt_incub[which(rbinom(length(idssyph_tx_asympt_incub),
@@ -833,7 +850,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 2 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  (is.na(syph.tx) | syph.tx == 0))
+                                  (is.na(syph.prim.tx) | syph.prim.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_prim <- idssyph_tx_asympt_prim[which(rbinom(length(idssyph_tx_asympt_prim),
@@ -844,7 +861,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 3 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  (is.na(syph.tx) | syph.tx == 0))
+                                  (is.na(syph.seco.tx) | syph.seco.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_seco <- idssyph_tx_asympt_seco[which(rbinom(length(idssyph_tx_asympt_seco),
@@ -856,7 +873,7 @@ sti_tx_msm <- function(dat, at) {
                                     stage.syph == 4 &
                                     syph.sympt == 0 &
                                     diag.status.syph == 1 &
-                                    (is.na(syph.tx) | syph.tx == 0))
+                                    (is.na(syph.earlat.tx) | syph.earlat.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_earlat <- idssyph_tx_asympt_earlat[which(rbinom(length(idssyph_tx_asympt_earlat),
@@ -867,7 +884,7 @@ sti_tx_msm <- function(dat, at) {
                                      (stage.syph == 5 | stage.syph == 6) &
                                      (syph.sympt == 0) &
                                      diag.status.syph == 1 &
-                                     (is.na(syph.tx) | syph.tx == 0))
+                                     (is.na(syph.latelat.tx) | syph.latelat.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_latelat <- idssyph_tx_asympt_latelat[which(rbinom(length(idssyph_tx_asympt_latelat),
@@ -877,7 +894,7 @@ sti_tx_msm <- function(dat, at) {
                                   stage.syph == 7 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
-                                  (is.na(syph.tx) | syph.tx == 0))
+                                  (is.na(syph.tert.tx) | syph.tert.tx == 0))
 
   # Select those to be treated
   txsyph_asympt_tert <- idssyph_tx_asympt_tert[which(rbinom(length(idssyph_tx_asympt_tert),
@@ -894,6 +911,21 @@ sti_tx_msm <- function(dat, at) {
   # All treated syphilis
   txsyph <- union(txsyph_sympt, txsyph_asympt)
   idssyph_tx <- union(idssyph_tx_sympt, idssyph_tx_asympt)
+
+  # By stage
+  idssyph_incub_tx <- union(idssyph_tx_asympt_incub, idssyph_tx_sympt_incub)
+  idssyph_prim_tx <- union(idssyph_tx_asympt_prim, idssyph_tx_sympt_prim)
+  idssyph_seco_tx <- union(idssyph_tx_asympt_seco, idssyph_tx_sympt_seco)
+  idssyph_earlat_tx <- union(idssyph_tx_asympt_earlat, idssyph_tx_sympt_earlat)
+  idssyph_latelat_tx <- union(idssyph_tx_asympt_latelat, idssyph_tx_sympt_latelat)
+  idssyph_tert_tx <- union(idssyph_tx_asympt_tert, idssyph_tx_sympt_tert)
+
+  syph_incub_tx <- union(txsyph_asympt_incub, txsyph_sympt_incub)
+  syph_prim_tx <- union(txsyph_asympt_prim, txsyph_sympt_prim)
+  syph_seco_tx <- union(txsyph_asympt_seco, txsyph_sympt_seco)
+  syph_earlat_tx <- union(txsyph_asympt_earlat, txsyph_sympt_earlat)
+  syph_latelat_tx <- union(txsyph_asympt_latelat, txsyph_sympt_latelat)
+  syph_tert_tx <- union(txsyph_asympt_tert, txsyph_sympt_tert)
 
 
   # Gonorrhea ---------------------------------------------------------------
@@ -1107,8 +1139,18 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$prepLastStiScreen <- prepLastStiScreen
 
   # Syphilis
-  dat$attr$syph.tx[idssyph_tx] <- 0
-  dat$attr$syph.tx[txsyph] <- 1
+  dat$attr$syph.incub.tx[idssyph_incub_tx] <- 0
+  dat$attr$syph.prim.tx[idssyph_prim_tx] <- 0
+  dat$attr$syph.seco.tx[idssyph_seco_tx] <- 0
+  dat$attr$syph.earlat.tx[idssyph_earlat_tx] <- 0
+  dat$attr$syph.latelat.tx[idssyph_latelat_tx] <- 0
+  dat$attr$syph.tert.tx[idssyph_tert_tx] <- 0
+  dat$attr$syph.incub.tx[syph_incub_tx] <- 1
+  dat$attr$syph.prim.tx[syph_prim_tx] <- 1
+  dat$attr$syph.seco.tx[syph_seco_tx] <- 1
+  dat$attr$syph.earlat.tx[syph_earlat_tx] <- 1
+  dat$attr$syph.latelat.tx[syph_latelat_tx] <- 1
+  dat$attr$syph.tert.tx[syph_tert_tx] <- 1
   dat$attr$last.tx.time.syph[txsyph_all] <- at
   dat$attr$syph.tx.prep[idssyph_prep_tx] <- 0
   dat$attr$syph.tx.prep[txsyph_prep] <- 1

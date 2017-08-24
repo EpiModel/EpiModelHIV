@@ -24,7 +24,12 @@ riskhist_prep_msm <- function(dat, at) {
   uGC.tx <- dat$attr$uGC.tx
   rCT.tx <- dat$attr$rCT.tx
   uCT.tx <- dat$attr$uCT.tx
-  syph.tx <- dat$attr$syph.tx
+  syph.incub.tx <- dat$attr$syph.incub.tx
+  syph.prim.tx <- dat$attr$syph.prim.tx
+  syph.seco.tx <- dat$attr$syph.seco.tx
+  syph.earlat.tx <- dat$attr$syph.earlat.tx
+  syph.latelat.tx <- dat$attr$syph.latelat.tx
+  syph.tert.tx <- dat$attr$syph.tert.tx
 
   ## Parameters
   time.unit <- dat$param$time.unit
@@ -94,7 +99,10 @@ riskhist_prep_msm <- function(dat, at) {
 
   ## Condition 4, any current STI diagnosis (before recovery)
   idsDx <- which(rGC.tx == 1 | uGC.tx == 1 |
-                   rCT.tx == 1 | uCT.tx == 1 | syph.tx == 1)
+                   rCT.tx == 1 | uCT.tx == 1 | syph.incub.tx == 1 |
+                   syph.prim.tx == 1 | syph.seco.tx == 1 |
+                   syph.earlat.tx == 1 | syph.latelat.tx == 1 |
+                   syph.tert.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at
 
 

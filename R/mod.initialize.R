@@ -748,7 +748,12 @@ init_status_sti_msm <- function(dat) {
     last.neg.test.syph <- rep(NA, num)
     last.tx.time.syph <- rep(NA, num)
     last.tx.time.syph.prep <- rep(NA, num)
-    syph.tx <- rep(NA, num)
+    syph.incub.tx <- rep(NA, num)
+    syph.prim.tx <- rep(NA, num)
+    syph.seco.tx <- rep(NA, num)
+    syph.earlat.tx <- rep(NA, num)
+    syph.latelat.tx <- rep(NA, num)
+    syph.tert.tx <- rep(NA, num)
     syph.tx.prep <- rep(NA, num)
     syph.sympt <- rep(NA, num)
 
@@ -932,7 +937,12 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.diag.time.syph <- last.diag.time.syph
-    dat$attr$syph.tx <- syph.tx
+    dat$attr$syph.incub.tx <- syph.incub.tx
+    dat$attr$syph.prim.tx <- syph.prim.tx
+    dat$attr$syph.seco.tx <- syph.seco.tx
+    dat$attr$syph.earlat.tx <- syph.earlat.tx
+    dat$attr$syph.latelat.tx <- syph.latelat.tx
+    dat$attr$syph.tert.tx <- syph.tert.tx
     dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$last.tx.time.syph <- last.tx.time.syph
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
