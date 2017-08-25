@@ -524,8 +524,8 @@ param_msm <- function(nwstats,
                       latelat.syph.int = 9 * 52 * 7,
                       latelatelat.syph.int = 20 * 52 * 7,
                       tert.syph.int = 20 * 52 * 7,
-                      syph.tert.prog.prob = 0.00015625599,
-                      #15% progress by the end of 20 years =
+                      syph.tert.prog.prob = 0.00010776536,
+                      #15% progress by the end of 29 years =
                       # 0.15 = 1 - (1 - per week prob)^(# of weeks)
 
                       b.B.rate = 1e-3 / 7,
@@ -884,8 +884,8 @@ init_msm <- function(nwstats,
                      prev.rct = 0.0075,
                      prev.syph.B = 0.015,
                      prev.syph.W = 0.015,
-                     stage.syph.B.prob = c(0.40, 0.20, 0.20, 0.20, 0.00, 0.00, 0.00),
-                     stage.syph.W.prob = c(0.40, 0.20, 0.20, 0.20, 0.00, 0.00, 0.00),
+                     stage.syph.B.prob = c(0.40, 0.20, 0.20, 0.20, 0.00, 0.00),
+                     stage.syph.W.prob = c(0.40, 0.20, 0.20, 0.20, 0.00, 0.00),
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),

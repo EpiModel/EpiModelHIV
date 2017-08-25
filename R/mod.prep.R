@@ -214,10 +214,10 @@ prep_msm <- function(dat, at) {
                            tsincelntst.ct >= prep.tst.int)
 
   # Syphilis PrEP testing
-  tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6, 7)]
+  tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6)]
   tst.syph.neg <- setdiff(tst.syph.prep, tst.syph.pos)
   tst.earlysyph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4)]
-  tst.latesyph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(5, 6, 7)]
+  tst.latesyph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(5, 6)]
 
   # GC PrEP testing
   tst.rgc <- tst.gc.prep[dat$attr$role.class %in% c("R", "V")]

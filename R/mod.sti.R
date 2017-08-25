@@ -260,7 +260,7 @@ sti_trans_msm <- function(dat, at) {
     ip.syph.tprob <- plogis(ip.syph.tlo)
 
     # Late stage multiplier (not log odds b/c log 0 = undefined)
-    islate <- which(ip.stage.syph %in% c(5, 6, 7))
+    islate <- which(ip.stage.syph %in% c(5, 6))
     ip.syph.tprob[islate] <- ip.syph.tprob[islate] * syph.late.rr
 
     # Check for valid probabilities
@@ -296,7 +296,7 @@ sti_trans_msm <- function(dat, at) {
     rp.syph.tprob <- plogis(rp.syph.tlo)
 
     # Late stage multiplier (not log odds b/c log 0 = undefined)
-    islate <- which(rp.stage.syph %in% c(5, 6, 7))
+    islate <- which(rp.stage.syph %in% c(5, 6))
     rp.syph.tprob[islate] <- rp.syph.tprob[islate] * (syph.late.rr)
 
     # Check for valid probabilities
@@ -571,7 +571,7 @@ sti_recov_msm <- function(dat, at) {
                             syph.prim.tx == 1 | syph.seco.tx == 1 |
                             syph.earlat.tx == 1 | syph.tx.prep == 1))
   idssyph_late_tx <- which(syphilis == 1 &
-                           stage.syph %in% c(5:7) &
+                           stage.syph %in% c(5:6) &
                            syph.infTime < at &
                            (syph.latelat.tx == 1 | syph.tert.tx == 1 |
                               syph.tx.prep == 1))
@@ -806,7 +806,7 @@ sti_tx_msm <- function(dat, at) {
   # Select those in late latent stage who are eligible to be treated
   idssyph_tx_sympt_latelat <- which(syphilis == 1 &
                                     syph.infTime < at &
-                                    (stage.syph == 5 | stage.syph == 6) &
+                                    (stage.syph == 5) &
                                     (syph.sympt == 1) &
                                     is.na(syph.latelat.tx))
 
@@ -817,7 +817,7 @@ sti_tx_msm <- function(dat, at) {
   # Select those in tertiary stage who are eligible to be treated
   idssyph_tx_sympt_tert <- which(syphilis == 1 &
                                  syph.infTime < at &
-                                 stage.syph == 7 &
+                                 stage.syph == 6 &
                                  syph.sympt == 1 &
                                  is.na(syph.tert.tx))
 
@@ -881,7 +881,7 @@ sti_tx_msm <- function(dat, at) {
 
   # Select those in late latent stage who are eligible to be treated
   idssyph_tx_asympt_latelat <- which(syph.infTime < at &
-                                     (stage.syph == 5 | stage.syph == 6) &
+                                     (stage.syph == 5) &
                                      (syph.sympt == 0) &
                                      diag.status.syph == 1 &
                                      (is.na(syph.latelat.tx) | syph.latelat.tx == 0))
@@ -891,7 +891,7 @@ sti_tx_msm <- function(dat, at) {
                                                                   1, syph.latelat.asympt.prob.tx) == 1)]
   # Select those in tertiary stage who are eligible to be treated
   idssyph_tx_asympt_tert <- which(syph.infTime < at &
-                                  stage.syph == 7 &
+                                  stage.syph == 6 &
                                   syph.sympt == 0 &
                                   diag.status.syph == 1 &
                                   (is.na(syph.tert.tx) | syph.tert.tx == 0))

@@ -334,22 +334,11 @@ syph_progress_msm <- function(dat, at) {
   syph.sympt[toLateLat] <- NA
   syph.sympt[toLateLat] <- rbinom(length(toLateLat), 1, syph.latelat.sympt.prob)
 
-
-  # Change stage to late late latent (functions the same way as late latent)
-  tolatelate <- which(stage.time.syph == (latelat.syph.int + 1) &
-                      stage.syph == 5 &
-                      syphilis == 1)
-  stage.syph[tolatelate] <- 6
-  stage.time.syph[tolatelate] <- 0
-  syph.sympt[tolatelate] <- NA
-  syph.sympt[tolatelate] <- rbinom(length(tolatelate), 1, syph.latelat.sympt.prob)
-
   # Change stage to tertiary for fraction of those in late late latent
-  toTert <- which(stage.time.syph >= 1 &
-                  stage.syph == 6 &
-                  syphilis == 1)
+  toTert <- which(stage.syph == 5 &
+                    syphilis == 1)
   toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
-  stage.syph[toTert] <- 7
+  stage.syph[toTert] <- 6
   stage.time.syph[toTert] <- 0
   syph.latelat.tx[toTert] <- NA
   syph.sympt[toTert] <- NA

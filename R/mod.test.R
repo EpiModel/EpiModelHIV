@@ -330,12 +330,12 @@ sti_test_msm <- function(dat, at) {
 
   # Syphilis non-PrEP testing
   tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
-                                   stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6, 7)]
+                                   stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6)]
   tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
   tst.earlysyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
                                    stage.syph[tst.syph.nprep] %in% c(2, 3, 4)]
   tst.latesyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
-                                   stage.syph[tst.syph.nprep] %in% c(5, 6, 7)]
+                                   stage.syph[tst.syph.nprep] %in% c(5, 6)]
 
   # GC non-PrEP testing
   tst.rgc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("R", "V")]

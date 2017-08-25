@@ -819,8 +819,8 @@ init_status_sti_msm <- function(dat) {
     inf.ids <- c(inf.ids.B, inf.ids.W)
 
     # Stage of infection
-    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6, 7), stage.syph.B.prob))
-    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6, 7), stage.syph.W.prob))
+    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6), stage.syph.B.prob))
+    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6), stage.syph.W.prob))
 
     # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
@@ -865,18 +865,8 @@ init_status_sti_msm <- function(dat) {
     syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
                                   seco.syph.int - prim.syph.int - incu.syph.int
 
-    # Late late latent
-    selected <- intersect(inf.ids, which(stage.syph == 6))
-    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
-    max.inf.time <- pmin(time.sex.active[selected], dat$param$latelatelat.syph.int)
-    time.in.latelatelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
-    stage.time.syph[selected] <- time.in.latelatelat.syph
-    syph.infTime[selected] <- 1 - time.in.latelatelat.syph - latelat.syph.int -
-                                  earlat.syph.int - seco.syph.int - prim.syph.int -
-                                  incu.syph.int
-
     # Tertiary
-    selected <- intersect(inf.ids, which(stage.syph == 7))
+    selected <- intersect(inf.ids, which(stage.syph == 6))
     syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
