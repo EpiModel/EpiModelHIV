@@ -362,7 +362,7 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.syph[tst.syph.pos] <- NA
   diag.status.syph[tst.syph.pos] <- 1
   last.diag.time.syph[tst.syph.pos] <- at
-  tsinceltst.syph[tst.syph.nprep] <- at
+  tsinceltst.syph[tst.syph.nprep] <- 0
 
   # GC Attributes
   last.neg.test.rgc[tst.rgc.neg] <- at
@@ -371,8 +371,8 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.ugc[tst.ugc.pos] <- NA
   diag.status.gc[tst.gc.pos] <- 1
   last.diag.time.gc[tst.gc.pos] <- at
-  tsinceltst.rgc[tst.rgc] <- at
-  tsinceltst.ugc[tst.ugc] <- at
+  tsinceltst.rgc[tst.rgc] <- 0
+  tsinceltst.ugc[tst.ugc] <- 0
 
   # CT Attributes
   last.neg.test.rct[tst.rct.neg] <- at
@@ -381,8 +381,8 @@ sti_test_msm <- function(dat, at) {
   last.neg.test.uct[tst.uct.pos] <- NA
   diag.status.ct[tst.ct.pos] <- 1
   last.diag.time.ct[tst.ct.pos] <- at
-  tsinceltst.rct[tst.rct] <- at
-  tsinceltst.uct[tst.uct] <- at
+  tsinceltst.rct[tst.rct] <- 0
+  tsinceltst.uct[tst.uct] <- 0
 
   # Number of tests for asymptomatic
   dat$epi$rGCasympttests[at] <- length(tst.rgc)
