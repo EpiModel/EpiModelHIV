@@ -148,11 +148,11 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.gc <- dat$attr$last.diag.time.gc
   last.diag.time.ct <- dat$attr$last.diag.time.ct
   last.diag.time.syph <- dat$attr$last.diag.time.syph
-  tsinceltst.syph <- dat$attr$time.since.last.test.syph
-  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc
-  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc
-  tsinceltst.rct <- dat$attr$time.since.last.test.rct
-  tsinceltst.uct <- dat$attr$time.since.last.test.uct
+  tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1
+  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1
+  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1
+  tsinceltst.rct <- dat$attr$time.since.last.test.rct + 1
+  tsinceltst.uct <- dat$attr$time.since.last.test.uct + 1
   tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
   tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
   race <- dat$attr$race
