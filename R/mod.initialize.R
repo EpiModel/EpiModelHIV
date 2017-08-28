@@ -802,7 +802,7 @@ init_status_sti_msm <- function(dat) {
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
     selected <- which(dat$attr$race %in% c("W", "B"))
-    tslaststitest <- ceiling(runif(length(selected), max = dat$param$stitest.active.int))
+    tslaststitest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 1)))
 
     ## Syphilis ----------------------------------------------------------------
 

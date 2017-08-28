@@ -279,7 +279,6 @@ syph_progress_msm <- function(dat, at) {
   prim.syph.int <- dat$param$prim.syph.int
   seco.syph.int <- dat$param$seco.syph.int
   earlat.syph.int <- dat$param$earlat.syph.int
-  latelat.syph.int <- dat$param$latelat.syph.int
 
   syph.prim.sympt.prob <- dat$param$syph.prim.sympt.prob
   syph.seco.sympt.prob <- dat$param$syph.seco.sympt.prob
@@ -287,7 +286,6 @@ syph_progress_msm <- function(dat, at) {
   syph.latelat.sympt.prob <- dat$param$syph.latelat.sympt.prob
   syph.tert.sympt.prob <- dat$param$syph.tert.sympt.prob
   syph.tert.prog.prob <- dat$param$syph.tert.prog.prob
-
 
   ## Process
 
@@ -343,7 +341,6 @@ syph_progress_msm <- function(dat, at) {
   syph.latelat.tx[toTert] <- NA
   syph.sympt[toTert] <- NA
   syph.sympt[toTert] <- rbinom(length(toTert), 1, syph.tert.sympt.prob)
-
 
   ## Output
   dat$attr$syph.incub.tx <- syph.incub.tx
