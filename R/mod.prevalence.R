@@ -327,14 +327,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$txlatesyph <- rNA
     dat$epi$txasympt <- rNA
 
-    # dat$epi$stiactiveind <- rNA
-    # dat$epi$recentpartners <- rNA
+    dat$epi$stiactiveind <- rNA
+    dat$epi$recentpartners <- rNA
     # dat$epi$recentSTI <- rNA
     # dat$epi$newpartner <- rNA
     # dat$epi$concurrpart <- rNA
     # dat$epi$partnersti <- rNA
     # dat$epi$uai.nmain <- rNA
     # dat$epi$uai.any <- rNA
+    dat$epi$stiactiveind.prop <-rNA
+    dat$epi$recentpartners.prop <- rNA
+
 
     dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
@@ -380,16 +383,6 @@ prevalence_msm <- function(dat, at) {
 
   dat$epi$time.on.prep[at] <- length(which(dat$attr$prepStat == 1))
   dat$epi$time.off.prep[at] <- length(which(dat$attr$prepStat == 0))
-  dat$epi$stisympttests[at] <- sum(dat$epi$syphsympttests[at], dat$epi$CTsympttests[at],
-                                   dat$epi$GCsympttests[at], na.rm = TRUE)
-  dat$epi$stiasympttests[at] <- sum(dat$epi$syphasympttests[at], dat$epi$CTasympttests[at],
-                                    dat$epi$GCasympttests[at], na.rm = TRUE)
-  dat$epi$stiasympttests.prep[at] <- sum(dat$epi$syphasympttests.prep[at], dat$epi$CTasympttests.prep[at],
-                                         dat$epi$GCasympttests.prep[at], na.rm = TRUE)
-  dat$epi$stiasympttests.pos[at] <- sum(dat$epi$syphasympttests.pos[at], dat$epi$CTasympttests.pos[at],
-                                        dat$epi$GCasympttests.pos[at], na.rm = TRUE)
-  dat$epi$stiasympttests.pos.prep[at] <- sum(dat$epi$syphasympttests.pos.prep[at], dat$epi$CTasympttests.pos.prep[at],
-                                           dat$epi$GCasympttests.pos.prep[at], na.rm = TRUE)
 
   # STI Prevalence
 
@@ -572,6 +565,9 @@ prevalence_msm <- function(dat, at) {
                                   (sum(rGC == 0 & prepStat == 1, na.rm = TRUE) + sum(uGC == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(rCT == 0 & prepStat == 1, na.rm = TRUE) + sum(uCT == 0 & prepStat == 1, na.rm = TRUE) +
                                    sum(syphilis == 0 & prepStat == 1, na.rm = TRUE))) * 5200, 0)
+
+  dat$epi$stiactiveind.prop[at] <- dat$epi$stiactiveind[at] / dat$epi$num[at]
+  dat$epi$recentpartners.prop[at] <- dat$epi$recentpartners[at] / dat$epi$num[at]
 
   # PAF
   # syph.prev <- which(syphilis == 1 & syph.infTime < at)

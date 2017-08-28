@@ -406,6 +406,11 @@ sti_test_msm <- function(dat, at) {
   dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos)
   dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos)
 
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc) + length(tst.ugc) +
+    length(tst.rct) + length(tst.uct) + length(tst.syph.nprep)
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.pos) + length(tst.ugc.pos) +
+    length(tst.rct.pos) + length(tst.uct.pos) + length(tst.syph.pos)
+
   ## Output -----------------------------------------------------------------
 
   # Attributes

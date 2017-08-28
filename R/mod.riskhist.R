@@ -105,7 +105,6 @@ riskhist_prep_msm <- function(dat, at) {
                    syph.tert.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at
 
-
   return(dat)
 }
 
@@ -169,6 +168,9 @@ riskhist_stitest_msm <- function(dat, at) {
   ### Update STI indication attributes
   dat$attr$stitest.ind.active[idsactive] <- 1
   dat$attr$stitest.ind.active[idsnotactive] <- 0
+
+  dat$epi$stiactiveind[at] <- length(idsactive)
+  dat$epi$recentpartners[at] <- length(idsrecentpartners)
 
   return(dat)
 }

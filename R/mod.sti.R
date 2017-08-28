@@ -1218,13 +1218,16 @@ sti_tx_msm <- function(dat, at) {
   # Number of tests for symptomatic
   dat$epi$rGCsympttests[at] <- length(txRGC_sympt)
   dat$epi$uGCsympttests[at] <- length(txUGC_sympt)
-  dat$epi$GCsympttests[at] <- length(c(txRGC_sympt, txUGC_sympt))
+  dat$epi$GCsympttests[at] <- length(txRGC_sympt) + length(txUGC_sympt)
 
   dat$epi$rCTsympttests[at] <- length(txRCT_sympt)
   dat$epi$uCTsympttests[at] <- length(txUCT_sympt)
-  dat$epi$CTsympttests[at] <- length(c(txRCT_sympt, txUCT_sympt))
+  dat$epi$CTsympttests[at] <- length(txRCT_sympt) + length(txUCT_sympt)
 
   dat$epi$syphsympttests[at] <- length(txsyph_sympt)
+
+  dat$epi$stisympttests[at] <- length(txRGC_sympt) + length(txUGC_sympt) +
+    length(txRCT_sympt) + length(txUCT_sympt) + length(txsyph_sympt)
 
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
