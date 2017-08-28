@@ -625,32 +625,67 @@ sti_test_msm <- function(dat, at) {
   dat$epi$stiasympttests.pos.hivneg[at] <- length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
     length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
 
-  # Number of tests for asymptomatic (HIV diagnosed)
-  dat$epi$rGCasympttests.hivpos[at] <- length(tst.rgc.hivpos)
-  dat$epi$uGCasympttests.hivpos[at] <- length(tst.ugc.hivpos)
-  dat$epi$GCasympttests.hivpos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos)
+  # Number of tests for asymptomatic (HIV-diagnosed)
+  dat$epi$rGCasympttests[at] <- length(tst.rgc.hivpos)
+  dat$epi$uGCasympttests[at] <- length(tst.ugc.hivpos)
+  dat$epi$GCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos)
 
-  dat$epi$rGCasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos)
-  dat$epi$uGCasympttests.pos.hivpos[at] <- length(tst.ugc.pos.hivpos)
-  dat$epi$GCasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos)
+  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos)
+  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos)
+  dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos)
 
-  dat$epi$rCTasympttests.hivpos[at] <- length(tst.rct.hivpos)
-  dat$epi$uCTasympttests.hivpos[at] <- length(tst.uct.hivpos)
-  dat$epi$CTasympttests.hivpos[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos)
+  dat$epi$rCTasympttests[at] <- length(tst.rct.hivpos)
+  dat$epi$uCTasympttests[at] <- length(tst.uct.hivpos)
+  dat$epi$CTasympttests[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos)
 
-  dat$epi$rCTasympttests.pos.hivpos[at] <- length(tst.rct.pos.hivpos)
-  dat$epi$uCTasympttests.pos.hivpos[at] <- length(tst.uct.pos.hivpos)
-  dat$epi$CTasympttests.pos.hivpos[at] <- length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos)
+  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos.hivpos)
+  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos.hivpos)
+  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos)
 
-  dat$epi$syphasympttests.hivpos[at] <- length(tst.syph.nprep.hivpos)
-  dat$epi$syphasympttests.pos.hivpos[at] <- length(tst.syph.pos.hivpos)
-  dat$epi$syphearlyasympttests.pos.hivpos[at] <- length(tst.earlysyph.pos.hivpos)
-  dat$epi$syphlateasympttests.pos.hivpos[at] <- length(tst.latesyph.pos.hivpos)
+  dat$epi$syphasympttests[at] <- length(tst.syph.nprep.hivpos)
+  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos)
+  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos)
+  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos)
 
-  dat$epi$stiasympttests.pos.hivpos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
     length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos)
-  dat$epi$stiasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
     length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) + length(tst.syph.pos.hivpos)
+
+  # Number of tests for asymptomatic (total)
+  dat$epi$rGCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.rgc.hivneg)
+  dat$epi$uGCasympttests[at] <- length(tst.ugc.hivpos) + length(tst.ugc.hivneg)
+  dat$epi$GCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
+    length(tst.rgc.hivneg) + length(tst.ugc.hivneg)
+
+  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.rgc.pos.hivneg)
+  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos) + length(tst.ugc.pos.hivneg)
+  dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
+    length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg)
+
+  dat$epi$rCTasympttests[at] <- length(tst.rct.hivpos) + length(tst.rct.hivneg)
+  dat$epi$uCTasympttests[at] <- length(tst.uct.hivpos) + length(tst.uct.hivneg)
+  dat$epi$CTasympttests[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos) +
+    length(tst.rct.hivneg) + length(tst.uct.hivneg)
+
+  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos.hivpos) + length(tst.rct.pos.hivneg)
+  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos.hivpos) + length(tst.uct.pos.hivneg)
+  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) +
+    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg)
+
+  dat$epi$syphasympttests[at] <- length(tst.syph.nprep.hivpos) + length(tst.syph.nprep.hivneg)
+  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos) + length(tst.syph.pos.hivneg)
+  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos) + length(tst.earlysyph.pos.hivneg)
+  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) + length(tst.latesyph.pos.hivneg)
+
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
+    length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos) +
+    length(tst.rgc.hivneg) + length(tst.ugc.hivneg) +
+    length(tst.rct.hivneg) + length(tst.uct.hivneg) + length(tst.syph.nprep.hivneg)
+  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
+    length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) + length(tst.syph.pos.hivpos) +
+    length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
+    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
 
   # Attributes
   # Stoppage attributes

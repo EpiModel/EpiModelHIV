@@ -54,12 +54,13 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, riskhist.int = 182,
   stitest.start = Inf, stitest.active.int = 364, tst.rect.sti.rr = 1,
   sti.highrisktest.int = 182, stitest.elig.model = "all",
-  stianntest.coverage = 0, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.coverage = 0,
-  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
-  ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
-  ept.provision.partner.main.ong = 0.5,
+  stianntest.hivneg.coverage = 0.1, stihighrisktest.hivneg.coverage = 0.1,
+  stianntest.hivpos.coverage = 0.1, stihighrisktest.hivpos.coverage = 0.1,
+  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
+  stihighrisktest.coverage = 0, stihighrisktest.cov.method = "curr",
+  stihighrisktest.cov.rate = 1, partnercutoff = 1, ept.start = Inf,
+  ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
+  ept.cov.rate = 1, ept.provision.partner.main.ong = 0.5,
   ept.provision.partner.pers.ong = 0.4,
   ept.provision.partner.main.end = 0.4,
   ept.provision.partner.pers.end = 0.3, ept.provision.partner.inst = 0.2,
@@ -460,10 +461,23 @@ testing intervention.}
 for high-risk STI testing. Current options are limited to:
 \code{"all"}.}
 
-\item{stianntest.coverage}{The proportion of the eligible population who are
-starting annual STI testing once they become eligible. This is not
-inclusive of those who are simultaneously indicated for more frequent
-testing.}
+\item{stianntest.hivneg.coverage}{The proportion of the non-HIV diagnosed
+eligible population who are starting annual STI testing once they
+become eligible. This is not inclusive of those who are simultaneously
+indicated for morre frequent testing.}
+
+\item{stihighrisktest.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk STI testing
+once they become eligible.}
+
+\item{stianntest.hivpos.coverage}{The proportion of the HIV-diagnosed eligible
+population who are starting annual STI testing once they become eligible.
+This is not inclusive of those who are simultaneously indicated for
+more frequent testing.}
+
+\item{stihighrisktest.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk STI testing
+once they become eligible.}
 
 \item{stianntest.cov.method}{The method for calculating STI annual testing,
 with options of \code{"curr"} to base the numerator  on the number of
@@ -475,9 +489,6 @@ more frequent testing.}
 \item{stianntest.cov.rate}{The rate at which persons initiate annual STI
 testing conditional on their eligibility, with 1 equal to instant
 start.}
-
-\item{stihighrisktest.coverage}{The proportion of the eligible population
-who are starting high-risk STI testing once they become eligible.}
 
 \item{stihighrisktest.cov.method}{The method for calculating STI high-risk
 testing, with options of \code{"curr"} to base the numerator on the
