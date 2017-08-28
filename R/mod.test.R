@@ -89,6 +89,9 @@ hiv_test_msm <- function(dat, at) {
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
   dat$attr$diag.status[tst.pos] <- 1
+  dat$attr$tt.traj.syph.hivneg[tst.pos] <- NA
+  dat$attr$tt.traj.gc.hivneg[tst.pos] <- NA
+  dat$attr$tt.traj.ct.hivneg[tst.pos] <- NA
   dat$attr$diag.time[tst.pos] <- at
 
   # Tests
@@ -129,10 +132,16 @@ sti_test_msm <- function(dat, at) {
   # Attributes
   tt.traj.ct <- dat$attr$tt.traj.ct
   tt.traj.gc <- dat$attr$tt.traj.gc
-  tt.traj.syph <- dat$attr$tt.traj.syph
+  tt.traj.syph.hivpos <- dat$attr$tt.traj.syph.hivpos
+  tt.traj.syph.hivneg <- dat$attr$tt.traj.syph.hivneg
+  tt.traj.gc.hivpos <- dat$attr$tt.traj.gc.hivpos
+  tt.traj.gc.hivneg <- dat$attr$tt.traj.gc.hivneg
+  tt.traj.ct.hivpos <- dat$attr$tt.traj.ct.hivpos
+  tt.traj.ct.hivneg <- dat$attr$tt.traj.ct.hivneg
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
   diag.status.syph <- dat$attr$diag.status.syph
+  diag.status <- dat$attr$diag.status
   syphilis <- dat$attr$syphilis
   rGC <- dat$attr$rGC
   uGC <- dat$attr$uGC
@@ -161,9 +170,11 @@ sti_test_msm <- function(dat, at) {
   stitestind2 <- dat$attr$stitest.ind.recentpartners
 
   # Parameters
-  stianntest.coverage <- dat$param$stianntest.coverage
+  stianntest.hivneg.coverage <- dat$param$stianntest.hivneg.coverage
+  stihighrisktest.hivneg.coverage <- dat$param$stihighrisktest.hivneg.coverage
+  stianntest.hivpos.coverage <- dat$param$stianntest.hivpos.coverage
+  stihighrisktest.hivpos.coverage <- dat$param$stihighrisktest.hivpos.coverage
   stianntest.cov.rate <- dat$param$stianntest.cov.rate
-  stihighrisktest.coverage <- dat$param$stihighrisktest.coverage
   stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
   testing.pattern.sti <- dat$param$testing.pattern.sti
   stitest.active.int <- dat$param$stitest.active.int
@@ -172,34 +183,52 @@ sti_test_msm <- function(dat, at) {
 
   # Eligibility and trajectory
   # Base eligibility
-  idsEligTest <- which(race %in% c("B", "W"))
+  idsEligTest.hivpos <- which(race %in% c("B", "W") & diag.status == 1)
+  idsEligTest.hivneg <- which(race %in% c("B", "W") & (diag.status == 0 | is.na(diag.status)))
 
   # Annual indications- sexually active in last year
-  idsactive <- which(stitestind1 == 1)
+  idsactive.hivpos <- which(stitestind1 == 1 & diag.status == 1)
+  idsactive.hivneg <- which(stitestind1 == 1 & (diag.status == 0 | is.na(diag.status)))
 
   # STI testing higher-risk eligibility scenarios
-  idshighrisk <- which(stitestind2 == 1)
+  idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1)
+  idshighrisk.hivneg <- which(stitestind2 == 1 & (diag.status == 0 | is.na(diag.status)))
 
   ## Stoppage (tt.traj.gc/.ct/.syph <- NA ------------------------------------
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
-  idsnothighriskelig <- which(tt.traj.syph == 2 & stitestind2 != 1)
-  tt.traj.syph[idsnothighriskelig] <- tt.traj.gc[idsnothighriskelig] <- tt.traj.ct[idsnothighriskelig] <- NA
+  idsnothighriskelig.hivpos <- which(tt.traj.syph.hivpos == 2 & stitestind2 != 1)
+  tt.traj.syph.hivpos[idsnothighriskelig.hivpos] <-
+    tt.traj.gc.hivpos[idsnothighriskelig.hivpos] <-
+    tt.traj.ct.hivpos[idsnothighriskelig.hivpos] <-
+    NA
+  idsnothighriskelig.hivneg <- which(tt.traj.syph.hivneg == 2 & stitestind2 != 1)
+  tt.traj.syph.hivneg[idsnothighriskelig.hivneg] <-
+    tt.traj.gc.hivneg[idsnothighriskelig.hivneg] <-
+    tt.traj.ct.hivneg[idsnothighriskelig.hivneg] <-
+    NA
 
   # Reduce testing trajectory to NA if no longer indicated for lower-risk testing
-  idsnotactiveelig <- which(tt.traj.syph == 1 & stitestind1 != 1)
-  tt.traj.syph[idsnotactiveelig] <- tt.traj.gc[idsnotactiveelig] <- tt.traj.ct[idsnotactiveelig] <- NA
+  idsnotactiveelig.hivpos <- which(tt.traj.syph.hivpos == 2 & stitestind1 != 1)
+  tt.traj.syph.hivpos[idsnotactiveelig.hivpos] <-
+    tt.traj.gc.hivpos[idsnotactiveelig.hivpos] <-
+    tt.traj.ct.hivpos[idsnotactiveelig.hivpos] <-
+    NA
+  idsnotactiveelig.hivneg <- which(tt.traj.syph.hivneg == 2 & stitestind1 != 1)
+  tt.traj.syph.hivneg[idsnotactiveelig.hivneg] <-
+    tt.traj.gc.hivneg[idsnotactiveelig.hivneg] <-
+    tt.traj.ct.hivneg[idsnotactiveelig.hivneg] <-
+    NA
 
-  ## Initiation -------------------------------------------------------------
-
+  ## Initiation (non-HIV diagnosed) --------------------------------------------
   ### Testing coverage for high risk
-  stihighrisktestCov <- sum(tt.traj.ct == 2, na.rm = TRUE) / length(idshighrisk)
+  stihighrisktestCov <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
   stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
 
-  idsEligSt <- idshighrisk
-  nEligSt <- length(idshighrisk)
+  idsEligSt <- idshighrisk.hivneg
+  nEligSt <- length(idshighrisk.hivneg)
 
-  nStart <- max(0, min(nEligSt, round((stihighrisktest.coverage - stihighrisktestCov) *
-                                        length(idshighrisk))))
+  nStart <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov) *
+                                        length(idshighrisk.hivneg))))
   idsStart <- NULL
   if (nStart > 0) {
     if (stihighrisktest.cov.rate >= 1) {
@@ -211,18 +240,18 @@ sti_test_msm <- function(dat, at) {
 
   ## Update testing trajectory for higher-risk
   if (length(idsStart) > 0) {
-    tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 2
+    tt.traj.syph.hivneg[idsStart] <- tt.traj.gc.hivneg[idsStart] <- tt.traj.ct.hivneg[idsStart] <- 2
   }
 
   ### Testing coverage for annual - all those sexually active without high-risk indications
-  stianntestCov <- sum(tt.traj.ct == 1, na.rm = TRUE) / length(setdiff(idsactive, which(tt.traj.syph == 2)))
+  stianntestCov <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) / length(setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2)))
   stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
 
-  idsEligSt <- setdiff(idsactive, idshighrisk)
-  nEligSt <- length(setdiff(idsactive, idshighrisk))
+  idsEligSt <- setdiff(idsactive.hivneg, idshighrisk.hivneg)
+  nEligSt <- length(setdiff(idsactive.hivneg, idshighrisk.hivneg))
 
-  nStart <- max(0, min(nEligSt, round((stianntest.coverage - stianntestCov) *
-                                        length(setdiff(idsactive, idshighrisk)))))
+  nStart <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stianntestCov) *
+                                        length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
   idsStart <- NULL
   if (nStart > 0) {
     if (stianntest.cov.rate >= 1) {
@@ -234,196 +263,407 @@ sti_test_msm <- function(dat, at) {
 
   ## Update testing trajectory for lower-risk
   if (length(idsStart) > 0) {
-    tt.traj.syph[idsStart] <- tt.traj.gc[idsStart] <- tt.traj.ct[idsStart] <- 1
+    tt.traj.syph.hivneg[idsStart] <- tt.traj.gc.hivneg[idsStart] <- tt.traj.ct.hivneg[idsStart] <- 1
   }
-
-  # Testing Rates by serostatus/race?
-  # All MSM with HIV infection entering care should be screened for GC and CT
-  # ct appropriate anatomic sites of exposure, as well as for syphilis
-  # For sexually active individuals, screen at first HIV evaluation,
-  # and at least annually thereafter
 
   ## Process for asymptomatic syphilis screening
   if (testing.pattern.sti == "memoryless") {
-    elig.syph.ann <- which(tt.traj.syph == 1 &
+    elig.syph.ann <- which(tt.traj.syph.hivneg == 1 &
                              (diag.status.syph == 0 | is.na(diag.status.syph)) &
                              prepStat == 0)
     rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
     tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
-    elig.syph.highrisk <- which(tt.traj.syph == 2 &
+    elig.syph.highrisk <- which(tt.traj.syph.hivneg == 2 &
                                   (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                   prepStat == 0)
     rates.syph <- rep(1/sti.highrisktest.int, length(elig.syph.highrisk))
     tst.syph.nprep.highrisk <- elig.syph.highrisk[rbinom(length(elig.syph.highrisk), 1, rates.syph) == 1]
-    tst.syph.nprep <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
+    tst.syph.nprep.hivneg <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
   }
 
   if (testing.pattern.sti == "interval" ) {
-    tst.syph.annual.interval <- which(tt.traj.syph == 1 &
+    tst.syph.annual.interval <- which(tt.traj.syph.hivneg == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                         tsinceltst.syph >= (stitest.active.int) &
                                         prepStat == 0)
-    tst.syph.highrisk.interval <- which(tt.traj.syph == 2 &
+    tst.syph.highrisk.interval <- which(tt.traj.syph.hivneg == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                           tsinceltst.syph >= (sti.highrisktest.int) &
                                           prepStat == 0)
-    tst.syph.nprep <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
+    tst.syph.nprep.hivneg <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
 
   ## Process for GC asymptomatic screening
   if (testing.pattern.sti == "memoryless") {
-    elig.gc.ann <- which(tt.traj.gc == 1 &
+    elig.gc.ann <- which(tt.traj.gc.hivneg == 1 &
                            (diag.status.gc == 0 | is.na(diag.status.gc)) &
                            prepStat == 0)
     rates.gc <- rep(1/stitest.active.int, length(elig.gc.ann))
     tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
 
-    elig.gc.highrisk <- which(tt.traj.gc == 2 &
+    elig.gc.highrisk <- which(tt.traj.gc.hivneg == 2 &
                                 (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                 prepStat == 0)
     rates.gc <- rep(1/sti.highrisktest.int, length(elig.gc.highrisk))
     tst.gc.nprep.highrisk <- elig.gc.highrisk[rbinom(length(elig.gc.highrisk), 1, rates.gc) == 1]
-    tst.gc.nprep <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
+    tst.gc.nprep.hivneg <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
   }
 
   if (testing.pattern.sti == "interval" ) {
-    tst.gc.annual.interval <- which(tt.traj.gc == 1 &
+    tst.gc.annual.interval <- which(tt.traj.gc.hivneg == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                       tsinceltst.gc >= (stitest.active.int) &
                                       prepStat == 0)
-    tst.gc.highrisk.interval <- which(tt.traj.gc == 2 &
+    tst.gc.highrisk.interval <- which(tt.traj.gc.hivneg == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                         tsinceltst.gc >= (sti.highrisktest.int) &
                                         prepStat == 0)
-    tst.gc.nprep <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
+    tst.gc.nprep.hivneg <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
 
   ## Process for CT asymptomatic screening
   if (testing.pattern.sti == "memoryless") {
-    elig.ct.ann <- which(tt.traj.ct == 1 &
+    elig.ct.ann <- which(tt.traj.ct.hivneg == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
                            prepStat == 0)
     rates.ct <- rep(1/stitest.active.int, length(elig.ct.ann))
     tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
 
-    elig.ct.highrisk <- which(tt.traj.ct == 2 &
+    elig.ct.highrisk <- which(tt.traj.ct.hivneg == 2 &
                                 (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                 prepStat == 0)
     rates.ct <- rep(1/sti.highrisktest.int, length(elig.ct.highrisk))
     tst.ct.nprep.highrisk <- elig.ct.highrisk[rbinom(length(elig.ct.highrisk), 1, rates.ct) == 1]
 
-    tst.ct.nprep <- c(tst.ct.nprep.ann, tst.ct.nprep.highrisk)
+    tst.ct.nprep.hivneg <- c(tst.ct.nprep.ann, tst.ct.nprep.highrisk)
   }
 
   if (testing.pattern.sti == "interval" ) {
-    tst.ct.annual.interval <- which(tt.traj.ct == 1 &
+    tst.ct.annual.interval <- which(tt.traj.ct.hivneg == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                       tsinceltst.ct >= (stitest.active.int) &
                                       prepStat == 0)
-    tst.ct.highrisk.interval <- which(tt.traj.ct == 2 &
+    tst.ct.highrisk.interval <- which(tt.traj.ct.hivneg == 2 &
                                         (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                         tsinceltst.ct >= (sti.highrisktest.int) &
                                         prepStat == 0)
-    tst.ct.nprep <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
+    tst.ct.nprep.hivneg <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
 
   # Syphilis non-PrEP testing
-  tst.syph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
-                                   stage.syph[tst.syph.nprep] %in% c(2, 3, 4, 5, 6)]
-  tst.syph.neg <- setdiff(tst.syph.nprep, tst.syph.pos)
-  tst.earlysyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
-                                   stage.syph[tst.syph.nprep] %in% c(2, 3, 4)]
-  tst.latesyph.pos <- tst.syph.nprep[syphilis[tst.syph.nprep] == 1 &
-                                   stage.syph[tst.syph.nprep] %in% c(5, 6)]
+  tst.syph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4, 5, 6)]
+  tst.syph.neg.hivneg <- setdiff(tst.syph.nprep.hivneg, tst.syph.pos.hivneg)
+  tst.earlysyph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4)]
+  tst.latesyph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(5, 6)]
 
   # GC non-PrEP testing
-  tst.rgc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("R", "V")]
-  #tst.rgc <- sample(tst.rgc, tst.rect.sti.rr * length(tst.rgc))
-  tst.ugc <- tst.gc.nprep[role.class[tst.gc.nprep] %in% c("I", "V")]
-  tst.rgc.pos <- tst.rgc[rGC[tst.rgc] == 1]
-  tst.ugc.pos <- tst.ugc[uGC[tst.ugc] == 1]
-  tst.rgc.neg <- setdiff(tst.rgc, tst.rgc.pos)
-  tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
-  tst.gc.pos <- unique(c(tst.rgc.pos, tst.ugc.pos))
+  tst.rgc.hivneg <- tst.gc.nprep.hivneg[role.class[tst.gc.nprep.hivneg] %in% c("R", "V")]
+  #tst.rgc <- sample(tst.rgc.hivneg, tst.rect.sti.rr * length(tst.rgc.hivneg))
+  tst.ugc.hivneg <- tst.gc.nprep.hivneg[role.class[tst.gc.nprep.hivneg] %in% c("I", "V")]
+  tst.rgc.pos.hivneg <- tst.rgc.hivneg[rGC[tst.rgc.hivneg] == 1]
+  tst.ugc.pos.hivneg <- tst.ugc.hivneg[uGC[tst.ugc.hivneg] == 1]
+  tst.rgc.neg.hivneg <- setdiff(tst.rgc.hivneg, tst.rgc.pos.hivneg)
+  tst.ugc.neg.hivneg <- setdiff(tst.ugc.hivneg, tst.ugc.pos.hivneg)
+  tst.gc.pos.hivneg <- unique(c(tst.rgc.pos.hivneg, tst.ugc.pos.hivneg))
 
   # CT non-PrEP testing
-  tst.rct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("R", "V")]
-  #tst.rct <- sample(tst.rct, tst.rect.sti.rr * length(tst.rct))
-  tst.uct <- tst.ct.nprep[role.class[tst.ct.nprep] %in% c("I", "V")]
-  tst.rct.pos <- tst.rct[rCT[tst.rct] == 1]
-  tst.uct.pos <- tst.uct[uCT[tst.uct] == 1]
-  tst.rct.neg <- setdiff(tst.rct, tst.rct.pos)
-  tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
-  tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
+  tst.rct.hivneg <- tst.ct.nprep.hivneg[role.class[tst.ct.nprep.hivneg] %in% c("R", "V")]
+  #tst.rct <- sample(tst.rct.hivneg, tst.rect.sti.rr * length(tst.rct.hivneg))
+  tst.uct.hivneg <- tst.ct.nprep.hivneg[role.class[tst.ct.nprep.hivneg] %in% c("I", "V")]
+  tst.rct.pos.hivneg <- tst.rct.hivneg[rCT[tst.rct.hivneg] == 1]
+  tst.uct.pos.hivneg <- tst.uct.hivneg[uCT[tst.uct.hivneg] == 1]
+  tst.rct.neg.hivneg <- setdiff(tst.rct.hivneg, tst.rct.pos.hivneg)
+  tst.uct.neg.hivneg <- setdiff(tst.uct.hivneg, tst.uct.pos.hivneg)
+  tst.ct.pos.hivneg <- unique(c(tst.rct.pos.hivneg, tst.uct.pos.hivneg))
 
   # Syphilis Attributes
-  last.neg.test.syph[tst.syph.neg] <- at
-  last.neg.test.syph[tst.syph.pos] <- NA
-  diag.status.syph[tst.syph.pos] <- 1
-  last.diag.time.syph[tst.syph.pos] <- at
-  tsinceltst.syph[tst.syph.nprep] <- 0
+  last.neg.test.syph[tst.syph.neg.hivneg] <- at
+  last.neg.test.syph[tst.syph.pos.hivneg] <- NA
+  diag.status.syph[tst.syph.pos.hivneg] <- 1
+  last.diag.time.syph[tst.syph.pos.hivneg] <- at
+  tsinceltst.syph[tst.syph.nprep.hivneg] <- 0
 
   # GC Attributes
-  last.neg.test.rgc[tst.rgc.neg] <- at
-  last.neg.test.ugc[tst.ugc.neg] <- at
-  last.neg.test.rgc[tst.rgc.pos] <- NA
-  last.neg.test.ugc[tst.ugc.pos] <- NA
-  diag.status.gc[tst.gc.pos] <- 1
-  last.diag.time.gc[tst.gc.pos] <- at
-  tsinceltst.rgc[tst.rgc] <- 0
-  tsinceltst.ugc[tst.ugc] <- 0
+  last.neg.test.rgc[tst.rgc.neg.hivneg] <- at
+  last.neg.test.ugc[tst.ugc.neg.hivneg] <- at
+  last.neg.test.rgc[tst.rgc.pos.hivneg] <- NA
+  last.neg.test.ugc[tst.ugc.pos.hivneg] <- NA
+  diag.status.gc[tst.gc.pos.hivneg] <- 1
+  last.diag.time.gc[tst.gc.pos.hivneg] <- at
+  tsinceltst.rgc[tst.rgc.hivneg] <- 0
+  tsinceltst.ugc[tst.ugc.hivneg] <- 0
 
   # CT Attributes
-  last.neg.test.rct[tst.rct.neg] <- at
-  last.neg.test.uct[tst.uct.neg] <- at
-  last.neg.test.rct[tst.rct.pos] <- NA
-  last.neg.test.uct[tst.uct.pos] <- NA
-  diag.status.ct[tst.ct.pos] <- 1
-  last.diag.time.ct[tst.ct.pos] <- at
-  tsinceltst.rct[tst.rct] <- 0
-  tsinceltst.uct[tst.uct] <- 0
+  last.neg.test.rct[tst.rct.neg.hivneg] <- at
+  last.neg.test.uct[tst.uct.neg.hivneg] <- at
+  last.neg.test.rct[tst.rct.pos.hivneg] <- NA
+  last.neg.test.uct[tst.uct.pos.hivneg] <- NA
+  diag.status.ct[tst.ct.pos.hivneg] <- 1
+  last.diag.time.ct[tst.ct.pos.hivneg] <- at
+  tsinceltst.rct[tst.rct.hivneg] <- 0
+  tsinceltst.uct[tst.uct.hivneg] <- 0
 
-  # Number of tests for asymptomatic
-  dat$epi$rGCasympttests[at] <- length(tst.rgc)
-  dat$epi$uGCasympttests[at] <- length(tst.ugc)
-  dat$epi$GCasympttests[at] <- length(tst.rgc) + length(tst.ugc)
+  ## Initiation (HIV diagnosed) --------------------------------------------
+  ### Testing coverage for high risk
+  stihighrisktestCov <- sum(tt.traj.ct.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
+  stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
 
-  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos)
-  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos)
-  dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos) + length(tst.ugc.pos)
+  idsEligSt <- idshighrisk.hivpos
+  nEligSt <- length(idshighrisk.hivpos)
 
-  dat$epi$rCTasympttests[at] <- length(tst.rct)
-  dat$epi$uCTasympttests[at] <- length(tst.uct)
-  dat$epi$CTasympttests[at] <- length(tst.rct) + length(tst.uct)
+  nStart <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov) *
+                                        length(idshighrisk.hivpos))))
+  idsStart <- NULL
+  if (nStart > 0) {
+    if (stihighrisktest.cov.rate >= 1) {
+      idsStart <- ssample(idsEligSt, nStart)
+    } else {
+      idsStart <- idsEligSt[rbinom(nStart, 1, stihighrisktest.cov.rate) == 1]
+    }
+  }
 
-  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos)
-  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos)
-  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos) + length(tst.uct.pos)
+  ## Update testing trajectory for higher-risk
+  if (length(idsStart) > 0) {
+    tt.traj.syph.hivpos[idsStart] <- tt.traj.gc.hivpos[idsStart] <- tt.traj.ct.hivpos[idsStart] <- 2
+  }
 
-  dat$epi$syphasympttests[at] <- length(tst.syph.nprep)
-  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos)
-  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos)
-  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos)
+  ### Testing coverage for annual - all those sexually active without high-risk indications
+  stianntestCov <- sum(tt.traj.ct.hivpos == 1, na.rm = TRUE) / length(setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2)))
+  stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
 
-  dat$epi$stiasympttests.pos[at] <- length(tst.rgc) + length(tst.ugc) +
-    length(tst.rct) + length(tst.uct) + length(tst.syph.nprep)
-  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.pos) + length(tst.ugc.pos) +
-    length(tst.rct.pos) + length(tst.uct.pos) + length(tst.syph.pos)
+  idsEligSt <- setdiff(idsactive.hivpos, idshighrisk.hivpos)
+  nEligSt <- length(setdiff(idsactive.hivpos, idshighrisk.hivpos))
+
+  nStart <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stianntestCov) *
+                                        length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
+  idsStart <- NULL
+  if (nStart > 0) {
+    if (stianntest.cov.rate >= 1) {
+      idsStart <- ssample(idsEligSt, nStart)
+    } else {
+      idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+    }
+  }
+
+  ## Update testing trajectory for lower-risk
+  if (length(idsStart) > 0) {
+    tt.traj.syph.hivpos[idsStart] <- tt.traj.gc.hivpos[idsStart] <- tt.traj.ct.hivpos[idsStart] <- 1
+  }
+
+  ## Process for asymptomatic syphilis screening
+  if (testing.pattern.sti == "memoryless") {
+    elig.syph.ann <- which(tt.traj.syph.hivpos == 1 &
+                             (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                             prepStat == 0)
+    rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
+    tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
+
+    elig.syph.highrisk <- which(tt.traj.syph.hivpos == 2 &
+                                  (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                  prepStat == 0)
+    rates.syph <- rep(1/sti.highrisktest.int, length(elig.syph.highrisk))
+    tst.syph.nprep.highrisk <- elig.syph.highrisk[rbinom(length(elig.syph.highrisk), 1, rates.syph) == 1]
+    tst.syph.nprep.hivpos <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
+  }
+
+  if (testing.pattern.sti == "interval" ) {
+    tst.syph.annual.interval <- which(tt.traj.syph.hivpos == 1 &
+                                        (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                        tsinceltst.syph >= (stitest.active.int) &
+                                        prepStat == 0)
+    tst.syph.highrisk.interval <- which(tt.traj.syph.hivpos == 2 &
+                                          (diag.status.syph == 0 | is.na(diag.status.syph)) &
+                                          tsinceltst.syph >= (sti.highrisktest.int) &
+                                          prepStat == 0)
+    tst.syph.nprep.hivpos <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
+  }
+
+  ## Process for GC asymptomatic screening
+  if (testing.pattern.sti == "memoryless") {
+    elig.gc.ann <- which(tt.traj.gc.hivpos == 1 &
+                           (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                           prepStat == 0)
+    rates.gc <- rep(1/stitest.active.int, length(elig.gc.ann))
+    tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
+
+    elig.gc.highrisk <- which(tt.traj.gc.hivpos == 2 &
+                                (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                                prepStat == 0)
+    rates.gc <- rep(1/sti.highrisktest.int, length(elig.gc.highrisk))
+    tst.gc.nprep.highrisk <- elig.gc.highrisk[rbinom(length(elig.gc.highrisk), 1, rates.gc) == 1]
+    tst.gc.nprep.hivpos <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
+  }
+
+  if (testing.pattern.sti == "interval" ) {
+    tst.gc.annual.interval <- which(tt.traj.gc.hivpos == 1 &
+                                      (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                                      tsinceltst.gc >= (stitest.active.int) &
+                                      prepStat == 0)
+    tst.gc.highrisk.interval <- which(tt.traj.gc.hivpos == 2 &
+                                        (diag.status.gc == 0 | is.na(diag.status.gc)) &
+                                        tsinceltst.gc >= (sti.highrisktest.int) &
+                                        prepStat == 0)
+    tst.gc.nprep.hivpos <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
+  }
+
+  ## Process for CT asymptomatic screening
+  if (testing.pattern.sti == "memoryless") {
+    elig.ct.ann <- which(tt.traj.ct.hivpos == 1 &
+                           (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                           prepStat == 0)
+    rates.ct <- rep(1/stitest.active.int, length(elig.ct.ann))
+    tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
+
+    elig.ct.highrisk <- which(tt.traj.ct.hivpos == 2 &
+                                (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                                prepStat == 0)
+    rates.ct <- rep(1/sti.highrisktest.int, length(elig.ct.highrisk))
+    tst.ct.nprep.highrisk <- elig.ct.highrisk[rbinom(length(elig.ct.highrisk), 1, rates.ct) == 1]
+
+    tst.ct.nprep.hivpos <- c(tst.ct.nprep.ann, tst.ct.nprep.highrisk)
+  }
+
+  if (testing.pattern.sti == "interval" ) {
+    tst.ct.annual.interval <- which(tt.traj.ct.hivpos == 1 &
+                                      (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                                      tsinceltst.ct >= (stitest.active.int) &
+                                      prepStat == 0)
+    tst.ct.highrisk.interval <- which(tt.traj.ct.hivpos == 2 &
+                                        (diag.status.ct == 0 | is.na(diag.status.ct)) &
+                                        tsinceltst.ct >= (sti.highrisktest.int) &
+                                        prepStat == 0)
+    tst.ct.nprep.hivpos <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
+  }
+
+  # Syphilis non-PrEP testing
+  tst.syph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                 stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4, 5, 6)]
+  tst.syph.neg.hivpos <- setdiff(tst.syph.nprep.hivpos, tst.syph.pos.hivpos)
+  tst.earlysyph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                      stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4)]
+  tst.latesyph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                     stage.syph[tst.syph.nprep.hivpos] %in% c(5, 6)]
+
+  # GC non-PrEP testing
+  tst.rgc.hivpos <- tst.gc.nprep.hivpos[role.class[tst.gc.nprep.hivpos] %in% c("R", "V")]
+  #tst.rgc <- sample(tst.rgc.hivpos, tst.rect.sti.rr * length(tst.rgc.hivpos))
+  tst.ugc.hivpos <- tst.gc.nprep.hivpos[role.class[tst.gc.nprep.hivpos] %in% c("I", "V")]
+  tst.rgc.pos.hivpos <- tst.rgc.hivpos[rGC[tst.rgc.hivpos] == 1]
+  tst.ugc.pos.hivpos <- tst.ugc.hivpos[uGC[tst.ugc.hivpos] == 1]
+  tst.rgc.neg.hivpos <- setdiff(tst.rgc.hivpos, tst.rgc.pos.hivpos)
+  tst.ugc.neg.hivpos <- setdiff(tst.ugc.hivpos, tst.ugc.pos.hivpos)
+  tst.gc.pos.hivpos <- unique(c(tst.rgc.pos.hivpos, tst.ugc.pos.hivpos))
+
+  # CT non-PrEP testing
+  tst.rct.hivpos <- tst.ct.nprep.hivpos[role.class[tst.ct.nprep.hivpos] %in% c("R", "V")]
+  #tst.rct <- sample(tst.rct.hivpos, tst.rect.sti.rr * length(tst.rct.hivpos))
+  tst.uct.hivpos <- tst.ct.nprep.hivpos[role.class[tst.ct.nprep.hivpos] %in% c("I", "V")]
+  tst.rct.pos.hivpos <- tst.rct.hivpos[rCT[tst.rct.hivpos] == 1]
+  tst.uct.pos.hivpos <- tst.uct.hivpos[uCT[tst.uct.hivpos] == 1]
+  tst.rct.neg.hivpos <- setdiff(tst.rct.hivpos, tst.rct.pos.hivpos)
+  tst.uct.neg.hivpos <- setdiff(tst.uct.hivpos, tst.uct.pos.hivpos)
+  tst.ct.pos.hivpos <- unique(c(tst.rct.pos.hivpos, tst.uct.pos.hivpos))
+
+  # Syphilis Attributes
+  last.neg.test.syph[tst.syph.neg.hivpos] <- at
+  last.neg.test.syph[tst.syph.pos.hivpos] <- NA
+  diag.status.syph[tst.syph.pos.hivpos] <- 1
+  last.diag.time.syph[tst.syph.pos.hivpos] <- at
+  tsinceltst.syph[tst.syph.nprep.hivpos] <- 0
+
+  # GC Attributes
+  last.neg.test.rgc[tst.rgc.neg.hivpos] <- at
+  last.neg.test.ugc[tst.ugc.neg.hivpos] <- at
+  last.neg.test.rgc[tst.rgc.pos.hivpos] <- NA
+  last.neg.test.ugc[tst.ugc.pos.hivpos] <- NA
+  diag.status.gc[tst.gc.pos.hivpos] <- 1
+  last.diag.time.gc[tst.gc.pos.hivpos] <- at
+  tsinceltst.rgc[tst.rgc.hivpos] <- 0
+  tsinceltst.ugc[tst.ugc.hivpos] <- 0
+
+  # CT Attributes
+  last.neg.test.rct[tst.rct.neg.hivpos] <- at
+  last.neg.test.uct[tst.uct.neg.hivpos] <- at
+  last.neg.test.rct[tst.rct.pos.hivpos] <- NA
+  last.neg.test.uct[tst.uct.pos.hivpos] <- NA
+  diag.status.ct[tst.ct.pos.hivpos] <- 1
+  last.diag.time.ct[tst.ct.pos.hivpos] <- at
+  tsinceltst.rct[tst.rct.hivpos] <- 0
+  tsinceltst.uct[tst.uct.hivpos] <- 0
+
 
   ## Output -----------------------------------------------------------------
 
-  # Attributes
+  # Number of tests for asymptomatic (non-HIV diagnosed)
+  dat$epi$rGCasympttests.hivneg[at] <- length(tst.rgc.hivneg)
+  dat$epi$uGCasympttests.hivneg[at] <- length(tst.ugc.hivneg)
+  dat$epi$GCasympttests.hivneg[at] <- length(tst.rgc.hivneg) + length(tst.ugc.hivneg)
 
+  dat$epi$rGCasympttests.pos.hivneg[at] <- length(tst.rgc.pos.hivneg)
+  dat$epi$uGCasympttests.pos.hivneg[at] <- length(tst.ugc.pos.hivneg)
+  dat$epi$GCasympttests.pos.hivneg[at] <- length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg)
+
+  dat$epi$rCTasympttests.hivneg[at] <- length(tst.rct.hivneg)
+  dat$epi$uCTasympttests.hivneg[at] <- length(tst.uct.hivneg)
+  dat$epi$CTasympttests.hivneg[at] <- length(tst.rct.hivneg) + length(tst.uct.hivneg)
+
+  dat$epi$rCTasympttests.pos.hivneg[at] <- length(tst.rct.pos.hivneg)
+  dat$epi$uCTasympttests.pos.hivneg[at] <- length(tst.uct.pos.hivneg)
+  dat$epi$CTasympttests.pos.hivneg[at] <- length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg)
+
+  dat$epi$syphasympttests.hivneg[at] <- length(tst.syph.nprep.hivneg)
+  dat$epi$syphasympttests.pos.hivneg[at] <- length(tst.syph.pos.hivneg)
+  dat$epi$syphearlyasympttests.pos.hivneg[at] <- length(tst.earlysyph.pos.hivneg)
+  dat$epi$syphlateasympttests.pos.hivneg[at] <- length(tst.latesyph.pos.hivneg)
+
+  dat$epi$stiasympttests.pos.hivneg[at] <- length(tst.rgc.hivneg) + length(tst.ugc.hivneg) +
+    length(tst.rct.hivneg) + length(tst.uct.hivneg) + length(tst.syph.nprep.hivneg)
+  dat$epi$stiasympttests.pos.hivneg[at] <- length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
+    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
+
+  # Number of tests for asymptomatic (HIV diagnosed)
+  dat$epi$rGCasympttests.hivpos[at] <- length(tst.rgc.hivpos)
+  dat$epi$uGCasympttests.hivpos[at] <- length(tst.ugc.hivpos)
+  dat$epi$GCasympttests.hivpos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos)
+
+  dat$epi$rGCasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos)
+  dat$epi$uGCasympttests.pos.hivpos[at] <- length(tst.ugc.pos.hivpos)
+  dat$epi$GCasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos)
+
+  dat$epi$rCTasympttests.hivpos[at] <- length(tst.rct.hivpos)
+  dat$epi$uCTasympttests.hivpos[at] <- length(tst.uct.hivpos)
+  dat$epi$CTasympttests.hivpos[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos)
+
+  dat$epi$rCTasympttests.pos.hivpos[at] <- length(tst.rct.pos.hivpos)
+  dat$epi$uCTasympttests.pos.hivpos[at] <- length(tst.uct.pos.hivpos)
+  dat$epi$CTasympttests.pos.hivpos[at] <- length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos)
+
+  dat$epi$syphasympttests.hivpos[at] <- length(tst.syph.nprep.hivpos)
+  dat$epi$syphasympttests.pos.hivpos[at] <- length(tst.syph.pos.hivpos)
+  dat$epi$syphearlyasympttests.pos.hivpos[at] <- length(tst.earlysyph.pos.hivpos)
+  dat$epi$syphlateasympttests.pos.hivpos[at] <- length(tst.latesyph.pos.hivpos)
+
+  dat$epi$stiasympttests.pos.hivpos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
+    length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos)
+  dat$epi$stiasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
+    length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) + length(tst.syph.pos.hivpos)
+
+  # Attributes
   # Stoppage attributes
-  dat$attr$stihighrisktestLastElig[idsnothighriskelig] <- at
-  dat$attr$stianntestLastElig[idsnotactiveelig] <- at
+  dat$attr$stihighrisktestLastElig[idsnothighriskelig.hivneg] <- at
+  dat$attr$stianntestLastElig[idsnotactiveelig.hivneg] <- at
+  dat$attr$stihighrisktestLastElig[idsnothighriskelig.hivpos] <- at
+  dat$attr$stianntestLastElig[idsnotactiveelig.hivpos] <- at
 
   # Syphilis Attributes
   dat$attr$last.neg.test.syph <- last.neg.test.syph
   dat$attr$diag.status.syph <- diag.status.syph
   dat$attr$last.diag.time.syph <- last.diag.time.syph
-  dat$attr$tt.traj.syph <- tt.traj.syph
+  dat$attr$tt.traj.syph.hivneg <- tt.traj.syph.hivneg
   dat$attr$time.since.last.test.syph <- tsinceltst.syph
 
   # GC Attributes
@@ -431,7 +671,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$last.neg.test.ugc <- last.neg.test.ugc
   dat$attr$diag.status.gc <- diag.status.gc
   dat$attr$last.diag.time.gc <- last.diag.time.gc
-  dat$attr$tt.traj.gc <- tt.traj.gc
+  dat$attr$tt.traj.gc.hivneg <- tt.traj.gc.hivneg
   dat$attr$time.since.last.test.rgc <- tsinceltst.rgc
   dat$attr$time.since.last.test.ugc <- tsinceltst.ugc
 
@@ -440,7 +680,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$last.neg.test.uct <- last.neg.test.uct
   dat$attr$diag.status.ct <- diag.status.ct
   dat$attr$last.diag.time.ct <- last.diag.time.ct
-  dat$attr$tt.traj.ct <- tt.traj.ct
+  dat$attr$tt.traj.ct.hivneg <- tt.traj.ct.hivneg
   dat$attr$time.since.last.test.rct <- tsinceltst.rct
   dat$attr$time.since.last.test.uct <- tsinceltst.uct
 

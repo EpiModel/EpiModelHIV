@@ -257,10 +257,14 @@
 #' @param stitest.elig.model Modeling approach for determining who is eligible
 #'        for high-risk STI testing. Current options are limited to:
 #'        \code{"all"}.
-#' @param stianntest.coverage The proportion of the eligible population who are
-#'        starting annual STI testing once they become eligible. This is not
-#'        inclusive of those who are simultaneously indicated for more frequent
-#'        testing.
+#' @param stianntest.hivneg.coverage The proportion of the non-HIV diagnosed
+#'        eligible population who are starting annual STI testing once they
+#'        become eligible. This is not inclusive of those who are simultaneously
+#'        indicated for morre frequent testing.
+#' @param stianntest.hivpos.coverage The proportion of the HIV-diagnosed eligible
+#'        population who are starting annual STI testing once they become eligible.
+#'        This is not inclusive of those who are simultaneously indicated for
+#'        more frequent testing.
 #' @param stianntest.cov.method The method for calculating STI annual testing,
 #'        with options of \code{"curr"} to base the numerator  on the number of
 #'        people currently annually testing for STI and \code{"ever"} to base it
@@ -270,8 +274,12 @@
 #' @param stianntest.cov.rate The rate at which persons initiate annual STI
 #'        testing conditional on their eligibility, with 1 equal to instant
 #'        start.
-#' @param stihighrisktest.coverage The proportion of the eligible population
-#'        who are starting high-risk STI testing once they become eligible.
+#' @param stihighrisktest.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk STI testing
+#'        once they become eligible.
+#' @param stihighrisktest.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk STI testing
+#'        once they become eligible.
 #' @param stihighrisktest.cov.method The method for calculating STI high-risk
 #'        testing, with options of \code{"curr"} to base the numerator on the
 #'        number of people currently high-risk testing for STI and \code{"ever"}
@@ -615,7 +623,10 @@ param_msm <- function(nwstats,
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
                       stitest.elig.model = "all",
-                      stianntest.coverage = 0,
+                      stianntest.hivneg.coverage = 0.1,
+                      stihighrisktest.hivneg.coverage = 0.1,
+                      stianntest.hivpos.coverage = 0.1,
+                      stihighrisktest.hivpos.coverage = 0.1,
                       stianntest.cov.method = "curr",
                       stianntest.cov.rate = 1,
                       stihighrisktest.coverage = 0,

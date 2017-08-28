@@ -936,7 +936,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$last.tx.time.syph <- last.tx.time.syph
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
-    dat$attr$tt.traj.syph <- rep(NA, num)
+    dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.syph <- tslaststitest
 
     # Gonorrhea
@@ -958,7 +959,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.ugc <- last.tx.time.ugc
     dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
-    dat$attr$tt.traj.gc <- rep(NA, num)
+    dat$attr$tt.traj.gc.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.rgc <- tslaststitest
     dat$attr$time.since.last.test.ugc <- tslaststitest
 
@@ -981,7 +983,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.uct <- last.tx.time.uct
     dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
-    dat$attr$tt.traj.ct <- rep(NA, num)
+    dat$attr$tt.traj.ct.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.rct <- tslaststitest
     dat$attr$time.since.last.test.uct <- tslaststitest
 
