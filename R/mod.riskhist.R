@@ -161,6 +161,7 @@ riskhist_stitest_msm <- function(dat, at) {
 
     dat$attr$stitest.ind.recentpartners[idsrecentpartners] <- 1
     dat$attr$stitest.ind.recentpartners[idsnotrecentpartners] <- 0
+    dat$epi$recentpartners[at] <- length(idsrecentpartners)
 
   }
 
@@ -170,7 +171,7 @@ riskhist_stitest_msm <- function(dat, at) {
   dat$attr$stitest.ind.active[idsnotactive] <- 0
 
   dat$epi$stiactiveind[at] <- length(idsactive)
-  dat$epi$recentpartners[at] <- length(idsrecentpartners)
+
 
   return(dat)
 }
