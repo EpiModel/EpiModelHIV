@@ -676,7 +676,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos) + length(tst.earlysyph.pos.hivneg)
   dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) + length(tst.latesyph.pos.hivneg)
 
-  dat$epi$stiasympttests.pos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
+  dat$epi$stiasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
     length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos) +
     length(tst.rgc.hivneg) + length(tst.ugc.hivneg) +
     length(tst.rct.hivneg) + length(tst.uct.hivneg) + length(tst.syph.nprep.hivneg)
