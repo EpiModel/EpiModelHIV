@@ -604,6 +604,27 @@ sti_test_msm <- function(dat, at) {
 
   ## Output -----------------------------------------------------------------
 
+  #
+  dat$epi$tt.traj.syph1.hivneg[at] <- length(which(tt.traj.syph.hivneg == 1))
+  dat$epi$tt.traj.gc1.hivneg[at] <- length(which(tt.traj.gc.hivneg == 1))
+  dat$epi$tt.traj.ct1.hivneg[at] <- length(which(tt.traj.ct.hivneg == 1))
+  dat$epi$tt.traj.syph2.hivneg[at] <- length(which(tt.traj.syph.hivneg == 2))
+  dat$epi$tt.traj.gc2.hivneg[at] <- length(which(tt.traj.gc.hivneg == 2))
+  dat$epi$tt.traj.ct2.hivneg[at] <- length(which(tt.traj.ct.hivneg == 2))
+  dat$epi$tt.traj.syph1.hivpos[at] <- length(which(tt.traj.syph.hivpos == 1))
+  dat$epi$tt.traj.gc1.hivpos[at] <- length(which(tt.traj.gc.hivpos == 1))
+  dat$epi$tt.traj.ct1.hivpos[at] <- length(which(tt.traj.ct.hivpos == 1))
+  dat$epi$tt.traj.syph2.hivpos[at] <- length(which(tt.traj.syph.hivpos == 2))
+  dat$epi$tt.traj.gc2.hivpos[at] <- length(which(tt.traj.gc.hivpos == 2))
+  dat$epi$tt.traj.ct2.hivpos[at] <- length(which(tt.traj.ct.hivpos == 2))
+
+  dat$epi$tt.traj.gc1 <- length(which(tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1))
+  dat$epi$tt.traj.ct1 <- length(which(tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1))
+  dat$epi$tt.traj.syph1 <- length(which(tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))
+  dat$epi$tt.traj.gc2 <- length(which(tt.traj.gc.hivneg == 2 | tt.traj.gc.hivpos == 2))
+  dat$epi$tt.traj.ct2 <- length(which(tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2))
+  dat$epi$tt.traj.syph2 <- length(which(tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))
+
   # Number of tests for asymptomatic (non-HIV diagnosed)
   dat$epi$rGCasympttests.hivneg[at] <- length(tst.rgc.hivneg)
   dat$epi$uGCasympttests.hivneg[at] <- length(tst.ugc.hivneg)

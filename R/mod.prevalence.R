@@ -176,10 +176,10 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$stiasympttests <- rep(0, nsteps)
     dat$epi$stiasympttests.pos <- rep(0, nsteps)
-    dat$epi$stiasympttests <- rep(0, nsteps)
-    dat$epi$stiasympttests.pos <- rep(0, nsteps)
-    dat$epi$stiasympttests <- rep(0, nsteps)
-    dat$epi$stiasympttests.pos <- rep(0, nsteps)
+    dat$epi$stiasympttests.hivneg <- rep(0, nsteps)
+    dat$epi$stiasympttests.pos.hivneg <- rep(0, nsteps)
+    dat$epi$stiasympttests.hivpos <- rep(0, nsteps)
+    dat$epi$stiasympttests.pos.hivpos <- rep(0, nsteps)
     dat$epi$stisympttests <- rep(0, nsteps)
     dat$epi$stiasympttests.prep <- rep(0, nsteps)
     dat$epi$stiasympttests.pos.prep <- rep(0, nsteps)
@@ -369,7 +369,7 @@ prevalence_msm <- function(dat, at) {
     # dat$epi$partnersti <- rNA
     # dat$epi$uai.nmain <- rNA
     # dat$epi$uai.any <- rNA
-    dat$epi$stiactiveind.prop <-rNA
+    dat$epi$stiactiveind.prop <- rNA
     dat$epi$recentpartners.prop <- rNA
 
 
@@ -387,6 +387,19 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptctinfectsti <- rNA
     dat$epi$eptgcinfecthiv <- rNA
     dat$epi$eptctinfecthiv <- rNA
+
+    dat$epi$tt.traj.syph1.hivneg <- rNA
+    dat$epi$tt.traj.gc1.hivneg <- rNA
+    dat$epi$tt.traj.ct1.hivneg <- rNA
+    dat$epi$tt.traj.syph2.hivneg <- rNA
+    dat$epi$tt.traj.gc2.hivneg <- rNA
+    dat$epi$tt.traj.ct2.hivneg <- rNA
+    dat$epi$tt.traj.syph1.hivpos <- rNA
+    dat$epi$tt.traj.gc1.hivpos <- rNA
+    dat$epi$tt.traj.ct1.hivpos <- rNA
+    dat$epi$tt.traj.syph2.hivpos <- rNA
+    dat$epi$tt.traj.gc2.hivpos <- rNA
+    dat$epi$tt.traj.ct2.hivpos <- rNA
 
   }
 

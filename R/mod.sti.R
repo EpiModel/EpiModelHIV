@@ -1156,6 +1156,7 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$syph.tx.prep[txsyph_prep] <- 1
   dat$attr$last.tx.time.syph.prep[txsyph_prep] <- at
   dat$attr$last.diag.time.syph[txsyph_sympt] <- at
+  dat$attr$last.neg.test.syph[txsyph_sympt] <- NA
   dat$attr$diag.status.syph[idssyph_tx_sympt] <- 0
   dat$attr$diag.status.syph[txsyph_sympt] <- 1
 
@@ -1178,8 +1179,9 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uGC.tx.ept[txUGC_ept] <- 1
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
-  dat$attr$last.diag.time.rgc[txRGC_sympt] <- at
-  dat$attr$last.diag.time.ugc[txUGC_sympt] <- at
+  dat$attr$last.diag.time.gc[txGC_sympt] <- at
+  dat$attr$last.neg.test.rgc[txRGC_sympt] <- NA
+  dat$attr$last.neg.test.ugc[txUGC_sympt] <- NA
   dat$attr$diag.status.gc[idsGC_tx_sympt] <- 0
   dat$attr$diag.status.gc[txGC_sympt] <- 1
 
@@ -1202,8 +1204,9 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uCT.tx.ept[txUCT_ept] <- 1
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
-  dat$attr$last.diag.time.rct[txRCT_sympt] <- at
-  dat$attr$last.diag.time.uct[txUCT_sympt] <- at
+  dat$attr$last.diag.time.ct[txCT_sympt] <- at
+  dat$attr$last.neg.test.rct[txRCT_sympt] <- NA
+  dat$attr$last.neg.test.uct[txUCT_sympt] <- NA
   dat$attr$diag.status.ct[idsCT_tx_sympt] <- 0
   dat$attr$diag.status.ct[txCT_sympt] <- 1
 
