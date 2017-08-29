@@ -38,8 +38,10 @@ param <- param_msm(nwstats = st,
                    syph.tert.sympt.prob.tx = 1.0,
 
                    ept.coverage = 0.0,
-                   stianntest.coverage = 0.4,
-                   stihighrisktest.coverage = 0.1,
+                   stianntest.hivneg.coverage = 0.1,
+                   stihighrisktest.hivneg.coverage = 0.1,
+                   stianntest.hivpos.coverage = 0.1,
+                   stihighrisktest.hivpos.coverage = 0.1,
 
                    prep.start = 2601,
                    stitest.start = 2601,
