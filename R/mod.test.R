@@ -86,12 +86,15 @@ hiv_test_msm <- function(dat, at) {
   tst.pos <- tst.all[status[tst.all] == 1 & inf.time[tst.all] <= at - twind.int]
   tst.neg <- setdiff(tst.all, tst.pos)
 
+  # Assign new STI treatment trajectory (HIV-pos) for diagnosed who will be on ART
+  tt.traj.new <- tst.pos[tt.traj[tst.pos] %in% c(3,4)]
+
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
   dat$attr$diag.status[tst.pos] <- 1
-  dat$attr$tt.traj.syph.hivneg[tst.pos] <- NA
-  dat$attr$tt.traj.gc.hivneg[tst.pos] <- NA
-  dat$attr$tt.traj.ct.hivneg[tst.pos] <- NA
+  dat$attr$tt.traj.syph.hivneg[tt.traj.new] <- NA
+  dat$attr$tt.traj.gc.hivneg[tt.traj.new] <- NA
+  dat$attr$tt.traj.ct.hivneg[tt.traj.new] <- NA
   dat$attr$diag.time[tst.pos] <- at
 
   # Tests
@@ -130,6 +133,7 @@ sti_test_msm <- function(dat, at) {
   ## Intervention -------------------------------------------------------------
 
   # Attributes
+  tt.traj <- dat$attr$tt.traj
   tt.traj.syph.hivpos <- dat$attr$tt.traj.syph.hivpos
   tt.traj.syph.hivneg <- dat$attr$tt.traj.syph.hivneg
   tt.traj.gc.hivpos <- dat$attr$tt.traj.gc.hivpos
@@ -155,7 +159,6 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.gc <- dat$attr$last.diag.time.gc
   last.diag.time.ct <- dat$attr$last.diag.time.ct
   last.diag.time.syph <- dat$attr$last.diag.time.syph
-  #diag.time <- dat$attr$diag.time
   tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1
   tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1
   tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1
@@ -181,12 +184,12 @@ sti_test_msm <- function(dat, at) {
 
   # Eligibility and trajectory
   # Annual indications- sexually active in last year
-  idsactive.hivpos <- which(stitestind1 == 1 & diag.status == 1)
-  idsactive.hivneg <- which(stitestind1 == 1 & (diag.status == 0 | is.na(diag.status)))
+  idsactive.hivpos <- which(stitestind1 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
+  idsactive.hivneg <- setdiff((which(stitestind1 == 1)), idsactive.hivpos)
 
   # STI testing higher-risk eligibility scenarios
-  idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1)
-  idshighrisk.hivneg <- which(stitestind2 == 1 & (diag.status == 0 | is.na(diag.status)))
+  idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
+  idshighrisk.hivneg <- setdiff((which(stitestind1 == 2)), idshighrisk.hivpos)
 
   ## Stoppage (tt.traj.gc/.ct/.syph <- NA ------------------------------------
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
@@ -452,15 +455,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "memoryless") {
     elig.syph.ann <- which((tt.traj.syph.hivpos == 1 &
                              (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                             prepStat == 0)) #|
-                             #diag.time == at)
+                             prepStat == 0))
     rates.syph <- rep(1/stitest.active.int, length(elig.syph.ann))
     tst.syph.nprep.ann <- elig.syph.ann[rbinom(length(elig.syph.ann), 1, rates.syph) == 1]
 
     elig.syph.highrisk <- which((tt.traj.syph.hivpos == 2 &
                                   (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                  prepStat == 0)) #|
-                                  #diag.time == at)
+                                  prepStat == 0))
     rates.syph <- rep(1/sti.highrisktest.int, length(elig.syph.highrisk))
     tst.syph.nprep.highrisk <- elig.syph.highrisk[rbinom(length(elig.syph.highrisk), 1, rates.syph) == 1]
     tst.syph.nprep.hivpos <- c(tst.syph.nprep.ann, tst.syph.nprep.highrisk)
@@ -470,13 +471,11 @@ sti_test_msm <- function(dat, at) {
     tst.syph.annual.interval <- which((tt.traj.syph.hivpos == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                         tsinceltst.syph >= (stitest.active.int) &
-                                        prepStat == 0))# |
-                                        #diag.time == at)
+                                        prepStat == 0))
     tst.syph.highrisk.interval <- which((tt.traj.syph.hivpos == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
                                           tsinceltst.syph >= (sti.highrisktest.int) &
-                                          prepStat == 0))# |
-                                          #diag.time == at)
+                                          prepStat == 0))
     tst.syph.nprep.hivpos <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
 
@@ -484,15 +483,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "memoryless") {
     elig.gc.ann <- which((tt.traj.gc.hivpos == 1 &
                            (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                           prepStat == 0))# |
-                           #diag.time == at)
+                           prepStat == 0))
     rates.gc <- rep(1/stitest.active.int, length(elig.gc.ann))
     tst.gc.nprep.ann <- elig.gc.ann[rbinom(length(elig.gc.ann), 1, rates.gc) == 1]
 
     elig.gc.highrisk <- which((tt.traj.gc.hivpos == 2 &
                                 (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                prepStat == 0 ))# |
-                                #diag.time == at)
+                                prepStat == 0))
     rates.gc <- rep(1/sti.highrisktest.int, length(elig.gc.highrisk))
     tst.gc.nprep.highrisk <- elig.gc.highrisk[rbinom(length(elig.gc.highrisk), 1, rates.gc) == 1]
     tst.gc.nprep.hivpos <- c(tst.gc.nprep.ann, tst.gc.nprep.highrisk)
@@ -502,13 +499,11 @@ sti_test_msm <- function(dat, at) {
     tst.gc.annual.interval <- which((tt.traj.gc.hivpos == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                       tsinceltst.gc >= (stitest.active.int) &
-                                      prepStat == 0))# |
-                                      #diag.time == at)
+                                      prepStat == 0))
     tst.gc.highrisk.interval <- which((tt.traj.gc.hivpos == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
                                         tsinceltst.gc >= (sti.highrisktest.int) &
-                                        prepStat == 0)) #|
-                                        #diag.time == at)
+                                        prepStat == 0))
     tst.gc.nprep.hivpos <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
 
@@ -516,15 +511,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "memoryless") {
     elig.ct.ann <- which((tt.traj.ct.hivpos == 1 &
                            (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                           prepStat == 0))#) |
-                           #diag.time == at
+                           prepStat == 0))
     rates.ct <- rep(1/stitest.active.int, length(elig.ct.ann))
     tst.ct.nprep.ann <- elig.ct.ann[rbinom(length(elig.ct.ann), 1, rates.ct) == 1]
 
     elig.ct.highrisk <- which((tt.traj.ct.hivpos == 2 &
                                 (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                prepStat == 0))# |
-                                #diag.time == at)
+                                prepStat == 0))
     rates.ct <- rep(1/sti.highrisktest.int, length(elig.ct.highrisk))
     tst.ct.nprep.highrisk <- elig.ct.highrisk[rbinom(length(elig.ct.highrisk), 1, rates.ct) == 1]
 
@@ -535,13 +528,11 @@ sti_test_msm <- function(dat, at) {
     tst.ct.annual.interval <- which((tt.traj.ct.hivpos == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                       tsinceltst.ct >= (stitest.active.int) &
-                                      prepStat == 0))# |
-                                      #diag.time == at)
+                                      prepStat == 0))
     tst.ct.highrisk.interval <- which((tt.traj.ct.hivpos == 2 &
                                          (diag.status.ct == 0 | is.na(diag.status.ct)) &
                                          tsinceltst.ct >= (stitest.active.int) &
-                                         prepStat == 0))# |
-                                         #diag.time == at)
+                                         prepStat == 0))
     tst.ct.nprep.hivpos <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
 
