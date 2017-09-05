@@ -25,19 +25,38 @@ hiv_test_msm <- function(dat, at) {
 
   # Attributes
   diag.status <- dat$attr$diag.status
+  role.class <- dat$attr$role.class
   race <- dat$attr$race
   tt.traj <- dat$attr$tt.traj
   status <- dat$attr$status
   inf.time <- dat$attr$inf.time
-
   prepStat <- dat$attr$prepStat
   prep.tst.int <- dat$param$prep.tst.int
+
+  # STI
+  tsinceltst.syph <- dat$attr$time.since.last.test.syph
+  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc
+  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc
+  tsinceltst.rct <- dat$attr$time.since.last.test.rct
+  tsinceltst.uct <- dat$attr$time.since.last.test.uct
+  tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
+  tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
+  diag.status.gc <- dat$attr$diag.status.gc
+  diag.status.ct <- dat$attr$diag.status.ct
+  diag.status.syph <- dat$attr$diag.status.syph
+  syphilis <- dat$attr$syphilis
+  stage.syph <- dat$attr$stage.syph
+  rGC <- dat$attr$rGC
+  uGC <- dat$attr$uGC
+  rCT <- dat$attr$rCT
+  uCT <- dat$attr$uCT
 
   # Parameters
   testing.pattern <- dat$param$testing.pattern
   mean.test.B.int <- dat$param$mean.test.B.int
   mean.test.W.int <- dat$param$mean.test.W.int
   twind.int <- dat$param$test.window.int
+  sti.correlation.time <- dat$param$sti.correlation.time
 
   tsincelntst <- at - dat$attr$last.neg.test
   tsincelntst[is.na(tsincelntst)] <- at - dat$attr$arrival.time[is.na(tsincelntst)]
@@ -102,6 +121,88 @@ hiv_test_msm <- function(dat, at) {
   dat$epi$hivtests.nprep[at] <- length(tst.nprep)
   dat$epi$hivtests.pos[at] <- length(tst.pos)
 
+  # STI testing if not tested for that in last X weeks ------------------------
+  if (dat$param$sti.hivdx.correlation == "true") {
+
+    tst.rgc <- tst.neg[which(tsinceltst.gc[tst.neg] > sti.correlation.time &
+                               (is.na(diag.status.gc[tst.neg]) | diag.status.gc[tst.neg] == 0) &
+                         role.class[tst.neg] %in% c("R", "V"))]
+    tst.ugc <- tst.neg[which(tsinceltst.gc[tst.neg] > sti.correlation.time &
+                                 (is.na(diag.status.gc[tst.neg]) | diag.status.gc[tst.neg] == 0) &
+                           role.class[tst.neg] %in% c("I", "V"))]
+    tst.rct <- tst.neg[which(tsinceltst.ct[tst.neg] > sti.correlation.time &
+                                 (is.na(diag.status.ct[tst.neg]) | diag.status.ct[tst.neg] == 0) &
+                           role.class[tst.neg] %in% c("R", "V"))]
+    tst.uct <- tst.neg[which(tsinceltst.ct[tst.neg] > sti.correlation.time &
+                                 (is.na(diag.status.ct[tst.neg]) | diag.status.ct[tst.neg] == 0) &
+                           role.class[tst.neg] %in% c("I", "V"))]
+    tst.syph <- tst.neg[which(tsinceltst.syph[tst.neg] > sti.correlation.time &
+                          (is.na(diag.status.syph[tst.neg]) | diag.status.syph[tst.neg] == 0))]
+
+    tst.syph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                               stage.syph[tst.syph] %in% c(2, 3, 4, 5, 6))]
+    tst.syph.neg <- setdiff(tst.syph, tst.syph.pos)
+    tst.earlysyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                                    stage.syph[tst.syph] %in% c(2, 3, 4))]
+    tst.latesyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                                  stage.syph[tst.syph] %in% c(5, 6))]
+
+    tst.rgc.pos <- tst.rgc[which(rGC[tst.rgc] == 1)]
+    tst.ugc.pos <- tst.ugc[which(uGC[tst.ugc] == 1)]
+    tst.rgc.neg <- setdiff(tst.rgc, tst.ugc.pos)
+    tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
+    tst.gc.pos <- c(tst.rgc.pos, tst.ugc.pos)
+
+    tst.rct.pos <- tst.rct[which(rCT[tst.rct] == 1)]
+    tst.uct.pos <- tst.uct[which(uCT[tst.uct] == 1)]
+    tst.rct.neg <- setdiff(tst.rct, tst.uct.pos)
+    tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
+    tst.ct.pos <- c(tst.rct.pos, tst.uct.pos)
+
+    # Syphilis Attributes
+    dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+    dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
+    dat$attr$diag.status.syph[tst.syph.pos] <- 1
+    dat$attr$last.diag.time.syph[tst.syph.pos] <- at
+    dat$attr$time.since.last.test.syph[tst.syph] <- 0
+
+    # GC Attributes
+    dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
+    dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
+    dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
+    dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
+    dat$attr$diag.status.gc[tst.gc.pos] <- 1
+    dat$attr$last.diag.time.gc[tst.gc.pos] <- at
+    dat$attr$time.since.last.test.rgc[tst.rgc] <- 0
+    dat$attr$time.since.last.test.ugc[tst.ugc] <- 0
+
+    # CT Attributes
+    dat$attr$last.neg.test.rct[tst.rct.neg] <- at
+    dat$attr$last.neg.test.uct[tst.uct.neg] <- at
+    dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
+    dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
+    dat$attr$diag.status.ct[tst.ct.pos] <- 1
+    dat$attr$last.diag.time.ct[tst.ct.pos] <- at
+    dat$attr$time.since.last.test.rct[tst.rct] <- 0
+    dat$attr$time.since.last.test.uct[tst.uct] <- 0
+
+    # Number of HIV-correlated STI tests
+    dat$epi$rGC_hivdxtime[at] <- length(tst.rgc)
+    dat$epi$uGC_hivdxtime[at] <- length(tst.ugc)
+    dat$epi$rCT_hivdxtime[at] <- length(tst.rct)
+    dat$epi$uCT_hivdxtime[at] <- length(tst.uct)
+    dat$epi$syph_hivdxtime[at] <- length(tst.syph)
+
+    dat$epi$rGC_pos_hivdxtime[at] <- length(tst.rgc.pos)
+    dat$epi$uGC_pos_hivdxtime[at] <- length(tst.ugc.pos)
+    dat$epi$rCT_pos_hivdxtime[at] <- length(tst.rct.pos)
+    dat$epi$uCT_pos_hivdxtime[at] <- length(tst.uct.pos)
+    dat$epi$syph_pos_hivdxtime[at] <- length(tst.syph.pos)
+    dat$epi$syph_earlypos_hivdxtime[at] <- length(tst.earlysyph.pos)
+    dat$epi$syph_latepos_hivdxtime[at] <- length(tst.latesyph.pos)
+
+  }
+
   return(dat)
 }
 
@@ -159,11 +260,11 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.gc <- dat$attr$last.diag.time.gc
   last.diag.time.ct <- dat$attr$last.diag.time.ct
   last.diag.time.syph <- dat$attr$last.diag.time.syph
-  tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1
-  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1
-  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1
-  tsinceltst.rct <- dat$attr$time.since.last.test.rct + 1
-  tsinceltst.uct <- dat$attr$time.since.last.test.uct + 1
+  tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1 # Will include those dx through HIV-correlated testing
+  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1 # Will include those dx through HIV-correlated testing
+  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1 # Will include those dx through HIV-correlated testing
+  tsinceltst.rct <- dat$attr$time.since.last.test.rct + 1 # Will include those dx through HIV-correlated testing
+  tsinceltst.uct <- dat$attr$time.since.last.test.uct + 1 # Will include those dx through HIV-correlated testing
   tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
   tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
   prepStat <- dat$attr$prepStat
@@ -406,30 +507,30 @@ sti_test_msm <- function(dat, at) {
   }
 
   # Syphilis non-PrEP testing
-  tst.syph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4, 5, 6)]
+  tst.syph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4, 5, 6))]
   tst.syph.neg.hivneg <- setdiff(tst.syph.nprep.hivneg, tst.syph.pos.hivneg)
-  tst.earlysyph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4)]
-  tst.latesyph.pos.hivneg <- tst.syph.nprep.hivneg[syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(5, 6)]
+  tst.earlysyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4))]
+  tst.latesyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(5, 6))]
 
   # GC non-PrEP testing
-  tst.rgc.hivneg <- tst.gc.nprep.hivneg[role.class[tst.gc.nprep.hivneg] %in% c("R", "V")]
+  tst.rgc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("R", "V"))]
   #tst.rgc.hivneg <- sample(tst.rgc.hivneg, tst.rect.sti.rr * length(tst.rgc.hivneg))
-  tst.ugc.hivneg <- tst.gc.nprep.hivneg[role.class[tst.gc.nprep.hivneg] %in% c("I", "V")]
-  tst.rgc.pos.hivneg <- tst.rgc.hivneg[rGC[tst.rgc.hivneg] == 1]
-  tst.ugc.pos.hivneg <- tst.ugc.hivneg[uGC[tst.ugc.hivneg] == 1]
+  tst.ugc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("I", "V"))]
+  tst.rgc.pos.hivneg <- tst.rgc.hivneg[which(rGC[tst.rgc.hivneg] == 1)]
+  tst.ugc.pos.hivneg <- tst.ugc.hivneg[which(uGC[tst.ugc.hivneg] == 1)]
   tst.rgc.neg.hivneg <- setdiff(tst.rgc.hivneg, tst.rgc.pos.hivneg)
   tst.ugc.neg.hivneg <- setdiff(tst.ugc.hivneg, tst.ugc.pos.hivneg)
   tst.gc.pos.hivneg <- unique(c(tst.rgc.pos.hivneg, tst.ugc.pos.hivneg))
 
   # CT non-PrEP testing
-  tst.rct.hivneg <- tst.ct.nprep.hivneg[role.class[tst.ct.nprep.hivneg] %in% c("R", "V")]
+  tst.rct.hivneg <- tst.ct.nprep.hivneg[which(role.class[tst.ct.nprep.hivneg] %in% c("R", "V"))]
   #tst.rct.hivneg <- sample(tst.rct.hivneg, tst.rect.sti.rr * length(tst.rct.hivneg))
-  tst.uct.hivneg <- tst.ct.nprep.hivneg[role.class[tst.ct.nprep.hivneg] %in% c("I", "V")]
-  tst.rct.pos.hivneg <- tst.rct.hivneg[rCT[tst.rct.hivneg] == 1]
-  tst.uct.pos.hivneg <- tst.uct.hivneg[uCT[tst.uct.hivneg] == 1]
+  tst.uct.hivneg <- tst.ct.nprep.hivneg[which(role.class[tst.ct.nprep.hivneg] %in% c("I", "V"))]
+  tst.rct.pos.hivneg <- tst.rct.hivneg[which(rCT[tst.rct.hivneg] == 1)]
+  tst.uct.pos.hivneg <- tst.uct.hivneg[which(uCT[tst.uct.hivneg] == 1)]
   tst.rct.neg.hivneg <- setdiff(tst.rct.hivneg, tst.rct.pos.hivneg)
   tst.uct.neg.hivneg <- setdiff(tst.uct.hivneg, tst.uct.pos.hivneg)
   tst.ct.pos.hivneg <- unique(c(tst.rct.pos.hivneg, tst.uct.pos.hivneg))
@@ -651,30 +752,30 @@ sti_test_msm <- function(dat, at) {
   }
 
   # Syphilis non-PrEP testing
-  tst.syph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
-                                                 stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4, 5, 6)]
+  tst.syph.pos.hivpos <- tst.syph.nprep.hivpos[which(syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                 stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4, 5, 6))]
   tst.syph.neg.hivpos <- setdiff(tst.syph.nprep.hivpos, tst.syph.pos.hivpos)
-  tst.earlysyph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
-                                                      stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4)]
-  tst.latesyph.pos.hivpos <- tst.syph.nprep.hivpos[syphilis[tst.syph.nprep.hivpos] == 1 &
-                                                     stage.syph[tst.syph.nprep.hivpos] %in% c(5, 6)]
+  tst.earlysyph.pos.hivpos <- tst.syph.nprep.hivpos[which(syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                      stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4))]
+  tst.latesyph.pos.hivpos <- tst.syph.nprep.hivpos[which(syphilis[tst.syph.nprep.hivpos] == 1 &
+                                                     stage.syph[tst.syph.nprep.hivpos] %in% c(5, 6))]
 
   # GC non-PrEP testing
-  tst.rgc.hivpos <- tst.gc.nprep.hivpos[role.class[tst.gc.nprep.hivpos] %in% c("R", "V")]
+  tst.rgc.hivpos <- tst.gc.nprep.hivpos[which(role.class[tst.gc.nprep.hivpos] %in% c("R", "V"))]
   #tst.rgc.hivpos <- sample(tst.rgc.hivpos, tst.rect.sti.rr * length(tst.rgc.hivpos))
-  tst.ugc.hivpos <- tst.gc.nprep.hivpos[role.class[tst.gc.nprep.hivpos] %in% c("I", "V")]
-  tst.rgc.pos.hivpos <- tst.rgc.hivpos[rGC[tst.rgc.hivpos] == 1]
-  tst.ugc.pos.hivpos <- tst.ugc.hivpos[uGC[tst.ugc.hivpos] == 1]
+  tst.ugc.hivpos <- tst.gc.nprep.hivpos[which(role.class[tst.gc.nprep.hivpos] %in% c("I", "V"))]
+  tst.rgc.pos.hivpos <- tst.rgc.hivpos[which(rGC[tst.rgc.hivpos] == 1)]
+  tst.ugc.pos.hivpos <- tst.ugc.hivpos[which(uGC[tst.ugc.hivpos] == 1)]
   tst.rgc.neg.hivpos <- setdiff(tst.rgc.hivpos, tst.rgc.pos.hivpos)
   tst.ugc.neg.hivpos <- setdiff(tst.ugc.hivpos, tst.ugc.pos.hivpos)
   tst.gc.pos.hivpos <- unique(c(tst.rgc.pos.hivpos, tst.ugc.pos.hivpos))
 
   # CT non-PrEP testing
-  tst.rct.hivpos <- tst.ct.nprep.hivpos[role.class[tst.ct.nprep.hivpos] %in% c("R", "V")]
+  tst.rct.hivpos <- tst.ct.nprep.hivpos[which(role.class[tst.ct.nprep.hivpos] %in% c("R", "V"))]
   #tst.rct.hivpos <- sample(tst.rct.hivpos, tst.rect.sti.rr * length(tst.rct.hivpos))
-  tst.uct.hivpos <- tst.ct.nprep.hivpos[role.class[tst.ct.nprep.hivpos] %in% c("I", "V")]
-  tst.rct.pos.hivpos <- tst.rct.hivpos[rCT[tst.rct.hivpos] == 1]
-  tst.uct.pos.hivpos <- tst.uct.hivpos[uCT[tst.uct.hivpos] == 1]
+  tst.uct.hivpos <- tst.ct.nprep.hivpos[which(role.class[tst.ct.nprep.hivpos] %in% c("I", "V"))]
+  tst.rct.pos.hivpos <- tst.rct.hivpos[which(rCT[tst.rct.hivpos] == 1)]
+  tst.uct.pos.hivpos <- tst.uct.hivpos[which(uCT[tst.uct.hivpos] == 1)]
   tst.rct.neg.hivpos <- setdiff(tst.rct.hivpos, tst.rct.pos.hivpos)
   tst.uct.neg.hivpos <- setdiff(tst.uct.hivpos, tst.uct.pos.hivpos)
   tst.ct.pos.hivpos <- unique(c(tst.rct.pos.hivpos, tst.uct.pos.hivpos))
@@ -709,7 +810,7 @@ sti_test_msm <- function(dat, at) {
 
   ## Output -----------------------------------------------------------------
 
-  #
+  # Number of people on each testing trajectory
   dat$epi$tt.traj.syph1.hivneg[at] <- length(which(tt.traj.syph.hivneg == 1))
   dat$epi$tt.traj.gc1.hivneg[at] <- length(which(tt.traj.gc.hivneg == 1))
   dat$epi$tt.traj.ct1.hivneg[at] <- length(which(tt.traj.ct.hivneg == 1))
@@ -730,7 +831,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$tt.traj.ct2 <- length(which(tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2))
   dat$epi$tt.traj.syph2 <- length(which(tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))
 
-  # Number of tests for asymptomatic (non-HIV diagnosed)
+  # Number of STIs tests for asymptomatic background (non-HIV diagnosed)
   dat$epi$rGCasympttests.hivneg[at] <- length(tst.rgc.hivneg)
   dat$epi$uGCasympttests.hivneg[at] <- length(tst.ugc.hivneg)
   dat$epi$GCasympttests.hivneg[at] <- length(tst.rgc.hivneg) + length(tst.ugc.hivneg)
@@ -757,7 +858,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$stiasympttests.pos.hivneg[at] <- length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
     length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
 
-  # Number of tests for asymptomatic (HIV-diagnosed)
+  # Number of STI tests for asymptomatic background (HIV-diagnosed)
   dat$epi$rGCasympttests.hivpos[at] <- length(tst.rgc.hivpos)
   dat$epi$uGCasympttests.hivpos[at] <- length(tst.ugc.hivpos)
   dat$epi$GCasympttests.hivpos[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos)
@@ -784,40 +885,62 @@ sti_test_msm <- function(dat, at) {
   dat$epi$stiasympttests.pos.hivpos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
     length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) + length(tst.syph.pos.hivpos)
 
-  # Number of tests for asymptomatic (total)
-  dat$epi$rGCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.rgc.hivneg)
-  dat$epi$uGCasympttests[at] <- length(tst.ugc.hivpos) + length(tst.ugc.hivneg)
+  # Number of tests for asymptomatic (total - include those from HIVdx and sympt STI dx)
+  dat$epi$rGCasympttests[at] <- length(tst.rgc.hivpos) +
+    length(tst.rgc.hivneg) + dat$epi$rGC_hivdxtime[at]
+  dat$epi$uGCasympttests[at] <- length(tst.ugc.hivpos) +
+    length(tst.ugc.hivneg) + dat$epi$uGC_hivdxtime[at]
   dat$epi$GCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
-    length(tst.rgc.hivneg) + length(tst.ugc.hivneg)
+    length(tst.rgc.hivneg) + length(tst.ugc.hivneg) + dat$epi$rGC_hivdxtime[at] +
+    dat$epi$uGC_hivdxtime[at]
 
-  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.rgc.pos.hivneg)
-  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos) + length(tst.ugc.pos.hivneg)
+  dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) +
+    length(tst.rgc.pos.hivneg) + dat$epi$rGC_pos_hivdxtime[at]
+  dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos) +
+    length(tst.ugc.pos.hivneg) + dat$epi$uGC_pos_hivdxtime[at]
   dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
-    length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg)
+    length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) + dat$epi$rGC_pos_hivdxtime[at] +
+    dat$epi$uGC_pos_hivdxtime[at]
 
-  dat$epi$rCTasympttests[at] <- length(tst.rct.hivpos) + length(tst.rct.hivneg)
-  dat$epi$uCTasympttests[at] <- length(tst.uct.hivpos) + length(tst.uct.hivneg)
+  dat$epi$rCTasympttests[at] <- length(tst.rct.hivpos) +
+    length(tst.rct.hivneg) + dat$epi$rCT_hivdxtime[at]
+  dat$epi$uCTasympttests[at] <- length(tst.uct.hivpos) +
+    length(tst.uct.hivneg) + dat$epi$uCT_hivdxtime[at]
   dat$epi$CTasympttests[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos) +
-    length(tst.rct.hivneg) + length(tst.uct.hivneg)
+    length(tst.rct.hivneg) + length(tst.uct.hivneg) + dat$epi$rCT_hivdxtime[at] +
+    dat$epi$uCT_hivdxtime[at]
 
-  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos.hivpos) + length(tst.rct.pos.hivneg)
-  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos.hivpos) + length(tst.uct.pos.hivneg)
-  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) +
-    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg)
+  dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos.hivpos) +
+    length(tst.rct.pos.hivneg) + dat$epi$rCT_pos_hivdxtime[at]
+  dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos.hivpos) +
+    length(tst.uct.pos.hivneg) + dat$epi$uCT_pos_hivdxtime[at]
+  dat$epi$CTasympttests.pos[at] <- length(tst.rct.pos.hivpos) +
+    length(tst.uct.pos.hivpos) + length(tst.rct.pos.hivneg) +
+    length(tst.uct.pos.hivneg) + dat$epi$rCT_pos_hivdxtime[at] +
+    dat$epi$uCT_pos_hivdxtime[at]
 
-  dat$epi$syphasympttests[at] <- length(tst.syph.nprep.hivpos) + length(tst.syph.nprep.hivneg)
-  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos) + length(tst.syph.pos.hivneg)
-  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos) + length(tst.earlysyph.pos.hivneg)
-  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) + length(tst.latesyph.pos.hivneg)
+  dat$epi$syphasympttests[at] <- length(tst.syph.nprep.hivpos) +
+    length(tst.syph.nprep.hivneg) + dat$epi$syph_hivdxtime[at] +
+  dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos) +
+    length(tst.syph.pos.hivneg) + dat$epi$syph_pos_hivdxtime[at] +
+  dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos) +
+    length(tst.earlysyph.pos.hivneg) + dat$epi$syph_earlypos_hivdxtime[at] +
+  dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) +
+    length(tst.latesyph.pos.hivneg) + dat$epi$syph_latepos_hivdxtime[at]
 
   dat$epi$stiasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
     length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos) +
     length(tst.rgc.hivneg) + length(tst.ugc.hivneg) +
-    length(tst.rct.hivneg) + length(tst.uct.hivneg) + length(tst.syph.nprep.hivneg)
+    length(tst.rct.hivneg) + length(tst.uct.hivneg) + length(tst.syph.nprep.hivneg) +
+    dat$epi$rGC_hivdxtime[at] + dat$epi$uGC_hivdxtime[at] + dat$epi$rCT_hivdxtime[at] +
+    dat$epi$uCT_hivdxtime[at] + dat$epi$syph_hivdxtime[at]
   dat$epi$stiasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
     length(tst.rct.pos.hivpos) + length(tst.uct.pos.hivpos) + length(tst.syph.pos.hivpos) +
     length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
-    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
+    length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg) +
+    dat$epi$rGC_pos_hivdxtime[at] + dat$epi$uGC_pos_hivdxtime[at] +
+    dat$epi$rCT_pos_hivdxtime[at] + dat$epi$uCT_pos_hivdxtime[at] +
+    dat$epi$syph_pos_hivdxtime[at]
 
   # Attributes
   # Stoppage attributes

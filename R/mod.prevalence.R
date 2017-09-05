@@ -186,6 +186,35 @@ prevalence_msm <- function(dat, at) {
     dat$epi$stiasympttests.prep <- rep(0, nsteps)
     dat$epi$stiasympttests.pos.prep <- rep(0, nsteps)
 
+    #STI Testing due to HIV/Symptomatic STI
+    dat$epi$rGC_hivdxtime <- rep(0, nsteps)
+    dat$epi$uGC_hivdxtime <- rep(0, nsteps)
+    dat$epi$rCT_hivdxtime <- rep(0, nsteps)
+    dat$epi$uCT_hivdxtime <- rep(0, nsteps)
+    dat$epi$syph_hivdxtime <- rep(0, nsteps)
+
+    dat$epi$rGC_pos_hivdxtime <- rep(0, nsteps)
+    dat$epi$uGC_pos_hivdxtime <- rep(0, nsteps)
+    dat$epi$rCT_pos_hivdxtime <- rep(0, nsteps)
+    dat$epi$uCT_pos_hivdxtime <- rep(0, nsteps)
+    dat$epi$syph_pos_hivdxtime <- rep(0, nsteps)
+    dat$epi$syph_earlypos_hivdxtime <- rep(0, nsteps)
+    dat$epi$syph_latepos_hivdxtime <- rep(0, nsteps)
+
+    dat$epi$rGC_symptstidxtime <- rep(0, nsteps)
+    dat$epi$uGC_symptstidxtime <- rep(0, nsteps)
+    dat$epi$rCT_symptstidxtime <- rep(0, nsteps)
+    dat$epi$uCT_symptstidxtime <- rep(0, nsteps)
+    dat$epi$syph_symptstidxtime <- rep(0, nsteps)
+
+    dat$epi$rGC_pos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$uGC_pos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$rCT_pos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$uCT_pos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$syph_pos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$syph_earlypos_symptstidxtime <- rep(0, nsteps)
+    dat$epi$syph_latepos_symptstidxtime <- rep(0, nsteps)
+
     # STI prevalence and coinfection prevalence
     dat$epi$prev.rgc <- rNA
     dat$epi$prev.ugc <- rNA

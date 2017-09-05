@@ -22,6 +22,17 @@
 #' @param testing.pattern.sti Method for STI testing, with options
 #'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
+#' @param sti.stitx.correlation Method for correlated STI testing, with option
+#'        \code{"true"} for testing for STIs if one is treated for symptomatic
+#'        STI - requires not being tested for that particular site-specific STI
+#'        (e.g. rectal NG) in the past X weeks.
+#' @param sti.hivdx.correlation Method for correlated STI testing, with option
+#'        \code{"true"} for testing for STIs if one is diagnosed with HIV -
+#'        requires not being tested for that particular site-specific STI
+#'        (e.g. rectal NG) in the past X weeks.
+#' @param sti.correlation.time Length of window lookback (weeks) for correlated
+#'        STI testing (e.g. value of 9 weeks means last test must have been > 9
+#'        weeks prior for a particular STI)
 #' @param test.window.int Length of the HIV test window period in days.
 #' @param tt.traj.B.prob Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
@@ -501,6 +512,9 @@ param_msm <- function(nwstats,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
+                      sti.stitx.correlation = "true",
+                      sti.hivdx.correlation = "true",
+                      sti.correlation.time = 12,
                       test.window.int = 21,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),

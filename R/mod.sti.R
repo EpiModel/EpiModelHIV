@@ -680,8 +680,6 @@ sti_recov_msm <- function(dat, at) {
 sti_tx_msm <- function(dat, at) {
 
   # Parameters ------------------------------------------------------------
-
-  hivdx.syph.sympt.tx.rr <- dat$param$hivdx.syph.sympt.tx.rr
   gc.sympt.prob.tx <- dat$param$gc.sympt.prob.tx
   ct.sympt.prob.tx <- dat$param$ct.sympt.prob.tx
 
@@ -708,9 +706,12 @@ sti_tx_msm <- function(dat, at) {
   ept.coverage <- dat$param$ept.coverage
   ept.cov.rate <- dat$param$ept.cov.rate
 
+  sti.correlation.time <- dat$param$sti.correlation.time
+
   # Attributes ------------------------------------------------------------
 
   # Infection status
+  role.class <- dat$attr$role.class
   rGC <- dat$attr$rGC
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
@@ -759,6 +760,13 @@ sti_tx_msm <- function(dat, at) {
   diag.status.syph <- dat$attr$diag.status.syph
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
+  tsinceltst.syph <- dat$attr$time.since.last.test.syph
+  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc
+  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc
+  tsinceltst.rct <- dat$attr$time.since.last.test.rct
+  tsinceltst.uct <- dat$attr$time.since.last.test.uct
+  tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
+  tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
 
   # EPT
   eptpartEligTx_GC <- dat$attr$eptpartEligTx_GC
@@ -1142,7 +1150,146 @@ sti_tx_msm <- function(dat, at) {
   # Update EPT index status for those selected to receive EPT for their partners
   dat$attr$eptindexStat[ept_idsStart] <- 1
 
-#
+  # Correlated testing for other STIs if symptomatic for one -------------------
+  if (dat$param$sti.stitx.correlation == "true") {
+
+    # All treated for other STIs, minus those getting treated for STI through EPT
+    tst.rgc <- setdiff(c(txsyph_sympt, txUGC_sympt, txRCT_sympt, txUCT_sympt), txRGC_ept)
+    tst.ugc <- setdiff(c(txsyph_sympt, txRGC_sympt, txRCT_sympt, txUCT_sympt), txUGC_ept)
+    tst.rct <- setdiff(c(txsyph_sympt, txUGC_sympt, txRGC_sympt, txUCT_sympt), txRCT_ept)
+    tst.uct <- setdiff(c(txsyph_sympt, txUGC_sympt, txRGC_sympt, txRCT_sympt), txUCT_ept)
+    tst.syph <- c(txRGC_sympt, txUGC_sympt, txRCT_sympt, txUCT_sympt)
+
+    # Remove those just treated for STI (either sympt/asympt) from testing
+    tst.rgc <- setdiff(tst.rgc, txRGC)
+    tst.ugc <- setdiff(tst.ugc, txUGC)
+    tst.rct <- setdiff(tst.rct, txRCT)
+    tst.uct <- setdiff(tst.uct, txUCT)
+    tst.syph <- setdiff(tst.syph, txsyph)
+
+    # Subset to those not tested for particular STI recently (in last 3 weeks)
+    tst.rgc <- tst.rgc[which(tsinceltst.rgc[tst.rgc] > sti.correlation.time &
+                               (is.na(diag.status.gc[tst.rgc]) | diag.status.gc[tst.rgc]) &
+                         role.class[tst.rgc] %in% c("R", "V"))]
+    tst.ugc <- tst.ugc[which(tsinceltst.ugc[tst.ugc] > sti.correlation.time &
+                               (is.na(diag.status.gc[tst.ugc]) | diag.status.gc[tst.ugc]) &
+                         role.class[tst.ugc] %in% c("I", "V"))]
+    tst.rct <- tst.rct[which(tsinceltst.rct[tst.rct] > sti.correlation.time &
+                               (is.na(diag.status.ct[tst.rct]) | diag.status.ct[tst.rct]) &
+                         role.class[tst.rct] %in% c("R", "V"))]
+    tst.uct <- tst.uct[which(tsinceltst.uct[tst.uct] > sti.correlation.time &
+                               (is.na(diag.status.ct[tst.uct]) | diag.status.ct[tst.uct]) &
+                         role.class[tst.uct] %in% c("I", "V"))]
+    tst.syph <- tst.syph[which(tsinceltst.syph[tst.syph] > sti.correlation.time &
+                               is.na(diag.status.syph[tst.syph]) | diag.status.syph[tst.syph])]
+
+    tst.syph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                                     stage.syph[tst.syph] %in% c(2, 3, 4, 5, 6))]
+    tst.syph.neg <- setdiff(tst.syph, tst.syph.pos)
+    tst.earlysyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                                          stage.syph[tst.syph] %in% c(2, 3, 4))]
+    tst.latesyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
+                                         stage.syph[tst.syph] %in% c(5, 6))]
+
+    tst.rgc.pos <- tst.rgc[which(rGC[tst.rgc] == 1)]
+    tst.ugc.pos <- tst.ugc[which(uGC[tst.ugc] == 1)]
+    tst.rgc.neg <- setdiff(tst.rgc, tst.ugc.pos)
+    tst.ugc.neg <- setdiff(tst.ugc, tst.ugc.pos)
+    tst.gc.pos <- c(tst.rgc.pos, tst.ugc.pos)
+
+    tst.rct.pos <- tst.rct[which(rCT[tst.rct] == 1)]
+    tst.uct.pos <- tst.uct[which(uCT[tst.uct] == 1)]
+    tst.rct.neg <- setdiff(tst.rct, tst.uct.pos)
+    tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
+    tst.ct.pos <- c(tst.rct.pos, tst.uct.pos)
+
+    # Syphilis Attributes
+    dat$attr$last.neg.test.syph[tst.syph.neg] <- at
+    dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
+    dat$attr$diag.status.syph[tst.syph.pos] <- 1
+    dat$attr$last.diag.time.syph[tst.syph.pos] <- at
+    dat$attr$time.since.last.test.syph[tst.syph] <- 0
+
+    # GC Attributes
+    dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
+    dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
+    dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
+    dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
+    dat$attr$diag.status.gc[tst.gc.pos] <- 1
+    dat$attr$last.diag.time.gc[tst.gc.pos] <- at
+    dat$attr$time.since.last.test.rgc[tst.rgc] <- 0
+    dat$attr$time.since.last.test.ugc[tst.ugc] <- 0
+
+    # CT Attributes
+    dat$attr$last.neg.test.rct[tst.rct.neg] <- at
+    dat$attr$last.neg.test.uct[tst.uct.neg] <- at
+    dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
+    dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
+    dat$attr$diag.status.ct[tst.ct.pos] <- 1
+    dat$attr$last.diag.time.ct[tst.ct.pos] <- at
+    dat$attr$time.since.last.test.rct[tst.rct] <- 0
+    dat$attr$time.since.last.test.uct[tst.uct] <- 0
+
+    dat$epi$rGC_symptstidxtime[at] <- length(tst.rgc)
+    dat$epi$uGC_symptstidxtime[at] <- length(tst.ugc)
+    dat$epi$rCT_symptstidxtime[at] <- length(tst.rct)
+    dat$epi$uCT_symptstidxtime[at] <- length(tst.uct)
+    dat$epi$syph_symptstidxtime[at] <- length(tst.syph)
+
+    dat$epi$rGC_pos_symptstidxtime[at] <- length(tst.rgc.pos)
+    dat$epi$uGC_pos_symptstidxtime[at] <- length(tst.ugc.pos)
+    dat$epi$rCT_pos_symptstidxtime[at] <- length(tst.rct.pos)
+    dat$epi$uCT_pos_symptstidxtime[at] <- length(tst.uct.pos)
+    dat$epi$syph_pos_symptstidxtime[at] <- length(tst.syph.pos)
+    dat$epi$syph_earlypos_symptstidxtime[at] <- length(tst.earlysyph.pos)
+    dat$epi$syph_latepos_symptstidxtime[at] <- length(tst.latesyph.pos)
+
+    # Update total tests to now include symptomatic STI-correlated testing
+    dat$epi$rGCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$rGC_symptstidxtime[at]
+    dat$epi$uGCasympttests[at] <- dat$epi$uGCasympttests[at] + dat$epi$uGC_symptstidxtime[at]
+    dat$epi$GCasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$uGCasympttests[at] +
+      dat$epi$rGC_symptstidxtime[at] + dat$epi$uGC_symptstidxtime[at]
+
+    dat$epi$rGCasympttests.pos[at] <- dat$epi$rGCasympttests.pos[at] + dat$epi$rGC_pos_symptstidxtime[at]
+    dat$epi$uGCasympttests.pos[at] <- dat$epi$uGCasympttests.pos[at] + dat$epi$uGC_pos_symptstidxtime[at]
+    dat$epi$GCasympttests.pos[at] <- dat$epi$rGCasympttests.pos[at] + dat$epi$uGCasympttests.pos[at] +
+      dat$epi$rGC_pos_symptstidxtime[at] + dat$epi$uGC_pos_symptstidxtime[at]
+
+    dat$epi$rCTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$rCT_symptstidxtime[at]
+    dat$epi$uCTasympttests[at] <- dat$epi$uCTasympttests[at] + dat$epi$uCT_symptstidxtime[at]
+    dat$epi$CTasympttests[at] <- dat$epi$rCTasympttests[at] + dat$epi$uCTasympttests[at] +
+      dat$epi$rCT_symptstidxtime[at] + dat$epi$uCT_symptstidxtime[at]
+
+    dat$epi$rCTasympttests.pos[at] <-  dat$epi$rCTasympttests.pos[at] +
+      dat$epi$rCT_pos_symptstidxtime[at]
+    dat$epi$uCTasympttests.pos[at] <- dat$epi$uCTasympttests.pos[at] +
+      dat$epi$uCT_pos_symptstidxtime[at]
+    dat$epi$CTasympttests.pos[at] <- dat$epi$rCTasympttests.pos[at] + dat$epi$uCTasympttests.pos[at] +
+      dat$epi$rCT_pos_symptstidxtime[at] + dat$epi$uCT_pos_symptstidxtime[at]
+
+    dat$epi$syphasympttests[at] <- dat$epi$syphasympttests[at] +
+      dat$epi$syph_symptstidxtime[at]
+    dat$epi$syphasympttests.pos[at] <- dat$epi$syphasympttests.pos[at] +
+      dat$epi$syph_pos_symptstidxtime[at]
+    dat$epi$syphearlyasympttests.pos[at] <- dat$epi$syphearlyasympttests.pos[at] +
+      dat$epi$syph_earlypos_symptstidxtime[at]
+    dat$epi$syphlateasympttests.pos[at] <- dat$epi$syphlateasympttests.pos[at] +
+      dat$epi$syph_latepos_symptstidxtime[at]
+
+    dat$epi$stiasympttests[at] <- dat$epi$rGCasympttests[at] + dat$epi$uGCasympttests[at] +
+      dat$epi$rCTasympttests[at] + dat$epi$uCTasympttests[at] + dat$epi$syphasympttests[at] +
+      dat$epi$rGC_symptstidxtime[at] + dat$epi$uGC_symptstidxtime[at] +
+      dat$epi$rCT_symptstidxtime[at] + dat$epi$uCT_symptstidxtime[at] +
+      dat$epi$syph_symptstidxtime[at]
+    dat$epi$stiasympttests[at] <- dat$epi$rGCasympttests.pos[at] + dat$epi$uGCasympttests.pos[at] +
+      dat$epi$rCTasympttests.pos[at] + dat$epi$uCTasympttests.pos[at] + dat$epi$syphasympttests.pos[at] +
+      dat$epi$rGC_pos_symptstidxtime[at] + dat$epi$uGC_pos_symptstidxtime[at] +
+      dat$epi$rCT_pos_symptstidxtime[at] + dat$epi$uCT_pos_symptstidxtime[at] +
+      dat$epi$syph_pos_symptstidxtime[at]
+
+  }
+
+
   # Output ---------------------------------------------------------------------
   # PrEP
   dat$attr$prepLastStiScreen <- prepLastStiScreen
@@ -1191,6 +1338,8 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$last.diag.time.gc[txGC_sympt] <- at
   dat$attr$last.neg.test.rgc[txRGC_sympt] <- NA
   dat$attr$last.neg.test.ugc[txUGC_sympt] <- NA
+  dat$attr$time.since.last.test.rgc[txRGC_sympt] <- 0
+  dat$attr$time.since.last.test.ugc[txUGC_sympt] <- 0
   dat$attr$diag.status.gc[idsGC_tx_sympt] <- 0
   dat$attr$diag.status.gc[txGC_sympt] <- 1
 
@@ -1216,6 +1365,8 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$last.diag.time.ct[txCT_sympt] <- at
   dat$attr$last.neg.test.rct[txRCT_sympt] <- NA
   dat$attr$last.neg.test.uct[txUCT_sympt] <- NA
+  dat$attr$time.since.last.test.rct[txRCT_sympt] <- 0
+  dat$attr$time.since.last.test.uct[txUCT_sympt] <- 0
   dat$attr$diag.status.ct[idsCT_tx_sympt] <- 0
   dat$attr$diag.status.ct[txCT_sympt] <- 1
 
