@@ -166,6 +166,7 @@ prep_msm <- function(dat, at) {
 riskhist_msm <- function(dat, at) {
 
   ## Attributes
+  n <- length(dat$attr$active)
   uid <- dat$attr$uid
   dx <- dat$attr$diag.status
   since.test <- at - dat$attr$last.neg.test
@@ -189,10 +190,10 @@ riskhist_msm <- function(dat, at) {
 
   # Initialize attributes
   if (is.null(dat$attr$prep.ind.uai.mono)) {
-    dat$attr$prep.ind.uai.mono <- rep(NA, length(uid))
-    dat$attr$prep.ind.uai.nmain <- rep(NA, length(uid))
-    dat$attr$prep.ind.ai.sd <- rep(NA, length(uid))
-    dat$attr$prep.ind.sti <- rep(NA, length(uid))
+    dat$attr$prep.ind.uai.mono <- rep(NA, n)
+    dat$attr$prep.ind.uai.nmain <- rep(NA, n)
+    dat$attr$prep.ind.ai.sd <- rep(NA, n)
+    dat$attr$prep.ind.sti <- rep(NA, n)
   }
 
   ## Degree ##
@@ -241,8 +242,7 @@ riskhist_msm <- function(dat, at) {
   dat$attr$prep.ind.ai.sd[ai.sd] <- at
 
   ## Condition 4, any STI diagnosis
-  idsDx <- which(rGC.tx == 1 | uGC.tx == 1 |
-                   rCT.tx == 1 | uCT.tx == 1)
+  idsDx <- which(rGC.tx == 1 | uGC.tx == 1 | rCT.tx == 1 | uCT.tx == 1)
   dat$attr$prep.ind.sti[idsDx] <- at
 
   return(dat)
