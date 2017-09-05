@@ -99,10 +99,10 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$inst.ai.class[newIds] <- sample(1:dat$param$num.inst.ai.classes,
                                            nBirths, replace = TRUE)
 
-  dat$attr$tt.traj[newIds[newB]] <- sample(c(1, 2, 3, 4),
+  dat$attr$tt.traj[newIds[newB]] <- sample(1:4,
                                            nBirths.B, replace = TRUE,
                                            prob = dat$param$tt.traj.B.prob)
-  dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
+  dat$attr$tt.traj[newIds[newW]] <- sample(1:4,
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
 
