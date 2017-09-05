@@ -257,14 +257,17 @@
 #' @param stitest.elig.model Modeling approach for determining who is eligible
 #'        for high-risk STI testing. Current options are limited to:
 #'        \code{"all"}.
-#' @param stianntest.hivneg.coverage The proportion of the non-HIV diagnosed
-#'        eligible population who are starting annual STI testing once they
-#'        become eligible. This is not inclusive of those who are simultaneously
-#'        indicated for morre frequent testing.
-#' @param stianntest.hivpos.coverage The proportion of the HIV-diagnosed eligible
-#'        population who are starting annual STI testing once they become eligible.
-#'        This is not inclusive of those who are simultaneously indicated for
-#'        more frequent testing.
+#' @param stianntest.hivneg.coverage The proportion of the eligible population
+#'        (HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
+#'        diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual STI testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual STI testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
 #' @param stianntest.cov.method The method for calculating STI annual testing,
 #'        with options of \code{"curr"} to base the numerator  on the number of
 #'        people currently annually testing for STI and \code{"ever"} to base it
@@ -341,6 +344,8 @@
 #' @param rct.tprob Probability of rectal chlamydia infection per act.
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
 #' @param syph.tprob Base probability of syphilis infection per act.
+#' @param syph.incub.rr Multiplier for reduced infection probability in
+#'        incubating stage of syphilis infection.
 #' @param syph.earlat.rr Multiplier for reduced infection probability in early
 #'        latent stage of syphilis infection.
 #' @param syph.late.rr Multiplier for reduced infection probability in late
@@ -661,7 +666,8 @@ param_msm <- function(nwstats,
                       uct.tprob = 0.1787,
 
                       syph.tprob = 0.1464,
-                      syph.earlat.rr = 0.5,
+                      syph.incub.rr = 0.25,
+                      syph.earlat.rr = 0.25,
                       syph.late.rr = 0,
 
                       rgc.sympt.prob = 0.16, # Beck

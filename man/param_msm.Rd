@@ -69,15 +69,16 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.4456, ugc.tprob = 0.3341,
   rct.tprob = 0.1985, uct.tprob = 0.1787, syph.tprob = 0.1464,
-  syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
-  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
-  syph.incub.sympt.prob = 0, syph.prim.sympt.prob = 0.5,
-  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
-  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 1,
-  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
-  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
-  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  syph.early.tx.int = 7, syph.late.tx.int = 3 * 7, gc.sympt.prob.tx = 0.9,
+  syph.incub.rr = 0.25, syph.earlat.rr = 0.25, syph.late.rr = 0,
+  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
+  uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
+  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
+  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
+  syph.tert.sympt.prob = 1, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
+  syph.late.tx.int = 3 * 7, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
   syph.incub.sympt.prob.tx = 0, syph.incub.asympt.prob.tx = 0,
   syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 1,
@@ -461,19 +462,22 @@ testing intervention.}
 for high-risk STI testing. Current options are limited to:
 \code{"all"}.}
 
-\item{stianntest.hivneg.coverage}{The proportion of the non-HIV diagnosed
-eligible population who are starting annual STI testing once they
-become eligible. This is not inclusive of those who are simultaneously
-indicated for morre frequent testing.}
+\item{stianntest.hivneg.coverage}{The proportion of the eligible population
+(HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
+diagnosed and tt.traj not equal to a treater type) and who are
+starting annual STI testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
 
 \item{stihighrisktest.hivneg.coverage}{The proportion of the non-HIV
 diagnosed eligible population who are starting high-risk STI testing
 once they become eligible.}
 
-\item{stianntest.hivpos.coverage}{The proportion of the HIV-diagnosed eligible
-population who are starting annual STI testing once they become eligible.
-This is not inclusive of those who are simultaneously indicated for
-more frequent testing.}
+\item{stianntest.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual STI testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
 
 \item{stihighrisktest.hivpos.coverage}{The proportion of the HIV
 diagnosed eligible population who are starting high-risk STI testing
@@ -574,6 +578,9 @@ known-discordant partnerships only, versus all partnerships.}
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
 \item{syph.tprob}{Base probability of syphilis infection per act.}
+
+\item{syph.incub.rr}{Multiplier for reduced infection probability in
+incubating stage of syphilis infection.}
 
 \item{syph.earlat.rr}{Multiplier for reduced infection probability in early
 latent stage of syphilis infection.}

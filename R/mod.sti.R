@@ -22,6 +22,7 @@ sti_trans_msm <- function(dat, at) {
   syph.tprob <- dat$param$syph.tprob
 
   # Relative risk by syphilis stage
+  syph.incub.rr <- dat$param$syph.incub.rr
   syph.earlat.rr <- dat$param$syph.earlat.rr
   syph.late.rr <- dat$param$syph.late.rr
 
@@ -252,7 +253,11 @@ sti_trans_msm <- function(dat, at) {
     not.syph.ip.UAI <- which(disc.syph.ip[, "uai"] == 0)
     ip.syph.tlo[not.syph.ip.UAI] <- ip.syph.tlo[not.syph.ip.UAI] + log(sti.cond.rr)
 
-    # Early latent-stage multipliers
+    # Incubating stage multiplier
+    isincub <- which(ip.stage.syph %in% 1)
+    ip.syph.tlo[isincub] <- ip.syph.tlo[isincub] + log(syph.incub.rr)
+
+    # Early latent-stage multiplier
     isearlat <- which(ip.stage.syph %in% 4)
     ip.syph.tlo[isearlat] <- ip.syph.tlo[isearlat] + log(syph.earlat.rr)
 
@@ -287,6 +292,10 @@ sti_trans_msm <- function(dat, at) {
     # Condom use multiplier
     not.syph.rp.UAI <- which(disc.syph.rp[, "uai"] == 0)
     rp.syph.tlo[not.syph.rp.UAI] <- rp.syph.tlo[not.syph.rp.UAI] + log(sti.cond.rr)
+
+    # Incubating stage multiplier
+    isincub <- which(rp.stage.syph %in% 1)
+    rp.syph.tlo[isincub] <- rp.syph.tlo[isincub] + log(syph.incub.rr)
 
     # Early latent stage multipliers
     isearlat <- which(rp.stage.syph %in% 4)
