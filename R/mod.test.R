@@ -218,49 +218,106 @@ sti_test_msm <- function(dat, at) {
 
   ## Initiation (non-HIV diagnosed) --------------------------------------------
   ### Testing coverage for high risk
-  stihighrisktestCov <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
-  stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
+  stihighrisktestCov.ct <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
+  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
+  stihighrisktestCov.gc <- sum(tt.traj.gc.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
+  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
+  stihighrisktestCov.syph <- sum(tt.traj.syph.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
+  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
 
   idsEligSt <- idshighrisk.hivneg
   nEligSt <- length(idshighrisk.hivneg)
 
-  nStart <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov) *
-                                        length(idshighrisk.hivneg))))
-  idsStart <- NULL
-  if (nStart > 0) {
+  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.ct) *
+                                           length(idshighrisk.hivneg))))
+  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.gc) *
+                                           length(idshighrisk.hivneg))))
+  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.syph) *
+                                             length(idshighrisk.hivneg))))
+  idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
+  if (nStart.ct > 0) {
     if (stihighrisktest.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
+      idsStart.ct <- ssample(idsEligSt, nStart.ct)
     } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, stihighrisktest.cov.rate) == 1]
+      idsStart.ct <- idsEligSt[rbinom(nStart.ct, 1, stihighrisktest.cov.rate) == 1]
+    }
+  }
+  if (nStart.gc > 0) {
+    if (stihighrisktest.cov.rate >= 1) {
+      idsStart.gc <- ssample(idsEligSt, nStart.gc)
+    } else {
+      idsStart.gc <- idsEligSt[rbinom(nStart.gc, 1, stihighrisktest.cov.rate) == 1]
+    }
+  }
+  if (nStart.syph > 0) {
+    if (stihighrisktest.cov.rate >= 1) {
+      idsStart.syph <- ssample(idsEligSt, nStart.syph)
+    } else {
+      idsStart.syph <- idsEligSt[rbinom(nStart.syph, 1, stihighrisktest.cov.rate) == 1]
     }
   }
 
   ## Update testing trajectory for higher-risk
-  if (length(idsStart) > 0) {
-    tt.traj.syph.hivneg[idsStart] <- tt.traj.gc.hivneg[idsStart] <- tt.traj.ct.hivneg[idsStart] <- 2
+  if (length(idsStart.ct) > 0) {
+    tt.traj.ct.hivneg[idsStart.ct] <- 2
+  }
+  if (length(idsStart.gc) > 0) {
+    tt.traj.gc.hivneg[idsStart.gc] <- 2
+  }
+  if (length(idsStart.syph) > 0) {
+    tt.traj.syph.hivneg[idsStart.syph] <- 2
   }
 
   ### Testing coverage for annual - all those sexually active without high-risk indications
-  stianntestCov <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) / length(setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2)))
-  stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
+  stianntestCov.ct <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) / length(setdiff(idsactive.hivneg, which(tt.traj.ct.hivneg == 2)))
+  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
+  stianntestCov.gc <- sum(tt.traj.gc.hivneg == 1, na.rm = TRUE) / length(setdiff(idsactive.hivneg, which(tt.traj.gc.hivneg == 2)))
+  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
+  stianntestCov.syph <- sum(tt.traj.syph.hivneg == 1, na.rm = TRUE) / length(setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2)))
+  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
 
   idsEligSt <- setdiff(idsactive.hivneg, idshighrisk.hivneg)
   nEligSt <- length(setdiff(idsactive.hivneg, idshighrisk.hivneg))
 
-  nStart <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stianntestCov) *
-                                        length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
-  idsStart <- NULL
-  if (nStart > 0) {
+  nStart.ct <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.ct) *
+                                           length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
+  nStart.gc <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.gc) *
+                                           length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
+  nStart.syph <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.syph) *
+                                             length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
+  idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
+
+  if (nStart.ct > 0) {
     if (stianntest.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
+      idsStart.ct <- ssample(idsEligSt, nStart.ct)
     } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+      idsStart.ct <- idsEligSt[rbinom(nStart.ct, 1, stianntest.cov.rate) == 1]
+    }
+  }
+  if (nStart.gc > 0) {
+    if (stianntest.cov.rate >= 1) {
+      idsStart.gc <- ssample(idsEligSt, nStart.gc)
+    } else {
+      idsStart.gc <- idsEligSt[rbinom(nStart.gc, 1, stianntest.cov.rate) == 1]
+    }
+  }
+  if (nStart.syph > 0) {
+    if (stianntest.cov.rate >= 1) {
+      idsStart.syph <- ssample(idsEligSt, nStart.syph)
+    } else {
+      idsStart.syph <- idsEligSt[rbinom(nStart.syph, 1, stianntest.cov.rate) == 1]
     }
   }
 
   ## Update testing trajectory for lower-risk
-  if (length(idsStart) > 0) {
-    tt.traj.syph.hivneg[idsStart] <- tt.traj.gc.hivneg[idsStart] <- tt.traj.ct.hivneg[idsStart] <- 1
+  if (length(idsStart.ct) > 0) {
+    tt.traj.ct.hivneg[idsStart.ct] <- 1
+  }
+  if (length(idsStart.gc) > 0) {
+    tt.traj.gc.hivneg[idsStart.gc] <- 1
+  }
+  if (length(idsStart.syph) > 0) {
+    tt.traj.syph.hivneg[idsStart.syph] <- 1
   }
 
   ## Process for asymptomatic syphilis screening
@@ -406,49 +463,106 @@ sti_test_msm <- function(dat, at) {
 
   ## Initiation (HIV diagnosed) --------------------------------------------
   ### Testing coverage for high risk
-  stihighrisktestCov <- sum(tt.traj.ct.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
-  stihighrisktestCov <- ifelse(is.nan(stihighrisktestCov), 0, stihighrisktestCov)
+  stihighrisktestCov.ct <- sum(tt.traj.ct.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
+  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
+  stihighrisktestCov.gc <- sum(tt.traj.gc.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
+  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
+  stihighrisktestCov.syph <- sum(tt.traj.syph.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
+  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
 
   idsEligSt <- idshighrisk.hivpos
   nEligSt <- length(idshighrisk.hivpos)
 
-  nStart <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov) *
+  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.ct) *
                                         length(idshighrisk.hivpos))))
-  idsStart <- NULL
-  if (nStart > 0) {
+  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.gc) *
+                                           length(idshighrisk.hivpos))))
+  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.syph) *
+                                           length(idshighrisk.hivpos))))
+  idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
+  if (nStart.ct > 0) {
     if (stihighrisktest.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
+      idsStart.ct <- ssample(idsEligSt, nStart.ct)
     } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, stihighrisktest.cov.rate) == 1]
+      idsStart.ct <- idsEligSt[rbinom(nStart.ct, 1, stihighrisktest.cov.rate) == 1]
+    }
+  }
+  if (nStart.gc > 0) {
+    if (stihighrisktest.cov.rate >= 1) {
+      idsStart.gc <- ssample(idsEligSt, nStart.gc)
+    } else {
+      idsStart.gc <- idsEligSt[rbinom(nStart.gc, 1, stihighrisktest.cov.rate) == 1]
+    }
+  }
+  if (nStart.syph > 0) {
+    if (stihighrisktest.cov.rate >= 1) {
+      idsStart.syph <- ssample(idsEligSt, nStart.syph)
+    } else {
+      idsStart.syph <- idsEligSt[rbinom(nStart.syph, 1, stihighrisktest.cov.rate) == 1]
     }
   }
 
   ## Update testing trajectory for higher-risk
-  if (length(idsStart) > 0) {
-    tt.traj.syph.hivpos[idsStart] <- tt.traj.gc.hivpos[idsStart] <- tt.traj.ct.hivpos[idsStart] <- 2
+  if (length(idsStart.ct) > 0) {
+    tt.traj.ct.hivpos[idsStart.ct] <- 2
+  }
+  if (length(idsStart.gc) > 0) {
+    tt.traj.gc.hivpos[idsStart.gc] <- 2
+  }
+  if (length(idsStart.syph) > 0) {
+    tt.traj.syph.hivpos[idsStart.syph] <- 2
   }
 
   ### Testing coverage for annual - all those sexually active without high-risk indications
-  stianntestCov <- sum(tt.traj.ct.hivpos == 1, na.rm = TRUE) / length(setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2)))
-  stianntestCov <- ifelse(is.nan(stianntestCov), 0, stianntestCov)
+  stianntestCov.ct <- sum(tt.traj.ct.hivpos == 1, na.rm = TRUE) / length(setdiff(idsactive.hivpos, which(tt.traj.ct.hivpos == 2)))
+  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
+  stianntestCov.gc <- sum(tt.traj.gc.hivpos == 1, na.rm = TRUE) / length(setdiff(idsactive.hivpos, which(tt.traj.gc.hivpos == 2)))
+  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
+  stianntestCov.syph <- sum(tt.traj.syph.hivpos == 1, na.rm = TRUE) / length(setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2)))
+  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
 
   idsEligSt <- setdiff(idsactive.hivpos, idshighrisk.hivpos)
   nEligSt <- length(setdiff(idsactive.hivpos, idshighrisk.hivpos))
 
-  nStart <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stianntestCov) *
-                                        length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
-  idsStart <- NULL
-  if (nStart > 0) {
+  nStart.ct <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.ct) *
+                                           length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
+  nStart.gc <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.gc) *
+                                           length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
+  nStart.syph <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.syph) *
+                                             length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
+  idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
+
+  if (nStart.ct > 0) {
     if (stianntest.cov.rate >= 1) {
-      idsStart <- ssample(idsEligSt, nStart)
+      idsStart.ct <- ssample(idsEligSt, nStart.ct)
     } else {
-      idsStart <- idsEligSt[rbinom(nStart, 1, stianntest.cov.rate) == 1]
+      idsStart.ct <- idsEligSt[rbinom(nStart.ct, 1, stianntest.cov.rate) == 1]
+    }
+  }
+  if (nStart.gc > 0) {
+    if (stianntest.cov.rate >= 1) {
+      idsStart.gc <- ssample(idsEligSt, nStart.gc)
+    } else {
+      idsStart.gc <- idsEligSt[rbinom(nStart.gc, 1, stianntest.cov.rate) == 1]
+    }
+  }
+  if (nStart.syph > 0) {
+    if (stianntest.cov.rate >= 1) {
+      idsStart.syph <- ssample(idsEligSt, nStart.syph)
+    } else {
+      idsStart.syph <- idsEligSt[rbinom(nStart.syph, 1, stianntest.cov.rate) == 1]
     }
   }
 
   ## Update testing trajectory for lower-risk
-  if (length(idsStart) > 0) {
-    tt.traj.syph.hivpos[idsStart] <- tt.traj.gc.hivpos[idsStart] <- tt.traj.ct.hivpos[idsStart] <- 1
+  if (length(idsStart.ct) > 0) {
+    tt.traj.ct.hivpos[idsStart.ct] <- 1
+  }
+  if (length(idsStart.gc) > 0) {
+    tt.traj.gc.hivpos[idsStart.gc] <- 1
+  }
+  if (length(idsStart.syph) > 0) {
+    tt.traj.syph.hivpos[idsStart.syph] <- 1
   }
 
   ## Process for asymptomatic syphilis screening
