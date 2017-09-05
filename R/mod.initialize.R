@@ -130,7 +130,7 @@ initialize_msm <- function(x, param, init, control, s) {
 
   # Prescription
   dat$attr$prepStat <- rep(0, num)
-
+  dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
