@@ -185,6 +185,8 @@ riskhist_msm <- function(dat, at) {
   uai <- summarise(by_pid, uai = sum(uai))[, 2]
   el <- as.data.frame(cbind(dat$temp$el, uai))
 
+  if (max(el[, 1:2]) != n) stop("riskhist el vs n mismatch")
+
   # Remove concordant positive edges
   el2 <- el[el$st2 == 0, ]
 
