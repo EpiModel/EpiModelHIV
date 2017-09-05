@@ -47,8 +47,8 @@ initialize_msm <- function(x, param, init, control, s) {
   for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p <- stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+                     x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
