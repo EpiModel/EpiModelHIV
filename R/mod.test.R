@@ -924,7 +924,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos) +
     length(tst.syph.pos.hivneg) + dat$epi$syph_pos_hivdxtime[at] +
   dat$epi$syphearlyasympttests.pos[at] <- length(tst.earlysyph.pos.hivpos) +
-    length(tst.earlysyph.pos.hivneg) + dat$epi$syph_earlypos_hivdxtime[at] +
+    length(tst.earlysyph.pos.hivneg) + dat$epi$syph_earlypos_hivdxtime[at]
   dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) +
     length(tst.latesyph.pos.hivneg) + dat$epi$syph_latepos_hivdxtime[at]
 
