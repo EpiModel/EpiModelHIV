@@ -272,10 +272,20 @@ sti_test_msm <- function(dat, at) {
   stitestind2 <- dat$attr$stitest.ind.recentpartners
 
   # Parameters
-  stianntest.hivneg.coverage <- dat$param$stianntest.hivneg.coverage
-  stihighrisktest.hivneg.coverage <- dat$param$stihighrisktest.hivneg.coverage
-  stianntest.hivpos.coverage <- dat$param$stianntest.hivpos.coverage
-  stihighrisktest.hivpos.coverage <- dat$param$stihighrisktest.hivpos.coverage
+  stianntest.gc.hivneg.coverage <- dat$param$stianntest.gc.hivneg.coverage
+  stianntest.ct.hivneg.coverage <- dat$param$stianntest.ct.hivneg.coverage
+  stianntest.syph.hivneg.coverage <- dat$param$stianntest.syph.hivneg.coverage
+  stihighrisktest.gc.hivneg.coverage <- dat$param$stihighrisktest.gc.hivneg.coverage
+  stihighrisktest.ct.hivneg.coverage <- dat$param$stihighrisktest.ct.hivneg.coverage
+  stihighrisktest.syph.hivneg.coverage <- dat$param$stihighrisktest.syph.hivneg.coverage
+  stianntest.gc.hivpos.coverage <- dat$param$stianntest.gc.hivpos.coverage
+  stianntest.ct.hivpos.coverage <- dat$param$stianntest.ct.hivpos.coverage
+  stianntest.syph.hivpos.coverage <- dat$param$stianntest.syph.hivpos.coverage
+  stihighrisktest.gc.hivpos.coverage <- dat$param$stihighrisktest.gc.hivpos.coverage
+  stihighrisktest.ct.hivpos.coverage <- dat$param$stihighrisktest.ct.hivpos.coverage
+  stihighrisktest.syph.hivpos.coverage <- dat$param$stihighrisktest.syph.hivpos.coverage
+
+
   stianntest.cov.rate <- dat$param$stianntest.cov.rate
   stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
   testing.pattern.sti <- dat$param$testing.pattern.sti
@@ -329,11 +339,11 @@ sti_test_msm <- function(dat, at) {
   idsEligSt <- idshighrisk.hivneg
   nEligSt <- length(idshighrisk.hivneg)
 
-  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.ct) *
+  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.gc.hivneg.coverage - stihighrisktestCov.ct) *
                                            length(idshighrisk.hivneg))))
-  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.gc) *
+  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.ct.hivneg.coverage - stihighrisktestCov.gc) *
                                            length(idshighrisk.hivneg))))
-  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.hivneg.coverage - stihighrisktestCov.syph) *
+  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.syph.hivneg.coverage - stihighrisktestCov.syph) *
                                              length(idshighrisk.hivneg))))
   idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
   if (nStart.ct > 0) {
@@ -380,12 +390,12 @@ sti_test_msm <- function(dat, at) {
   idsEligSt <- setdiff(idsactive.hivneg, idshighrisk.hivneg)
   nEligSt <- length(setdiff(idsactive.hivneg, idshighrisk.hivneg))
 
-  nStart.ct <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.ct) *
-                                           length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
-  nStart.gc <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.gc) *
-                                           length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
-  nStart.syph <- max(0, min(nEligSt, round((stianntest.hivneg.coverage - stihighrisktestCov.syph) *
-                                             length(setdiff(idsactive.hivneg, idshighrisk.hivneg)))))
+  nStart.ct <- max(0, min(nEligSt, round((stianntest.ct.hivneg.coverage - stianntestCov.ct) *
+                                           length(setdiff(idsactive.hivneg, which(tt.traj.ct.hivneg == 2))))))
+  nStart.gc <- max(0, min(nEligSt, round((stianntest.gc.hivneg.coverage - stianntestCov.gc) *
+                                           length(setdiff(idsactive.hivneg, which(tt.traj.gc.hivneg == 2))))))
+  nStart.syph <- max(0, min(nEligSt, round((stianntest.syph.hivneg.coverage - stianntestCov.syph) *
+                                             length(setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2))))))
   idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
 
   if (nStart.ct > 0) {
@@ -574,11 +584,11 @@ sti_test_msm <- function(dat, at) {
   idsEligSt <- idshighrisk.hivpos
   nEligSt <- length(idshighrisk.hivpos)
 
-  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.ct) *
+  nStart.ct <- max(0, min(nEligSt, round((stihighrisktest.ct.hivpos.coverage - stihighrisktestCov.ct) *
                                         length(idshighrisk.hivpos))))
-  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.gc) *
+  nStart.gc <- max(0, min(nEligSt, round((stihighrisktest.gc.hivpos.coverage - stihighrisktestCov.gc) *
                                            length(idshighrisk.hivpos))))
-  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.hivpos.coverage - stihighrisktestCov.syph) *
+  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.syph.hivpos.coverage - stihighrisktestCov.syph) *
                                            length(idshighrisk.hivpos))))
   idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
   if (nStart.ct > 0) {
@@ -625,12 +635,12 @@ sti_test_msm <- function(dat, at) {
   idsEligSt <- setdiff(idsactive.hivpos, idshighrisk.hivpos)
   nEligSt <- length(setdiff(idsactive.hivpos, idshighrisk.hivpos))
 
-  nStart.ct <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.ct) *
-                                           length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
-  nStart.gc <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.gc) *
-                                           length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
-  nStart.syph <- max(0, min(nEligSt, round((stianntest.hivpos.coverage - stihighrisktestCov.syph) *
-                                             length(setdiff(idsactive.hivpos, idshighrisk.hivpos)))))
+  nStart.ct <- max(0, min(nEligSt, round((stianntest.ct.hivpos.coverage - stianntestCov.ct) *
+                                           length(setdiff(idsactive.hivpos, which(tt.traj.ct.hivpos == 2))))))
+  nStart.gc <- max(0, min(nEligSt, round((stianntest.gc.hivpos.coverage - stianntestCov.gc) *
+                                           length(setdiff(idsactive.hivpos, which(tt.traj.gc.hivpos == 2))))))
+  nStart.syph <- max(0, min(nEligSt, round((stianntest.syph.hivpos.coverage - stianntestCov.syph) *
+                                             length(setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2))))))
   idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
 
   if (nStart.ct > 0) {

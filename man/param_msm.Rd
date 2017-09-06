@@ -7,7 +7,7 @@
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
   testing.pattern = "memoryless", testing.pattern.sti = "interval",
-  sti.stitx.correlation = "true", sti.hivdx.correlation = "true",
+  sti.stitx.correlation = "false", sti.hivdx.correlation = "false",
   sti.correlation.time = 12, test.window.int = 21,
   tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
   0.331, 0.617), tx.init.B.prob = 0.092, tx.init.W.prob = 0.127,
@@ -56,13 +56,20 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, riskhist.int = 182,
   stitest.start = Inf, stitest.active.int = 364, tst.rect.sti.rr = 1,
   sti.highrisktest.int = 182, stitest.elig.model = "all",
-  stianntest.hivneg.coverage = 0.1, stihighrisktest.hivneg.coverage = 0.1,
-  stianntest.hivpos.coverage = 0.1, stihighrisktest.hivpos.coverage = 0.1,
-  stianntest.cov.method = "curr", stianntest.cov.rate = 1,
-  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
-  ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
-  ept.provision.partner.main.ong = 0.5,
+  stianntest.gc.hivneg.coverage = 0.1, stianntest.ct.hivneg.coverage = 0.1,
+  stianntest.syph.hivneg.coverage = 0.1,
+  stihighrisktest.gc.hivneg.coverage = 0,
+  stihighrisktest.ct.hivneg.coverage = 0,
+  stihighrisktest.syph.hivneg.coverage = 0,
+  stianntest.gc.hivpos.coverage = 0.1, stianntest.ct.hivpos.coverage = 0.1,
+  stianntest.syph.hivpos.coverage = 0.1,
+  stihighrisktest.gc.hivpos.coverage = 0,
+  stihighrisktest.ct.hivpos.coverage = 0,
+  stihighrisktest.syph.hivpos.coverage = 0, stianntest.cov.method = "curr",
+  stianntest.cov.rate = 1, stihighrisktest.cov.method = "curr",
+  stihighrisktest.cov.rate = 1, partnercutoff = 1, ept.start = Inf,
+  ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
+  ept.cov.rate = 1, ept.provision.partner.main.ong = 0.5,
   ept.provision.partner.pers.ong = 0.4,
   ept.provision.partner.main.end = 0.4,
   ept.provision.partner.pers.end = 0.3, ept.provision.partner.inst = 0.2,
@@ -478,25 +485,67 @@ testing intervention.}
 for high-risk STI testing. Current options are limited to:
 \code{"all"}.}
 
-\item{stianntest.hivneg.coverage}{The proportion of the eligible population
+\item{stianntest.gc.hivneg.coverage}{The proportion of the eligible population
 (HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
 diagnosed and tt.traj not equal to a treater type) and who are
-starting annual STI testing once they become eligible. This is not
+starting annual NG testing once they become eligible. This is not
 inclusive of those who are simultaneously indicated for more frequent
 testing.}
 
-\item{stihighrisktest.hivneg.coverage}{The proportion of the non-HIV
-diagnosed eligible population who are starting high-risk STI testing
+\item{stianntest.ct.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk NG testing
 once they become eligible.}
 
-\item{stianntest.hivpos.coverage}{The proportion of the eligible population
+\item{stihighrisktest.ct.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk syphilis testing
+once they become eligible.}
+
+\item{stianntest.gc.hivpos.coverage}{The proportion of the eligible population
 (HIV-positive and diagnosed and tt.traj equal to a treater type) who
-are starting annual STI testing once they become eligible. This is not
+are starting annual NG testing once they become eligible. This is not
 inclusive of those who are simultaneously indicated for more frequent
 testing.}
 
-\item{stihighrisktest.hivpos.coverage}{The proportion of the HIV
-diagnosed eligible population who are starting high-risk STI testing
+\item{stianntest.ct.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk NG testing
+once they become eligible.}
+
+\item{stihighrisktest.ct.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk syphilis testing
 once they become eligible.}
 
 \item{stianntest.cov.method}{The method for calculating STI annual testing,

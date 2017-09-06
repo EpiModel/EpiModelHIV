@@ -268,15 +268,37 @@
 #' @param stitest.elig.model Modeling approach for determining who is eligible
 #'        for high-risk STI testing. Current options are limited to:
 #'        \code{"all"}.
-#' @param stianntest.hivneg.coverage The proportion of the eligible population
+#' @param stianntest.gc.hivneg.coverage The proportion of the eligible population
 #'        (HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
 #'        diagnosed and tt.traj not equal to a treater type) and who are
-#'        starting annual STI testing once they become eligible. This is not
+#'        starting annual NG testing once they become eligible. This is not
 #'        inclusive of those who are simultaneously indicated for more frequent
 #'        testing.
-#' @param stianntest.hivpos.coverage The proportion of the eligible population
+#' @param stianntest.ct.hivneg.coverage The proportion of the eligible
+#'        population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+#'        and diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual CT testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.syph.hivneg.coverage The proportion of the eligible
+#'        population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+#'        and diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual syphilis testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.gc.hivpos.coverage The proportion of the eligible population
 #'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
-#'        are starting annual STI testing once they become eligible. This is not
+#'        are starting annual NG testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.ct.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual CT testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.syph.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual syphilis testing once they become eligible. This is not
 #'        inclusive of those who are simultaneously indicated for more frequent
 #'        testing.
 #' @param stianntest.cov.method The method for calculating STI annual testing,
@@ -288,11 +310,23 @@
 #' @param stianntest.cov.rate The rate at which persons initiate annual STI
 #'        testing conditional on their eligibility, with 1 equal to instant
 #'        start.
-#' @param stihighrisktest.hivneg.coverage The proportion of the non-HIV
-#'        diagnosed eligible population who are starting high-risk STI testing
+#' @param stihighrisktest.gc.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk NG testing
 #'        once they become eligible.
-#' @param stihighrisktest.hivpos.coverage The proportion of the HIV
-#'        diagnosed eligible population who are starting high-risk STI testing
+#' @param stihighrisktest.ct.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk CT testing
+#'        once they become eligible.
+#' @param stihighrisktest.syph.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk syphilis testing
+#'        once they become eligible.
+#' @param stihighrisktest.gc.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk NG testing
+#'        once they become eligible.
+#' @param stihighrisktest.ct.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk CT testing
+#'        once they become eligible.
+#' @param stihighrisktest.syph.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk syphilis testing
 #'        once they become eligible.
 #' @param stihighrisktest.cov.method The method for calculating STI high-risk
 #'        testing, with options of \code{"curr"} to base the numerator on the
@@ -512,8 +546,8 @@ param_msm <- function(nwstats,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
-                      sti.stitx.correlation = "true",
-                      sti.hivdx.correlation = "true",
+                      sti.stitx.correlation = "false",
+                      sti.hivdx.correlation = "false",
                       sti.correlation.time = 12,
                       test.window.int = 21,
 
@@ -642,10 +676,18 @@ param_msm <- function(nwstats,
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
                       stitest.elig.model = "all",
-                      stianntest.hivneg.coverage = 0.1,
-                      stihighrisktest.hivneg.coverage = 0.1,
-                      stianntest.hivpos.coverage = 0.1,
-                      stihighrisktest.hivpos.coverage = 0.1,
+                      stianntest.gc.hivneg.coverage = 0.1,
+                      stianntest.ct.hivneg.coverage = 0.1,
+                      stianntest.syph.hivneg.coverage = 0.1,
+                      stihighrisktest.gc.hivneg.coverage = 0.0,
+                      stihighrisktest.ct.hivneg.coverage = 0.0,
+                      stihighrisktest.syph.hivneg.coverage = 0.0,
+                      stianntest.gc.hivpos.coverage = 0.1,
+                      stianntest.ct.hivpos.coverage = 0.1,
+                      stianntest.syph.hivpos.coverage = 0.1,
+                      stihighrisktest.gc.hivpos.coverage = 0.0,
+                      stihighrisktest.ct.hivpos.coverage = 0.0,
+                      stihighrisktest.syph.hivpos.coverage = 0.0,
                       stianntest.cov.method = "curr",
                       stianntest.cov.rate = 1,
                       stihighrisktest.cov.method = "curr",
