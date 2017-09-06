@@ -246,7 +246,7 @@
 #'        per act, and 1 is a complete cessation of condom use following PrEP
 #'        initiation.
 #' @param rcomp.adh.groups PrEP adherence groups for whom risk compensation
-#'        occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+#'        occurs, as a vector with values 1, 2, 3 corresponding to
 #'        low adherence, medium adherence, and high adherence to PrEP.
 #' @param rcomp.main.only Logical, if risk compensation is limited to main
 #'        partnerships only, versus all partnerships.
@@ -446,7 +446,7 @@ param_msm <- function(nwstats,
                       prep.risk.reassess.method = "year", # inst, year
 
                       rcomp.prob = 0,
-                      rcomp.adh.groups = 0:3,
+                      rcomp.adh.groups = 1:3,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
 

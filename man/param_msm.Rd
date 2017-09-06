@@ -52,7 +52,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.discont.rate.B = 1/365, prep.discont.rate.W = 1/365,
   prep.tst.int = 90, prep.risk.int = 182,
   prep.risk.reassess.method = "year", rcomp.prob = 0,
-  rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
+  rcomp.adh.groups = 1:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.357698, ugc.tprob = 0.248095,
   rct.tprob = 0.321597, uct.tprob = 0.212965, rgc.sympt.prob = 0.16,
   ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
@@ -417,7 +417,7 @@ per act, and 1 is a complete cessation of condom use following PrEP
 initiation.}
 
 \item{rcomp.adh.groups}{PrEP adherence groups for whom risk compensation
-occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+occurs, as a vector with values 1, 2, 3 corresponding to
 low adherence, medium adherence, and high adherence to PrEP.}
 
 \item{rcomp.main.only}{Logical, if risk compensation is limited to main
