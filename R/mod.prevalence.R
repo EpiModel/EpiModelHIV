@@ -74,8 +74,8 @@ prevalence_msm <- function(dat, at) {
   dat$epi$num.W[at] <- sum(race == "W", na.rm = TRUE)
 
   dat$epi$s.num[at] <- sum(status == 0, na.rm = TRUE)
-  dat$epi$i.num.B[at] <- sum(status == 0 & race == "B", na.rm = TRUE)
-  dat$epi$i.num.W[at] <- sum(status == 0 & race == "W", na.rm = TRUE)
+  dat$epi$s.num.B[at] <- sum(status == 0 & race == "B", na.rm = TRUE)
+  dat$epi$s.num.W[at] <- sum(status == 0 & race == "W", na.rm = TRUE)
 
   dat$epi$i.num[at] <- sum(status == 1, na.rm = TRUE)
   dat$epi$i.num.B[at] <- sum(status == 1 & race == "B", na.rm = TRUE)
