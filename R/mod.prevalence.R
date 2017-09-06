@@ -643,26 +643,25 @@ prevalence_msm <- function(dat, at) {
 
   # Testing in last 12 months
   # Overall
-  dat$epi$test.gc.12mo[at] <- sum(tslt.rgc <= 52 | tslt.ugc <= 52) / dat$epi$num[at]
-  dat$epi$test.ct.12mo[at] <- sum(tslt.rct <= 52 | tslt.uct <= 52) / dat$epi$num[at]
-  dat$epi$test.syph.12mo[at] <- sum(tslt.syph <= 52) / dat$epi$num[at]
+  dat$epi$test.gc.12mo[at] <- length(which(tslt.rgc <= 52 | tslt.ugc <= 52)) / dat$epi$num[at]
+  dat$epi$test.ct.12mo[at] <- length(which(tslt.rct <= 52 | tslt.uct <= 52)) / dat$epi$num[at]
+  dat$epi$test.syph.12mo[at] <- length(which(tslt.syph <= 52)) / dat$epi$num[at]
 
   # Among those HIV-negative or undiagnosed
-  dat$epi$test.gc.12mo.nonhivdiag[at] <- sum((tslt.rgc <= 52 | tslt.ugc <= 52) &
-                                           is.na(diag.status) | diag.status == 0) / dat$epi$num[at]
-  dat$epi$test.ct.12mo.nonhivdiag[at] <- sum((tslt.rct <= 52 | tslt.uct <= 52) &
-                                           is.na(diag.status) | diag.status == 0) / dat$epi$num[at]
-  dat$epi$test.syph.12mo.nonhivdiag[at] <- sum((tslt.syph <= 52) &
-                                             is.na(diag.status) | diag.status == 0) / dat$epi$num[at]
+  dat$epi$test.gc.12mo.nonhivdiag[at] <- length(which((tslt.rgc <= 52 | tslt.ugc <= 52) &
+                                           (is.na(diag.status) | diag.status == 0))) / length(which(is.na(diag.status) | diag.status == 0))
+  dat$epi$test.ct.12mo.nonhivdiag[at] <- length(which((tslt.rct <= 52 | tslt.uct <= 52) &
+                                           (is.na(diag.status) | diag.status == 0))) / length(which(is.na(diag.status) | diag.status == 0))
+  dat$epi$test.syph.12mo.nonhivdiag[at] <- length(which((tslt.syph <= 52) &
+                                             (is.na(diag.status) | diag.status == 0))) / length(which(is.na(diag.status) | diag.status == 0))
 
   # Among those diagnosed
-  dat$epi$test.gc.12mo.hivdiag[at] <- sum((tslt.rgc <= 52 | tslt.ugc <= 52) &
-                                           diag.status == 1) / dat$epi$num[at]
-  dat$epi$test.ct.12mo.hivdiag[at] <- sum((tslt.rct <= 52 | tslt.uct <= 52) &
-                                           diag.status == 1) / dat$epi$num[at]
-  dat$epi$test.syph.12mo.hivdiag[at] <- sum((tslt.syph <= 52) &
-                                             diag.status == 1) / dat$epi$num[at]
-
+  dat$epi$test.gc.12mo.hivdiag[at] <- length(which((tslt.rgc <= 52 | tslt.ugc <= 52) &
+                                           diag.status == 1)) / length(which(diag.status == 1))
+  dat$epi$test.ct.12mo.hivdiag[at] <- length(which((tslt.rct <= 52 | tslt.uct <= 52) &
+                                           diag.status == 1)) / length(which(diag.status == 1))
+  dat$epi$test.syph.12mo.hivdiag[at] <- length(which((tslt.syph <= 52) &
+                                             diag.status == 1)) / length(which(diag.status == 1))
 
   return(dat)
 }
