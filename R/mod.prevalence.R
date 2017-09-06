@@ -89,22 +89,22 @@ prevalence_msm <- function(dat, at) {
   dat$epi$ir100.B[at] <- (dat$epi$incid.B[at] / sum(status == 0 & race == "B", na.rm = TRUE)) * 5200
   dat$epi$ir100.W[at] <- (dat$epi$incid.W[at] / sum(status == 0 & race == "W", na.rm = TRUE)) * 5200
 
-  dat$epi$prepAware.B <- sum(prepAware == 1 & race == "B", na.rm = TRUE) /
-                         sum(race == "B", na.rm = TRUE)
-  dat$epi$prepAware.W <- sum(prepAware == 1 & race == "W", na.rm = TRUE) /
-                         sum(race == "W", na.rm = TRUE)
-  dat$epi$prepAccess.B <- sum(prepAccess == 1 & race == "B", na.rm = TRUE) /
+  dat$epi$prepAware.B[at] <- sum(prepAware == 1 & race == "B", na.rm = TRUE) /
+                             sum(race == "B", na.rm = TRUE)
+  dat$epi$prepAware.W[at] <- sum(prepAware == 1 & race == "W", na.rm = TRUE) /
+                             sum(race == "W", na.rm = TRUE)
+  dat$epi$prepAccess.B[at] <- sum(prepAccess == 1 & race == "B", na.rm = TRUE) /
+                              sum(race == "B", na.rm = TRUE)
+  dat$epi$prepAccess.W[at] <- sum(prepAccess == 1 & race == "W", na.rm = TRUE) /
+                              sum(race == "W", na.rm = TRUE)
+  dat$epi$prepRx.B[at] <- sum(prepStat == 1 & race == "B", na.rm = TRUE) /
                           sum(race == "B", na.rm = TRUE)
-  dat$epi$prepAccess.W <- sum(prepAccess == 1 & race == "W", na.rm = TRUE) /
+  dat$epi$prepRx.W[at] <- sum(prepStat == 1 & race == "W", na.rm = TRUE) /
                           sum(race == "W", na.rm = TRUE)
-  dat$epi$prepRx.B <- sum(prepStat == 1 & race == "B", na.rm = TRUE) /
-                      sum(race == "B", na.rm = TRUE)
-  dat$epi$prepRx.W <- sum(prepStat == 1 & race == "W", na.rm = TRUE) /
-                      sum(race == "W", na.rm = TRUE)
-  dat$epi$prepHiAdr.B <- sum(prepClass == 3 & race == "B", na.rm = TRUE) /
-                         sum(race == "B", na.rm = TRUE)
-  dat$epi$prepHiAdr.W <- sum(prepClass == 3 & race == "W", na.rm = TRUE) /
-                         sum(race == "W", na.rm = TRUE)
+  dat$epi$prepHiAdr.B[at] <- sum(prepClass == 3 & race == "B", na.rm = TRUE) /
+                             sum(race == "B", na.rm = TRUE)
+  dat$epi$prepHiAdr.W[at] <- sum(prepClass == 3 & race == "W", na.rm = TRUE) /
+                             sum(race == "W", na.rm = TRUE)
 
   dat$epi$prev.gc[at] <- sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$num[at]
   dat$epi$prev.ct[at] <- sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$num[at]
