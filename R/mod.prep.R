@@ -68,15 +68,18 @@ prep_msm <- function(dat, at) {
 
   twind <- at - dat$param$prep.risk.int
   idsIndic <- which(ind1 >= twind | ind2 >= twind | ind3 >= twind | ind4 >= twind)
+  prepIndic[idsIndic] <- 1
 
   idsEligStart <- intersect(idsIndic, idsEligStart)
 
-  prepIndic[idsIndic] <- 1
 
   ## Stoppage ------------------------------------------------------------------
 
   # No indications
-  idsNoIndic <- which(ind1 < twind & ind2 < twind & ind3 < twind & ind4 < twind)
+  idsNoIndic <- which((ind1 < twind | is.na(ind1)) &
+                      (ind2 < twind | is.na(ind2)) &
+                      (ind3 < twind | is.na(ind3)) &
+                      (ind4 < twind | is.na(ind4)))
   prepIndic[idsNoIndic] <- 0
 
   # Risk reassessment rules
