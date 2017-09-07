@@ -72,6 +72,7 @@ dat <- initialize_msm(est, param, init, control, s = 1)
 
 debug(sti_recov_msm)
 debug(sti_tx_msm)
+debug(hiv_test_msm)
 debug(sti_test_msm)
 
 at <- at + 1

@@ -106,7 +106,7 @@ hiv_test_msm <- function(dat, at) {
   tst.neg <- setdiff(tst.all, tst.pos)
 
   # Assign new STI treatment trajectory (HIV-pos) for diagnosed who will be on ART
-  tt.traj.new <- tst.pos[tt.traj[tst.pos] %in% c(3,4)]
+  tt.traj.new <- tst.pos[which(tt.traj[tst.pos] %in% c(3,4))]
 
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
@@ -124,20 +124,20 @@ hiv_test_msm <- function(dat, at) {
   # STI testing if not tested for that in last X weeks ------------------------
   if (dat$param$sti.hivdx.correlation == "true") {
 
-    tst.rgc <- tst.neg[which(tsinceltst.gc[tst.neg] > sti.correlation.time &
-                               (is.na(diag.status.gc[tst.neg]) | diag.status.gc[tst.neg] == 0) &
-                         role.class[tst.neg] %in% c("R", "V"))]
-    tst.ugc <- tst.neg[which(tsinceltst.gc[tst.neg] > sti.correlation.time &
-                                 (is.na(diag.status.gc[tst.neg]) | diag.status.gc[tst.neg] == 0) &
-                           role.class[tst.neg] %in% c("I", "V"))]
-    tst.rct <- tst.neg[which(tsinceltst.ct[tst.neg] > sti.correlation.time &
-                                 (is.na(diag.status.ct[tst.neg]) | diag.status.ct[tst.neg] == 0) &
-                           role.class[tst.neg] %in% c("R", "V"))]
-    tst.uct <- tst.neg[which(tsinceltst.ct[tst.neg] > sti.correlation.time &
-                                 (is.na(diag.status.ct[tst.neg]) | diag.status.ct[tst.neg] == 0) &
-                           role.class[tst.neg] %in% c("I", "V"))]
-    tst.syph <- tst.neg[which(tsinceltst.syph[tst.neg] > sti.correlation.time &
-                          (is.na(diag.status.syph[tst.neg]) | diag.status.syph[tst.neg] == 0))]
+    tst.rgc <- tst.all[which(tsinceltst.gc[tst.all] > sti.correlation.time &
+                               (is.na(diag.status.gc[tst.all]) | diag.status.gc[tst.all] == 0) &
+                         role.class[tst.all] %in% c("R", "V"))]
+    tst.ugc <- tst.all[which(tsinceltst.gc[tst.all] > sti.correlation.time &
+                                 (is.na(diag.status.gc[tst.all]) | diag.status.gc[tst.all] == 0) &
+                           role.class[tst.all] %in% c("I", "V"))]
+    tst.rct <- tst.all[which(tsinceltst.ct[tst.all] > sti.correlation.time &
+                                 (is.na(diag.status.ct[tst.all]) | diag.status.ct[tst.all] == 0) &
+                           role.class[tst.all] %in% c("R", "V"))]
+    tst.uct <- tst.all[which(tsinceltst.ct[tst.all] > sti.correlation.time &
+                                 (is.na(diag.status.ct[tst.all]) | diag.status.ct[tst.all] == 0) &
+                           role.class[tst.all] %in% c("I", "V"))]
+    tst.syph <- tst.all[which(tsinceltst.syph[tst.all] > sti.correlation.time &
+                          (is.na(diag.status.syph[tst.all]) | diag.status.syph[tst.all] == 0))]
 
     tst.syph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
                                stage.syph[tst.syph] %in% c(2, 3, 4, 5, 6))]
@@ -260,13 +260,31 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.gc <- dat$attr$last.diag.time.gc
   last.diag.time.ct <- dat$attr$last.diag.time.ct
   last.diag.time.syph <- dat$attr$last.diag.time.syph
-  tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1 # Will include those dx through HIV-correlated testing
-  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1 # Will include those dx through HIV-correlated testing
-  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1 # Will include those dx through HIV-correlated testing
-  tsinceltst.rct <- dat$attr$time.since.last.test.rct + 1 # Will include those dx through HIV-correlated testing
-  tsinceltst.uct <- dat$attr$time.since.last.test.uct + 1 # Will include those dx through HIV-correlated testing
-  tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
-  tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
+
+  #Avoid increasing time for those with HIV-correlated testing (would have just tested for STIs)
+  if (dat$param$sti.hivdx.correlation == "true") {
+
+    tsinceltst.syph <- dat$attr$time.since.last.test.syph[which(is.na(dat$attr$diag.time) | dat$attr$diag.time != at)] + 1
+    tsinceltst.rgc <- dat$attr$time.since.last.test.rgc[which(is.na(dat$attr$diag.time) | dat$attr$diag.time != at)] + 1
+    tsinceltst.ugc <- dat$attr$time.since.last.test.ugc[which(is.na(dat$attr$diag.time) | dat$attr$diag.time != at)] + 1
+    tsinceltst.rct <- dat$attr$time.since.last.test.rct[which(is.na(dat$attr$diag.time) | dat$attr$diag.time != at)] + 1
+    tsinceltst.uct <- dat$attr$time.since.last.test.uct[which(is.na(dat$attr$diag.time) | dat$attr$diag.time != at)] + 1
+    tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
+    tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
+
+  }
+
+  if (dat$param$sti.hivdx.correlation == "false") {
+
+    tsinceltst.syph <- dat$attr$time.since.last.test.syph + 1
+    tsinceltst.rgc <- dat$attr$time.since.last.test.rgc + 1
+    tsinceltst.ugc <- dat$attr$time.since.last.test.ugc + 1
+    tsinceltst.rct <- dat$attr$time.since.last.test.rct + 1
+    tsinceltst.uct <- dat$attr$time.since.last.test.uct + 1
+    tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
+    tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
+  }
+
   prepStat <- dat$attr$prepStat
   stitestind1 <- dat$attr$stitest.ind.active
   stitestind2 <- dat$attr$stitest.ind.recentpartners
@@ -285,7 +303,6 @@ sti_test_msm <- function(dat, at) {
   stihighrisktest.ct.hivpos.coverage <- dat$param$stihighrisktest.ct.hivpos.coverage
   stihighrisktest.syph.hivpos.coverage <- dat$param$stihighrisktest.syph.hivpos.coverage
 
-
   stianntest.cov.rate <- dat$param$stianntest.cov.rate
   stihighrisktest.cov.rate <- dat$param$stihighrisktest.cov.rate
   testing.pattern.sti <- dat$param$testing.pattern.sti
@@ -300,7 +317,7 @@ sti_test_msm <- function(dat, at) {
 
   # STI testing higher-risk eligibility scenarios
   idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
-  idshighrisk.hivneg <- setdiff((which(stitestind1 == 2)), idshighrisk.hivpos)
+  idshighrisk.hivneg <- setdiff((which(stitestind2 == 1)), idshighrisk.hivpos)
 
   ## Stoppage (tt.traj.gc/.ct/.syph <- NA ------------------------------------
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
