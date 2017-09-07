@@ -426,9 +426,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$test.ct.12mo.nonhivdiag <- rNA
     dat$epi$test.syph.12mo.nonhivdiag <- rNA
 
+    dat$epi$test.gc.12mo.hivneg <- rNA
+    dat$epi$test.ct.12mo.hivneg <- rNA
+    dat$epi$test.syph.12mo.hivneg <- rNA
+
     dat$epi$test.gc.12mo.hivdiag <- rNA
     dat$epi$test.ct.12mo.hivdiag <- rNA
     dat$epi$test.syph.12mo.hivdiag <- rNA
+
+    dat$epi$test.gc.12mo.hivpos <- rNA
+    dat$epi$test.ct.12mo.hivpos <- rNA
+    dat$epi$test.syph.12mo.hivpos <- rNA
 
   }
 
@@ -662,6 +670,22 @@ prevalence_msm <- function(dat, at) {
                                            diag.status == 1)) / length(which(diag.status == 1))
   dat$epi$test.syph.12mo.hivdiag[at] <- length(which((tslt.syph <= 52) &
                                              diag.status == 1)) / length(which(diag.status == 1))
+
+  # Among those HIV-negative
+  dat$epi$test.gc.12mo.hivneg[at] <- length(which((tslt.rgc <= 52 | tslt.ugc <= 52) &
+                                                   status == 0)) / length(which(status == 0))
+  dat$epi$test.ct.12mo.hivneg[at] <- length(which((tslt.rct <= 52 | tslt.uct <= 52) &
+                                                   status == 0)) / length(which(status == 0))
+  dat$epi$test.syph.12mo.hivneg[at] <- length(which((tslt.syph <= 52) &
+                                                     status == 0)) / length(which(status == 0))
+
+  # Among those HIV-positive
+  dat$epi$test.gc.12mo.hivpos[at] <- length(which((tslt.rgc <= 52 | tslt.ugc <= 52) &
+                                                   status == 1)) / length(which(status == 1))
+  dat$epi$test.ct.12mo.hivpos[at] <- length(which((tslt.rct <= 52 | tslt.uct <= 52) &
+                                                    status == 1)) / length(which(status == 1))
+  dat$epi$test.syph.12mo.hivpos[at] <- length(which((tslt.syph <= 52) &
+                                                      status == 1)) / length(which(status == 1))
 
   return(dat)
 }
