@@ -32,7 +32,9 @@ prep_msm <- function(dat, at) {
   race <- dat$attr$race
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
-  prepElig <- dat$attr$prepElig
+
+  prepAccess <- dat$attr$prepAccess
+  prepIndic <- dat$attr$prepIndic
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
   prepLastRisk <- dat$attr$prepLastRisk
@@ -52,7 +54,11 @@ prep_msm <- function(dat, at) {
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & lnt == at)
+  idsEligStart <- which(active == 1 &
+                        status == 0 &
+                        prepStat == 0 &
+                        lnt == at &
+                        prepAccess == 1)
 
   # Core eligiblity
   ind1 <- dat$attr$prep.ind.uai.mono
@@ -61,30 +67,29 @@ prep_msm <- function(dat, at) {
   ind4 <- dat$attr$prep.ind.sti
 
   twind <- at - dat$param$prep.risk.int
-  idsEligStart <- intersect(which(ind1 >= twind | ind2 >= twind |
-                                  ind3 >= twind | ind4 >= twind),
-                            idsEligStart)
+  idsIndic <- which(ind1 >= twind | ind2 >= twind | ind3 >= twind | ind4 >= twind)
 
-  prepElig[idsEligStart] <- 1
+  idsEligStart <- intersect(idsIndic, idsEligStart)
 
+  prepIndic[idsIndic] <- 1
 
   ## Stoppage ------------------------------------------------------------------
 
   # No indications
+  idsNoIndic <- which(ind1 < twind & ind2 < twind & ind3 < twind & ind4 < twind)
+  prepIndic[idsNoIndic] <- 0
+
+  # Risk reassessment rules
   if (prep.risk.reassess.method == "none") {
     idsStpInd <- NULL
   } else if (prep.risk.reassess.method == "inst") {
     idsRiskAssess <- which(active == 1 & prepStat == 1)
     prepLastRisk[idsRiskAssess] <- at
-    idsStpInd <- intersect(which(ind1 < twind & ind2 < twind &
-                                 ind3 < twind & ind4 < twind),
-                             idsRiskAssess)
+    idsStpInd <- intersect(idsNoIndic, idsRiskAssess)
   } else if (prep.risk.reassess.method == "year") {
     idsRiskAssess <- which(active == 1 & prepStat == 1 & lnt == at & (at - prepLastRisk) >= 52)
     prepLastRisk[idsRiskAssess] <- at
-    idsStpInd <- intersect(which(ind1 < twind & ind2 < twind &
-                                 ind3 < twind & ind4 < twind),
-                             idsRiskAssess)
+    idsStpInd <- intersect(idsNoIndic, idsRiskAssess)
   }
 
   # Random (memoryless) discontinuation
@@ -104,7 +109,6 @@ prep_msm <- function(dat, at) {
 
   # Reset PrEP status
   idsStp <- c(idsStpInd, idsStpRand, idsStpDx, idsStpDth)
-  prepElig[idsStp] <- 0
   prepStat[idsStp] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
@@ -113,8 +117,8 @@ prep_msm <- function(dat, at) {
 
   ## Initiation ----------------------------------------------------------------
 
-  idsEligSt.B <- which(prepElig == 1 & race == "B")
-  idsEligSt.W <- which(prepElig == 1 & race == "W")
+  idsEligSt.B <- intersect(idsEligStart, which(race == "B"))
+  idsEligSt.W <- intersect(idsEligStart, which(race == "W"))
 
   prepStat[idsEligSt.B] <- rbinom(length(idsEligSt.B), 1, prep.rx.B)
   prepStat[idsEligSt.W] <- rbinom(length(idsEligSt.W), 1, prep.rx.W)
@@ -141,12 +145,22 @@ prep_msm <- function(dat, at) {
   ## Output --------------------------------------------------------------------
 
   # Attributes
-  dat$attr$prepElig <- prepElig
+  dat$attr$prepIndic <- prepIndic
   dat$attr$prepStat <- prepStat
   dat$attr$prepStartTime <- prepStartTime
   dat$attr$prepClass <- prepClass
   dat$attr$prepLastRisk <- prepLastRisk
   dat$attr$prepLastStiScreen <- prepLastStiScreen
+
+  # Summary stats
+  if (is.null(dat$epi$prepStpInd)) {
+    dat$epi$prepStpInd <- rep(NA, dat$control$nsteps)
+    dat$epi$prepStpDx <- rep(NA, dat$control$nsteps)
+    dat$epi$prepStpRand <- rep(NA, dat$control$nsteps)
+  }
+  dat$epi$prepStpInd[at] <- length(idsStpInd)
+  dat$epi$prepStpDx[at] <- length(idsStpDx)
+  dat$epi$prepStpRand[at] <- length(idsStpRand)
 
   return(dat)
 }
