@@ -45,13 +45,20 @@ prep_msm <- function(dat, at) {
     prepAware[ids.W] <- rbinom(length(ids.W), 1, dat$param$prep.aware.W)
     dat$attr$prepAware <- prepAware
 
-    # Acess
+    # Access
     prepAccess <- rep(NA, num)
     ids.B.aware <- which(dat$attr$race == "B" & prepAware == 1)
     ids.W.aware <- which(dat$attr$race == "W" & prepAware == 1)
     prepAccess[ids.B.aware] <- rbinom(length(ids.B.aware), 1, dat$param$prep.access.B)
     prepAccess[ids.W.aware] <- rbinom(length(ids.W.aware), 1, dat$param$prep.access.W)
     dat$attr$prepAccess <- prepAccess
+
+    # Indications
+    dat$attr$prepIndic <- rep(NA, num)
+    dat$attr$prepIndic1 <- rep(NA, num)
+    dat$attr$prepIndic2 <- rep(NA, num)
+    dat$attr$prepIndic3 <- rep(NA, num)
+    dat$attr$prepIndic4 <- rep(NA, num)
   }
 
 
@@ -59,6 +66,10 @@ prep_msm <- function(dat, at) {
 
   prepAccess <- dat$attr$prepAccess
   prepIndic <- dat$attr$prepIndic
+  prepIndic1 <- dat$attr$prepIndic1
+  prepIndic2 <- dat$attr$prepIndic2
+  prepIndic3 <- dat$attr$prepIndic3
+  prepIndic4 <- dat$attr$prepIndic4
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
   prepLastRisk <- dat$attr$prepLastRisk
@@ -92,7 +103,17 @@ prep_msm <- function(dat, at) {
 
   twind <- at - dat$param$prep.risk.int
   idsIndic <- which(ind1 >= twind | ind2 >= twind | ind3 >= twind | ind4 >= twind)
+
+  idsIndic1 <- which(ind1 >= twind)
+  idsIndic2 <- which(ind2 >= twind)
+  idsIndic3 <- which(ind3 >= twind)
+  idsIndic4 <- which(ind4 >= twind)
+
   prepIndic[idsIndic] <- 1
+  prepIndic1[idsIndic1] <- 1
+  prepIndic2[idsIndic2] <- 1
+  prepIndic3[idsIndic3] <- 1
+  prepIndic4[idsIndic4] <- 1
 
   idsEligStart <- intersect(idsIndic, idsEligStart)
 
@@ -104,7 +125,17 @@ prep_msm <- function(dat, at) {
                       (ind2 < twind | is.na(ind2)) &
                       (ind3 < twind | is.na(ind3)) &
                       (ind4 < twind | is.na(ind4)))
+
+  idsNoIndic1 <- which(ind1 < twind | is.na(ind1))
+  idsNoIndic2 <- which(ind1 < twind | is.na(ind2))
+  idsNoIndic3 <- which(ind1 < twind | is.na(ind3))
+  idsNoIndic4 <- which(ind1 < twind | is.na(ind4))
+
   prepIndic[idsNoIndic] <- 0
+  prepIndic1[idsNoIndic1] <- 0
+  prepIndic2[idsNoIndic2] <- 0
+  prepIndic3[idsNoIndic3] <- 0
+  prepIndic4[idsNoIndic4] <- 0
 
   # Risk reassessment rules
   if (prep.risk.reassess.method == "none") {
@@ -173,6 +204,11 @@ prep_msm <- function(dat, at) {
 
   # Attributes
   dat$attr$prepIndic <- prepIndic
+  dat$attr$prepIndic1 <- prepIndic1
+  dat$attr$prepIndic2 <- prepIndic2
+  dat$attr$prepIndic3 <- prepIndic3
+  dat$attr$prepIndic4 <- prepIndic4
+
   dat$attr$prepStat <- prepStat
   dat$attr$prepStartTime <- prepStartTime
   dat$attr$prepClass <- prepClass

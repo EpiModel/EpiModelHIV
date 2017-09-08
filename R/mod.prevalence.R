@@ -35,6 +35,10 @@ prevalence_msm <- function(dat, at) {
   prepAware <- dat$attr$prepAware
   prepAccess <- dat$attr$prepAccess
   prepIndic <- dat$attr$prepIndic
+  prepIndic1 <- dat$attr$prepIndic1
+  prepIndic2 <- dat$attr$prepIndic2
+  prepIndic3 <- dat$attr$prepIndic3
+  prepIndic4 <- dat$attr$prepIndic4
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
 
@@ -58,6 +62,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prepAware.B <- dat$epi$prepAware.W <- rNA
     dat$epi$prepAccess.B <- dat$epi$prepAccess.W <- rNA
     dat$epi$prepIndic.B <- dat$epi$prepIndic.W <- rNA
+
     dat$epi$prepRx.B <- dat$epi$prepRx.W <- rNA
     dat$epi$prepCurr.B <- dat$epi$prepCurr.W <- rNA
     dat$epi$prepHiAdr.B <- dat$epi$prepHiAdr.W <- rNA
@@ -70,6 +75,13 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$ir100.gc <- dat$epi$ir100.gc.B <- dat$epi$ir100.gc.W <- rNA
     dat$epi$ir100.ct <- dat$epi$ir100.ct.B <- dat$epi$ir100.ct.W <- rNA
+  }
+
+  if (is.null(dat$epi$prepIndic1.B)) {
+    dat$epi$prepIndic1.B <- dat$epi$prepIndic1.W <- rNA
+    dat$epi$prepIndic2.B <- dat$epi$prepIndic2.W <- rNA
+    dat$epi$prepIndic3.B <- dat$epi$prepIndic3.W <- rNA
+    dat$epi$prepIndic4.B <- dat$epi$prepIndic4.W <- rNA
   }
 
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
@@ -104,6 +116,24 @@ prevalence_msm <- function(dat, at) {
                              sum(race == "B", na.rm = TRUE)
   dat$epi$prepIndic.W[at] <- sum(prepIndic == 1 & race == "W", na.rm = TRUE) /
                              sum(race == "W", na.rm = TRUE)
+
+  dat$epi$prepIndic1.B[at] <- sum(prepIndic1 == 1 & race == "B", na.rm = TRUE) /
+                              sum(race == "B", na.rm = TRUE)
+  dat$epi$prepIndic1.W[at] <- sum(prepIndic1 == 1 & race == "W", na.rm = TRUE) /
+                              sum(race == "W", na.rm = TRUE)
+  dat$epi$prepIndic2.B[at] <- sum(prepIndic2 == 1 & race == "B", na.rm = TRUE) /
+                              sum(race == "B", na.rm = TRUE)
+  dat$epi$prepIndic2.W[at] <- sum(prepIndic2 == 1 & race == "W", na.rm = TRUE) /
+                              sum(race == "W", na.rm = TRUE)
+  dat$epi$prepIndic3.B[at] <- sum(prepIndic3 == 1 & race == "B", na.rm = TRUE) /
+                              sum(race == "B", na.rm = TRUE)
+  dat$epi$prepIndic3.W[at] <- sum(prepIndic3 == 1 & race == "W", na.rm = TRUE) /
+                              sum(race == "W", na.rm = TRUE)
+  dat$epi$prepIndic4.B[at] <- sum(prepIndic4 == 1 & race == "B", na.rm = TRUE) /
+                              sum(race == "B", na.rm = TRUE)
+  dat$epi$prepIndic4.W[at] <- sum(prepIndic4 == 1 & race == "W", na.rm = TRUE) /
+                              sum(race == "W", na.rm = TRUE)
+
   dat$epi$prepRx.B[at] <- sum(prepAccess == 1 & prepIndic == 1 & prepStat == 1 & race == "B", na.rm = TRUE) /
                           sum(prepAccess == 1 & prepIndic == 1 & race == "B", na.rm = TRUE)
   dat$epi$prepRx.W[at] <- sum(prepAccess == 1 & prepIndic == 1 & prepStat == 1 & race == "W", na.rm = TRUE) /

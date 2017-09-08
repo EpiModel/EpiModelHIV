@@ -112,9 +112,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   ## PrEP Attributes (new continuum method) ##
 
-  # Indications
-  dat$attr$prepIndic <- rep(NA, num)
-
   # Prescription
   dat$attr$prepStat <- rep(0, num)
   dat$attr$prepClass <- rep(NA, num)
