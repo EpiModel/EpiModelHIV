@@ -220,10 +220,14 @@ prep_msm <- function(dat, at) {
     dat$epi$prepStpInd <- rep(NA, dat$control$nsteps)
     dat$epi$prepStpDx <- rep(NA, dat$control$nsteps)
     dat$epi$prepStpRand <- rep(NA, dat$control$nsteps)
+    dat$epi$prepStaB <- rep(NA, dat$control$nsteps)
+    dat$epi$prepStaW <- rep(NA, dat$control$nsteps)
   }
   dat$epi$prepStpInd[at] <- length(idsStpInd)
   dat$epi$prepStpDx[at] <- length(idsStpDx)
   dat$epi$prepStpRand[at] <- length(idsStpRand)
+  dat$epi$prepStaB[at] <- length(idsStart.B)/length(idsEligSt.B)
+  dat$epi$prepStaW[at] <- length(idsStart.W)/length(idsEligSt.W)
 
   return(dat)
 }
