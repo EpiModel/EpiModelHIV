@@ -111,19 +111,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$circ <- circ
 
   ## PrEP Attributes (new continuum method) ##
-  # Awareness
-  prepAware <- rep(NA, num)
-  prepAware[ids.B] <- rbinom(length(ids.B), 1, dat$param$prep.aware.B)
-  prepAware[ids.W] <- rbinom(length(ids.W), 1, dat$param$prep.aware.W)
-  dat$attr$prepAware <- prepAware
-
-  # Acess
-  prepAccess <- rep(NA, num)
-  ids.B.aware <- which(dat$attr$race == "B" & prepAware == 1)
-  ids.W.aware <- which(dat$attr$race == "W" & prepAware == 1)
-  prepAccess[ids.B.aware] <- rbinom(length(ids.B.aware), 1, dat$param$prep.access.B)
-  prepAccess[ids.W.aware] <- rbinom(length(ids.W.aware), 1, dat$param$prep.access.W)
-  dat$attr$prepAccess <- prepAccess
 
   # Indications
   dat$attr$prepIndic <- rep(NA, num)
