@@ -989,6 +989,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.syph <- diag.status.syph
   dat$attr$last.diag.time.syph <- last.diag.time.syph
   dat$attr$tt.traj.syph.hivneg <- tt.traj.syph.hivneg
+  dat$attr$tt.traj.syph.hivpos <- tt.traj.syph.hivpos
   dat$attr$time.since.last.test.syph <- tsinceltst.syph
 
   # GC Attributes
@@ -997,6 +998,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.gc <- diag.status.gc
   dat$attr$last.diag.time.gc <- last.diag.time.gc
   dat$attr$tt.traj.gc.hivneg <- tt.traj.gc.hivneg
+  dat$attr$tt.traj.gc.hivpos <- tt.traj.gc.hivpos
   dat$attr$time.since.last.test.rgc <- tsinceltst.rgc
   dat$attr$time.since.last.test.ugc <- tsinceltst.ugc
 
@@ -1006,6 +1008,7 @@ sti_test_msm <- function(dat, at) {
   dat$attr$diag.status.ct <- diag.status.ct
   dat$attr$last.diag.time.ct <- last.diag.time.ct
   dat$attr$tt.traj.ct.hivneg <- tt.traj.ct.hivneg
+  dat$attr$tt.traj.ct.hivpos <- tt.traj.ct.hivpos
   dat$attr$time.since.last.test.rct <- tsinceltst.rct
   dat$attr$time.since.last.test.uct <- tsinceltst.uct
 
