@@ -119,11 +119,9 @@ trans_msm <- function(dat, at) {
   ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
   ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 3 adherence classes
-  for (i in 1:3) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
-    ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  ip.on.prep <- which(ip.prep == 1)
+  ip.tlo[ip.on.prep] <- ip.tlo[ip.on.prep] + log(prep.hr[ip.prepcl[ip.on.prep]])
 
   # Acute-stage multipliers
   isAcute <- which(ip.stage %in% 1:2)
@@ -189,11 +187,9 @@ trans_msm <- function(dat, at) {
   rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
   rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 3 adherence classes
-  for (i in 1:3) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
-    rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  rp.on.prep <- which(rp.prep == 1)
+  rp.tlo[rp.on.prep] <- rp.tlo[rp.on.prep] + log(prep.hr[rp.prepcl[rp.on.prep]])
 
   # Acute-stage multipliers
   isAcute <- which(rp.stage %in% 1:2)
