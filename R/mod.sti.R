@@ -1313,6 +1313,7 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$last.tx.time.syph.prep[txsyph_prep] <- at
   dat$attr$last.diag.time.syph[txsyph_sympt] <- at
   dat$attr$last.neg.test.syph[txsyph_sympt] <- NA
+  dat$attr$time.since.last.test.syph[txsyph_sympt] <- 0
   dat$attr$diag.status.syph[idssyph_tx_sympt] <- 0
   dat$attr$diag.status.syph[txsyph_sympt] <- 1
 
