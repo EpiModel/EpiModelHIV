@@ -138,10 +138,8 @@ prevalence_msm <- function(dat, at) {
                           sum(prepAccess == 1 & prepIndic == 1 & race == "B", na.rm = TRUE)
   dat$epi$prepRx.W[at] <- sum(prepAccess == 1 & prepIndic == 1 & prepStat == 1 & race == "W", na.rm = TRUE) /
                           sum(prepAccess == 1 & prepIndic == 1 & race == "W", na.rm = TRUE)
-  dat$epi$prepCurr.B[at] <- sum(prepStat == 1 & race == "B", na.rm = TRUE) /
-                            sum(race == "B", na.rm = TRUE)
-  dat$epi$prepCurr.W[at] <- sum(prepStat == 1 & race == "W", na.rm = TRUE) /
-                            sum(race == "W", na.rm = TRUE)
+  dat$epi$prepCurr.B[at] <- sum(prepStat == 1 & race == "B", na.rm = TRUE)
+  dat$epi$prepCurr.W[at] <- sum(prepStat == 1 & race == "W", na.rm = TRUE)
   dat$epi$prepHiAdr.B[at] <- sum(prepStat == 1 & prepClass == 3 & race == "B", na.rm = TRUE) /
                              sum(prepStat == 1 & race == "B", na.rm = TRUE)
   dat$epi$prepHiAdr.W[at] <- sum(prepStat == 1 & prepClass == 3 & race == "W", na.rm = TRUE) /
