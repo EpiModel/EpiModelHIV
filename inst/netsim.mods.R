@@ -7,8 +7,11 @@ devtools::load_all()
 #data(st)
 load("est/nwstats.rda")
 load("est/fit.rda")
+load("est/stimod.burnin.rda")
 
 param <- param_msm(nwstats = st,
+
+                   ai.scale = 1.04,
 
                    # STI acquisition
                    rgc.tprob = 0.4456,
@@ -63,16 +66,18 @@ init <- init_msm(nwstats = st)
 
 control <- control_msm(nsteps = 200)
 
-sim <- netsim(est, param, init, control)
+#sim <- netsim(est, param, init, control)
 
-debug(initialize_msm)
-at <- 1
-dat <- initialize_msm(est, param, init, control, s = 1)
-# dat <- reinit_msm(sim, param, init, control, s = 1)
+#debug(initialize_msm)
+debug(reinit_msm)
+#at <- 1
+at <- 5201
+#dat <- initialize_msm(est, param, init, control, s = 1)
+dat <- reinit_msm(sim, param, init, control, s = 1)
 
-debug(sti_recov_msm)
-debug(sti_tx_msm)
-debug(hiv_test_msm)
+#debug(sti_recov_msm)
+#debug(sti_tx_msm)
+#debug(hiv_test_msm)
 debug(sti_test_msm)
 
 at <- at + 1

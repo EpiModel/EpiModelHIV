@@ -1119,6 +1119,10 @@ reinit_msm <- function(x, param, init, control, s) {
     s <- 1
   }
 
+  if (length(x$el > 1)) {
+    s <- round(runif(1, min = 1, max = length(x$attr)), 0)
+  }
+
   dat <- list()
 
   dat$param <- param
