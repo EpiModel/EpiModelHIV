@@ -24,3 +24,4 @@ sub-Saharan Africa.
 \keyword{het}
 \keyword{msm}
 \keyword{package}
+\keyword{shamp}

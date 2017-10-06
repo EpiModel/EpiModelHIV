@@ -25,6 +25,6 @@
 #' @useDynLib EpiModelHIV
 #'
 #' @docType package
-#' @keywords package msm het
+#' @keywords package msm het shamp
 #'
 NULL
