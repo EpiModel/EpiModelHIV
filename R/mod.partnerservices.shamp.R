@@ -1,0 +1,36 @@
+# SHAMP -----------------------------------------------------------------
+
+#' @title Partner Services Module
+#'
+#' @description Module function for tracking partnerships over a predetermined time window.
+#'
+#' @inheritParams aging_msm
+#'
+#' @keywords module shamp
+#'
+#' @export
+#'
+pservices_shamp <- function(dat, at) {
+  
+#The partner services relationship edgelist
+psel <- dat$psel
+
+#The current edge list
+el <- rbind(dat$el[[1]],dat$el[[2]],dat$el[[3]])  
+
+#Edges formed in this time step
+new.edges <- rbind(dat$temp$new.edges, dat$el[[3]])
+    #assign new edges a start time.
+    start.time <- rep(at,length(new.edges[,1]))
+    new.edges <- cbind(new.edges,start.time)
+    
+#Merge new edges with psel
+psel<-rbind(psel,new.edges)
+    
+
+## drop relationships that are older than the window and not active  
+
+
+  return(dat)
+}
+
