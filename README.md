@@ -15,7 +15,6 @@ You can install `EpiModelHIV` in R using `devtools`:
 ```
 install.packages("EpiModel", dependencies = TRUE)
 devtools::install_github("statnet/tergmLite")
-devtools::install_github("statnet/EpiModelHPC")
 devtools::install_github("statnet/EpiModelHIV")
 ```
 
