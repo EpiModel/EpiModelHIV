@@ -364,7 +364,7 @@ sti_trans_msm <- function(dat, at) {
   dat$epi$incid.uct[at] <- length(idsInf_uct)
   dat$epi$incid.ct[at] <- length(unique(c(idsInf_rct,idsInf_uct)))
   dat$epi$incid.syph[at] <- length(idsInf_syph)
-  dat$epi$incid.sti[at] <- length(unique(c(idsInf_rct,idsInf_uct, idsInf_rgc,idsInf_ugc, idsInf_syph)))
+  dat$epi$incid.sti[at] <- dat$epi$incid.gc[at] + dat$epi$incid.ct[at] + dat$epi$incid.syph[at]
   dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
                                                            idsInf_rct, idsInf_uct)),
                                                   which(dat$attr$prepStat == 1)))
@@ -1409,18 +1409,18 @@ sti_tx_msm <- function(dat, at) {
   }
 
   # Number of tests for symptomatic
-  dat$epi$rGCsympttests[at] <- length(txRGC_sympt)
-  dat$epi$uGCsympttests[at] <- length(txUGC_sympt)
-  dat$epi$GCsympttests[at] <- length(txRGC_sympt) + length(txUGC_sympt)
+  dat$epi$rGCsympttests[at] <- length(unique(txRGC_sympt))
+  dat$epi$uGCsympttests[at] <- length(unique(txUGC_sympt))
+  dat$epi$GCsympttests[at] <- length(unique(txRGC_sympt)) + length(unique(txUGC_sympt))
 
-  dat$epi$rCTsympttests[at] <- length(txRCT_sympt)
-  dat$epi$uCTsympttests[at] <- length(txUCT_sympt)
-  dat$epi$CTsympttests[at] <- length(txRCT_sympt) + length(txUCT_sympt)
+  dat$epi$rCTsympttests[at] <- length(unique(txRCT_sympt))
+  dat$epi$uCTsympttests[at] <- length(unique(txUCT_sympt))
+  dat$epi$CTsympttests[at] <- length(unique(txRCT_sympt)) + length(unique(txUCT_sympt))
 
-  dat$epi$syphsympttests[at] <- length(txsyph_sympt)
+  dat$epi$syphsympttests[at] <- length(unique(txsyph_sympt))
 
-  dat$epi$stisympttests[at] <- length(txRGC_sympt) + length(txUGC_sympt) +
-    length(txRCT_sympt) + length(txUCT_sympt) + length(txsyph_sympt)
+  dat$epi$stisympttests[at] <- length(unique(txRGC_sympt)) + length(unique(txUGC_sympt)) +
+    length(unique(txRCT_sympt)) + length(unique(txUCT_sympt)) + length(unique(txsyph_sympt))
 
   asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
                  intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
@@ -1461,36 +1461,35 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$num.rect.cases.prep[at] <- length(unique(rect.cases.prep))
 
   # Track total number treated
-  dat$epi$txGC[at] <- length(unique(c(alltxRGC, alltxUGC)))
-  dat$epi$txGC_asympt[at] <- length(txGC_asympt)
-  dat$epi$txCT[at] <- length(unique(c(alltxRCT, alltxUCT)))
-  dat$epi$txCT_asympt[at] <- length(txCT_asympt)
-  dat$epi$txsyph[at] <- length(unique(c(txsyph_all)))
-  dat$epi$txsyph_asympt[at] <- length(txsyph_asympt)
+  dat$epi$txGC[at] <- length(unique(txRGC)) + length(unique(txUGC))
+  dat$epi$txGC_asympt[at] <- length(unique(txGC_asympt))
+  dat$epi$txCT[at] <- length(unique(txRCT)) + length(unique(txUCT))
+  dat$epi$txCT_asympt[at] <- length(unique(txCT_asympt))
+  dat$epi$txsyph[at] <- length(unique(c(txsyph)))
+  dat$epi$txsyph_asympt[at] <- length(unique(txsyph_asympt))
   dat$epi$txearlysyph[at] <- length(unique(c(txsyph_sympt_prim, txsyph_sympt_seco,
                                              txsyph_asympt_prim, txsyph_asympt_seco,
                                              txsyph_asympt_earlat)))
   dat$epi$txlatesyph[at] <- length(unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                             txsyph_sympt_tert)))
-  dat$epi$txSTI_asympt[at] <- length(c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                          txsyph_asympt))
+  dat$epi$txSTI_asympt[at] <- dat$epi$txGC_asympt[at] + dat$epi$txCT_asympt[at] + dat$epi$txsyph_asympt[at]
   dat$epi$txSTI[at] <- dat$epi$txGC[at] + dat$epi$txCT[at] + dat$epi$txsyph[at]
 
   # Risk group-specific treatment and test counters
-  dat$epi$txGC.tttraj1[at] <- length(which(tt.traj.gc.hivneg[unique(c(alltxRGC, alltxUGC))] == 1 | tt.traj.gc.hivpos[unique(c(alltxRGC, alltxUGC))] == 1))
-  dat$epi$txGC_asympt.tttraj1[at] <- length(which(tt.traj.gc.hivneg[txGC_asympt] == 1 | tt.traj.gc.hivpos[txGC_asympt] == 1))
-  dat$epi$txGC.tttraj2[at] <- length(which(tt.traj.gc.hivneg[unique(c(alltxRGC, alltxUGC))] == 2 | tt.traj.gc.hivpos[unique(c(alltxRGC, alltxUGC))] == 2))
-  dat$epi$txGC_asympt.tttraj2[at] <- length(which(tt.traj.gc.hivneg[txGC_asympt] == 2 | tt.traj.gc.hivpos[txGC_asympt] == 2))
+  dat$epi$txGC.tttraj1[at] <- length(which(tt.traj.gc.hivneg[unique(c(txRGC, txUGC))] == 1 | tt.traj.gc.hivpos[unique(c(txRGC, txUGC))] == 1))
+  dat$epi$txGC_asympt.tttraj1[at] <- length(which(tt.traj.gc.hivneg[unique(txGC_asympt)] == 1 | tt.traj.gc.hivpos[unique(txGC_asympt)] == 1))
+  dat$epi$txGC.tttraj2[at] <- length(which(tt.traj.gc.hivneg[unique(c(txRGC, txUGC))] == 2 | tt.traj.gc.hivpos[unique(c(txRGC, txUGC))] == 2))
+  dat$epi$txGC_asympt.tttraj2[at] <- length(which(tt.traj.gc.hivneg[unique(txGC_asympt)] == 2 | tt.traj.gc.hivpos[unique(txGC_asympt)] == 2))
 
-  dat$epi$txCT.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(c(alltxRCT, alltxUCT))] == 1 | tt.traj.ct.hivneg[unique(c(alltxRCT, alltxUCT))] == 1))
-  dat$epi$txCT_asympt.tttraj1[at] <- length(which(tt.traj.ct.hivpos[txCT_asympt] == 1 | tt.traj.ct.hivneg[txCT_asympt] == 1))
-  dat$epi$txCT.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(c(alltxRCT, alltxUCT))] == 2 | tt.traj.ct.hivneg[unique(c(alltxRCT, alltxUCT))] == 2))
-  dat$epi$txCT_asympt.tttraj2[at] <- length(which(tt.traj.ct.hivpos[txCT_asympt] == 2 | tt.traj.ct.hivneg[txCT_asympt] == 2))
+  dat$epi$txCT.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(c(txRCT, txUCT))] == 1 | tt.traj.ct.hivneg[unique(c(txRCT, txUCT))] == 1))
+  dat$epi$txCT_asympt.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(txCT_asympt)] == 1 | tt.traj.ct.hivneg[unique(txCT_asympt)] == 1))
+  dat$epi$txCT.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(c(txRCT, txUCT))] == 2 | tt.traj.ct.hivneg[unique(c(txRCT, txUCT))] == 2))
+  dat$epi$txCT_asympt.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(txCT_asympt)] == 2 | tt.traj.ct.hivneg[unique(txCT_asympt)] == 2))
 
-  dat$epi$txsyph.tttraj1[at] <- length(which(tt.traj.syph.hivneg[unique(c(txsyph_all))] == 1 | tt.traj.syph.hivpos[unique(c(txsyph_all))] == 1))
-  dat$epi$txsyph_asympt.tttraj1[at] <- length(which(tt.traj.syph.hivneg[txsyph_asympt] == 1 | tt.traj.syph.hivpos[txsyph_asympt] == 1 ))
-  dat$epi$txsyph.tttraj2[at] <- length(which(tt.traj.syph.hivneg[unique(c(txsyph_all))] == 2 | tt.traj.syph.hivpos[unique(c(txsyph_all))] == 2))
-  dat$epi$txsyph_asympt.tttraj2[at] <- length(which(tt.traj.syph.hivneg[txsyph_asympt] == 2 | tt.traj.syph.hivpos[txsyph_asympt] == 2))
+  dat$epi$txsyph.tttraj1[at] <- length(which(tt.traj.syph.hivneg[unique(txsyph)] == 1 | tt.traj.syph.hivpos[unique(txsyph)] == 1))
+  dat$epi$txsyph_asympt.tttraj1[at] <- length(which(tt.traj.syph.hivneg[unique(txsyph_asympt)] == 1 | tt.traj.syph.hivpos[unique(txsyph_asympt)] == 1))
+  dat$epi$txsyph.tttraj2[at] <- length(which(tt.traj.syph.hivneg[unique(txsyph)] == 2 | tt.traj.syph.hivpos[unique(txsyph)] == 2))
+  dat$epi$txsyph_asympt.tttraj2[at] <- length(which(tt.traj.syph.hivneg[unique(txsyph_asympt)] == 2 | tt.traj.syph.hivpos[unique(txsyph_asympt)] == 2))
 
   dat$epi$txearlysyph.tttraj1[at] <- length(which(tt.traj.syph.hivneg[unique(c(txsyph_sympt_prim, txsyph_sympt_seco,
                                              txsyph_asympt_prim, txsyph_asympt_seco,
@@ -1512,121 +1511,77 @@ sti_tx_msm <- function(dat, at) {
                                                    tt.traj.syph.hivpos[unique(c(txsyph_asympt_latelat, txsyph_asympt_tert,
                                                                               txsyph_sympt_tert))] == 2))
 
-  dat$epi$txSTI_asympt.tttraj1[at] <- length(which(tt.traj.gc.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                   txsyph_asympt)] == 1 |
-                                                 tt.traj.gc.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 1 |
-                                                 tt.traj.ct.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 1 |
-                                                 tt.traj.ct.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 1 |
-                                                 tt.traj.syph.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 1 |
-                                                 tt.traj.syph.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 1))
+  dat$epi$txSTI_asympt.tttraj1[at] <- dat$epi$txGC_asympt.tttraj1[at] + dat$epi$txCT_asympt.tttraj1[at] + dat$epi$txsyph_asympt.tttraj1[at]
 
-  dat$epi$txSTI_asympt.tttraj2[at] <- length(which(tt.traj.gc.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                   txsyph_asympt)] == 2 |
-                                                 tt.traj.gc.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 2 |
-                                                 tt.traj.ct.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                   txsyph_asympt)] == 2 |
-                                                 tt.traj.ct.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                     txsyph_asympt)] == 2 |
-                                                 tt.traj.syph.hivneg[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                       txsyph_asympt)] == 2 |
-                                                 tt.traj.syph.hivpos[c(txRCT_asympt, txUCT_asympt, txRGC_asympt, txUGC_asympt,
-                                                                       txsyph_asympt)] == 2))
+  dat$epi$txSTI_asympt.tttraj2[at] <- dat$epi$txGC_asympt.tttraj2[at] + dat$epi$txCT_asympt.tttraj2[at] + dat$epi$txsyph_asympt.tttraj2[at]
 
-  dat$epi$txSTI.tttraj1[at] <- length(which(tt.traj.gc.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                txsyph_all)] == 1 |
-                                              tt.traj.gc.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 1 |
-                                              tt.traj.ct.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 1 |
-                                              tt.traj.ct.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 1 |
-                                              tt.traj.syph.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                    txsyph_all)] == 1 |
-                                              tt.traj.syph.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                    txsyph_all)] == 1))
+  dat$epi$txSTI.tttraj1[at] <- dat$epi$txGC.tttraj1[at] + dat$epi$txCT.tttraj1[at] + dat$epi$txsyph.tttraj1[at]
 
-  dat$epi$txSTI.tttraj2[at] <- length(which(tt.traj.gc.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                txsyph_all)] == 2 |
-                                              tt.traj.gc.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 2 |
-                                              tt.traj.ct.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 2 |
-                                              tt.traj.ct.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                  txsyph_all)] == 2 |
-                                              tt.traj.syph.hivneg[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                    txsyph_all)] == 2 |
-                                              tt.traj.syph.hivpos[c(alltxRGC, alltxUGC, alltxRCT, alltxUCT,
-                                                                    txsyph_all)] == 2))
+  dat$epi$txSTI.tttraj2[at] <- dat$epi$txGC.tttraj2[at] + dat$epi$txCT.tttraj2[at] + dat$epi$txsyph.tttraj2[at]
 
-  dat$epi$rGCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 1)) +
-                                        length(which(tt.traj.gc.hivneg[txRGC_sympt] == 1))
-  dat$epi$uGCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[txUGC_sympt] == 1)) +
-                                        length(which(tt.traj.gc.hivneg[txUGC_sympt] == 1))
-  dat$epi$GCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 1)) +
-                                      length(which(tt.traj.gc.hivneg[txRGC_sympt] == 1)) +
-                                      length(which(tt.traj.gc.hivpos[txUGC_sympt] == 1)) +
-                                      length(which(tt.traj.gc.hivneg[txUGC_sympt] == 1))
+  dat$epi$rGCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 1)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 1))
+  dat$epi$uGCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 1)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 1))
+  dat$epi$GCsympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 1)) +
+                                      length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 1)) +
+                                      length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 1)) +
+                                      length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 1))
 
-  dat$epi$rGCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 2)) +
-                                        length(which(tt.traj.gc.hivneg[txRGC_sympt] == 2))
-  dat$epi$uGCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[txUGC_sympt] == 2)) +
-                                        length(which(tt.traj.gc.hivneg[txUGC_sympt] == 2))
-  dat$epi$GCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 2)) +
-                                      length(which(tt.traj.gc.hivneg[txRGC_sympt] == 2)) +
-                                      length(which(tt.traj.gc.hivpos[txUGC_sympt] == 2)) +
-                                      length(which(tt.traj.gc.hivneg[txUGC_sympt] == 2))
+  dat$epi$rGCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 2)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 2))
+  dat$epi$uGCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 2)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 2))
+  dat$epi$GCsympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 2)) +
+                                      length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 2)) +
+                                      length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 2)) +
+                                      length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 2))
 
-  dat$epi$rCTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[txRCT_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivneg[txRCT_sympt] == 1))
-  dat$epi$uCTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[txUCT_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivneg[txUCT_sympt] == 1))
-  dat$epi$CTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[txRCT_sympt] == 1)) +
-                                      length(which(tt.traj.ct.hivneg[txRCT_sympt] == 1)) +
-                                      length(which(tt.traj.ct.hivpos[txUCT_sympt] == 1)) +
-                                      length(which(tt.traj.ct.hivneg[txUCT_sympt] == 1))
+  dat$epi$rCTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 1))
+  dat$epi$uCTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 1))
+  dat$epi$CTsympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 1)) +
+                                      length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 1)) +
+                                      length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 1)) +
+                                      length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 1))
 
-  dat$epi$rCTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[txRCT_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivneg[txRCT_sympt] == 2))
-  dat$epi$uCTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[txUCT_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivneg[txUCT_sympt] == 2))
-  dat$epi$CTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[txRCT_sympt] == 2)) +
-                                      length(which(tt.traj.ct.hivneg[txRCT_sympt] == 2)) +
-                                      length(which(tt.traj.ct.hivpos[txUCT_sympt] == 2)) +
-                                      length(which(tt.traj.ct.hivneg[txUCT_sympt] == 2))
+  dat$epi$rCTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 2))
+  dat$epi$uCTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 2))
+  dat$epi$CTsympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 2)) +
+                                      length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 2)) +
+                                      length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 2)) +
+                                      length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 2))
 
-  dat$epi$syphsympttests.tttraj1[at] <- length(which(tt.traj.syph.hivpos[txsyph_sympt] == 1)) +
-                                        length(which(tt.traj.syph.hivneg[txsyph_sympt] == 1))
+  dat$epi$syphsympttests.tttraj1[at] <- length(which(tt.traj.syph.hivpos[unique(txsyph_sympt)] == 1)) +
+                                        length(which(tt.traj.syph.hivneg[unique(txsyph_sympt)] == 1))
 
-  dat$epi$syphsympttests.tttraj2[at] <- length(which(tt.traj.syph.hivpos[txsyph_sympt] == 2)) +
-                                        length(which(tt.traj.syph.hivneg[txsyph_sympt] == 2))
+  dat$epi$syphsympttests.tttraj2[at] <- length(which(tt.traj.syph.hivpos[unique(txsyph_sympt)] == 2)) +
+                                        length(which(tt.traj.syph.hivneg[unique(txsyph_sympt)] == 2))
 
-  dat$epi$stisympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 1)) +
-                                        length(which(tt.traj.gc.hivneg[txRGC_sympt] == 1)) +
-                                        length(which(tt.traj.gc.hivpos[txUGC_sympt] == 1)) +
-                                        length(which(tt.traj.gc.hivneg[txUGC_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivpos[txRCT_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivneg[txRCT_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivpos[txUCT_sympt] == 1)) +
-                                        length(which(tt.traj.ct.hivneg[txUCT_sympt] == 1)) +
-                                        length(which(tt.traj.syph.hivpos[txsyph_sympt] == 1)) +
-                                        length(which(tt.traj.syph.hivneg[txsyph_sympt] == 1))
+  dat$epi$stisympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 1)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 1)) +
+                                        length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 1)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 1)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 1)) +
+                                        length(which(tt.traj.syph.hivpos[unique(txsyph_sympt)] == 1)) +
+                                        length(which(tt.traj.syph.hivneg[unique(txsyph_sympt)] == 1))
 
-  dat$epi$stisympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[txRGC_sympt] == 2)) +
-                                        length(which(tt.traj.gc.hivneg[txRGC_sympt] == 2)) +
-                                        length(which(tt.traj.gc.hivpos[txUGC_sympt] == 2)) +
-                                        length(which(tt.traj.gc.hivneg[txUGC_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivpos[txRCT_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivneg[txRCT_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivpos[txUCT_sympt] == 2)) +
-                                        length(which(tt.traj.ct.hivneg[txUCT_sympt] == 2)) +
-                                        length(which(tt.traj.syph.hivpos[txsyph_sympt] == 2)) +
-                                        length(which(tt.traj.syph.hivneg[txsyph_sympt] == 2))
+  dat$epi$stisympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[unique(txRGC_sympt)] == 2)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txRGC_sympt)] == 2)) +
+                                        length(which(tt.traj.gc.hivpos[unique(txUGC_sympt)] == 2)) +
+                                        length(which(tt.traj.gc.hivneg[unique(txUGC_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivpos[unique(txRCT_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txRCT_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivpos[unique(txUCT_sympt)] == 2)) +
+                                        length(which(tt.traj.ct.hivneg[unique(txUCT_sympt)] == 2)) +
+                                        length(which(tt.traj.syph.hivpos[unique(txsyph_sympt)] == 2)) +
+                                        length(which(tt.traj.syph.hivneg[unique(txsyph_sympt)] == 2))
 
   # EPT
   # Proportion of treated GC/CT index who have current partners - e.g. eligibility for EPT

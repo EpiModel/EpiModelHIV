@@ -933,8 +933,6 @@ sti_test_msm <- function(dat, at) {
           length(tst.rgc.hivneg) + length(tst.ugc.hivneg) + dat$epi$rGC_hivdxtime[at] +
           dat$epi$uGC_hivdxtime[at]
 
-
-
         dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) +
           length(tst.rgc.pos.hivneg) + dat$epi$rGC_pos_hivdxtime[at]
         dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos) +
@@ -1061,7 +1059,7 @@ sti_test_msm <- function(dat, at) {
       dat$epi$CTasympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[tst.rct.hivpos] == 1)) +
                                             length(which(tt.traj.ct.hivneg[tst.rct.hivneg] == 1)) +
                                             length(which(tt.traj.ct.hivpos[tst.uct.hivpos] == 1)) +
-                                            length(which(tt.traj.ct.hivneg[tst.ugc.hivneg] == 1))
+                                            length(which(tt.traj.ct.hivneg[tst.uct.hivneg] == 1))
 
       dat$epi$rCTasympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[tst.rct.hivpos] == 2)) +
                                             length(which(tt.traj.ct.hivneg[tst.rct.hivneg] == 2))
