@@ -6,11 +6,12 @@ Title: Network-Based Epidemic Modeling of HIV Transmission among MSM and Heteros
 Authors@R: c(person("Samuel M.", "Jenness", role = c("cre", "aut"), email = "samuel.m.jenness@emory.edu"),
              person("Steven M.", "Goodreau", role="aut", email="goodeau@uw.edu"),
              person("Emily", "Beylerian", role = "ctb", email = "ebey@uw.edu"),
-             person("Kevin", "Weiss", role = "aut", email = "kevin.weiss@emory.edu"))
+             person("Kevin", "Weiss", role = "aut", email = "kevin.weiss@emory.edu"),
+             person("Deven", "Hamilton", role = "aut", email = "dth2@uw.edu"))
 Maintainer: Samuel M. Jenness <samuel.m.jenness@emory.edu>
-Description: EpiModelHIV provides extensions to our general EpiModel package to allow for simulating HIV transmission
-  dynamics among two populations: men who have sex with men (MSM) in the United States and heterosexual adults in
-  sub-Saharan Africa.
+Description: The SHAMP branch of EpiModelHIV provides extensions to our EpiModelHIV package to allow for simulating HIV transmission
+  dynamics among mixed populations: males who have sex with males (MSM), males who have sex with females (MSF), males who have sex with males 
+  and females (MSMF) and females (F) and up to 5 race catagories.
 License: GPL-3
 Depends:
     R (>= 3.2.0),

@@ -27,6 +27,7 @@ Author                                                        | Department      
 ------------------------------------------------------------- | -------------------------- | ------------------------
 [Samuel M. Jenness](http://samueljenness.org/)                | Department of Epidemiology | Emory University
 [Steven M. Goodreau](http://faculty.washington.edu/goodreau/) | Department of Anthropology | University of Washington
+Deven T. Hamilton                                             | CSDE                       | University of Washington
 Kevin M. Weiss                                                | Department of Epidemiology | Emory University
 
 
