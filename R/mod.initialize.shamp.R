@@ -531,8 +531,6 @@ init_status_shamp <- function(dat) {
      status[ids.W.msmf] <- rbinom(num.W.msmf, 1, probInfW.msmf)
    }
   
-    dat$attr$status <- status
-    dat$attr$inf.class[dat$attr$status==1] <- "L"
 
   # Treatment trajectory
   tt.traj <- rep(NA, num)
