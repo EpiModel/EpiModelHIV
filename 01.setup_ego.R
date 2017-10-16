@@ -304,9 +304,6 @@ est <- list(fit.1, fit.2, fit.3)
 save(est, file = "~/EpiModelHIV_shamp_modeling/scenarios/est/fitsmall.rda")
 save(data.params, file = "~/EpiModelHIV_shamp_modeling/scenarios/est/data.params.rda")
 
-param <- param_shamp(data.params,temp.adjust=100)
-init <- init_shamp()
-control <- control_shamp(nsteps = 520)
 
 
 
@@ -315,6 +312,14 @@ control <- control_shamp(nsteps = 520)
 load(file = "~/EpiModelHIV_shamp_modeling/scenarios/est/fitsmall.rda")
 load(file = "~/EpiModelHIV_shamp_modeling/scenarios/est/data.params.rda")
 
+
+param <- param_shamp(data.params,
+                     msm.temp.adjust = 1,
+                     fa.temp.adjust = 1000,
+                     depart.adjust = 1000,
+                     return.adjust = .1)
+init <- init_shamp()
+control <- control_shamp(nsteps = 520)
 
 sim<-netsim(est, param, init, control)
 
