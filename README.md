@@ -3,7 +3,7 @@ EpiModelHIV
 
 [![Build Status](https://travis-ci.org/statnet/EpiModelHIV.svg?branch=master)](https://travis-ci.org/statnet/EpiModelHIV)
 
-An R package for simulating HIV transmission dynamics among men who have sex with men and heterosexual populations, developed as an extension to our general network-based epidemic modeling platform, [EpiModel](http://epimodel.org).
+An R package for simulating HIV transmission dynamics among men who have sex with men, men who have sex with men and women, and heterosexual populations and includes functionality for up to five race catagories.  This brach is being developed as an extension to our base package for simulating HIV transmission, [EpiModelHIV](https//github.com/statnet/EpiModelHIV).
 
 `EpiModel` and `EpiModelHIV` use the statistical framework of temporal exponential-family random graph models to fit and simulate models of dynamic networks. These [statistical methods](http://onlinelibrary.wiley.com/doi/10.1111/rssb.12014/abstract) have been developed and implemented as open-source software, building on the extensive efforts of the [Statnet](https://statnet.org/) research group to build software tools for the representation, analysis, and visualization of complex network data.
 
@@ -20,6 +20,10 @@ devtools::install_github("statnet/EpiModelHIV")
 ```
 
 Documentation on using this software package is forthcoming, although limited function documentation is provided within the package and available with the `help(package = "EpiModelHIV")` command.
+
+## Warning
+
+This branch of EpiModelHIV is in ongoing development.  In addition this branch currently relies upon private versions of R packages including ergm.ego.  Use of this version of EpimodelHIV is not recomended and it is suggested that users work with the master branch.
 
 ## EpiModelHIV Software Development Team
 
