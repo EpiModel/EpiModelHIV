@@ -866,6 +866,13 @@ sti_test_msm <- function(dat, at) {
   dat$epi$tt.traj.ct2[at] <- length(which(tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2))
   dat$epi$tt.traj.syph2[at] <- length(which(tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))
 
+  dat$epi$tt.traj.sti1[at] <- length(which(tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1 |
+                                            tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1 |
+                                            tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))
+  dat$epi$tt.traj.sti2[at] <- length(which(tt.traj.gc.hivneg == 2 | tt.traj.gc.hivpos == 2 |
+                                             tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2 |
+                                             tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))
+
   # Number of STIs tests for asymptomatic background (non-HIV diagnosed)
   dat$epi$rGCasympttests.hivneg[at] <- length(tst.rgc.hivneg)
   dat$epi$uGCasympttests.hivneg[at] <- length(tst.ugc.hivneg)

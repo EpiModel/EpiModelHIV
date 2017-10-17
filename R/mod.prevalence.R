@@ -561,6 +561,8 @@ prevalence_msm <- function(dat, at) {
     dat$epi$tt.traj.syph2 <- rep(0, nsteps)
     dat$epi$tt.traj.gc2 <- rep(0, nsteps)
     dat$epi$tt.traj.ct2 <- rep(0, nsteps)
+    dat$epi$tt.traj.sti1 <- rep(0, nsteps)
+    dat$epi$tt.traj.sti2 <- rep(0, nsteps)
 
     # Incidence by risk group
     dat$epi$ir100.ct.tttraj1 <- rNA
