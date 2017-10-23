@@ -756,11 +756,11 @@ prevalence_msm <- function(dat, at) {
 
   dat$epi$prev.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, length(which(stage.syph %in% c(1, 2, 3))) /
                                             dat$epi$num[at], 0)
-  dat$epi$prev.primsecosyph.tttraj1[at] <- ifelse(dat$epi$tt.traj.syph1[at] > 0,
+  dat$epi$prev.primsecosyph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at])),
                                                   length(which(stage.syph %in% c(1, 2, 3) &
                                                                    (tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))) /
                                                     dat$epi$tt.traj.syph1[at], 0)
-  dat$epi$prev.primsecosyph.tttraj2[at] <- ifelse(dat$epi$tt.traj.syph2[at] > 0,
+  dat$epi$prev.primsecosyph.tttraj2[at] <- ifelse((dat$epi$tt.traj.syph2[at] == 0 | is.na(dat$epi$tt.traj.syph2[at])),
                                                   length(which(stage.syph %in% c(1, 2, 3) &
                                                                                 (tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))) /
                                                     dat$epi$tt.traj.syph2[at], 0)
