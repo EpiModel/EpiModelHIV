@@ -1146,7 +1146,7 @@ reinit_msm <- function(x, param, init, control, s) {
   }
 
   dat$temp <- x$temp[[s]]
-  dat <- prevalence_msm(dat, at = 5201)
+  #dat <- prevalence_msm(dat, at = 5201)
 
   class(dat) <- "dat"
   return(dat)
