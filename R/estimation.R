@@ -75,13 +75,19 @@
 #' @export
 #'
 calc_nwstats_msm <- function(time.unit = 7,
-                             method = 2,
+                             method = 1,
                              num.B,
                              num.W,
+                             num.B.msm,
+                             num.W.msm,
+                             num.B.asmm,
+                             num.W.asmm,
                              deg.mp.B,
                              deg.mp.W,
                              mdeg.inst.B,
                              mdeg.inst.W,
+                             deg.asmm,
+                             cross.frac,
                              qnts.B,
                              qnts.W,
                              prop.hom.mpi.B,
@@ -92,13 +98,27 @@ calc_nwstats_msm <- function(time.unit = 7,
                              sqrt.adiff.BW,
                              diss.main,
                              diss.pers,
+                             diss.asmm,
                              durs.main,
                              durs.pers,
+                             rates.asmm,
+                             durs.asmm,
                              ages,
+                             ages.asmm,
+                             ages.yamsm,
+                             ages.oamsm,
+                             ages.msm,
+                             birth.age,
+                             out.age.prob,
+                             debut.entry.prob,
+                             debut.prob,
                              asmr.B,
                              asmr.W,
-                             role.B.prob,
-                             role.W.prob) {
+                             role.B.prob.msm,
+                             role.W.prob.msm,
+                             role.B.prob.asmm,
+                             role.W.prob.asmm,
+                             role.shift) {
 
   if (sum(deg.mp.B) != 1) {
     stop("deg.mp.B must sum to 1.")
@@ -110,24 +130,24 @@ calc_nwstats_msm <- function(time.unit = 7,
     stop("method must either be 1 for one-race models or 2 for two-race models", call. = FALSE)
   }
 
-  num <- num.B + num.W
+  num.msm <- num.B.msm + num.W.msm
 
   # deg.pers nodal attribute
   if (method == 2) {
-    deg.pers.B <- apportion_lr(num.B, c("B0", "B1", "B2"), colSums(deg.mp.B))
-    deg.pers.W <- apportion_lr(num.W, c("W0", "W1", "W2"), colSums(deg.mp.W))
+    deg.pers.B <- apportion_lr(num.B.msm, c("B0", "B1", "B2"), colSums(deg.mp.B))
+    deg.pers.W <- apportion_lr(num.W.msm, c("W0", "W1", "W2"), colSums(deg.mp.W))
   }
   if (method == 1) {
-    deg.pers <- apportion_lr(num, 0:2, colSums(deg.mp.W))
+    deg.pers <- apportion_lr(num.msm, 0:2, colSums(deg.mp.W))
   }
 
   # deg main nodal attribute
   if (method == 2) {
-    deg.main.B <- apportion_lr(num.B, c("B0", "B1"), rowSums(deg.mp.B))
-    deg.main.W <- apportion_lr(num.W, c("W0", "W1"), rowSums(deg.mp.W))
+    deg.main.B <- apportion_lr(num.B.msm, c("B0", "B1"), rowSums(deg.mp.B))
+    deg.main.W <- apportion_lr(num.W.msm, c("W0", "W1"), rowSums(deg.mp.W))
   }
   if (method == 1) {
-    deg.main <- apportion_lr(num, 0:1, rowSums(deg.mp.W))
+    deg.main <- apportion_lr(num.msm, 0:1, rowSums(deg.mp.W))
   }
 
 
@@ -135,10 +155,10 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Persons in partnerships by casual degree
   if (method == 2) {
-    totdeg.m.by.dp <- c(num.B * deg.mp.B[2, ], num.W * deg.mp.W[2, ])
+    totdeg.m.by.dp <- c(num.B.msm * deg.mp.B[2, ], num.W.msm * deg.mp.W[2, ])
   }
   if (method == 1) {
-    totdeg.m.by.dp <- c(num * deg.mp.B[2, ])
+    totdeg.m.by.dp <- c(num.msm * deg.mp.B[2, ])
   }
 
   # Persons in partnerships by race
@@ -148,8 +168,8 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Number of partnerships
   edges.m <- (sum(totdeg.m.by.dp)) / 2
-
-  # Mixing
+  
+    # Mixing
   if (method == 2) {
     # Number of mixed-race partnerships, with balancing to decide
     edges.m.B2W <- totdeg.m.by.race[1] * (1 - prop.hom.mpi.B[1])
@@ -183,7 +203,7 @@ calc_nwstats_msm <- function(time.unit = 7,
   }
 
   # Dissolution model
-  exp.mort <- (mean(asmr.B[ages]) + mean(asmr.W[ages])) / 2
+  exp.mort <- (mean(asmr.B[ages.msm]) + mean(asmr.W[ages.msm])) / 2
 
   coef.diss.m <- dissolution_coefs(dissolution = diss.main,
                                    duration = durs.main / time.unit,
@@ -195,11 +215,11 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Persons in partnerships by main degree
   if (method == 2) {
-    totdeg.p.by.dm <- c(num.B * deg.mp.B[, 2] + num.B * deg.mp.B[, 3] * 2,
-                        num.W * deg.mp.W[, 2] + num.W * deg.mp.W[, 3] * 2)
+    totdeg.p.by.dm <- c(num.B.msm * deg.mp.B[, 2] + num.B.msm * deg.mp.B[, 3] * 2,
+                        num.W.msm * deg.mp.W[, 2] + num.W.msm * deg.mp.W[, 3] * 2)
   }
   if (method == 1) {
-    totdeg.p.by.dm <- c(num * deg.mp.B[, 2] + num * deg.mp.B[, 3] * 2)
+    totdeg.p.by.dm <- c(num.msm * deg.mp.B[, 2] + num.msm * deg.mp.B[, 3] * 2)
   }
 
   # Persons in partnerships by race
@@ -209,14 +229,16 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Persons concurrent
   if (method == 2) {
-    conc.p.by.race <- c(sum(deg.mp.B[, 3]) * num.B, sum(deg.mp.W[, 3]) * num.W)
+    conc.p.by.race <- c(sum(deg.mp.B[, 3]) * num.B.msm, sum(deg.mp.W[, 3]) * num.W.msm)
   }
   if (method == 1) {
-    conc.p <- sum(deg.mp.B[, 3] * num)
+    conc.p <- sum(deg.mp.B[, 3] * num.msm)
   }
 
   # Number of partnerships
   edges.p <- sum(totdeg.p.by.dm) / 2
+  
+  edges.p.oamsm<-1-(length(19:25)/length(19:40))*(1+cross.frac)*edges.p
 
   # Mixing
   if (method == 2) {
@@ -245,10 +267,10 @@ calc_nwstats_msm <- function(time.unit = 7,
   # Compile target statistics
   if (method == 2) {
     stats.p <- c(edges.p, edges.nodemix.p[2:3], totdeg.p.by.dm[c(2, 4)],
-                 conc.p.by.race, sqrt.adiff.p)
+                 conc.p.by.race, sqrt.adiff.p,edges.p.oamsm)
   }
   if (method == 1) {
-    stats.p <- c(edges.p, totdeg.p.by.dm[2], conc.p, sqrt.adiff.p)
+    stats.p <- c(edges.p, totdeg.p.by.dm[2], conc.p, sqrt.adiff.p,edges.p.oamsm)
   }
 
   # Dissolution model
@@ -262,21 +284,21 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Number of instant partnerships per time step, by main and casl degree
   if (method == 2) {
-    num.inst.B <- num.B * deg.mp.B * mdeg.inst.B * time.unit
-    num.inst.W <- num.W * deg.mp.W * mdeg.inst.W * time.unit
+    num.inst.B <- num.B.msm * deg.mp.B * mdeg.inst.B * time.unit
+    num.inst.W <- num.W.msm * deg.mp.W * mdeg.inst.W * time.unit
   }
   if (method == 1) {
-    num.inst <- num * deg.mp.W * mdeg.inst.W * time.unit
+    num.inst <- num.msm * deg.mp.W * mdeg.inst.W * time.unit
   }
 
   # Risk quantiles
   if (!is.na(qnts.B[1]) & !is.na(qnts.W[1])) {
     if (method == 2) {
-      num.riskg.B <- (0.2*num.B) * qnts.B * time.unit
-      num.riskg.W <- (0.2*num.W) * qnts.W * time.unit
+      num.riskg.B <- (0.2*(num.B.msm)) * qnts.B * time.unit
+      num.riskg.W <- (0.2*(num.W.msm)) * qnts.W * time.unit
     }
     if (method == 1) {
-      num.riskg <- 0.2 * num * qnts.B * time.unit
+      num.riskg <- 0.2 * (num.msm) * qnts.B * time.unit
     }
   }
 
@@ -335,6 +357,28 @@ calc_nwstats_msm <- function(time.unit = 7,
     }
   }
 
+  # ASMM partnerships -------------------------------------------------------
+  
+
+  edges.asmm <- ((num.W.asmm + num.B.asmm) * deg.asmm)/2 + cross.frac*(num.msm)
+  
+  cross.ties<-cross.frac*(num.msm)
+
+  # Risk quantiles
+  
+  num.riskg.asmm <- (edges.asmm*riskg.asmm)*2
+
+  
+  
+  # Dissolution model
+  exp.mort.asmm <- (mean(asmr.B[min(ages.asmm):max(ages.yamsm)]) + mean(asmr.W[min(ages.asmm):max(ages.yamsm)])) / 2
+  
+  coef.diss.asmm <- dissolution_coefs(dissolution = diss.asmm,
+                                   duration = durs.asmm / time.unit,
+                                   d.rate = exp.mort.asmm)
+  
+  stats.asmm <- c(edges.asmm, num.riskg.asmm[-3], cross.ties)
+  
 
   # Compile results ---------------------------------------------------------
   out <- list()
@@ -351,25 +395,43 @@ calc_nwstats_msm <- function(time.unit = 7,
   out$stats.m <- stats.m
   out$stats.p <- stats.p
   out$stats.i <- stats.i
+  out$stats.asmm <- stats.asmm
 
   out$coef.diss.m <- coef.diss.m
   out$coef.diss.p <- coef.diss.p
+  out$coef.diss.asmm <- coef.diss.asmm
 
   out$ages <- ages
+  out$ages.asmm <- ages.asmm
+  out$ages.yamsm <- ages.yamsm
+  out$ages.oamsm <- ages.oamsm
+  
+  out$out.age.prob<-out.age.prob
+  out$debut.entry.prob<-debut.entry.prob
+  out$debut.prob<-debut.prob
+
+
   out$asmr.B <- asmr.B
   out$asmr.W <- asmr.W
 
   out$time.unit <- time.unit
   out$num.B <- num.B
   out$num.W <- num.W
+  out$num.B.msm <- num.B.msm
+  out$num.W.msm <- num.W.msm 
+  out$num.B.asmm <- num.B.asmm
+  out$num.W.asmm <- num.W.asmm  
 
   out$deg.mp.B <- deg.mp.B
   out$deg.mp.W <- deg.mp.W
 
-  out$role.B.prob <- role.B.prob
-  out$role.W.prob <- role.W.prob
+  out$role.B.prob.msm <- role.B.prob.msm
+  out$role.W.prob.msm <- role.W.prob.msm
+  out$role.B.prob.asmm <- role.B.prob.asmm
+  out$role.W.prob.asmm <- role.W.prob.asmm
+  out$role.shift <- role.shift
 
-  class(out) <- "nwstats"
+ class(out) <- "nwstats"
   return(out)
 }
 
@@ -399,13 +461,17 @@ base_nw_msm <- function(nwstats) {
 
   num.B <- nwstats$num.B
   num.W <- nwstats$num.W
+  num.B.msm <- nwstats$num.B.msm
+  num.W.msm <- nwstats$num.W.msm
+  num.B.asmm <- nwstats$num.B.asmm
+  num.W.asmm <- nwstats$num.W.asmm
 
   # Initialize network
   n <- num.B + num.W
   nw <- network::network.initialize(n, directed = FALSE)
 
   # Calculate attributes
-  race <- c(rep("B", num.B), rep("W", num.W))
+  race <- c(rep("B",(num.B)), rep("W", (num.W)))
   race <- sample(race)
 
   ager <- nwstats$ages
@@ -413,20 +479,57 @@ base_nw_msm <- function(nwstats) {
   age <- sample(ages, n, TRUE)
   sqrt.age <- sqrt(age)
 
-  role.B <- sample(apportion_lr(num.B, c("I", "R", "V"), nwstats$role.B.prob))
-  role.W <- sample(apportion_lr(num.W, c("I", "R", "V"), nwstats$role.W.prob))
+  role.B <- sample(apportion_lr((num.B), c("I", "R", "V"), nwstats$role.B.prob.msm))
+  role.W <- sample(apportion_lr((num.W), c("I", "R", "V"), nwstats$role.W.prob.msm))
   role <- rep(NA, n)
   role[race == "B"] <- role.B
   role[race == "W"] <- role.W
 
-  riskg.B <- sample(apportion_lr(num.B, 1:5, rep(0.2, 5)))
-  riskg.W <- sample(apportion_lr(num.W, 1:5, rep(0.2, 5)))
+  riskg.B <- sample(apportion_lr((num.B), 1:5, rep(0.2, 5)))
+  riskg.W <- sample(apportion_lr((num.W), 1:5, rep(0.2, 5)))
   riskg <- rep(NA, n)
   riskg[race == "B"] <- riskg.B
   riskg[race == "W"] <- riskg.W
+  
+  #Set out for ASMM and debut for out ASMM 
+  
+  out.age.prob<-nwstats$out.age.prob
+  debut.entry.prob<-nwstats$debut.entry.prob
+  debut.prob<-nwstats$debut.prob
 
-  attr.names <- c("race", "riskg", "sqrt.age", "role.class")
-  attr.values <- list(race, riskg, sqrt.age, role)
+  agecat<-floor(age)
+  asmm<-yamsm<-oamsm<-out<-debuted<-rep("0",length(agecat))
+  asmm[agecat < 19] <-"1"
+  yamsm[agecat > 18 & agecat < 26] <-"1"
+  oamsm[agecat > 25] <-"1"
+  out[agecat > 18] <-"1"
+  debuted[agecat > 18] <-"1"
+  
+  ##Set out for ASMM
+
+out.age <- rep(0,length(agecat))
+out.age <- sample((13:18),length(out.age),out.age.prob,replace=TRUE)
+out <- rep(0,length(agecat))
+out[which(age>out.age)]<-1
+  
+
+  ##Set debut for ASMM
+for(i in 1:length(agecat)){
+  
+  debuted[i]<-ifelse(agecat[i]==13 & out[i]=="1",rbinom(1,1,debut.entry.prob),
+                ifelse(agecat[i]==14 & out[i]=="1", rbinom(1,1,debut.entry.prob),
+                ifelse(agecat[i]==15 & out[i]=="1", rbinom(1,1,debut.entry.prob),
+                ifelse(agecat[i]==16 & out[i]=="1", rbinom(1,1,debut.entry.prob),
+                ifelse(agecat[i]==17 & out[i]=="1", rbinom(1,1,debut.entry.prob),
+                ifelse(agecat[i]==18 & out[i]=="1", rbinom(1,1,debut.entry.prob),debuted[i]))))))
+ }
+  
+
+  
+  
+
+  attr.names <- c("race", "riskg", "sqrt.age", "age", "role.class", "debuted", "out","out.age", "asmm", "oamsm", "yamsm")
+  attr.values <- list(race, riskg, sqrt.age, age, role, debuted, out, out.age, asmm, oamsm, yamsm)
   nw <- network::set.vertex.attribute(nw, attr.names, attr.values)
 
   return(nw)
@@ -479,8 +582,9 @@ assign_degree <- function(nw, deg.type, nwstats) {
   }
 
   race <- get.vertex.attribute(nw, "race")
-  vB <- which(race == "B")
-  vW <- which(race == "W")
+  asmm <- get.vertex.attribute(nw, "asmm")
+  vB <- which(race == "B" & asmm == 0)
+  vW <- which(race == "W" & asmm == 0)
   nB <- length(vB)
   nW <- length(vW)
 
@@ -501,60 +605,3 @@ assign_degree <- function(nw, deg.type, nwstats) {
   return(nw)
 }
 
-
-# Het -----------------------------------------------------------------
-
-#' @title Calculate Network Statistics
-#'
-#' @description This function calculates the target statistics for the formation
-#'              and dissolution models estimated in \code{netest}.
-#'
-#' @param n Population size.
-#' @param meandeg Mean degree.
-#' @param prop.male Percent of the population that is male.
-#' @param start.prev Starting HIV prevalence in the population.
-#' @param part.dur Mean duration of partnerships.
-#' @param time.unit Time unit used, relative to days.
-#'
-#' @keywords het
-#' @export
-#'
-make_nw_het <- function(n = 10000,
-                        meandeg = 0.8,
-                        prop.male = 0.5,
-                        start.prev = 0.05,
-                        part.dur = 1000,
-                        time.unit = 7) {
-
-  nMale <- round(n * prop.male)
-
-  male <- rep(0, n)
-  male[sample(1:n, nMale)] <- 1
-
-  # Set vertex attributes
-  nw <- network.initialize(n = n, directed = FALSE)
-  nw <- set.vertex.attribute(nw, attrname = "male", value = male)
-
-  # Formation Model
-  formation <- ~edges + offset(nodematch("male"))
-
-  # Target stats
-  edges.ts <- meandeg * (n/2)
-
-  stats <- edges.ts
-
-  # Dissolution model
-  dissolution <- ~offset(edges)
-  dur <- part.dur/time.unit
-  d.rate <- time.unit * (((1 - start.prev) * 1/(55 - 18)/365) + (start.prev * 1/12/365))
-  coef.diss <- dissolution_coefs(dissolution, duration = dur, d.rate = d.rate)
-
-  out <- list()
-  out$nw <- nw
-  out$time.unit <- time.unit
-  out$formation <- formation
-  out$stats <- stats
-  out$coef.diss <- coef.diss
-
-  return(out)
-}

@@ -4,7 +4,7 @@
 #' @description Module function for births or entries into the sexually active
 #'              population.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' New population members are added based on expected numbers of entries among
@@ -18,10 +18,10 @@
 #' This function updates the \code{attr} list with new attributes for each new
 #' population member, and the \code{nw} objects with new vertices.
 #'
-#' @keywords module msm
+#' @keywords module msm lifecycle
 #' @export
 #'
-births_msm <- function(dat, at){
+births_camplc <- function(dat, at){
 
   ## Variables
 
@@ -54,8 +54,8 @@ births_msm <- function(dat, at){
 
   # Update Networks
   if (nBirths > 0) {
-    for (i in 1:3) {
-      dat$el[[i]] <- tergmLite::add_vertices(dat$el[[i]], nBirths)
+    for (i in 1:4) {
+      dat$el[[i]] <- add_vertices(dat$el[[i]], nBirths)
     }
   }
 
@@ -90,9 +90,52 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   newW <- which(race == "W")
   dat$attr$race[newIds] <- race
 
-  dat$attr$age[newIds] <- rep(dat$param$birth.age, nBirths)
-  dat$attr$sqrt.age[newIds] <- sqrt(dat$attr$age[newIds])
 
+  ##Age
+  dat$attr$age[newIds] <- dat$param$birth.age
+  dat$attr$sqrt.age[newIds] <- sqrt(dat$param$birth.age)
+  
+  
+  #Set out age for new births and debut for new births 
+  
+  out.age.prob<-dat$init$out.age.prob
+  debut.entry.prob<-dat$init$debut.entry.prob
+  debut.prob<-dat$init$debut.prob
+  
+  ##Set out for ASMM
+  out.age <- sample((13:18),nBirths,out.age.prob,replace=TRUE)
+  dat$attr$out.age[newIds] <- out.age
+ 
+    ##Set debut for ASMM
+  debuted<-rep(NA,nBirths)
+  for(i in 1:nBirths){
+    
+    debuted[i]<-ifelse(out.age[i]==13,rbinom(1,1,debut.entry.prob),0)
+  }
+  
+  dat$attr$debuted[newIds] <- debuted
+  dat$attr$of.age[newIds] <- 0
+  dat$attr$out[newIds] <- 0
+  
+  #set group
+  dat$attr$asmm[newIds] <- 1
+  dat$attr$yamsm[newIds] <- 0
+  dat$attr$oamsm[newIds] <- 0
+  
+  
+  #AI.
+  dat$attr$everAI[newIds]<-rep(0,nBirths)
+  dat$attr$AI.adult.count[newIds]<-rep(0,nBirths)
+  dat$attr$AI.adult.count.t[newIds]<-rep(0,nBirths)
+  dat$attr$AI.ysmm.count[newIds]<-rep(0,nBirths)
+  
+  #Set attributes to take start times for active debut AI and PrEP.
+  dat$attr$active.time[newIds]<-rep(at,nBirths)
+  dat$attr$has.debuted.time[newIds] <-rep(0,nBirths)
+  dat$attr$AI.time[newIds] <-rep(0,nBirths)
+  dat$attr$prepStart.time[newIds]<-rep(Inf,nBirths)
+  
+  
   # Disease status and related
   dat$attr$status[newIds] <- rep(0, nBirths)
 
@@ -105,7 +148,9 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
-
+  
+  dat$attr$evertested[newIds] <- rep(0, nBirths)
+  
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
@@ -113,10 +158,10 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   # Role
   dat$attr$role.class[newIds[newB]] <- sample(c("I", "R", "V"),
                                               nBirths.B, replace = TRUE,
-                                              prob = dat$param$role.B.prob)
+                                              prob = dat$param$role.B.prob.asmm)
   dat$attr$role.class[newIds[newW]] <- sample(c("I", "R", "V"),
                                               nBirths.W, replace = TRUE,
-                                              prob = dat$param$role.W.prob)
+                                              prob = dat$param$role.W.prob.asmm)
 
   ins.quot <- rep(NA, nBirths)
   ins.quot[dat$attr$role.class[newIds] == "I"]  <- 1
@@ -141,6 +186,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   # Degree
   dat$attr$deg.main[newIds] <- 0
   dat$attr$deg.pers[newIds] <- 0
+  dat$attr$deg.asmm[newIds] <- 0
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
@@ -152,132 +198,27 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
   dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
-
+  dat$attr$uaicount[newIds] <- rep(0,nBirths) 
+  
   # PrEP
+  dat$attr$prepEver[newIds] <- 0
   dat$attr$prepStat[newIds] <- 0
-
+  dat$attr$prepElig[newIds] <- rep(0, nBirths)
+  dat$attr$prepClass[newIds] <- rep(NA, nBirths)
+  dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
+  
+  # Risk history matrices
+  for (i in 1:length(dat$riskh)) {
+    dat$riskh[[i]] <- rbind(dat$riskh[[i]],
+                            matrix(NA, ncol = ncol(dat$riskh[[i]]), nrow = nBirths))
+  }
+  
+  # Risk history adolecent
+  for (i in 1:length(newIds)) {
+    x<-c(dat$temp$max.uid - nBirths + i ,rep(0,26))
+    dat$riskhist <- rbind(dat$riskhist,x,make.row.names = FALSE)
+  }
+  
   return(dat)
 }
 
-
-
-#' @title Births Module
-#'
-#' @description Module for simulating births/entries into the population, including
-#'              initialization of attributes for incoming nodes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
-#' @export
-#'
-births_het <- function(dat, at) {
-
-  # Variables
-  b.rate.method <- dat$param$b.rate.method
-  b.rate <- dat$param$b.rate
-  active <- dat$attr$active
-
-
-  # Process
-  nBirths <- 0
-  if (b.rate.method == "stgrowth") {
-    exptPopSize <- dat$epi$num[1] * (1 + b.rate*at)
-    numNeeded <- exptPopSize - sum(active == 1)
-    if (numNeeded > 0) {
-      nBirths <- rpois(1, numNeeded)
-    }
-  }
-  if (b.rate.method == "totpop") {
-    nElig <- dat$epi$num[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-  if (b.rate.method == "fpop") {
-    nElig <- dat$epi$num.feml[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-
-
-  # Update Population Structure
-  if (nBirths > 0) {
-    dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el[[1]] <- tergmLite::add_vertices(dat$el[[1]], nBirths)
-  }
-
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-    stop("mismatch between el and attr length in births mod")
-  }
-
-  # Output
-  dat$epi$b.flow[at] <- nBirths
-
-  return(dat)
-}
-
-
-#' @title Assign Vertex Attributes at Network Entry
-#'
-#' @description Assigns vertex attributes to incoming nodes at birth/entry into
-#'              the network.
-#'
-#' @inheritParams births_het
-#' @param nBirths Number of new births as determined by \code{\link{births_het}}.
-#'
-#' @keywords het
-#'
-#' @export
-#'
-#'
-setBirthAttr_het <- function(dat, at, nBirths) {
-
-  # Set attributes for new births to NA
-  dat$attr <- lapply(dat$attr, function(x) c(x, rep(NA, nBirths)))
-  newIds <- which(is.na(dat$attr$active))
-
-
-  # Network Status
-  dat$attr$active[newIds] <- rep(1, nBirths)
-  dat$attr$entTime[newIds] <- rep(at, nBirths)
-
-
-  # Demography
-  prop.male <- ifelse(is.null(dat$param$b.propmale),
-                      dat$epi$propMale[1],
-                      dat$param$b.propmale)
-  dat$attr$male[newIds] <- rbinom(nBirths, 1, prop.male)
-
-  dat$attr$age[newIds] <- rep(18, nBirths)
-
-  # Circumcision
-  entTime <- dat$attr$entTime
-
-  idsNewMale <- which(dat$attr$male == 1 & entTime == at)
-
-  if (length(idsNewMale) > 0) {
-    age <- dat$attr$age[idsNewMale]
-    newCirc <- rbinom(length(idsNewMale), 1, dat$param$circ.prob.birth)
-    isCirc <- which(newCirc == 1)
-
-    newCircTime <- rep(NA, length(idsNewMale))
-    newCircTime[isCirc] <- round(-age[isCirc] * (365 / dat$param$time.unit))
-
-    dat$attr$circStat[idsNewMale] <- newCirc
-    dat$attr$circTime[idsNewMale] <- newCircTime
-  }
-
-
-  # Epi/Clinical
-  dat$attr$status[newIds] <- rep(0, nBirths)
-
-  if (length(unique(sapply(dat$attr, length))) != 1) {
-    sapply(dat$attr, length)
-    stop("Attribute dimensions not unique")
-  }
-
-  return(dat)
-}

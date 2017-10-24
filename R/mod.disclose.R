@@ -4,7 +4,7 @@
 #' @description Module function for disclosure of HIV status to partners given
 #'              non-disclosure in the past.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' Persons who are infected may disclose their status to partners at three
@@ -22,7 +22,7 @@
 #'
 disclose_msm <- function(dat, at){
 
-  for (type in c("main", "pers", "inst")) {
+  for (type in c("main", "pers", "asmm","inst")) {
 
     # Variables --------------------------------------------------------------
 
@@ -53,11 +53,22 @@ disclose_msm <- function(dat, at){
       disc.post.diag.W.prob <- dat$param$disc.post.diag.pers.W.prob
       el <- dat$el[[2]]
     }
+    
+    if (type == "asmm") {
+      disc.outset.B.prob <- dat$param$disc.outset.asmm.B.prob
+      disc.at.diag.B.prob <- dat$param$disc.at.diag.asmm.B.prob
+      disc.post.diag.B.prob <- dat$param$disc.post.diag.asmm.B.prob
+      disc.outset.W.prob <- dat$param$disc.outset.asmm.W.prob
+      disc.at.diag.W.prob <- dat$param$disc.at.diag.asmm.W.prob
+      disc.post.diag.W.prob <- dat$param$disc.post.diag.asmm.W.prob
+      el <- dat$el[[3]]
+    }
+    
 
     if (type == "inst") {
       disc.inst.B.prob <- dat$param$disc.inst.B.prob
       disc.inst.W.prob <- dat$param$disc.inst.W.prob
-      el <- dat$el[[3]]
+      el <- dat$el[[4]]
     }
 
 
@@ -90,7 +101,7 @@ disclose_msm <- function(dat, at){
       # Split by race of pos node
       pos.race <- race[nd.dx[, 1]]
 
-      if (type %in% c("main", "pers")) {
+      if (type %in% c("main", "pers", "asmm")) {
 
         # Check that rel is new
         # new.edges matrix is expressed in uid, so need to transform nd.dx

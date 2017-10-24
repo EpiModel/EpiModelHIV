@@ -6,7 +6,7 @@
 #' @description Stochastically simulates disease transmission given the current
 #'              state of the discordand edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' This is the final substantive function that occurs within the time loop at
@@ -32,22 +32,19 @@
 #'
 #' @export
 #'
-trans_msm <- function(dat, at) {
+trans_msm <- function(dat, at){
 
-  # Variables -----------------------------------------------------------
+  ## Variables
 
   # Attributes
   vl <- dat$attr$vl
   stage <- dat$attr$stage
   ccr5 <- dat$attr$ccr5
   circ <- dat$attr$circ
-  status <- dat$attr$status
+  diag.status <- dat$attr$diag.status
+  tx.status <- dat$attr$tx.status
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
-  rGC <- dat$attr$rGC
-  uGC <- dat$attr$uGC
-  rCT <- dat$attr$rCT
-  uCT <- dat$attr$uCT
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
@@ -57,16 +54,9 @@ trans_msm <- function(dat, at) {
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
   prep.hr <- dat$param$prep.class.hr
-  hiv.ugc.rr <- dat$param$hiv.ugc.rr
-  hiv.uct.rr <- dat$param$hiv.uct.rr
-  hiv.rgc.rr <- dat$param$hiv.rgc.rr
-  hiv.rct.rr <- dat$param$hiv.rct.rr
-  hiv.dual.rr <- dat$param$hiv.dual.rr
-
 
   # Data
-  al <- dat$temp$al
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
+  dal <- dat$temp$dal
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
@@ -74,13 +64,18 @@ trans_msm <- function(dat, at) {
     return(dat)
   }
 
-  ## Reorder by role: ins on the left, rec on the right, flippers represented twice
+
+  ## Processes
+
+  ## Reorder by role: ins on the left, rec on the right,
+  ##                  with flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
   disc.rp <- dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
-  colnames(disc.ip)[1:2] <- colnames(disc.rp)[1:2] <- c("ins", "rec")
+  colnames(disc.ip)[1:2] <- c("i", "r")
+  colnames(disc.rp)[1:2] <- c("i", "r")
 
 
-  # PATP: Insertive Man Infected (Col 1) --------------------------------
+  ## PATP: Insertive Man Infected (Column 1)
 
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
@@ -90,55 +85,35 @@ trans_msm <- function(dat, at) {
   ip.ccr5 <- ccr5[disc.ip[, 2]]
   ip.prep <- prepStat[disc.ip[, 2]]
   ip.prepcl <- prepClass[disc.ip[, 2]]
-  ip.rGC <- rGC[disc.ip[, 2]]
-  ip.rCT <- rCT[disc.ip[, 2]]
 
   # Base TP from VL
-  ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
-
-  # Transform to log odds
-  ip.tlo <- log(ip.tprob/(1-ip.tprob))
+  trans.ip.prob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Condom use
-  not.UAI <- which(disc.ip[, "uai"] == 0)
-  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr)
+  trans.ip.prob[disc.ip[, "uai"] == 0] <- trans.ip.prob[disc.ip[, "uai"] == 0] * condom.rr
 
   # CCR5
-  ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
-  ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
+  trans.ip.prob[ip.ccr5 == "DD"] <- trans.ip.prob[ip.ccr5 == "DD"] * 0
+  trans.ip.prob[ip.ccr5 == "DW"] <- trans.ip.prob[ip.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
-    ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 0)] * prep.hr[1]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 1)] * prep.hr[2]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 2)] * prep.hr[3]
+  trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] <-
+    trans.ip.prob[which(ip.prep == 1 & ip.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
-  isAcute <- which(ip.stage %in% 1:2)
-  ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
+  isAcute <- which(ip.stage %in% c("AR", "AF"))
+  trans.ip.prob[isAcute] <- trans.ip.prob[isAcute] * acute.rr
 
-  ## Multiplier for STI
-  is.rGC <- which(ip.rGC == 1)
+  ## TODO: multiplier for prevalent STI infection
+  ## Need to do this twice, given differentials in multipliers
 
-  is.rCT <- which(ip.rCT == 1)
-
-  is.rect.dual <- intersect(is.rGC, is.rCT)
-
-  is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
-  is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
-
-  ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
-  ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
-
-  ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
-    max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
-
-  ip.tprob <- plogis(ip.tlo)
-  stopifnot(ip.tprob >= 0, ip.tprob <= 1)
-
-
-  # PATP: Receptive Man Infected (Col 2) --------------------------------
+  ## PATP: Receptive Man Infected (Column 2)
 
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
@@ -149,89 +124,80 @@ trans_msm <- function(dat, at) {
   rp.ccr5 <- ccr5[disc.rp[, 1]]
   rp.prep <- prepStat[disc.rp[, 1]]
   rp.prepcl <- prepClass[disc.rp[, 1]]
-  rp.uGC <- uGC[disc.rp[, 1]]
-  rp.uCT <- uCT[disc.rp[, 1]]
 
   # Base TP from VL
-  rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
-
-  # Transform to log odds
-  rp.tlo <- log(rp.tprob/(1-rp.tprob))
+  trans.rp.prob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Circumcision
-  rp.tlo[rp.circ == 1] <- rp.tlo[rp.circ == 1] + log(circ.rr)
+  trans.rp.prob[rp.circ == 1] <- trans.rp.prob[rp.circ == 1] * circ.rr
 
   # Condom use
-  not.UAI <- which(disc.rp[, "uai"] == 0)
-  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr)
+  trans.rp.prob[disc.rp[, "uai"] == 0] <- trans.rp.prob[disc.rp[, "uai"] == 0] * condom.rr
 
   # CCR5
-  rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
-  rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
+  trans.rp.prob[rp.ccr5 == "DD"] <- trans.rp.prob[rp.ccr5 == "DD"] * 0
+  trans.rp.prob[rp.ccr5 == "DW"] <- trans.rp.prob[rp.ccr5 == "DW"] * ccr5.heteroz.rr
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
-    rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 0)] * prep.hr[1]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 1)] * prep.hr[2]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 2)] * prep.hr[3]
+  trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] <-
+    trans.rp.prob[which(rp.prep == 1 & rp.prepcl == 3)] * prep.hr[4]
 
   # Acute-stage multipliers
-  isAcute <- which(rp.stage %in% 1:2)
-  rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
+  isAcute <- which(rp.stage %in% c("AR", "AF"))
+  trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
-  ## Multiplier for STI
-  is.uGC <- which(rp.uGC == 1)
+  ## TODO: multiplier for prevalent STI infection
+  ## Need to do this twice, given differentials in multipliers
 
-  is.uCT <- which(rp.uCT == 1)
+  ## Bound range of PATP
+  trans.ip.prob <- pmin(trans.ip.prob, 1)
+  trans.rp.prob <- pmin(trans.rp.prob, 1)
 
-  is.ureth.dual <- intersect(is.uGC, is.uCT)
-
-  is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
-  is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
-
-  rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
-  rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-
-  rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
-    max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
-
-  # Retransformation to probability
-  rp.tprob <- plogis(rp.tlo)
-  stopifnot(rp.tprob >= 0, rp.tprob <= 1)
-
-
-  # Transmission --------------------------------------------------------
 
   ## Bernoulli transmission events
-  trans.ip <- rbinom(length(ip.tprob), 1, ip.tprob)
-  trans.rp <- rbinom(length(rp.tprob), 1, rp.tprob)
+  trans.ip <- rbinom(length(trans.ip.prob), 1, trans.ip.prob)
+  trans.rp <- rbinom(length(trans.rp.prob), 1, trans.rp.prob)
 
 
-  # Output --------------------------------------------------------------
-
+  ## Output
 
   # Update attributes
 
-  infected <- inf.type <- NULL
+  infected <- infector <- inf.type <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
                   disc.rp[trans.rp == 1, 1])
+    infector <- c(disc.ip[trans.ip == 1, 1],
+                  disc.rp[trans.rp == 1, 2])
     inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
     inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
                   disc.rp[trans.rp == 1, "ptype"])
 
+    inf.stage <- stage[infector]
+    inf.diag <- diag.status[infector]
+    inf.tx <- tx.status[infector]
+
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
     dat$attr$vl[infected] <- 0
-    dat$attr$stage[infected] <- 1
+    dat$attr$stage[infected] <- "AR"
     dat$attr$stage.time[infected] <- 0
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
 
+    dat$attr$infector[infected] <- infector
     dat$attr$inf.role[infected] <- inf.role
     dat$attr$inf.type[infected] <- inf.type
+    dat$attr$inf.diag[infected] <- inf.diag
+    dat$attr$inf.tx[infected] <- inf.tx
+    dat$attr$inf.stage[infected] <- inf.stage
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
@@ -240,9 +206,19 @@ trans_msm <- function(dat, at) {
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
-  dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
-  dat$epi$trans.inst[at] <- sum(inf.type == 3)
+  dat$epi$incid.cai[at] <- sum(trans.ip[disc.ip[, "uai"] == 0]) +
+    sum(trans.rp[disc.rp[, "uai"] == 0])
+  dat$epi$incid.uai[at] <- sum(trans.ip[disc.ip[, "uai"] == 1]) +
+    sum(trans.rp[disc.rp[, "uai"] == 1])
+  dat$epi$incid.cai.perc[at] <- dat$epi$incid.cai[at] / dat$epi$incid[at]
+
+  if (at >= dat$param$prep.start) {
+    dat$epi$mean.trans[at] <- mean(c(trans.ip.prob, trans.rp.prob))
+    dat$epi$mean.trans.prep[at] <- mean(c(trans.ip.prob[which(ip.prep == 1)],
+                                          trans.rp.prob[which(rp.prep == 1)]))
+    dat$epi$mean.trans.nprep[at] <- mean(c(trans.ip.prob[which(ip.prep == 0)],
+                                           trans.rp.prob[which(rp.prep == 0)]))
+  }
 
   return(dat)
 }
@@ -408,7 +384,11 @@ discord_edgelist_het <- function(dat, at) {
 
   if (nInft > 0) {
 
-    el <- dat$el[[1]]
+    if (is.null(dat$el)) {
+      el <- get.dyads.active(dat$nw, at = at)
+    } else {
+      el <- dat$el
+    }
 
     if (nrow(el) > 0) {
       el <- el[sample(1:nrow(el)), , drop = FALSE]

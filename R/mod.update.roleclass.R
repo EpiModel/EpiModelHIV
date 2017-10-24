@@ -14,25 +14,29 @@
 #' 
 #' @export
 #'
-update_roleclass_msm <- function(dat, at) {
+roleclass_trans <- function(dat, at) {
 
-  role.trans.matrix <- dat$param$role.trans.matrix
-  if (sum(colSums(role.trans.matrix) != 1) > 0) {
-    stop("Column sums in argument role.trans.matrix must all equal 1.")
-  }
-  old.role.class <- dat$attr$role.class
 
-  new.role.class <- sapply(1:length(old.role.class),
-                           function(x) {
-                             sample(c("I", "V", "R"), size = 1,
-                                     prob = role.trans.matrix[, 1] *
-                                               (old.role.class[x] == "I") +
-                                            role.trans.matrix[, 2] *
-                                               (old.role.class[x] == "V") +
-                                            role.trans.matrix[, 3] *
-                                               (old.role.class[x] == "R"))
-                           })
+  deg.main <- get_degree(dat$el[[1]])
+  deg.pers <- get_degree(dat$el[[2]])
+  deg.asmm <- get_degree(dat$el[[3]])
+  
+  ids.B.r <- which(dat$attr$race == "B" & dat$attr$role.class == "R" & dat$attr$age == 19 & deg.main == 0 & deg.pers == 0 & deg.asmm == 0)
+  ids.B.v <- which(dat$attr$race == "B" & dat$attr$role.class == "V" & dat$attr$age == 19 & deg.main == 0 & deg.pers == 0 & deg.asmm == 0)
+  
+  ids.W.r <- which(dat$attr$race == "W" & dat$attr$role.class == "R" & dat$attr$age == 19 & deg.main == 0 & deg.pers == 0 & deg.asmm == 0)
+  ids.W.v <- which(dat$attr$race == "W" & dat$attr$role.class == "V" & dat$attr$age == 19 & deg.main == 0 & deg.pers == 0 & deg.asmm == 0)
+  
+  popsize.B <- sum(dat$attr$age == 19 & dat$attr$race == "B")
+  popsize.W <- sum(dat$attr$age == 19 & dat$attr$race == "W")
+  
+  role.class[ids.B.r] <- sample(apportion_lr(length(ids.B.r), c("I", "R"), prob=c(role.shift[1], 1-(role.shift[1])))) 
+  role.class[ids.B.v] <- sample(apportion_lr(length(ids.B.v), c("I", "V"), prob=c(role.shift[2], 1-(role.shift[2])))) 
+  
+  role.class[ids.W.r] <- sample(apportion_lr(length(ids.W.r), c("I", "R"), prob=c(role.shift[1], 1-(role.shift[1])))) 
+  role.class[ids.W.v] <- sample(apportion_lr(length(ids.W.v), c("I", "V"), prob=c(role.shift[2], 1-(role.shift[2])))) 
 
+  
   dat$attr$role.class <- new.role.class
 
   return(dat)

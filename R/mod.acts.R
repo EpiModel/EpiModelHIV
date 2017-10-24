@@ -4,7 +4,7 @@
 #' @description Module function for setting the number of sexual acts on the
 #'              discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' The number of acts at each time step is specified as a function of the race of
@@ -24,7 +24,7 @@
 #'
 acts_msm <- function(dat, at) {
 
-  for (type in c("main", "pers", "inst")) {
+  for (type in c("main", "pers", "asmm", "inst")) {
 
     ## Variables ##
 
@@ -33,11 +33,12 @@ acts_msm <- function(dat, at) {
     race <- dat$attr$race
 
     # Parameters
-    ai.scale <- dat$param$ai.scale
+
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
+      ai.scale <- dat$param$ai.main.scale
       fixed <- FALSE
       ptype <- 1
       el <- dat$el[[1]]
@@ -46,17 +47,28 @@ acts_msm <- function(dat, at) {
       base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
       base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
+      ai.scale <- dat$param$ai.pers.scale
       fixed <- FALSE
       ptype <- 2
       el <- dat$el[[2]]
+    }
+    if (type == "asmm") {
+      base.ai.BB.rate <- dat$param$base.ai.asmm.BB.rate
+      base.ai.BW.rate <- dat$param$base.ai.asmm.BW.rate
+      base.ai.WW.rate <- dat$param$base.ai.asmm.WW.rate
+      ai.scale <- dat$param$ai.asmm.scale
+      fixed <- FALSE
+      ptype <- 3
+      el <- dat$el[[3]]
     }
     if (type == "inst") {
       base.ai.BB.rate <- 1
       base.ai.BW.rate <- 1
       base.ai.WW.rate <- 1
+      ai.scale <- dat$param$ai.inst.scale
       fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
-      ptype <- 3
-      el <- dat$el[[3]]
+      ptype <- 4
+      el <- dat$el[[4]]
     }
 
     ## Processes ##
@@ -81,11 +93,6 @@ acts_msm <- function(dat, at) {
                  (num.B == 1) * base.ai.BW.rate +
                  (num.B == 0) * base.ai.WW.rate
       ai.rate <- ai.rate * ai.scale
-
-      ## STI associated cessation of activity
-      idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
-      noActs <- el[, "p1"] %in% idsCease | el[, "p2"] %in% idsCease
-      ai.rate[noActs] <- 0
 
       # Final act number
       if (fixed == FALSE) {

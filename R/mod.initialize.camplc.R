@@ -20,7 +20,7 @@
 #' @export
 #' @keywords module msm
 #'
-initialize_msm <- function(x, param, init, control, s) {
+initialize_camplc <- function(x, param, init, control, s) {
 
   # Master data list
   dat <- list()
@@ -73,7 +73,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
   dat$attr$deg.main <- get.vertex.attribute(x[[2]]$fit$network, "deg.main")
 
-
   # Race
   dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
   num.B <- dat$init$num.B
@@ -90,6 +89,10 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "sqrt.age")
   dat$attr$age <- get.vertex.attribute(nw[[1]], "age")
   dat$attr$of.age<-ifelse(dat$attr$age >= 16,1,0)
+
+  # Out in the population
+  dat$attr$out <- get.vertex.attribute(nw[[1]], "out")
+  dat$attr$out.age <- get.vertex.attribute(nw[[1]], "out.age")
   
   # Sexual Debut
   dat$attr$debuted <- get.vertex.attribute(nw[[1]], "debuted")
@@ -104,7 +107,6 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$uaicount<-rep(0,num)
   
   #Timers
-  dat$attr$debuted.time <- dat$attr$debuted
   dat$attr$AI.time <- rep(0,num)
   dat$attr$active.time <- rep(0,num)
   dat$attr$prepStart.time <- rep(Inf,num)
@@ -135,6 +137,7 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepElig <- rep(NA, num)
   dat$attr$prepStat <- rep(0, num)
   dat$attr$prepEver <- rep(0, num)
+  dat$attr$ever.adol.prep <- rep(0, num)
 
   # Risk history lists
   nc <- ceiling(dat$param$prep.risk.int)
@@ -304,7 +307,7 @@ init_status_msm <- function(dat) {
   InfElig<-which(dat$attr$debuted == 1, dat$attr$asmm == 1)
   
   for (i in 1:(length(InfElig))){
-    dat$attr$status[InfElig[1]]<-rbinom(1, 1, dat$init$prev.asmm)}
+    dat$attr$status[InfElig[i]]<-rbinom(1, 1, dat$init$prev.asmm)}
   
 
   # Treatment trajectory
@@ -354,7 +357,7 @@ init_status_msm <- function(dat) {
 
   ### Non-treater type: tester and non-tester
   selected.msm <- which(status == 1 & asmm == 0 & tt.traj %in% c(1, 2))
-  selected.asmm <- which(status == 1 & asmm == 1 & debuted == 1 & tt.traj %in% c(1, 2))
+  selected.asmm <- which(status == 1 & asmm == 1 & tt.traj %in% c(1, 2))
   
   selected.all <- c(selected.msm, selected.asmm)
   max.inf.time <- pmin(time.sex.active[selected.all], vldo.int + vl.aids.int)
@@ -387,7 +390,7 @@ init_status_msm <- function(dat) {
   diag.status[selected] <- 0
   
 
-  # Time to next test 
+  # Time to next test MSM
   selected.msm <- which(status == 1 & tt.traj == 2 & asmm == 0)
   selected.asmm <- which(status == 1 & tt.traj == 2 & asmm == 1)
   
@@ -464,6 +467,7 @@ init_status_msm <- function(dat) {
   offon.B[, 2] <- (1:max.possible.inf.time.B) - offon.B[, 1]
   stage.B <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
+  
 
   # Stage for Whites
   prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
@@ -532,27 +536,47 @@ init_status_msm <- function(dat) {
                   (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
 
-  # Diagnosis
-  selected <- which(status == 1 & tt.traj == 4)
+  # Diagnosis MSM
+  selected.msm <- which(status == 1 & tt.traj == 4 & asmm == 0)
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected),
+    ttntest <- ceiling(runif(length(selected.msm),
                              min = 0,
-                             max = dat$param$mean.test.B.int * (race[selected] == "B") +
-                                   dat$param$mean.test.W.int * (race[selected] == "W")))
+                             max = dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                                   dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
-    ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                          dat$param$mean.test.W.int * (race[selected] == "W")))
+    ttntest <- rgeom(length(selected.msm),
+                     1 / (dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                          dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
 
-  diag.status[selected][ttntest > cum.time.off.tx[selected] - twind.int] <- 0
-  last.neg.test[selected][ttntest > cum.time.off.tx[selected] - twind.int] <-
-                           -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
-  diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
-  diag.status[selected][cum.time.on.tx[selected] > 0] <- 1
-  last.neg.test[selected][cum.time.on.tx[selected] > 0] <- NA
+  diag.status[selected.msm][ttntest > cum.time.off.tx[selected.msm] - twind.int] <- 0
+  last.neg.test[selected.msm][ttntest > cum.time.off.tx[selected.msm] - twind.int] <-
+                           -ttntest[ttntest > cum.time.off.tx[selected.msm] - twind.int]
+  diag.status[selected.msm][ttntest <= cum.time.off.tx[selected.msm] - twind.int] <- 1
+  diag.status[selected.msm][cum.time.on.tx[selected.msm] > 0] <- 1
+  last.neg.test[selected.msm][cum.time.on.tx[selected.msm] > 0] <- NA
 
+  # Diagnosis ASMM
+  selected.asmm <- which(status == 1 & tt.traj == 4 & asmm == 1)
+  if (dat$param$testing.pattern == "interval") {
+    ttntest <- ceiling(runif(length(selected.msm),
+                             min = 0,
+                             max = dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                               dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  if (dat$param$testing.pattern == "memoryless") {
+    ttntest <- rgeom(length(selected.asmm),
+                     1 / (dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                            dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  
+  diag.status[selected.asmm][ttntest > cum.time.off.tx[selected.asmm] - twind.int] <- 0
+  last.neg.test[selected.asmm][ttntest > cum.time.off.tx[selected.asmm] - twind.int] <-
+    -ttntest[ttntest > cum.time.off.tx[selected.asmm] - twind.int]
+  diag.status[selected.asmm][ttntest <= cum.time.off.tx[selected.asmm] - twind.int] <- 1
+  diag.status[selected.asmm][cum.time.on.tx[selected.asmm] > 0] <- 1
+  last.neg.test[selected.asmm][cum.time.on.tx[selected.asmm] > 0] <- NA
 
   ### Part adherent type
 
@@ -649,46 +673,86 @@ init_status_msm <- function(dat) {
                   (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
 
-  # Implement diagnosis for both
-  selected <- which(status == 1 & tt.traj == 3)
+  # Implement diagnosis for both (MSM)
+  selected.msm <- which(status == 1 & tt.traj == 3 & asmm == 0)
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected),
+    ttntest <- ceiling(runif(length(selected.msm),
                              min = 0,
-                             max = dat$param$mean.test.B.int * (race[selected] == "B") +
-                                   dat$param$mean.test.W.int * (race[selected] == "W")))
+                             max = dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                                   dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
 
   if (dat$param$testing.pattern == "memoryless") {
-    ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                          dat$param$mean.test.W.int * (race[selected] == "W")))
+    ttntest <- rgeom(length(selected.msm),
+                     1 / (dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                          dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
 
 
-  diag.status[selected][ttntest > cum.time.off.tx[selected] - twind.int] <- 0
-  last.neg.test[selected][ttntest > cum.time.off.tx[selected] - twind.int] <-
-    -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
+  diag.status[selected.msm][ttntest > cum.time.off.tx[selected.msm] - twind.int] <- 0
+  last.neg.test[selected.msm][ttntest > cum.time.off.tx[selected.msm] - twind.int] <-
+    -ttntest[ttntest > cum.time.off.tx[selected.msm] - twind.int]
 
-  diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
-  diag.status[selected][cum.time.on.tx[selected] > 0] <- 1
-  last.neg.test[selected][cum.time.on.tx[selected] > 0] <- NA
+  diag.status[selected.msm][ttntest <= cum.time.off.tx[selected.msm] - twind.int] <- 1
+  diag.status[selected.msm][cum.time.on.tx[selected.msm] > 0] <- 1
+  last.neg.test[selected.msm][cum.time.on.tx[selected.msm] > 0] <- NA
+  
+  # Implement diagnosis for both (ASMM)
+  selected.asmm <- which(status == 1 & tt.traj == 3 & asmm == 1)
+  if (dat$param$testing.pattern == "interval") {
+    ttntest <- ceiling(runif(length(selected.asmm),
+                             min = 0,
+                             max = dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                               dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  
+  if (dat$param$testing.pattern == "memoryless") {
+    ttntest <- rgeom(length(selected.asmm),
+                     1 / (dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                            dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  
+  
+  diag.status[selected.asmm][ttntest > cum.time.off.tx[selected.asmm] - twind.int] <- 0
+  last.neg.test[selected.asmm][ttntest > cum.time.off.tx[selected.asmm] - twind.int] <-
+    -ttntest[ttntest > cum.time.off.tx[selected.asmm] - twind.int]
+  
+  diag.status[selected.asmm][ttntest <= cum.time.off.tx[selected.asmm] - twind.int] <- 1
+  diag.status[selected.asmm][cum.time.on.tx[selected.asmm] > 0] <- 1
+  last.neg.test[selected.asmm][cum.time.on.tx[selected.asmm] > 0] <- NA
 
 
-  # Last neg test before present for negatives
-  selected <- which(status == 0 & tt.traj %in% c(2, 3, 4))
+  # Last neg test before present for negative MSM
+  selected.msm <- which(status == 0 & tt.traj %in% c(2, 3, 4) & asmm == 0)
 
   if (dat$param$testing.pattern == "interval") {
-    tslt <- ceiling(runif(length(selected),
+    tslt <- ceiling(runif(length(selected.msm),
                           min = 0,
-                          max = dat$param$mean.test.B.int * (race[selected] == "B") +
-                                dat$param$mean.test.W.int * (race[selected] == "W")))
+                          max = dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                                dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
-    tslt <- rgeom(length(selected),
-                  1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                       dat$param$mean.test.W.int * (race[selected] == "W")))
+    tslt <- rgeom(length(selected.msm),
+                  1 / (dat$param$mean.test.B.int * (race[selected.msm] == "B") +
+                       dat$param$mean.test.W.int * (race[selected.msm] == "W")))
   }
-  last.neg.test[selected] <- -tslt
+  last.neg.test[selected.msm] <- -tslt
+  
+  # Last neg test before present for negative ASMM
+  selected.asmm <- which(status == 0 & tt.traj %in% c(2, 3, 4) & asmm == 1 & debuted == 1)
+  
+  if (dat$param$testing.pattern == "interval") {
+    tslt <- ceiling(runif(length(selected.asmm),
+                          min = 0,
+                          max = dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                            dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  if (dat$param$testing.pattern == "memoryless") {
+    tslt <- rgeom(length(selected.asmm),
+                  1 / (dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
+                         dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
+  }
+  last.neg.test[selected.asmm] <- -tslt
 
 
   ## Set all onto dat$attr

@@ -19,7 +19,7 @@
 #' exist.
 #'
 #' @keywords module msm
-#'
+#' 
 #' @export
 #'
 verbose_msm <- function(x, type, s, at) {
@@ -44,6 +44,8 @@ verbose_msm <- function(x, type, s, at) {
                 "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
                 "\nPop Size: ", x$epi$num[at],
                 "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
+                "\nWht Prev: ", round(x$epi$i.num.W[at] / x$epi$num.W[at], 3),
+                "\nBlk Prev: ", round(x$epi$i.num.B[at] / x$epi$num.B[at], 3),
                 "\n\n", sep = "", file = fn)
           }
         }
@@ -54,10 +56,8 @@ verbose_msm <- function(x, type, s, at) {
           nsteps <- x$control$nsteps
           time.unit <- x$param$time.unit
           prev <- round(x$epi$i.prev[at], 3)
-          prev.rgc <- round(x$epi$prev.rgc[at], 3)
-          prev.ugc <- round(x$epi$prev.ugc[at], 3)
-          prev.rct <- round(x$epi$prev.rct[at], 3)
-          prev.uct <- round(x$epi$prev.uct[at], 3)
+          prev.B <- round(x$epi$i.prev.B[at], 3)
+          prev.W <- round(x$epi$i.prev.W[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -68,15 +68,14 @@ verbose_msm <- function(x, type, s, at) {
               round((nsteps * time.unit) / 365, 1), sep = "")
           cat("\n------------------------------")
           cat("\nTotal Pop Size:", x$epi$num[at])
+          cat("\nBlack Pop Size:", x$epi$num.B[at])
+          cat("\nWhite Pop Size:", x$epi$num.W[at])
           cat("\n------------------------------")
-          cat("\nHIV Curr Incidence:", x$epi$incid[at])
-          cat("\nHIV Cuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
-          cat("\nHIV Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
-          cat("\n------------------------------")
-          cat("\nrGC Prevalence: ", prev.rgc, sep = "")
-          cat("\nuGC Prevalence: ", prev.ugc, sep = "")
-          cat("\nrCT Prevalence: ", prev.rct, sep = "")
-          cat("\nuCT Prevalence: ", prev.uct, sep = "")
+          cat("\nCurr Incidence:", x$epi$incid[at])
+          cat("\nCuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
+          cat("\nTotal Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
+          cat("\nBlack Prevalence: ", x$epi$i.num.B[at], " (", prev.B, ")", sep = "")
+          cat("\nWhite Prevalence: ", x$epi$i.num.W[at], " (", prev.W, ")", sep = "")
           cat("\n==============================")
 
         }
@@ -108,7 +107,7 @@ verbose_msm <- function(x, type, s, at) {
 #' exist.
 #'
 #' @keywords module het
-#'
+#' 
 #' @export
 #'
 verbose_het <- function(x, type, s, at) {

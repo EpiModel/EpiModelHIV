@@ -4,7 +4,7 @@
 #' @description Module function stochastically simulates potential condom use
 #'              for each act on the discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' For each act on the discordant edgelist, condom use is stochastically simulated
@@ -22,24 +22,14 @@
 #'
 condoms_msm <- function(dat, at) {
 
-  # Attributes
-  uid <- dat$attr$uid
-  diag.status <- dat$attr$diag.status
-  race <- dat$attr$race
-  prepStat <- dat$attr$prepStat
-  prepClass <- dat$attr$prepClass
-
-  # Parameters
-  rcomp.prob <- dat$param$rcomp.prob
-  rcomp.adh.groups <- dat$param$rcomp.adh.groups
-  rcomp.main.only <- dat$param$rcomp.main.only
-  rcomp.discl.only <- dat$param$rcomp.discl.only
-
-  el <- dat$temp$el
-
-  for (type in c("main", "pers", "inst")) {
+  for (type in c("main", "pers", "asmm", "inst")) {
 
     ## Variables ##
+
+    # Attributes
+    uid <- dat$attr$uid
+    diag.status <- dat$attr$diag.status
+    race <- dat$attr$race
 
     # Parameters
     cond.rr.BB <- dat$param$cond.rr.BB
@@ -64,6 +54,15 @@ condoms_msm <- function(dat, at) {
       cond.always <- dat$attr$cond.always.pers
       ptype <- 2
     }
+    if (type == "asmm") {
+      cond.BB.prob <- dat$param$cond.asmm.BB.prob
+      cond.BW.prob <- dat$param$cond.asmm.BW.prob
+      cond.WW.prob <- dat$param$cond.asmm.WW.prob
+      diag.beta <- dat$param$cond.diag.asmm.beta
+      discl.beta <- dat$param$cond.discl.asmm.beta
+      cond.always <- dat$attr$cond.always.asmm
+      ptype <- 3
+    }
     if (type == "inst") {
       cond.BB.prob <- dat$param$cond.inst.BB.prob
       cond.BW.prob <- dat$param$cond.inst.BW.prob
@@ -71,9 +70,10 @@ condoms_msm <- function(dat, at) {
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
       cond.always <- dat$attr$cond.always.inst
-      ptype <- 3
+      ptype <- 4
     }
 
+    el <- dat$temp$el
     elt <- el[el[, "ptype"] == ptype, ]
 
     ## Process ##
@@ -83,8 +83,8 @@ condoms_msm <- function(dat, at) {
     race.p2 <- race[elt[, 2]]
     num.B <- (race.p1 == "B") + (race.p2 == "B")
     cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
-                 (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
-                 (num.B == 0) * (cond.WW.prob * cond.rr.WW)
+      (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
+      (num.B == 0) * (cond.WW.prob * cond.rr.WW)
 
 
     # Transform to UAI logit
@@ -123,43 +123,46 @@ condoms_msm <- function(dat, at) {
       ca2 <- cond.always[elt[, 2]]
       uai.prob <- ifelse(ca1 == 1 | ca2 == 1, 0, uai.prob)
       if (type == "pers") {
-        dat$epi$cprob.always.pers <- NULL
-        # dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
+        dat$epi$cprob.always.pers[at] <- mean(uai.prob == 0)
       } else {
-        dat$epi$cprob.always.inst <- NULL
-        # dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
+        dat$epi$cprob.always.inst[at] <- mean(uai.prob == 0)
       }
     }
 
     # PrEP Status (risk compensation)
+    rcomp.prob <- dat$param$rcomp.prob
+    rcomp.adh.groups <- dat$param$rcomp.adh.groups
     if (rcomp.prob > 0) {
+
+      prepStat <- dat$attr$prepStat
+      prepClass <- dat$attr$prepClass
 
       idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
                        (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
 
-      if (rcomp.main.only == TRUE & ptype > 1) {
+      if (dat$param$rcomp.main.only == TRUE & ptype > 1) {
         idsRC <- NULL
       }
-      if (rcomp.discl.only == TRUE) {
+      if (dat$param$rcomp.discl.only == TRUE) {
         idsRC <- intersect(idsRC, isDisc)
       }
       uai.prob[idsRC] <- 1 - (1 - uai.prob[idsRC]) * (1 - rcomp.prob)
     }
 
     ai.vec <- elt[, "ai"]
-    p1 <- rep(elt[, "p1"], ai.vec)
-    p2 <- rep(elt[, "p2"], ai.vec)
+    pos <- rep(elt[, "p1"], ai.vec)
+    neg <- rep(elt[, "p2"], ai.vec)
     ptype <- rep(elt[, "ptype"], ai.vec)
 
     uai.prob.peract <- rep(uai.prob, ai.vec)
-    uai <- rbinom(length(p1), 1, uai.prob.peract)
+    uai <- rbinom(length(pos), 1, uai.prob.peract)
 
     if (type == "main") {
       pid <- rep(1:length(ai.vec), ai.vec)
-      al <- cbind(p1, p2, ptype, uai, pid)
+      al <- cbind(pos, neg, ptype, uai, pid)
     } else {
       pid <- rep(max(al[, "pid"]) + (1:length(ai.vec)), ai.vec)
-      tmp.al <- cbind(p1, p2, ptype, uai, pid)
+      tmp.al <- cbind(pos, neg, ptype, uai, pid)
       al <- rbind(al, tmp.al)
     }
 

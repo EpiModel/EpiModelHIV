@@ -3,7 +3,7 @@
 #'
 #' @description Module function for updating HIV viral load.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_camplc
 #'
 #' @details
 #' HIV viral load varies over time as a function of time since infection and ART
