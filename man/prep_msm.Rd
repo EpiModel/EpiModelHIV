@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod.prep.R
 \name{prep_msm}
 \alias{prep_msm}
-\title{PrEP Module}
+\title{PrEP MSM Module}
 \usage{
 prep_msm(dat, at)
 }
@@ -14,7 +14,7 @@ individual-level attributes, and summary statistics.}
 }
 \description{
 Module function for implementation and uptake of pre-exposure
-             prophylaxis (PrEP) to prevent HIV infection.
+             prophylaxis (PrEP) to prevent HIV infection for MSM.
 }
 \keyword{module}
 \keyword{msm}

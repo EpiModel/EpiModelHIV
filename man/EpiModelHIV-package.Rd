@@ -4,14 +4,14 @@
 \name{EpiModelHIV-package}
 \alias{EpiModelHIV-package}
 \alias{EpiModelHIV}
-\title{Network-Based Epidemic Modeling of HIV Transmission among MSM and Heterosexual Populations}
+\title{HIV Transmission Dynamics among MSM and Heterosexuals}
 \description{
 \tabular{ll}{
    Package: \tab EpiModelHIV\cr
    Type: \tab Package\cr
-   Version: \tab 1.5.0\cr
-   Date: \tab 2017-05-04\cr
-   License: \tab GPL-3\cr
+   Version: \tab 1.0.0\cr
+   Date: \tab 2016-06-25\cr
+   License: \tab GPL (>= 2)\cr
    LazyLoad: \tab yes\cr
 }
 }
