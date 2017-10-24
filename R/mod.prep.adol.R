@@ -4,7 +4,7 @@
 #' @description Module function for implementation and uptake of pre-exposure
 #'              prophylaxis (PrEP) among ASMM to prevent HIV infection.
 #'
-#' @inheritParams aging.mard
+#' @inheritParams aging_camplc
 #'
 #' @export
 #'
