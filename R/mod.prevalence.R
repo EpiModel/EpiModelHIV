@@ -915,7 +915,7 @@ prevalence_msm <- function(dat, at) {
                                                         (tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1 |
                                                            tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1 |
                                                            tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))) /
-                                           dat$epi$tt.traj.sti2[at])
+                                           dat$epi$tt.traj.sti1[at])
 
   dat$epi$prev.sti.tttraj2[at] <- ifelse((dat$epi$tt.traj.sti2[at] == 0 | is.na(dat$epi$tt.traj.sti2[at]) | is.nan(dat$epi$tt.traj.sti2[at])), 0,
                                  length(which((rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1) &
