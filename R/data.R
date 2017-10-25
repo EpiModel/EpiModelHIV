@@ -1,26 +1,4 @@
 
-#' Fitted Network Models for 10000 Person Network
-#'
-#' A dataset containing a list of three outputs from \code{netest}, one for each
-#' network. This would be used primarily for more efficient package testing.
-#'
-#' @docType data
-#' @keywords datasets
-#' @format A list with three elements.
-#' @name est
-NULL
-
-#' Network Statistics Network Models for 10000 Person Network
-#'
-#' A dataset containing the necessary network statistics for efficient
-#' package testing.
-#'
-#' @docType data
-#' @keywords datasets
-#' @format A list with 18 elements.
-#' @name st
-NULL
-
 #' Life Table for Ghana
 #'
 #' A dataset containing age-sex-period specific mortality rates.
