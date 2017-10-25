@@ -30,21 +30,22 @@ dat <- initialize_msm(est, param, init, control, s = 1)
 
 
 at <- at + 1
-dat <- aging_msm(dat, at)
-dat <- deaths_msm(dat, at)
-dat <- births_msm(dat, at)
-dat <- test_msm(dat, at)
-dat <- tx_msm(dat, at)
-dat <- prep_msm(dat, at)
-dat <- progress_msm(dat, at)
-dat <- vl_msm(dat, at)
-# dat <- update_aiclass_msm(dat, at)
-# dat <- update_roleclass_msm(dat, at)
-dat <- simnet_msm(dat, at)
-dat <- disclose_msm(dat, at)
-dat <- acts_msm(dat, at)
-dat <- condoms_msm(dat, at)
-dat <- riskhist_msm(dat, at)
-dat <- position_msm(dat, at)
-dat <- trans_msm(dat, at)
-dat <- prevalence_msm(dat, at)
+dat <- aging_msm(dat, at)       ## <1 ms
+dat <- deaths_msm(dat, at)      ## 4 ms
+dat <- births_msm(dat, at)      ## 6 ms
+dat <- test_msm(dat, at)        ## 2 ms
+dat <- tx_msm(dat, at)          ## 3 ms
+dat <- prep_msm(dat, at)        ## 2 ms
+dat <- progress_msm(dat, at)    ## 2 ms
+dat <- vl_msm(dat, at)          ## 3 ms
+dat <- simnet_msm(dat, at)      ## 53 ms
+dat <- disclose_msm(dat, at)    ## 1 ms
+dat <- acts_msm(dat, at)        ## 1 ms
+dat <- condoms_msm(dat, at)     ## 2 ms
+dat <- riskhist_msm(dat, at)    ## 4 ms
+dat <- position_msm(dat, at)    ## 1 ms
+dat <- trans_msm(dat, at)       ## 1 ms
+dat <- sti_trans(dat, at)       ## 4 ms
+dat <- sti_recov(dat, at)       ## 3 ms
+dat <- sti_tx(dat, at)          ## 2 ms
+dat <- prevalence_msm(dat, at)  ## 1 ms
