@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.aging.R
 \name{aging_msm}
 \alias{aging_msm}
+\alias{aging_het}
 \title{Aging Module}
 \usage{
 aging_msm(dat, at)
+
+aging_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

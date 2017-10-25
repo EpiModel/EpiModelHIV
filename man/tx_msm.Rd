@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.tx.R
 \name{tx_msm}
 \alias{tx_msm}
+\alias{tx_het}
 \title{Treatment Module}
 \usage{
 tx_msm(dat, at)
+
+tx_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

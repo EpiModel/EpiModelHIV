@@ -178,17 +178,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
 
 
-#' @title Births Module
-#'
-#' @description Module for simulating births/entries into the population, including
-#'              initialization of attributes for incoming nodes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname births_msm
 births_het <- function(dat, at) {
 
   # Variables
@@ -237,19 +228,6 @@ births_het <- function(dat, at) {
 }
 
 
-#' @title Assign Vertex Attributes at Network Entry
-#'
-#' @description Assigns vertex attributes to incoming nodes at birth/entry into
-#'              the network.
-#'
-#' @inheritParams births_het
-#' @param nBirths Number of new births as determined by \code{\link{births_het}}.
-#'
-#' @keywords het
-#'
-#' @export
-#'
-#'
 setBirthAttr_het <- function(dat, at, nBirths) {
 
   # Set attributes for new births to NA

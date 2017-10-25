@@ -71,18 +71,8 @@ deaths_msm <- function(dat, at) {
 }
 
 
-
-#' @title Deaths Module
-#'
-#' @description Module for simulating deaths among susceptible and infected
-#'              persons within the population.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname deaths_msm
 deaths_het <- function(dat, at) {
 
   ### 1. Susceptible Deaths ###

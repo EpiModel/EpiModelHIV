@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.births.R
 \name{births_msm}
 \alias{births_msm}
+\alias{births_het}
 \title{Births Module}
 \usage{
 births_msm(dat, at)
+
+births_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

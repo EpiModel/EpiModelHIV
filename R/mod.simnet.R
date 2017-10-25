@@ -3,8 +3,8 @@
 
 #' @title Network Resimulation Module
 #'
-#' @description Module function for resimulating the main, casual, and one-off
-#'              networks for one time step.
+#' @description Module function for resimulating the sexual networks for one
+#'              time step.
 #'
 #' @inheritParams aging_msm
 #'
@@ -170,18 +170,8 @@ edges_correct_msm <- function(dat, at) {
 # HET -----------------------------------------------------------------
 
 
-#' @title Network Resimulation Module
-#'
-#' @description Module function to resimulate the dynamic network forward one
-#'              time step conditional on current network structure and vertex
-#'              attributes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname simnet_msm
 simnet_het <- function(dat, at) {
 
   # Update edges coefficients
@@ -203,35 +193,8 @@ simnet_het <- function(dat, at) {
 }
 
 
-
-#' @title Adjustment for the Edges Coefficient with Changing Network Size
-#'
-#' @description Adjusts the edges coefficients in a dynamic network model
-#'              to preserve the mean degree.
-#'
-#' @inheritParams aging_het
-#'
-#' @details
-#' In HIV/STI modeling, there is typically an assumption that changes in
-#' population size do not affect one's number of partners, specified as the
-#' mean degree for network models. A person would not have 10 times the number
-#' of partners should he move from a city 10 times as large. This module uses
-#' the adjustment of Krivitsky et al. to adjust the edges coefficients on the
-#' three network models to account for varying population size in order to
-#' preserve that mean degree.
-#'
-#' @return
-#' The network model parameters stored in \code{dat$nwparam} are updated.
-#'
-#' @references
-#' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
-#' composition effects in exponential-family random graph models." Statistical
-#' Methodology. 2011; 8.4: 319-339.
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname edges_correct_msm
 edges_correct_het <- function(dat, at) {
 
   # Popsize

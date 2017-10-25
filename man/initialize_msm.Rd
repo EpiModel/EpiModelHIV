@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.initialize.R
 \name{initialize_msm}
 \alias{initialize_msm}
+\alias{initialize_het}
 \title{Initialization Module}
 \usage{
 initialize_msm(x, param, init, control, s)
+
+initialize_het(x, param, init, control, s)
 }
 \arguments{
 \item{x}{An \code{EpiModel} object of class \code{\link{netest}}.}

@@ -135,17 +135,8 @@ vl_msm <- function(dat, at) {
 
 
 
-#' @title Viral Load Module
-#'
-#' @description Module function for simulating progression of HIV viral load in
-#'              natural disease dynamics and in the presence of ART.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname vl_msm
 vl_het <- function(dat, at) {
 
   ## Common variables

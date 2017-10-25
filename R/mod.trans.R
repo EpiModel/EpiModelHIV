@@ -263,20 +263,8 @@ trans_msm <- function(dat, at) {
 
 
 
-# HET -----------------------------------------------------------------
-
-#' @title Infection Module
-#'
-#' @description Module function to simulate transmission over an active
-#'              discordant edgelist.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
-#'
+#' @rdname trans_msm
 trans_het <- function(dat, at) {
 
   ## Discordant Edgelist

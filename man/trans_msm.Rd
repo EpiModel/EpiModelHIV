@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.trans.R
 \name{trans_msm}
 \alias{trans_msm}
+\alias{trans_het}
 \title{Transmission Module}
 \usage{
 trans_msm(dat, at)
+
+trans_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,
