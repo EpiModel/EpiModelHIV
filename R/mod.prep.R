@@ -12,9 +12,11 @@
 #'
 prep_msm <- function(dat, at) {
 
-  dat <- calc_psens_stats(dat, at)
-
   # Function Selection ------------------------------------------------------
+
+  if (at >= dat$param$prep.sens.start) {
+    dat <- calc_psens_stats(dat, at)
+  }
 
   if (at >= dat$param$riskh.start) {
     dat <- riskhist_msm(dat, at)
@@ -34,34 +36,6 @@ prep_msm <- function(dat, at) {
   race <- dat$attr$race
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
-
-  if (at == dat$param$prep.start) {
-    num <- length(active)
-
-    ids.B <- which(race == "B")
-    ids.W <- which(race == "W")
-
-    # Awareness
-    prepAware <- rep(NA, num)
-    prepAware[ids.B] <- rbinom(length(ids.B), 1, dat$param$prep.aware.B)
-    prepAware[ids.W] <- rbinom(length(ids.W), 1, dat$param$prep.aware.W)
-    dat$attr$prepAware <- prepAware
-
-    # Access
-    prepAccess <- rep(NA, num)
-    ids.B.aware <- which(dat$attr$race == "B" & prepAware == 1)
-    ids.W.aware <- which(dat$attr$race == "W" & prepAware == 1)
-    prepAccess[ids.B.aware] <- rbinom(length(ids.B.aware), 1, dat$param$prep.access.B)
-    prepAccess[ids.W.aware] <- rbinom(length(ids.W.aware), 1, dat$param$prep.access.W)
-    dat$attr$prepAccess <- prepAccess
-
-    # Indications
-    dat$attr$prepIndic <- rep(NA, num)
-    dat$attr$prepIndic1 <- rep(NA, num)
-    dat$attr$prepIndic2 <- rep(NA, num)
-    dat$attr$prepIndic3 <- rep(NA, num)
-    dat$attr$prepIndic4 <- rep(NA, num)
-  }
 
 
   # Pull Data ---------------------------------------------------------------
@@ -342,10 +316,6 @@ calc_psens_stats <- function(dat, at) {
   # params
   prep.timing.lnt <- dat$param$prep.timing.lnt
   prep.indics <- dat$param$prep.indics
-
-  if (at < dat$param$prep.sens.start) {
-    return(dat)
-  }
 
   # Attributes
   active <- dat$attr$active
