@@ -319,12 +319,12 @@ sti_recov <- function(dat, at) {
 
   # Parameters ----------------------------------------------------------
 
-  rgc.ntx.int <- dat$param$rgc.asympt.int
-  ugc.ntx.int <- dat$param$ugc.asympt.int
+  rgc.ntx.int <- dat$param$rgc.ntx.int
+  ugc.ntx.int <- dat$param$ugc.ntx.int
   gc.tx.int <- dat$param$gc.tx.int
 
-  rct.ntx.int <- dat$param$rct.asympt.int
-  uct.ntx.int <- dat$param$uct.asympt.int
+  rct.ntx.int <- dat$param$rct.ntx.int
+  uct.ntx.int <- dat$param$uct.ntx.int
   ct.tx.int <- dat$param$ct.tx.int
 
 
