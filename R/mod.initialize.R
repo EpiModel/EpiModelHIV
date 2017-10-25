@@ -47,8 +47,8 @@ initialize_msm <- function(x, param, init, control, s) {
   for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p <- stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+                     x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
@@ -110,13 +110,15 @@ initialize_msm <- function(x, param, init, control, s) {
   circ[ids.W] <- sample(apportion_lr(num.W, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
-  # PrEP Attributes
-  dat$attr$prepClass <- rep(NA, num)
-  dat$attr$prepElig <- rep(NA, num)
+  ## PrEP Attributes (new continuum method) ##
+
+  # Prescription
   dat$attr$prepStat <- rep(0, num)
+  dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
+
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -171,7 +173,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
   dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
-  dat$attr$GC.cease <- rep(NA, num)
 
   # Initialize CT infection at both sites
   idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
@@ -198,7 +199,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
   dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
-  dat$attr$CT.cease <- rep(NA, num)
 
 
   # CCR5

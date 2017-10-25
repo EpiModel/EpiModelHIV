@@ -54,10 +54,10 @@ verbose_msm <- function(x, type, s, at) {
           nsteps <- x$control$nsteps
           time.unit <- x$param$time.unit
           prev <- round(x$epi$i.prev[at], 3)
-          prev.rgc <- round(x$epi$prev.rgc[at], 3)
-          prev.ugc <- round(x$epi$prev.ugc[at], 3)
-          prev.rct <- round(x$epi$prev.rct[at], 3)
-          prev.uct <- round(x$epi$prev.uct[at], 3)
+          prev.B <- round(x$epi$i.prev.B[at], 3)
+          prev.W <- round(x$epi$i.prev.W[at], 3)
+          prev.gc <- round(x$epi$prev.gc[at], 3)
+          prev.ct <- round(x$epi$prev.ct[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -71,12 +71,13 @@ verbose_msm <- function(x, type, s, at) {
           cat("\n------------------------------")
           cat("\nHIV Curr Incidence:", x$epi$incid[at])
           cat("\nHIV Cuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
-          cat("\nHIV Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
           cat("\n------------------------------")
-          cat("\nrGC Prevalence: ", prev.rgc, sep = "")
-          cat("\nuGC Prevalence: ", prev.ugc, sep = "")
-          cat("\nrCT Prevalence: ", prev.rct, sep = "")
-          cat("\nuCT Prevalence: ", prev.uct, sep = "")
+          cat("\nHIV Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
+          cat("\n B HIV Prevalence: ", x$epi$i.num.B[at], " (", prev.B, ")", sep = "")
+          cat("\n W HIV Prevalence: ", x$epi$i.num.W[at], " (", prev.W, ")", sep = "")
+          cat("\n------------------------------")
+          cat("\nGC Prevalence: ", prev.gc, sep = "")
+          cat("\nCT Prevalence: ", prev.ct, sep = "")
           cat("\n==============================")
 
         }

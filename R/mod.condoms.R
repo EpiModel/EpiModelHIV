@@ -135,7 +135,7 @@ condoms_msm <- function(dat, at) {
     if (rcomp.prob > 0) {
 
       idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
-                       (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+                     (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
 
       if (rcomp.main.only == TRUE & ptype > 1) {
         idsRC <- NULL

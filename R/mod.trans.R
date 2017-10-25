@@ -48,12 +48,17 @@ trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  race <- dat$attr$race
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
   acute.rr <- dat$param$acute.rr
-  condom.rr <- dat$param$condom.rr
+
+  cond.eff <- dat$param$cond.eff
+  cond.fail.B <- dat$param$cond.fail.B
+  cond.fail.W <- dat$param$cond.fail.W
+
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
   prep.hr <- dat$param$prep.class.hr
@@ -101,17 +106,22 @@ trans_msm <- function(dat, at) {
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
-  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr)
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.ip))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
   ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
-    ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  ip.on.prep <- which(ip.prep == 1)
+  ip.tlo[ip.on.prep] <- ip.tlo[ip.on.prep] + log(prep.hr[ip.prepcl[ip.on.prep]])
 
   # Acute-stage multipliers
   isAcute <- which(ip.stage %in% 1:2)
@@ -163,17 +173,23 @@ trans_msm <- function(dat, at) {
 
   # Condom use
   not.UAI <- which(disc.rp[, "uai"] == 0)
-  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr)
+
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.rp))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
   rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
-    rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  rp.on.prep <- which(rp.prep == 1)
+  rp.tlo[rp.on.prep] <- rp.tlo[rp.on.prep] + log(prep.hr[rp.prepcl[rp.on.prep]])
 
   # Acute-stage multipliers
   isAcute <- which(rp.stage %in% 1:2)
@@ -239,10 +255,8 @@ trans_msm <- function(dat, at) {
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-
-  dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
-  dat$epi$trans.inst[at] <- sum(inf.type == 3)
+  dat$epi$incid.B[at] <- sum(dat$attr$race[infected] == "B")
+  dat$epi$incid.W[at] <- sum(dat$attr$race[infected] == "W")
 
   return(dat)
 }

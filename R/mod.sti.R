@@ -27,13 +27,14 @@ sti_trans <- function(dat, at) {
   uct.sympt.prob <- dat$param$uct.sympt.prob
 
   # Relative risk of infection given condom use during act
-  sti.cond.rr <- dat$param$sti.cond.rr
+  sti.cond.eff <- dat$param$sti.cond.eff
+  sti.cond.fail.B <- dat$param$sti.cond.fail.B
+  sti.cond.fail.W <- dat$param$sti.cond.fail.W
 
-  # Cessation
-  gc.prob.cease <- dat$param$gc.prob.cease
-  ct.prob.cease <- dat$param$ct.prob.cease
 
   # Attributes ----------------------------------------------------------
+
+  race <- dat$attr$race
 
   # Current infection state
   rGC <- dat$attr$rGC
@@ -60,17 +61,12 @@ sti_trans <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
 
-
-
   # Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
   uGC.sympt <- dat$attr$uGC.sympt
   rCT.sympt <- dat$attr$rCT.sympt
   uCT.sympt <- dat$attr$uCT.sympt
 
-  # Men who cease sexual activity during symptomatic infection
-  GC.cease <- dat$attr$GC.cease
-  CT.cease <- dat$attr$CT.cease
 
   # Pull act list
   al <- dat$temp$al
@@ -80,19 +76,33 @@ sti_trans <- function(dat, at) {
   # ins = 1 : p1 is insertive
   # ins = 2 : both p1 and p2 are insertive
 
+
   # Rectal GC -----------------------------------------------------------
 
   # Requires: uGC in insertive man, and no rGC in receptive man
   p1Inf_rgc <- which(uGC[al[, "p1"]] == 1 & uGC.infTime[al[, "p1"]] < at &
-                       rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rgc <- which(uGC[al[, "p1"]] == 0 & uGC.infTime[al[, "p2"]] < at &
-                       rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+  p2Inf_rgc <- which(uGC[al[, "p2"]] == 1 & uGC.infTime[al[, "p2"]] < at &
+                     rGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rgc <- c(p1Inf_rgc, p2Inf_rgc)
 
   # UAI modifier
-  uai_rgc <- al[, "uai"][allActs_rgc]
+  uai_rgc <- al[allActs_rgc, "uai"]
   tprob_rgc <- rep(rgc.tprob, length(allActs_rgc))
-  tprob_rgc[uai_rgc == 0] <- tprob_rgc[uai_rgc == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_rgc <- log(tprob_rgc/(1 - tprob_rgc))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_rgc, "p1"]], race[al[p2Inf_rgc, "p2"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_rgc[uai_rgc == 0] <- tlo_rgc[uai_rgc == 0] + log(condom.rr[uai_rgc == 0])
+
+  # Back-transform to probability
+  tprob_rgc <- plogis(tlo_rgc)
 
   # Stochastic transmission
   trans_rgc <- rbinom(length(allActs_rgc), 1, tprob_rgc)
@@ -111,19 +121,33 @@ sti_trans <- function(dat, at) {
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   rGC.timesInf[idsInf_rgc] <- rGC.timesInf[idsInf_rgc] + 1
 
+
   # Urethral GC ---------------------------------------------------------
 
   # Requires: rGC in receptive man, and no uGC in insertive man
   p1Inf_ugc <- which(rGC[al[, "p1"]] == 1 & rGC.infTime[al[, "p1"]] < at &
-                       uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_ugc <- which(rGC[al[, "p1"]] == 0 & rGC.infTime[al[, "p2"]] < at &
-                       uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uGC[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+  p2Inf_ugc <- which(rGC[al[, "p2"]] == 1 & rGC.infTime[al[, "p2"]] < at &
+                     uGC[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_ugc <- c(p1Inf_ugc, p2Inf_ugc)
 
   # UAI modifier
-  uai_ugc <- al[, "uai"][allActs_ugc]
+  uai_ugc <- al[allActs_ugc, "uai"]
   tprob_ugc <- rep(ugc.tprob, length(allActs_ugc))
-  tprob_ugc[uai_ugc == 0] <- tprob_ugc[uai_ugc == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_ugc <- log(tprob_ugc/(1 - tprob_ugc))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_ugc, "p2"]], race[al[p2Inf_ugc, "p1"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_ugc[uai_ugc == 0] <- tlo_ugc[uai_ugc == 0] + log(condom.rr[uai_ugc == 0])
+
+  # Back-transform to probability
+  tprob_ugc <- plogis(tlo_ugc)
 
   # Stochastic transmission
   trans_ugc <- rbinom(length(allActs_ugc), 1, tprob_ugc)
@@ -147,15 +171,28 @@ sti_trans <- function(dat, at) {
 
   # Requires: uCT in insertive man, and no rCT in receptive man
   p1Inf_rct <- which(uCT[al[, "p1"]] == 1 & uCT.infTime[al[, "p1"]] < at &
-                       rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
-  p2Inf_rct <- which(uCT[al[, "p1"]] == 0 & uCT.infTime[al[, "p2"]] < at &
-                       rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
+                     rCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(1, 2))
+  p2Inf_rct <- which(uCT[al[, "p2"]] == 1 & uCT.infTime[al[, "p2"]] < at &
+                     rCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(0, 2))
   allActs_rct <- c(p1Inf_rct, p2Inf_rct)
 
   # UAI modifier
-  uai_rct <- al[, "uai"][allActs_rct]
+  uai_rct <- al[allActs_rct, "uai"]
   tprob_rct <- rep(rct.tprob, length(allActs_rct))
-  tprob_rct[uai_rct == 0] <- tprob_rct[uai_rct == 0] * sti.cond.rr
+
+  # Transform to log odds
+  tlo_rct <- log(tprob_rct/(1 - tprob_rct))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_rct, "p1"]], race[al[p2Inf_rct, "p2"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_rct[uai_rct == 0] <- tlo_rct[uai_rct == 0] + log(condom.rr[uai_rct == 0])
+
+  # Back-transform to probability
+  tprob_rct <- plogis(tlo_rct)
 
   # Stochastic transmission
   trans_rct <- rbinom(length(allActs_rct), 1, tprob_rct)
@@ -179,17 +216,30 @@ sti_trans <- function(dat, at) {
 
   # Requires: rCT in receptive man, and no uCT in insertive man
   p1Inf_uct <- which(rCT[al[, "p1"]] == 1 & rCT.infTime[al[, "p1"]] < at &
-                       uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
-  p2Inf_uct <- which(rCT[al[, "p1"]] == 0 & rCT.infTime[al[, "p2"]] < at &
-                       uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
+                     uCT[al[, "p2"]] == 0 & al[, "ins"] %in% c(0, 2))
+  p2Inf_uct <- which(rCT[al[, "p2"]] == 1 & rCT.infTime[al[, "p2"]] < at &
+                     uCT[al[, "p1"]] == 0 & al[, "ins"] %in% c(1, 2))
   allActs_uct <- c(p1Inf_uct, p2Inf_uct)
 
   # UAI modifier
-  uai_uct <- al[, "uai"][allActs_uct]
+  uai_uct <- al[allActs_uct, "uai"]
   tprob_uct <- rep(uct.tprob, length(allActs_uct))
-  tprob_uct[uai_uct == 0] <- tprob_uct[uai_uct == 0] * sti.cond.rr
 
-  # Transmission
+  # Transform to log odds
+  tlo_uct <- log(tprob_uct/(1 - tprob_uct))
+
+  # Modify log odds by race-specific condom effectiveness
+  races <- c(race[al[p1Inf_uct, "p2"]], race[al[p2Inf_uct, "p1"]])
+  condom.rr <- rep(NA, length(races))
+  condom.rr[races == "B"] <- 1 - (sti.cond.eff - sti.cond.fail.B)
+  condom.rr[races == "W"] <- 1 - (sti.cond.eff - sti.cond.fail.W)
+
+  tlo_uct[uai_uct == 0] <- tlo_uct[uai_uct == 0] + log(condom.rr[uai_uct == 0])
+
+  # Back-transform to probability
+  tprob_uct <- plogis(tlo_uct)
+
+  # Stochastic transmission
   trans_uct <- rbinom(length(allActs_uct), 1, tprob_uct)
 
   # Determine the newly infected partner
@@ -205,23 +255,6 @@ sti_trans <- function(dat, at) {
   uCT.infTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   uCT.timesInf[idsInf_uct] <- uCT.timesInf[idsInf_uct] + 1
-
-
-  # Set activity cessation attribute for newly infected -----------------
-
-  # Symptomatic GC
-  GC.sympt <- which(is.na(GC.cease) & (rGC.sympt == 1 | uGC.sympt == 1))
-  idsGC.cease <- GC.sympt[which(rbinom(length(GC.sympt),
-                                       1, gc.prob.cease) == 1)]
-  GC.cease[GC.sympt] <- 0
-  GC.cease[idsGC.cease] <- 1
-
-  # Symptomatic CT
-  CT.sympt <- which(is.na(CT.cease) & (rCT.sympt == 1 | uCT.sympt == 1))
-  idsCT.cease <- CT.sympt[which(rbinom(length(CT.sympt),
-                                       1, ct.prob.cease) == 1)]
-  CT.cease[CT.sympt] <- 0
-  CT.cease[idsCT.cease] <- 1
 
 
   # Output --------------------------------------------------------------
@@ -247,21 +280,16 @@ sti_trans <- function(dat, at) {
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
 
-  dat$attr$GC.cease <- GC.cease
-  dat$attr$CT.cease <- CT.cease
-
 
   # Summary stats
-  dat$epi$incid.rgc[at] <- length(idsInf_rgc)
-  dat$epi$incid.ugc[at] <- length(idsInf_ugc)
   dat$epi$incid.gc[at] <- length(idsInf_rgc) + length(idsInf_ugc)
-  dat$epi$incid.rct[at] <- length(idsInf_rct)
-  dat$epi$incid.uct[at] <- length(idsInf_uct)
-  dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
+  dat$epi$incid.gc.B[at] <- length(intersect(union(idsInf_rgc, idsInf_ugc), which(race == "B")))
+  dat$epi$incid.gc.W[at] <- length(intersect(union(idsInf_rgc, idsInf_ugc), which(race == "W")))
 
-  dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
-                                                    idsInf_rct, idsInf_uct)),
-                                           which(dat$attr$prepStat == 1)))
+  dat$epi$incid.ct[at] <- length(idsInf_rct) + length(idsInf_uct)
+  dat$epi$incid.ct.B[at] <- length(intersect(union(idsInf_rct, idsInf_uct), which(race == "B")))
+  dat$epi$incid.ct.W[at] <- length(intersect(union(idsInf_rct, idsInf_uct), which(race == "W")))
+
 
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
@@ -272,17 +300,6 @@ sti_trans <- function(dat, at) {
             all(!is.na(rCT.sympt[rCT == 1])),
             all(!is.na(uCT.infTime[uCT == 1])),
             all(!is.na(uCT.sympt[uCT == 1])))
-
-  if (is.null(dat$epi$times.rgc)) {
-    dat$epi$times.rgc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.ugc <- rep(NA, length(dat$epi$num))
-    dat$epi$times.rct <- rep(NA, length(dat$epi$num))
-    dat$epi$times.uct <- rep(NA, length(dat$epi$num))
-  }
-  dat$epi$times.rgc[at] <- mean(rGC.timesInf, na.rm = TRUE)
-  dat$epi$times.ugc[at] <- mean(uGC.timesInf, na.rm = TRUE)
-  dat$epi$times.rct[at] <- mean(rCT.timesInf, na.rm = TRUE)
-  dat$epi$times.uct[at] <- mean(uCT.timesInf, na.rm = TRUE)
 
   return(dat)
 }
@@ -302,60 +319,32 @@ sti_recov <- function(dat, at) {
 
   # Parameters ----------------------------------------------------------
 
-  rgc.asympt.int <- dat$param$rgc.asympt.int
-  ugc.asympt.int <- dat$param$ugc.asympt.int
+  rgc.ntx.int <- dat$param$rgc.asympt.int
+  ugc.ntx.int <- dat$param$ugc.asympt.int
   gc.tx.int <- dat$param$gc.tx.int
-  gc.ntx.int <- dat$param$gc.ntx.int
 
-  rct.asympt.int <- dat$param$rct.asympt.int
-  uct.asympt.int <- dat$param$uct.asympt.int
+  rct.ntx.int <- dat$param$rct.asympt.int
+  uct.ntx.int <- dat$param$uct.asympt.int
   ct.tx.int <- dat$param$ct.tx.int
-  ct.ntx.int <- dat$param$ct.ntx.int
 
 
   # GC Recovery ---------------------------------------------------------
 
-  # Asymptomatic untreated
-  idsRGC_asympt_ntx <- which(dat$attr$rGC == 1 &
-                             dat$attr$rGC.infTime < at &
-                             dat$attr$rGC.sympt == 0 &
-                             (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
-                             (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0))
-  idsUGC_asympt_ntx <- which(dat$attr$uGC == 1 &
+  # Untreated (asymptomatic and symptomatic)
+  idsRGC_ntx <- which(dat$attr$rGC == 1 &
+                      dat$attr$rGC.infTime < at &
+                      (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
+                      (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0))
+  idsUGC_ntx <- which(dat$attr$uGC == 1 &
                              dat$attr$uGC.infTime < at &
-                             dat$attr$uGC.sympt == 0 &
                              (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
                              (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
 
-  recovRGC_asympt_ntx <- idsRGC_asympt_ntx[which(rbinom(length(idsRGC_asympt_ntx), 1,
-                                                        1/rgc.asympt.int) == 1)]
-  recovUGC_asympt_ntx <- idsUGC_asympt_ntx[which(rbinom(length(idsUGC_asympt_ntx), 1,
-                                                        1/ugc.asympt.int) == 1)]
+  recovRGC_ntx <- idsRGC_ntx[which(rbinom(length(idsRGC_ntx), 1,
+                                          1/rgc.ntx.int) == 1)]
+  recovUGC_ntx <- idsUGC_ntx[which(rbinom(length(idsUGC_ntx), 1,
+                                          1/ugc.ntx.int) == 1)]
 
-  # Symptomatic untreated
-  idsRGC_sympt_ntx <- which(dat$attr$rGC == 1 &
-                            dat$attr$rGC.infTime < at &
-                            dat$attr$rGC.sympt == 1 &
-                            (is.na(dat$attr$rGC.tx) | dat$attr$rGC.tx == 0) &
-                            (is.na(dat$attr$rGC.tx.prep) | dat$attr$rGC.tx.prep == 0))
-  idsUGC_sympt_ntx <- which(dat$attr$uGC == 1 &
-                            dat$attr$uGC.infTime < at &
-                            dat$attr$uGC.sympt == 1 &
-                            (is.na(dat$attr$uGC.tx) | dat$attr$uGC.tx == 0) &
-                            (is.na(dat$attr$uGC.tx.prep) | dat$attr$uGC.tx.prep == 0))
-
-  # If parameter is null, uses recovery rate of asytomatic untreated
-  if (!is.na(gc.ntx.int)) {
-    recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                        1/gc.ntx.int) == 1)]
-    recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                        1/gc.ntx.int) == 1)]
-  } else {
-    recovRGC_sympt_ntx <- idsRGC_sympt_ntx[which(rbinom(length(idsRGC_sympt_ntx), 1,
-                                                        1/rgc.asympt.int) == 1)]
-    recovUGC_sympt_ntx <- idsUGC_sympt_ntx[which(rbinom(length(idsUGC_sympt_ntx), 1,
-                                                        1/ugc.asympt.int) == 1)]
-  }
 
   # Treated (asymptomatic and symptomatic)
   idsRGC_tx <- which(dat$attr$rGC == 1 &
@@ -370,8 +359,8 @@ sti_recov <- function(dat, at) {
   recovUGC_tx <- idsUGC_tx[which(rbinom(length(idsUGC_tx), 1,
                                         1/gc.tx.int) == 1)]
 
-  recovRGC <- c(recovRGC_asympt_ntx, recovRGC_sympt_ntx, recovRGC_tx)
-  recovUGC <- c(recovUGC_asympt_ntx, recovUGC_sympt_ntx, recovUGC_tx)
+  recovRGC <- c(recovRGC_ntx, recovRGC_tx)
+  recovUGC <- c(recovUGC_ntx, recovUGC_tx)
 
   dat$attr$rGC[recovRGC] <- 0
   dat$attr$rGC.sympt[recovRGC] <- NA
@@ -385,52 +374,25 @@ sti_recov <- function(dat, at) {
   dat$attr$uGC.tx[recovUGC] <- NA
   dat$attr$uGC.tx.prep[recovUGC] <- NA
 
-  dat$attr$GC.cease[c(recovRGC, recovUGC)] <- NA
-
 
 
   # CT Recovery ---------------------------------------------------------
 
-  # Asymptomatic untreated
-  idsRCT_asympt_ntx <- which(dat$attr$rCT == 1 &
-                             dat$attr$rCT.infTime < at &
-                             dat$attr$rCT.sympt == 0 &
-                             (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
-                             (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0))
-  idsUCT_asympt_ntx <- which(dat$attr$uCT == 1 &
-                             dat$attr$uCT.infTime < at &
-                             dat$attr$uCT.sympt == 0 &
-                             (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
-                             (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
+  # Untreated (asymptomatic and symptomatic)
+  idsRCT_ntx <- which(dat$attr$rCT == 1 &
+                      dat$attr$rCT.infTime < at &
+                      (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
+                      (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0))
+  idsUCT_ntx <- which(dat$attr$uCT == 1 &
+                      dat$attr$uCT.infTime < at &
+                      (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
+                      (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
 
-  recovRCT_asympt_ntx <- idsRCT_asympt_ntx[which(rbinom(length(idsRCT_asympt_ntx),
-                                                        1, 1/rct.asympt.int) == 1)]
-  recovUCT_asympt_ntx <- idsUCT_asympt_ntx[which(rbinom(length(idsUCT_asympt_ntx),
-                                                        1, 1/uct.asympt.int) == 1)]
+  recovRCT_ntx <- idsRCT_ntx[which(rbinom(length(idsRCT_ntx),
+                                          1, 1/rct.ntx.int) == 1)]
+  recovUCT_ntx <- idsUCT_ntx[which(rbinom(length(idsUCT_ntx),
+                                          1, 1/uct.ntx.int) == 1)]
 
-  # Symptomatic untreated
-  idsRCT_sympt_ntx <- which(dat$attr$rCT == 1 &
-                            dat$attr$rCT.infTime < at &
-                            dat$attr$rCT.sympt == 1 &
-                            (is.na(dat$attr$rCT.tx) | dat$attr$rCT.tx == 0) &
-                            (is.na(dat$attr$rCT.tx.prep) | dat$attr$rCT.tx.prep == 0))
-  idsUCT_sympt_ntx <- which(dat$attr$uCT == 1 &
-                            dat$attr$uCT.infTime < at &
-                            dat$attr$uCT.sympt == 1 &
-                            (is.na(dat$attr$uCT.tx) | dat$attr$uCT.tx == 0) &
-                            (is.na(dat$attr$uCT.tx.prep) | dat$attr$uCT.tx.prep == 0))
-
-  if (!is.na(ct.ntx.int)) {
-    recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                                        1, 1/ct.ntx.int) == 1)]
-    recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                                        1, 1/ct.ntx.int) == 1)]
-  } else {
-    recovRCT_sympt_ntx <- idsRCT_sympt_ntx[which(rbinom(length(idsRCT_sympt_ntx),
-                                                        1, 1/rct.asympt.int) == 1)]
-    recovUCT_sympt_ntx <- idsUCT_sympt_ntx[which(rbinom(length(idsUCT_sympt_ntx),
-                                                        1, 1/uct.asympt.int) == 1)]
-  }
 
   # Treated (asymptomatic and symptomatic)
   idsRCT_tx <- which(dat$attr$rCT == 1 &
@@ -446,8 +408,8 @@ sti_recov <- function(dat, at) {
                                         1, 1/ct.tx.int) == 1)]
 
 
-  recovRCT <- c(recovRCT_asympt_ntx, recovRCT_sympt_ntx, recovRCT_tx)
-  recovUCT <- c(recovUCT_asympt_ntx, recovUCT_sympt_ntx, recovUCT_tx)
+  recovRCT <- c(recovRCT_ntx, recovRCT_tx)
+  recovUCT <- c(recovUCT_ntx, recovUCT_tx)
 
   dat$attr$rCT[recovRCT] <- 0
   dat$attr$rCT.sympt[recovRCT] <- NA
@@ -460,14 +422,6 @@ sti_recov <- function(dat, at) {
   dat$attr$uCT.infTime[recovUCT] <- NA
   dat$attr$uCT.tx[recovUCT] <- NA
   dat$attr$uCT.tx.prep[recovUCT] <- NA
-
-  dat$attr$CT.cease[c(recovRCT, recovUCT)] <- NA
-
-  # Summary stats
-  dat$epi$recov.rgc[at] <- length(unique(recovRGC))
-  dat$epi$recov.ugc[at] <- length(unique(recovUGC))
-  dat$epi$recov.rct[at] <- length(unique(recovRCT))
-  dat$epi$recov.uct[at] <- length(unique(recovUCT))
 
   return(dat)
 }
@@ -486,11 +440,15 @@ sti_recov <- function(dat, at) {
 sti_tx <- function(dat, at) {
 
   # Parameters
-  gc.sympt.prob.tx <- dat$param$gc.sympt.prob.tx
-  ct.sympt.prob.tx <- dat$param$ct.sympt.prob.tx
+  gc.sympt.prob.tx.B <- dat$param$gc.sympt.prob.tx.B
+  gc.sympt.prob.tx.W <- dat$param$gc.sympt.prob.tx.W
+  ct.sympt.prob.tx.W <- dat$param$ct.sympt.prob.tx.B
+  ct.sympt.prob.tx.B <- dat$param$ct.sympt.prob.tx.W
 
-  gc.asympt.prob.tx <- dat$param$gc.asympt.prob.tx
-  ct.asympt.prob.tx <- dat$param$ct.asympt.prob.tx
+  gc.asympt.prob.tx.B <- dat$param$gc.asympt.prob.tx.B
+  gc.asympt.prob.tx.W <- dat$param$gc.asympt.prob.tx.W
+  ct.asympt.prob.tx.W <- dat$param$ct.asympt.prob.tx.B
+  ct.asympt.prob.tx.B <- dat$param$ct.asympt.prob.tx.W
 
   prep.sti.screen.int <- dat$param$prep.sti.screen.int
   prep.sti.prob.tx <- dat$param$prep.sti.prob.tx
@@ -502,7 +460,9 @@ sti_tx <- function(dat, at) {
     prep.stand.tx.grp <- 0
   }
 
-  # symptomatic gc treatment
+  race <- dat$attr$race
+
+  ## Symptomatic GC Treatment ##
   idsRGC_tx_sympt <- which(dat$attr$rGC == 1 &
                            dat$attr$rGC.infTime < at &
                            dat$attr$rGC.sympt == 1 &
@@ -513,14 +473,29 @@ sti_tx <- function(dat, at) {
                            dat$attr$uGC.sympt == 1 &
                            is.na(dat$attr$uGC.tx) &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsGC_tx_sympt <- c(idsRGC_tx_sympt, idsUGC_tx_sympt)
 
-  txGC_sympt <- idsGC_tx_sympt[which(rbinom(length(idsGC_tx_sympt), 1,
-                                            gc.sympt.prob.tx) == 1)]
+  # Subset by race
+  idsRGC_tx_sympt_B <- intersect(idsRGC_tx_sympt, which(race == "B"))
+  idsRGC_tx_sympt_W <- intersect(idsRGC_tx_sympt, which(race == "W"))
+  idsUGC_tx_sympt_B <- intersect(idsUGC_tx_sympt, which(race == "B"))
+  idsUGC_tx_sympt_W <- intersect(idsUGC_tx_sympt, which(race == "W"))
+
+  # Collect over site
+  idsGC_tx_sympt_B <- union(idsRGC_tx_sympt_B, idsUGC_tx_sympt_B)
+  idsGC_tx_sympt_W <- union(idsRGC_tx_sympt_W, idsUGC_tx_sympt_W)
+
+  # Treatment by race
+  txGC_sympt_B <- idsGC_tx_sympt_B[which(rbinom(length(idsGC_tx_sympt_B), 1,
+                                                gc.sympt.prob.tx.B) == 1)]
+  txGC_sympt_W <- idsGC_tx_sympt_W[which(rbinom(length(idsGC_tx_sympt_W), 1,
+                                                gc.sympt.prob.tx.W) == 1)]
+  txGC_sympt <- union(txGC_sympt_B, txGC_sympt_W)
+
+  # Subset by site
   txRGC_sympt <- intersect(idsRGC_tx_sympt, txGC_sympt)
   txUGC_sympt <- intersect(idsUGC_tx_sympt, txGC_sympt)
 
-  # asymptomatic gc treatment
+  ## Asymptomatic GC Treatment ##
   idsRGC_tx_asympt <- which(dat$attr$rGC == 1 &
                             dat$attr$rGC.infTime < at &
                             dat$attr$rGC.sympt == 0 &
@@ -531,22 +506,40 @@ sti_tx <- function(dat, at) {
                             dat$attr$uGC.sympt == 0 &
                             is.na(dat$attr$uGC.tx) &
                             dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsGC_tx_asympt <- c(idsRGC_tx_asympt, idsUGC_tx_asympt)
 
-  txGC_asympt <- idsGC_tx_asympt[which(rbinom(length(idsGC_tx_asympt), 1,
-                                              gc.asympt.prob.tx) == 1)]
+  # Subset by race
+  idsRGC_tx_asympt_B <- intersect(idsRGC_tx_asympt, which(race == "B"))
+  idsRGC_tx_asympt_W <- intersect(idsRGC_tx_asympt, which(race == "W"))
+  idsUGC_tx_asympt_B <- intersect(idsUGC_tx_asympt, which(race == "B"))
+  idsUGC_tx_asympt_W <- intersect(idsUGC_tx_asympt, which(race == "W"))
+
+  # Collect over site
+  idsGC_tx_asympt_B <- union(idsRGC_tx_asympt_B, idsUGC_tx_asympt_B)
+  idsGC_tx_asympt_W <- union(idsRGC_tx_asympt_W, idsUGC_tx_asympt_W)
+
+  # Treatment by race
+  txGC_asympt_B <- idsGC_tx_asympt_B[which(rbinom(length(idsGC_tx_asympt_B), 1,
+                                                  gc.asympt.prob.tx.B) == 1)]
+  txGC_asympt_W <- idsGC_tx_asympt_W[which(rbinom(length(idsGC_tx_asympt_W), 1,
+                                                  gc.asympt.prob.tx.W) == 1)]
+  txGC_asympt <- union(txGC_asympt_B, txGC_asympt_W)
+
+  # Subset by site
   txRGC_asympt <- intersect(idsRGC_tx_asympt, txGC_asympt)
   txUGC_asympt <- intersect(idsUGC_tx_asympt, txGC_asympt)
 
-  # all treated GC
+  ## All Treated GC ##
+
+  # IDs of men sucessfully treated
   txRGC <- union(txRGC_sympt, txRGC_asympt)
   txUGC <- union(txUGC_sympt, txUGC_asympt)
 
+  # IDs of men eligible for treatment
   idsRGC_tx <- union(idsRGC_tx_sympt, idsRGC_tx_asympt)
   idsUGC_tx <- union(idsUGC_tx_sympt, idsUGC_tx_asympt)
 
 
-  # symptomatic ct treatment
+  ## Symptomatic CT Treatment ##
   idsRCT_tx_sympt <- which(dat$attr$rCT == 1 &
                            dat$attr$rCT.infTime < at &
                            dat$attr$rCT.sympt == 1 &
@@ -557,14 +550,30 @@ sti_tx <- function(dat, at) {
                            dat$attr$uCT.sympt == 1 &
                            is.na(dat$attr$uCT.tx) &
                            dat$attr$prepStat %in% prep.stand.tx.grp)
-  idsCT_tx_sympt <- c(idsRCT_tx_sympt, idsUCT_tx_sympt)
 
-  txCT_sympt <- idsCT_tx_sympt[which(rbinom(length(idsCT_tx_sympt), 1,
-                                            ct.sympt.prob.tx) == 1)]
+  # Subset by race
+  idsRCT_tx_sympt_B <- intersect(idsRCT_tx_sympt, which(race == "B"))
+  idsRCT_tx_sympt_W <- intersect(idsRCT_tx_sympt, which(race == "W"))
+  idsUCT_tx_sympt_B <- intersect(idsUCT_tx_sympt, which(race == "B"))
+  idsUCT_tx_sympt_W <- intersect(idsUCT_tx_sympt, which(race == "W"))
+
+  # Collect over site
+  idsCT_tx_sympt_B <- union(idsRCT_tx_sympt_B, idsUCT_tx_sympt_B)
+  idsCT_tx_sympt_W <- union(idsRCT_tx_sympt_W, idsUCT_tx_sympt_W)
+
+  # Treatment by race
+  txCT_sympt_B <- idsCT_tx_sympt_B[which(rbinom(length(idsCT_tx_sympt_B), 1,
+                                                ct.sympt.prob.tx.B) == 1)]
+  txCT_sympt_W <- idsCT_tx_sympt_W[which(rbinom(length(idsCT_tx_sympt_W), 1,
+                                                ct.sympt.prob.tx.W) == 1)]
+  txCT_sympt <- union(txCT_sympt_B, txCT_sympt_W)
+
+  # Subset by site
   txRCT_sympt <- intersect(idsRCT_tx_sympt, txCT_sympt)
   txUCT_sympt <- intersect(idsUCT_tx_sympt, txCT_sympt)
 
-  # asymptomatic ct treatment
+
+  ## Asymptomatic CT Treatment ##
   idsRCT_tx_asympt <- which(dat$attr$rCT == 1 &
                             dat$attr$rCT.infTime < at &
                             dat$attr$rCT.sympt == 0 &
@@ -575,21 +584,37 @@ sti_tx <- function(dat, at) {
                             dat$attr$uCT.sympt == 0 &
                             is.na(dat$attr$uCT.tx) &
                             dat$attr$prepStat == 0)
-  idsCT_tx_asympt <- c(idsRCT_tx_asympt, idsUCT_tx_asympt)
 
-  txCT_asympt <- idsCT_tx_asympt[which(rbinom(length(idsCT_tx_asympt), 1,
-                                              ct.asympt.prob.tx) == 1)]
+  # Subset by race
+  idsRCT_tx_asympt_B <- intersect(idsRCT_tx_asympt, which(race == "B"))
+  idsRCT_tx_asympt_W <- intersect(idsRCT_tx_asympt, which(race == "W"))
+  idsUCT_tx_asympt_B <- intersect(idsUCT_tx_asympt, which(race == "B"))
+  idsUCT_tx_asympt_W <- intersect(idsUCT_tx_asympt, which(race == "W"))
+
+  # Collect over site
+  idsCT_tx_asympt_B <- union(idsRCT_tx_asympt_B, idsUCT_tx_asympt_B)
+  idsCT_tx_asympt_W <- union(idsRCT_tx_asympt_W, idsUCT_tx_asympt_W)
+
+  # Treatment by race
+  txCT_asympt_B <- idsCT_tx_asympt_B[which(rbinom(length(idsCT_tx_asympt_B), 1,
+                                                ct.asympt.prob.tx.B) == 1)]
+  txCT_asympt_W <- idsCT_tx_asympt_W[which(rbinom(length(idsCT_tx_asympt_W), 1,
+                                                ct.asympt.prob.tx.W) == 1)]
+  txCT_asympt <- union(txCT_asympt_B, txCT_asympt_W)
+
+  # Subset by site
   txRCT_asympt <- intersect(idsRCT_tx_asympt, txCT_asympt)
   txUCT_asympt <- intersect(idsUCT_tx_asympt, txCT_asympt)
 
-  # all treated CT
+  ## All Treated CT ##
   txRCT <- union(txRCT_sympt, txRCT_asympt)
   txUCT <- union(txUCT_sympt, txUCT_asympt)
 
   idsRCT_tx <- union(idsRCT_tx_sympt, idsRCT_tx_asympt)
   idsUCT_tx <- union(idsUCT_tx_sympt, idsUCT_tx_asympt)
 
-  # Interval-based treatment for MSM on PrEP
+
+  ## Interval-based treatment for MSM on PrEP ##
   idsSTI_screen <- which(dat$attr$prepStartTime == at |
                            (at - dat$attr$prepLastStiScreen >= prep.sti.screen.int))
 
@@ -623,7 +648,7 @@ sti_tx <- function(dat, at) {
                                             prep.sti.prob.tx) == 1)]
 
 
-  # update attributes
+  ## Update Attributes ##
   dat$attr$rGC.tx[idsRGC_tx] <- 0
   dat$attr$rGC.tx[txRGC] <- 1
 
@@ -649,64 +674,16 @@ sti_tx <- function(dat, at) {
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
 
 
-  # add tx at other site
-  dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1) & dat$attr$rGC == 1)] <- 1
-  dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1) & dat$attr$uGC == 1)] <- 1
+  ## Add tx at other anatomical site ##
+  dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1) &
+                          dat$attr$rGC == 1)] <- 1
+  dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1) &
+                          dat$attr$uGC == 1)] <- 1
 
-  dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1) & dat$attr$rCT == 1)] <- 1
-  dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1) & dat$attr$uCT == 1)] <- 1
-
-  txRGC_all <- union(txRGC, txRGC_prep)
-  txUGC_all <- union(txUGC, txUGC_prep)
-  txRCT_all <- union(txRCT, txRCT_prep)
-  txUCT_all <- union(txUCT, txUCT_prep)
-
-
-  # summary stats
-  if (is.null(dat$epi$num.asympt.tx)) {
-    dat$epi$num.asympt.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.asympt.cases.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.tx.prep <- rep(NA, length(dat$epi$num))
-    dat$epi$num.rect.cases.prep <- rep(NA, length(dat$epi$num))
-  }
-
-  asympt.tx <- c(intersect(txRGC_all, which(dat$attr$rGC.sympt == 0)),
-                 intersect(txUGC_all, which(dat$attr$uGC.sympt == 0)),
-                 intersect(txRCT_all, which(dat$attr$rCT.sympt == 0)),
-                 intersect(txUCT_all, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.tx[at] <- length(unique(asympt.tx))
-  asympt.cases <- c(idsRGC_tx_asympt, intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
-                    idsUGC_tx_asympt, intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
-                    idsRCT_tx_asympt, intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                    idsUCT_tx_asympt, intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.cases[at] <- length(unique(asympt.cases))
-
-
-  asympt.tx.prep <- c(intersect(txRGC_prep, which(dat$attr$rGC.sympt == 0)),
-                      intersect(txUGC_prep, which(dat$attr$uGC.sympt == 0)),
-                      intersect(txRCT_prep, which(dat$attr$rCT.sympt == 0)),
-                      intersect(txUCT_prep, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.tx.prep[at] <- length(unique(asympt.tx.prep))
-  asympt.cases.prep <- c(intersect(idsRGC_prep_tx, which(dat$attr$rGC.sympt == 0)),
-                         intersect(idsUGC_prep_tx, which(dat$attr$uGC.sympt == 0)),
-                         intersect(idsRCT_prep_tx, which(dat$attr$rCT.sympt == 0)),
-                         intersect(idsUCT_prep_tx, which(dat$attr$uCT.sympt == 0)))
-  dat$epi$num.asympt.cases.prep[at] <- length(unique(asympt.cases.prep))
-
-
-  rect.tx <- c(txRGC_all, txRCT_all)
-  dat$epi$num.rect.tx[at] <- length(unique(rect.tx))
-  rect.cases <- c(idsRGC_tx, idsRGC_prep_tx, idsRCT_tx, idsRCT_prep_tx)
-  dat$epi$num.rect.cases[at] <- length(unique(rect.cases))
-
-  rect.tx.prep <- c(txRGC_prep, txRCT_prep)
-  dat$epi$num.rect.tx.prep[at] <- length(unique(rect.tx.prep))
-  rect.cases.prep <- c(idsRGC_prep_tx, idsRCT_prep_tx)
-  dat$epi$num.rect.cases.prep[at] <- length(unique(rect.cases.prep))
+  dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1) &
+                          dat$attr$rCT == 1)] <- 1
+  dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1) &
+                          dat$attr$uCT == 1)] <- 1
 
   return(dat)
 }

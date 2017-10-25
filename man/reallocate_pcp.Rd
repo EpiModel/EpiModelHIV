@@ -4,11 +4,11 @@
 \alias{reallocate_pcp}
 \title{Proportionally Reallocate PrEP Adherence Class Probability}
 \usage{
-reallocate_pcp(in.pcp = c(0.211, 0.07, 0.1, 0.619), reall = 0)
+reallocate_pcp(in.pcp = c(0.089, 0.127, 0.784), reall = 0)
 }
 \arguments{
-\item{in.pcp}{Input vector of length four for the \code{prep.class.prob}
-parameter.}
+\item{in.pcp}{Input vector of length four for the \code{prep.adhr.dist}
+parameters.}
 
 \item{reall}{The pure percentage points to shift from the high adherence
 group to the lower three groups.}
