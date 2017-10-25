@@ -109,17 +109,8 @@ tx_msm <- function(dat, at) {
 }
 
 
-#' @title HIV Anti-Retroviral Treatment Module
-#'
-#' @description Module function for simulating HIV therapy after diagnosis,
-#'              including adherence and non-adherence to ART.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname tx_msm
 tx_het <- function(dat, at) {
 
   # Variables ---------------------------------------------------------------

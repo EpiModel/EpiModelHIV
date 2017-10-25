@@ -31,18 +31,8 @@ aging_msm <- function(dat, at) {
 }
 
 
-#' @title Aging Module
-#'
-#' @description This module ages all active nodes in the population by one time
-#'              unit at each time step.
-#'
-#' @param dat Master data list object of class \code{dat} containing networks,
-#'        individual-level attributes, and summary statistics.
-#' @param at Current time step.
-#'
-#' @keywords module het
 #' @export
-#'
+#' @rdname aging_msm
 aging_het <- function(dat, at) {
 
   ## Parameters

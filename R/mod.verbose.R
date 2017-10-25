@@ -88,29 +88,8 @@ verbose_msm <- function(x, type, s, at) {
 }
 
 
-#' @title Verbose Module
-#'
-#' @description Prints simulation model progress within the time loop.
-#'
-#' @param x If the \code{type} is "startup", then an object of class
-#'        \code{control.net}, otherwise the all master data object in \code{netsim}
-#'        simulations.
-#' @param type Progress type, either of "startup" for starting messages before
-#'        all simulations, or "progress" for time step specific messages.
-#' @param s Current simulation number, if type is "progress"
-#' @param at Current time step, if type is "progress"
-#'
-#' @details
-#' In interactive mode, this module function prints out a standard set of
-#' demographic and epidemiologic summary statistics to the console window. In
-#' non-interactive, batch mode these are saved onto \code{.txt} files in a
-#' \code{verb/} subdirectory. This subdirectory will be created if it does not
-#' exist.
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname verbose_msm
 verbose_het <- function(x, type, s, at) {
 
   if (type == "startup") {

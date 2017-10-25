@@ -181,18 +181,8 @@ prevalence_msm <- function(dat, at) {
 }
 
 
-#' @title Prevalence Module
-#'
-#' @description Module function to calculate and store summary statistics for
-#'              disease prevalence, demographics, and other epidemiological
-#'              outcomes.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname prevalence_msm
 prevalence_het <- function(dat, at) {
 
   status <- dat$attr$status

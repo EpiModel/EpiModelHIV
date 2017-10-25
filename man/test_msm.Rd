@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.test.R
 \name{test_msm}
 \alias{test_msm}
+\alias{dx_het}
 \title{HIV Testing Module}
 \usage{
 test_msm(dat, at)
+
+dx_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

@@ -95,17 +95,8 @@ test_msm <- function(dat, at) {
 }
 
 
-#' @title HIV Diagnosis Module
-#'
-#' @description Module function for simulating HIV diagnosis after infection,
-#'              currently based on diagnosis at treatment initiation.
-#'
-#' @inheritParams aging_het
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname test_msm
 dx_het <- function(dat, at) {
 
   # Variables

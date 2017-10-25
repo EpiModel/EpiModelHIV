@@ -2,9 +2,12 @@
 % Please edit documentation in R/mod.vl.R
 \name{vl_msm}
 \alias{vl_msm}
+\alias{vl_het}
 \title{Viral Load Module}
 \usage{
 vl_msm(dat, at)
+
+vl_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

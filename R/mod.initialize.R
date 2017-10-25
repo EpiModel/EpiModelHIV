@@ -821,26 +821,8 @@ reinit_msm <- function(x, param, init, control, s) {
 # HET -----------------------------------------------------------------
 
 
-#' @title Initialization Module
-#'
-#' @description This function initializes the master \code{dat} object on which
-#'              data are stored, simulates the initial state of the network, and
-#'              simulates disease status and other attributes.
-#'
-#' @param x An \code{EpiModel} object of class \code{\link{netest}}.
-#' @param param An \code{EpiModel} object of class \code{\link{param_het}}.
-#' @param init An \code{EpiModel} object of class \code{\link{init_het}}.
-#' @param control An \code{EpiModel} object of class \code{\link{control_het}}.
-#' @param s Simulation number, used for restarting dependent simulations.
-#'
-#' @return
-#' This function returns the updated \code{dat} object with the initialized values
-#' for demographics and disease-related variables.
-#'
-#' @keywords module het
-#'
 #' @export
-#'
+#' @rdname initialize_msm
 initialize_het <- function(x, param, init, control, s) {
 
   dat <- list()
