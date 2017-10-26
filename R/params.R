@@ -361,8 +361,8 @@ param_cl <- function(nwstats,
                       
                       #b.B.rate.asmm = 0.004262/7,
                       #b.W.rate.asmm = 0.004262/7,
-                      b.B.rate.asmm = 0.0001358571,
-                      b.W.rate.asmm = 0.0001358571,
+                      b.B.rate.asmm = 0.0001348571,
+                      b.W.rate.asmm = 0.0001348571,
                       b.method = "fixed",
                       
 

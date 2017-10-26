@@ -23,7 +23,7 @@ param_cl(nwstats, race.method = 1, last.neg.test.B.int = 301,
   7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25, birth.age = 13,
-  b.B.rate.asmm = 0.0001288571, b.W.rate.asmm = 0.0001288571,
+  b.B.rate.asmm = 0.0001358571, b.W.rate.asmm = 0.0001358571,
   b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
   1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
   disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
