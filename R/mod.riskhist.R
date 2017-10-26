@@ -47,7 +47,7 @@ riskhist_msm <- function(dat, at) {
 
   ## Degree ##
   n <- attributes(dat$el[[1]])$n
-  main.deg <- casl.deg <- inst.deg <- rep(0, n)
+  main.deg <- casl.deg <-asmm.deg <- inst.deg <- rep(0, n)
 
   tab.main <- table(dat$el[[1]])
   main.deg[as.numeric(names(tab.main))] <- as.vector(tab.main)
