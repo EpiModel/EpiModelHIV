@@ -44,8 +44,9 @@ verbose_msm <- function(x, type, s, at) {
                 "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
                 "\nPop Size: ", x$epi$num[at],
                 "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
-                "\nWht Prev: ", round(x$epi$i.num.W[at] / x$epi$num.W[at], 3),
-                "\nBlk Prev: ", round(x$epi$i.num.B[at] / x$epi$num.B[at], 3),
+                "\nASMM Prev: ", round(x$epi$i.num.asmm[at] / x$epi$num.asmm.deb[at], 3),
+                "\nMSM Prev: ", round(x$epi$i.num.msm[at] / x$epi$num.msm[at], 3),
+                "\nAge18 Prev: ", round(x$epi$i.num.age18[at] / x$epi$num.ag18.deb[at], 3),
                 "\n\n", sep = "", file = fn)
           }
         }
@@ -56,8 +57,9 @@ verbose_msm <- function(x, type, s, at) {
           nsteps <- x$control$nsteps
           time.unit <- x$param$time.unit
           prev <- round(x$epi$i.prev[at], 3)
-          prev.B <- round(x$epi$i.prev.B[at], 3)
-          prev.W <- round(x$epi$i.prev.W[at], 3)
+          prev.asmm <- round(x$epi$i.prev.asmm[at], 3)
+          prev.msm <- round(x$epi$i.prev.msm[at], 3)
+          prev.age18 <- round(x$epi$i.prev.age18[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -68,14 +70,15 @@ verbose_msm <- function(x, type, s, at) {
               round((nsteps * time.unit) / 365, 1), sep = "")
           cat("\n------------------------------")
           cat("\nTotal Pop Size:", x$epi$num[at])
-          cat("\nBlack Pop Size:", x$epi$num.B[at])
-          cat("\nWhite Pop Size:", x$epi$num.W[at])
+          cat("\nMSM Pop Size:", x$epi$num.msm[at])
+          cat("\nASMM Pop Size:", x$epi$num.asmm[at])
           cat("\n------------------------------")
           cat("\nCurr Incidence:", x$epi$incid[at])
           cat("\nCuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
           cat("\nTotal Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
-          cat("\nBlack Prevalence: ", x$epi$i.num.B[at], " (", prev.B, ")", sep = "")
-          cat("\nWhite Prevalence: ", x$epi$i.num.W[at], " (", prev.W, ")", sep = "")
+          cat("\nMSM Prevalence: ", x$epi$i.num.msm[at], " (", prev.msm, ")", sep = "")
+          cat("\nASMM Prevalence: ", x$epi$i.num.asmm[at], " (", prev.asmm, ")", sep = "")
+          cat("\nAge18 Prevalence: ", x$epi$i.num.age18[at], " (", prev.age18, ")", sep = "")
           cat("\n==============================")
 
         }
