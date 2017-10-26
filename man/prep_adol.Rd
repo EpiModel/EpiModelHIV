@@ -6,6 +6,12 @@
 \usage{
 prep_adol(dat, at)
 }
+\arguments{
+\item{dat}{Master data list object of class \code{dat} containing networks,
+individual-level attributes, and summary statistics.}
+
+\item{at}{Current time step.}
+}
 \description{
 Module function for implementation and uptake of pre-exposure
              prophylaxis (PrEP) among ASMM to prevent HIV infection.
