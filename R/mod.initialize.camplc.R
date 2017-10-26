@@ -304,12 +304,13 @@ init_status_msm <- function(dat) {
 
   dat$attr$status[dat$attr$asmm == 1] <- 0
   
-  InfElig<-which(dat$attr$debuted == 1, dat$attr$asmm == 1)
+  InfElig<-which(dat$attr$debuted == 1 & dat$attr$asmm == 1)
   
   for (i in 1:(length(InfElig))){
     dat$attr$status[InfElig[i]]<-rbinom(1, 1, dat$init$prev.asmm)}
   
-
+  status <- dat$attr$status
+  
   # Treatment trajectory
   tt.traj <- rep(NA, num)
 
