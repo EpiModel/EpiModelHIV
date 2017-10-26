@@ -46,6 +46,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$i.num <- rNA
     dat$epi$i.num.B <- rNA
     dat$epi$i.num.W <- rNA
+    dat$epi$i.num.msm <- rNA
+    dat$epi$i.num.asmm <- rNA
+    dat$epi$i.num.age18 <- rNA
     dat$epi$i.prev <- rNA
     dat$epi$i.prev.B <- rNA
     dat$epi$i.prev.W <- rNA
@@ -78,13 +81,20 @@ prevalence_msm <- function(dat, at) {
   dat$epi$num[at] <- sum(active == 1, na.rm = TRUE)
   dat$epi$num.B[at] <- sum(active == 1 & race == "B", na.rm = TRUE)
   dat$epi$num.W[at] <- sum(active == 1 & race == "W", na.rm = TRUE)
-  dat$epi$num.asmm[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$num.asmm[at] <- sum(active == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.msm[at] <- sum(active == 1 & asmm == 0, na.rm = TRUE)
-  dat$epi$num.age18[at] <- sum(active == 1 & debuted ==1 & age == 18, na.rm = TRUE)
+  dat$epi$num.age18[at] <- sum(active == 1 & age == 18, na.rm = TRUE)
+  dat$epi$num.asmm.deb[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$num.age18.deb[at] <- sum(active == 1 & debuted ==1 & age == 18, na.rm = TRUE)
   dat$epi$s.num[at] <- sum(active == 1 & status == 0, na.rm = TRUE)
   dat$epi$i.num[at] <- sum(active == 1 & status == 1, na.rm = TRUE)
   dat$epi$i.num.B[at] <- sum(active == 1 & status == 1 & race == "B", na.rm = TRUE)
   dat$epi$i.num.W[at] <- sum(active == 1 & status == 1 & race == "W", na.rm = TRUE)
+  dat$epi$i.num.msm[at] <- sum(active == 1 & status == 1 & asmm == 0, na.rm = TRUE)
+  dat$epi$i.num.asmm[at] <- sum(active == 1 & status == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$i.num.age18[at] <- sum(active == 1 & status == 1 & age == 18, na.rm = TRUE)
+  dat$epi$i.num.asmm.deb[at] <- sum(active == 1 & debuted == 1 & status == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$i.num.age18.deb[at] <- sum(active == 1 & debuted ==1 & status == 1 & age == 18, na.rm = TRUE)
   dat$epi$i.prev[at] <- dat$epi$i.num[at] / dat$epi$num[at]
   dat$epi$i.prev.B[at] <- dat$epi$i.num.B[at] / dat$epi$num.B[at]
   dat$epi$i.prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
@@ -102,9 +112,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] / sum(active == 1 & prepStat == 1, na.rm = TRUE)
   }
   
-  dat$epi$i.prev.msm[at] <- sum(active == 1 & asmm == 0, na.rm = TRUE) / dat$epi$num.msm[at]
-  dat$epi$i.prev.asmm[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE) / dat$epi$num.asmm[at]
-  dat$epi$i.prev.age18[at] <- sum(active == 1 & debuted == 1 & age == 18, na.rm = TRUE) / dat$epi$num.age18[at]
+  dat$epi$i.prev.msm[at] <- sum(active == 1 & status ==1 & asmm == 0, na.rm = TRUE) / dat$epi$num.msm[at]
+  dat$epi$i.prev.asmm[at] <- sum(active == 1 & status ==1 & debuted == 1 & asmm == 1, na.rm = TRUE) / dat$epi$num.asmm.deb[at]
+  dat$epi$i.prev.age18[at] <- sum(active == 1 & status ==1 & debuted == 1 & age == 18, na.rm = TRUE) / dat$epi$num.age18.deb[at]
 
   return(dat)
 }
