@@ -54,7 +54,7 @@ initialize_camplc <- function(x, param, init, control, s) {
     dat$p[[i]] <- p
   }
   dat$el[[4]] <- as.edgelist(nw[[4]])
-  attributes(dat$el[[3]])$vnames <- NULL
+  attributes(dat$el[[4]])$vnames <- NULL
   p <- tergmLite::ergm_prep(nw[[4]], x[[4]]$formation, x[[4]]$coef.form, x[[4]]$constraints)
   p$model.form$formula <- NULL
   dat$p[[4]] <- p
@@ -72,6 +72,7 @@ initialize_camplc <- function(x, param, init, control, s) {
   # Degree terms
   dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
   dat$attr$deg.main <- get.vertex.attribute(x[[2]]$fit$network, "deg.main")
+  dat$attr$deg.asmm <- get.vertex.attribute(x[[3]]$fit$network, "deg.asmm")
 
   # Race
   dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
