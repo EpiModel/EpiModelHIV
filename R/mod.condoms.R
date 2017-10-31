@@ -98,6 +98,8 @@ condoms_msm <- function(dat, at) {
 
     # Disclosure modifier
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
+    
+    if (length(isDiscord) > 0){
     delt <- elt[isDiscord, ]
     discl.list <- dat$temp$discl.list
     disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
@@ -109,6 +111,7 @@ condoms_msm <- function(dat, at) {
 
     isDisc <- which(discl == 1)
     uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta
+    }
 
     # Back transform to prob
     old.uai.prob <- uai.prob
