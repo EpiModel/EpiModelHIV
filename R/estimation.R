@@ -238,7 +238,7 @@ calc_nwstats_msm <- function(time.unit = 7,
   # Number of partnerships
   edges.p <- sum(totdeg.p.by.dm) / 2
   
-  edges.p.oamsm<-1-(length(19:25)/length(19:40))*(1+cross.frac)*edges.p
+  edges.p.oamsm<-(1-(length(19:25)/length(19:40))) * ((1+cross.frac) * edges.p)
 
   # Mixing
   if (method == 2) {
