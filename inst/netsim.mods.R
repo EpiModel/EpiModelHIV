@@ -7,25 +7,25 @@ devtools::load_all()
 #data(st)
 load("est/nwstats.rda")
 load("est/fit.rda")
-load("est/stimod.burnin.rda")
+#load("est/stimod.burnin.rda")
 
 param <- param_msm(nwstats = st,
 
                    ai.scale = 1.04,
 
                    # STI acquisition
-                   rgc.tprob = 0.4456,
-                   ugc.tprob = 0.3341,
-                   rct.tprob = 0.1985,
-                   uct.tprob = 0.1787,
-                   syph.tprob = 0.17,
+                   rgc.tprob = 0.4773,
+                   ugc.tprob = 0.3819,
+                   rct.tprob = 0.2564,
+                   uct.tprob = 0.2091,
+                   syph.tprob = 0.2526,
 
                    # HIV acquisition
-                   hiv.rgc.rr = 1.80292790,
-                   hiv.ugc.rr = 1.1989083,
-                   hiv.rct.rr = 1.80292790,
-                   hiv.uct.rr = 1.1989083,
-                   hiv.syph.rr = 2.00,
+                   hiv.rgc.rr = 1.75,
+                   hiv.ugc.rr = 1.26,
+                   hiv.rct.rr = 1.75,
+                   hiv.uct.rr = 1.26,
+                   hiv.syph.rr = 1.63,
 
                    syph.incub.sympt.prob = 0,
                    syph.prim.sympt.prob = 0.70,
@@ -41,15 +41,15 @@ param <- param_msm(nwstats = st,
                    syph.tert.sympt.prob.tx = 1.0,
 
                    ept.coverage = 0.0,
-                   stianntest.gc.hivneg.coverage = 0.1,
-                   stianntest.ct.hivneg.coverage = 0.1,
-                   stianntest.syph.hivneg.coverage = 0.1,
+                   stianntest.gc.hivneg.coverage = 0.44,
+                   stianntest.ct.hivneg.coverage = 0.44,
+                   stianntest.syph.hivneg.coverage = 0.45,
                    stihighrisktest.gc.hivneg.coverage = 0.0,
                    stihighrisktest.ct.hivneg.coverage = 0.0,
                    stihighrisktest.syph.hivneg.coverage = 0.0,
-                   stianntest.gc.hivpos.coverage = 0.1,
-                   stianntest.ct.hivpos.coverage = 0.1,
-                   stianntest.syph.hivpos.coverage = 0.1,
+                   stianntest.gc.hivpos.coverage = 0.61,
+                   stianntest.ct.hivpos.coverage = 0.61,
+                   stianntest.syph.hivpos.coverage = 0.67,
                    stihighrisktest.gc.hivpos.coverage = 0.0,
                    stihighrisktest.ct.hivpos.coverage = 0.0,
                    stihighrisktest.syph.hivpos.coverage = 0.0,
@@ -66,14 +66,17 @@ init <- init_msm(nwstats = st)
 
 control <- control_msm(nsteps = 200)
 
-#sim <- netsim(est, param, init, control)
+sim <- netsim(est, param, init, control)
 
 #debug(initialize_msm)
-debug(reinit_msm)
-#at <- 1
-at <- 5201
-#dat <- initialize_msm(est, param, init, control, s = 1)
-dat <- reinit_msm(sim, param, init, control, s = 1)
+#debug(reinit_msm)
+debug(prevalence_msm)
+
+at <- 1
+#at <- 5201
+
+dat <- initialize_msm(est, param, init, control, s = 1)
+#dat <- reinit_msm(sim, param, init, control, s = 1)
 
 #debug(sti_recov_msm)
 #debug(sti_tx_msm)

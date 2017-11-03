@@ -424,9 +424,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$tt.traj.syph1 <- rep(0, nsteps)
     dat$epi$tt.traj.gc1 <- rep(0, nsteps)
     dat$epi$tt.traj.ct1 <- rep(0, nsteps)
+    dat$epi$tt.traj.sti1 <- rep(0, nsteps)
     dat$epi$tt.traj.syph2 <- rep(0, nsteps)
     dat$epi$tt.traj.gc2 <- rep(0, nsteps)
     dat$epi$tt.traj.ct2 <- rep(0, nsteps)
+    dat$epi$tt.traj.sti2 <- rep(0, nsteps)
 
     #STI Testing in last 12 months
     dat$epi$test.gc.12mo <- rNA
@@ -688,11 +690,13 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rgc[at] <- ifelse(dat$epi$num[at] > 0, sum(rGC == 1, na.rm = TRUE) / dat$epi$num[at], 0)
   dat$epi$prev.ugc[at] <- ifelse(dat$epi$num[at] > 0, sum(uGC == 1, na.rm = TRUE) / dat$epi$num[at], 0)
   dat$epi$prev.gc[at] <- ifelse(dat$epi$num[at] > 0, sum((rGC == 1 | uGC == 1), na.rm = TRUE) / dat$epi$num[at], 0)
-  dat$epi$prev.gc.tttraj1[at] <- ifelse((dat$epi$tt.traj.gc1[at] == 0 | is.na(dat$epi$tt.traj.gc1[at]) | is.nan(dat$epi$tt.traj.gc1[at])), 0,
+  dat$epi$prev.gc.tttraj1[at] <- ifelse((dat$epi$tt.traj.gc1[at] == 0 | is.na(dat$epi$tt.traj.gc1[at])
+                                         | is.nan(dat$epi$tt.traj.gc1[at]) | is.null(dat$epi$tt.traj.gc1[at])), 0,
                                         sum((rGC == 1 | uGC == 1) &
                                              (tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1), na.rm = TRUE) /
                                           dat$epi$tt.traj.gc1[at])
-  dat$epi$prev.gc.tttraj2[at] <- ifelse((dat$epi$tt.traj.gc2[at] == 0 | is.na(dat$epi$tt.traj.gc2[at]) | is.nan(dat$epi$tt.traj.gc2[at])), 0 ,
+  dat$epi$prev.gc.tttraj2[at] <- ifelse((dat$epi$tt.traj.gc2[at] == 0 | is.na(dat$epi$tt.traj.gc2[at]) |
+                                           is.nan(dat$epi$tt.traj.gc2[at]) | is.null(dat$epi$tt.traj.gc2[at])), 0 ,
                                         sum((rGC == 1 | uGC == 1) &
                                              (tt.traj.gc.hivneg == 2 | tt.traj.gc.hivpos == 2), na.rm = TRUE) /
                                           dat$epi$tt.traj.gc2[at])
@@ -706,11 +710,13 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.rct[at] <- ifelse(dat$epi$num[at] > 0, sum(rCT == 1, na.rm = TRUE) / dat$epi$num[at], 0)
   dat$epi$prev.uct[at] <- ifelse(dat$epi$num[at] > 0, sum(uCT == 1, na.rm = TRUE) / dat$epi$num[at], 0)
   dat$epi$prev.ct[at] <- ifelse(dat$epi$num[at] > 0, sum((rCT == 1 | uCT == 1), na.rm = TRUE) / dat$epi$num[at], 0)
-  dat$epi$prev.ct.tttraj1[at] <- ifelse((dat$epi$tt.traj.ct1[at] == 0 | is.na(dat$epi$tt.traj.ct1[at]) | is.nan(dat$epi$tt.traj.ct1[at])), 0,
+  dat$epi$prev.ct.tttraj1[at] <- ifelse((dat$epi$tt.traj.ct1[at] == 0 | is.na(dat$epi$tt.traj.ct1[at]) |
+                                           is.nan(dat$epi$tt.traj.ct1[at]) | is.null(dat$epi$tt.traj.ct1[at])), 0,
                                         sum((rCT == 1 | uCT == 1) &
                                         (tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1), na.rm = TRUE) /
                                           dat$epi$tt.traj.ct1[at])
-  dat$epi$prev.ct.tttraj2[at] <- ifelse((dat$epi$tt.traj.ct2[at] == 0 | is.na(dat$epi$tt.traj.ct2[at]) | is.nan(dat$epi$tt.traj.ct2[at])), 0,
+  dat$epi$prev.ct.tttraj2[at] <- ifelse((dat$epi$tt.traj.ct2[at] == 0 | is.na(dat$epi$tt.traj.ct2[at]) |
+                                           is.nan(dat$epi$tt.traj.ct2[at]) | is.null(dat$epi$tt.traj.ct2[at])), 0,
                                         sum((rCT == 1 | uCT == 1) &
                                                                    (tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2), na.rm = TRUE) /
                                           dat$epi$tt.traj.ct2[at])
@@ -752,21 +758,25 @@ prevalence_msm <- function(dat, at) {
                                                    length(which(diag.status.syph == 1 & stage.syph %in% c(5, 6))), 0)
 
   dat$epi$prev.syph[at] <- ifelse(dat$epi$num[at] > 0, length(which(syphilis == 1)) / dat$epi$num[at], 0)
-  dat$epi$prev.syph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at]) | is.nan(dat$epi$tt.traj.syph1[at])), 0,
+  dat$epi$prev.syph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at]) |
+                                             is.nan(dat$epi$tt.traj.syph1[at]) | is.null(dat$epi$tt.traj.syph1[at])), 0,
                                           sum((syphilis == 1) &
                                                (tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1), na.rm = TRUE) /
                                             dat$epi$tt.traj.syph1[at])
-  dat$epi$prev.syph.tttraj2[at] <- ifelse((dat$epi$tt.traj.syph2[at] == 0 | is.na(dat$epi$tt.traj.syph2[at]) | is.nan(dat$epi$tt.traj.syph2[at])), 0,
+  dat$epi$prev.syph.tttraj2[at] <- ifelse((dat$epi$tt.traj.syph2[at] == 0 | is.na(dat$epi$tt.traj.syph2[at]) |
+                                             is.nan(dat$epi$tt.traj.syph2[at]) | is.null(dat$epi$tt.traj.syph2[at])), 0,
                                           sum((syphilis == 1) &
                                                (tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2), na.rm = TRUE) / dat$epi$tt.traj.syph2[at])
 
   dat$epi$prev.primsecosyph[at] <- ifelse(dat$epi$num[at] > 0, length(which(stage.syph %in% c(1, 2, 3))) /
                                             dat$epi$num[at], 0)
-  dat$epi$prev.primsecosyph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at]) | is.nan(dat$epi$tt.traj.syph1[at])), 0,
+  dat$epi$prev.primsecosyph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at]) |
+                                                     is.nan(dat$epi$tt.traj.syph1[at])| is.null(dat$epi$tt.traj.syph1[at])), 0,
                                                   length(which(stage.syph %in% c(1, 2, 3) &
                                                                    (tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))) /
                                                     dat$epi$tt.traj.syph1[at])
-  dat$epi$prev.primsecosyph.tttraj2[at] <- ifelse((dat$epi$tt.traj.syph2[at] == 0 | is.na(dat$epi$tt.traj.syph2[at]) | is.nan(dat$epi$tt.traj.syph2[at])), 0,
+  dat$epi$prev.primsecosyph.tttraj2[at] <- ifelse((dat$epi$tt.traj.syph2[at] == 0 | is.na(dat$epi$tt.traj.syph2[at]) |
+                                                     is.nan(dat$epi$tt.traj.syph2[at])| is.null(dat$epi$tt.traj.syph2[at])), 0,
                                                   length(which(stage.syph %in% c(1, 2, 3) &
                                                           (tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))) /
                                                     dat$epi$tt.traj.syph2[at])
@@ -910,14 +920,16 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.sti[at] <- ifelse(sum(rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) > 0,
                                  sum(rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1 , na.rm = TRUE) / dat$epi$num[at], 0)
 
-  dat$epi$prev.sti.tttraj1[at] <- ifelse((dat$epi$tt.traj.sti1[at] == 0 | is.na(dat$epi$tt.traj.sti1[at]) | is.nan(dat$epi$tt.traj.sti1[at])), 0,
+  dat$epi$prev.sti.tttraj1[at] <- ifelse((dat$epi$tt.traj.sti1[at] == 0 | is.na(dat$epi$tt.traj.sti1[at]) |
+                                            is.nan(dat$epi$tt.traj.sti1[at])| is.null(dat$epi$tt.traj.sti1[at])), 0,
                                          length(which((rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1) &
                                                         (tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1 |
                                                            tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1 |
                                                            tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))) /
                                            dat$epi$tt.traj.sti1[at])
 
-  dat$epi$prev.sti.tttraj2[at] <- ifelse((dat$epi$tt.traj.sti2[at] == 0 | is.na(dat$epi$tt.traj.sti2[at]) | is.nan(dat$epi$tt.traj.sti2[at])), 0,
+  dat$epi$prev.sti.tttraj2[at] <- ifelse((dat$epi$tt.traj.sti2[at] == 0 | is.na(dat$epi$tt.traj.sti2[at]) |
+                                            is.nan(dat$epi$tt.traj.sti2[at])| is.null(dat$epi$tt.traj.sti2[at])), 0,
                                  length(which((rGC == 1 | uGC == 1 | rCT == 1 | uCT == 1 | syphilis == 1) &
                                                 (tt.traj.gc.hivneg == 2 | tt.traj.gc.hivpos == 2 |
                                                  tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2 |
