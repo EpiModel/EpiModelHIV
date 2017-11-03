@@ -152,8 +152,6 @@ trans_msm <- function(dat, at){
   isAcute <- which(rp.stage %in% c("AR", "AF"))
   trans.rp.prob[isAcute] <- trans.rp.prob[isAcute] * acute.rr
 
-  ## TODO: multiplier for prevalent STI infection
-  ## Need to do this twice, given differentials in multipliers
 
   ## Bound range of PATP
   trans.ip.prob <- pmin(trans.ip.prob, 1)
