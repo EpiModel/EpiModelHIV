@@ -18,7 +18,7 @@ riskhist_adol <- function(dat, at) {
   uid <- dat$attr$uid
 
   ## Edgelist
-  el <- as.data.frame(dat$temp$el)
+  al <- as.data.frame(dat$temp$al)
   
 
   #Move past UAI counts down a time step.
@@ -28,8 +28,8 @@ riskhist_adol <- function(dat, at) {
   # Number of UAI at time = at.
   #p1 and p2 are row numbers not uid so we need to get the uid that corespond to those rows. 
   
-  rows <- unique(c(el$p1, el$p2))
-  counts <- sapply(rows, function(x) sum(el$uai[el$p1==x | el$p2==x]))
+  rows <- unique( c(al[,1], al[,2]) )
+  counts <- sapply(rows, function(x) sum(al[,4][al[,1]==x | al[,2]==x]))
   uids<-rep(NA,length(rows))
   mat<-as.data.frame(cbind(rows,counts,uids))
   
