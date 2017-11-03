@@ -100,7 +100,7 @@ condoms_msm <- function(dat, at) {
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
     
     if (length(isDiscord) > 0){
-    delt <- elt[isDiscord, ]
+    delt <- elt[isDiscord,, drop=FALSE]
     discl.list <- dat$temp$discl.list
     disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
     delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
