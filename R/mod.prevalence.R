@@ -311,11 +311,20 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.rgc <- rNA
     dat$epi$incid.ugc <- rNA
     dat$epi$incid.gc <- rNA
+    dat$epi$incid.gc.g1 <- rNA
+    dat$epi$incid.gc.g2 <- rNA
     dat$epi$incid.rct <- rNA
     dat$epi$incid.uct <- rNA
     dat$epi$incid.ct <- rNA
+    dat$epi$incid.ct.g1 <- rNA
+    dat$epi$incid.ct.g2 <- rNA
     dat$epi$incid.syph <- rNA
+    dat$epi$incid.syph.g1 <- rNA
+    dat$epi$incid.syph.g2 <- rNA
     dat$epi$incid.sti <- rNA
+    dat$epi$incid.sti.g1 <- rNA
+    dat$epi$incid.sti.g2 <- rNA
+
 
     dat$epi$ir100.rgc <- rNA
     dat$epi$ir100.ugc <- rNA

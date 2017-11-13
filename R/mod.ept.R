@@ -677,9 +677,8 @@ sti_ept_msm <- function(dat, at) {
     dat$epi$eptpartelig[at] <- length(idsept)
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
     dat$epi$eptpartuptake[at] <- length(idsuptake_ept)
-    dat$epi$eptprop_provided[at] <- ifelse(dat$epi$partelig[at] > 0,
-                                            dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at],
-                                            0)
+    dat$epi$eptprop_provided[at] <- ifelse((dat$epi$partelig[at] == 0 | is.na(dat$epi$partelig[at]) | is.nan(dat$epi$partelig[at])), 0,
+                                           dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at])
 
     # Wasted EPT
     dat$epi$eptuninfectedprovided[at] <- ifelse(length(idsprovided_ept) > 0,
