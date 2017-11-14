@@ -279,7 +279,7 @@ sti_ept_msm <- function(dat, at) {
     idspartlistsept2.main.end.gc <- which(dat$attr$uid %in% partlist.col2.ept.main.end.gc[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.main.end.gc <- idspartlistsept1.main.end.gc[which(rGC.tx[idspartlistsept2.main.end.gc] %in% c(0, NA) &
+    idspartlistsept2.main.end.gc <- idspartlistsept2.main.end.gc[which(rGC.tx[idspartlistsept2.main.end.gc] %in% c(0, NA) &
                                                                    uGC.tx[idspartlistsept2.main.end.gc] %in% c(0, NA) &
                                                                    rGC.tx.prep[idspartlistsept2.main.end.gc] %in% c(0, NA) &
                                                                    uGC.tx.prep[idspartlistsept2.main.end.gc] %in% c(0, NA) &
@@ -520,7 +520,7 @@ sti_ept_msm <- function(dat, at) {
     idspartlistsept2.main.end.ct <- which(dat$attr$uid %in% partlist.col2.ept.main.end.ct[, "uid1"])
 
     # Check STI Tx status of partner 1
-    idspartlistsept2.main.end.ct <- idspartlistsept1.main.end.ct[which(rCT.tx[idspartlistsept2.main.end.ct] %in% c(0, NA) &
+    idspartlistsept2.main.end.ct <- idspartlistsept2.main.end.ct[which(rCT.tx[idspartlistsept2.main.end.ct] %in% c(0, NA) &
                                                                          uCT.tx[idspartlistsept2.main.end.ct] %in% c(0, NA) &
                                                                          rCT.tx.prep[idspartlistsept2.main.end.ct] %in% c(0, NA) &
                                                                          uCT.tx.prep[idspartlistsept2.main.end.ct] %in% c(0, NA) &
@@ -677,7 +677,7 @@ sti_ept_msm <- function(dat, at) {
     dat$epi$eptpartelig[at] <- length(idsept)
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
     dat$epi$eptpartuptake[at] <- length(idsuptake_ept)
-    dat$epi$eptprop_provided[at] <- ifelse((dat$epi$partelig[at] == 0 | is.na(dat$epi$partelig[at]) | is.nan(dat$epi$partelig[at])), 0,
+    dat$epi$eptprop_provided[at] <- ifelse((length(idsept) == 0), 0,
                                            dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at])
 
     # Wasted EPT

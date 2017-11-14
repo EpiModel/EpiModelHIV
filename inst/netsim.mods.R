@@ -7,7 +7,7 @@ devtools::load_all()
 #data(st)
 load("est/nwstats.rda")
 load("est/fit.rda")
-#load("est/stimod.burnin.rda")
+load("est/stimod.burnin.rda")
 
 param <- param_msm(nwstats = st,
 
@@ -40,7 +40,7 @@ param <- param_msm(nwstats = st,
                    syph.latelat.sympt.prob.tx = 0.10,
                    syph.tert.sympt.prob.tx = 1.0,
 
-                   ept.coverage = 0.0,
+                   ept.coverage = 0.5,
                    stianntest.gc.hivneg.coverage = 0.44,
                    stianntest.ct.hivneg.coverage = 0.44,
                    stianntest.syph.hivneg.coverage = 0.45,
@@ -54,9 +54,9 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.ct.hivpos.coverage = 0.0,
                    stihighrisktest.syph.hivpos.coverage = 0.0,
 
-                   prep.start = 2601,
-                   stitest.start = 2601,
-                   ept.start = 2601,
+                   prep.start = 7000,
+                   stitest.start = 7000,
+                   ept.start = 5201,
 
                    stitest.active.int = 364,
                    sti.highrisktest.int = 182,
@@ -64,27 +64,28 @@ param <- param_msm(nwstats = st,
 
 init <- init_msm(nwstats = st)
 
-control <- control_msm(nsteps = 200)
+control <- control_msm(start = 5201,
+                       nsteps = 5210)
 
-sim <- netsim(est, param, init, control)
+#sim <- netsim(est, param, init, control)
 
 #debug(initialize_msm)
 #debug(reinit_msm)
-debug(prevalence_msm)
+#debug(prevalence_msm)
 
-at <- 1
-#at <- 5201
+#at <- 1
+at <- 5201
 
-dat <- initialize_msm(est, param, init, control, s = 1)
-#dat <- reinit_msm(sim, param, init, control, s = 1)
+#dat <- initialize_msm(est, param, init, control, s = 1)
+dat <- reinit_msm(sim, param, init, control, s = 1)
 
 #debug(sti_recov_msm)
 #debug(sti_tx_msm)
 #debug(hiv_test_msm)
-debug(sti_test_msm)
+debug(sti_ept_msm)
 
 at <- at + 1
-for (at in 2:198) {
+for (at in (at + 1): (at + 198)) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)
   dat <- births_msm(dat, at)
