@@ -371,17 +371,24 @@ sti_trans_msm <- function(dat, at) {
   dat$epi$incid.syph.prep[at] <- length(intersect(idsInf_syph,
                                                   which(dat$attr$prepStat == 1)))
 
+  dat$epi$incid.gcct[at] <- length(unique(c(idsInf_rgc,idsInf_ugc))) + length(unique(c(idsInf_rct,idsInf_uct)))
+
+
   # Risk group-specific
-  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1 | dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
-  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1 | dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1))
-  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1 | dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1))
+  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
+  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
+  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1 | dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 1))
   dat$epi$incid.sti.tttraj1[at] <- dat$epi$incid.gc.tttraj1[at] + dat$epi$incid.ct.tttraj1[at] + dat$epi$incid.syph.tttraj1[at]
+  dat$epi$incid.gcct.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1 |
+                                                   dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
 
-  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2 | dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
-  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2 | dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2))
-  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2 | dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2))
+
+  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
+  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
+  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2 | dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 2))
   dat$epi$incid.sti.tttraj2[at] <- dat$epi$incid.gc.tttraj2[at] + dat$epi$incid.ct.tttraj2[at] + dat$epi$incid.syph.tttraj2[at]
-
+  dat$epi$incid.gcct.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2 |
+                                                  dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
 
   # Stop check for STI attributes
   stopifnot(all(!is.na(dat$attr$rGC.infTime[dat$attr$rGC == 1])),
