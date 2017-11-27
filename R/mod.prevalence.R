@@ -692,6 +692,13 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ct.infect.dur <- rNA
     dat$epi$gcct.infect.dur <- rNA
     dat$epi$syph.infect.dur <- rNA
+
+    # Last infection time
+    dat$attr$last.rGC.infTime <- dat$attr$rGC.infTime
+    dat$attr$last.uGC.infTime <- dat$attr$uGC.infTime
+    dat$attr$last.rCT.infTime <- dat$attr$rCT.infTime
+    dat$attr$last.uCT.infTime <- dat$attr$uCT.infTime
+    dat$attr$last.syph.infTime <- dat$attr$syph.infTime
   }
 
   # Population sizes and HIV incidence/prevalence
