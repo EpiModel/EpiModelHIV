@@ -741,6 +741,7 @@ init_status_sti_msm <- function(dat) {
     # Syphilis
     syphilis <- rep(0, num)
     syph.infTime <- rep(NA, num)
+    last.syph.infTime <- rep(NA, num)
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
@@ -762,6 +763,8 @@ init_status_sti_msm <- function(dat) {
     rGC <- rep(0, num)
     rGC.infTime <- rep(NA, num)
     uGC.infTime <- rep(NA, num)
+    last.rGC.infTime <- rep(NA, num)
+    last.uGC.infTime <- rep(NA, num)
     rGC.sympt <- rep(NA, num)
     uGC.sympt <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
@@ -778,6 +781,8 @@ init_status_sti_msm <- function(dat) {
     rCT <- rep(0, num)
     rCT.infTime <- rep(NA, num)
     uCT.infTime <- rep(NA, num)
+    last.rCT.infTime <- rep(NA, num)
+    last.uCT.infTime <- rep(NA, num)
     rCT.sympt <- rep(NA, num)
     uCT.sympt <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
@@ -829,7 +834,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.incub.syph
-    syph.infTime[selected] <- 1 - time.in.incub.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.incub.syph
 
     # Primary
     selected <- intersect(inf.ids, which(stage.syph == 2))
@@ -837,7 +842,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.prim.syph
-    syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
 
     # Secondary
     selected <- intersect(inf.ids, which(stage.syph == 3))
@@ -845,7 +850,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.seco.syph
-    syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
 
     # Early latent
     selected <- intersect(inf.ids, which(stage.syph == 4))
@@ -853,7 +858,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.earlat.syph
-    syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
                                   prim.syph.int - incu.syph.int
 
     # Late latent
@@ -862,7 +867,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelat.syph
-    syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
                                   seco.syph.int - prim.syph.int - incu.syph.int
 
     # Tertiary
@@ -871,7 +876,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.tert.syph
-    syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
                                   earlat.syph.int - seco.syph.int - prim.syph.int -
                                   incu.syph.int
 
@@ -892,8 +897,8 @@ init_status_sti_msm <- function(dat) {
     rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
     uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
 
-    rGC.infTime[rGC == 1] <- 1
-    uGC.infTime[uGC == 1] <- 1
+    rGC.infTime[rGC == 1] <- last.rGC.infTime[rGC == 1] <- 1
+    uGC.infTime[uGC == 1] <- last.uGC.infTime[uGC == 1] <- 1
 
     diag.status.gc[uGC == 1 | rGC == 1] <- 0
 
@@ -911,8 +916,8 @@ init_status_sti_msm <- function(dat) {
     rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
     uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
 
-    rCT.infTime[rCT == 1] <- 1
-    uCT.infTime[uCT == 1] <- 1
+    rCT.infTime[rCT == 1] <- last.rCT.infTime[rCT == 1] <- 1
+    uCT.infTime[uCT == 1] <- last.uCT.infTime[uCT == 1] <- 1
 
     diag.status.ct[uCT == 1 | rCT == 1] <- 0
 
@@ -924,6 +929,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$syph.infTime <- syph.infTime
+    dat$attr$last.syph.infTime <- last.syph.infTime
     dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.diag.time.syph <- last.diag.time.syph
@@ -946,6 +952,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$diag.status.gc <- diag.status.gc
     dat$attr$rGC.infTime <- rGC.infTime
     dat$attr$uGC.infTime <- uGC.infTime
+    dat$attr$last.rGC.infTime <- last.rGC.infTime
+    dat$attr$last.uGC.infTime <- last.uGC.infTime
     dat$attr$rGC.sympt <- rGC.sympt
     dat$attr$uGC.sympt <- uGC.sympt
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
@@ -970,6 +978,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$rCT.infTime <- rCT.infTime
     dat$attr$uCT.infTime <- uCT.infTime
+    dat$attr$last.rCT.infTime <- last.rCT.infTime
+    dat$attr$last.uCT.infTime <- last.uCT.infTime
     dat$attr$rCT.sympt <- rCT.sympt
     dat$attr$uCT.sympt <- uCT.sympt
     dat$attr$last.neg.test.rct <- last.neg.test.rct

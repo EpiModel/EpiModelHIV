@@ -7,7 +7,7 @@ devtools::load_all()
 #data(st)
 load("est/nwstats.rda")
 load("est/fit.rda")
-load("est/stimod.burnin.rda")
+#load("est/stimod.burnin.rda")
 
 param <- param_msm(nwstats = st,
 
@@ -64,25 +64,28 @@ param <- param_msm(nwstats = st,
 
 init <- init_msm(nwstats = st)
 
-control <- control_msm(start = 5201,
-                       nsteps = 5210)
+control <- control_msm(nsteps = 200)
 
-#sim <- netsim(est, param, init, control)
+# control <- control_msm(start = 5201,
+#                        nsteps = 5210)
+
+sim <- netsim(est, param, init, control)
 
 #debug(initialize_msm)
 #debug(reinit_msm)
 #debug(prevalence_msm)
 
-#at <- 1
-at <- 5201
+at <- 1
+#at <- 5201
 
-#dat <- initialize_msm(est, param, init, control, s = 1)
-dat <- reinit_msm(sim, param, init, control, s = 1)
+dat <- initialize_msm(est, param, init, control, s = 1)
+#dat <- reinit_msm(sim, param, init, control, s = 1)
 
+#debug(sti_trans_msm)
 #debug(sti_recov_msm)
 #debug(sti_tx_msm)
 #debug(hiv_test_msm)
-debug(sti_ept_msm)
+#debug(sti_ept_msm)
 
 at <- at + 1
 for (at in (at + 1): (at + 198)) {

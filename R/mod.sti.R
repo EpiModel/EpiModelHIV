@@ -55,6 +55,11 @@ sti_trans_msm <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
   syph.infTime <- dat$attr$syph.infTime
+  last.rGC.infTime <- dat$attr$last.rGC.infTime
+  last.uGC.infTime <- dat$attr$last.uGC.infTime
+  last.rCT.infTime <- dat$attr$last.rCT.infTime
+  last.uCT.infTime <- dat$attr$last.uCT.infTime
+  last.syph.infTime <- dat$attr$last.syph.infTime
 
   # GC/CT Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
@@ -102,7 +107,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Update attributes
   rGC[idsInf_rgc] <- 1
-  rGC.infTime[idsInf_rgc] <- at
+  rGC.infTime[idsInf_rgc] <- last.rGC.infTime[idsInf_rgc] <- at
   rGC.sympt[idsInf_rgc] <- rbinom(length(idsInf_rgc), 1, rgc.sympt.prob)
   diag.status.gc[idsInf_rgc] <- 0
 
@@ -134,7 +139,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Update attributes
   uGC[idsInf_ugc] <- 1
-  uGC.infTime[idsInf_ugc] <- at
+  uGC.infTime[idsInf_ugc] <- last.uGC.infTime[idsInf_ugc] <- at
   uGC.sympt[idsInf_ugc] <- rbinom(length(idsInf_ugc), 1, ugc.sympt.prob)
   diag.status.gc[idsInf_ugc] <- 0
 
@@ -166,7 +171,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Update attributes
   rCT[idsInf_rct] <- 1
-  rCT.infTime[idsInf_rct] <- at
+  rCT.infTime[idsInf_rct] <- last.rCT.infTime[idsInf_rct] <- at
   rCT.sympt[idsInf_rct] <- rbinom(length(idsInf_rct), 1, rct.sympt.prob)
   diag.status.ct[idsInf_rct] <- 0
 
@@ -198,7 +203,7 @@ sti_trans_msm <- function(dat, at) {
 
   # Update attributes
   uCT[idsInf_uct] <- 1
-  uCT.infTime[idsInf_uct] <- at
+  uCT.infTime[idsInf_uct] <- last.uCT.infTime[idsInf_uct] <- at
   uCT.sympt[idsInf_uct] <- rbinom(length(idsInf_uct), 1, uct.sympt.prob)
   diag.status.ct[idsInf_uct] <- 0
 
@@ -321,7 +326,7 @@ sti_trans_msm <- function(dat, at) {
     idsInf_syph <- unique(c(disc.syph.ip[trans.syph.ip == 1, 2],
                        disc.syph.rp[trans.syph.rp == 1, 1]))
     syphilis[idsInf_syph] <- 1
-    syph.infTime[idsInf_syph] <- at
+    syph.infTime[idsInf_syph] <- last.syph.infTime[idsInf_syph] <- at
     stage.syph[idsInf_syph] <- 1
     stage.time.syph[idsInf_syph] <- 0
     diag.status.syph[idsInf_syph] <- 0
@@ -335,6 +340,8 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uGC <- uGC
   dat$attr$rGC.infTime <- rGC.infTime
   dat$attr$uGC.infTime <- uGC.infTime
+  dat$attr$last.rGC.infTime <- last.rGC.infTime
+  dat$attr$last.uGC.infTime <- last.uGC.infTime
   dat$attr$rGC.sympt <- rGC.sympt
   dat$attr$uGC.sympt <- uGC.sympt
   dat$attr$diag.status.gc <- diag.status.gc
@@ -344,6 +351,8 @@ sti_trans_msm <- function(dat, at) {
   dat$attr$uCT <- uCT
   dat$attr$rCT.infTime <- rCT.infTime
   dat$attr$uCT.infTime <- uCT.infTime
+  dat$attr$last.rCT.infTime <- last.rCT.infTime
+  dat$attr$last.uCT.infTime <- last.uCT.infTime
   dat$attr$rCT.sympt <- rCT.sympt
   dat$attr$uCT.sympt <- uCT.sympt
   dat$attr$diag.status.ct <- diag.status.ct
@@ -351,6 +360,7 @@ sti_trans_msm <- function(dat, at) {
   # Syphilis attributes
   dat$attr$syphilis <- syphilis
   dat$attr$syph.infTime <- syph.infTime
+  dat$attr$last.syph.infTime <- last.syph.infTime
   dat$attr$stage.syph <- stage.syph
   dat$attr$syph.sympt <- syph.sympt
   dat$attr$stage.time.syph <- stage.time.syph
@@ -375,31 +385,34 @@ sti_trans_msm <- function(dat, at) {
 
 
   # Risk group-specific
-  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
-  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
-  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1 | dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 1))
+  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1)) + length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
+  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1)) + length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
+  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1)) + length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 1))
   dat$epi$incid.sti.tttraj1[at] <- dat$epi$incid.gc.tttraj1[at] + dat$epi$incid.ct.tttraj1[at] + dat$epi$incid.syph.tttraj1[at]
-  dat$epi$incid.gcct.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1 |
-                                                   dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
+  dat$epi$incid.gcct.tttraj1[at] <- dat$epi$incid.gc.tttraj1[at] + dat$epi$incid.ct.tttraj1[at]
 
 
-  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
-  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
-  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2 | dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 2))
+  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2)) + length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
+  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2)) + length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
+  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2)) + length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 2))
   dat$epi$incid.sti.tttraj2[at] <- dat$epi$incid.gc.tttraj2[at] + dat$epi$incid.ct.tttraj2[at] + dat$epi$incid.syph.tttraj2[at]
-  dat$epi$incid.gcct.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2 | dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2 |
-                                                  dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2 | dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
+  dat$epi$incid.gcct.tttraj2[at] <- dat$epi$incid.gc.tttraj2[at] + dat$epi$incid.ct.tttraj2[at]
 
   # Stop check for STI attributes
   stopifnot(all(!is.na(dat$attr$rGC.infTime[dat$attr$rGC == 1])),
+            all(!is.na(dat$attr$last.rGC.infTime[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$rGC.sympt[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$uGC.infTime[dat$attr$uGC == 1])),
+            all(!is.na(dat$attr$last.uGC.infTime[dat$attr$uGC == 1])),
             all(!is.na(dat$attr$uGC.sympt[dat$attr$uGC == 1])),
             all(!is.na(dat$attr$rCT.infTime[dat$attr$rCT == 1])),
+            all(!is.na(dat$attr$last.rCT.infTime[dat$attr$rCT == 1])),
             all(!is.na(dat$attr$rCT.sympt[dat$attr$rCT == 1])),
             all(!is.na(dat$attr$uCT.infTime[dat$attr$uCT == 1])),
+            all(!is.na(dat$attr$last.uCT.infTime[dat$attr$uCT == 1])),
             all(!is.na(dat$attr$uCT.sympt[dat$attr$uCT == 1])),
-            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1])))
+            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1])),
+            all(!is.na(dat$attr$last.syph.infTime[dat$attr$syphilis == 1])))
 
   return(dat)
 }
@@ -532,6 +545,10 @@ sti_recov_msm <- function(dat, at) {
   recovRGC <- c(recovRGC_asympt_ntx, recovRGC_sympt_ntx, recovRGC_tx)
   recovUGC <- c(recovUGC_asympt_ntx, recovUGC_sympt_ntx, recovUGC_tx)
 
+  rgc.infect.dur <- at - rGC.infTime[recovRGC]
+  ugc.infect.dur <- at - uGC.infTime[recovUGC]
+  gc.infect.dur <- mean(c(rgc.infect.dur, ugc.infect.dur), na.rm = TRUE)
+
 
   # CT Recovery ---------------------------------------------------------
 
@@ -589,6 +606,12 @@ sti_recov_msm <- function(dat, at) {
   recovRCT <- c(recovRCT_asympt_ntx, recovRCT_sympt_ntx, recovRCT_tx)
   recovUCT <- c(recovUCT_asympt_ntx, recovUCT_sympt_ntx, recovUCT_tx)
 
+  rct.infect.dur <- at - rCT.infTime[recovRCT]
+  uct.infect.dur <- at - uCT.infTime[recovUCT]
+  ct.infect.dur <- mean(c(rct.infect.dur, uct.infect.dur), na.rm = TRUE)
+
+  gcct.infect.dur <- mean(c(rgc.infect.dur, ugc.infect.dur, rct.infect.dur, uct.infect.dur), na.rm = TRUE)
+
 
   # Syphilis Recovery -------------------------------------------------
 
@@ -610,6 +633,7 @@ sti_recov_msm <- function(dat, at) {
 
   ## Aggregate recovery by stage
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
+  syph.infect.dur <- mean(at - syph.infTime[recovsyph], na.rm = TRUE)
 
 
     # Output -----------------------------------------------------------
@@ -680,6 +704,11 @@ sti_recov_msm <- function(dat, at) {
   dat$epi$recov.uct[at] <- length(unique(recovUCT))
   dat$epi$recov.syphilis[at] <- length(unique(recovsyph))
   dat$epi$recov.earlysyph[at] <- length(unique(recovsyph_early_tx))
+
+  dat$epi$gc.infect.dur[at] <- gc.infect.dur
+  dat$epi$ct.infect.dur[at] <- ct.infect.dur
+  dat$epi$gcct.infect.dur[at] <- gcct.infect.dur
+  dat$epi$syph.infect.dur[at] <- syph.infect.dur
 
   return(dat)
 }
@@ -1395,6 +1424,17 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$time.since.last.test.uct[txUCT_sympt] <- 0
   dat$attr$diag.status.ct[idsCT_tx_sympt] <- 0
   dat$attr$diag.status.ct[txCT_sympt] <- 1
+
+  # Proportion of infections treated in past year
+  dat$epi$tx.gc.prop[at] <- (length(which(dat$attr$last.tx.time.rgc <= 52 & dat$attr$last.rGC.infTime <= 52)) + length(which(dat$attr$last.tx.time.ugc <= 52 & dat$attr$last.uGC.infTime <= 52))) / (length(which(dat$attr$last.rGC.infTime <= 52)) + length(which(dat$attr$last.uGC.infTime <= 52)))
+
+  dat$epi$tx.ct.prop[at] <- (length(which(dat$attr$last.tx.time.rct <= 52 & dat$attr$last.rCT.infTime <= 52)) + length(which(dat$attr$last.tx.time.uct <= 52 & dat$attr$last.uCT.infTime <= 52))) / (length(which(dat$attr$last.rCT.infTime <= 52)) + length(which(dat$attr$last.uCT.infTime <= 52)))
+
+  dat$epi$tx.gcct.prop[at] <- (length(which(dat$attr$last.tx.time.rgc <= 52 & dat$attr$last.rGC.infTime <= 52)) + length(which(dat$attr$last.tx.time.ugc <= 52 & dat$attr$last.uGC.infTime <= 52)) + length(which(dat$attr$last.tx.time.rct <= 52 & dat$attr$last.rCT.infTime <= 52)) + length(which(dat$attr$last.tx.time.uct <= 52 & dat$attr$last.uCT.infTime <= 52))) /
+    (length(which(dat$attr$last.rGC.infTime <= 52)) + length(which(dat$attr$last.uGC.infTime <= 52)) + length(which(dat$attr$last.rCT.infTime <= 52)) + length(which(dat$attr$last.uCT.infTime <= 52)))
+
+  dat$epi$tx.syph.prop[at] <- length(which(dat$attr$last.tx.time.syph <= 52 & dat$attr$last.syph.infTime <= 52)) / length(which(dat$attr$last.syph.infTime <= 52))
+
 
   # Non-index EPT-treated
   dat$attr$eptpartEligTx_GC[txGC_ept] <- NA

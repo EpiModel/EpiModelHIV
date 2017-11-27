@@ -554,6 +554,18 @@ prevalence_msm <- function(dat, at) {
     dat$epi$txSTI_asympt.tttraj1 <- rNA
     dat$epi$txSTI_asympt.tttraj2 <- rNA
 
+    # Proportion of infections treated in past year
+    dat$epi$tx.gc.prop <- rNA
+    dat$epi$tx.ct.prop <- rNA
+    dat$epi$tx.gcct.prop <- rNA
+    dat$epi$tx.syph.prop <- rNA
+
+    # Duration of infection
+    dat$epi$gc.infect.dur <- rNA
+    dat$epi$ct.infect.dur <- rNA
+    dat$epi$gcct.infect.dur <- rNA
+    dat$epi$syph.infect.dur <- rNA
+
   }
 
   # Add new risk-group specific trackers if needed
@@ -669,6 +681,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$txSTI_asympt.tttraj1 <- rNA
     dat$epi$txSTI_asympt.tttraj2 <- rNA
 
+    # Proportion of infections treated in past year
+    dat$epi$tx.gc.prop <- rNA
+    dat$epi$tx.ct.prop <- rNA
+    dat$epi$tx.gcct.prop <- rNA
+    dat$epi$tx.syph.prop <- rNA
+
+    # Duration of infection
+    dat$epi$gc.infect.dur <- rNA
+    dat$epi$ct.infect.dur <- rNA
+    dat$epi$gcct.infect.dur <- rNA
+    dat$epi$syph.infect.dur <- rNA
   }
 
   # Population sizes and HIV incidence/prevalence
