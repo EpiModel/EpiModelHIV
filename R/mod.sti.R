@@ -55,11 +55,29 @@ sti_trans_msm <- function(dat, at) {
   rCT.infTime <- dat$attr$rCT.infTime
   uCT.infTime <- dat$attr$uCT.infTime
   syph.infTime <- dat$attr$syph.infTime
-  last.rGC.infTime <- dat$attr$last.rGC.infTime
-  last.uGC.infTime <- dat$attr$last.uGC.infTime
-  last.rCT.infTime <- dat$attr$last.rCT.infTime
-  last.uCT.infTime <- dat$attr$last.uCT.infTime
-  last.syph.infTime <- dat$attr$last.syph.infTime
+
+  if (is.null(dat$attr$last.rGC.infTime)) {
+  # Last infection time (if null)
+
+  last.rGC.infTime <- rep(NA, dat$control$nsteps)
+  last.uGC.infTime <- rep(NA, dat$control$nsteps)
+  last.rCT.infTime <- rep(NA, dat$control$nsteps)
+  last.uCT.infTime <- rep(NA, dat$control$nsteps)
+  last.syph.infTime <- rep(NA, dat$control$nsteps)
+
+  last.rGC.infTime[dat$attr$rGC == 1] <- dat$attr$rGC.infTime[dat$attr$rGC == 1]
+  last.uGC.infTime[dat$attr$uGC == 1] <- dat$attr$uGC.infTime[dat$attr$uGC == 1]
+  last.rCT.infTime[dat$attr$rCT == 1] <- dat$attr$rCT.infTime[dat$attr$rCT == 1]
+  last.uCT.infTime[dat$attr$uCT == 1] <- dat$attr$uCT.infTime[dat$attr$uCT == 1]
+  last.syph.infTime[dat$attr$syphilis == 1] <- dat$attr$syph.infTime[dat$attr$syphilis == 1]
+  } else {
+
+  last.rGC.infTime <- dat$attr$rGC.infTime
+  last.uGC.infTime <- dat$attr$uGC.infTime
+  last.rCT.infTime <- dat$attr$rCT.infTime
+  last.uCT.infTime <- dat$attr$uCT.infTime
+  last.syph.infTime <- dat$attr$syph.infTime
+  }
 
   # GC/CT Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
