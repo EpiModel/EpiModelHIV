@@ -400,19 +400,14 @@ sti_trans_msm <- function(dat, at) {
 
   # Stop check for STI attributes
   stopifnot(all(!is.na(dat$attr$rGC.infTime[dat$attr$rGC == 1])),
-            all(!is.na(dat$attr$last.rGC.infTime[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$rGC.sympt[dat$attr$rGC == 1])),
             all(!is.na(dat$attr$uGC.infTime[dat$attr$uGC == 1])),
-            all(!is.na(dat$attr$last.uGC.infTime[dat$attr$uGC == 1])),
             all(!is.na(dat$attr$uGC.sympt[dat$attr$uGC == 1])),
             all(!is.na(dat$attr$rCT.infTime[dat$attr$rCT == 1])),
-            all(!is.na(dat$attr$last.rCT.infTime[dat$attr$rCT == 1])),
             all(!is.na(dat$attr$rCT.sympt[dat$attr$rCT == 1])),
             all(!is.na(dat$attr$uCT.infTime[dat$attr$uCT == 1])),
-            all(!is.na(dat$attr$last.uCT.infTime[dat$attr$uCT == 1])),
             all(!is.na(dat$attr$uCT.sympt[dat$attr$uCT == 1])),
-            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1])),
-            all(!is.na(dat$attr$last.syph.infTime[dat$attr$syphilis == 1])))
+            all(!is.na(dat$attr$syph.infTime[dat$attr$syphilis == 1])))
 
   return(dat)
 }
