@@ -925,11 +925,14 @@ init_status_sti_msm <- function(dat) {
 
     # Syphilis
     dat$attr$syphilis <- syphilis
+    dat$attr$syph.timesInf <- rep(0, num)
+    dat$attr$syph.timesInf[syphilis == 1] <- 1
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$syph.infTime <- syph.infTime
     dat$attr$last.syph.infTime <- last.syph.infTime
+    dat$attr$last.syph.recovTime <- rep(NA, num)
     dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.diag.time.syph <- last.diag.time.syph
@@ -949,11 +952,17 @@ init_status_sti_msm <- function(dat) {
     # Gonorrhea
     dat$attr$rGC <- rGC
     dat$attr$uGC <- uGC
+    dat$attr$rGC.timesInf <- rep(0, num)
+    dat$attr$rGC.timesInf[rGC == 1] <- 1
+    dat$attr$uGC.timesInf <- rep(0, num)
+    dat$attr$uGC.timesInf[uGC == 1] <- 1
     dat$attr$diag.status.gc <- diag.status.gc
     dat$attr$rGC.infTime <- rGC.infTime
     dat$attr$uGC.infTime <- uGC.infTime
     dat$attr$last.rGC.infTime <- last.rGC.infTime
     dat$attr$last.uGC.infTime <- last.uGC.infTime
+    dat$attr$last.rGC.recovTime <- rep(NA, num)
+    dat$attr$last.uGC.recovTime <- rep(NA, num)
     dat$attr$rGC.sympt <- rGC.sympt
     dat$attr$uGC.sympt <- uGC.sympt
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
@@ -975,11 +984,17 @@ init_status_sti_msm <- function(dat) {
     # Chlamydia
     dat$attr$rCT <- rCT
     dat$attr$uCT <- uCT
+    dat$attr$rCT.timesInf <- rep(0, num)
+    dat$attr$rCT.timesInf[rCT == 1] <- 1
+    dat$attr$uCT.timesInf <- rep(0, num)
+    dat$attr$uCT.timesInf[uCT == 1] <- 1
     dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$rCT.infTime <- rCT.infTime
     dat$attr$uCT.infTime <- uCT.infTime
     dat$attr$last.rCT.infTime <- last.rCT.infTime
     dat$attr$last.uCT.infTime <- last.uCT.infTime
+    dat$attr$last.rCT.recovTime <- rep(NA, num)
+    dat$attr$last.uCT.recovTime <- rep(NA, num)
     dat$attr$rCT.sympt <- rCT.sympt
     dat$attr$uCT.sympt <- uCT.sympt
     dat$attr$last.neg.test.rct <- last.neg.test.rct
