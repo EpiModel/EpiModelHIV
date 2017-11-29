@@ -64,7 +64,7 @@ param <- param_msm(nwstats = st,
 
 init <- init_msm(nwstats = st)
 
-control <- control_msm(nsteps = 200)
+control <- control_msm(nsteps = 20)
 
 # control <- control_msm(start = 5201,
 #                        nsteps = 5210)
@@ -88,7 +88,7 @@ dat <- initialize_msm(est, param, init, control, s = 1)
 #debug(sti_ept_msm)
 
 at <- at + 1
-for (at in (at + 1): (at + 198)) {
+for (at in at:(at + 18)) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)
   dat <- births_msm(dat, at)
