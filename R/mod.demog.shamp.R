@@ -70,6 +70,24 @@ demogupdate_shamp <- function(dat, at) {
                                    dat$attr$race.sex.cohab))))))))))))))))))))
   
   
+  #Create a factor to capture within the PERS network concurrency.
+  #Capturing the uniquness of Black male and Black females.
+  #Four catagories Black males, Black females, Non-Black males, Non-Black females.
+  dat$attr$pers.conc.group<-ifelse(dat$attr$race == "B" & dat$attr$sex == "M", "BM.conc.g",
+  ifelse(dat$attr$race == "B" & dat$attr$sex == "F", "BF.conc.g",
+  ifelse(dat$attr$race != "B" & dat$attr$sex == "M", "nonBM.conc.g",
+  ifelse(dat$attr$race !="B" & dat$attr$sex=="F", "nonBF.conc.g",
+  dat$attr$pers.conc.group))))
+  
+  dat$attr$cross.net.group<-ifelse((dat$attr$race == "B" | dat$attr$race == "BI") & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 0,"B.BIM.c0",
+  ifelse((dat$attr$race=="B" | dat$attr$race=="BI") & dat$attr$sex=="M" & dat$attr$deg.cohab.c==1,"B.BIM.c1",
+  ifelse(dat$attr$race != "B" & dat$attr$race != "BI" & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 0,"non.B.BIM.c0",
+  ifelse((dat$attr$race != "B" & dat$attr$race != "BI" & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 1) |
+        (dat$attr$sex =="F" &  dat$attr$deg.cohab.c == 1),"non.B.BIM.c1.F.c1",
+  ifelse(dat$attr$sex == "F" &  dat$attr$deg.cohab.c == 0, "F.c0",
+  dat$attr$cross.net.group)))))
+  
+  
   
   #  Recalculate the demog.cat for new demo.
   
