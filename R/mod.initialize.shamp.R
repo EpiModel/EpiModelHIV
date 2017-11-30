@@ -20,6 +20,8 @@
 #' @export
 #' @keywords module HET MSM ego 
 #'
+
+
 initialize_shamp <- function(x, param, init, control, s) {
 
   # Master data list
@@ -33,17 +35,21 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$stats$nwstats <- list()
   dat$temp <- list()
   dat$epi <- list()
-
+  dat$trans.el <- list()
+  
   ## Network simulation ##
   
   nw <- list()
   for (i in 1:3) {
 
-   # nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
-    #                control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
+   nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
+                   control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
     
-    nw[[i]] <- simulate(x[[i]]$fit)
-   }
+    #nw[[i]] <- simulate(x[[i]]$fit)
+  }
+  
+  
+  
 
 
   ## ergm_prep here
@@ -51,7 +57,8 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$p <- list()
   for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
-    attributes(dat$el[[i]])$vnames <- NULL
+    
+       attributes(dat$el[[i]])$vnames <- NULL
     p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
                                 x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
@@ -119,10 +126,14 @@ initialize_shamp <- function(x, param, init, control, s) {
   ids.W.m<-na.omit(ids.M[ids.W])
   
   #race.sex.cohab.
-  dat$attr$race.sex.cohab<-get.vertex.attribute(nw[[1]], "race.sex.cohab")
+  dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
   
    #race.sex.pers.
-  dat$attr$race.sex.pers<-get.vertex.attribute(nw[[1]], "race.sex.pers")
+  dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
+  
+  dat$attr$pers.conc.group <- get.vertex.attribute(nw[[1]], "pers.conc.group") 
+  dat$attr$cross.net.group <- get.vertex.attribute(nw[[1]], "cross.net.group") 
+  
   
   
   # Sex Identity
@@ -171,7 +182,6 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$riskg <- get.vertex.attribute(nw[[1]], "riskg")
   
   # Immigrant status
-  dat$attr$immig <- get.vertex.attribute(nw[[1]], "immig") 
   dat$attr$immig.loc <- rep(0,length(dat$attr$age))
 
   # UAI group
@@ -532,6 +542,10 @@ init_status_shamp <- function(dat) {
    }
   
 
+  dat$attr$status <- status
+  dat$attr$infected.gen <- rep(NA,length(status))
+  infected<-which(dat$attr$status==1)
+  dat$attr$infected.gen[infected] <-0
   # Treatment trajectory
   tt.traj <- rep(NA, num)
 
@@ -608,6 +622,12 @@ init_status_shamp <- function(dat) {
 
   ## Infection-related attributes
 
+  ##Edge list of each transmission event.
+  ##Infector, infected, time)
+  dat$trans.el$infector <- dat$trans.el$infector.sex <- dat$trans.el$infector.race <- dat$trans.el$infector.age <- dat$trans.el$infector.sex.ident <- dat$trans.el$infector.gen <-NULL
+  dat$trans.el$infected <- dat$trans.el$infected.sex <- dat$trans.el$infected.race <- dat$trans.el$infected.age <- dat$trans.el$infected.sex.ident <- dat$trans.el$infected.gen <-NULL 
+  dat$trans.el$time <-NULL
+  
   stage <- rep(NA, num)
   stage.time <- rep(NA, num)
   inf.time <- rep(NA, num)
@@ -2828,6 +2848,25 @@ init_status_shamp <- function(dat) {
   dat$attr$inf.tx <- inf.tx
   dat$attr$inf.stage <- inf.stage
   dat$attr$inf.class <- inf.class
+  
+ 
+    dat$trans.el$infected <- c(dat$trans.el$infected, dat$attr$uid[dat$attr$status == 1]) 
+    dat$trans.el$infected.gen <- c(dat$trans.el$infected.gen, rep(1, sum(dat$attr$status == 1)))
+    dat$trans.el$infected.sex <- c(dat$trans.el$infected.sex, dat$attr$sex[dat$attr$status == 1])
+    dat$trans.el$infected.race <- c(dat$trans.el$infected.race, dat$attr$race[dat$attr$status == 1])
+    dat$trans.el$infected.age <- c(dat$trans.el$infected.age, dat$attr$age[dat$attr$status == 1])
+    dat$trans.el$infected.sex.ident <- c(dat$trans.el$infected.sex.ident, dat$attr$sex.ident[dat$attr$status == 1])
+    
+    dat$trans.el$infector <- c(dat$trans.el$infector, rep("SEED", sum(dat$attr$status, na.rm = TRUE)))
+    dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, rep(0, sum(dat$attr$status, na.rm = TRUE)))
+    dat$trans.el$infector.sex <- c(dat$trans.el$infector.sex, rep("SEED", sum(dat$attr$status, na.rm = TRUE)))
+    dat$trans.el$infector.race <- c(dat$trans.el$infector.race, rep("SEED", sum(dat$attr$status, na.rm = TRUE)))
+    dat$trans.el$infector.age <- c(dat$trans.el$infector.age, rep("SEED", sum(dat$attr$status, na.rm = TRUE)))
+    dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, rep("SEED", sum(dat$attr$status, na.rm = TRUE)))  
+    
+    dat$trans.el$time <- c(dat$trans.el$time, rep(0, sum(dat$attr$status, na.rm = TRUE)))
+    
+
 
   return(dat)
 
@@ -2850,6 +2889,7 @@ init_ccr5_shamp <- function(dat) {
   sex<-dat$attr$sex
   sex.ident<-dat$attr$sex.ident
   race<-dat$attr$race
+  status<-dat$attr$status
 
   num.B.f <- length(which(dat$attr$race == "B" & dat$attr$sex=="F"))
   num.BI.f <- length(which(dat$attr$race == "BI" & dat$attr$sex=="F"))
@@ -2863,8 +2903,6 @@ init_ccr5_shamp <- function(dat) {
   num.HI.m <- length(which(dat$attr$race == "HI" & dat$attr$sex=="M"))
   num.W.m <- length(which(dat$attr$race == "W" & dat$attr$sex=="M"))
   num <- num.B.f + num.BI.f + num.H.f + num.HI.f + num.W.f + num.B.m + num.BI.m + num.H.m + num.HI.m + num.W.m
-  race <- dat$attr$race
-  status <- dat$attr$status
 
   nInfB.f <- sum(race == "B" & status == 1 & sex=="F")
   nInfBI.f <- sum(race == "BI" & status == 1 & sex=="F")
@@ -3172,10 +3210,10 @@ if (num.B.f > 0){
 #'
 reinit_shamp <- function(x, param, init, control, s) {
 
-  need.for.reinit <- c("param", "control", "nwparam", "epi", "attr", "temp", "el", "p")
+  need.for.reinit <- c("param", "control", "nwparam", "epi", "attr", "temp", "el", "p", "trans.el")
   if (!all(need.for.reinit %in% names(x))) {
     stop("x must contain the following elements for restarting: ",
-         "param, control, nwparam, epi, attr, temp, el, p",
+         "param, control, nwparam, epi, attr, temp, el, p, trans.el",
          call. = FALSE)
   }
 
@@ -3197,6 +3235,7 @@ reinit_shamp <- function(x, param, init, control, s) {
   dat$p <- x$p[[s]]
 
   dat$attr <- x$attr[[s]]
+  dat$attr <- x$trans.el[[s]]
 
   if (!is.null(x$stats)) {
     dat$stats <- list()
