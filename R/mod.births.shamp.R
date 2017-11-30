@@ -100,6 +100,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$age[newIds] <- rep(0, nBirths)
   dat$attr$demog.cat[newIds] <- rep(0, nBirths)
   dat$attr$evertest[newIds] <- rep(0, nBirths)
+  dat$attr$infected.gen[newIds]<-rep(NA, nBirths)
 
   dat$attr$arrival.time[newIds] <- rep(at, nBirths)
 
@@ -167,7 +168,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
  
 
   dat$attr$status[newIds] <- rep(0, nBirths)
-  dat$attr$aq.class[newIds] <- rep(NA, nBirths)
+
 
  
   # dat$attr$inst.ai.class[newIds] <- sample(1:dat$param$num.inst.ai.classes,
@@ -380,6 +381,9 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
 
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
+  
+  dat$attr$pers.conc.group[newIds] <- 0 
+  dat$attr$cross.net.group[newIds] <- 0
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
