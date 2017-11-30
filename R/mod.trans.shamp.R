@@ -36,6 +36,8 @@ trans_shamp <- function(dat, at){
 
   # Variables -----------------------------------------------------------
 
+
+  
   # Attributes
   vl <- dat$attr$vl
   stage <- dat$attr$stage
@@ -300,6 +302,34 @@ trans_shamp <- function(dat, at){
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
+    
+    for(k in 1:length(infected)){
+    dat$attr$infected.gen[infected[k]] <- dat$attr$infected.gen[infector[k]]+1
+    }
+    
+    dat$trans.el$infected <- c(dat$trans.el$infected, dat$attr$uid[infected])
+    
+    dat$trans.el$infected.sex <- c(dat$trans.el$infected.sex, dat$attr$sex[infected])
+    dat$trans.el$infected.race <- c(dat$trans.el$infected.race, dat$attr$race[infected])
+    dat$trans.el$infected.age <- c(dat$trans.el$infected.age, dat$attr$age[infected])
+    dat$trans.el$infected.sex.ident <- c(dat$trans.el$infected.sex.ident, dat$attr$sex.ident[infected])
+    
+    new.gens <- dat$attr$infected.gen[infector]
+    new.gens <- new.gens+1
+    dat$trans.el$infected.gen <- c(dat$trans.el$infected.gen, new.gens)
+    
+    
+    
+    dat$trans.el$infector <- c(dat$trans.el$infector, dat$attr$uid[infector])
+    dat$trans.el$infector.sex <- c(dat$trans.el$infector.sex, dat$attr$sex[infector])
+    dat$trans.el$infector.race <- c(dat$trans.el$infector.race, dat$attr$race[infector])
+    dat$trans.el$infector.age <- c(dat$trans.el$infector.age, dat$attr$age[infector])
+    dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, dat$attr$sex.ident[infector])
+    dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, dat$attr$infected.gen[infector])
+    
+
+    dat$trans.el$time <- c(dat$trans.el$time, rep(at, length(infected)))
+                           
   }
 
   # Summary Output
