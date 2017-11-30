@@ -4,7 +4,7 @@
 \alias{param_shamp}
 \title{Epidemic Model Parameters for SHAMP}
 \usage{
-param_shamp(race.method = 1, time.unit = 7, method = 1,
+param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   last.neg.test.B.f.int = 1464, last.neg.test.BI.f.int = 1464,
   last.neg.test.H.f.int = 1464, last.neg.test.HI.f.int = 1464,
   last.neg.test.W.f.int = 1464, last.neg.test.B.msf.int = 1708,
