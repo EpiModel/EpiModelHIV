@@ -24,6 +24,9 @@
 #'
 condoms_shamp <- function(dat, at) {
 
+  al.ai<-NULL
+  al.vi<-NULL
+  
   for (type in c("main", "pers", "inst")) {
 
     ## Variables ##
@@ -174,7 +177,8 @@ condoms_shamp <- function(dat, at) {
 
     # Disclosure modifier
     isDiscord <- which((elt.vi[, "st1"] - elt.vi[, "st2"]) == 1)
-    delt <- matrix(elt.vi[isDiscord, ],ncol=7)
+    if (length(isDiscord) > 0){
+    delt <- elt.vi[isDiscord,, drop=FALSE]
     discl.list <- dat$temp$discl.list
     disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
     delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
@@ -185,6 +189,7 @@ condoms_shamp <- function(dat, at) {
 
     isDisc <- which(discl == 1)
     uvi.logodds[isDisc] <- uvi.logodds[isDisc] + discl.beta.het
+    }
     
     # Back transform to prob
     old.uvi.prob <- uvi.prob
@@ -218,19 +223,19 @@ condoms_shamp <- function(dat, at) {
     if (type == "main") {
       pid <- rep(1:length(vi.vec), vi.vec)
       uai<-rep(0,length(uvi))
-      al <- cbind(pos, neg, ptype, uai, uvi, pid)
+      al.vi <- cbind(pos, neg, ptype, uai, uvi, pid)
     } else {
-      pid <- rep(max(al[, "pid"]) + (1:length(vi.vec)), vi.vec)
+      pid <- rep(max(al.vi[, "pid"]) + (1:length(vi.vec)), vi.vec)
       uai<-rep(0,length(uvi))
-      tmp.al <- cbind(pos, neg, ptype, uai, uvi, pid)
-      al <- rbind(al, tmp.al)
+      tmp.al.vi <- cbind(pos, neg, ptype, uai, uvi, pid)
+      al.vi <- rbind(al.vi, tmp.al.vi)
     }
     max.pid.vi<-max(pid)
     
     }
     
 ### AI
-  
+    
     if(nrow(elt.ai) > 0){
     
     ## Process ##
@@ -241,6 +246,7 @@ condoms_shamp <- function(dat, at) {
     race.p2 <- race[elt.ai[, 2]]
     sex.p1 <- sex[elt.ai[,1]]
     sex.p2 <- sex[elt.ai[,2]]
+    
     
     
     num.het <- (sex.p1 == "F") + (sex.p2 == "F")
@@ -288,7 +294,9 @@ condoms_shamp <- function(dat, at) {
 
     # Disclosure modifier
     isDiscord <- which((elt.ai[, "st1"] - elt.ai[, "st2"]) == 1)
-    delt <- matrix(elt.vi[isDiscord, ],ncol=7)
+    
+    if (length(isDiscord) > 0){
+    delt <- elt.ai[isDiscord,, drop=FALSE]
     discl.list <- dat$temp$discl.list
     disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
     delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
@@ -299,6 +307,8 @@ condoms_shamp <- function(dat, at) {
     
     isDisc <- which(discl == 1)
     uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta.msm
+    }
+    
 
     # Back transform to prob
     old.uai.prob <- uai.prob
@@ -333,19 +343,39 @@ condoms_shamp <- function(dat, at) {
       pid <- rep(1:length(ai.vec), ai.vec)
       if(max.pid.vi > 1){pid<-pid+max.pid.vi}
       uvi <- rep(0,length(uai))
-      al <- cbind(pos, neg, ptype, uai, uvi, pid)
+      al.ai <- cbind(pos, neg, ptype, uai, uvi, pid)
     } else {
-      pid <- rep(max(al[, "pid"]) + (1:length(ai.vec)), ai.vec)
+      pid <- rep(max(al.ai[, "pid"]) + (1:length(ai.vec)), ai.vec)
       if(max.pid.vi > 1){pid<-pid+max.pid.vi}
       uvi <- rep(0,length(uai))
-      tmp.al <- cbind(pos, neg, ptype, uai, uvi, pid)
-      al <- rbind(al, tmp.al)
+      tmp.al.ai <- cbind(pos, neg, ptype, uai, uvi, pid)
+      al.ai <- rbind(al.ai, tmp.al.ai)
     }
     }
+    
 
   } # end ptype loop
+  
+  if (length(al.vi)>0 & length(al.ai)>0){
+  al.ai[,pid] <- al.ai[,pid] + max(al.vi[,pid])
+  al <- rbind(al.vi, al.ai)}
 
+  if (length(al.vi) > 0 & length(al.ai) < 1){
+    al <- al.vi}
+    
+  if (length(al.vi) < 1 & length(al.ai)> 0){
+    al <- al.ai}
+      
   dat$temp$al <- al
+  
+  if (at == 2) {
+    dat$epi$uai.events <- rep(NA, 2)
+    dat$epi$uvi.events <- rep(NA, 2)
+  }
+
+  dat$epi$uai.events[at] <- sum(al[, "uai"])
+  dat$epi$uvi.events[at] <- sum(al[, "uvi"])
+  
 
   return(dat)
 }
