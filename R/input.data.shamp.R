@@ -439,7 +439,27 @@ ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.cohab.c==1,"W.F.
 
 
   #Create a new factor for age by sex group degree (1).
- 
+
+#Create a new factor to capture within the PERS network concurrency.
+#Capturing the uniquness of Black male and Black females.
+#Four catagories Black males, Black females, Non-Black males, Non-Black females.
+data$egos$pers.conc.group<-rep(NA,length(data$egos$ego))
+data$egos$pers.conc.group<-ifelse(data$egos$race == "B" & data$egos$sex == "M", "BM.conc.g",
+ifelse(data$egos$race == "B" & data$egos$sex == "F", "BF.conc.g",
+ifelse(data$egos$race != "B" & data$egos$sex == "M", "nonBM.conc.g",
+ifelse(data$egos$race !="B" & data$egos$sex=="F", "nonBF.conc.g",
+       data$egos$pers.conc.group))))
+
+data$egos$cross.net.group<-rep(NA,length(data$egos$ego))
+data$egos$cross.net.group<-ifelse((data$egos$race == "B" | data$egos$race == "BI") & data$egos$sex == "M" & data$egos$deg.cohab.c == 0,"B.BIM.c0",
+ifelse((data$egos$race=="B" | data$egos$race=="BI") & data$egos$sex=="M" & data$egos$deg.cohab.c==1,"B.BIM.c1",
+ifelse(data$egos$race != "B" & data$egos$race != "BI" & data$egos$sex == "M" & data$egos$deg.cohab.c == 0,"non.B.BIM.c0",
+ifelse((data$egos$race != "B" & data$egos$race != "BI" & data$egos$sex == "M" & data$egos$deg.cohab.c == 1) |
+         (data$egos$sex =="F" &  data$egos$deg.cohab.c == 1),"non.B.BIM.c1.F.c1",
+ifelse(data$egos$sex == "F" &  data$egos$deg.cohab.c == 0, "F.c0",
+       data$egos$cross.net.group)))))
+
+
   return(list(data.params,data))
 
 }
