@@ -257,7 +257,8 @@
 #' @export
 param_shamp <- function(race.method = 1,
                       time.unit = 7,
-                      method=1,
+                      method = 1,
+                      age.unit = 52,
                       
                       last.neg.test.B.f.int = 1464,
                       last.neg.test.BI.f.int = 1464,
@@ -788,16 +789,71 @@ param_shamp <- function(race.method = 1,
   p$method <- method
   p$modes <- 1
 
-  p$asmr.B.f <- asmr.B.f
-  p$asmr.BI.f <- asmr.BI.f
-  p$asmr.H.f <- asmr.H.f
-  p$asmr.HI.f <- asmr.HI.f
-  p$asmr.W.f <- asmr.W.f
-  p$asmr.B.m <- asmr.B.m
-  p$asmr.BI.m <- asmr.BI.m
-  p$asmr.H.m <- asmr.H.m
-  p$asmr.HI.m <- asmr.HI.m
-  p$asmr.W.m <- asmr.W.m
+  
+  p$asmr.B.f <- c(rep(0, 17),
+                1-(1-c(rep(0.000405376, 12),
+                       rep(0.000661066, 10),
+                       rep(0.001378053, 10),
+                       rep(0.003065837, 10)))^(1 / age.unit),
+                1)
+  p$asmr.BI.f <- c(rep(0, 17),
+                 1-(1-c(rep(0.000405376, 12),
+                        rep(0.000661066, 10),
+                        rep(0.001378053, 10),
+                        rep(0.003065837, 10)))^(1 / age.unit),
+                 1)
+  
+  p$asmr.H.f <- c(rep(0, 17),
+                1-(1-c(rep(0.000405376, 12),
+                       rep(0.000661066, 10),
+                       rep(0.001378053, 10),
+                       rep(0.003065837, 10)))^(1/age.unit),
+                1)
+  p$asmr.HI.f <- c(rep(0, 17),
+                 1-(1-c(rep(0.000405376, 12),
+                        rep(0.000661066, 10),
+                        rep(0.001378053, 10),
+                        rep(0.003065837, 10)))^(1/age.unit),
+                 1)
+  p$asmr.W.f <- c(rep(0, 17),
+                1-(1-c(rep(0.000405376, 12),
+                       rep(0.000661066, 10),
+                       rep(0.001378053, 10),
+                       rep(0.003065837, 10)))^(1/age.unit),
+                1)
+  
+  
+  p$asmr.B.m <- c(rep(0, 17),
+                1-(1-c(rep(0.000853417, 12),
+                       rep(0.001084014, 10),
+                       rep(0.001982864, 10),
+                       rep(0.005400669, 10)))^(1 / age.unit),
+                1)
+  p$asmr.BI.m <- c(rep(0, 17),
+                 1-(1-c(rep(0.000853417, 12),
+                        rep(0.001084014, 10),
+                        rep(0.001982864, 10),
+                        rep(0.005400669, 10)))^(1 / age.unit),
+                 1)
+  
+  p$asmr.H.m <- c(rep(0, 17),
+                1-(1-c(rep(0.000853417, 12),
+                       rep(0.001084014, 10),
+                       rep(0.001982864, 10),
+                       rep(0.005400669, 10)))^(1/age.unit),
+                1)
+  p$asmr.HI.m <- c(rep(0, 17),
+                 1-(1-c(rep(0.000853417, 12),
+                        rep(0.001084014, 10),
+                        rep(0.001982864, 10),
+                        rep(0.005400669, 10)))^(1/age.unit),
+                 1)
+  p$asmr.W.m <- c(rep(0, 17),
+                1-(1-c(rep(0.000853417, 12),
+                       rep(0.001084014, 10),
+                       rep(0.001982864, 10),
+                       rep(0.005400669, 10)))^(1/age.unit),
+                1)
 
 
   class(p) <- "param.net"
@@ -982,7 +1038,7 @@ control_shamp <- function(simno = 1,
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  p$save.other = c("attr", "temp", "el", "p")
+  p$save.other = c("attr", "temp", "el", "p" ,"trans.el")
 
   p$save.network = FALSE
 
