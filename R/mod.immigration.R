@@ -29,7 +29,7 @@
 
 immigration_shamp <- function(dat, at){
   
-  
+  if (at > 1){
   ## Infected from the heat bath
   #Attributes
 
@@ -175,6 +175,24 @@ immigration_shamp <- function(dat, at){
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
     
+
+    
+    dat$trans.el$infected <- c(dat$trans.el$infected, dat$attr$uid[infected])
+    dat$trans.el$infected.sex <- c(dat$trans.el$infected.sex, dat$attr$sex[infected])
+    dat$trans.el$infected.race <- c(dat$trans.el$infected.race, dat$attr$race[infected])
+    dat$trans.el$infected.age <- c(dat$trans.el$infected.age, dat$attr$age[infected])
+    dat$trans.el$infected.sex.ident <- c(dat$trans.el$infected.sex.ident, dat$attr$sex.ident[infected])
+    dat$trans.el$infected.gen <- c(dat$trans.el$infected.gen, rep(1,length(infected)))
+    dat$attr$infected.gen[infected]<-1
+    
+    dat$trans.el$infector <- c(dat$trans.el$infector, rep("FA", length(infected)))
+    dat$trans.el$infector.sex <- c(dat$trans.el$infector.sex, rep("FA", length(infected)))
+    dat$trans.el$infector.race <- c(dat$trans.el$infector.race, rep("FA", length(infected)))
+    dat$trans.el$infector.age <- c(dat$trans.el$infector.age, rep("FA", length(infected)))
+    dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, rep("FA", length(infected)))
+    dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, rep(0,length(infected)))
+    
+    dat$trans.el$time <- c(dat$trans.el$time, rep(at, length(infected)))
     
     # Summary Output
     dat$epi$incid[at] <- dat$epi$incid[at] + length(infected)
@@ -194,7 +212,7 @@ immigration_shamp <- function(dat, at){
     
     if (length(infected) < 1){ dat$epi$incid.FA[at] <-0}
   
-  
+  }
     
   return(dat)
 }
