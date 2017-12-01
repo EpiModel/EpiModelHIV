@@ -624,8 +624,10 @@ init_status_shamp <- function(dat) {
 
   ##Edge list of each transmission event.
   ##Infector, infected, time)
-  dat$trans.el$infector <- dat$trans.el$infector.sex <- dat$trans.el$infector.race <- dat$trans.el$infector.age <- dat$trans.el$infector.sex.ident <- dat$trans.el$infector.gen <-NULL
-  dat$trans.el$infected <- dat$trans.el$infected.sex <- dat$trans.el$infected.race <- dat$trans.el$infected.age <- dat$trans.el$infected.sex.ident <- dat$trans.el$infected.gen <-NULL 
+  dat$trans.el$infector <- dat$trans.el$infector.sex <- dat$trans.el$infector.race <- dat$trans.el$infector.age <- NULL
+  dat$trans.el$infector.sex.ident <- dat$trans.el$infector.deg.tot <- dat$trans.el$infector.gen <-NULL
+  dat$trans.el$infected <- dat$trans.el$infected.sex <- dat$trans.el$infected.race <- dat$trans.el$infected.age <- NULL 
+  dat$trans.el$infected.sex.ident <- dat$trans.el$infected.deg.tot <- dat$trans.el$infected.gen <-NULL 
   dat$trans.el$time <-NULL
   
   stage <- rep(NA, num)
