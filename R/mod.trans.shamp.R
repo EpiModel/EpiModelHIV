@@ -307,12 +307,15 @@ trans_shamp <- function(dat, at){
     dat$attr$infected.gen[infected[k]] <- dat$attr$infected.gen[infector[k]]+1
     }
     
+
+    
     dat$trans.el$infected <- c(dat$trans.el$infected, dat$attr$uid[infected])
     
     dat$trans.el$infected.sex <- c(dat$trans.el$infected.sex, dat$attr$sex[infected])
     dat$trans.el$infected.race <- c(dat$trans.el$infected.race, dat$attr$race[infected])
     dat$trans.el$infected.age <- c(dat$trans.el$infected.age, dat$attr$age[infected])
     dat$trans.el$infected.sex.ident <- c(dat$trans.el$infected.sex.ident, dat$attr$sex.ident[infected])
+    dat$trans.el$infected.deg.tot <- c(dat$trans.el$infected.deg.tot, dat$attr$deg.tot[infected])
     
     new.gens <- dat$attr$infected.gen[infector]
     new.gens <- new.gens+1
@@ -326,13 +329,14 @@ trans_shamp <- function(dat, at){
     dat$trans.el$infector.age <- c(dat$trans.el$infector.age, dat$attr$age[infector])
     dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, dat$attr$sex.ident[infector])
     dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, dat$attr$infected.gen[infector])
-    
+    dat$trans.el$infector.deg.tot <- c(dat$trans.el$infector.deg.tot, dat$attr$deg.tot[infector])    
 
     dat$trans.el$time <- c(dat$trans.el$time, rep(at, length(infected)))
                            
   }
 
   # Summary Output
+
   dat$epi$incid[at] <- sum(dat$epi$incid[at] , length(infected), na.rm = TRUE)
   dat$epi$incid.B[at] <- sum(dat$epi$incid.B[at] , sum(race[infected] == "B", na.rm = TRUE), na.rm = TRUE)
   dat$epi$incid.BI[at] <- sum(dat$epi$incid.BI[at] , sum(race[infected] == "BI", na.rm = TRUE), na.rm = TRUE)
@@ -348,7 +352,9 @@ trans_shamp <- function(dat, at){
   dat$epi$incid.msmf[at] <- sum(dat$epi$incid.msmf[at] , sum(sex.ident[infected] == "msmf", na.rm = TRUE), na.rm = TRUE)
 
   dat$epi$incid.Lhet[at] <- length(infected)
-
+  
+  
+  
   return(dat)
 }
 
