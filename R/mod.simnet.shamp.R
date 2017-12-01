@@ -102,6 +102,11 @@ simnet_shamp <- function(dat, at) {
     dat <- calc_resim_nwstats(dat, at)
   }
   
+  dat$attr$deg.cohab <- get_degree(dat$el[[1]])
+  dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  dat$attr$deg.inst <- get_degree(dat$el[[3]])
+  dat$attr$deg.tot<-dat$attr$deg.cohab + dat$attr$deg.pers + dat$attr$deg.inst
+  
   return(dat)
 }
 
