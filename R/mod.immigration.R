@@ -182,6 +182,7 @@ immigration_shamp <- function(dat, at){
     dat$trans.el$infected.race <- c(dat$trans.el$infected.race, dat$attr$race[infected])
     dat$trans.el$infected.age <- c(dat$trans.el$infected.age, dat$attr$age[infected])
     dat$trans.el$infected.sex.ident <- c(dat$trans.el$infected.sex.ident, dat$attr$sex.ident[infected])
+    dat$trans.el$infected.deg.tot <- c(dat$trans.el$infected.deg.tot, dat$attr$deg.tot[infected])
     dat$trans.el$infected.gen <- c(dat$trans.el$infected.gen, rep(1,length(infected)))
     dat$attr$infected.gen[infected]<-1
     
@@ -190,6 +191,7 @@ immigration_shamp <- function(dat, at){
     dat$trans.el$infector.race <- c(dat$trans.el$infector.race, rep("FA", length(infected)))
     dat$trans.el$infector.age <- c(dat$trans.el$infector.age, rep("FA", length(infected)))
     dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, rep("FA", length(infected)))
+    dat$trans.el$infector.deg.tot <- c(dat$trans.el$infector.deg.tot, rep("FA", length(infected)))
     dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, rep(0,length(infected)))
     
     dat$trans.el$time <- c(dat$trans.el$time, rep(at, length(infected)))
