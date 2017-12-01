@@ -415,16 +415,22 @@ sti_trans_msm <- function(dat, at) {
 
 
   # Risk group-specific
-  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1)) + length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
-  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1)) + length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
-  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1)) + length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 1))
+  dat$epi$incid.gc.tttraj1[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 1)) +
+    length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
+  dat$epi$incid.ct.tttraj1[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 1)) +
+    length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 1))
+  dat$epi$incid.syph.tttraj1[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 1)) +
+    length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 1))
   dat$epi$incid.sti.tttraj1[at] <- dat$epi$incid.gc.tttraj1[at] + dat$epi$incid.ct.tttraj1[at] + dat$epi$incid.syph.tttraj1[at]
   dat$epi$incid.gcct.tttraj1[at] <- dat$epi$incid.gc.tttraj1[at] + dat$epi$incid.ct.tttraj1[at]
 
 
-  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2)) + length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
-  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2)) + length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
-  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2)) + length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 2))
+  dat$epi$incid.gc.tttraj2[at] <- length(which(dat$attr$tt.traj.gc.hivneg[unique(c(idsInf_rgc,idsInf_ugc))] == 2)) +
+    length(which(dat$attr$tt.traj.gc.hivpos[unique(c(idsInf_rgc,idsInf_ugc))] == 2))
+  dat$epi$incid.ct.tttraj2[at] <- length(which(dat$attr$tt.traj.ct.hivneg[unique(c(idsInf_rct,idsInf_uct))] == 2)) +
+    length(which(dat$attr$tt.traj.ct.hivpos[unique(c(idsInf_rct,idsInf_uct))] == 2))
+  dat$epi$incid.syph.tttraj2[at] <- length(which(dat$attr$tt.traj.syph.hivneg[unique(c(idsInf_syph))] == 2)) +
+    length(which(dat$attr$tt.traj.syph.hivpos[unique(c(idsInf_syph))] == 2))
   dat$epi$incid.sti.tttraj2[at] <- dat$epi$incid.gc.tttraj2[at] + dat$epi$incid.ct.tttraj2[at] + dat$epi$incid.syph.tttraj2[at]
   dat$epi$incid.gcct.tttraj2[at] <- dat$epi$incid.gc.tttraj2[at] + dat$epi$incid.ct.tttraj2[at]
 
@@ -1462,13 +1468,40 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$diag.status.ct[txCT_sympt] <- 1
 
   # Proportion of infections treated in past year
-  dat$epi$tx.gc.prop[at] <- (length(which(at - dat$attr$last.tx.time.rgc <= 52 & at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.tx.time.ugc <= 52 & at - dat$attr$last.uGC.infTime <= 52))) / (length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)))
+  dat$epi$tx.gc.prop[at] <- ifelse(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) == 0 |
+                                     is.na(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52))) |
+                                     is.nan(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52))) |
+                                     is.null(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52))), 0,
+                                   (length(which(at - dat$attr$last.tx.time.rgc <= 52 & at - dat$attr$last.rGC.infTime <= 52)) +
+                                       length(which(at - dat$attr$last.tx.time.ugc <= 52 & at - dat$attr$last.uGC.infTime <= 52))) /
+                                     (length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52))))
 
-  dat$epi$tx.ct.prop[at] <- (length(which(at - dat$attr$last.tx.time.rct <= 52 & at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.tx.time.uct <= 52 & at - dat$attr$last.uCT.infTime <= 52))) / (length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52)))
+  dat$epi$tx.ct.prop[at] <- ifelse(length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52)) == 0 |
+                                     is.na(length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))) |
+                                     is.nan(length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))) |
+                                     is.null(length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))), 0,
+                                   (length(which(at - dat$attr$last.tx.time.rct <= 52 & at - dat$attr$last.rCT.infTime <= 52)) +
+                                      length(which(at - dat$attr$last.tx.time.uct <= 52 & at - dat$attr$last.uCT.infTime <= 52))) /
+                                     (length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCTC.infTime <= 52))))
 
-  dat$epi$tx.gcct.prop[at] <- (length(which(at - dat$attr$last.tx.time.rgc <= 52 & at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.tx.time.ugc <= 52 & at - dat$attr$last.uGC.infTime <= 52)) + length(which(at - dat$attr$last.tx.time.rct <= 52 & at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.tx.time.uct <= 52 & at - dat$attr$last.uCT.infTime <= 52))) / (length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) + length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52)))
+  dat$epi$tx.gcct.prop[at] <- ifelse((length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) +
+                                        length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))) == 0 |
+                                       is.na(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) +
+                                               length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))) |
+                                       is.nan(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) +
+                                                length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))) |
+                                       is.null(length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) +
+                                                 length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))), 0,
+                                     (length(which(at - dat$attr$last.tx.time.rgc <= 52 & at - dat$attr$last.rGC.infTime <= 52)) +
+                                        length(which(at - dat$attr$last.tx.time.ugc <= 52 & at - dat$attr$last.uGC.infTime <= 52)) +
+                                        length(which(at - dat$attr$last.tx.time.rct <= 52 & at - dat$attr$last.rCT.infTime <= 52)) +
+                                        length(which(at - dat$attr$last.tx.time.uct <= 52 & at - dat$attr$last.uCT.infTime <= 52))) /
+                                       (length(which(at - dat$attr$last.rGC.infTime <= 52)) + length(which(at - dat$attr$last.uGC.infTime <= 52)) +
+                                          length(which(at - dat$attr$last.rCT.infTime <= 52)) + length(which(at - dat$attr$last.uCT.infTime <= 52))))
 
-  dat$epi$tx.syph.prop[at] <- length(which(at - dat$attr$last.tx.time.syph <= 52 & at - dat$attr$last.syph.infTime <= 52)) / length(which(at - dat$attr$last.syph.infTime <= 52))
+  dat$epi$tx.syph.prop[at] <- ifelse(length(which(at - dat$attr$last.syph.infTime <= 52)) == 0 | is.na(length(which(at - dat$attr$last.syph.infTime <= 52))) |
+                                       is.nan(length(which(at - dat$attr$last.syph.infTime <= 52))) | is.null(length(which(at - dat$attr$last.syph.infTime <= 52))), 0,
+                                     length(which(at - dat$attr$last.tx.time.syph <= 52 & at - dat$attr$last.syph.infTime <= 52)) / length(which(at - dat$attr$last.syph.infTime <= 52)))
 
 
   # Non-index EPT-treated

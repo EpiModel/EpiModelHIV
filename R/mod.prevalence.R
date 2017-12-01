@@ -566,6 +566,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$gcct.infect.dur <- rNA
     dat$epi$syph.infect.dur <- rNA
 
+    # Proportion of HIV discordant edges
+    dat$epi$prop.edges.discord <- rNA
+
   }
 
   # Add new risk-group specific trackers if needed
@@ -692,6 +695,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ct.infect.dur <- rNA
     dat$epi$gcct.infect.dur <- rNA
     dat$epi$syph.infect.dur <- rNA
+
+    # Proportion of HIV discordant edges
+    dat$epi$prop.edges.discord <- rNA
+
+
 
   }
 
