@@ -102,17 +102,19 @@ simnet_msm <- function(dat, at) {
   dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
 
   # Calculate discordant/concordant proportion
-  if (is.null(dat$epi$prop.edges.discord)) {
-    dat$epi$prop.edges.discord <- rep(NA, dat$control$nsteps)
+  if (is.null(dat$epi$prop.edges.negneg)) {
+    dat$epi$prop.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.edges.pospos <- rep(NA, dat$control$nsteps)
   }
 
   alledge <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-  st1 <- dat$attr$status[alledge[, 1]]
-  st2 <- dat$attr$status[alledge[, 2]]
+  status <- cbind(dat$attr$status[alledge[, 1]], dat$attr$status[alledge[, 2]])
 
-
-  dat$epi$prop.edges.discord[at] <- length(which(abs(st1 - st2) == 1))
-
+  dat$epi$prop.edges.negneg[at] <- length(which(status[, 1] == 0 & status[, 2] == 0)) / nrow(alledge)
+  dat$epi$prop.edges.negpos[at] <- length(which((status[, 1] == 1 & status[, 2] == 0) |
+                                                  (status[, 1] == 0 & status[, 2] == 1))) / nrow(alledge)
+  dat$epi$prop.edges.pospos[at] <- length(which(status[, 1] == 1 & status[, 2] == 1)) / nrow(alledge)
 
   return(dat)
 }

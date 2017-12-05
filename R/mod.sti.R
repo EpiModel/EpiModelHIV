@@ -400,10 +400,16 @@ sti_trans_msm <- function(dat, at) {
   dat$epi$incid.rgc[at] <- length(idsInf_rgc)
   dat$epi$incid.ugc[at] <- length(idsInf_ugc)
   dat$epi$incid.gc[at] <- length(unique(c(idsInf_rgc,idsInf_ugc)))
+  dat$epi$incid.gc.hivneg[at] <- length(which(dat$attr$status[unique(c(idsInf_rgc,idsInf_ugc))] == 0))
+  dat$epi$incid.gc.hivpos[at] <- length(which(dat$attr$status[unique(c(idsInf_rgc,idsInf_ugc))] == 1))
   dat$epi$incid.rct[at] <- length(idsInf_rct)
   dat$epi$incid.uct[at] <- length(idsInf_uct)
   dat$epi$incid.ct[at] <- length(unique(c(idsInf_rct,idsInf_uct)))
+  dat$epi$incid.ct.hivneg[at] <- length(which(dat$attr$status[unique(c(idsInf_rct,idsInf_uct))] == 0))
+  dat$epi$incid.ct.hivpos[at] <- length(which(dat$attr$status[unique(c(idsInf_rct,idsInf_uct))] == 1))
   dat$epi$incid.syph[at] <- length(idsInf_syph)
+  dat$epi$incid.syph.hivneg[at] <- length(which(dat$attr$status[idsInf_syph] == 0))
+  dat$epi$incid.syph.hivpos[at] <- length(which(dat$attr$status[idsInf_syph] == 1))
   dat$epi$incid.sti[at] <- dat$epi$incid.gc[at] + dat$epi$incid.ct[at] + dat$epi$incid.syph[at]
   dat$epi$incid.gcct.prep[at] <- length(intersect(unique(c(idsInf_rgc, idsInf_ugc,
                                                            idsInf_rct, idsInf_uct)),
