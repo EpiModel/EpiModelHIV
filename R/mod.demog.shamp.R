@@ -45,7 +45,7 @@ demogupdate_shamp <- function(dat, at) {
   
   
   
-  #Create a new factor for age by sex group by main.c 
+  #Create a new factor for race by sex group by main.c 
   dat$attr$race.sex.cohab<-rep(NA,length(dat$attr$age))
   dat$attr$race.sex.cohab<-ifelse(dat$attr$race=="B" & dat$attr$sex=="M" & dat$attr$deg.cohab.c==0,"Ref.0",
                                    ifelse(dat$attr$race=="BI" & dat$attr$sex=="M" & dat$attr$deg.cohab.c==0,"Ref.0",
