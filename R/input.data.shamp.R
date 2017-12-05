@@ -331,7 +331,7 @@ if(length(alter.list>0)){warning("OT alters deleted: missing values",call. = FAL
                            ifelse(data$egos$age > 45,"46-60",data$egos$agecat))))
   
 
-  #Create a new factor for age by sex group.
+  #Create a new factor for race by sex group.
   data$egos$race.sex<-rep(NA,length(data$egos$ego))
   data$egos$race.sex<-ifelse(data$egos$race=="B" & data$egos$sex=="M","B.M",
                              ifelse(data$egos$race=="BI" & data$egos$sex=="M","BI.M",
@@ -386,19 +386,19 @@ if(length(alter.list>0)){warning("OT alters deleted: missing values",call. = FAL
   
   
 
-  #Create a new factor for age by sex group by pers.c.
+  #Create a new factor for race by sex group by pers.c.
   
 data$egos$race.sex.pers<-rep(NA,length(data$egos$ego)) 
-data$egos$race.sex.pers<-ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="HI" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="W" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="B" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="BI" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="H" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="HI" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"Ref.0",
-ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"Ref.0",
+data$egos$race.sex.pers<-ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"B.M.p0",
+ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"BI.M.p0",
+ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"H.M.p0",
+ifelse(data$egos$race=="HI" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"HI.M.p0",
+ifelse(data$egos$race=="W" & data$egos$sex=="M" & data$egos$deg.pers.c==0,"W.M.p0",
+ifelse(data$egos$race=="B" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"B.F.p0",
+ifelse(data$egos$race=="BI" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"BI.F.p0",
+ifelse(data$egos$race=="H" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"H.F.p0",
+ifelse(data$egos$race=="HI" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"HI.F.p0",
+ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.pers.c==0,"W.F.p0",
 ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.pers.c==1,"B.M.p1",
 ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.pers.c==1,"BI.M.p1",
 ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.pers.c==1,"H.M.p1",
@@ -413,18 +413,18 @@ ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.pers.c==1,"W.F.p
   
   
 
-  #Create a new factor for age by sex group by main.c 
+  #Create a new factor for race by sex group by main.c 
 data$egos$race.sex.cohab<-rep(NA,length(data$egos$ego))
-data$egos$race.sex.cohab<-ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="HI" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="W" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="B" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="BI" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="H" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="HI" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"Ref.0",
-ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"Ref.0",
+data$egos$race.sex.cohab<-ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"B.M.p0",
+ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"BI.M.p0",
+ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"H.M.p0",
+ifelse(data$egos$race=="HI" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"HI.M.p0",
+ifelse(data$egos$race=="W" & data$egos$sex=="M" & data$egos$deg.cohab.c==0,"W.M.p0",
+ifelse(data$egos$race=="B" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"B.F.p0",
+ifelse(data$egos$race=="BI" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"BI.F.p0",
+ifelse(data$egos$race=="H" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"H.F.p0",
+ifelse(data$egos$race=="HI" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"HI.F.p0",
+ifelse(data$egos$race=="W" & data$egos$sex=="F" & data$egos$deg.cohab.c==0,"W.F.p0",
 ifelse(data$egos$race=="B" & data$egos$sex=="M" & data$egos$deg.cohab.c==1,"B.M.p1",
 ifelse(data$egos$race=="BI" & data$egos$sex=="M" & data$egos$deg.cohab.c==1,"BI.M.p1",
 ifelse(data$egos$race=="H" & data$egos$sex=="M" & data$egos$deg.cohab.c==1,"H.M.p1",
