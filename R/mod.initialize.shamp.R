@@ -125,6 +125,8 @@ initialize_shamp <- function(x, param, init, control, s) {
   ids.HI.m<-na.omit(ids.M[ids.HI])
   ids.W.m<-na.omit(ids.M[ids.W])
   
+  dat$attr$race.sex <- get.vertex.attribute(nw[[1]], "race.sex")
+  
   #race.sex.cohab.
   dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
   
