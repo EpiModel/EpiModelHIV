@@ -133,6 +133,19 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$age[newIds] <- age
   dat$attr$sqrt.age[newIds] <- sqrt(dat$attr$age[newIds]) 
   
+  ##Race Sex joint catagory.
+  dat$attr$race.sex<-ifelse(dat$attr$race=="B" & dat$attr$sex=="M","B.M",
+                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="M","BI.M",
+                     ifelse(dat$attr$race=="H" & dat$attr$sex=="M","H.M",
+                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="M","HI.M",
+                     ifelse(dat$attr$race=="W" & dat$attr$sex=="M","W.M",
+                     ifelse(dat$attr$race=="B" & dat$attr$sex=="F","B.F",
+                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="F","BI.F",
+                     ifelse(dat$attr$race=="H" & dat$attr$sex=="F","H.F",
+                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="F","HI.F",
+                     ifelse(dat$attr$race=="W" & dat$attr$sex=="F","W.F",
+                            dat$attr$race.sex))))))))))
+  
   dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
                                 ifelse(dat$attr$sex=="F",dat$attr$sqrt.age + dat$param$age.adj,dat$attr$sqrt.age))
   
