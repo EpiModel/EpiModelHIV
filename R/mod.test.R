@@ -143,9 +143,9 @@ hiv_test_msm <- function(dat, at) {
                                stage.syph[tst.syph] %in% c(2, 3, 4, 5, 6))]
     tst.syph.neg <- setdiff(tst.syph, tst.syph.pos)
     tst.earlysyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
-                                    stage.syph[tst.syph] %in% c(2, 3, 4))]
+                                    stage.syph[tst.syph] %in% c(2, 3))]
     tst.latesyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
-                                  stage.syph[tst.syph] %in% c(5, 6))]
+                                  stage.syph[tst.syph] %in% c(4, 5, 6))]
 
     tst.rgc.pos <- tst.rgc[which(rGC[tst.rgc] == 1)]
     tst.ugc.pos <- tst.ugc[which(uGC[tst.ugc] == 1)]
@@ -542,9 +542,9 @@ sti_test_msm <- function(dat, at) {
                                    stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4, 5, 6))]
   tst.syph.neg.hivneg <- setdiff(tst.syph.nprep.hivneg, tst.syph.pos.hivneg)
   tst.earlysyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4))]
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3))]
   tst.latesyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(5, 6))]
+                                   stage.syph[tst.syph.nprep.hivneg] %in% c(4, 5, 6))]
 
   # GC non-PrEP testing
   tst.rgc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("R", "V"))]
@@ -791,9 +791,9 @@ sti_test_msm <- function(dat, at) {
                                                  stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4, 5, 6))]
   tst.syph.neg.hivpos <- setdiff(tst.syph.nprep.hivpos, tst.syph.pos.hivpos)
   tst.earlysyph.pos.hivpos <- tst.syph.nprep.hivpos[which(syphilis[tst.syph.nprep.hivpos] == 1 &
-                                                      stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3, 4))]
+                                                      stage.syph[tst.syph.nprep.hivpos] %in% c(2, 3))]
   tst.latesyph.pos.hivpos <- tst.syph.nprep.hivpos[which(syphilis[tst.syph.nprep.hivpos] == 1 &
-                                                     stage.syph[tst.syph.nprep.hivpos] %in% c(5, 6))]
+                                                     stage.syph[tst.syph.nprep.hivpos] %in% c(4, 5, 6))]
 
   # GC non-PrEP testing
   tst.rgc.hivpos <- tst.gc.nprep.hivpos[which(role.class[tst.gc.nprep.hivpos] %in% c("R", "V"))]

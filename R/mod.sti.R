@@ -1289,9 +1289,9 @@ sti_tx_msm <- function(dat, at) {
                                      stage.syph[tst.syph] %in% c(2, 3, 4, 5, 6))]
     tst.syph.neg <- setdiff(tst.syph, tst.syph.pos)
     tst.earlysyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
-                                          stage.syph[tst.syph] %in% c(2, 3, 4))]
+                                          stage.syph[tst.syph] %in% c(2, 3))]
     tst.latesyph.pos <- tst.syph[which(syphilis[tst.syph] == 1 &
-                                         stage.syph[tst.syph] %in% c(5, 6))]
+                                         stage.syph[tst.syph] %in% c(4, 5, 6))]
 
     tst.rgc.pos <- tst.rgc[which(rGC[tst.rgc] == 1)]
     tst.ugc.pos <- tst.ugc[which(uGC[tst.ugc] == 1)]
