@@ -4,7 +4,7 @@
 \alias{init_cl}
 \title{Epidemic Model Initial Conditions}
 \usage{
-init_cl(nwstats, prev.B = 0.253, prev.W = 0.253, prev.asmm = 0.07, ...)
+init_cl(nwstats, prev.B = 0.283, prev.W = 0.283, prev.asmm = 0.07, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
