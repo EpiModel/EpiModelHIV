@@ -498,6 +498,7 @@ param_cl <- function(nwstats,
                       rcomp.adh.groups = 0:4,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
+                     
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -613,8 +614,8 @@ param_cl <- function(nwstats,
 #'
 #' @export
 init_cl <- function(nwstats,
-                     prev.B = 0.253,
-                     prev.W = 0.253,
+                     prev.B = 0.283,
+                     prev.W = 0.283,
                      prev.asmm = 0.07,
                      ...) {
 
@@ -639,6 +640,15 @@ init_cl <- function(nwstats,
   p$out.age.prob <- nwstats$out.age.prob
   p$debut.entry.prob <- nwstats$debut.entry.prob
   p$debut.prob <- nwstats$debut.prob
+  
+  
+  # I, R, V role frequencies
+  p$role.B.prob.asmm <- nwstats$role.B.prob.asmm
+  p$role.W.prob.asmm <- nwstats$role.W.prob.asmm
+  
+  # I, R, V role frequencies
+  p$role.B.prob.msm <- nwstats$role.B.prob.msm 
+  p$role.W.prob.msm <- nwstats$role.W.prob.msm
 
   
   p$nwstats <- NULL
@@ -728,7 +738,7 @@ control_cl <- function(simno = 1,
                         vl.FUN = vl_msm,
                         aiclass.FUN = NULL,
                         roleclass.FUN = NULL,
-                        role.classtrans = roleclass_trans,
+                        role.classtrans.FUN = roleclass_trans,
                         resim_nets.FUN = simnet_msm,
                         disclose.FUN = disclose_msm,
                         acts.FUN = acts_msm,
