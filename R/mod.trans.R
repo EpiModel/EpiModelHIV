@@ -88,6 +88,27 @@ hiv_trans_msm <- function(dat, at) {
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
+  al <- cbind(al, st1 = as.vector(dat$attr$status[al[ ,"p1"]]))
+  al <- cbind(al, st2 = as.vector(dat$attr$status[al[ ,"p2"]]))
+
+  al.negneg <- al[al[, "st1"] == 0 & al[, "st2"] == 0, , drop = FALSE]
+  al.negpos <- al[(al[, "st1"] == 1 & al[, "st2"] == 0) |
+                    (al[, "st1"] == 0 & al[, "st2"] == 1), , drop = FALSE]
+  al.pospos <- al[al[, "st1"] == 1 & al[, "st2"] == 1, , drop = FALSE]
+
+  num.acts.negneg <- nrow(al.negneg)
+  num.acts.negpos <- nrow(al.negpos)
+  num.acts.pospos <- nrow(al.pospos)
+
+  prop.uai.negneg <- sum(al.negneg[, "uai"] == 1) / nrow(al.negneg)
+  prop.uai.negpos <- sum(al.negpos[, "uai"] == 1) / nrow(al.negpos)
+  prop.uai.pospos <- sum(al.pospos[, "uai"] == 1) / nrow(al.pospos)
+
+  prop.acts.negneg <- nrow(al.negneg) / (nrow(al))
+  prop.acts.negpos <- nrow(al.negpos) / (nrow(al))
+  prop.acts.pospos <- nrow(al.pospos) / (nrow(al))
+
+
   if (nrow(dal) == 0) {
     return(dat)
   }
@@ -593,6 +614,18 @@ hiv_trans_msm <- function(dat, at) {
   dat$epi$trans.main[at] <- sum(inf.type == 1)
   dat$epi$trans.pers[at] <- sum(inf.type == 2)
   dat$epi$trans.inst[at] <- sum(inf.type == 3)
+
+  dat$epi$num.acts.negneg[at] <- num.acts.negneg
+  dat$epi$num.acts.negpos[at] <- num.acts.negpos
+  dat$epi$num.acts.pospos[at] <- num.acts.pospos
+
+  dat$epi$prop.uai.negneg[at] <- prop.uai.negneg
+  dat$epi$prop.uai.negpos[at] <- prop.uai.negpos
+  dat$epi$prop.uai.pospos[at] <- prop.uai.pospos
+
+  dat$epi$prop.acts.negneg[at] <- prop.acts.negneg
+  dat$epi$prop.acts.negpos[at] <- prop.acts.negpos
+  dat$epi$prop.acts.pospos[at] <- prop.acts.pospos
 
   return(dat)
 }
