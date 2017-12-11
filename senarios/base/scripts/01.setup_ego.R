@@ -53,7 +53,7 @@ summary(ego.obj_c ~edges +
 #nodefactor("race",base=5) +
   
 fit.c.temp<-ergm.ego(ego.obj_c ~edges + 
-                    nodefactor("race.sex", base=c(5,6)) +
+                    nodefactor("race.sex", base=c(5,10)) +
                     nodematch("race",diff=TRUE) +
                     nodefactor("agecat", base=1) + 
                     absdiff("sqrt.age.adj") + 
