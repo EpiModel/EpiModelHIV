@@ -43,7 +43,7 @@ roleclass_trans <- function(dat, at) {
   if (length(ids.B.v) > 1) {role.class[ids.B.v] <- sample(iv.list,size=length(ids.B.v)) }
   
   if (length(ids.W.r) > 1) {role.class[ids.W.r] <- sample(ir.list,size=length(ids.W.r)) }
-  if (length(ids.W.v) > 1) {role.class[ids.W.v] <- sample(iv.list,size=length(ids.B.v)) }
+  if (length(ids.W.v) > 1) {role.class[ids.W.v] <- sample(iv.list,size=length(ids.W.v)) }
 
   
   dat$attr$role.class <- role.class
