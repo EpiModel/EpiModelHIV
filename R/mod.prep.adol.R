@@ -326,7 +326,7 @@ prep_adol <- function(dat, at) {
 
     # PrEP class is fixed over PrEP cycles
     needPC.b <- which(is.na(prepClass[idsStart.b]))
-    prepClass[needPC.b] <- sample(x = c("n", "l", "m", "h"), size = length(needPC.b),
+    prepClass[needPC.b] <- sample(x = 0:3, size = length(needPC.b),
                                           replace = TRUE, prob = prep.class.prob.b)
   }
 
@@ -338,7 +338,7 @@ prep_adol <- function(dat, at) {
     
     # PrEP class is fixed over PrEP cycles
     needPC.w <- which(is.na(prepClass[idsStart.w]))
-    prepClass[needPC.w] <- sample(x = c("n", "l", "m", "h"), size = length(needPC.w),
+    prepClass[needPC.w] <- sample(x = 0:3, size = length(needPC.w),
                                           replace = TRUE, prob = prep.class.prob.w)
   }
 
