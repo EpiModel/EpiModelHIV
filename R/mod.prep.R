@@ -76,7 +76,7 @@ prep_msm <- function(dat, at) {
       idsEligStart.adol.exp <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
                                                    rowSums(mat.c2, na.rm = TRUE) > 0 |
                                                    rowSums(mat.c3, na.rm = TRUE) > 0),
-                                           idsEligStart.adol.naive)
+                                           idsEligStart.adol.exp)
       
       idsEligStop <- intersect(which(rowSums(mat.c1, na.rm = TRUE) == 0 &
                                        rowSums(mat.c2, na.rm = TRUE) == 0 &
@@ -116,12 +116,12 @@ prep_msm <- function(dat, at) {
   ## Initiation ----------------------------------------------------------------
 
   if (prep.cov.method == "curr") {
-    prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
+    prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
+    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
   }
   if (prep.cov.method == "ever") {
-    prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1, na.rm = TRUE)
+    prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
+    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
   }
   prepCov.adol.naive <- ifelse(is.nan(prepCov.adol.naive), 0, prepCov.adol.naive)
   prepCov.adol.exp <- ifelse(is.nan(prepCov.adol.exp), 0, prepCov.adol.exp)
