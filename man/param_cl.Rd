@@ -65,7 +65,6 @@ param_cl(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.start.asmm = Inf, prep.elig.model.asmm = "none",
   prep.efficacy.asmm = 0.92, prep.class.prob.b.asmm = c(0.2085, 0.2438,
   0.1314, 0.4163), prep.class.prob.w.asmm = c(0.2085, 0.2438, 0.1314, 0.4163),
-  prep.class.effect.asmm = c(0, 0.31, 0.81, 0.95),
   prep.coverage.b.asmm = 0.4, prep.coverage.w.asmm = 0.4,
   prep.cov.method.asmm = "curr", prep.cov.rate.b.asmm = 1,
   prep.cov.rate.w.asmm = 1, prep.rcomp.asmm = 1, prep.tst.int.asmm = 90,
@@ -413,9 +412,6 @@ of adherence to PrEP for black asmm.}
 \item{prep.class.prob.w.asmm}{The frequency of being in a low, medium, or high class
 of adherence to PrEP for white asmm.}
 
-\item{prep.class.effect.asmm}{The functional effectiveness of PrEP conditional on
-PrEP class.}
-
 \item{prep.coverage.b.asmm}{The proportion of the eligible population who are start
 PrEP once they become eligible for black asmm.}
 
@@ -480,6 +476,9 @@ calibration.}
 
 \item{prep.coverage}{The proportion of the eligible MSM population who used PrEP as an ASMM
 and start PrEP once they become eligible.}
+
+\item{prep.class.effect.asmm}{The functional effectiveness of PrEP conditional on
+PrEP class.}
 
 \item{PrepDrop.b.asmm}{The hazard for dropping PrEP for black asmm given prepSpell.asmm==TRUE.}
 
