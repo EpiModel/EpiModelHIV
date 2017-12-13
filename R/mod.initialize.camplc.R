@@ -33,6 +33,7 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$stats$nwstats <- list()
   dat$temp <- list()
   dat$epi <- list()
+  dat$age.inf.vec <- list()
 
   ## Network simulation ##
   nw <- list()
@@ -135,7 +136,8 @@ initialize_camplc <- function(x, param, init, control, s) {
 
   # PrEP Attributes
   dat$attr$prepClass <- rep(NA, num)
-  dat$attr$prepElig <- rep(NA, num)
+  dat$attr$prepElig <- rep(0, num)
+  dat$attr$prepElig.asmm <- rep(0, num)
   dat$attr$prepStat <- rep(0, num)
   dat$attr$prepEver <- rep(0, num)
   dat$attr$ever.adol.prep <- rep(0, num)
@@ -562,7 +564,7 @@ init_status_msm <- function(dat) {
   # Diagnosis ASMM
   selected.asmm <- which(status == 1 & tt.traj == 4 & asmm == 1)
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected.msm),
+    ttntest <- ceiling(runif(length(selected.asmm),
                              min = 0,
                              max = dat$param$mean.test.B.int.asmm * (race[selected.asmm] == "B") +
                                dat$param$mean.test.W.int.asmm * (race[selected.asmm] == "W")))
@@ -894,6 +896,7 @@ reinit_msm <- function(x, param, init, control, s) {
 
   dat$attr <- x$attr[[s]]
   dat$riskhist <- x$riskhist[[s]]
+  dat$age.inf.vec <- x$age.inf.vec[[s]]
 
   if (!is.null(x$stats)) {
     dat$stats <- list()
