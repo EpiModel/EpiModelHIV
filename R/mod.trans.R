@@ -199,6 +199,9 @@ trans_msm <- function(dat, at){
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
+    
+    dat$age.inf.vec$age <- c(dat$age.inf.vec$age,dat$attr$age[infected])
+    dat$age.inf.vec$time <- c(dat$age.inf.vec$time,rep(at,length(infected)))
   }
 
   # Summary Output
