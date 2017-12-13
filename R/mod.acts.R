@@ -116,6 +116,12 @@ acts_msm <- function(dat, at) {
 
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
+  
+  #set any node with AI to having had AI.
+  ids <- unique(c(dat$temp$el$p1, dat$temp$el$p2))
+  dat$attr$everAI[ids]<-1
+  dat$attr$AI.time[ids]<-ifelse(dat$attr$AI.time[ids]==0,at,dat$attr$AI.time[ids])
+  
 
   return(dat)
 }
