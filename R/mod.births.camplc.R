@@ -204,6 +204,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$prepEver[newIds] <- 0
   dat$attr$prepStat[newIds] <- 0
   dat$attr$prepElig[newIds] <- rep(0, nBirths)
+  dat$attr$prepElig.asmm[newIds] <- rep(0, nBirths)
   dat$attr$prepClass[newIds] <- rep(NA, nBirths)
   dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
   
