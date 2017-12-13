@@ -41,8 +41,7 @@ prep_msm <- function(dat, at) {
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart.adol.naive <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 0 & ever.adol.prep == 0 & lnt == at)
-  idsEligStart.adol.exp <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 0 & ever.adol.prep == 1 & lnt == at)
+  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 0 & lnt == at)
 
   idsEligStop <- NULL
   if (prep.risk.reassess == TRUE) {
@@ -69,14 +68,11 @@ prep_msm <- function(dat, at) {
         mat.c2 <- dat$riskh$uai.nmain
         mat.c3 <- dat$riskh$uai.sd.mc
       }
-      idsEligStart.adol.naive <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
+      idsEligStart <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
                                         rowSums(mat.c2, na.rm = TRUE) > 0 |
                                         rowSums(mat.c3, na.rm = TRUE) > 0),
-                                idsEligStart.adol.naive)
-      idsEligStart.adol.exp <- intersect(which(rowSums(mat.c1, na.rm = TRUE) > 0 |
-                                                   rowSums(mat.c2, na.rm = TRUE) > 0 |
-                                                   rowSums(mat.c3, na.rm = TRUE) > 0),
-                                           idsEligStart.adol.exp)
+                                idsEligStart)
+
       
       idsEligStop <- intersect(which(rowSums(mat.c1, na.rm = TRUE) == 0 &
                                        rowSums(mat.c2, na.rm = TRUE) == 0 &
@@ -84,16 +80,13 @@ prep_msm <- function(dat, at) {
                                idsEligStop)
     } else {
       mat <- dat$riskh[[prep.elig.model]]
-      idsEligStart.adol.naive <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart.adol.naive)
-      idsEligStart.adol.exp <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart.adol.exp)
+      idsEligStart <- intersect(which(rowSums(mat, na.rm = TRUE) > 0), idsEligStart)
       idsEligStop <- intersect(which(rowSums(mat, na.rm = TRUE) == 0), idsEligStop)
     }
   }
 
-  prepElig.adol.naive[idsEligStart.adol.naive] <- 1
-  prepElig.adol.exp[idsEligStart.adol.exp] <- 1
-  prepElig[idsEligStart.adol.naive] <- 1
-  prepElig[idsEligStart.adol.exp] <- 1
+
+  prepElig[idsEligStart] <- 1
   prepElig[idsEligStop] <- 0
 
 
@@ -126,8 +119,8 @@ prep_msm <- function(dat, at) {
   prepCov.adol.naive <- ifelse(is.nan(prepCov.adol.naive), 0, prepCov.adol.naive)
   prepCov.adol.exp <- ifelse(is.nan(prepCov.adol.exp), 0, prepCov.adol.exp)
   
-  idsEligSt.adol.naive <- which(prepElig.adol.naive == 1)
-  idsEligSt.adol.exp <- which(prepElig.adol.exp == 1)
+  idsEligSt.adol.naive <- which(prepElig == 1  & ever.adol.prep == 0)
+  idsEligSt.adol.exp <- which(prepElig == 1  & ever.adol.prep == 1)
     nEligSt.adol.naive <- length(idsEligSt.adol.naive)
     nEligSt.adol.exp <- length(idsEligSt.adol.exp)
 
@@ -141,19 +134,19 @@ prep_msm <- function(dat, at) {
   
   idsStart.adol.naive <- NULL
   if (nStart.adol.naive > 0) {
-    if (prep.cov.rate.adol.naive >= 1) {
+    if (prep.cov.rate >= 1) {
       idsStart.adol.naive <- ssample(idsEligSt.adol.naive, nStart.adol.naive)
     } else {
-      idsStart.adol.naive <- idsEligSt.adol.naive[rbinom(nStart.adol.naive, 1, prep.cov.rate.adol.naive) == 1]
+      idsStart.adol.naive <- idsEligSt.adol.naive[rbinom(nStart.adol.naive, 1, prep.cov.rate) == 1]
     }
   }
 
   idsStart.adol.exp <- NULL
   if (nStart.adol.exp > 0) {
-    if (prep.cov.rate.adol.exp >= 1) {
+    if (prep.cov.rate >= 1) {
       idsStart.adol.exp <- ssample(idsEligSt.adol.exp, nStart.adol.exp)
     } else {
-      idsStart.adol.exp <- idsEligSt.adol.exp[rbinom(nStart.adol.exp, 1, prep.cov.rate.adol.exp) == 1]
+      idsStart.adol.exp <- idsEligSt.adol.exp[rbinom(nStart.adol.exp, 1, prep.cov.rate) == 1]
     }
   }
   
@@ -183,9 +176,6 @@ prep_msm <- function(dat, at) {
   ## Output --------------------------------------------------------------------
 
   # Attributes
-  dat$attr$prepElig <- prepElig
-  dat$attr$prepElig.adol.naive <- prepElig.adol.naive
-  dat$attr$prepElig.adol.exp <- prepElig.adol.exp
   dat$attr$prepElig <- prepElig
   dat$attr$prepStat <- prepStat
   dat$attr$prepEver <- prepEver
