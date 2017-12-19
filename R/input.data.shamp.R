@@ -94,7 +94,7 @@ for (i in 1:length(fields)){
   ego.ids<-data$egos$ego[ids]
   ids.list<-c(ids.list,ego.ids)}
   
-  if(length(ego.ids>0)){warning("Egos and associated alters deleted: missing required field",call. = FALSE)
+  if(length(ids.list>0)){warning("Egos and associated alters deleted: missing required field",call. = FALSE)
     print(length(ids.list))}
 
   data$egos<-data$egos[data$egos$ego %in% ids.list == FALSE,]
@@ -106,40 +106,42 @@ for (i in 1:length(fields)){
 ##Main
 fields<-names(data$altersCohab)
 
-alter.list<-NULL
+ids.list<-NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersCohab[i])
   ids<-which(temp==TRUE)
-  alter.ids<-data$altersCohab$ego[ids]
-  alter.list<-c(alter.list,alter.ids)}
+  ids.list<-c(ids.list,ids)
+  }
 
-if(length(alter.list>0)){warning("Cohab alters deleted: missing values",call. = FALSE)
-    print(length(alter.list))}
-    data$altersCohab<-data$altersCohab[data$altersCohab$ego %in% alter.list == FALSE,]
-
+ids.list<-unique(ids.list)
+if(length(ids.list>0)){warning("Cohab alters deleted: missing values",call. = FALSE)
+    print(length(ids.list))}
+    data$altersCohab<-data$altersCohab[-ids.list,]
 
 ##Casual.
 
 fields<-names(data$altersPers)
 
-alter.list<-NULL
+ids.list <- NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersPers[i])
   ids<-which(temp==TRUE)
-  alter.ids<-data$altersPers$ego[ids]
-  alter.list<-c(alter.list,alter.ids)}
+  ids.list<-c(ids.list,ids)}
 
-if(length(alter.list>0)){warning("Casual alters deleted: missing values",call. = FALSE)
-   print(length(alter.list))}
-    data$altersPers<-data$altersPers[data$altersPers$ego %in% alter.list == FALSE,]
+ids.list<-unique(ids.list)
+if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = FALSE)
+   print(length(ids.list))}
+    data$altersPers<-data$altersPers[-ids.list,]
 
 
 
 ##one time.
 
 ##If not imputing race of missing alters move BI and HI assignment for egos to after the missing data checks.
-   
 ##If using immigration set Black and Hispanic immigrants to BI and HI.
+    
+    #####Get the counts of immigrant by sex.
+    
     if(immigration==TRUE){
       data$egos$race<-ifelse(data$egos$race=="B" & data$egos$immigrant=="Yes","BI",
                              ifelse(data$egos$race=="H" & data$egos$immigrant=="Yes","HI",
@@ -159,9 +161,13 @@ if(length(alter.list>0)){warning("Casual alters deleted: missing values",call. =
     }
     
     
-    {warning("OT alters race imputed)",call. = FALSE)}
+mis.r <- which(is.na(data$altersOT$race)==TRUE)    
+{warning("OT alters race imputed",call. = FALSE)
+      print(length(mis.r))}
 
-mis.r <- which(is.na(data$altersOT$race)==TRUE)
+
+##  Were did these probabilities come from?
+  
 for (i in 1:length(mis.r)){
   ego<- data$altersOT$ego[mis.r[i]]
   ego.race<-data$egos$race[data$egos$ego==ego]
@@ -176,20 +182,19 @@ for (i in 1:length(mis.r)){
 
 fields<-names(data$altersOT)
 
-alter.list<-NULL
-
+ids.list<-NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersOT[i])
   ids<-which(temp==TRUE)
-  alter.ids<-data$altersOT$ego[ids]
-  alter.list<-c(alter.list,alter.ids)}
+  ids.list<-c(ids.list,ids)}
+
+data$altersOT<-data$altersOT[-ids.list,]
+
+if(length(ids.list>0)){warning("OT alters deleted: missing values",call. = FALSE)
+  print(length(ids.list))}
 
 
-if(length(alter.list>0)){warning("OT alters deleted: missing values",call. = FALSE)
-  print(length(alter.list))}
 
-
-    data$altersOT<-data$altersOT[data$altersOT$ego %in% alter.list == FALSE,]
     
 ##Data checks completed############################################
 
