@@ -82,20 +82,24 @@ for (i in 1:length(fields)){
     
   
 ##Drop egos and alters with missing data.
-  
+ 
 ##egos with missing data.
   
   fields<-c("weight","ego","sex","age","sqrt.age","sex.ident","immigrant","role.class","race","deg.cohab", "deg.pers")
   
   ids.list<-NULL
   for(i in 1:length(fields)){
-  temp<-is.na(data$egos[i])
-  ids<-which(temp==TRUE)
-  ego.ids<-data$egos$ego[ids]
-  ids.list<-c(ids.list,ego.ids)}
+    temp<-is.na(data$egos[fields[i]]) # JKB: this used to say just [i]
+    ids<-which(temp==TRUE)
+    ego.ids<-data$egos$ego[ids]
+    ids.list<-c(ids.list,ego.ids)
+  }
   
-  if(length(ids.list>0)){warning("Egos and associated alters deleted: missing required field",call. = FALSE)
-    print(length(ids.list))}
+  if(length(ids.list>0)){
+    warning("Egos and associated alters deleted: missing required field",call. = FALSE)
+ #   print(length(ids.list))
+    cat('\nEgos deleted: ', length(ids.list))
+    }
 
   data$egos<-data$egos[data$egos$ego %in% ids.list == FALSE,]
   data$altersCohab<-data$altersCohab[data$altersCohab$ego %in% ids.list == FALSE,]
@@ -105,32 +109,45 @@ for (i in 1:length(fields)){
 ##Alters with missing data.
 ##Main
 fields<-names(data$altersCohab)
+# JKB 12/19: removing "immigrant" from required list and replacing with immigrant.male.ego.
+# Everyone will have a value for this variable except the 403 female alters with no immigration info.
+fields <- fields[!fields %in% 'immigrant']
+fields <- c(fields, 'immigrant.male.ego')
+data$altersCohab$immigrant.male.ego <- ifelse(data$altersCohab$sex=='M', 'No',
+                                              data$altersCohab$immigrant)
 
 ids.list<-NULL
 for(i in 1:length(fields)){
-  temp<-is.na(data$altersCohab[i])
+  temp<-is.na(data$altersCohab[fields[i]]) # JKB: this used to say just [i]
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)
   }
 
 ids.list<-unique(ids.list)
-if(length(ids.list>0)){warning("Cohab alters deleted: missing values",call. = FALSE)
-    print(length(ids.list))}
-    data$altersCohab<-data$altersCohab[-ids.list,]
+if(length(ids.list>0)){
+  warning("Cohab alters deleted: missing values",call. = FALSE)
+#  print(length(ids.list))
+  cat('\nCohab alters deleted: ', length(ids.list))
+  }
+  data$altersCohab<-data$altersCohab[-ids.list,]
 
 ##Casual.
 
 fields<-names(data$altersPers)
+# JKB 12/19: removing "immigrant" from required list
+fields <- fields[!fields %in% 'immigrant']
 
 ids.list <- NULL
 for(i in 1:length(fields)){
-  temp<-is.na(data$altersPers[i])
+  temp<-is.na(data$altersPers[fields[i]]) # JKB: this used to say just [i]
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)}
 
 ids.list<-unique(ids.list)
 if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = FALSE)
-   print(length(ids.list))}
+#   print(length(ids.list))
+   cat('\nPers alters deleted: ', length(ids.list))
+   }
     data$altersPers<-data$altersPers[-ids.list,]
 
 
@@ -141,12 +158,42 @@ if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = F
 ##If using immigration set Black and Hispanic immigrants to BI and HI.
     
     #####Get the counts of immigrant by sex.
+          # This code doesn't make the edited race variable missing if immigration is missing,
+          # but we'll ignore that because we're going to ignore alter immigration except for
+          # Cohabs, and there we will impute
     
     if(immigration==TRUE){
+      
       data$egos$race<-ifelse(data$egos$race=="B" & data$egos$immigrant=="Yes","BI",
                              ifelse(data$egos$race=="H" & data$egos$immigrant=="Yes","HI",
                                     data$egos$race))
       
+      # Impute immigration for male alters of female cohabs
+      f.egos <- data$altersCohab$sex=='M'
+      f.ego.ids <- data$altersCohab$ego[f.egos]
+      warning('Immigration imputation presumes egos are numbered 1 to n')
+      f.ego.race <- data$egos$race[f.ego.ids]
+      impute.probs <- matrix(c(0.4/1.8, 1, 0, 1, 0.5,        # Black males: p(immigrant) for each female ego
+                               0, 0.5, 0.5, 3.7/4.1, 0.4/1.4 # Hisp males: p(immigrant) for each female ego
+                              ), nrow=2, ncol=5, byrow=TRUE,
+                             dimnames=list(alter=c('B', 'H'), ego=c('B', 'BI', 'H', 'HI', 'W')))
+      
+      # Sample with impute.probs to find immigrant='Yes'
+      for (ego.race in c('B', 'BI', 'H', 'HI', 'W')) {
+        # Ego race==ego.race and black alters - impute which alters are immigrants
+        impute.bi <- (f.ego.race %in% ego.race) & (data$altersCohab$race[f.egos] %in% 'B')
+        bi.indicator <- rbinom(sum(impute.bi), size=1, prob=impute.probs['B', ego.race])
+        # Ego race==ego.race and Hispanic alters - impute which alters are immigrants
+        impute.hi <- (f.ego.race %in% ego.race) & (data$altersCohab$race[f.egos] %in% 'H')
+        hi.indicator <- rbinom(sum(impute.hi), size=1, prob=impute.probs['H', ego.race])       
+        
+        data$altersCohab$immigrant[f.egos][impute.bi][bi.indicator==1] <- 'Yes'
+        data$altersCohab$immigrant[f.egos][impute.hi][hi.indicator==1] <- 'Yes'
+      }
+      # All others are immigrant='No'
+      data$altersCohab$immigrant[f.egos][is.na(data$altersCohab$immigrant[f.egos])] <- 'No'
+
+      # Now construct 5-category race that includes immigration info
       data$altersCohab$race<-ifelse(data$altersCohab$race=="B" & data$altersCohab$immigrant=="Yes","BI",
                                     ifelse(data$altersCohab$race=="H" & data$altersCohab$immigrant=="Yes","HI",
                                            data$altersCohab$race))
@@ -163,11 +210,13 @@ if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = F
     
 mis.r <- which(is.na(data$altersOT$race)==TRUE)    
 {warning("OT alters race imputed",call. = FALSE)
-      print(length(mis.r))}
+ #     print(length(mis.r))
+      cat('\nOT alters race imputed: ', length(mis.r))
+      }
 
 
 ##  Were did these probabilities come from?
-  
+
 for (i in 1:length(mis.r)){
   ego<- data$altersOT$ego[mis.r[i]]
   ego.race<-data$egos$race[data$egos$ego==ego]
@@ -181,6 +230,8 @@ for (i in 1:length(mis.r)){
 }
 
 fields<-names(data$altersOT)
+# JKB 12/19: removing "immigrant", "race" and "race3" from required list
+fields <- fields[!fields %in% c('immigrant', 'race', 'race3')]
 
 ids.list<-NULL
 for(i in 1:length(fields)){
@@ -190,12 +241,15 @@ for(i in 1:length(fields)){
 
 data$altersOT<-data$altersOT[-ids.list,]
 
-if(length(ids.list>0)){warning("OT alters deleted: missing values",call. = FALSE)
-  print(length(ids.list))}
+if(length(ids.list>0)){
+  warning("OT alters deleted: missing values",call. = FALSE)
+#  print(length(ids.list))
+  cat('\nOT alters deleted: ', length(ids.list), '\n')
+  }
 
 
 
-    
+
 ##Data checks completed############################################
 
 ###  Calculate the paramters needed for estimation that are not line data.
@@ -226,9 +280,7 @@ if(length(ids.list>0)){warning("OT alters deleted: missing values",call. = FALSE
       sqrt.age.fa[i] <- sample(c(data$altersCohab$sqrt.age[data$altersCohab$ego == ids.me[i]],
                                  data$altersCohab$sqrt.age[data$altersCohab$ego == ids.me[i]]),size=1)
     }
-  
     
-
     ids.fe<-sample(data$egos$ego[data$egos$sex=="F"],100000,replace=TRUE,prob=data$egos$weight[data$egos$sex=="F"])
     x<-which((ids.fe %in% data$altersCohab$ego) == TRUE)
     ids.fe<-ids.fe[x]      
@@ -463,7 +515,6 @@ ifelse((data$egos$race != "B" & data$egos$race != "BI" & data$egos$sex == "M" & 
          (data$egos$sex =="F" &  data$egos$deg.cohab.c == 1),"non.B.BIM.c1.F.c1",
 ifelse(data$egos$sex == "F" &  data$egos$deg.cohab.c == 0, "F.c0",
        data$egos$cross.net.group)))))
-
 
   return(list(data.params,data))
 
