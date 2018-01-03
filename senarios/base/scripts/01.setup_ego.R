@@ -13,11 +13,13 @@ library(rlist)
 np = detectCores()
 
 #Load the ego and alter data frames and look at them
-load("~/SHAMP/egonet/data/all.egodata.rda")
+load("~/SHAMP/egonet/data/all.impute.egodata.rda")
 str(all.egodata)
 
 
 data.params<-list ()
+library(devtools)
+load_all()
 
 
 new_data<-input_shamp(all.egodata, data.params, immigration=TRUE, msm.msmf=FALSE)
