@@ -109,16 +109,11 @@ for (i in 1:length(fields)){
 ##Alters with missing data.
 ##Main
 fields<-names(data$altersCohab)
-# JKB 12/19: removing "immigrant" from required list and replacing with immigrant.male.ego.
-# Everyone will have a value for this variable except the 403 female alters with no immigration info.
-fields <- fields[!fields %in% 'immigrant']
-fields <- c(fields, 'immigrant.male.ego')
-data$altersCohab$immigrant.male.ego <- ifelse(data$altersCohab$sex=='M', 'No',
-                                              data$altersCohab$immigrant)
 
 ids.list<-NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersCohab[fields[i]]) # JKB: this used to say just [i]
+#cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)
   }
@@ -168,30 +163,6 @@ if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = F
                              ifelse(data$egos$race=="H" & data$egos$immigrant=="Yes","HI",
                                     data$egos$race))
       
-      # Impute immigration for male alters of female cohabs
-      f.egos <- data$altersCohab$sex=='M'
-      f.ego.ids <- data$altersCohab$ego[f.egos]
-      warning('Immigration imputation presumes egos are numbered 1 to n')
-      f.ego.race <- data$egos$race[f.ego.ids]
-      impute.probs <- matrix(c(0.4/1.8, 1, 0, 1, 0.5,        # Black males: p(immigrant) for each female ego
-                               0, 0.5, 0.5, 3.7/4.1, 0.4/1.4 # Hisp males: p(immigrant) for each female ego
-                              ), nrow=2, ncol=5, byrow=TRUE,
-                             dimnames=list(alter=c('B', 'H'), ego=c('B', 'BI', 'H', 'HI', 'W')))
-      
-      # Sample with impute.probs to find immigrant='Yes'
-      for (ego.race in c('B', 'BI', 'H', 'HI', 'W')) {
-        # Ego race==ego.race and black alters - impute which alters are immigrants
-        impute.bi <- (f.ego.race %in% ego.race) & (data$altersCohab$race[f.egos] %in% 'B')
-        bi.indicator <- rbinom(sum(impute.bi), size=1, prob=impute.probs['B', ego.race])
-        # Ego race==ego.race and Hispanic alters - impute which alters are immigrants
-        impute.hi <- (f.ego.race %in% ego.race) & (data$altersCohab$race[f.egos] %in% 'H')
-        hi.indicator <- rbinom(sum(impute.hi), size=1, prob=impute.probs['H', ego.race])       
-        
-        data$altersCohab$immigrant[f.egos][impute.bi][bi.indicator==1] <- 'Yes'
-        data$altersCohab$immigrant[f.egos][impute.hi][hi.indicator==1] <- 'Yes'
-      }
-      # All others are immigrant='No'
-      data$altersCohab$immigrant[f.egos][is.na(data$altersCohab$immigrant[f.egos])] <- 'No'
 
       # Now construct 5-category race that includes immigration info
       data$altersCohab$race<-ifelse(data$altersCohab$race=="B" & data$altersCohab$immigrant=="Yes","BI",
