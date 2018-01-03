@@ -14,15 +14,11 @@ np = detectCores()
 
 #Load the ego and alter data frames and look at them
 load("~/SHAMP/egonet/data/all.impute.egodata.rda")
-str(all.egodata)
-
+str(all.impute.egodata)
 
 data.params<-list ()
-library(devtools)
-load_all()
 
-
-new_data<-input_shamp(all.egodata, data.params, immigration=TRUE, msm.msmf=FALSE)
+new_data<-input_shamp(all.impute.egodata, data.params, immigration=TRUE, msm.msmf=FALSE)
 data.params<-as.list(new_data[1])
 
 
@@ -33,7 +29,8 @@ ego.obj_i<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersOT,egoIDcol=
 
 # Location of EpiModelHIV folders
 # epifold <- '~/EpiModelHIV_SHAMP'
-epifold <- '~/'
+# epifold <- '~/'
+epifold <- '~/Dropbox/CFAR/'
 
 save(ego.obj_c, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_c.rda"))
 save(ego.obj_p, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_p.rda"))
