@@ -39,13 +39,14 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.scale = 1.03, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
-  cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
-  cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
-  cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
-  cond.inst.BB.prob = 0.27, cond.inst.BW.prob = 0.27,
-  cond.inst.WW.prob = 0.27, cond.always.prob.corr = 0.5, cond.rr.BB = 1,
-  cond.rr.BW = 1, cond.rr.WW = 1, cond.diag.main.beta = -0.67,
+  ai.scale.pospos = 1.04, ai.scale = 1.04, cond.main.BB.prob = 0.38,
+  cond.main.BW.prob = 0.1, cond.main.WW.prob = 0.15,
+  cond.pers.always.prob = 0.216, cond.pers.BB.prob = 0.26,
+  cond.pers.BW.prob = 0.26, cond.pers.WW.prob = 0.26,
+  cond.inst.always.prob = 0.326, cond.inst.BB.prob = 0.27,
+  cond.inst.BW.prob = 0.27, cond.inst.WW.prob = 0.27,
+  cond.always.prob.corr = 0.5, cond.rr.BB = 1, cond.rr.BW = 1,
+  cond.rr.WW = 1, cond.diag.main.beta = -0.67,
   cond.discl.main.beta = -0.85, cond.diag.pers.beta = -0.67,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
@@ -351,7 +352,10 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.scale}{General relative scaler for all act rates for model
+\item{ai.scale.pospos}{General relative scaler for HIV-positive-concordant
+act rates for model calibration.}
+
+\item{ai.scale}{General relative scaler for all other act rates for model
 calibration.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main

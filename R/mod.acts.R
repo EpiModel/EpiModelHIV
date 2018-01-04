@@ -16,9 +16,9 @@
 #' person.
 #'
 #' @return
-#' This function returns the \code{dat} object with the updated discordant act
+#' This function returns the \code{dat} object with the updated act
 #' list (\code{dal}). Each element of \code{dal} is a data frame with the ids
-#' of the discordant pair repeated the number of times they have AI.
+#' of the  pair repeated the number of times they have AI.
 #'
 #' @keywords module msm
 #' @export
@@ -35,6 +35,7 @@ acts_msm <- function(dat, at) {
 
     # Parameters
     ai.scale <- dat$param$ai.scale
+    ai.scale.pospos <- dat$param$ai.scale.pospos
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
@@ -75,25 +76,83 @@ acts_msm <- function(dat, at) {
 
     if (nrow(el) > 0) {
 
-      # Base AI rates
-      ai.rate <- rep(NA, nrow(el))
-      race.p1 <- race[el[, 1]]
-      race.p2 <- race[el[, 2]]
-      num.B <- (race.p1 == "B") + (race.p2 == "B")
-      ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                 (num.B == 1) * base.ai.BW.rate +
-                 (num.B == 0) * base.ai.WW.rate
-      ai.rate <- ai.rate * ai.scale
+      el.pospos <- el[which(st1 == 1 & st2 == 1), , drop = FALSE]
 
-      # Final act number
-      if (fixed == FALSE) {
-        ai <- rpois(length(ai.rate), ai.rate)
+      # If positive-positive, then split el into 2
+      # If no positive-positive, then don't split
+      if (nrow(el.pospos) > 0) {
+
+        # Separate into positive-concordant and non-positive concordant
+        el2 <- el[which(!(st1 == 1 & st2 == 1)), , drop = FALSE]
+
+        # Base AI rates for positive concordant
+        ai.rate.pospos <- rep(NA, nrow(el.pospos))
+        race.p1 <- race[el.pospos[, 1]]
+        race.p2 <- race[el.pospos[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate.pospos <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate.pospos <- ai.rate.pospos * ai.scale.pospos
+
+        # Final act number for positive concordant
+        if (fixed == FALSE) {
+          ai.pospos <- rpois(length(ai.rate.pospos), ai.rate.pospos)
+        } else {
+          ai.pospos <- round(ai.rate.pospos)
+        }
+
+        # Edge list (positive concordant)
+        el.pospos <- cbind(el.pospos, ptype, ai.pospos)
+
+        # Base AI rates for non-positive concordant
+        ai.rate <- rep(NA, nrow(el2))
+        race.p1 <- race[el2[, 1]]
+        race.p2 <- race[el2[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate <- ai.rate * ai.scale
+
+        # Final act number for non-positive concordant
+        if (fixed == FALSE) {
+          ai <- rpois(length(ai.rate), ai.rate)
+        } else {
+          ai <- round(ai.rate)
+        }
+
+        # Edge list (non-positive concordant)
+        el2 <- cbind(el2, ptype, ai)
+
+        # Full edge list (combine positive concordant and non-positive concordant)
+        el <- rbind(el2, el.pospos)
+
       } else {
-        ai <- round(ai.rate)
+
+        # Base AI rates for all
+        ai.rate <- rep(NA, nrow(el))
+        race.p1 <- race[el[, 1]]
+        race.p2 <- race[el[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate <- ai.rate * ai.scale
+
+
+        # Final act number for non-positive concordant
+        if (fixed == FALSE) {
+          ai <- rpois(length(ai.rate), ai.rate)
+        } else {
+          ai <- round(ai.rate)
+        }
+
+        # Edge list (non-positive concordant)
+        el <- cbind(el, ptype, ai)
+
       }
 
-      # Full edge list
-      el <- cbind(el, ptype, ai)
       colnames(el)[5:6] <- c("ptype", "ai")
 
       if (type == "main") {

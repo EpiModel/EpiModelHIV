@@ -22,7 +22,7 @@
 #' @importFrom stats median rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
 #' @importFrom dplyr group_by summarise
 #'
-#' @useDynLib EpiModelHIV
+#' @useDynLib EpiModelHIV, .registration = TRUE
 #'
 #' @docType package
 #' @keywords package msm het

@@ -12,6 +12,7 @@ load("est/fit.rda")
 param <- param_msm(nwstats = st,
 
                    ai.scale = 1.04,
+                   ai.scale.pospos = 1.04,
 
                    # STI acquisition
                    rgc.tprob = 0.4773,
@@ -28,7 +29,7 @@ param <- param_msm(nwstats = st,
                    hiv.syph.rr = 1.63,
 
                    syph.incub.sympt.prob = 0,
-                   syph.prim.sympt.prob = 0.70,
+                   syph.prim.sympt.prob = 0.50,
                    syph.seco.sympt.prob = 0.85,
                    syph.earlat.sympt.prob = 0,
                    syph.latelat.sympt.prob = 0,
@@ -64,7 +65,7 @@ param <- param_msm(nwstats = st,
 
 init <- init_msm(nwstats = st)
 
-control <- control_msm(nsteps = 20)
+control <- control_msm(nsteps = 2600)
 
 # control <- control_msm(start = 5201,
 #                        nsteps = 5210)
@@ -86,9 +87,11 @@ dat <- initialize_msm(est, param, init, control, s = 1)
 #debug(sti_tx_msm)
 #debug(hiv_test_msm)
 #debug(sti_ept_msm)
+debug(acts_msm)
+debug(hiv_trans_msm)
 
 at <- at + 1
-for (at in at:(at + 18)) {
+for (at in at:nsteps) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)
   dat <- births_msm(dat, at)

@@ -2,19 +2,19 @@
 #' @title Condom Use Module
 #'
 #' @description Module function stochastically simulates potential condom use
-#'              for each act on the discordant edgelist.
+#'              for each act on the edgelist.
 #'
 #' @inheritParams aging_msm
 #'
 #' @details
-#' For each act on the discordant edgelist, condom use is stochastically 
-#' simulated based on the partnership type and racial combination of the dyad. 
-#' Other modifiers for the probability of condom use in that pair are diagnosis 
+#' For each act on the edgelist, condom use is stochastically
+#' simulated based on the partnership type and racial combination of the dyad.
+#' Other modifiers for the probability of condom use in that pair are diagnosis
 #' of disease, disclosure of status, and full or partial HIV viral suppression
 #' given HIV anti-retroviral therapy.
 #'
 #' @return
-#' Updates the discordant edgelist with a \code{uai} variable indicating whether
+#' Updates the edgelist with a \code{uai} variable indicating whether
 #' condoms were used in that act.
 #'
 #' @keywords module msm

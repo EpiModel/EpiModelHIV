@@ -173,7 +173,9 @@
 #'        partnerships (acts per day).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per day).
-#' @param ai.scale General relative scaler for all act rates for model
+#' @param ai.scale.pospos General relative scaler for HIV-positive-concordant
+#'        act rates for model calibration.
+#' @param ai.scale General relative scaler for all other act rates for model
 #'        calibration.
 #' @param cond.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
@@ -629,7 +631,8 @@ param_msm <- function(nwstats,
                       base.ai.pers.BB.rate = 0.11,
                       base.ai.pers.BW.rate = 0.16,
                       base.ai.pers.WW.rate = 0.14,
-                      ai.scale = 1.03,
+                      ai.scale.pospos = 1.04,
+                      ai.scale = 1.04,
 
                       cond.main.BB.prob = 0.38,
                       cond.main.BW.prob = 0.10,

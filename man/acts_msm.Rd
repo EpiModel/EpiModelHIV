@@ -13,9 +13,9 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-This function returns the \code{dat} object with the updated discordant act
+This function returns the \code{dat} object with the updated act
 list (\code{dal}). Each element of \code{dal} is a data frame with the ids
-of the discordant pair repeated the number of times they have AI.
+of the  pair repeated the number of times they have AI.
 }
 \description{
 Module function for setting the number of sexual acts on the

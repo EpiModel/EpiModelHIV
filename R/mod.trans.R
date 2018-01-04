@@ -96,18 +96,18 @@ hiv_trans_msm <- function(dat, at) {
                     (al[, "st1"] == 0 & al[, "st2"] == 1), , drop = FALSE]
   al.pospos <- al[al[, "st1"] == 1 & al[, "st2"] == 1, , drop = FALSE]
 
-  num.acts.negneg <- nrow(al.negneg)
-  num.acts.negpos <- nrow(al.negpos)
-  num.acts.pospos <- nrow(al.pospos)
+  # Output act and edge stats before evaluating whether discordant pairs exists
+  dat$epi$num.acts.negneg[at] <- nrow(al.negneg)
+  dat$epi$num.acts.negpos[at] <- nrow(al.negpos)
+  dat$epi$num.acts.pospos[at] <- nrow(al.pospos)
 
-  prop.uai.negneg <- sum(al.negneg[, "uai"] == 1) / nrow(al.negneg)
-  prop.uai.negpos <- sum(al.negpos[, "uai"] == 1) / nrow(al.negpos)
-  prop.uai.pospos <- sum(al.pospos[, "uai"] == 1) / nrow(al.pospos)
+  dat$epi$prop.uai.negneg[at] <- sum(al.negneg[, "uai"] == 1) / nrow(al.negneg)
+  dat$epi$prop.uai.negpos[at]  <- sum(al.negpos[, "uai"] == 1) / nrow(al.negpos)
+  dat$epi$prop.uai.pospos[at] <- sum(al.pospos[, "uai"] == 1) / nrow(al.pospos)
 
-  prop.acts.negneg <- nrow(al.negneg) / (nrow(al))
-  prop.acts.negpos <- nrow(al.negpos) / (nrow(al))
-  prop.acts.pospos <- nrow(al.pospos) / (nrow(al))
-
+  dat$epi$prop.acts.negneg[at] <- nrow(al.negneg) / (nrow(al))
+  dat$epi$prop.acts.negpos[at]  <- nrow(al.negpos) / (nrow(al))
+  dat$epi$prop.acts.pospos[at] <- nrow(al.pospos) / (nrow(al))
 
   if (nrow(dal) == 0) {
     return(dat)
@@ -614,18 +614,6 @@ hiv_trans_msm <- function(dat, at) {
   dat$epi$trans.main[at] <- sum(inf.type == 1)
   dat$epi$trans.pers[at] <- sum(inf.type == 2)
   dat$epi$trans.inst[at] <- sum(inf.type == 3)
-
-  dat$epi$num.acts.negneg[at] <- num.acts.negneg
-  dat$epi$num.acts.negpos[at] <- num.acts.negpos
-  dat$epi$num.acts.pospos[at] <- num.acts.pospos
-
-  dat$epi$prop.uai.negneg[at] <- prop.uai.negneg
-  dat$epi$prop.uai.negpos[at] <- prop.uai.negpos
-  dat$epi$prop.uai.pospos[at] <- prop.uai.pospos
-
-  dat$epi$prop.acts.negneg[at] <- prop.acts.negneg
-  dat$epi$prop.acts.negpos[at] <- prop.acts.negpos
-  dat$epi$prop.acts.pospos[at] <- prop.acts.pospos
 
   return(dat)
 }
