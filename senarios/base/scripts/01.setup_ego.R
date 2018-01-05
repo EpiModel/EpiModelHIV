@@ -12,14 +12,12 @@ library(parallel)
 np = detectCores()
 
 #Load the ego and alter data frames and look at them
-load("~/SHAMP/egonet/data/all.egodata.rda")
-str(all.egodata)
-
+load("~/SHAMP/egonet/data/all.impute.egodata.rda")
+str(all.impute.egodata)
 
 data.params<-list ()
 
-
-new_data<-input_shamp(all.egodata, data.params, immigration=TRUE, msm.msmf=FALSE)
+new_data<-input_shamp(all.impute.egodata, data.params, immigration=TRUE, msm.msmf=FALSE)
 data.params<-as.list(new_data[1])
 
 
@@ -28,14 +26,18 @@ ego.obj_c<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersCohab,egoIDc
 ego.obj_p<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersPers,egoIDcol="ego", egoWt=new_data[[2]]$egos$weight)
 ego.obj_i<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersOT,egoIDcol="ego", egoWt=new_data[[2]]$egos$weight)
 
+# Location of EpiModelHIV folders
+# epifold <- '~/EpiModelHIV_SHAMP'
+# epifold <- '~/'
+epifold <- '~/Dropbox/CFAR/'
 
-save(ego.obj_c, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_c.rda")
-save(ego.obj_p, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_p.rda")
-save(ego.obj_i, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_i.rda")
+save(ego.obj_c, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_c.rda"))
+save(ego.obj_p, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_p.rda"))
+save(ego.obj_i, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_i.rda"))
 
-save(ego.obj_c, file = "~/EpiModelHIV_SHAMP/EpiModelHIV/data/ego.obj_c.rda")
-save(ego.obj_p, file = "~/EpiModelHIV_SHAMP/EpiModelHIV/data/ego.obj_p.rda")
-save(ego.obj_i, file = "~/EpiModelHIV_SHAMP/EpiModelHIV/data/ego.obj_i.rda")
+save(ego.obj_c, file = file.path(epifold, "EpiModelHIV/data/ego.obj_c.rda"))
+save(ego.obj_p, file = file.path(epifold, "EpiModelHIV/data/ego.obj_p.rda"))
+save(ego.obj_i, file = file.path(epifold, "EpiModelHIV/data/ego.obj_i.rda"))
 
 
 ###cohab partnership network.
