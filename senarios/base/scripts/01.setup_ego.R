@@ -9,7 +9,6 @@ library(EpiModelHPC)
 library(ergm.ego)
 library(tergmLite)
 library(parallel)
-library(rlist)
 np = detectCores()
 
 #Load the ego and alter data frames and look at them
@@ -42,6 +41,9 @@ save(ego.obj_i, file = "~/EpiModelHIV_SHAMP/EpiModelHIV/data/ego.obj_i.rda")
 ###cohab partnership network.
 
 summary(ego.obj_c ~edges + 
+          nodemix("sex",base=0))
+
+summary(ego.obj_c ~edges + 
                   nodefactor("race.sex",base=0) +
                   nodematch("race",diff=TRUE) +
                   nodefactor("agecat", base=1) + 
@@ -63,13 +65,16 @@ fit.c.temp<-ergm.ego(ego.obj_c ~edges +
                     offset.coef = c(-Inf, -Inf),
                     control=control.ergm.ego(ppopsize=50000, stats.est="asymptotic",
                                            ergm.control = control.ergm(MCMC.interval=7500,
-                                                                       MCMC.samplesize=7500,
+                                                                       MCMC.samplesize=500,
                                                                        MCMC.burnin = 7500,
                                                                        MPLE.max.dyad.types = 1e7,
                                                                        init.method = "zeros",
-                                                                       MCMLE.maxit = 400,
-                                                                       parallel = np, 
-                                                                       parallel.type="PSOCK")))
+                                                                       MCMLE.maxit = 400
+                                                                       #parallel = np, 
+                                                                       #parallel.type="PSOCK"
+                                                                       )))
+
+mcmc.diagnostics(fit.c.temp)
 
 fit.c$egodata <- fit.c$newnetworks <- fit.c$sample <- fit.c$constrained <-NULL 
 
