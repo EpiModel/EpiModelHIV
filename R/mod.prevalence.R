@@ -252,6 +252,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$early.late.syphratio <- rNA
     dat$epi$early.late.diagsyphratio <- rNA
     dat$epi$prev.dxhiv.dxipssyph <- rNA
+    dat$epi$prev.dxhiv.atdxipssyph <- rNA
 
     # STI only by HIV serostatus
     dat$epi$prev.rgc.hivneg.only <- rNA
@@ -851,13 +852,20 @@ prevalence_msm <- function(dat, at) {
                                                  length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3))) /
                                                    length(which(diag.status.syph == 1 & stage.syph %in% c(4, 5, 6))), 0)
 
-
   dat$epi$prev.dxhiv.dxipssyph[at] <- ifelse(length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3))) == 0, 0,
                                                   length(which(diag.status == 1 &
                                                                  diag.status.syph == 1 &
                                                                  stage.syph %in% c(1, 2, 3))) /
                                             length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3))))
 
+  dat$epi$prev.dxhiv.atdxipssyph[at] <- ifelse(length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3) &
+                                                              dat$attr$last.diag.time.syph == at)) == 0, 0,
+                                             length(which(diag.status == 1 &
+                                                            diag.status.syph == 1 &
+                                                            stage.syph %in% c(1, 2, 3) &
+                                                            dat$attr$last.diag.time.syph == at)) /
+                                               length(which(diag.status.syph == 1 & stage.syph %in% c(1, 2, 3)  &
+                                                              dat$attr$last.diag.time.syph == at)))
 
   dat$epi$prev.syph[at] <- ifelse(dat$epi$num[at] > 0, length(which(syphilis == 1)) / dat$epi$num[at], 0)
   dat$epi$prev.syph.tttraj1[at] <- ifelse((dat$epi$tt.traj.syph1[at] == 0 | is.na(dat$epi$tt.traj.syph1[at]) |

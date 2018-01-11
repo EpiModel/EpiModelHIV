@@ -82,13 +82,15 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 #dat <- reinit_msm(sim, param, init, control, s = 1)
 
-#debug(sti_trans_msm)
-#debug(sti_recov_msm)
-#debug(sti_tx_msm)
-#debug(hiv_test_msm)
-#debug(sti_ept_msm)
-debug(acts_msm)
-debug(hiv_trans_msm)
+# debug(sti_trans_msm)
+# debug(sti_recov_msm)
+# debug(sti_tx_msm)
+# debug(hiv_test_msm)
+# debug(sti_ept_msm)
+# debug(acts_msm)
+# debug(hiv_trans_msm)
+# debug(condoms_msm)
+debug(simnet_msm)
 
 at <- at + 1
 for (at in at:nsteps) {
