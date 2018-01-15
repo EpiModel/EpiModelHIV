@@ -59,13 +59,13 @@ param_cl(nwstats, race.method = 1, last.neg.test.B.int = 301,
   cond.discl.asmm.beta = -0.85, vv.iev.BB.prob = 0.42,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = Inf,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
-  prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage.adol.naive = 0,
-  prep.coverage.adol.exp = 0, prep.cov.method = "curr", prep.cov.rate = 1,
-  prep.tst.int = 90, prep.risk.int = 182, prep.risk.reassess = TRUE,
-  prep.start.asmm = Inf, prep.elig.model.asmm = "none",
-  prep.efficacy.asmm = 0.92, prep.class.prob.b.asmm = c(0.2085, 0.2438,
-  0.1314, 0.4163), prep.class.prob.w.asmm = c(0.2085, 0.2438, 0.1314, 0.4163),
-  prep.coverage.b.asmm = 0.4, prep.coverage.w.asmm = 0.4,
+  prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage.adol.naive = 0.4,
+  prep.coverage.adol.exp = 0.4, prep.cov.method = "curr",
+  prep.cov.rate = 1, prep.tst.int = 90, prep.risk.int = 182,
+  prep.risk.reassess = TRUE, prep.start.asmm = Inf,
+  prep.elig.model.asmm = "none", prep.class.prob.b.asmm = c(0.209, 0.244,
+  0.131, 0.416), prep.class.prob.w.asmm = c(0.209, 0.244, 0.131, 0.416),
+  prep.coverage.b.asmm = 0.3, prep.coverage.w.asmm = 0.3,
   prep.cov.method.asmm = "curr", prep.cov.rate.b.asmm = 1,
   prep.cov.rate.w.asmm = 1, prep.rcomp.asmm = 1, prep.tst.int.asmm = 90,
   prep.risk.int.asmm = 182, prep.risk.reassess.asmm = FALSE,
@@ -403,9 +403,6 @@ adol.riskhist.older, adol.riskhist.time, adol.riskhist.older.time}
 for all persons who have never been on PrEP or those who have cycled off
 see: prepSpell if \code{TRUE} and are disease-susceptible.}
 
-\item{prep.efficacy.asmm}{The per-contact efficacy of PrEP to prevent infection if
-used (parameter not currently used).}
-
 \item{prep.class.prob.b.asmm}{The frequency of being in a low, medium, or high class
 of adherence to PrEP for black asmm.}
 
@@ -476,6 +473,9 @@ calibration.}
 
 \item{prep.coverage}{The proportion of the eligible MSM population who used PrEP as an ASMM
 and start PrEP once they become eligible.}
+
+\item{prep.efficacy.asmm}{The per-contact efficacy of PrEP to prevent infection if
+used (parameter not currently used).}
 
 \item{prep.class.effect.asmm}{The functional effectiveness of PrEP conditional on
 PrEP class.}
