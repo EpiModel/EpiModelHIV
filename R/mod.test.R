@@ -149,7 +149,7 @@ hiv_test_msm <- function(dat, at) {
 #'
 sti_test_msm <- function(dat, at) {
 
-  ## Intervention -------------------------------------------------------------
+  # 1. Setup ----------------------------------------------------------------
 
   # Attributes
   tt.traj <- dat$attr$tt.traj
@@ -213,14 +213,16 @@ sti_test_msm <- function(dat, at) {
 
   # Eligibility and trajectory
   # Annual indications- sexually active in last year
-  idsactive.hivpos <- which(stitestind1 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
+  idsactive.hivpos <- which(stitestind1 == 1 & diag.status == 1 & tt.traj %in% 3:4)
   idsactive.hivneg <- setdiff((which(stitestind1 == 1)), idsactive.hivpos)
 
   # STI testing higher-risk eligibility scenarios
   idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
   idshighrisk.hivneg <- setdiff((which(stitestind2 == 1)), idshighrisk.hivpos)
 
-  ## Stoppage (tt.traj.gc/.ct/.syph <- NA ------------------------------------
+
+  # 2. Indication Trajectory Stoppage ---------------------------------------
+
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
   idsnothighriskelig.hivpos <- which(tt.traj.syph.hivpos == 2 & stitestind2 != 1)
   tt.traj.syph.hivpos[idsnothighriskelig.hivpos] <-
@@ -245,8 +247,11 @@ sti_test_msm <- function(dat, at) {
     tt.traj.ct.hivneg[idsnotactiveelig.hivneg] <-
     NA
 
-  ## Initiation (non-HIV diagnosed) --------------------------------------------
-  ### Testing coverage for high risk
+
+
+  # 3. Screening for non-HIV Diagnosed --------------------------------------
+
+  ## 3a. High-Risk Testing ##
   stihighrisktestCov.ct <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
   stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
   stihighrisktestCov.gc <- sum(tt.traj.gc.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
@@ -285,7 +290,7 @@ sti_test_msm <- function(dat, at) {
     tt.traj.syph.hivneg[idsStart.syph] <- 2
   }
 
-  ### Testing coverage for annual - all those sexually active without high-risk indications
+  ## 3b. Sexually Active (non-HR) Testing ##
   stianntestCov.ct <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) /
                       length(setdiff(idsactive.hivneg, which(tt.traj.ct.hivneg == 2)))
   stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
@@ -312,25 +317,13 @@ sti_test_msm <- function(dat, at) {
   idsStart.ct <- idsStart.gc <- idsStart.syph <- NULL
 
   if (nStart.ct > 0) {
-    if (stianntest.cov.rate >= 1) {
-      idsStart.ct <- ssample(idsEligSt.ct, nStart.ct)
-    } else {
-      idsStart.ct <- idsEligSt.ct[rbinom(nStart.ct, 1, stianntest.cov.rate) == 1]
-    }
+    idsStart.ct <- ssample(idsEligSt.ct, nStart.ct)
   }
   if (nStart.gc > 0) {
-    if (stianntest.cov.rate >= 1) {
-      idsStart.gc <- ssample(idsEligSt.gc, nStart.gc)
-    } else {
-      idsStart.gc <- idsEligSt.gc[rbinom(nStart.gc, 1, stianntest.cov.rate) == 1]
-    }
+    idsStart.gc <- ssample(idsEligSt.gc, nStart.gc)
   }
   if (nStart.syph > 0) {
-    if (stianntest.cov.rate >= 1) {
-      idsStart.syph <- ssample(idsEligSt.syph, nStart.syph)
-    } else {
-      idsStart.syph <- idsEligSt.syph[rbinom(nStart.syph, 1, stianntest.cov.rate) == 1]
-    }
+    idsStart.syph <- ssample(idsEligSt.syph, nStart.syph)
   }
 
   ## Update testing trajectory for lower-risk
@@ -345,7 +338,9 @@ sti_test_msm <- function(dat, at) {
   }
 
 
+  ## 3c. Asymptomatic Screening ##
 
+  # Syphilis
   if (testing.pattern.sti == "interval" ) {
     tst.syph.annual.interval <- which(tt.traj.syph.hivneg == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
@@ -358,6 +353,7 @@ sti_test_msm <- function(dat, at) {
     tst.syph.nprep.hivneg <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
 
+  # GC
   if (testing.pattern.sti == "interval" ) {
     tst.gc.annual.interval <- which(tt.traj.gc.hivneg == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
@@ -370,6 +366,7 @@ sti_test_msm <- function(dat, at) {
     tst.gc.nprep.hivneg <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
 
+  # CT
   if (testing.pattern.sti == "interval" ) {
     tst.ct.annual.interval <- which(tt.traj.ct.hivneg == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
@@ -384,12 +381,12 @@ sti_test_msm <- function(dat, at) {
 
   # Syphilis non-PrEP testing
   tst.syph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3, 4, 5, 6))]
+                                   stage.syph[tst.syph.nprep.hivneg] %in% 2:6)]
   tst.syph.neg.hivneg <- setdiff(tst.syph.nprep.hivneg, tst.syph.pos.hivneg)
   tst.earlysyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(2, 3))]
+                                   stage.syph[tst.syph.nprep.hivneg] %in% 2:3)]
   tst.latesyph.pos.hivneg <- tst.syph.nprep.hivneg[which(syphilis[tst.syph.nprep.hivneg] == 1 &
-                                   stage.syph[tst.syph.nprep.hivneg] %in% c(4, 5, 6))]
+                                   stage.syph[tst.syph.nprep.hivneg] %in% 4:6)]
 
   # GC non-PrEP testing
   tst.rgc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("R", "V"))]
@@ -437,6 +434,9 @@ sti_test_msm <- function(dat, at) {
   last.diag.time.ct[tst.ct.pos.hivneg] <- at
   tsinceltst.rct[tst.rct.hivneg] <- 0
   tsinceltst.uct[tst.uct.hivneg] <- 0
+
+
+  # 4. Screening for HIV-Diagnosed ------------------------------------------
 
   ## Initiation (HIV diagnosed) --------------------------------------------
   ### Testing coverage for high risk
