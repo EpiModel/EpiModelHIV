@@ -309,9 +309,6 @@
 #'        on the number of people who have ever been annually tested for STI.
 #'        This is not inclusive of those who are simultaneously indicated for
 #'        more frequent testing.
-#' @param stianntest.cov.rate The rate at which persons initiate annual STI
-#'        testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param stihighrisktest.gc.hivneg.coverage The proportion of the non-HIV
 #'        diagnosed eligible population who are starting high-risk NG testing
 #'        once they become eligible.
@@ -335,9 +332,6 @@
 #'        number of people currently high-risk testing for STI and \code{"ever"}
 #'        to base it on the number of people who have ever been high-risk tested
 #'        for STI.
-#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
-#'        STI testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param partnercutoff The cutoff point for STI high-risk indication, above
 #'        which person would be indicated for higher-risk testing schedules.
 #'
@@ -692,9 +686,7 @@ param_msm <- function(nwstats,
                       stihighrisktest.ct.hivpos.coverage = 0.0,
                       stihighrisktest.syph.hivpos.coverage = 0.0,
                       stianntest.cov.method = "curr",
-                      stianntest.cov.rate = 1,
                       stihighrisktest.cov.method = "curr",
-                      stihighrisktest.cov.rate = 1,
                       partnercutoff = 1,
 
                       # EPT intervention

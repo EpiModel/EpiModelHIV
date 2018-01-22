@@ -67,8 +67,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   stihighrisktest.gc.hivpos.coverage = 0,
   stihighrisktest.ct.hivpos.coverage = 0,
   stihighrisktest.syph.hivpos.coverage = 0, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.cov.method = "curr",
-  stihighrisktest.cov.rate = 1, partnercutoff = 1, ept.start = Inf,
+  stihighrisktest.cov.method = "curr", partnercutoff = 1, ept.start = Inf,
   ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
   ept.cov.rate = 1, ept.provision.partner.main.ong = 0.5,
   ept.provision.partner.pers.ong = 0.4,
@@ -559,19 +558,11 @@ on the number of people who have ever been annually tested for STI.
 This is not inclusive of those who are simultaneously indicated for
 more frequent testing.}
 
-\item{stianntest.cov.rate}{The rate at which persons initiate annual STI
-testing conditional on their eligibility, with 1 equal to instant
-start.}
-
 \item{stihighrisktest.cov.method}{The method for calculating STI high-risk
 testing, with options of \code{"curr"} to base the numerator on the
 number of people currently high-risk testing for STI and \code{"ever"}
 to base it on the number of people who have ever been high-risk tested
 for STI.}
-
-\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
-STI testing conditional on their eligibility, with 1 equal to instant
-start.}
 
 \item{partnercutoff}{The cutoff point for STI high-risk indication, above
 which person would be indicated for higher-risk testing schedules.}
