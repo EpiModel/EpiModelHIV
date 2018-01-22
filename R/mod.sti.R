@@ -423,6 +423,7 @@ sti_recov_msm <- function(dat, at) {
   syph.early.tx.int <- dat$param$syph.early.tx.int
   syph.late.tx.int <- dat$param$syph.late.tx.int
 
+
   # Attributes ----------------------------------------------------------
 
   # Infection status
@@ -466,6 +467,7 @@ sti_recov_msm <- function(dat, at) {
   syph.latelat.tx <- dat$attr$syph.latelat.tx
   syph.tert.tx <- dat$attr$syph.tert.tx
   syph.tx.prep <- dat$attr$syph.tx.prep
+
 
   # GC Recovery ---------------------------------------------------------
 
@@ -523,6 +525,7 @@ sti_recov_msm <- function(dat, at) {
   recovRGC <- c(recovRGC_asympt_ntx, recovRGC_sympt_ntx, recovRGC_tx)
   recovUGC <- c(recovUGC_asympt_ntx, recovUGC_sympt_ntx, recovUGC_tx)
 
+
   # CT Recovery ---------------------------------------------------------
 
   ## Recovery for asymptomatic untreated (natural clearance)
@@ -579,19 +582,21 @@ sti_recov_msm <- function(dat, at) {
   recovRCT <- c(recovRCT_asympt_ntx, recovRCT_sympt_ntx, recovRCT_tx)
   recovUCT <- c(recovUCT_asympt_ntx, recovUCT_sympt_ntx, recovUCT_tx)
 
+
   # Syphilis Recovery -------------------------------------------------
 
   ## Recovery for treated
   idssyph_early_tx <- which(syphilis == 1 &
-                            stage.syph %in% c(1:4) &
-                            syph.infTime < at & (syph.incub.tx == 1 |
-                            syph.prim.tx == 1 | syph.seco.tx == 1 |
-                            syph.earlat.tx == 1 | syph.tx.prep == 1))
+                            stage.syph %in% 1:4 &
+                            syph.infTime < at &
+                              (syph.incub.tx == 1 | syph.prim.tx == 1 |
+                               syph.seco.tx == 1 | syph.earlat.tx == 1 |
+                               syph.tx.prep == 1))
   idssyph_late_tx <- which(syphilis == 1 &
-                           stage.syph %in% c(5:6) &
+                           stage.syph %in% 5:6 &
                            syph.infTime < at &
                            (syph.latelat.tx == 1 | syph.tert.tx == 1 |
-                              syph.tx.prep == 1))
+                            syph.tx.prep == 1))
 
   ## Move stage-specific treated to recovered
   recovsyph_early_tx <- idssyph_early_tx[which(rbinom(length(idssyph_early_tx), 1, 1/syph.early.tx.int) == 1)]
@@ -600,7 +605,8 @@ sti_recov_msm <- function(dat, at) {
   ## Aggregate recovery by stage
   recovsyph <- c(recovsyph_early_tx, recovsyph_late_tx)
 
-    # Output -----------------------------------------------------------
+
+  # Output -----------------------------------------------------------
 
   ## All recovered
   recovGCCT <- c(recovUCT, recovRCT, recovRGC, recovUGC)
