@@ -42,10 +42,13 @@ initialize_shamp <- function(x, param, init, control, s) {
   nw <- list()
   for (i in 1:3) {
 
-   nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
-                   control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
+   #nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
+   #               control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
     
-    #nw[[i]] <- simulate(x[[i]]$fit)
+    ## est[[1]]$fit is an ergm.ego fit so it includes net.adjustment.  This should be fine for just simulating the starting network.
+    ## But ergm.ego must also be run.
+    ## The other elements of est must be modified to remove the network size adjustment for tergmLite. 
+    nw[[i]] <- simulate(x[[i]]$fit)
   }
   
   
@@ -84,11 +87,11 @@ initialize_shamp <- function(x, param, init, control, s) {
   ## Nodal attributes ##
 
   # Degree terms
-  dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
-  dat$attr$deg.cohab <- get.vertex.attribute(x[[2]]$fit$network, "deg.cohab")
+  dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$newnetwork, "deg.pers")
+  dat$attr$deg.cohab <- get.vertex.attribute(x[[2]]$fit$newnetwork, "deg.cohab")
   
-  dat$attr$deg.pers.c <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers.c")
-  dat$attr$deg.cohab.c <- get.vertex.attribute(x[[2]]$fit$network, "deg.cohab.c")
+  dat$attr$deg.pers.c <- get.vertex.attribute(x[[1]]$fit$newnetwork, "deg.pers.c")
+  dat$attr$deg.cohab.c <- get.vertex.attribute(x[[2]]$fit$newnetwork, "deg.cohab.c")
   
 
   # Race
@@ -98,6 +101,8 @@ initialize_shamp <- function(x, param, init, control, s) {
   num.H <-sum(dat$attr$race == "H")
   num.HI <-sum(dat$attr$race == "HI")
   num.W <-sum(dat$attr$race == "W")
+  
+  dat$attr$race3 <- get.vertex.attribute(nw[[2]], "race3")
   
   num <-num.B + num.BI + num.H + num.HI + num.W
   ids.B <- which(dat$attr$race == "B")
@@ -160,6 +165,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   dat$attr$agecat <- get.vertex.attribute(nw[[1]], "agecat")
   dat$attr$sqrt.age.adj <- get.vertex.attribute(nw[[1]], "sqrt.age.adj")
+  dat$attr$agesq <- dat$attr$age^2
   
   #demographic catagory.
   dat$attr$demog.cat<-rep(NA,length(dat$attr$sex))
