@@ -344,8 +344,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$ir100.syph <- rNA
 
     dat$epi$ir100.sti <- rNA
-    dat$epi$incid.gcct.prep <- rNA
-    dat$epi$incid.syph.prep <- rNA
     dat$epi$ir100.gcct <- rNA
     dat$epi$ir100.gcct.tttraj1 <- rNA
     dat$epi$ir100.gcct.tttraj2 <- rNA
