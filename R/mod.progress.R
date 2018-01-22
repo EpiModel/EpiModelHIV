@@ -128,7 +128,8 @@ hiv_progress_msm <- function(dat, at) {
   stage.time.af.dx[AF.dx] <- stage.time.af.dx[AF.dx] + 1
   stage.time.early.chronic.ndx[early.chronic.ndx] <- stage.time.early.chronic.ndx[early.chronic.ndx] + 1
   stage.time.early.chronic.dx.yrone[early.chronic.dx.yrone] <- stage.time.early.chronic.dx.yrone[early.chronic.dx.yrone] + 1
-  stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] <- stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] + 1
+  stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] <-
+    stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] + 1
   stage.time.early.chronic.art[early.chronic.art] <- stage.time.early.chronic.art[early.chronic.art] + 1
   stage.time.late.chronic.ndx[late.chronic.ndx] <- stage.time.late.chronic.ndx[late.chronic.ndx] + 1
   stage.time.late.chronic.dx[late.chronic.dx] <- stage.time.late.chronic.dx[late.chronic.dx] + 1
@@ -298,7 +299,6 @@ syph_progress_msm <- function(dat, at) {
                   syphilis == 1)
   stage.syph[toPrim] <- 2
   stage.time.syph[toPrim] <- 0
-  syphilis[toPrim] <- 1
   syph.incub.tx[toPrim] <- NA
   syph.sympt[toPrim] <- rbinom(length(toPrim), 1, syph.prim.sympt.prob)
 
@@ -308,7 +308,6 @@ syph_progress_msm <- function(dat, at) {
                   syphilis == 1)
   stage.syph[toSeco] <- 3
   stage.time.syph[toSeco] <- 0
-  syphilis[toSeco] <- 1
   syph.prim.tx[toSeco] <- 0
   syph.sympt[toSeco] <- NA
   syph.sympt[toSeco] <- rbinom(length(toSeco), 1, syph.seco.sympt.prob)
@@ -319,11 +318,9 @@ syph_progress_msm <- function(dat, at) {
                     syphilis == 1)
   stage.syph[toEarLat] <- 4
   stage.time.syph[toEarLat] <- 0
-  syphilis[toEarLat] <- 1
   syph.seco.tx[toEarLat] <- NA
   syph.sympt[toEarLat] <- NA
   syph.sympt[toEarLat] <- rbinom(length(toEarLat), 1, syph.earlat.sympt.prob)
-
 
   # Change stage to Late Latent and assign symptoms
   toLateLat <- which(stage.time.syph == (earlat.syph.int + 1) &
@@ -331,18 +328,16 @@ syph_progress_msm <- function(dat, at) {
                      syphilis == 1)
   stage.syph[toLateLat] <- 5
   stage.time.syph[toLateLat] <- 0
-  syphilis[toLateLat] <- 1
   syph.earlat.tx[toLateLat] <- NA
   syph.sympt[toLateLat] <- NA
   syph.sympt[toLateLat] <- rbinom(length(toLateLat), 1, syph.latelat.sympt.prob)
 
   # Change stage to tertiary for fraction of those in late late latent
   toTert <- which(stage.syph == 5 &
-                    syphilis == 1)
+                  syphilis == 1)
   toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
   stage.syph[toTert] <- 6
   stage.time.syph[toTert] <- 0
-  syphilis[toTert] <- 1
   syph.latelat.tx[toTert] <- NA
   syph.sympt[toTert] <- NA
   syph.sympt[toTert] <- rbinom(length(toTert), 1, syph.tert.sympt.prob)
