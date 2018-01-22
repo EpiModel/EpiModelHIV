@@ -26,10 +26,6 @@
 #'        \code{"true"} for testing for STIs if one is treated for symptomatic
 #'        STI - requires not being tested for that particular site-specific STI
 #'        (e.g. rectal NG) in the past X weeks.
-#' @param sti.hivdx.correlation Method for correlated STI testing, with option
-#'        \code{"true"} for testing for STIs if one is diagnosed with HIV -
-#'        requires not being tested for that particular site-specific STI
-#'        (e.g. rectal NG) in the past X weeks.
 #' @param sti.correlation.time Length of window lookback (weeks) for correlated
 #'        STI testing (e.g. value of 9 weeks means last test must have been > 9
 #'        weeks prior for a particular STI)
@@ -543,7 +539,6 @@ param_msm <- function(nwstats,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
                       sti.stitx.correlation = "false",
-                      sti.hivdx.correlation = "false",
                       sti.correlation.time = 12,
                       test.window.int = 21,
 
