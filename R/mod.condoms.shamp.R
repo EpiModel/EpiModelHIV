@@ -113,12 +113,13 @@ condoms_shamp <- function(dat, at) {
     
       ## Handle ai and vi seperately
 
-    elt.vi <- el[el[, "ptype"] == ptype & el[, "vi"] > 0, ]
-    elt.ai <- el[el[, "ptype"] == ptype & el[, "ai"] > 0, ]
+    elt.vi <- el[el[, "ptype"] == ptype & el[, "vi"] > 0,,drop=FALSE]
+    elt.ai <- el[el[, "ptype"] == ptype & el[, "ai"] > 0,,drop=FALSE]
     
+
   ##VI.
 
-
+    if(is.null(elt.vi)==FALSE){
     if(nrow(elt.vi) > 0){
 
     ## Process ##
@@ -233,9 +234,11 @@ condoms_shamp <- function(dat, at) {
     max.pid.vi<-max(pid)
     
     }
+    }
     
 ### AI
     
+    if(is.null(elt.ai)==FALSE){
     if(nrow(elt.ai) > 0){
     
     ## Process ##
@@ -350,6 +353,7 @@ condoms_shamp <- function(dat, at) {
       uvi <- rep(0,length(uai))
       tmp.al.ai <- cbind(pos, neg, ptype, uai, uvi, pid)
       al.ai <- rbind(al.ai, tmp.al.ai)
+    }
     }
     }
     
