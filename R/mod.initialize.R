@@ -244,10 +244,10 @@ init_status_hiv_msm <- function(dat) {
   probInfCrW <- age[ids.W] * dat$init$init.prev.age.slope.W
   probInfW <- probInfCrW + (nInfW - sum(probInfCrW)) / num.W
 
-  if (any(probInfB <= 0) | any(probInfW <= 0)) {
-    stop("Slope of initial prevalence by age must be sufficiently low to ",
-         "avoid non-positive probabilities.", call. = FALSE)
-  }
+  # if (any(probInfB <= 0) | any(probInfW <= 0)) {
+  #   stop("Slope of initial prevalence by age must be sufficiently low to ",
+  #        "avoid non-positive probabilities.", call. = FALSE)
+  # }
 
   # Infection status
   status <- rep(0, num)
