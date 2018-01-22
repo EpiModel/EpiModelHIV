@@ -712,7 +712,7 @@ param_msm <- function(nwstats,
                       uct.tprob = 0.1787,
 
                       syph.tprob = 0.1464,
-                      syph.incub.rr = 0.25,
+                      syph.incub.rr = 0,
                       syph.earlat.rr = 0.25,
                       syph.late.rr = 0,
 
