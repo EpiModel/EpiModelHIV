@@ -114,6 +114,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   sex.temp<-as.numeric(substr(demog.cat,1,1))
   race.temp<-as.numeric(substr(demog.cat,2,2))
+  ##groups are oreder and the age is a value so we subtract of the difference between the lowest age and 1.
   age.temp<-as.numeric(substr(demog.cat,3,4))-(dat$param$birth.age-1)
   
   for (i in 1:length(demog.cat)){
@@ -132,6 +133,12 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$race[newIds] <- race
   dat$attr$age[newIds] <- age
   dat$attr$sqrt.age[newIds] <- sqrt(dat$attr$age[newIds]) 
+  
+  race3 <- race
+  race3 <- ifelse(race3 == "HI","H",
+                  ifelse(race3 == "BI", "B", race3))
+  
+  dat$attr$race3[newIds] <- race3
   
   ##Race Sex joint catagory.
   dat$attr$race.sex<-ifelse(dat$attr$race=="B" & dat$attr$sex=="M","B.M",
@@ -152,9 +159,9 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   #Set agecat
   
   dat$attr$agecat[newIds]<-ifelse(dat$att$age[newIds] < 26 ,"18-25",
-                          ifelse(dat$attr$age[newIds] > 25 & dat$attr$age[newIds] < 36,"26-35",
-                                 ifelse(dat$attr$age[newIds] > 35 & dat$attr$age[newIds] < 46,"36-45",
-                                        ifelse(dat$attr$age[newIds] > 45,"46-60",dat$attr$agecat[newIds]))))
+                          ifelse(dat$attr$age[newIds] >= 26 & dat$attr$age[newIds] < 36,"26-35",
+                                 ifelse(dat$attr$age[newIds] >= 36 & dat$attr$age[newIds] < 46,"36-45",
+                                        ifelse(dat$attr$age[newIds] >= 46,"46-60",dat$attr$agecat[newIds]))))
                       
   
   newF<-which(sex=="F")
