@@ -224,24 +224,32 @@ sti_test_msm <- function(dat, at) {
   # 2. Indication Trajectory Stoppage ---------------------------------------
 
   # Reduce testing trajectory to NA if no longer indicated for more frequent high-risk testing
-  idsnothighriskelig.hivpos <- which(tt.traj.syph.hivpos == 2 & stitestind2 != 1)
+  idsnothighriskelig.hivpos <- which((tt.traj.syph.hivpos == 2 |
+                                        tt.traj.gc.hivpos == 2 |
+                                        tt.traj.ct.hivpos == 2) & stitestind2 != 1)
   tt.traj.syph.hivpos[idsnothighriskelig.hivpos] <-
     tt.traj.gc.hivpos[idsnothighriskelig.hivpos] <-
     tt.traj.ct.hivpos[idsnothighriskelig.hivpos] <-
     NA
-  idsnothighriskelig.hivneg <- which(tt.traj.syph.hivneg == 2 & stitestind2 != 1)
+  idsnothighriskelig.hivneg <- which((tt.traj.syph.hivneg == 2 |
+                                        tt.traj.gc.hivneg == 2 |
+                                        tt.traj.ct.hivneg == 2) & stitestind2 != 1)
   tt.traj.syph.hivneg[idsnothighriskelig.hivneg] <-
     tt.traj.gc.hivneg[idsnothighriskelig.hivneg] <-
     tt.traj.ct.hivneg[idsnothighriskelig.hivneg] <-
     NA
 
   # Reduce testing trajectory to NA if no longer indicated for lower-risk testing
-  idsnotactiveelig.hivpos <- which(tt.traj.syph.hivpos == 1 & stitestind1 != 1)
+  idsnotactiveelig.hivpos <- which((tt.traj.syph.hivpos == 1 |
+                                      tt.traj.gc.hivpos == 1 |
+                                      tt.traj.ct.hivpos == 1) & stitestind1 != 1)
   tt.traj.syph.hivpos[idsnotactiveelig.hivpos] <-
     tt.traj.gc.hivpos[idsnotactiveelig.hivpos] <-
     tt.traj.ct.hivpos[idsnotactiveelig.hivpos] <-
     NA
-  idsnotactiveelig.hivneg <- which(tt.traj.syph.hivneg == 1 & stitestind1 != 1)
+  idsnotactiveelig.hivneg <- which((tt.traj.syph.hivneg == 1 |
+                                      tt.traj.gc.hivneg == 1 |
+                                      tt.traj.ct.hivneg == 1) & stitestind1 != 1)
   tt.traj.syph.hivneg[idsnotactiveelig.hivneg] <-
     tt.traj.gc.hivneg[idsnotactiveelig.hivneg] <-
     tt.traj.ct.hivneg[idsnotactiveelig.hivneg] <-

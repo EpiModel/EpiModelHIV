@@ -1195,7 +1195,7 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$eptindexStat[ept_idsStart] <- 1
 
   # Correlated testing for other STIs if symptomatic for one -------------------
-  if (dat$param$sti.stitx.correlation == "true") {
+  if (dat$param$sti.stitx.correlation == TRUE) {
 
     # All treated for other STIs, minus those getting treated for STI through EPT
     tst.rgc <- setdiff(c(txsyph_sympt, txUGC_sympt, txRCT_sympt, txUCT_sympt), txRGC_ept)

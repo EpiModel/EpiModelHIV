@@ -7,7 +7,7 @@
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
   testing.pattern = "memoryless", testing.pattern.sti = "interval",
-  sti.stitx.correlation = "false", sti.correlation.time = 12,
+  sti.stitx.correlation = FALSE, sti.correlation.time = 12,
   test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
   tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
   tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
@@ -130,7 +130,7 @@ previous test, or \code{"interval"} deterministic fixed intervals.}
 previous test, or \code{"interval"} deterministic fixed intervals.}
 
 \item{sti.stitx.correlation}{Method for correlated STI testing, with option
-\code{"true"} for testing for STIs if one is treated for symptomatic
+\code{TRUE} for testing for STIs if one is treated for symptomatic
 STI - requires not being tested for that particular site-specific STI
 (e.g. rectal NG) in the past X weeks.}
 

@@ -23,7 +23,7 @@
 #'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
 #' @param sti.stitx.correlation Method for correlated STI testing, with option
-#'        \code{"true"} for testing for STIs if one is treated for symptomatic
+#'        \code{TRUE} for testing for STIs if one is treated for symptomatic
 #'        STI - requires not being tested for that particular site-specific STI
 #'        (e.g. rectal NG) in the past X weeks.
 #' @param sti.correlation.time Length of window lookback (weeks) for correlated
@@ -538,7 +538,7 @@ param_msm <- function(nwstats,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
-                      sti.stitx.correlation = "false",
+                      sti.stitx.correlation = FALSE,
                       sti.correlation.time = 12,
                       test.window.int = 21,
 
