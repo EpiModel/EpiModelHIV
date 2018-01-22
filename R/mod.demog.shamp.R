@@ -13,9 +13,9 @@ demogupdate_shamp <- function(dat, at) {
 
   #AGECAT
   dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
-                           ifelse(dat$attr$age > 25 & dat$attr$age < 36,"26-35",
-                                  ifelse(dat$attr$age > 35 & dat$attr$age < 46,"36-45",
-                                         ifelse(dat$attr$age > 45,"46-60",dat$attr$agecat))))
+                           ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
+                                  ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",
+                                         ifelse(dat$attr$age >= 46,"46-60",dat$attr$agecat))))
   
 
   #Create a new factor for age by sex group by pers.c.
