@@ -197,7 +197,7 @@ fields <- fields[!fields %in% c('immigrant', 'race', 'race3', 'raceimm')]
 
 ids.list<-NULL
 for(i in 1:length(fields)){
-  temp<-is.na(data$altersOT[i])
+  temp<-is.na(data$altersOT[fields[i]]) # JKB: this used to say just [i]
 #  cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)}
