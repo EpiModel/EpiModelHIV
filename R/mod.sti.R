@@ -56,35 +56,11 @@ sti_trans_msm <- function(dat, at) {
   uCT.infTime <- dat$attr$uCT.infTime
   syph.infTime <- dat$attr$syph.infTime
 
-  if (is.null(dat$attr$last.rGC.infTime)) {
-  # Last infection time (if null)
-
-  last.rGC.infTime <- rep(NA, dat$control$nsteps)
-  last.uGC.infTime <- rep(NA, dat$control$nsteps)
-  last.rCT.infTime <- rep(NA, dat$control$nsteps)
-  last.uCT.infTime <- rep(NA, dat$control$nsteps)
-  last.syph.infTime <- rep(NA, dat$control$nsteps)
-
-  last.rGC.infTime[dat$attr$rGC == 1] <- dat$attr$rGC.infTime[dat$attr$rGC == 1]
-  last.uGC.infTime[dat$attr$uGC == 1] <- dat$attr$uGC.infTime[dat$attr$uGC == 1]
-  last.rCT.infTime[dat$attr$rCT == 1] <- dat$attr$rCT.infTime[dat$attr$rCT == 1]
-  last.uCT.infTime[dat$attr$uCT == 1] <- dat$attr$uCT.infTime[dat$attr$uCT == 1]
-  last.syph.infTime[dat$attr$syphilis == 1] <- dat$attr$syph.infTime[dat$attr$syphilis == 1]
-
-  dat$attr$last.rGC.recovTime <- rep(NA, sum(dat$attr$race %in% c("B","W"), na.rm = TRUE))
-  dat$attr$last.uGC.recovTime <- rep(NA, sum(dat$attr$race %in% c("B","W"), na.rm = TRUE))
-  dat$attr$last.rCT.recovTime <- rep(NA, sum(dat$attr$race %in% c("B","W"), na.rm = TRUE))
-  dat$attr$last.uCT.recovTime <- rep(NA, sum(dat$attr$race %in% c("B","W"), na.rm = TRUE))
-  dat$attr$last.syph.recovTime <- rep(NA, sum(dat$attr$race %in% c("B","W"), na.rm = TRUE))
-
-  } else {
-
   last.rGC.infTime <- dat$attr$rGC.infTime
   last.uGC.infTime <- dat$attr$uGC.infTime
   last.rCT.infTime <- dat$attr$rCT.infTime
   last.uCT.infTime <- dat$attr$uCT.infTime
   last.syph.infTime <- dat$attr$syph.infTime
-  }
 
   # GC/CT Infection symptoms (non-varying)
   rGC.sympt <- dat$attr$rGC.sympt
@@ -246,7 +222,6 @@ sti_trans_msm <- function(dat, at) {
   # Invert so p1 is the infected partner, then rbind
   p2Inf_syph[, 1:2] <- p2Inf_syph[, 2:1]
   allActs_syph <- rbind(p1Inf_syph, p2Inf_syph)
-  ncols <- ncol(allActs_syph)
 
   if (nrow(allActs_syph) == 0) {
     trans.syph <- NULL
@@ -273,12 +248,12 @@ sti_trans_msm <- function(dat, at) {
     isearlat <- which(dal.stage.syph == 4)
     dal.syph.tlo[isearlat] <- dal.syph.tlo[isearlat] + log(syph.earlat.rr)
 
+    # Late stage multiplier
+    islate <- which(dal.stage.syph %in% 5:6)
+    dal.syph.tlo[islate] <- dal.syph.tlo[islate] * syph.late.rr
+
     # Retransformation to probability
     dal.syph.tprob <- plogis(dal.syph.tlo)
-
-    # Late stage multiplier (not log odds b/c log 0 = undefined)
-    islate <- which(dal.stage.syph %in% 5:6)
-    dal.syph.tprob[islate] <- dal.syph.tprob[islate] * syph.late.rr
 
     # Check for valid probabilities
     stopifnot(dal.syph.tprob >= 0, dal.syph.tprob <= 1)
@@ -286,7 +261,6 @@ sti_trans_msm <- function(dat, at) {
     ## Bernoulli Transmission Events
     trans.syph <- rbinom(length(dal.syph.tprob), 1, dal.syph.tprob)
   }
-
 
   # Update attributes for newly infected
   idsInf_syph <- NULL
