@@ -17,7 +17,7 @@
 #'
 #' @return
 #' This function returns the \code{dat} object with the updated act
-#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids
+#' list (\code{al}). Each element of \code{al} is a data frame with the ids
 #' of the  pair repeated the number of times they have AI.
 #'
 #' @keywords module msm
@@ -166,6 +166,9 @@ acts_msm <- function(dat, at) {
 
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
+
+  # Update time of last sex
+  dat$attr$time.last.sexunique(c(dat$temp$el[, "p1"], dat$temp$el[, "p2"])) <- at
 
   return(dat)
 }

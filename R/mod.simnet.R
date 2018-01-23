@@ -99,7 +99,7 @@ simnet_msm <- function(dat, at) {
   }
 
   # Set last sexually active date - doesn't need to be uid-based
-  dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
+  # dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
 
   # Calculate discordant/concordant proportion
   if (is.null(dat$epi$prop.edges.negneg)) {

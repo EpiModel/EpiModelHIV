@@ -14,7 +14,7 @@ individual-level attributes, and summary statistics.}
 }
 \value{
 This function returns the \code{dat} object with the updated act
-list (\code{dal}). Each element of \code{dal} is a data frame with the ids
+list (\code{al}). Each element of \code{al} is a data frame with the ids
 of the  pair repeated the number of times they have AI.
 }
 \description{
