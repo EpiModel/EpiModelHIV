@@ -98,7 +98,7 @@ for (i in 1:length(fields)){
   if(length(ids.list>0)){
     warning("Egos and associated alters deleted: missing required field",call. = FALSE)
  #   print(length(ids.list))
-    cat('\nEgos deleted: ', length(ids.list))
+    cat('\nEgos deleted: ', length(unique(ids.list)))
     }
 
   data$egos<-data$egos[data$egos$ego %in% ids.list == FALSE,]
@@ -113,7 +113,7 @@ fields<-names(data$altersCohab)
 ids.list<-NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersCohab[fields[i]]) # JKB: this used to say just [i]
-#cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
+  # cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)
   }
@@ -122,7 +122,7 @@ ids.list<-unique(ids.list)
 if(length(ids.list>0)){
   warning("Cohab alters deleted: missing values",call. = FALSE)
 #  print(length(ids.list))
-  cat('\nCohab alters deleted: ', length(ids.list))
+  cat('\nCohab alters deleted: ', length(unique(ids.list)))
   }
   data$altersCohab<-data$altersCohab[-ids.list,]
 
@@ -130,18 +130,19 @@ if(length(ids.list>0)){
 
 fields<-names(data$altersPers)
 # JKB 12/19: removing "immigrant" from required list
-fields <- fields[!fields %in% 'immigrant']
+fields <- fields[!fields %in% c('raceimm', 'immigrant')]
 
 ids.list <- NULL
 for(i in 1:length(fields)){
   temp<-is.na(data$altersPers[fields[i]]) # JKB: this used to say just [i]
+  # cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)}
 
 ids.list<-unique(ids.list)
 if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = FALSE)
 #   print(length(ids.list))
-   cat('\nPers alters deleted: ', length(ids.list))
+   cat('\nPers alters deleted: ', length(unique(ids.list)))
    }
     data$altersPers<-data$altersPers[-ids.list,]
 
@@ -153,29 +154,19 @@ if(length(ids.list>0)){warning("Casual alters deleted: missing values",call. = F
 ##If using immigration set Black and Hispanic immigrants to BI and HI.
     
     #####Get the counts of immigrant by sex.
-          # This code doesn't make the edited race variable missing if immigration is missing,
-          # but we'll ignore that because we're going to ignore alter immigration except for
-          # Cohabs, and there we will impute
+
+    # JKB 1/17/18: the "raceimm" variable is defined in all.egodata and all.impute.egodata,
+    # more precisely than the code that was here, which masked some true NA values. 
+    # raceimm is constructed using egonet::define_raceimm(). Just using "raceimm" would
+    # be preferable, but transforming "race" to match "raceimm" may have dependencies that
+    # I cannot anticipate now, so I am leaving it temporarily.
     
     if(immigration==TRUE){
       
-      data$egos$race<-ifelse(data$egos$race=="B" & data$egos$immigrant=="Yes","BI",
-                             ifelse(data$egos$race=="H" & data$egos$immigrant=="Yes","HI",
-                                    data$egos$race))
-      
+      data$egos$race <- data$egos$raceimm
+      data$altersCohab$race <- data$altersCohab$raceimm 
+      data$altersPers$race <- data$altersPers$raceimm
 
-      # Now construct 5-category race that includes immigration info
-      data$altersCohab$race<-ifelse(data$altersCohab$race=="B" & data$altersCohab$immigrant=="Yes","BI",
-                                    ifelse(data$altersCohab$race=="H" & data$altersCohab$immigrant=="Yes","HI",
-                                           data$altersCohab$race))
-      
-      data$altersPers$race<-ifelse(data$altersPers$race=="B" & data$altersPers$immigrant=="Yes","BI",
-                                   ifelse(data$altersPers$race=="H" & data$altersPers$immigrant=="Yes","HI",
-                                          data$altersPers$race))
-      
-      data$altersOT$race<-ifelse(data$altersOT$race=="B" & data$altersOT$immigrant=="Yes","BI",
-                                 ifelse(data$altersOT$race=="H" & data$altersOT$immigrant=="Yes","HI",
-                                        data$altersOT$race))
     }
     
     
@@ -202,11 +193,12 @@ for (i in 1:length(mis.r)){
 
 fields<-names(data$altersOT)
 # JKB 12/19: removing "immigrant", "race" and "race3" from required list
-fields <- fields[!fields %in% c('immigrant', 'race', 'race3')]
+fields <- fields[!fields %in% c('immigrant', 'race', 'race3', 'raceimm')]
 
 ids.list<-NULL
 for(i in 1:length(fields)){
-  temp<-is.na(data$altersOT[i])
+  temp<-is.na(data$altersOT[fields[i]]) # JKB: this used to say just [i]
+#  cat('\nField is', fields[i], ' and NA sum is ', sum(temp))
   ids<-which(temp==TRUE)
   ids.list<-c(ids.list,ids)}
 
@@ -215,7 +207,7 @@ data$altersOT<-data$altersOT[-ids.list,]
 if(length(ids.list>0)){
   warning("OT alters deleted: missing values",call. = FALSE)
 #  print(length(ids.list))
-  cat('\nOT alters deleted: ', length(ids.list), '\n')
+  cat('\nOT alters deleted: ', length(unique(ids.list)), '\n')
   }
 
 
