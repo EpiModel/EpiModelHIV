@@ -168,7 +168,7 @@ acts_msm <- function(dat, at) {
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
   # Update time of last sex
-  dat$attr$time.last.sexunique(c(dat$temp$el[, "p1"], dat$temp$el[, "p2"])) <- at
+  dat$attr$time.last.sex[unique(c(dat$temp$el[, "p1"], dat$temp$el[, "p2"]))] <- at
 
   return(dat)
 }
