@@ -187,22 +187,21 @@ sti_test_msm <- function(dat, at) {
   tsinceltst.gc <- pmin(tsinceltst.rgc, tsinceltst.ugc)
   tsinceltst.ct <- pmin(tsinceltst.rct, tsinceltst.uct)
 
-
   prepStat <- dat$attr$prepStat
   stitestind1 <- dat$attr$stitest.ind.active
   stitestind2 <- dat$attr$stitest.ind.recentpartners
 
   # Parameters
-  stianntest.gc.hivneg.coverage <- dat$param$stianntest.gc.hivneg.coverage
+  # stianntest.gc.hivneg.coverage <- dat$param$stianntest.gc.hivneg.coverage
   stianntest.ct.hivneg.coverage <- dat$param$stianntest.ct.hivneg.coverage
   stianntest.syph.hivneg.coverage <- dat$param$stianntest.syph.hivneg.coverage
-  stihighrisktest.gc.hivneg.coverage <- dat$param$stihighrisktest.gc.hivneg.coverage
+  # stihighrisktest.gc.hivneg.coverage <- dat$param$stihighrisktest.gc.hivneg.coverage
   stihighrisktest.ct.hivneg.coverage <- dat$param$stihighrisktest.ct.hivneg.coverage
   stihighrisktest.syph.hivneg.coverage <- dat$param$stihighrisktest.syph.hivneg.coverage
-  stianntest.gc.hivpos.coverage <- dat$param$stianntest.gc.hivpos.coverage
+  # stianntest.gc.hivpos.coverage <- dat$param$stianntest.gc.hivpos.coverage
   stianntest.ct.hivpos.coverage <- dat$param$stianntest.ct.hivpos.coverage
   stianntest.syph.hivpos.coverage <- dat$param$stianntest.syph.hivpos.coverage
-  stihighrisktest.gc.hivpos.coverage <- dat$param$stihighrisktest.gc.hivpos.coverage
+  # stihighrisktest.gc.hivpos.coverage <- dat$param$stihighrisktest.gc.hivpos.coverage
   stihighrisktest.ct.hivpos.coverage <- dat$param$stihighrisktest.ct.hivpos.coverage
   stihighrisktest.syph.hivpos.coverage <- dat$param$stihighrisktest.syph.hivpos.coverage
 
@@ -338,11 +337,11 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.syph.annual.interval <- which(tt.traj.syph.hivneg == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                        tsinceltst.syph >= (stitest.active.int) &
+                                        (tsinceltst.syph >= stitest.active.int) &
                                         prepStat == 0)
     tst.syph.highrisk.interval <- which(tt.traj.syph.hivneg == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                          tsinceltst.syph >= (sti.highrisktest.int) &
+                                          (tsinceltst.syph >= sti.highrisktest.int) &
                                           prepStat == 0)
     tst.syph.nprep.hivneg <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
@@ -351,11 +350,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.gc.annual.interval <- which(tt.traj.gc.hivneg == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                    (tsinceltst.gc | tsinceltst.ct) >= (stitest.active.int) &
+                                      (tsinceltst.gc >= stitest.active.int) |
+                                      (tsinceltst.ct >= stitest.active.int) &
                                       prepStat == 0)
     tst.gc.highrisk.interval <- which(tt.traj.gc.hivneg == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                        (tsinceltst.gc | tsinceltst.ct) >= (sti.highrisktest.int) &
+                                        (tsinceltst.gc >= sti.highrisktest.int) |
+                                        (tsinceltst.ct >= sti.highrisktest.int) &
                                         prepStat == 0)
     tst.gc.nprep.hivneg <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
@@ -364,11 +365,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.ct.annual.interval <- which(tt.traj.ct.hivneg == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                      (tsinceltst.gc | tsinceltst.ct) >= (stitest.active.int) &
+                                      (tsinceltst.gc >= stitest.active.int) |
+                                      (tsinceltst.ct >= stitest.active.int) &
                                       prepStat == 0)
     tst.ct.highrisk.interval <- which(tt.traj.ct.hivneg == 2 &
                                         (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                        (tsinceltst.gc | tsinceltst.ct) >= (sti.highrisktest.int) &
+                                        (tsinceltst.gc >= sti.highrisktest.int) |
+                                        (tsinceltst.ct >= sti.highrisktest.int) &
                                         prepStat == 0)
     tst.ct.nprep.hivneg <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
@@ -511,11 +514,11 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.syph.annual.interval <- which((tt.traj.syph.hivpos == 1 &
                                         (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                        tsinceltst.syph >= (stitest.active.int) &
+                                         (tsinceltst.syph >= stitest.active.int) &
                                         prepStat == 0))
     tst.syph.highrisk.interval <- which((tt.traj.syph.hivpos == 2 &
                                           (diag.status.syph == 0 | is.na(diag.status.syph)) &
-                                          tsinceltst.syph >= (sti.highrisktest.int) &
+                                          (tsinceltst.syph >= sti.highrisktest.int) &
                                           prepStat == 0))
     tst.syph.nprep.hivpos <- c(tst.syph.annual.interval, tst.syph.highrisk.interval)
   }
@@ -524,11 +527,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.gc.annual.interval <- which((tt.traj.gc.hivpos == 1 &
                                       (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                       (tsinceltst.gc | tsinceltst.ct) >= (stitest.active.int) &
+                                       (tsinceltst.gc >= stitest.active.int) |
+                                       (tsinceltst.ct >= stitest.active.int) &
                                       prepStat == 0))
     tst.gc.highrisk.interval <- which((tt.traj.gc.hivpos == 2 &
                                         (diag.status.gc == 0 | is.na(diag.status.gc)) &
-                                         (tsinceltst.gc | tsinceltst.ct) >= (sti.highrisktest.int) &
+                                         (tsinceltst.gc >= sti.highrisktest.int) |
+                                         (tsinceltst.ct >= sti.highrisktest.int) &
                                         prepStat == 0))
     tst.gc.nprep.hivpos <- c(tst.gc.annual.interval, tst.gc.highrisk.interval)
   }
@@ -537,11 +542,13 @@ sti_test_msm <- function(dat, at) {
   if (testing.pattern.sti == "interval" ) {
     tst.ct.annual.interval <- which((tt.traj.ct.hivpos == 1 &
                                       (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                       (tsinceltst.gc | tsinceltst.ct) >= (stitest.active.int) &
+                                       (tsinceltst.gc >= stitest.active.int) |
+                                       (tsinceltst.ct >= stitest.active.int) &
                                       prepStat == 0))
     tst.ct.highrisk.interval <- which((tt.traj.ct.hivpos == 2 &
                                          (diag.status.ct == 0 | is.na(diag.status.ct)) &
-                                         (tsinceltst.gc | tsinceltst.ct) >= (stitest.active.int) &
+                                         (tsinceltst.gc >= sti.highrisktest.int) |
+                                         (tsinceltst.ct >= sti.highrisktest.int) &
                                          prepStat == 0))
     tst.ct.nprep.hivpos <- c(tst.ct.annual.interval, tst.ct.highrisk.interval)
   }
