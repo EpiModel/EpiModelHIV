@@ -603,7 +603,7 @@ sti_test_msm <- function(dat, at) {
 
   ## Output -----------------------------------------------------------------
 
-  # Number of people on each testing trajectory
+  # Number of people on each testing trajectory by serostatus
   dat$epi$tt.traj.syph1.hivneg[at] <- length(which(tt.traj.syph.hivneg == 1))
   dat$epi$tt.traj.gc1.hivneg[at] <- length(which(tt.traj.gc.hivneg == 1))
   dat$epi$tt.traj.ct1.hivneg[at] <- length(which(tt.traj.ct.hivneg == 1))
@@ -617,6 +617,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$tt.traj.gc2.hivpos[at] <- length(which(tt.traj.gc.hivpos == 2))
   dat$epi$tt.traj.ct2.hivpos[at] <- length(which(tt.traj.ct.hivpos == 2))
 
+  # Number of people on each testing trajectory
   dat$epi$tt.traj.gc1[at] <- length(which(tt.traj.gc.hivneg == 1 | tt.traj.gc.hivpos == 1))
   dat$epi$tt.traj.ct1[at] <- length(which(tt.traj.ct.hivneg == 1 | tt.traj.ct.hivpos == 1))
   dat$epi$tt.traj.syph1[at] <- length(which(tt.traj.syph.hivneg == 1 | tt.traj.syph.hivpos == 1))
@@ -631,7 +632,8 @@ sti_test_msm <- function(dat, at) {
                                              tt.traj.ct.hivneg == 2 | tt.traj.ct.hivpos == 2 |
                                              tt.traj.syph.hivneg == 2 | tt.traj.syph.hivpos == 2))
 
-
+  # Number of screening tests and number of positive results on screening tests
+  # GC overall
   dat$epi$rGCasympttests[at] <- length(tst.rgc.hivpos) +
     length(tst.rgc.hivneg)
   dat$epi$uGCasympttests[at] <- length(tst.ugc.hivpos) +
@@ -639,6 +641,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$GCasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
     length(tst.rgc.hivneg) + length(tst.ugc.hivneg)
 
+  # GC positive tests
   dat$epi$rGCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) +
     length(tst.rgc.pos.hivneg)
   dat$epi$uGCasympttests.pos[at] <- length(tst.ugc.pos.hivpos) +
@@ -646,6 +649,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$GCasympttests.pos[at] <- length(tst.rgc.pos.hivpos) + length(tst.ugc.pos.hivpos) +
     length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg)
 
+  # CT overall
   dat$epi$rCTasympttests[at] <- length(tst.rct.hivpos) +
     length(tst.rct.hivneg)
   dat$epi$uCTasympttests[at] <- length(tst.uct.hivpos) +
@@ -653,6 +657,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$CTasympttests[at] <- length(tst.rct.hivpos) + length(tst.uct.hivpos) +
     length(tst.rct.hivneg) + length(tst.uct.hivneg)
 
+  # CT positive tests
   dat$epi$rCTasympttests.pos[at] <- length(tst.rct.pos.hivpos) +
     length(tst.rct.pos.hivneg)
   dat$epi$uCTasympttests.pos[at] <- length(tst.uct.pos.hivpos) +
@@ -661,6 +666,7 @@ sti_test_msm <- function(dat, at) {
     length(tst.uct.pos.hivpos) + length(tst.rct.pos.hivneg) +
     length(tst.uct.pos.hivneg)
 
+  # Syph (overall, positive, early-stage positive, late-stage positive)
   dat$epi$syphasympttests[at] <- length(tst.syph.nprep.hivpos) +
     length(tst.syph.nprep.hivneg)
   dat$epi$syphasympttests.pos[at] <- length(tst.syph.pos.hivpos) +
@@ -670,6 +676,7 @@ sti_test_msm <- function(dat, at) {
   dat$epi$syphlateasympttests.pos[at] <- length(tst.latesyph.pos.hivpos) +
     length(tst.latesyph.pos.hivneg)
 
+  # Overall STI tests and positive STI tests
   dat$epi$stiasympttests[at] <- length(tst.rgc.hivpos) + length(tst.ugc.hivpos) +
     length(tst.rct.hivpos) + length(tst.uct.hivpos) + length(tst.syph.nprep.hivpos) +
     length(tst.rgc.hivneg) + length(tst.ugc.hivneg) +
@@ -679,8 +686,8 @@ sti_test_msm <- function(dat, at) {
     length(tst.rgc.pos.hivneg) + length(tst.ugc.pos.hivneg) +
     length(tst.rct.pos.hivneg) + length(tst.uct.pos.hivneg) + length(tst.syph.pos.hivneg)
 
-
   # Risk group-specific test counters
+  # GC lower-risk
   dat$epi$rGCasympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[tst.rgc.hivpos] == 1)) +
                                         length(which(tt.traj.gc.hivneg[tst.rgc.hivneg] == 1))
   dat$epi$uGCasympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[tst.ugc.hivpos] == 1)) +
@@ -690,6 +697,7 @@ sti_test_msm <- function(dat, at) {
                                         length(which(tt.traj.gc.hivpos[tst.ugc.hivpos] == 1)) +
                                         length(which(tt.traj.gc.hivneg[tst.ugc.hivneg] == 1))
 
+  # GC higher-risk
   dat$epi$rGCasympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[tst.rgc.hivpos] == 2)) +
                                         length(which(tt.traj.gc.hivneg[tst.rgc.hivneg] == 2))
   dat$epi$uGCasympttests.tttraj2[at] <- length(which(tt.traj.gc.hivpos[tst.ugc.hivpos] == 2)) +
@@ -699,6 +707,7 @@ sti_test_msm <- function(dat, at) {
                                         length(which(tt.traj.gc.hivpos[tst.ugc.hivpos] == 2)) +
                                         length(which(tt.traj.gc.hivneg[tst.ugc.hivneg] == 2))
 
+  # CT lower-risk
   dat$epi$rCTasympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[tst.rct.hivpos] == 1)) +
                                         length(which(tt.traj.ct.hivneg[tst.rct.hivneg] == 1))
   dat$epi$uCTasympttests.tttraj1[at] <- length(which(tt.traj.ct.hivpos[tst.uct.hivpos] == 1)) +
@@ -708,6 +717,7 @@ sti_test_msm <- function(dat, at) {
                                         length(which(tt.traj.ct.hivpos[tst.uct.hivpos] == 1)) +
                                         length(which(tt.traj.ct.hivneg[tst.uct.hivneg] == 1))
 
+  # CT higher-risk
   dat$epi$rCTasympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[tst.rct.hivpos] == 2)) +
                                         length(which(tt.traj.ct.hivneg[tst.rct.hivneg] == 2))
   dat$epi$uCTasympttests.tttraj2[at] <- length(which(tt.traj.ct.hivpos[tst.uct.hivpos] == 2)) +
@@ -717,12 +727,14 @@ sti_test_msm <- function(dat, at) {
                                         length(which(tt.traj.ct.hivpos[tst.uct.hivpos] == 2)) +
                                         length(which(tt.traj.ct.hivneg[tst.uct.hivneg] == 2))
 
+  # Syph
   dat$epi$syphasympttests.tttraj1[at] <- length(which(tt.traj.syph.hivpos[tst.syph.nprep.hivpos] == 1)) +
                                           length(which(tt.traj.syph.hivneg[tst.syph.nprep.hivneg] == 1))
 
   dat$epi$syphasympttests.tttraj2[at] <- length(which(tt.traj.syph.hivpos[tst.syph.nprep.hivpos] == 2)) +
                                           length(which(tt.traj.syph.hivneg[tst.syph.nprep.hivneg] == 2))
 
+  # STI
   dat$epi$stiasympttests.tttraj1[at] <- length(which(tt.traj.gc.hivpos[tst.rgc.hivpos] == 1)) +
                                         length(which(tt.traj.gc.hivneg[tst.rgc.hivneg] == 1)) +
                                         length(which(tt.traj.gc.hivpos[tst.ugc.hivpos] == 1)) +
@@ -745,7 +757,7 @@ sti_test_msm <- function(dat, at) {
                                         length(which(tt.traj.syph.hivpos[tst.syph.nprep.hivpos] == 2)) +
                                         length(which(tt.traj.syph.hivneg[tst.syph.nprep.hivneg] == 2))
 
-  # Attributes
+  # Update Attributes
   # Stoppage attributes
   dat$attr$stihighrisktestLastElig[idsnothighriskelig.hivneg] <- at
   dat$attr$stianntestLastElig[idsnotactiveelig.hivneg] <- at

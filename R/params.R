@@ -730,12 +730,12 @@ param_msm <- function(nwstats,
 
                       rgc.asympt.int = 35.11851*7,
                       ugc.asympt.int = 35.11851*7,
-                      gc.tx.int = 2*7,
+                      gc.tx.int = 7,
                       gc.ntx.int = NA,
 
                       rct.asympt.int = 44.24538*7,
                       uct.asympt.int = 44.24538*7,
-                      ct.tx.int = 2*7,
+                      ct.tx.int = 7,
                       ct.ntx.int = NA,
 
                       syph.early.tx.int = 7,
@@ -984,7 +984,7 @@ init_msm <- function(nwstats,
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
 #' @param initialize.FUN Module function to use for initialization of the
-#'        epidemicmodel.
+#'        epidemic model.
 #' @param aging.FUN Module function for aging.
 #' @param deaths.FUN Module function for general and disease-realted deaths.
 #' @param births.FUN Module function for births or entries into the population.

@@ -273,7 +273,6 @@ syph_progress_msm <- function(dat, at) {
   syph.seco.tx <- dat$attr$syph.seco.tx
   syph.earlat.tx <- dat$attr$syph.earlat.tx
   syph.latelat.tx <- dat$attr$syph.latelat.tx
-  syph.tert.tx <- dat$attr$syph.tert.tx
 
   # Parameters
   incu.syph.int <- dat$param$incu.syph.int
@@ -348,7 +347,6 @@ syph_progress_msm <- function(dat, at) {
   dat$attr$syph.seco.tx <- syph.seco.tx
   dat$attr$syph.earlat.tx <- syph.earlat.tx
   dat$attr$syph.latelat.tx <- syph.latelat.tx
-  dat$attr$syph.tert.tx <- syph.tert.tx
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$syph.sympt <- syph.sympt

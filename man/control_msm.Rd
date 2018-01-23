@@ -39,7 +39,7 @@ step of a previous simulation to resume the simulation with different
 parameters.}
 
 \item{initialize.FUN}{Module function to use for initialization of the
-epidemicmodel.}
+epidemic model.}
 
 \item{aging.FUN}{Module function for aging.}
 
