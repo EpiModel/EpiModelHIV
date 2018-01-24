@@ -42,6 +42,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$num.asmm <- rNA
     dat$epi$num.msm <- rNA
     dat$epi$num.age18 <- rNA
+    dat$epi$num.deb <- rNA
+    dat$epi$num.asmm.deb <- rNA
+    dat$epi$num.age18.deb <- rNA
     dat$epi$s.num <- rNA
     dat$epi$i.num <- rNA
     dat$epi$i.num.B <- rNA
@@ -56,8 +59,15 @@ prevalence_msm <- function(dat, at) {
     dat$epi$i.prev.asmm <- rNA
     dat$epi$i.prev.age18 <- rNA
     dat$epi$incid <- rNA
+    dat$epi$incid.msm <- rNA
+    dat$epi$incid.asmm <- rNA
 
+    dat$epi$debuted <- rNA
+    dat$epi$debuted.asmm <- rNA
+    
     dat$epi$prepCurr <- rNA
+    dat$epi$prepCurr.msm <- rNA
+    dat$epi$prepCurr.asmm <- rNA
     dat$epi$prepEver <- rNA
     dat$epi$prepCov <- rNA
     dat$epi$prepElig <- rNA
@@ -75,6 +85,9 @@ prevalence_msm <- function(dat, at) {
     dat$epi$incid.cai <- rNA
     dat$epi$incid.uai <- rNA
     dat$epi$incid.cai.perc <- rNA
+    
+    dat$epi$incid.msm <- rNA
+    dat$epi$incid.asmm <- rNA
   }
 
 
@@ -84,6 +97,9 @@ prevalence_msm <- function(dat, at) {
   dat$epi$num.asmm[at] <- sum(active == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.msm[at] <- sum(active == 1 & asmm == 0, na.rm = TRUE)
   dat$epi$num.age18[at] <- sum(active == 1 & age == 18, na.rm = TRUE)
+  dat$epi$num.deb[at] <- sum(active == 1 & debuted == 1, na.rm = TRUE)
+  dat$epi$debuted[at] <- sum(active == 1 & debuted == 1, na.rm = TRUE)
+  dat$epi$debuted.asmm[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.asmm.deb[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.age18.deb[at] <- sum(active == 1 & debuted ==1 & age == 18, na.rm = TRUE)
   dat$epi$s.num[at] <- sum(active == 1 & status == 0, na.rm = TRUE)
@@ -100,6 +116,8 @@ prevalence_msm <- function(dat, at) {
   dat$epi$i.prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
 
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
+  dat$epi$prepCurr.msm[at] <- sum(active == 1 & prepStat == 1 & asmm == 0, na.rm = TRUE)
+  dat$epi$prepCurr.asmm[at] <- sum(active == 1 & prepStat == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(active == 1 & dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum(active == 1 & (is.na(prepStat) | prepStat == 0) & status == 1, na.rm = TRUE)
