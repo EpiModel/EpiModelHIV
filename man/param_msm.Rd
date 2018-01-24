@@ -7,35 +7,34 @@
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
   testing.pattern = "memoryless", testing.pattern.sti = "interval",
-  sti.stitx.correlation = "false", sti.hivdx.correlation = "false",
-  sti.correlation.time = 12, test.window.int = 21,
-  tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
-  0.331, 0.617), tx.init.B.prob = 0.092, tx.init.W.prob = 0.127,
-  tx.halt.B.prob = 0.0102, tx.halt.W.prob = 0.0071,
-  tx.reinit.B.prob = 0.00066, tx.reinit.W.prob = 0.00291,
-  max.time.off.tx.full.int = 520 * 7, max.time.on.tx.part.int = 52 * 15 * 7,
-  max.time.off.tx.part.int = 520 * 7, vl.acute.rise.int = 45,
-  vl.acute.peak = 6.886, vl.acute.fall.int = 45, vl.set.point = 4.5,
-  vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 * 7, vl.fatal = 7,
-  vl.full.supp = 1.5, vl.part.supp = 3.5, full.supp.down.slope = 0.25,
-  full.supp.up.slope = 0.25, part.supp.down.slope = 0.25,
-  part.supp.up.slope = 0.25, incu.syph.int = 28, prim.syph.int = 63,
-  seco.syph.int = 119, earlat.syph.int = 364 - incu.syph.int - prim.syph.int
-  - seco.syph.int, latelat.syph.int = 9 * 52 * 7, latelatelat.syph.int = 20
-  * 52 * 7, tert.syph.int = 20 * 52 * 7,
-  syph.tert.prog.prob = 0.00010776536, b.B.rate = 0.001/7,
-  b.W.rate = 0.001/7, birth.age = 18, b.method = "fixed",
-  URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 * 1.09, acute.rr = 6,
-  circ.rr = 0.4, condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  sti.stitx.correlation = FALSE, sti.correlation.time = 12,
+  test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
+  tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
+  tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
+  tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
+  tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = 520 * 7,
+  max.time.on.tx.part.int = 52 * 15 * 7, max.time.off.tx.part.int = 520 * 7,
+  vl.acute.rise.int = 45, vl.acute.peak = 6.886, vl.acute.fall.int = 45,
+  vl.set.point = 4.5, vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 *
+  7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
+  full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
+  part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
+  incu.syph.int = 28, prim.syph.int = 63, seco.syph.int = 119,
+  earlat.syph.int = 364 - incu.syph.int - prim.syph.int - seco.syph.int,
+  latelat.syph.int = 9 * 52 * 7, latelatelat.syph.int = 20 * 52 * 7,
+  tert.syph.int = 20 * 52 * 7, syph.tert.prog.prob = 0.00010776536,
+  b.B.rate = 0.001/7, b.W.rate = 0.001/7, birth.age = 18,
+  b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
+  1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
+  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
+  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
@@ -67,8 +66,7 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   stihighrisktest.gc.hivpos.coverage = 0,
   stihighrisktest.ct.hivpos.coverage = 0,
   stihighrisktest.syph.hivpos.coverage = 0, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.cov.method = "curr",
-  stihighrisktest.cov.rate = 1, partnercutoff = 1, ept.start = Inf,
+  stihighrisktest.cov.method = "curr", partnercutoff = 1, ept.start = Inf,
   ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
   ept.cov.rate = 1, ept.provision.partner.main.ong = 0.5,
   ept.provision.partner.pers.ong = 0.4,
@@ -79,15 +77,15 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.4456, ugc.tprob = 0.3341,
   rct.tprob = 0.1985, uct.tprob = 0.1787, syph.tprob = 0.1464,
-  syph.incub.rr = 0.25, syph.earlat.rr = 0.25, syph.late.rr = 0,
+  syph.incub.rr = 0, syph.earlat.rr = 0.25, syph.late.rr = 0,
   rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
   uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
   syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
   syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
   syph.tert.sympt.prob = 1, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 7, gc.ntx.int = NA,
   rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, syph.early.tx.int = 7,
+  ct.tx.int = 7, ct.ntx.int = NA, syph.early.tx.int = 7,
   syph.late.tx.int = 3 * 7, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
   syph.incub.sympt.prob.tx = 0, syph.incub.asympt.prob.tx = 0,
@@ -132,13 +130,8 @@ previous test, or \code{"interval"} deterministic fixed intervals.}
 previous test, or \code{"interval"} deterministic fixed intervals.}
 
 \item{sti.stitx.correlation}{Method for correlated STI testing, with option
-\code{"true"} for testing for STIs if one is treated for symptomatic
+\code{TRUE} for testing for STIs if one is treated for symptomatic
 STI - requires not being tested for that particular site-specific STI
-(e.g. rectal NG) in the past X weeks.}
-
-\item{sti.hivdx.correlation}{Method for correlated STI testing, with option
-\code{"true"} for testing for STIs if one is diagnosed with HIV -
-requires not being tested for that particular site-specific STI
 (e.g. rectal NG) in the past X weeks.}
 
 \item{sti.correlation.time}{Length of window lookback (weeks) for correlated
@@ -559,19 +552,11 @@ on the number of people who have ever been annually tested for STI.
 This is not inclusive of those who are simultaneously indicated for
 more frequent testing.}
 
-\item{stianntest.cov.rate}{The rate at which persons initiate annual STI
-testing conditional on their eligibility, with 1 equal to instant
-start.}
-
 \item{stihighrisktest.cov.method}{The method for calculating STI high-risk
 testing, with options of \code{"curr"} to base the numerator on the
 number of people currently high-risk testing for STI and \code{"ever"}
 to base it on the number of people who have ever been high-risk tested
 for STI.}
-
-\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
-STI testing conditional on their eligibility, with 1 equal to instant
-start.}
 
 \item{partnercutoff}{The cutoff point for STI high-risk indication, above
 which person would be indicated for higher-risk testing schedules.}

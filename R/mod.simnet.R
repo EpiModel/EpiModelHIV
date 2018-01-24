@@ -99,22 +99,49 @@ simnet_msm <- function(dat, at) {
   }
 
   # Set last sexually active date - doesn't need to be uid-based
-  dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
+  # dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
 
   # Calculate discordant/concordant proportion
   if (is.null(dat$epi$prop.edges.negneg)) {
     dat$epi$prop.edges.negneg <- rep(NA, dat$control$nsteps)
     dat$epi$prop.edges.negpos <- rep(NA, dat$control$nsteps)
     dat$epi$prop.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.pospos <- rep(NA, dat$control$nsteps)
   }
 
   alledge <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
   status <- cbind(dat$attr$status[alledge[, 1]], dat$attr$status[alledge[, 2]])
 
+  main <- rbind(dat$el[[1]])
+  cas <- rbind(dat$el[[2]])
+  inst <- rbind(dat$el[[3]])
+
+  main.status <- cbind(dat$attr$status[main[, 1]], dat$attr$status[main[, 2]])
+  cas.status <- cbind(dat$attr$status[cas[, 1]], dat$attr$status[cas[, 2]])
+  inst.status <- cbind(dat$attr$status[inst[, 1]], dat$attr$status[inst[, 2]])
+
   dat$epi$prop.edges.negneg[at] <- length(which(status[, 1] == 0 & status[, 2] == 0)) / nrow(alledge)
   dat$epi$prop.edges.negpos[at] <- length(which((status[, 1] == 1 & status[, 2] == 0) |
                                                   (status[, 1] == 0 & status[, 2] == 1))) / nrow(alledge)
   dat$epi$prop.edges.pospos[at] <- length(which(status[, 1] == 1 & status[, 2] == 1)) / nrow(alledge)
+
+  dat$epi$prop.main.edges.negneg[at] <- length(which(main.status[, 1] == 0 & main.status[, 2] == 0)) / nrow(main)
+  dat$epi$prop.main.edges.negpos[at] <- length(which((main.status[, 1] == 1 & main.status[, 2] == 0) | (main.status[, 1] == 0 & main.status[, 2] == 1))) / nrow(main)
+  dat$epi$prop.main.edges.pospos[at] <- length(which(main.status[, 1] == 1 & main.status[, 2] == 1)) / nrow(main)
+  dat$epi$prop.cas.edges.negneg[at] <- length(which(cas.status[, 1] == 0 & cas.status[, 2] == 0)) / nrow(cas)
+  dat$epi$prop.cas.edges.negpos[at] <- length(which((cas.status[, 1] == 1 & cas.status[, 2] == 0) | (cas.status[, 1] == 0 & cas.status[, 2] == 1)))  / nrow(cas)
+  dat$epi$prop.cas.edges.pospos[at] <- length(which(cas.status[, 1] == 1 & cas.status[, 2] == 1)) / nrow(cas)
+  dat$epi$prop.inst.edges.negneg[at] <- length(which(inst.status[, 1] == 0 & inst.status[, 2] == 0)) / nrow(inst)
+  dat$epi$prop.inst.edges.negpos[at] <- length(which((inst.status[, 1] == 1 & inst.status[, 2] == 0) | (inst.status[, 1] == 0 & inst.status[, 2] == 1))) / nrow(inst)
+  dat$epi$prop.inst.edges.pospos[at] <- length(which(inst.status[, 1] == 1 & inst.status[, 2] == 1)) / nrow(inst)
 
   return(dat)
 }

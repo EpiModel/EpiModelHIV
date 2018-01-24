@@ -23,12 +23,8 @@
 #'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
 #' @param sti.stitx.correlation Method for correlated STI testing, with option
-#'        \code{"true"} for testing for STIs if one is treated for symptomatic
+#'        \code{TRUE} for testing for STIs if one is treated for symptomatic
 #'        STI - requires not being tested for that particular site-specific STI
-#'        (e.g. rectal NG) in the past X weeks.
-#' @param sti.hivdx.correlation Method for correlated STI testing, with option
-#'        \code{"true"} for testing for STIs if one is diagnosed with HIV -
-#'        requires not being tested for that particular site-specific STI
 #'        (e.g. rectal NG) in the past X weeks.
 #' @param sti.correlation.time Length of window lookback (weeks) for correlated
 #'        STI testing (e.g. value of 9 weeks means last test must have been > 9
@@ -309,9 +305,6 @@
 #'        on the number of people who have ever been annually tested for STI.
 #'        This is not inclusive of those who are simultaneously indicated for
 #'        more frequent testing.
-#' @param stianntest.cov.rate The rate at which persons initiate annual STI
-#'        testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param stihighrisktest.gc.hivneg.coverage The proportion of the non-HIV
 #'        diagnosed eligible population who are starting high-risk NG testing
 #'        once they become eligible.
@@ -335,9 +328,6 @@
 #'        number of people currently high-risk testing for STI and \code{"ever"}
 #'        to base it on the number of people who have ever been high-risk tested
 #'        for STI.
-#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
-#'        STI testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param partnercutoff The cutoff point for STI high-risk indication, above
 #'        which person would be indicated for higher-risk testing schedules.
 #'
@@ -548,8 +538,7 @@ param_msm <- function(nwstats,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
-                      sti.stitx.correlation = "false",
-                      sti.hivdx.correlation = "false",
+                      sti.stitx.correlation = FALSE,
                       sti.correlation.time = 12,
                       test.window.int = 21,
 
@@ -692,9 +681,7 @@ param_msm <- function(nwstats,
                       stihighrisktest.ct.hivpos.coverage = 0.0,
                       stihighrisktest.syph.hivpos.coverage = 0.0,
                       stianntest.cov.method = "curr",
-                      stianntest.cov.rate = 1,
                       stihighrisktest.cov.method = "curr",
-                      stihighrisktest.cov.rate = 1,
                       partnercutoff = 1,
 
                       # EPT intervention
@@ -725,7 +712,7 @@ param_msm <- function(nwstats,
                       uct.tprob = 0.1787,
 
                       syph.tprob = 0.1464,
-                      syph.incub.rr = 0.25,
+                      syph.incub.rr = 0,
                       syph.earlat.rr = 0.25,
                       syph.late.rr = 0,
 
@@ -743,12 +730,12 @@ param_msm <- function(nwstats,
 
                       rgc.asympt.int = 35.11851*7,
                       ugc.asympt.int = 35.11851*7,
-                      gc.tx.int = 2*7,
+                      gc.tx.int = 7,
                       gc.ntx.int = NA,
 
                       rct.asympt.int = 44.24538*7,
                       uct.asympt.int = 44.24538*7,
-                      ct.tx.int = 2*7,
+                      ct.tx.int = 7,
                       ct.ntx.int = NA,
 
                       syph.early.tx.int = 7,
@@ -997,7 +984,7 @@ init_msm <- function(nwstats,
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
 #' @param initialize.FUN Module function to use for initialization of the
-#'        epidemicmodel.
+#'        epidemic model.
 #' @param aging.FUN Module function for aging.
 #' @param deaths.FUN Module function for general and disease-realted deaths.
 #' @param births.FUN Module function for births or entries into the population.

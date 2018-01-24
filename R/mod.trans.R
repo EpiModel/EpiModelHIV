@@ -84,7 +84,10 @@ hiv_trans_msm <- function(dat, at) {
 
   # Data
   al <- dat$temp$al
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
+  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), , drop = FALSE]
+  if (nrow(dal) == 0) {
+    return(dat)
+  }
   dal <- dal[sample(1:nrow(dal)), ]
   ncols <- dim(dal)[2]
 
@@ -108,10 +111,6 @@ hiv_trans_msm <- function(dat, at) {
   dat$epi$prop.acts.negneg[at] <- nrow(al.negneg) / (nrow(al))
   dat$epi$prop.acts.negpos[at]  <- nrow(al.negpos) / (nrow(al))
   dat$epi$prop.acts.pospos[at] <- nrow(al.pospos) / (nrow(al))
-
-  if (nrow(dal) == 0) {
-    return(dat)
-  }
 
   ## Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]

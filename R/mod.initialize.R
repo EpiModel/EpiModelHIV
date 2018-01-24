@@ -244,10 +244,10 @@ init_status_hiv_msm <- function(dat) {
   probInfCrW <- age[ids.W] * dat$init$init.prev.age.slope.W
   probInfW <- probInfCrW + (nInfW - sum(probInfCrW)) / num.W
 
-  if (any(probInfB <= 0) | any(probInfW <= 0)) {
-    stop("Slope of initial prevalence by age must be sufficiently low to ",
-         "avoid non-positive probabilities.", call. = FALSE)
-  }
+  # if (any(probInfB <= 0) | any(probInfW <= 0)) {
+  #   stop("Slope of initial prevalence by age must be sufficiently low to ",
+  #        "avoid non-positive probabilities.", call. = FALSE)
+  # }
 
   # Infection status
   status <- rep(0, num)
@@ -807,7 +807,9 @@ init_status_sti_msm <- function(dat) {
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
     selected <- which(dat$attr$race %in% c("W", "B"))
-    tslaststitest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastcttest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
 
     ## Syphilis ----------------------------------------------------------------
 
@@ -947,7 +949,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
     dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
     dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.syph <- tslaststitest
+    dat$attr$time.since.last.test.syph <- tslastsyphtest
 
     # Gonorrhea
     dat$attr$rGC <- rGC
@@ -978,8 +980,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
     dat$attr$tt.traj.gc.hivpos <- rep(NA, num)
     dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.rgc <- tslaststitest
-    dat$attr$time.since.last.test.ugc <- tslaststitest
+    dat$attr$time.since.last.test.rgc <- tslastgctest
+    dat$attr$time.since.last.test.ugc <- tslastgctest
 
     # Chlamydia
     dat$attr$rCT <- rCT
@@ -1010,8 +1012,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
     dat$attr$tt.traj.ct.hivpos <- rep(NA, num)
     dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.rct <- tslaststitest
-    dat$attr$time.since.last.test.uct <- tslaststitest
+    dat$attr$time.since.last.test.rct <- tslastcttest
+    dat$attr$time.since.last.test.uct <- tslastcttest
 
     # EPT variables
     dat$attr$eptindexElig <- rep(NA, num)

@@ -15,11 +15,11 @@ param <- param_msm(nwstats = st,
                    ai.scale.pospos = 1.04,
 
                    # STI acquisition
-                   rgc.tprob = 0.4773,
-                   ugc.tprob = 0.3819,
-                   rct.tprob = 0.2564,
-                   uct.tprob = 0.2091,
-                   syph.tprob = 0.2526,
+                   rgc.tprob = 0.65,
+                   ugc.tprob = 0.55,
+                   rct.tprob = 0.29,
+                   uct.tprob = 0.23,
+                   syph.tprob = 0.06,
 
                    # HIV acquisition
                    hiv.rgc.rr = 1.75,
@@ -29,7 +29,7 @@ param <- param_msm(nwstats = st,
                    hiv.syph.rr = 1.63,
 
                    syph.incub.sympt.prob = 0,
-                   syph.prim.sympt.prob = 0.50,
+                   syph.prim.sympt.prob = 0.70,
                    syph.seco.sympt.prob = 0.85,
                    syph.earlat.sympt.prob = 0,
                    syph.latelat.sympt.prob = 0,
@@ -63,7 +63,15 @@ param <- param_msm(nwstats = st,
                    sti.highrisktest.int = 182,
                    ept.risk.int = 60)
 
-init <- init_msm(nwstats = st)
+init <- init_msm(nwstats = st,
+                 prev.B = 0.10,
+                 prev.W = 0.10,
+                 prev.ugc = 0.010,
+                 prev.rgc = 0.010,
+                 prev.uct = 0.010,
+                 prev.rct = 0.010,
+                 prev.syph.B = 0.010,
+                 prev.syph.W = 0.010)
 
 control <- control_msm(nsteps = 2600)
 
@@ -72,26 +80,31 @@ control <- control_msm(nsteps = 2600)
 
 sim <- netsim(est, param, init, control)
 
-#debug(initialize_msm)
-#debug(reinit_msm)
-#debug(prevalence_msm)
+# debug(initialize_msm)
+# debug(reinit_msm)
+# debug(prevalence_msm)
 
 at <- 1
-#at <- 5201
+# at <- 5201
 
 dat <- initialize_msm(est, param, init, control, s = 1)
-#dat <- reinit_msm(sim, param, init, control, s = 1)
+# dat <- reinit_msm(sim, param, init, control, s = 1)
 
-#debug(sti_trans_msm)
-#debug(sti_recov_msm)
-#debug(sti_tx_msm)
-#debug(hiv_test_msm)
-#debug(sti_ept_msm)
-debug(acts_msm)
-debug(hiv_trans_msm)
+# debug(sti_trans_msm)
+# debug(riskhist_stitest_msm)
+debug(sti_test_msm)
+# debug(part_msm)
+# debug(sti_recov_msm)
+# debug(sti_tx_msm)
+# debug(hiv_test_msm)
+# debug(sti_ept_msm)
+# debug(acts_msm)
+# debug(hiv_trans_msm)
+# debug(condoms_msm)
+# debug(simnet_msm)
 
 at <- at + 1
-for (at in at:nsteps) {
+for (at in at:dat$control$nsteps) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)
   dat <- births_msm(dat, at)
