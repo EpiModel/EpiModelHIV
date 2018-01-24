@@ -22,6 +22,13 @@
 #' @param testing.pattern.sti Method for STI testing, with options
 #'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
+#' @param sti.stitx.correlation Method for correlated STI testing, with option
+#'        \code{TRUE} for testing for STIs if one is treated for symptomatic
+#'        STI - requires not being tested for that particular site-specific STI
+#'        (e.g. rectal NG) in the past X weeks.
+#' @param sti.correlation.time Length of window lookback (weeks) for correlated
+#'        STI testing (e.g. value of 9 weeks means last test must have been > 9
+#'        weeks prior for a particular STI)
 #' @param test.window.int Length of the HIV test window period in days.
 #' @param tt.traj.B.prob Proportion of black MSM who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
@@ -162,7 +169,9 @@
 #'        partnerships (acts per day).
 #' @param base.ai.pers.WW.rate Expected coital frequency in white-white casual
 #'        partnerships (acts per day).
-#' @param ai.scale General relative scaler for all act rates for model
+#' @param ai.scale.pospos General relative scaler for HIV-positive-concordant
+#'        act rates for model calibration.
+#' @param ai.scale General relative scaler for all other act rates for model
 #'        calibration.
 #' @param cond.main.BB.prob Probability of condom use in a black-black main
 #'        partnership.
@@ -257,8 +266,37 @@
 #' @param stitest.elig.model Modeling approach for determining who is eligible
 #'        for high-risk STI testing. Current options are limited to:
 #'        \code{"all"}.
-#' @param stianntest.coverage The proportion of the eligible population who are
-#'        starting annual STI testing once they become eligible. This is not
+#' @param stianntest.gc.hivneg.coverage The proportion of the eligible population
+#'        (HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
+#'        diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual NG testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.ct.hivneg.coverage The proportion of the eligible
+#'        population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+#'        and diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual CT testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.syph.hivneg.coverage The proportion of the eligible
+#'        population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+#'        and diagnosed and tt.traj not equal to a treater type) and who are
+#'        starting annual syphilis testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.gc.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual NG testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.ct.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual CT testing once they become eligible. This is not
+#'        inclusive of those who are simultaneously indicated for more frequent
+#'        testing.
+#' @param stianntest.syph.hivpos.coverage The proportion of the eligible population
+#'        (HIV-positive and diagnosed and tt.traj equal to a treater type) who
+#'        are starting annual syphilis testing once they become eligible. This is not
 #'        inclusive of those who are simultaneously indicated for more frequent
 #'        testing.
 #' @param stianntest.cov.method The method for calculating STI annual testing,
@@ -267,19 +305,29 @@
 #'        on the number of people who have ever been annually tested for STI.
 #'        This is not inclusive of those who are simultaneously indicated for
 #'        more frequent testing.
-#' @param stianntest.cov.rate The rate at which persons initiate annual STI
-#'        testing conditional on their eligibility, with 1 equal to instant
-#'        start.
-#' @param stihighrisktest.coverage The proportion of the eligible population
-#'        who are starting high-risk STI testing once they become eligible.
+#' @param stihighrisktest.gc.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk NG testing
+#'        once they become eligible.
+#' @param stihighrisktest.ct.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk CT testing
+#'        once they become eligible.
+#' @param stihighrisktest.syph.hivneg.coverage The proportion of the non-HIV
+#'        diagnosed eligible population who are starting high-risk syphilis testing
+#'        once they become eligible.
+#' @param stihighrisktest.gc.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk NG testing
+#'        once they become eligible.
+#' @param stihighrisktest.ct.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk CT testing
+#'        once they become eligible.
+#' @param stihighrisktest.syph.hivpos.coverage The proportion of the HIV
+#'        diagnosed eligible population who are starting high-risk syphilis testing
+#'        once they become eligible.
 #' @param stihighrisktest.cov.method The method for calculating STI high-risk
 #'        testing, with options of \code{"curr"} to base the numerator on the
 #'        number of people currently high-risk testing for STI and \code{"ever"}
 #'        to base it on the number of people who have ever been high-risk tested
 #'        for STI.
-#' @param stihighrisktest.cov.rate The rate at which persons initiate high-risk
-#'        STI testing conditional on their eligibility, with 1 equal to instant
-#'        start.
 #' @param partnercutoff The cutoff point for STI high-risk indication, above
 #'        which person would be indicated for higher-risk testing schedules.
 #'
@@ -333,6 +381,8 @@
 #' @param rct.tprob Probability of rectal chlamydia infection per act.
 #' @param uct.tprob Probability of urethral chlamydia infection per act.
 #' @param syph.tprob Base probability of syphilis infection per act.
+#' @param syph.incub.rr Multiplier for reduced infection probability in
+#'        incubating stage of syphilis infection.
 #' @param syph.earlat.rr Multiplier for reduced infection probability in early
 #'        latent stage of syphilis infection.
 #' @param syph.late.rr Multiplier for reduced infection probability in late
@@ -488,6 +538,8 @@ param_msm <- function(nwstats,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       testing.pattern.sti = "interval",
+                      sti.stitx.correlation = FALSE,
+                      sti.correlation.time = 12,
                       test.window.int = 21,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
@@ -568,7 +620,8 @@ param_msm <- function(nwstats,
                       base.ai.pers.BB.rate = 0.11,
                       base.ai.pers.BW.rate = 0.16,
                       base.ai.pers.WW.rate = 0.14,
-                      ai.scale = 1.03,
+                      ai.scale.pospos = 1.04,
+                      ai.scale = 1.04,
 
                       cond.main.BB.prob = 0.38,
                       cond.main.BW.prob = 0.10,
@@ -615,12 +668,20 @@ param_msm <- function(nwstats,
                       tst.rect.sti.rr = 1,
                       sti.highrisktest.int = 182,
                       stitest.elig.model = "all",
-                      stianntest.coverage = 0,
+                      stianntest.gc.hivneg.coverage = 0.1,
+                      stianntest.ct.hivneg.coverage = 0.1,
+                      stianntest.syph.hivneg.coverage = 0.1,
+                      stihighrisktest.gc.hivneg.coverage = 0.0,
+                      stihighrisktest.ct.hivneg.coverage = 0.0,
+                      stihighrisktest.syph.hivneg.coverage = 0.0,
+                      stianntest.gc.hivpos.coverage = 0.1,
+                      stianntest.ct.hivpos.coverage = 0.1,
+                      stianntest.syph.hivpos.coverage = 0.1,
+                      stihighrisktest.gc.hivpos.coverage = 0.0,
+                      stihighrisktest.ct.hivpos.coverage = 0.0,
+                      stihighrisktest.syph.hivpos.coverage = 0.0,
                       stianntest.cov.method = "curr",
-                      stianntest.cov.rate = 1,
-                      stihighrisktest.coverage = 0,
                       stihighrisktest.cov.method = "curr",
-                      stihighrisktest.cov.rate = 1,
                       partnercutoff = 1,
 
                       # EPT intervention
@@ -651,7 +712,8 @@ param_msm <- function(nwstats,
                       uct.tprob = 0.1787,
 
                       syph.tprob = 0.1464,
-                      syph.earlat.rr = 0.5,
+                      syph.incub.rr = 0,
+                      syph.earlat.rr = 0.25,
                       syph.late.rr = 0,
 
                       rgc.sympt.prob = 0.16, # Beck
@@ -668,12 +730,12 @@ param_msm <- function(nwstats,
 
                       rgc.asympt.int = 35.11851*7,
                       ugc.asympt.int = 35.11851*7,
-                      gc.tx.int = 2*7,
+                      gc.tx.int = 7,
                       gc.ntx.int = NA,
 
                       rct.asympt.int = 44.24538*7,
                       uct.asympt.int = 44.24538*7,
-                      ct.tx.int = 2*7,
+                      ct.tx.int = 7,
                       ct.ntx.int = NA,
 
                       syph.early.tx.int = 7,
@@ -922,7 +984,7 @@ init_msm <- function(nwstats,
 #'        step of a previous simulation to resume the simulation with different
 #'        parameters.
 #' @param initialize.FUN Module function to use for initialization of the
-#'        epidemicmodel.
+#'        epidemic model.
 #' @param aging.FUN Module function for aging.
 #' @param deaths.FUN Module function for general and disease-realted deaths.
 #' @param births.FUN Module function for births or entries into the population.

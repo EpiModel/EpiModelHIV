@@ -84,13 +84,33 @@ hiv_trans_msm <- function(dat, at) {
 
   # Data
   al <- dat$temp$al
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
-  dal <- dal[sample(1:nrow(dal)), ]
-  ncols <- dim(dal)[2]
-
+  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), , drop = FALSE]
   if (nrow(dal) == 0) {
     return(dat)
   }
+  dal <- dal[sample(1:nrow(dal)), ]
+  ncols <- dim(dal)[2]
+
+  al <- cbind(al, st1 = as.vector(dat$attr$status[al[ ,"p1"]]))
+  al <- cbind(al, st2 = as.vector(dat$attr$status[al[ ,"p2"]]))
+
+  al.negneg <- al[al[, "st1"] == 0 & al[, "st2"] == 0, , drop = FALSE]
+  al.negpos <- al[(al[, "st1"] == 1 & al[, "st2"] == 0) |
+                    (al[, "st1"] == 0 & al[, "st2"] == 1), , drop = FALSE]
+  al.pospos <- al[al[, "st1"] == 1 & al[, "st2"] == 1, , drop = FALSE]
+
+  # Output act and edge stats before evaluating whether discordant pairs exists
+  dat$epi$num.acts.negneg[at] <- nrow(al.negneg)
+  dat$epi$num.acts.negpos[at] <- nrow(al.negpos)
+  dat$epi$num.acts.pospos[at] <- nrow(al.pospos)
+
+  dat$epi$prop.uai.negneg[at] <- sum(al.negneg[, "uai"] == 1) / nrow(al.negneg)
+  dat$epi$prop.uai.negpos[at]  <- sum(al.negpos[, "uai"] == 1) / nrow(al.negpos)
+  dat$epi$prop.uai.pospos[at] <- sum(al.pospos[, "uai"] == 1) / nrow(al.pospos)
+
+  dat$epi$prop.acts.negneg[at] <- nrow(al.negneg) / (nrow(al))
+  dat$epi$prop.acts.negpos[at]  <- nrow(al.negpos) / (nrow(al))
+  dat$epi$prop.acts.pospos[at] <- nrow(al.pospos) / (nrow(al))
 
   ## Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]

@@ -128,7 +128,8 @@ hiv_progress_msm <- function(dat, at) {
   stage.time.af.dx[AF.dx] <- stage.time.af.dx[AF.dx] + 1
   stage.time.early.chronic.ndx[early.chronic.ndx] <- stage.time.early.chronic.ndx[early.chronic.ndx] + 1
   stage.time.early.chronic.dx.yrone[early.chronic.dx.yrone] <- stage.time.early.chronic.dx.yrone[early.chronic.dx.yrone] + 1
-  stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] <- stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] + 1
+  stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] <-
+    stage.time.early.chronic.dx.yrstwotolate[early.chronic.dx.yrstwotolate] + 1
   stage.time.early.chronic.art[early.chronic.art] <- stage.time.early.chronic.art[early.chronic.art] + 1
   stage.time.late.chronic.ndx[late.chronic.ndx] <- stage.time.late.chronic.ndx[late.chronic.ndx] + 1
   stage.time.late.chronic.dx[late.chronic.dx] <- stage.time.late.chronic.dx[late.chronic.dx] + 1
@@ -272,7 +273,6 @@ syph_progress_msm <- function(dat, at) {
   syph.seco.tx <- dat$attr$syph.seco.tx
   syph.earlat.tx <- dat$attr$syph.earlat.tx
   syph.latelat.tx <- dat$attr$syph.latelat.tx
-  syph.tert.tx <- dat$attr$syph.tert.tx
 
   # Parameters
   incu.syph.int <- dat$param$incu.syph.int
@@ -321,7 +321,6 @@ syph_progress_msm <- function(dat, at) {
   syph.sympt[toEarLat] <- NA
   syph.sympt[toEarLat] <- rbinom(length(toEarLat), 1, syph.earlat.sympt.prob)
 
-
   # Change stage to Late Latent and assign symptoms
   toLateLat <- which(stage.time.syph == (earlat.syph.int + 1) &
                      stage.syph == 4 &
@@ -334,7 +333,7 @@ syph_progress_msm <- function(dat, at) {
 
   # Change stage to tertiary for fraction of those in late late latent
   toTert <- which(stage.syph == 5 &
-                    syphilis == 1)
+                  syphilis == 1)
   toTert <- which(rbinom(length(toTert), 1, syph.tert.prog.prob) == 1)
   stage.syph[toTert] <- 6
   stage.time.syph[toTert] <- 0
@@ -348,7 +347,6 @@ syph_progress_msm <- function(dat, at) {
   dat$attr$syph.seco.tx <- syph.seco.tx
   dat$attr$syph.earlat.tx <- syph.earlat.tx
   dat$attr$syph.latelat.tx <- syph.latelat.tx
-  dat$attr$syph.tert.tx <- syph.tert.tx
   dat$attr$stage.syph <- stage.syph
   dat$attr$stage.time.syph <- stage.time.syph
   dat$attr$syph.sympt <- syph.sympt

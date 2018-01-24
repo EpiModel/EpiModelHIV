@@ -2,19 +2,19 @@
 #' @title Condom Use Module
 #'
 #' @description Module function stochastically simulates potential condom use
-#'              for each act on the discordant edgelist.
+#'              for each act on the edgelist.
 #'
 #' @inheritParams aging_msm
 #'
 #' @details
-#' For each act on the discordant edgelist, condom use is stochastically 
-#' simulated based on the partnership type and racial combination of the dyad. 
-#' Other modifiers for the probability of condom use in that pair are diagnosis 
+#' For each act on the edgelist, condom use is stochastically
+#' simulated based on the partnership type and racial combination of the dyad.
+#' Other modifiers for the probability of condom use in that pair are diagnosis
 #' of disease, disclosure of status, and full or partial HIV viral suppression
 #' given HIV anti-retroviral therapy.
 #'
 #' @return
-#' Updates the discordant edgelist with a \code{uai} variable indicating whether
+#' Updates the edgelist with a \code{uai} variable indicating whether
 #' condoms were used in that act.
 #'
 #' @keywords module msm
@@ -91,10 +91,12 @@ condoms_msm <- function(dat, at) {
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
-    # Diagnosis modifier
+    # Diagnosis modifier ---- make sure this is right!
+    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1) # pull vector of discordant
     pos.diag <- diag.status[elt[, 1]]
-    isDx <- which(pos.diag == 1)
-    uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
+    isDx <- which(pos.diag == 1) # pull vector of diagnosis status
+    isDiscord.dx <- intersect(isDiscord, isDx)
+    uai.logodds[isDiscord.dx] <- uai.logodds[isDiscord.dx] + diag.beta
 
     # Disclosure modifier
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)

@@ -244,10 +244,10 @@ init_status_hiv_msm <- function(dat) {
   probInfCrW <- age[ids.W] * dat$init$init.prev.age.slope.W
   probInfW <- probInfCrW + (nInfW - sum(probInfCrW)) / num.W
 
-  if (any(probInfB <= 0) | any(probInfW <= 0)) {
-    stop("Slope of initial prevalence by age must be sufficiently low to ",
-         "avoid non-positive probabilities.", call. = FALSE)
-  }
+  # if (any(probInfB <= 0) | any(probInfW <= 0)) {
+  #   stop("Slope of initial prevalence by age must be sufficiently low to ",
+  #        "avoid non-positive probabilities.", call. = FALSE)
+  # }
 
   # Infection status
   status <- rep(0, num)
@@ -741,6 +741,7 @@ init_status_sti_msm <- function(dat) {
     # Syphilis
     syphilis <- rep(0, num)
     syph.infTime <- rep(NA, num)
+    last.syph.infTime <- rep(NA, num)
     stage.syph <- rep(NA, num)
     stage.time.syph <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
@@ -762,6 +763,8 @@ init_status_sti_msm <- function(dat) {
     rGC <- rep(0, num)
     rGC.infTime <- rep(NA, num)
     uGC.infTime <- rep(NA, num)
+    last.rGC.infTime <- rep(NA, num)
+    last.uGC.infTime <- rep(NA, num)
     rGC.sympt <- rep(NA, num)
     uGC.sympt <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
@@ -778,6 +781,8 @@ init_status_sti_msm <- function(dat) {
     rCT <- rep(0, num)
     rCT.infTime <- rep(NA, num)
     uCT.infTime <- rep(NA, num)
+    last.rCT.infTime <- rep(NA, num)
+    last.uCT.infTime <- rep(NA, num)
     rCT.sympt <- rep(NA, num)
     uCT.sympt <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
@@ -802,7 +807,9 @@ init_status_sti_msm <- function(dat) {
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
     selected <- which(dat$attr$race %in% c("W", "B"))
-    tslaststitest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 1)))
+    tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastcttest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
 
     ## Syphilis ----------------------------------------------------------------
 
@@ -829,7 +836,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
     time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.incub.syph
-    syph.infTime[selected] <- 1 - time.in.incub.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.incub.syph
 
     # Primary
     selected <- intersect(inf.ids, which(stage.syph == 2))
@@ -837,7 +844,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
     time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.prim.syph
-    syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
 
     # Secondary
     selected <- intersect(inf.ids, which(stage.syph == 3))
@@ -845,7 +852,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
     time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.seco.syph
-    syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
 
     # Early latent
     selected <- intersect(inf.ids, which(stage.syph == 4))
@@ -853,7 +860,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
     time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.earlat.syph
-    syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
                                   prim.syph.int - incu.syph.int
 
     # Late latent
@@ -862,7 +869,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
     time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.latelat.syph
-    syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
                                   seco.syph.int - prim.syph.int - incu.syph.int
 
     # Tertiary
@@ -871,7 +878,7 @@ init_status_sti_msm <- function(dat) {
     max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
     time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
     stage.time.syph[selected] <- time.in.tert.syph
-    syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
                                   earlat.syph.int - seco.syph.int - prim.syph.int -
                                   incu.syph.int
 
@@ -892,8 +899,8 @@ init_status_sti_msm <- function(dat) {
     rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
     uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
 
-    rGC.infTime[rGC == 1] <- 1
-    uGC.infTime[uGC == 1] <- 1
+    rGC.infTime[rGC == 1] <- last.rGC.infTime[rGC == 1] <- 1
+    uGC.infTime[uGC == 1] <- last.uGC.infTime[uGC == 1] <- 1
 
     diag.status.gc[uGC == 1 | rGC == 1] <- 0
 
@@ -911,8 +918,8 @@ init_status_sti_msm <- function(dat) {
     rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
     uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
 
-    rCT.infTime[rCT == 1] <- 1
-    uCT.infTime[uCT == 1] <- 1
+    rCT.infTime[rCT == 1] <- last.rCT.infTime[rCT == 1] <- 1
+    uCT.infTime[uCT == 1] <- last.uCT.infTime[uCT == 1] <- 1
 
     diag.status.ct[uCT == 1 | rCT == 1] <- 0
 
@@ -920,10 +927,14 @@ init_status_sti_msm <- function(dat) {
 
     # Syphilis
     dat$attr$syphilis <- syphilis
+    dat$attr$syph.timesInf <- rep(0, num)
+    dat$attr$syph.timesInf[syphilis == 1] <- 1
     dat$attr$stage.syph <- stage.syph
     dat$attr$stage.time.syph <- stage.time.syph
     dat$attr$diag.status.syph <- diag.status.syph
     dat$attr$syph.infTime <- syph.infTime
+    dat$attr$last.syph.infTime <- last.syph.infTime
+    dat$attr$last.syph.recovTime <- rep(NA, num)
     dat$attr$syph.sympt <- syph.sympt
     dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.diag.time.syph <- last.diag.time.syph
@@ -936,15 +947,24 @@ init_status_sti_msm <- function(dat) {
     dat$attr$syph.tx.prep <- syph.tx.prep
     dat$attr$last.tx.time.syph <- last.tx.time.syph
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
-    dat$attr$tt.traj.syph <- rep(NA, num)
-    dat$attr$time.since.last.test.syph <- tslaststitest
+    dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.syph <- tslastsyphtest
 
     # Gonorrhea
     dat$attr$rGC <- rGC
     dat$attr$uGC <- uGC
+    dat$attr$rGC.timesInf <- rep(0, num)
+    dat$attr$rGC.timesInf[rGC == 1] <- 1
+    dat$attr$uGC.timesInf <- rep(0, num)
+    dat$attr$uGC.timesInf[uGC == 1] <- 1
     dat$attr$diag.status.gc <- diag.status.gc
     dat$attr$rGC.infTime <- rGC.infTime
     dat$attr$uGC.infTime <- uGC.infTime
+    dat$attr$last.rGC.infTime <- last.rGC.infTime
+    dat$attr$last.uGC.infTime <- last.uGC.infTime
+    dat$attr$last.rGC.recovTime <- rep(NA, num)
+    dat$attr$last.uGC.recovTime <- rep(NA, num)
     dat$attr$rGC.sympt <- rGC.sympt
     dat$attr$uGC.sympt <- uGC.sympt
     dat$attr$last.neg.test.rgc <- last.neg.test.rgc
@@ -958,16 +978,25 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.ugc <- last.tx.time.ugc
     dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
-    dat$attr$tt.traj.gc <- rep(NA, num)
-    dat$attr$time.since.last.test.rgc <- tslaststitest
-    dat$attr$time.since.last.test.ugc <- tslaststitest
+    dat$attr$tt.traj.gc.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.rgc <- tslastgctest
+    dat$attr$time.since.last.test.ugc <- tslastgctest
 
     # Chlamydia
     dat$attr$rCT <- rCT
     dat$attr$uCT <- uCT
+    dat$attr$rCT.timesInf <- rep(0, num)
+    dat$attr$rCT.timesInf[rCT == 1] <- 1
+    dat$attr$uCT.timesInf <- rep(0, num)
+    dat$attr$uCT.timesInf[uCT == 1] <- 1
     dat$attr$diag.status.ct <- diag.status.ct
     dat$attr$rCT.infTime <- rCT.infTime
     dat$attr$uCT.infTime <- uCT.infTime
+    dat$attr$last.rCT.infTime <- last.rCT.infTime
+    dat$attr$last.uCT.infTime <- last.uCT.infTime
+    dat$attr$last.rCT.recovTime <- rep(NA, num)
+    dat$attr$last.uCT.recovTime <- rep(NA, num)
     dat$attr$rCT.sympt <- rCT.sympt
     dat$attr$uCT.sympt <- uCT.sympt
     dat$attr$last.neg.test.rct <- last.neg.test.rct
@@ -981,9 +1010,10 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.uct <- last.tx.time.uct
     dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
-    dat$attr$tt.traj.ct <- rep(NA, num)
-    dat$attr$time.since.last.test.rct <- tslaststitest
-    dat$attr$time.since.last.test.uct <- tslaststitest
+    dat$attr$tt.traj.ct.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.rct <- tslastcttest
+    dat$attr$time.since.last.test.uct <- tslastcttest
 
     # EPT variables
     dat$attr$eptindexElig <- rep(NA, num)
@@ -1116,6 +1146,10 @@ reinit_msm <- function(x, param, init, control, s) {
     s <- 1
   }
 
+  if (length(x$el) > 1) {
+    s <- round(runif(1, min = 1, max = length(x$attr)), 0)
+  }
+
   dat <- list()
 
   dat$param <- param
@@ -1139,6 +1173,7 @@ reinit_msm <- function(x, param, init, control, s) {
   }
 
   dat$temp <- x$temp[[s]]
+  #dat <- prevalence_msm(dat, at = 5201)
 
   class(dat) <- "dat"
   return(dat)

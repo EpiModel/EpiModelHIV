@@ -7,6 +7,7 @@
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
   testing.pattern = "memoryless", testing.pattern.sti = "interval",
+  sti.stitx.correlation = FALSE, sti.correlation.time = 12,
   test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
   tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
   tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
@@ -37,13 +38,14 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.scale = 1.03, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
-  cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
-  cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
-  cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
-  cond.inst.BB.prob = 0.27, cond.inst.BW.prob = 0.27,
-  cond.inst.WW.prob = 0.27, cond.always.prob.corr = 0.5, cond.rr.BB = 1,
-  cond.rr.BW = 1, cond.rr.WW = 1, cond.diag.main.beta = -0.67,
+  ai.scale.pospos = 1.04, ai.scale = 1.04, cond.main.BB.prob = 0.38,
+  cond.main.BW.prob = 0.1, cond.main.WW.prob = 0.15,
+  cond.pers.always.prob = 0.216, cond.pers.BB.prob = 0.26,
+  cond.pers.BW.prob = 0.26, cond.pers.WW.prob = 0.26,
+  cond.inst.always.prob = 0.326, cond.inst.BB.prob = 0.27,
+  cond.inst.BW.prob = 0.27, cond.inst.WW.prob = 0.27,
+  cond.always.prob.corr = 0.5, cond.rr.BB = 1, cond.rr.BW = 1,
+  cond.rr.WW = 1, cond.diag.main.beta = -0.67,
   cond.discl.main.beta = -0.85, cond.diag.pers.beta = -0.67,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
   cond.discl.inst.beta = -0.85, vv.iev.BB.prob = 0.42,
@@ -54,12 +56,19 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.risk.int = 182, prep.risk.reassess = TRUE, riskhist.int = 182,
   stitest.start = Inf, stitest.active.int = 364, tst.rect.sti.rr = 1,
   sti.highrisktest.int = 182, stitest.elig.model = "all",
-  stianntest.coverage = 0, stianntest.cov.method = "curr",
-  stianntest.cov.rate = 1, stihighrisktest.coverage = 0,
-  stihighrisktest.cov.method = "curr", stihighrisktest.cov.rate = 1,
-  partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
-  ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
-  ept.provision.partner.main.ong = 0.5,
+  stianntest.gc.hivneg.coverage = 0.1, stianntest.ct.hivneg.coverage = 0.1,
+  stianntest.syph.hivneg.coverage = 0.1,
+  stihighrisktest.gc.hivneg.coverage = 0,
+  stihighrisktest.ct.hivneg.coverage = 0,
+  stihighrisktest.syph.hivneg.coverage = 0,
+  stianntest.gc.hivpos.coverage = 0.1, stianntest.ct.hivpos.coverage = 0.1,
+  stianntest.syph.hivpos.coverage = 0.1,
+  stihighrisktest.gc.hivpos.coverage = 0,
+  stihighrisktest.ct.hivpos.coverage = 0,
+  stihighrisktest.syph.hivpos.coverage = 0, stianntest.cov.method = "curr",
+  stihighrisktest.cov.method = "curr", partnercutoff = 1, ept.start = Inf,
+  ept.risk.int = 60, ept.coverage = 0, ept.cov.method = "curr",
+  ept.cov.rate = 1, ept.provision.partner.main.ong = 0.5,
   ept.provision.partner.pers.ong = 0.4,
   ept.provision.partner.main.end = 0.4,
   ept.provision.partner.pers.end = 0.3, ept.provision.partner.inst = 0.2,
@@ -68,15 +77,16 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   rcomp.prob = 0, rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
   rcomp.discl.only = FALSE, rgc.tprob = 0.4456, ugc.tprob = 0.3341,
   rct.tprob = 0.1985, uct.tprob = 0.1787, syph.tprob = 0.1464,
-  syph.earlat.rr = 0.5, syph.late.rr = 0, rgc.sympt.prob = 0.16,
-  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14, uct.sympt.prob = 0.58,
-  syph.incub.sympt.prob = 0, syph.prim.sympt.prob = 0.5,
-  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
-  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 1,
-  rgc.asympt.int = 35.11851 * 7, ugc.asympt.int = 35.11851 * 7,
-  gc.tx.int = 2 * 7, gc.ntx.int = NA, rct.asympt.int = 44.24538 * 7,
-  uct.asympt.int = 44.24538 * 7, ct.tx.int = 2 * 7, ct.ntx.int = NA,
-  syph.early.tx.int = 7, syph.late.tx.int = 3 * 7, gc.sympt.prob.tx = 0.9,
+  syph.incub.rr = 0, syph.earlat.rr = 0.25, syph.late.rr = 0,
+  rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.9, rct.sympt.prob = 0.14,
+  uct.sympt.prob = 0.58, syph.incub.sympt.prob = 0,
+  syph.prim.sympt.prob = 0.5, syph.seco.sympt.prob = 0.85,
+  syph.earlat.sympt.prob = 0, syph.latelat.sympt.prob = 0,
+  syph.tert.sympt.prob = 1, rgc.asympt.int = 35.11851 * 7,
+  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 7, gc.ntx.int = NA,
+  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
+  ct.tx.int = 7, ct.ntx.int = NA, syph.early.tx.int = 7,
+  syph.late.tx.int = 3 * 7, gc.sympt.prob.tx = 0.9,
   ct.sympt.prob.tx = 0.85, gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
   syph.incub.sympt.prob.tx = 0, syph.incub.asympt.prob.tx = 0,
   syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 1,
@@ -118,6 +128,15 @@ previous test, or \code{"interval"} deterministic fixed intervals.}
 \item{testing.pattern.sti}{Method for STI testing, with options
 \code{"memoryless"} for constant hazard without regard to time since
 previous test, or \code{"interval"} deterministic fixed intervals.}
+
+\item{sti.stitx.correlation}{Method for correlated STI testing, with option
+\code{TRUE} for testing for STIs if one is treated for symptomatic
+STI - requires not being tested for that particular site-specific STI
+(e.g. rectal NG) in the past X weeks.}
+
+\item{sti.correlation.time}{Length of window lookback (weeks) for correlated
+STI testing (e.g. value of 9 weeks means last test must have been > 9
+weeks prior for a particular STI)}
 
 \item{test.window.int}{Length of the HIV test window period in days.}
 
@@ -326,7 +345,10 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.scale}{General relative scaler for all act rates for model
+\item{ai.scale.pospos}{General relative scaler for HIV-positive-concordant
+act rates for model calibration.}
+
+\item{ai.scale}{General relative scaler for all other act rates for model
 calibration.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main
@@ -460,10 +482,68 @@ testing intervention.}
 for high-risk STI testing. Current options are limited to:
 \code{"all"}.}
 
-\item{stianntest.coverage}{The proportion of the eligible population who are
-starting annual STI testing once they become eligible. This is not
+\item{stianntest.gc.hivneg.coverage}{The proportion of the eligible population
+(HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
+diagnosed and tt.traj not equal to a treater type) and who are
+starting annual NG testing once they become eligible. This is not
 inclusive of those who are simultaneously indicated for more frequent
 testing.}
+
+\item{stianntest.ct.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk NG testing
+once they become eligible.}
+
+\item{stihighrisktest.ct.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk syphilis testing
+once they become eligible.}
+
+\item{stianntest.gc.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual NG testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.ct.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk NG testing
+once they become eligible.}
+
+\item{stihighrisktest.ct.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk syphilis testing
+once they become eligible.}
 
 \item{stianntest.cov.method}{The method for calculating STI annual testing,
 with options of \code{"curr"} to base the numerator  on the number of
@@ -472,22 +552,11 @@ on the number of people who have ever been annually tested for STI.
 This is not inclusive of those who are simultaneously indicated for
 more frequent testing.}
 
-\item{stianntest.cov.rate}{The rate at which persons initiate annual STI
-testing conditional on their eligibility, with 1 equal to instant
-start.}
-
-\item{stihighrisktest.coverage}{The proportion of the eligible population
-who are starting high-risk STI testing once they become eligible.}
-
 \item{stihighrisktest.cov.method}{The method for calculating STI high-risk
 testing, with options of \code{"curr"} to base the numerator on the
 number of people currently high-risk testing for STI and \code{"ever"}
 to base it on the number of people who have ever been high-risk tested
 for STI.}
-
-\item{stihighrisktest.cov.rate}{The rate at which persons initiate high-risk
-STI testing conditional on their eligibility, with 1 equal to instant
-start.}
 
 \item{partnercutoff}{The cutoff point for STI high-risk indication, above
 which person would be indicated for higher-risk testing schedules.}
@@ -563,6 +632,9 @@ known-discordant partnerships only, versus all partnerships.}
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
 
 \item{syph.tprob}{Base probability of syphilis infection per act.}
+
+\item{syph.incub.rr}{Multiplier for reduced infection probability in
+incubating stage of syphilis infection.}
 
 \item{syph.earlat.rr}{Multiplier for reduced infection probability in early
 latent stage of syphilis infection.}

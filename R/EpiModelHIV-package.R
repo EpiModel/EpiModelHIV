@@ -19,10 +19,10 @@
 #' @aliases EpiModelHIV
 #'
 #' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
-#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
+#' @importFrom stats median rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
 #' @importFrom dplyr group_by summarise
 #'
-#' @useDynLib EpiModelHIV
+#' @useDynLib EpiModelHIV, .registration = TRUE
 #'
 #' @docType package
 #' @keywords package msm het
