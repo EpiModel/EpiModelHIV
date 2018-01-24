@@ -202,11 +202,18 @@ trans_msm <- function(dat, at){
     
     dat$age.inf.vec$age <- c(dat$age.inf.vec$age,dat$attr$age[infected])
     dat$age.inf.vec$time <- c(dat$age.inf.vec$time,rep(at,length(infected)))
+    
   }
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-
+  
+  msm<-sum(dat$attr$asmm[infected] == 0)
+  asmm<-sum(dat$attr$asmm[infected] == 1)
+  
+  dat$epi$incid.msm[at] <- length(msm)
+  dat$epi$incid.asmm[at] <- length(asmm)
+  
   dat$epi$incid.cai[at] <- sum(trans.ip[disc.ip[, "uai"] == 0]) +
     sum(trans.rp[disc.rp[, "uai"] == 0])
   dat$epi$incid.uai[at] <- sum(trans.ip[disc.ip[, "uai"] == 1]) +
