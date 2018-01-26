@@ -73,7 +73,13 @@ param_cl(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prepDrop.b.asmm = 0.014337, prepDrop.w.asmm = 0.014337,
   prep.uaicount.thresh.b.asmm = 10, prep.uaicount.thresh.w.asmm = 10,
   rcomp.prob = 0, rcomp.adh.groups = 0:4, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, ...)
+  rcomp.discl.only = FALSE, out.age.prob = nwstats$out.age.prob,
+  debut.entry.prob = nwstats$debut.entry.prob,
+  debut.prob = nwstats$debut.prob,
+  role.B.prob.asmm = nwstats$role.B.prob.asmm,
+  role.W.prob.asmm = nwstats$role.W.prob.asmm,
+  role.B.prob.msm = nwstats$role.B.prob.msm,
+  role.W.prob.msm = nwstats$role.W.prob.msm, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
