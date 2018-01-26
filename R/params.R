@@ -497,6 +497,18 @@ param_cl <- function(nwstats,
                       rcomp.adh.groups = 0:4,
                       rcomp.main.only = FALSE,
                       rcomp.discl.only = FALSE,
+                      out.age.prob = nwstats$out.age.prob,
+                      debut.entry.prob = nwstats$debut.entry.prob,
+                      debut.prob = nwstats$debut.prob,
+                     
+                     
+                     # I, R, V role frequencies
+                      role.B.prob.asmm = nwstats$role.B.prob.asmm,
+                      role.W.prob.asmm = nwstats$role.W.prob.asmm,
+                     
+                     # I, R, V role frequencies
+                      role.B.prob.msm = nwstats$role.B.prob.msm, 
+                      role.W.prob.msm = nwstats$role.W.prob.msm,
                      
                       ...) {
 
