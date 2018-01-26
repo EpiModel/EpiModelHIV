@@ -92,9 +92,11 @@ condoms_msm <- function(dat, at) {
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
     # Diagnosis modifier
+    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1) # pull vector of discordant
     pos.diag <- diag.status[elt[, 1]]
-    isDx <- which(pos.diag == 1)
-    uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
+    isDx <- which(pos.diag == 1) # pull vector of diagnosis status
+    isDiscord.dx <- intersect(isDiscord, isDx)
+    uai.logodds[isDiscord.dx] <- uai.logodds[isDiscord.dx] + diag.beta
 
     # Disclosure modifier
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
