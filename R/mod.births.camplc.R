@@ -98,9 +98,9 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   
   #Set out age for new births and debut for new births 
   
-  out.age.prob<-dat$init$out.age.prob
-  debut.entry.prob<-dat$init$debut.entry.prob
-  debut.prob<-dat$init$debut.prob
+  out.age.prob<-dat$param$out.age.prob
+  debut.entry.prob<-dat$param$debut.entry.prob
+  debut.prob<-dat$param$debut.prob
   
   ##Set out for ASMM
   out.age <- sample((13:18),nBirths,out.age.prob,replace=TRUE)
