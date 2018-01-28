@@ -872,7 +872,7 @@ init_ccr5_msm <- function(dat) {
 reinit_msm <- function(x, param, init, control, s) {
 
   if (any(c("param", "control", "nwparam", "epi", "attr", "temp" , "riskhist",
-    "el", "p") %in% names(x)) == FALSE) {
+    "el", "p", "riskh") %in% names(x)) == FALSE) {
     stop("x must contain the following elements for restarting: param control",
          "nwparam epi attr temp el p riskhist", call. = FALSE)
   }
@@ -896,6 +896,7 @@ reinit_msm <- function(x, param, init, control, s) {
 
   dat$attr <- x$attr[[s]]
   dat$riskhist <- x$riskhist[[s]]
+  dat$riskh <- x$riskh[[s]]
   dat$age.inf.vec <- x$age.inf.vec[[s]]
 
   if (!is.null(x$stats)) {
