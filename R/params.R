@@ -296,6 +296,7 @@
 #' @export
 param_cl <- function(nwstats,
                       race.method = 1,
+                      FU=FALSE,
                       last.neg.test.B.int = 301,
                       last.neg.test.W.int = 315,
                       
@@ -686,6 +687,7 @@ init_cl <- function(nwstats,
 #'        parameters.
 #' @param initialize.FUN Module function to use for initialization of the epidemic
 #'        model.
+#' @param followUP.FUN re-create tracking elements of dat (riskhist, age.inf.vec and counts) 
 #' @param aging.FUN Module function for aging.
 #' @param outdebut.FUN Module for outing into the population and debuting as sexually available
 #' @param deaths.FUN Module function for general and disease-realted deaths.
@@ -737,6 +739,7 @@ control_cl <- function(simno = 1,
                         nsteps = 100,
                         start = 1,
                         initialize.FUN = initialize_camplc,
+                        followUP.FUN = FU_elements_camplc,
                         aging.FUN = aging_camplc,
                         deaths.FUN = deaths_msm,
                         births.FUN = births_camplc,
