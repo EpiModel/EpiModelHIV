@@ -4,7 +4,7 @@
 \alias{param_cl}
 \title{Epidemic Model Parameters}
 \usage{
-param_cl(nwstats, race.method = 1, last.neg.test.B.int = 301,
+param_cl(nwstats, race.method = 1, FU = FALSE, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, last.neg.test.B.int.asmm = 2900,
   last.neg.test.W.int.asmm = 2900, mean.test.B.int = 301,
   mean.test.W.int = 315, mean.test.B.int.asmm = 2900,

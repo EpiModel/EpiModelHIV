@@ -5,11 +5,12 @@
 \title{Epidemic Model Control Settings}
 \usage{
 control_cl(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
-  initialize.FUN = initialize_camplc, aging.FUN = aging_camplc,
-  deaths.FUN = deaths_msm, births.FUN = births_camplc,
-  outdebut.FUN = out_debut_camplc, test.FUN = test_msm, tx.FUN = tx_msm,
-  prep.FUN = prep_msm, prep2.FUN = prep_adol, progress.FUN = progress_msm,
-  vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
+  initialize.FUN = initialize_camplc, followUP.FUN = FU_elements_camplc,
+  aging.FUN = aging_camplc, deaths.FUN = deaths_msm,
+  births.FUN = births_camplc, outdebut.FUN = out_debut_camplc,
+  test.FUN = test_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
+  prep2.FUN = prep_adol, progress.FUN = progress_msm, vl.FUN = vl_msm,
+  aiclass.FUN = NULL, roleclass.FUN = NULL,
   role.classtrans.FUN = roleclass_trans, resim_nets.FUN = simnet_msm,
   disclose.FUN = disclose_msm, acts.FUN = acts_msm,
   condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
@@ -37,6 +38,8 @@ parameters.}
 
 \item{initialize.FUN}{Module function to use for initialization of the epidemic
 model.}
+
+\item{followUP.FUN}{re-create tracking elements of dat (riskhist, age.inf.vec and counts)}
 
 \item{aging.FUN}{Module function for aging.}
 
