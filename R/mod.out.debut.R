@@ -28,7 +28,7 @@ out_debut_camplc <- function(dat, at) {
   
   ids<-which(dat$attr$debuted == 0)
   
-  dat$attr$debuted[ids] <- rbinom(ids,1,dat$init$debut.prob)
+  dat$attr$debuted[ids] <- rbinom(ids,1,dat$param$debut.prob)
   
 
   dat$attr$debuted <- ifelse(dat$attr$age >= 19,1,dat$attr$debuted)
