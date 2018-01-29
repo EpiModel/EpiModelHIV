@@ -14,7 +14,7 @@ individual-level attributes, and summary statistics.}
 }
 \value{
 This function returns \code{dat} after adding elements to dat that are not tracked during the burnin
-\code{riskhist} , \code{age.inf.vec}.
+\code{riskhist} , \code{age.inf.vec}, \code{counts}.
 }
 \description{
 Module sets up adolcent risk history and infection age elements of dat.
