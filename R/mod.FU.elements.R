@@ -43,6 +43,18 @@ FU_elements_camplc <- function(dat, at) {
   #Track the age at which each new infection is aquired
   dat$age.inf.vec <- list()
   
+  # Risk history lists
+  nc <- ceiling(dat$param$prep.risk.int)
+  dat$riskh <- list()
+  rh.names <- c("uai.mono2.nt.3mo", "uai.mono2.nt.6mo",
+                "uai.mono1.nt.3mo", "uai.mono1.nt.6mo",
+                "uai.nonmonog", "uai.nmain",
+                "ai.sd.mc", "uai.sd.mc")
+  for (i in 1:length(rh.names)) {
+    dat$riskh[[rh.names[i]]] <- matrix(NA, ncol = nc, nrow = length(dat$attr$uid))
+  }
+  
+  
   }
 
   return(dat)
