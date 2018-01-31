@@ -63,17 +63,14 @@ param_cl(nwstats, race.method = 1, FU = FALSE, last.neg.test.B.int = 301,
   prep.coverage.adol.exp = 0.4, prep.cov.method = "curr",
   prep.cov.rate = 1, prep.tst.int = 90, prep.risk.int = 182,
   prep.risk.reassess = TRUE, prep.start.asmm = Inf,
-  prep.elig.model.asmm = "none", prep.class.prob.b.asmm = c(0.209, 0.244,
-  0.131, 0.416), prep.class.prob.w.asmm = c(0.209, 0.244, 0.131, 0.416),
-  prep.coverage.b.asmm = 0.3, prep.coverage.w.asmm = 0.3,
-  prep.cov.method.asmm = "curr", prep.cov.rate.b.asmm = 1,
-  prep.cov.rate.w.asmm = 1, prep.rcomp.asmm = 1, prep.tst.int.asmm = 90,
+  prep.elig.model.asmm = "none", prep.class.prob.asmm = c(0.209, 0.244,
+  0.131, 0.416), prep.coverage.asmm = 0.3, prep.cov.method.asmm = "curr",
+  prep.cov.rate.asmm = 1, prep.rcomp.asmm = 1, prep.tst.int.asmm = 90,
   prep.risk.int.asmm = 182, prep.risk.reassess.asmm = FALSE,
-  prep.delay.b.asmm = 26, prep.delay.w.asmm = 26, prepSpell.asmm = FALSE,
-  prepDrop.b.asmm = 0.014337, prepDrop.w.asmm = 0.014337,
-  prep.uaicount.thresh.b.asmm = 10, prep.uaicount.thresh.w.asmm = 10,
-  rcomp.prob = 0, rcomp.adh.groups = 0:4, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, out.age.prob = nwstats$out.age.prob,
+  prep.delay.asmm = 26, prepSpell.asmm = TRUE, prepDrop.asmm = 0.014337,
+  prep.uaicount.thresh.asmm = 10, rcomp.prob = 0, rcomp.adh.groups = 0:4,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE,
+  out.age.prob = nwstats$out.age.prob,
   debut.entry.prob = nwstats$debut.entry.prob,
   debut.prob = nwstats$debut.prob,
   role.B.prob.asmm = nwstats$role.B.prob.asmm,
@@ -409,28 +406,10 @@ adol.riskhist.older, adol.riskhist.time, adol.riskhist.older.time}
 for all persons who have never been on PrEP or those who have cycled off
 see: prepSpell if \code{TRUE} and are disease-susceptible.}
 
-\item{prep.class.prob.b.asmm}{The frequency of being in a low, medium, or high class
-of adherence to PrEP for black asmm.}
-
-\item{prep.class.prob.w.asmm}{The frequency of being in a low, medium, or high class
-of adherence to PrEP for white asmm.}
-
-\item{prep.coverage.b.asmm}{The proportion of the eligible population who are start
-PrEP once they become eligible for black asmm.}
-
-\item{prep.coverage.w.asmm}{The proportion of the eligible population who are start
-PrEP once they become eligible for white asmm.}
-
 \item{prep.cov.method.asmm}{The method for calculating PrEP coverage, with options
 of \code{"curr"} to base the numerator on the number of people currently
 on PrEP and \code{"ever"} to base it on the number of people ever on
 PrEP for asmm.}
-
-\item{prep.cov.rate.b.asmm}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start for black asmm.}
-
-\item{prep.cov.rate.w.asmm}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start for white asmm.}
 
 \item{prep.tst.int.asmm}{Testing interval for asmm who are actively on PrEP. This
 overrides the mean testing interval parameters.}
@@ -441,17 +420,7 @@ in days.}
 \item{prep.risk.reassess.asmm}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
 
-\item{prep.delay.b.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for black asmm.}
-
-\item{prep.delay.w.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.}
-
 \item{prepSpell.asmm}{If \code{TRUE}, there is a constant hazard from dropping PrEP.}
-
-\item{prep.uaicount.thresh.b.asmm}{The number of UAI a black asmm must have to initiate prep 
-if PreP eligibility is based on UAI counts.}
-
-\item{prep.uaicount.thresh.w.asmm}{The number of UAI a white asmm must have to initiate prep 
-if PreP eligibility is based on UAI counts.}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
@@ -483,12 +452,40 @@ and start PrEP once they become eligible.}
 \item{prep.efficacy.asmm}{The per-contact efficacy of PrEP to prevent infection if
 used (parameter not currently used).}
 
+\item{prep.class.prob.b.asmm}{The frequency of being in a low, medium, or high class
+of adherence to PrEP for black asmm.}
+
+\item{prep.class.prob.w.asmm}{The frequency of being in a low, medium, or high class
+of adherence to PrEP for white asmm.}
+
 \item{prep.class.effect.asmm}{The functional effectiveness of PrEP conditional on
 PrEP class.}
+
+\item{prep.coverage.b.asmm}{The proportion of the eligible population who are start
+PrEP once they become eligible for black asmm.}
+
+\item{prep.coverage.w.asmm}{The proportion of the eligible population who are start
+PrEP once they become eligible for white asmm.}
+
+\item{prep.cov.rate.b.asmm}{The rate at which persons initiate PrEP conditional on
+their eligibility, with 1 equal to instant start for black asmm.}
+
+\item{prep.cov.rate.w.asmm}{The rate at which persons initiate PrEP conditional on
+their eligibility, with 1 equal to instant start for white asmm.}
+
+\item{prep.delay.b.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for black asmm.}
+
+\item{prep.delay.w.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.}
 
 \item{PrepDrop.b.asmm}{The hazard for dropping PrEP for black asmm given prepSpell.asmm==TRUE.}
 
 \item{PrepDrop.w.asmm}{The hazard for dropping PrEP for white asmm given prepSpell.asmm==TRUE.}
+
+\item{prep.uaicount.thresh.b.asmm}{The number of UAI a black asmm must have to initiate prep 
+if PreP eligibility is based on UAI counts.}
+
+\item{prep.uaicount.thresh.w.asmm}{The number of UAI a white asmm must have to initiate prep 
+if PreP eligibility is based on UAI counts.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to
