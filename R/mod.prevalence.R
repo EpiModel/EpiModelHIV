@@ -70,6 +70,10 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prepCurr.asmm <- rNA
     dat$epi$prepEver <- rNA
     dat$epi$prepCov <- rNA
+    dat$epi$prepCov.asmm <- rNA
+    dat$epi$prepCov.msm <- rNA
+    dat$epi$prepCov.adol.naive <- rNA
+    dat$epi$prepCov.adol.exp <- rNA
     dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
     dat$epi$i.num.prep0 <- rNA
