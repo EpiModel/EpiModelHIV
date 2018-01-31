@@ -1354,10 +1354,6 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uGC.tx.ept[txUGC_ept] <- 1
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
-  dat$attr$rGC.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1 |
-                           dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
-  dat$attr$uGC.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1 |
-                           dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
   dat$attr$last.diag.time.gc[txGC_sympt] <- at
   dat$attr$last.neg.test.rgc[txRGC_sympt] <- NA
   dat$attr$last.neg.test.ugc[txUGC_sympt] <- NA
@@ -1383,10 +1379,8 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$uCT.tx.prep[txUCT_prep] <- 1
   dat$attr$uCT.tx.ept[idsUCT_tx_ept] <- 0
   dat$attr$uCT.tx.ept[txUCT_ept] <- 1
-  dat$attr$rCT.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1 |
-                           dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
-  dat$attr$uCT.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1 |
-                           dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
+  dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
+  dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
   dat$attr$last.diag.time.ct[txCT_sympt] <- at
   dat$attr$last.neg.test.rct[txRCT_sympt] <- NA
   dat$attr$last.neg.test.uct[txUCT_sympt] <- NA
