@@ -111,11 +111,14 @@ prep_msm <- function(dat, at) {
   if (prep.cov.method == "curr") {
     prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
     prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
+    prepCov.msm <- sum(prepStat == 1 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & asmm == 0, na.rm = TRUE)
   }
   if (prep.cov.method == "ever") {
     prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
     prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
+    prepCov.msm <- sum(prepEver == 1 & asmm == 1, na.rm = TRUE)/sum(prepElig == 1 & asmm == 1, na.rm = TRUE)
   }
+  
   prepCov.adol.naive <- ifelse(is.nan(prepCov.adol.naive), 0, prepCov.adol.naive)
   prepCov.adol.exp <- ifelse(is.nan(prepCov.adol.exp), 0, prepCov.adol.exp)
   
@@ -150,6 +153,8 @@ prep_msm <- function(dat, at) {
     }
   }
   
+  
+  
   # Attributes
   if (length(idsStart.adol.naive) > 0) {
     prepStat[idsStart.adol.naive] <- 1
@@ -169,6 +174,7 @@ prep_msm <- function(dat, at) {
     needPC <- which(is.na(prepClass[idsStart.adol.exp]))
     prepClass[idsStart.adol.exp[needPC]] <- sample(x = 0:3, size = length(needPC),
                                           replace = TRUE, prob = prep.class.prob)
+
   }
   
 
@@ -184,6 +190,7 @@ prep_msm <- function(dat, at) {
   # Summary Statistics
   dat$epi$prepCov.adol.naive[at] <- prepCov.adol.naive
   dat$epi$prepCov.adol.exp[at] <- prepCov.adol.exp
+  dat$epi$prepCov.msm[at] <- prepCov.msm
   dat$epi$prepStart[at] <- length(idsStart.adol.naive) + length(idsStart.adol.exp)
 
   return(dat)
