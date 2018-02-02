@@ -15,10 +15,10 @@ param <- param_msm(nwstats = st,
                    ai.scale.pospos = 1.04,
 
                    # STI acquisition
-                   rgc.tprob = 0.65,
-                   ugc.tprob = 0.55,
-                   rct.tprob = 0.29,
-                   uct.tprob = 0.23,
+                   rgc.tprob = 0, #0.65,
+                   ugc.tprob = 0, #0.55,
+                   rct.tprob = 0, #0.29,
+                   uct.tprob = 0, #0.23,
                    syph.tprob = 0.06,
 
                    # HIV acquisition
@@ -78,7 +78,7 @@ control <- control_msm(nsteps = 2600)
 # control <- control_msm(start = 5201,
 #                        nsteps = 5210)
 
-sim <- netsim(est, param, init, control)
+#sim <- netsim(est, param, init, control)
 
 # debug(initialize_msm)
 # debug(reinit_msm)
@@ -90,21 +90,23 @@ at <- 1
 dat <- initialize_msm(est, param, init, control, s = 1)
 # dat <- reinit_msm(sim, param, init, control, s = 1)
 
-# debug(sti_trans_msm)
-# debug(riskhist_stitest_msm)
+debug(sti_trans_msm)
+debug(riskhist_stitest_msm)
 debug(sti_test_msm)
-# debug(part_msm)
-# debug(sti_recov_msm)
-# debug(sti_tx_msm)
+debug(sti_recov_msm)
+debug(sti_tx_msm)
+debug(sti_ept_msm)
+debug(part_msm)
+# debug(acts_msm)
 # debug(hiv_test_msm)
-# debug(sti_ept_msm)
 # debug(acts_msm)
 # debug(hiv_trans_msm)
 # debug(condoms_msm)
 # debug(simnet_msm)
+# debug(syph_progress_msm)
 
 at <- at + 1
-for (at in at:dat$control$nsteps) {
+#for (at in at:dat$control$nsteps) {
   dat <- aging_msm(dat, at)
   dat <- deaths_msm(dat, at)
   dat <- births_msm(dat, at)
@@ -130,4 +132,4 @@ for (at in at:dat$control$nsteps) {
   dat <- sti_ept_msm(dat, at)
   dat <- prevalence_msm(dat, at)
   cat("\t", at)
-}
+#}

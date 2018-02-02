@@ -806,7 +806,7 @@ init_status_sti_msm <- function(dat) {
     time.sex.active <- pmax(1, round((365 / dat$param$time.unit) * age -
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
-    selected <- which(dat$attr$race %in% c("W", "B"))
+    selected <- which(dat$attr$race %in% c("B", "W"))
     tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
     tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
     tslastcttest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))

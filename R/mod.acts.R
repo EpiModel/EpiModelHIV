@@ -167,7 +167,7 @@ acts_msm <- function(dat, at) {
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
 
-  # Update time of last sex
+  # Update time of last sex for all those with acts at time step
   dat$attr$time.last.sex[unique(c(dat$temp$el[, "p1"], dat$temp$el[, "p2"]))] <- at
 
   return(dat)

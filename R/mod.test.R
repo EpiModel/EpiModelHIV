@@ -173,16 +173,13 @@ sti_test_msm <- function(dat, at) {
   stitestind2 <- dat$attr$stitest.ind.recentpartners
 
   # Parameters
-  # stianntest.gc.hivneg.coverage <- dat$param$stianntest.gc.hivneg.coverage
   stianntest.ct.hivneg.coverage <- dat$param$stianntest.ct.hivneg.coverage
   stianntest.syph.hivneg.coverage <- dat$param$stianntest.syph.hivneg.coverage
-  # stihighrisktest.gc.hivneg.coverage <- dat$param$stihighrisktest.gc.hivneg.coverage
   stihighrisktest.ct.hivneg.coverage <- dat$param$stihighrisktest.ct.hivneg.coverage
   stihighrisktest.syph.hivneg.coverage <- dat$param$stihighrisktest.syph.hivneg.coverage
-  # stianntest.gc.hivpos.coverage <- dat$param$stianntest.gc.hivpos.coverage
+
   stianntest.ct.hivpos.coverage <- dat$param$stianntest.ct.hivpos.coverage
   stianntest.syph.hivpos.coverage <- dat$param$stianntest.syph.hivpos.coverage
-  # stihighrisktest.gc.hivpos.coverage <- dat$param$stihighrisktest.gc.hivpos.coverage
   stihighrisktest.ct.hivpos.coverage <- dat$param$stihighrisktest.ct.hivpos.coverage
   stihighrisktest.syph.hivpos.coverage <- dat$param$stihighrisktest.syph.hivpos.coverage
 
@@ -197,7 +194,7 @@ sti_test_msm <- function(dat, at) {
   idsactive.hivneg <- setdiff((which(stitestind1 == 1)), idsactive.hivpos)
 
   # STI testing higher-risk eligibility scenarios
-  idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1 & tt.traj %in% c(3, 4))
+  idshighrisk.hivpos <- which(stitestind2 == 1 & diag.status == 1 & tt.traj %in% 3:4)
   idshighrisk.hivneg <- setdiff((which(stitestind2 == 1)), idshighrisk.hivpos)
 
 
@@ -240,21 +237,26 @@ sti_test_msm <- function(dat, at) {
   # 3. Screening for non-HIV Diagnosed --------------------------------------
 
   ## 3a. High-Risk Testing ##
-  stihighrisktestCov.ct <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
-  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
-  stihighrisktestCov.gc <- sum(tt.traj.gc.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
-  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
-  stihighrisktestCov.syph <- sum(tt.traj.syph.hivneg == 2, na.rm = TRUE) / length(idshighrisk.hivneg)
-  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
 
+  ## Assume coverage and people are same for NG and CT - correlation
   idsEligSt <- idshighrisk.hivneg
   nEligSt <- length(idshighrisk.hivneg)
 
-  # Assume coverage and people are same for NG and CT - correlation
+  ## Evaluate existing coverage
+  stihighrisktestCov.ct <- sum(tt.traj.ct.hivneg == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
+  stihighrisktestCov.gc <- sum(tt.traj.gc.hivneg == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
+  stihighrisktestCov.syph <- sum(tt.traj.syph.hivneg == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
+
+  ## Count how many are eligible to start a new trajectory
   nStart.gcct <- max(0, min(nEligSt, round((stihighrisktest.ct.hivneg.coverage - stihighrisktestCov.ct) *
-                                           length(idshighrisk.hivneg))))
+                                           length(idsEligSt))))
   nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.syph.hivneg.coverage - stihighrisktestCov.syph) *
-                                             length(idshighrisk.hivneg))))
+                                             length(idsEligSt))))
+
+  ## Sample individuals
   idsStart.gcct <- idsStart.syph <- NULL
   if (nStart.gcct > 0) {
     idsStart.gcct <- ssample(idsEligSt, nStart.gcct)
@@ -273,28 +275,29 @@ sti_test_msm <- function(dat, at) {
   }
 
   ## 3b. Sexually Active (non-HR) Testing ##
-  stianntestCov.ct <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) /
-                      length(setdiff(idsactive.hivneg, which(tt.traj.ct.hivneg == 2)))
-  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
-  stianntestCov.gc <- sum(tt.traj.gc.hivneg == 1, na.rm = TRUE) /
-                      length(setdiff(idsactive.hivneg, which(tt.traj.gc.hivneg == 2)))
-  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
-  stianntestCov.syph <- sum(tt.traj.syph.hivneg == 1, na.rm = TRUE) /
-                        length(setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2)))
-  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
 
-  # Assume coverage and people are same for NG and CT - correlation
+  ## Assume coverage and people are same for NG and CT - correlation
   idsEligSt.gcct <- setdiff(idsactive.hivneg, which(tt.traj.ct.hivneg == 2))
   idsEligSt.syph <- setdiff(idsactive.hivneg, which(tt.traj.syph.hivneg == 2))
   nEligSt.gcct <- length(idsEligSt.gcct)
   nEligSt.syph <- length(idsEligSt.syph)
 
+  ## Evaluate existing coverage
+  stianntestCov.ct <- sum(tt.traj.ct.hivneg == 1, na.rm = TRUE) / nEligSt.gcct
+  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
+  stianntestCov.gc <- sum(tt.traj.gc.hivneg == 1, na.rm = TRUE) / nEligSt.gcct
+  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
+  stianntestCov.syph <- sum(tt.traj.syph.hivneg == 1, na.rm = TRUE) / nEligSt.syph
+  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
+
+  ## Count how many are eligible to start a new trajectory
   nStart.gcct <- max(0, min(nEligSt.gcct,
                           round((stianntest.ct.hivneg.coverage - stianntestCov.ct) * nEligSt.gcct)))
   nStart.syph <- max(0, min(nEligSt.syph,
                             round((stianntest.syph.hivneg.coverage - stianntestCov.syph) * nEligSt.syph)))
-  idsStart.gcct <- idsStart.syph <- NULL
 
+  ## Sample individuals
+  idsStart.gcct <- idsStart.syph <- NULL
   if (nStart.gcct > 0) {
     idsStart.gcct <- ssample(idsEligSt.gcct, nStart.gcct)
   }
@@ -416,24 +419,28 @@ sti_test_msm <- function(dat, at) {
 
   # 4. Screening for HIV-Diagnosed ------------------------------------------
 
-  ## 4a. High-risk testing ##
-  stihighrisktestCov.ct <- sum(tt.traj.ct.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
-  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
-  stihighrisktestCov.gc <- sum(tt.traj.gc.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
-  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
-  stihighrisktestCov.syph <- sum(tt.traj.syph.hivpos == 2, na.rm = TRUE) / length(idshighrisk.hivpos)
-  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
+  ## 4a. High-Risk Testing ##
 
+  ## Assume coverage and people are same for NG and CT - correlation
   idsEligSt <- idshighrisk.hivpos
   nEligSt <- length(idshighrisk.hivpos)
 
-  # Assume coverage and people are same for NG and CT - correlation
-  nStart.gcct <- max(0, min(nEligSt, round((stihighrisktest.ct.hivpos.coverage - stihighrisktestCov.ct) *
-                                        length(idshighrisk.hivpos))))
-  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.syph.hivpos.coverage - stihighrisktestCov.syph) *
-                                           length(idshighrisk.hivpos))))
-  idsStart.gcct <- idsStart.syph <- NULL
+  ## Evaluate existing coverage
+  stihighrisktestCov.ct <- sum(tt.traj.ct.hivpos == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.ct <- ifelse(is.nan(stihighrisktestCov.ct), 0, stihighrisktestCov.ct)
+  stihighrisktestCov.gc <- sum(tt.traj.gc.hivpos == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.gc <- ifelse(is.nan(stihighrisktestCov.gc), 0, stihighrisktestCov.gc)
+  stihighrisktestCov.syph <- sum(tt.traj.syph.hivpos == 2, na.rm = TRUE) / nEligSt
+  stihighrisktestCov.syph <- ifelse(is.nan(stihighrisktestCov.syph), 0, stihighrisktestCov.syph)
 
+  ## Count how many are eligible to start a new trajectory
+  nStart.gcct <- max(0, min(nEligSt, round((stihighrisktest.ct.hivpos.coverage - stihighrisktestCov.ct) *
+                                             length(idshighrisk.hivpos))))
+  nStart.syph <- max(0, min(nEligSt, round((stihighrisktest.syph.hivpos.coverage - stihighrisktestCov.syph) *
+                                             length(idshighrisk.hivpos))))
+
+  ## Sample individuals
+  idsStart.gcct <- idsStart.syph <- NULL
   if (nStart.gcct > 0) {
     idsStart.gcct <- ssample(idsEligSt, nStart.gcct)
   }
@@ -451,28 +458,29 @@ sti_test_msm <- function(dat, at) {
   }
 
   ## 4b. Sexually Active (non-HR) Testing ##
-  stianntestCov.ct <- sum(tt.traj.ct.hivpos == 1, na.rm = TRUE) /
-                      length(setdiff(idsactive.hivpos, which(tt.traj.ct.hivpos == 2)))
-  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
-  stianntestCov.gc <- sum(tt.traj.gc.hivpos == 1, na.rm = TRUE) /
-                      length(setdiff(idsactive.hivpos, which(tt.traj.gc.hivpos == 2)))
-  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
-  stianntestCov.syph <- sum(tt.traj.syph.hivpos == 1, na.rm = TRUE) /
-                        length(setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2)))
-  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
 
-  # Assume coverage and people are same for NG and CT - correlation
+  ## Assume coverage and people are same for NG and CT - correlation
   idsEligSt.gcct <- setdiff(idsactive.hivpos, which(tt.traj.ct.hivpos == 2))
   idsEligSt.syph <- setdiff(idsactive.hivpos, which(tt.traj.syph.hivpos == 2))
   nEligSt.gcct <- length(idsEligSt.gcct)
   nEligSt.syph <- length(idsEligSt.syph)
 
+  ## Evaluate existing coverage
+  stianntestCov.ct <- sum(tt.traj.ct.hivpos == 1, na.rm = TRUE) / nEligSt.gcct
+  stianntestCov.ct <- ifelse(is.nan(stianntestCov.ct), 0, stianntestCov.ct)
+  stianntestCov.gc <- sum(tt.traj.gc.hivpos == 1, na.rm = TRUE) / nEligSt.gcct
+  stianntestCov.gc <- ifelse(is.nan(stianntestCov.gc), 0, stianntestCov.gc)
+  stianntestCov.syph <- sum(tt.traj.syph.hivpos == 1, na.rm = TRUE) / nEligSt.syph
+  stianntestCov.syph <- ifelse(is.nan(stianntestCov.syph), 0, stianntestCov.syph)
+
+  ## Count how many are eligible to start a new trajectory
   nStart.gcct <- max(0, min(nEligSt.gcct,
-                          round((stianntest.ct.hivpos.coverage - stianntestCov.ct) * nEligSt.gcct)))
+                            round((stianntest.ct.hivpos.coverage - stianntestCov.ct) * nEligSt.gcct)))
   nStart.syph <- max(0, min(nEligSt.syph,
                             round((stianntest.syph.hivpos.coverage - stianntestCov.syph) * nEligSt.syph)))
-  idsStart.gcct <- idsStart.syph <- NULL
 
+  ## Sample individuals
+  idsStart.gcct <- idsStart.syph <- NULL
   if (nStart.gcct > 0) {
     idsStart.gcct <- ssample(idsEligSt.gcct, nStart.gcct)
   }

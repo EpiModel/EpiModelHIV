@@ -134,16 +134,15 @@ riskhist_stitest_msm <- function(dat, at) {
   # Indications -------------------------------------------------------------
 
   part.list <- dat$temp$part.list
-  idsEligTest <- which(race %in% c("B", "W"))
 
   ### Lower risk - sexually active in the last year
-  idsactive <- intersect(which((at - stitestind1) <= stitest.active.int), idsEligTest)
+  idsactive <- which((at - stitestind1) <= stitest.active.int)
   idsnotactive <- setdiff(which(race %in% c("B","W")), idsactive)
   # these are relative ids of nodes in partner list
 
   ### High-risk: Have more than one sex partner in last x months
   # Reset # of partners at each time step- length of "recent" interval is drawn from interval of partner list lookback
-  dat$attr$recentpartners <- rep(0, length(idsEligTest))
+  dat$attr$recentpartners <- rep(0, length(dat$attr$race))
 
   if (at >= dat$param$stitest.start | at >= dat$param$ept.start) {
 

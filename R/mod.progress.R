@@ -299,6 +299,7 @@ syph_progress_msm <- function(dat, at) {
   stage.syph[toPrim] <- 2
   stage.time.syph[toPrim] <- 0
   syph.incub.tx[toPrim] <- NA
+  syph.sympt[toPrim] <- NA
   syph.sympt[toPrim] <- rbinom(length(toPrim), 1, syph.prim.sympt.prob)
 
   # Change stage to Secondary and assign symptoms
