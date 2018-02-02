@@ -92,8 +92,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
 
   ##Age
-  dat$attr$age[newIds] <- dat$param$birth.age
-  dat$attr$sqrt.age[newIds] <- sqrt(dat$param$birth.age)
+  dat$attr$age[newIds] <- rep(dat$param$birth.age,nBirths)
+  dat$attr$sqrt.age[newIds] <- rep(sqrt(dat$param$birth.age),nBirths)
   
   
   #Set out age for new births and debut for new births 
@@ -114,13 +114,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   }
   
   dat$attr$debuted[newIds] <- debuted
-  dat$attr$of.age[newIds] <- 0
-  dat$attr$out[newIds] <- 0
+  dat$attr$of.age[newIds] <- rep(0, nBirths)
+  dat$attr$out[newIds] <- rep(0, nBirths)
   
   #set group
-  dat$attr$asmm[newIds] <- 1
-  dat$attr$yamsm[newIds] <- 0
-  dat$attr$oamsm[newIds] <- 0
+  dat$attr$asmm[newIds] <- rep(1, nBirths)
+  dat$attr$yamsm[newIds] <- rep(0, nBirths)
+  dat$attr$oamsm[newIds] <- rep(0, nBirths)
   
   
   #AI.
