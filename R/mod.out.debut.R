@@ -18,10 +18,15 @@
 #'
 out_debut_camplc <- function(dat, at) {
  
-  
+  #old Code
   dat$attr$asmm <- ifelse(dat$attr$age < 19,1,0)
-  dat$attr$yamsm <- ifelse(dat$attr$age >= 19 & dat$attr$age < 26,1,0)
-  dat$attr$oamsm <- ifelse(dat$attr$age >= 26,1,0)
+  dat$attr$yamsm <- ifelse(dat$attr$age > 18 & dat$attr$age < 26,1,0)
+  dat$attr$oamsm <- ifelse(dat$attr$age > 25,1,0)
+  
+  #New Code
+  #dat$attr$asmm <- ifelse(dat$attr$age < 19,1,0)
+  #dat$attr$yamsm <- ifelse(dat$attr$age >= 19 & dat$attr$age < 26,1,0)
+  #dat$attr$oamsm <- ifelse(dat$attr$age >= 26,1,0)
   
   dat$attr$out <- ifelse(dat$attr$age > dat$attr$out.age,1,dat$attr$out)
   
@@ -30,8 +35,11 @@ out_debut_camplc <- function(dat, at) {
   
   dat$attr$debuted[ids] <- rbinom(ids,1,dat$param$debut.prob)
   
-
-  dat$attr$debuted <- ifelse(dat$attr$age >= 19,1,dat$attr$debuted)
+  #old code
+  dat$attr$debuted <- ifelse(dat$attr$age > 19,1,dat$attr$debuted)
+  
+  #New Code
+  #dat$attr$debuted <- ifelse(dat$attr$age >= 19,1,dat$attr$debuted)
 
   return(dat)
 }
