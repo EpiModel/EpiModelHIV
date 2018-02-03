@@ -154,6 +154,9 @@ initialize_camplc <- function(x, param, init, control, s) {
   }
 
   
+  #Track the age at which each new infection is aquired
+  dat$age.inf.vec <- list()
+  
   # Risk history lists adol 
   t1<-t2<-t3<-t4<-t5<-t6<-t7<-t8<-t9<-t10<-t11<-t12<-t13<-t14<-t15<-t16<-t17<-t18<-t19<-t20<-t21<-t22<-t23<-t24<-t25<-t26<-rep(0,length(dat$attr$uid))
   dat$riskhist<-cbind(dat$attr$uid,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26)
