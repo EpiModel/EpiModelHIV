@@ -145,6 +145,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   # Sex Identity
   dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex.ident")
+  dat$attr$msmf <- ifelse(dat$attr$sex.ident == "msmf" ,1 ,0)
   num.msf <-sum(dat$attr$sex.ident == "msf")
   num.msm <-sum(dat$attr$sex.ident == "msm")
   num.msmf <-sum(dat$attr$sex.ident == "msmf")
