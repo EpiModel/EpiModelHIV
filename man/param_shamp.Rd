@@ -221,10 +221,12 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   base.vi.pers.BI.rate)/2) * UIVI.prob * fa.temp.adjust,
   immig.aq.prob.HI.m = 0.3 * 0.005 * ((base.vi.main.HI.rate +
   base.vi.pers.HI.rate)/2) * UIVI.prob * fa.temp.adjust,
-  msm.aq.prob.B = 7.183e-06 * msm.temp.adjust, msm.aq.prob.BI = 7.183e-06 *
-  msm.temp.adjust, msm.aq.prob.H = 7.183e-06 * msm.temp.adjust,
-  msm.aq.prob.HI = 7.183e-06 * msm.temp.adjust, msm.aq.prob.W = 7.183e-06 *
-  msm.temp.adjust, demog.list = data.params[[1]]$demog.list,
+  msm.aq.prob.B = 1.68767e-05 * msm.temp.adjust,
+  msm.aq.prob.BI = 1.68767e-05 * msm.temp.adjust,
+  msm.aq.prob.H = 1.68767e-05 * msm.temp.adjust,
+  msm.aq.prob.HI = 1.68767e-05 * msm.temp.adjust,
+  msm.aq.prob.W = 1.68767e-05 * msm.temp.adjust,
+  demog.list = data.params[[1]]$demog.list,
   demog.dist = data.params[[1]]$demog.dist,
   sex.groups = data.params[[1]]$sex.groups,
   race.groups = data.params[[1]]$race.groups,
