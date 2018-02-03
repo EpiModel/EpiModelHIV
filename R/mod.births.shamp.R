@@ -100,7 +100,6 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$age[newIds] <- rep(0, nBirths)
   dat$attr$sqrt.age[newIds] <- rep(0, nBirths)
   dat$attr$agesq[newIds] <- rep(0, nBirths)
-  dat$attr$sqrt.age.adj[newIds] <- rep(0, nBirths)
   dat$attr$demog.cat[newIds] <- rep(0, nBirths)
   dat$attr$evertest[newIds] <- rep(0, nBirths)
   dat$attr$infected.gen[newIds]<-rep(NA, nBirths)
