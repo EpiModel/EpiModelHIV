@@ -16,9 +16,9 @@
 #' person.
 #'
 #' @return
-#' This function returns the \code{dat} object with the updated act
-#' list (\code{al}). Each element of \code{al} is a data frame with the ids
-#' of the  pair repeated the number of times they have AI.
+#' This function returns the \code{dat} object with the updated edge
+#' list (\code{el}). An additional column is added with the number of acts for
+#' each partnership on the edge list (\code{el}).
 #'
 #' @keywords module msm
 #' @export

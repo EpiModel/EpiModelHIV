@@ -14,7 +14,9 @@ individual-level attributes, and summary statistics.}
 }
 \value{
 Updates the edgelist with a \code{uai} variable indicating whether
-condoms were used in that act.
+condoms were used in that act. An act list \code{al} is created.
+The act list \code{al} is a data frame with the ids of the pair
+repeated the number of times they have AI.
 }
 \description{
 Module function stochastically simulates potential condom use
