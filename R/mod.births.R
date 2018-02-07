@@ -141,12 +141,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$stitest.ind.recentpartners[newIds] <- rep(0, nBirths)
 
   selected <- newIds
-  tslaststitest <- ceiling(runif(length(selected), max = dat$param$stitest.active.int))
-  dat$attr$time.since.last.test.syph[newIds] <- tslaststitest
-  dat$attr$time.since.last.test.rgc[newIds] <- tslaststitest
-  dat$attr$time.since.last.test.ugc[newIds] <- tslaststitest
-  dat$attr$time.since.last.test.rct[newIds] <- tslaststitest
-  dat$attr$time.since.last.test.uct[newIds] <- tslaststitest
+  tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
+  tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
+  dat$attr$time.since.last.test.syph[newIds] <- tslastsyphtest
+  dat$attr$time.since.last.test.rgc[newIds] <- tslastgctest
+  dat$attr$time.since.last.test.ugc[newIds] <- tslastgctest
+  dat$attr$time.since.last.test.rct[newIds] <- tslastcttest
+  dat$attr$time.since.last.test.uct[newIds] <- tslastcttest
 
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)

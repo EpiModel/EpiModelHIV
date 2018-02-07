@@ -808,8 +808,7 @@ init_status_sti_msm <- function(dat) {
 
     selected <- which(dat$attr$race %in% c("B", "W"))
     tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
-    tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
-    tslastcttest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
 
     ## Syphilis ----------------------------------------------------------------
 
