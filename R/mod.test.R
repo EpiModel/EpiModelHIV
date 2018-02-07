@@ -186,7 +186,7 @@ sti_test_msm <- function(dat, at) {
   testing.pattern.sti <- dat$param$testing.pattern.sti
   stitest.active.int <- dat$param$stitest.active.int
   sti.highrisktest.int <- dat$param$sti.highrisktest.int
-  #tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
+  tst.rect.sti.rr <- dat$param$tst.rect.sti.rr
 
   # Eligibility and trajectory
   # Annual indications- sexually active in last year
@@ -371,7 +371,7 @@ sti_test_msm <- function(dat, at) {
 
   # GC non-PrEP testing
   tst.rgc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("R", "V"))]
-  #tst.rgc.hivneg <- sample(tst.rgc.hivneg, tst.rect.sti.rr * length(tst.rgc.hivneg))
+  tst.rgc.hivneg <- sample(tst.rgc.hivneg, tst.rect.sti.rr * length(tst.rgc.hivneg))
   tst.ugc.hivneg <- tst.gc.nprep.hivneg[which(role.class[tst.gc.nprep.hivneg] %in% c("I", "V"))]
   tst.rgc.pos.hivneg <- tst.rgc.hivneg[which(rGC[tst.rgc.hivneg] == 1)]
   tst.ugc.pos.hivneg <- tst.ugc.hivneg[which(uGC[tst.ugc.hivneg] == 1)]
@@ -381,7 +381,7 @@ sti_test_msm <- function(dat, at) {
 
   # CT non-PrEP testing
   tst.rct.hivneg <- tst.ct.nprep.hivneg[which(role.class[tst.ct.nprep.hivneg] %in% c("R", "V"))]
-  #tst.rct.hivneg <- sample(tst.rct.hivneg, tst.rect.sti.rr * length(tst.rct.hivneg))
+  tst.rct.hivneg <- sample(tst.rct.hivneg, tst.rect.sti.rr * length(tst.rct.hivneg))
   tst.uct.hivneg <- tst.ct.nprep.hivneg[which(role.class[tst.ct.nprep.hivneg] %in% c("I", "V"))]
   tst.rct.pos.hivneg <- tst.rct.hivneg[which(rCT[tst.rct.hivneg] == 1)]
   tst.uct.pos.hivneg <- tst.uct.hivneg[which(uCT[tst.uct.hivneg] == 1)]

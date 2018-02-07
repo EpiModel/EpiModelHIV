@@ -83,7 +83,7 @@ part_msm <- function(dat, at){
       }
 
       if (type == 3) {
-        # Set end.time for all one-offs to now
+        # Set end.time for all one-offs to now (last active time already set)
         new.part[, "end.time"] <- at
 
         # Newly re-active one-offs: of those in current EL, also in existing PL
