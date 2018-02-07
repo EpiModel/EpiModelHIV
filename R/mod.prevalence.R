@@ -110,6 +110,15 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rCTsympttests <- rep(0, nsteps)
     dat$epi$uCTsympttests <- rep(0, nsteps)
     dat$epi$syphsympttests <- rep(0, nsteps)
+    dat$epi$rGCsympttests.pos <- rep(0, nsteps)
+    dat$epi$uGCsympttests.pos <- rep(0, nsteps)
+    dat$epi$GCsympttests.pos <- rep(0, nsteps)
+    dat$epi$rCTsympttests.pos <- rep(0, nsteps)
+    dat$epi$uCTsympttests.pos <- rep(0, nsteps)
+    dat$epi$CTsympttests.pos <- rep(0, nsteps)
+    dat$epi$syphsympttests.pos <- rep(0, nsteps)
+    dat$epi$syphearlysympttests.pos <- rep(0, nsteps)
+    dat$epi$syphlatesympttests.pos <- rep(0, nsteps)
 
     dat$epi$rGCasympttests <- rep(0, nsteps)
     dat$epi$uGCasympttests <- rep(0, nsteps)
@@ -133,10 +142,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$stiasympttests <- rep(0, nsteps)
     dat$epi$stiasympttests.pos <- rep(0, nsteps)
     dat$epi$stisympttests <- rep(0, nsteps)
+    dat$epi$stisympttests.pos <- rep(0, nsteps)
     dat$epi$stiasympttests.prep <- rep(0, nsteps)
     dat$epi$stiasympttests.pos.prep <- rep(0, nsteps)
 
-    #STI Testing due to Symptomatic STI
+    # STI diagnostic testing due to symptoms at a site (rectal or urethral)
     dat$epi$rGC_symptstidxtime <- rep(0, nsteps)
     dat$epi$uGC_symptstidxtime <- rep(0, nsteps)
     dat$epi$rCT_symptstidxtime <- rep(0, nsteps)
@@ -148,8 +158,6 @@ prevalence_msm <- function(dat, at) {
     dat$epi$rCT_pos_symptstidxtime <- rep(0, nsteps)
     dat$epi$uCT_pos_symptstidxtime <- rep(0, nsteps)
     dat$epi$syph_pos_symptstidxtime <- rep(0, nsteps)
-    dat$epi$syph_earlypos_symptstidxtime <- rep(0, nsteps)
-    dat$epi$syph_latepos_symptstidxtime <- rep(0, nsteps)
 
     # STI prevalence and coinfection prevalence
     dat$epi$prev.rgc <- rNA
@@ -486,6 +494,24 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prop.acts.negneg <- rNA
     dat$epi$prop.acts.negpos <- rNA
     dat$epi$prop.acts.pospos <- rNA
+
+    # Testing events
+    dat$epi$testing.events.syph <- rep(0, nsteps)
+    dat$epi$testing.events.syph.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.rgc <- rep(0, nsteps)
+    dat$epi$testing.events.rgc.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.ugc <- rep(0, nsteps)
+    dat$epi$testing.events.ugc.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.gc <- rep(0, nsteps)
+    dat$epi$testing.events.gc.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.sti <- rep(0, nsteps)
+    dat$epi$testing.events.sti.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.rct <- rep(0, nsteps)
+    dat$epi$testing.events.rct.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.uct <- rep(0, nsteps)
+    dat$epi$testing.events.uct.asympt <- rep(0, nsteps)
+    dat$epi$testing.events.ct <- rep(0, nsteps)
+    dat$epi$testing.events.ct.asympt <- rep(0, nsteps)
 
   }
 
