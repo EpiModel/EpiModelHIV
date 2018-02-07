@@ -949,6 +949,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
     dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.syph <- tslastsyphtest
+    dat$attr$testing.events.syph <- rep(0, num)
+    dat$attr$testing.events.syph.asympt <- rep(0, num)
 
     # Gonorrhea
     dat$attr$rGC <- rGC
@@ -981,6 +983,12 @@ init_status_sti_msm <- function(dat) {
     dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.rgc <- tslastgctest
     dat$attr$time.since.last.test.ugc <- tslastgctest
+    dat$attr$testing.events.rgc <- rep(0, num)
+    dat$attr$testing.events.rgc.asympt <- rep(0, num)
+    dat$attr$testing.events.ugc <- rep(0, num)
+    dat$attr$testing.events.ugc.asympt <- rep(0, num)
+    dat$attr$testing.events.gc <- rep(0, num)
+    dat$attr$testing.events.gc.asympt <- rep(0, num)
 
     # Chlamydia
     dat$attr$rCT <- rCT
@@ -1013,6 +1021,12 @@ init_status_sti_msm <- function(dat) {
     dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
     dat$attr$time.since.last.test.rct <- tslastcttest
     dat$attr$time.since.last.test.uct <- tslastcttest
+    dat$attr$testing.events.rct <- rep(0, num)
+    dat$attr$testing.events.rct.asympt <- rep(0, num)
+    dat$attr$testing.events.uct <- rep(0, num)
+    dat$attr$testing.events.uct.asympt <- rep(0, num)
+    dat$attr$testing.events.ct <- rep(0, num)
+    dat$attr$testing.events.ct.asympt <- rep(0, num)
 
     # EPT variables
     dat$attr$eptindexElig <- rep(NA, num)
@@ -1035,6 +1049,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$stihighrisktestLastElig <- rep(NA, num)
     dat$attr$stitest.ind.active <- rep(0, num)
     dat$attr$stitest.ind.recentpartners <- rep(0, num)
+    dat$attr$testing.events.sti <- rep(0, num)
+    dat$attr$testing.events.sti.asympt <- rep(0, num)
 
     return(dat)
 

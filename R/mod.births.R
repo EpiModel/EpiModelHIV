@@ -139,6 +139,24 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$recentpartners[newIds] <- rep(0, nBirths)
   dat$attr$stitest.ind.active[newIds] <- rep(0, nBirths)
   dat$attr$stitest.ind.recentpartners[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.syph[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.syph.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rgc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rgc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ugc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ugc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.gc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.gc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.sti[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.sti.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rct.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.uct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.uct.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ct.asympt[newIds] <- rep(0, nBirths)
+
+
 
   selected <- newIds
   tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
