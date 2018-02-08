@@ -14,11 +14,11 @@
 #' @keywords shamp
 #'
 #' @export
-make_small <- function(data) {
+make_small <- function(data,prop) {
  
 ##Drop egos and alters younger than 20 or older than 30.
   
-    selected<-rbinom(length(data[[1]]$egos$age),1,.5)
+    selected<-rbinom(length(data[[1]]$egos$age),1,prop)
     ids<-which(selected == 1)
     
     #ids<-which(data[[1]]$egos$age > 19 & data[[1]]$egos$age < 31 )

@@ -4,7 +4,7 @@
 \alias{make_small}
 \title{Cut population size for testing}
 \usage{
-make_small(data)
+make_small(data, prop)
 }
 \arguments{
 \item{...}{Additional arguments passed to the function.}

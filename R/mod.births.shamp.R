@@ -98,6 +98,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$sex[newIds] <- rep(0, nBirths)
   dat$attr$race[newIds] <- rep(0, nBirths)
   dat$attr$age[newIds] <- rep(0, nBirths)
+  dat$attr$sqrt.age[newIds] <- rep(0, nBirths)
+  dat$attr$agesq[newIds] <- rep(0, nBirths)
   dat$attr$demog.cat[newIds] <- rep(0, nBirths)
   dat$attr$evertest[newIds] <- rep(0, nBirths)
   dat$attr$infected.gen[newIds]<-rep(NA, nBirths)
@@ -132,7 +134,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$sex[newIds] <- sex
   dat$attr$race[newIds] <- race
   dat$attr$age[newIds] <- age
-  dat$attr$sqrt.age[newIds] <- sqrt(dat$attr$age[newIds]) 
+  dat$attr$sqrt.age <- sqrt(dat$attr$age) 
+  dat$attr$agesq <- dat$attr$age^2 
   
   race3 <- race
   race3 <- ifelse(race3 == "HI","H",
@@ -180,6 +183,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
                                     prob=c(dat$param$msm.frac,dat$param$msmf.frac,(1-(dat$param$msm.frac+dat$param$msmf.frac))),
                                            replace=TRUE)
   dat$attr$sex.ident[newIds] <- sex.ident
+  dat$attr$msmf<-ifelse(dat$attr$sex.ident == "msmf",1,0)
   new.msm<-which(sex.ident=="msm")
   new.msmf<-which(sex.ident=="msmf")
   new.msf<-which(sex.ident=="msf")
