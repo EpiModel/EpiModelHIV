@@ -244,6 +244,13 @@
 #' where R is a charater (BI or HI), and sex S, were S is a charater (f or m), who has left
 #' the population being simulated aquires HIV while in their home country.
 #' 
+#' @param pos.entry.BI The probability that a BI entering into the population that is etering at an
+#' age older than the birth age (replacing deaths from mortality proportional to the demographic
+#' distribution and approximating in-migration) is HIV positive
+#' 
+#' @param pos.entry.HI The probability that a HI entering into the population that is etering at an
+#' age older than the birth age (replacing deaths from mortality proportional to the demographic
+#' distribution and approximating in-migration) is HIV positive
 #'        
 #'        
 #' @param ... Additional arguments passed to the function.
@@ -730,12 +737,15 @@ param_shamp <- function(race.method = 1,
                       immig.aq.prob.HI.f = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*URVI.prob * fa.temp.adjust ,
                       immig.aq.prob.BI.m = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*UIVI.prob * fa.temp.adjust ,
                       immig.aq.prob.HI.m = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*UIVI.prob * fa.temp.adjust ,  
+                      #pos.entry.BI = 0,
+                      #pos.entry.HI = 0,
                       
                       msm.aq.prob.B=0.0000168767 * msm.temp.adjust,
                       msm.aq.prob.BI=0.0000168767 * msm.temp.adjust,
                       msm.aq.prob.H=0.0000168767 * msm.temp.adjust,
                       msm.aq.prob.HI=0.0000168767 * msm.temp.adjust,
                       msm.aq.prob.W= 0.0000168767 * msm.temp.adjust,
+                      
                       
                       demog.list=data.params[[1]]$demog.list,
                       demog.dist=data.params[[1]]$demog.dist,
