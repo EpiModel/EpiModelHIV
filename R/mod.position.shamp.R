@@ -27,17 +27,22 @@
 position_shamp <- function(dat, at) {
 
   ## Variables
-
-  print(nrow(al))
+  al <- dat$temp$al
+  
   if (nrow(al) == 0) {
     return(dat)
   }
 
   status <- dat$attr$status
   sex <- dat$attr$sex
-  test.new<<-dal <- as.matrix(al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ],drop=FALSE)
-  test.old<<-dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
+  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
+  if(class(dal)=="numeric"){dal<-as.matrix(t(dal))}
   dat$temp$al <- NULL
+  
+  if (nrow(dal) == 0) {
+    dat$temp$dal <- dal
+    return(dat)
+  }
 
   role.class <- dat$attr$role.class
   ins.quot <- dat$attr$ins.quot
