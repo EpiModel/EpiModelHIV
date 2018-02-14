@@ -371,7 +371,7 @@ condoms_shamp <- function(dat, at) {
     al <- al.ai}
       
   dat$temp$al <- al
-  
+
   if (at == 2) {
     dat$epi$uai.events <- rep(NA, 2)
     dat$epi$uvi.events <- rep(NA, 2)
