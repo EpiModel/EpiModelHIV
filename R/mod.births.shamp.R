@@ -37,9 +37,9 @@ births_shamp <- function(dat, at){
 
   ## Process
 
-  nBirths.gen <- dat$epi$dth.gen[at] 
-  nBirths.dis <- dat$epi$dth.dis[at]
-  nBirths.age <- dat$epi$dth.age[at]
+  nBirths.gen <- max(dat$epi$dth.gen[at],0) 
+  nBirths.dis <- max(dat$epi$dth.dis[at],0)
+  nBirths.age <- max(dat$epi$dth.age[at],0)
   
 
   ##For now we will not replace disease deaths.
@@ -47,8 +47,12 @@ births_shamp <- function(dat, at){
 
   ## Update Attr
 
-  if (nBirths.gen > 0 | nBirths.dis > 0 | nBirths.age > 0) {
-    dat <- setBirthAttr_shamp(dat, at, nBirths.gen, nBirths.age, nBirths.dis)
+ # if (nBirths.gen > 0 | nBirths.dis > 0 | nBirths.age > 0) {
+ #   dat <- setBirthAttr_shamp(dat, at, nBirths.gen, nBirths.age, nBirths.dis)
+ #  }
+  
+  if (nBirths.gen > 0 | nBirths.age > 0) {
+    dat <- setBirthAttr_shamp(dat, at, nBirths.gen, nBirths.age)
   }
 
  
@@ -69,8 +73,10 @@ births_shamp <- function(dat, at){
 }
 
 
-setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
+#setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
 
+setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
+    
   # Parameters
   demog.list <- dat$param$demog.list
   demog.dist <- dat$param$demog.dist
@@ -80,6 +86,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   ##Not replcing disease deathe at this time
   nBirths <- nBirths.gen + nBirths.age
+
 
   # Set all attributes NA by default
   dat$attr <- lapply(dat$attr, {
@@ -95,6 +102,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$temp$max.uid <- dat$temp$max.uid + nBirths
   dat$attr$sex.ident[newIds] <- rep("NA", nBirths)
   dat$attr$immig.loc[newIds] <- rep(0, nBirths)
+  #dat$attr$arv.BI.pos[newIds] <- rep(0, nBirths)
+  #dat$attr$arv.HI.pos[newIds] <- rep(0, nBirths)
   dat$attr$sex[newIds] <- rep(0, nBirths)
   dat$attr$race[newIds] <- rep(0, nBirths)
   dat$attr$age[newIds] <- rep(0, nBirths)
@@ -190,9 +199,18 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
  
 
  
-
+  #Status
   dat$attr$status[newIds] <- rep(0, nBirths)
+ 
+  #Set status for Black and Hispanic imigrant that are entering at an age greater than 18 based on prevelance parameters pos.entry.BI pos.entry.HI
 
+  #BI.imigrating <- which(dat$attr$race[newIds] == "BI" & dat$attr$age[newIds] == dat$param$birth.age)
+  #BI.status <- rbinom(length(BI.imigrating),1,prob=dat$param$pos.entry.BI)
+  #dat$attr$status[newIds][BI.imigrating] <- BI.status
+  #dat$attr$arv.BI.pos[newIds][BI.imigrating] <- BI.status * at
+    
+  #HI.imigrating <- which(dat$attr$race[newIds] == "HI" & dat$attr$age[newIds] == dat$param$birth.age)
+  
 
  
   # dat$attr$inst.ai.class[newIds] <- sample(1:dat$param$num.inst.ai.classes,

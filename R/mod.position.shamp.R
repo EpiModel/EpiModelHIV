@@ -27,14 +27,16 @@
 position_shamp <- function(dat, at) {
 
   ## Variables
-  al <- dat$temp$al
+
+  print(nrow(al))
   if (nrow(al) == 0) {
     return(dat)
   }
 
   status <- dat$attr$status
   sex <- dat$attr$sex
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
+  test.new<<-dal <- as.matrix(al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ],drop=FALSE)
+  test.old<<-dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
   dat$temp$al <- NULL
 
   role.class <- dat$attr$role.class
