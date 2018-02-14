@@ -563,6 +563,14 @@ being simulated.}
 \item{immig.aq.prob.R.S}{The probability per time step that a person of group R,
 where R is a charater (BI or HI), and sex S, were S is a charater (f or m), who has left
 the population being simulated aquires HIV while in their home country.}
+
+\item{pos.entry.BI}{The probability that a BI entering into the population that is etering at an
+age older than the birth age (replacing deaths from mortality proportional to the demographic
+distribution and approximating in-migration) is HIV positive}
+
+\item{pos.entry.HI}{The probability that a HI entering into the population that is etering at an
+age older than the birth age (replacing deaths from mortality proportional to the demographic
+distribution and approximating in-migration) is HIV positive}
 }
 \value{
 A list object of class \code{param_shamp}, which can be passed to
