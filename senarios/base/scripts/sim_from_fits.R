@@ -239,7 +239,7 @@ param <- param_shamp(data.params)
 init <- init_shamp()
 control <- control_shamp(nsteps = 1040, save.other = c("attr", "trans.el"), verbose = TRUE)
 
-sim_fits <- netsim(est, param, init, control)
+sim_fits <- netsim(est_f, param, init, control)
 save(sim_fits, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/sim_fits.rda")
 
 
