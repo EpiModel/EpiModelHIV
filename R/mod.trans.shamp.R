@@ -70,18 +70,24 @@ trans_shamp <- function(dat, at){
   # Data
   
   dal <- dat$temp$dal
-  dal <- dal[sample(1:nrow(dal)), ]
+  
+  if (nrow(dal) == 0) {return(dat)}
+  
+  if (nrow(dal) == 1) {
+    dal <- dal[sample(1:nrow(dal)), ]
+    dal<-as.matrix(t(dal))
+  }
+
+  if (nrow(dal) > 1) {dal <- dal[sample(1:nrow(dal)), ]}
+  
   ncols <- dim(dal)[2]
   
 
-  if (nrow(dal) == 0) {
-    return(dat)
-  }
 
   ## Reorder by role: ins on the left, rec on the right,
   ##                  with flippers represented twice
-  disc.ip <- as.data.frame(dal[dal[, "ins"] %in% 1:2, ])
-  disc.rp <- as.data.frame(dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)])
+  disc.ip <- as.data.frame(dal[dal[, "ins"] %in% 1:2,, drop=FALSE ])
+  disc.rp <- as.data.frame(dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols), drop=FALSE])
   colnames(disc.ip)[1:2] <- c("i", "r")
   colnames(disc.rp)[1:2] <- c("i", "r")
   
