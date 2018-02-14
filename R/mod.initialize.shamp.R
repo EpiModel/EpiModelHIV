@@ -192,7 +192,9 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   # Immigrant status
   dat$attr$immig.loc <- rep(0,length(dat$attr$age))
-
+  #dat$attr$arv.BI.pos <- rep(0,length(dat$attr$age))
+  #dat$attr$arv.HI.pos <- rep(0,length(dat$attr$age))
+  
   # UAI group
   p1.msm <- dat$param$cond.pers.always.prob.msm
   p2.msm <- dat$param$cond.inst.always.prob.msm
