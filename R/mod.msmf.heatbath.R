@@ -125,7 +125,7 @@ heatbath_msmf_shamp <- function(dat, at){
     dat$trans.el$infector.race <- c(dat$trans.el$infector.race, rep("MSM", length(infected)))
     dat$trans.el$infector.age <- c(dat$trans.el$infector.age, rep("MSM", length(infected)))
     dat$trans.el$infector.sex.ident <- c(dat$trans.el$infector.sex.ident, rep("MSM", length(infected)))
-    dat$trans.el$infector.deg.tot <- c(dat$trans.el$infector.deg.tot, rep("FA", length(infected)))
+    dat$trans.el$infector.deg.tot <- c(dat$trans.el$infector.deg.tot, rep("MSM", length(infected)))
     dat$trans.el$infector.gen <- c(dat$trans.el$infector.gen, rep(0,length(infected)))
     
     dat$trans.el$time <- c(dat$trans.el$time, rep(at, length(infected)))
