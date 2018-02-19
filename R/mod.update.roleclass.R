@@ -47,6 +47,7 @@ roleclass_trans <- function(dat, at) {
 
   
   dat$attr$role.class <- role.class
-
+  
+  
   return(dat)
 }
