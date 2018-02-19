@@ -689,6 +689,8 @@ init_cl <- function(nwstats,
 #' @param test.FUN Module function for diagnostic disease testing.
 #' @param tx.FUN Module function for ART initiation and adherence.
 #' @param prep.FUN Module function for PrEP initiation and utilization.
+#' @param prep2.FUN Module function for PrEP initiation and utilization for ASMM
+#' @param prep.classtrans.FUN Model for transmisioning PrEP adherence class from ASMM to adult MSM at age 19
 #' @param progress.FUN Module function for HIV disease progression.
 #' @param vl.FUN Module function for HIV viral load evolution.
 #' @param aiclass.FUN Module function for one-off AI risk class transitions.
@@ -742,6 +744,7 @@ control_cl <- function(simno = 1,
                         tx.FUN = tx_msm,
                         prep.FUN = prep_msm,
                         prep2.FUN = prep_adol,
+                        prep.classtrans.FUN = prep_adherence_trans,
                         progress.FUN = progress_msm,
                         vl.FUN = vl_msm,
                         aiclass.FUN = NULL,
