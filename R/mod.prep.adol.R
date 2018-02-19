@@ -40,6 +40,7 @@ prep_adol <- function(dat, at) {
   prepClass <- dat$attr$prepClass
   prepStart.time <- dat$attr$prepStart.time
   ever.adol.prep <- dat$attr$ever.adol.prep
+  ever.adult.prep <- dat$attr$ever.adult.prep
   
 
 ##PrEP params.
@@ -49,7 +50,6 @@ prep_adol <- function(dat, at) {
   prep.risk.reassess <- dat$param$prep.risk.reassess.asmm
   prepSpell<- dat$param$prepSpell.asmm
   
-  ##Race specific.
   prep.coverage <- dat$param$prep.coverage.asmm
   prep.cov.rate <- dat$param$prep.cov.rate.asmm
   prep.class.prob <- dat$param$prep.class.prob.asmm
@@ -177,13 +177,20 @@ prep_adol <- function(dat, at) {
 
   }
   
+ #Drop out for MSM continuing adolecent PrEP into adulthood
+  msm.resid <-which(active==1 & prepStat == 1 & asmm == 0 & ever.adult.prep == 0)
+  idsStpDrop.msm.resid<-integer(0)
+  if (length(msm.resid>=1)){
+    msm.resid.list<-rbinom(length(msm.resid),1,prepDrop)
+    idsStpDrop.msm.resid <-msm.resid[msm.resid.list==1]
+  }
 
   
   # Transition to ineligibility
   idsStpInelig <- idsEligStop
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpDth, idsStpDrop, idsStpInelig)
+  idsStp <- c(idsStpDx, idsStpDth, idsStpDrop, idsStpInelig, idsStpDrop.msm.resid)
   prepStat[idsStp] <- 0
   prepClass[idsStp] <-NA
   
