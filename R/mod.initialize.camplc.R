@@ -141,7 +141,8 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$attr$prepStat <- rep(0, num)
   dat$attr$prepEver <- rep(0, num)
   dat$attr$ever.adol.prep <- rep(0, num)
-
+  dat$attr$ever.adult.prep <- rep(0, num)
+  
   # Risk history lists
   nc <- ceiling(dat$param$prep.risk.int)
   dat$riskh <- list()
