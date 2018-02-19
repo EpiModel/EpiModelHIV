@@ -207,6 +207,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$prepElig.asmm[newIds] <- rep(0, nBirths)
   dat$attr$prepClass[newIds] <- rep(NA, nBirths)
   dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
+  dat$attr$ever.adult.prep[newIds] <- rep(0, nBirths)
   
   # Risk history matrices
   for (i in 1:length(dat$riskh)) {
