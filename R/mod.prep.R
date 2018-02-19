@@ -21,6 +21,7 @@ prep_msm <- function(dat, at) {
   status <- dat$attr$status
   asmm <- dat$attr$asmm
   ever.adol.prep <- dat$attr$ever.adol.prep
+  ever.adult.prep  <- dat$attr$ever.adult.prep
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
 
@@ -88,6 +89,7 @@ prep_msm <- function(dat, at) {
 
   prepElig[idsEligStart] <- 1
   prepElig[idsEligStop] <- 0
+
 
 
   ## Stoppage ------------------------------------------------------------------
@@ -159,6 +161,7 @@ prep_msm <- function(dat, at) {
   if (length(idsStart.adol.naive) > 0) {
     prepStat[idsStart.adol.naive] <- 1
     prepEver[idsStart.adol.naive] <- 1
+    ever.adult.prep[idsStart.adol.naive] <- 1
 
     # PrEP class is fixed over PrEP cycles
     needPC <- which(is.na(prepClass[idsStart.adol.naive]))
@@ -169,6 +172,7 @@ prep_msm <- function(dat, at) {
   if (length(idsStart.adol.exp) > 0) {
     prepStat[idsStart.adol.exp] <- 1
     prepEver[idsStart.adol.exp] <- 1
+    ever.adult.prep[idsStart.adol.exp] <- 1
     
     # PrEP class is fixed over PrEP cycles
     needPC <- which(is.na(prepClass[idsStart.adol.exp]))
@@ -186,6 +190,7 @@ prep_msm <- function(dat, at) {
   dat$attr$prepStat <- prepStat
   dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
+  dat$attr$ever.adult.prep <- ever.adult.prep
 
   # Summary Statistics
   dat$epi$prepCov.adol.naive[at] <- prepCov.adol.naive
