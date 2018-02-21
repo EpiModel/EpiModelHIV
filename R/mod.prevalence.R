@@ -685,7 +685,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prev.hiv.primsecosyphpos[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0,
                                             length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / length(which(stage.syph %in% c(1, 2, 3))), 0)
   dat$epi$prev.hiv.primsecosyphneg[at] <- ifelse(length(which(stage.syph %in% c(1, 2, 3))) > 0,
-                                            length(intersect(which(status == 1), which(stage.syph %in% c(1, 2, 3)))) / length(which(stage.syph %in% c(1, 2, 3))), 0)
+                                            length(intersect(which(status == 0), which(stage.syph %in% c(1, 2, 3)))) / length(which(stage.syph %in% c(1, 2, 3))), 0)
 
   dat$epi$prev.rgc.hivpos[at] <- ifelse(dat$epi$i.num[at] > 0,
                                         length(intersect(which(status == 1), which(rGC == 1))) / dat$epi$i.num[at], 0)

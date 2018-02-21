@@ -93,14 +93,14 @@ condoms_msm <- function(dat, at) {
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
-    # Diagnosis modifier ---- applies to all HIV-positive persons
+    # Diagnosis modifier ---- applies to all diagnosed, discordant
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1) # pull vector of discordant
     pos.diag <- diag.status[elt[, 1]]
     isDx <- which(pos.diag == 1) # pull vector of diagnosis status
     isDiscord.dx <- intersect(isDiscord, isDx)
     uai.logodds[isDiscord.dx] <- uai.logodds[isDiscord.dx] + diag.beta
 
-    # Disclosure modifier ---- applies to all discordant partnerships
+    # Disclosure modifier ---- applies to all discordant, disclosed
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
     delt <- elt[isDiscord, ]
 
