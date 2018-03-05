@@ -424,8 +424,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
   
-  dat$attr$pers.conc.group[newIds] <- 0 
-  dat$attr$cross.net.group[newIds] <- 0
+  dat$attr$p.conc.gr[newIds] <- 0 
+  dat$attr$x.conc.gr[newIds] <- 0
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)

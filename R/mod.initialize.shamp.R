@@ -138,8 +138,8 @@ initialize_shamp <- function(x, param, init, control, s) {
    #race.sex.pers.
   dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
   
-  dat$attr$pers.conc.group <- get.vertex.attribute(nw[[1]], "pers.conc.group") 
-  dat$attr$cross.net.group <- get.vertex.attribute(nw[[1]], "cross.net.group") 
+  dat$attr$p.conc.gr <- get.vertex.attribute(nw[[1]], "p.conc.gr") 
+  dat$attr$x.conc.gr <- get.vertex.attribute(nw[[1]], "x.conc.gr") 
   
   
   
