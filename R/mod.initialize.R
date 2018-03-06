@@ -824,10 +824,13 @@ init_status_sti_msm <- function(dat) {
     inf.ids.W <- intersect(ids.W, which(syphilis == 1))
     inf.ids <- c(inf.ids.B, inf.ids.W)
 
-    # Stage of infection
+    # Stage of syphilis infection
+    if (length(inf.ids.B) > 0 ) {
     stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6), stage.syph.B.prob))
+    }
+    if (length(inf.ids.W) > 0) {
     stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6), stage.syph.W.prob))
-
+    }
     # Assign duration of untreated infection and symptomatic at beginning
     # Incubating
     selected <- intersect(inf.ids, which(stage.syph == 1))
