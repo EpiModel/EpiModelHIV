@@ -24,7 +24,7 @@ prep_adol <- function(dat, at) {
 
 
   diag.status <- dat$attr$diag.status
-  debuted<-dat$attr$has.debuted
+  debuted<-dat$attr$debuted
   debuted.time<-dat$attr$has.debuted.time
   active.time<-dat$attr$active.time
   AI.time<-dat$attr$AI.time
@@ -33,7 +33,6 @@ prep_adol <- function(dat, at) {
   of.age<-dat$attr$of.age
   uaicount<-dat$attr$uaicount
  
-  prepElig <- dat$attr$prepElig
   prepElig.asmm <- dat$attr$prepElig.asmm
   prepStat <- dat$attr$prepStat
   prepEver <- dat$attr$prepEver
@@ -69,7 +68,7 @@ prep_adol <- function(dat, at) {
     idsEligStop <- which(active == 1 & prepStat == 1 & asmm == 1)
   }
 
-  if (prep.elig.model == "none")  prepElig[idsEligStart] <-0
+  if (prep.elig.model == "none")  prepElig.asmm[idsEligStart] <-0
   
   # Core eligiblity scenarios
   if (prep.elig.model != "none") {
@@ -145,9 +144,6 @@ prep_adol <- function(dat, at) {
       idsEligStop <- intersect(which(c1 == 0 | c2 == 0 | c3 == 0),idsEligStop)
     } 
     
-    prepElig[idsEligStart] <- 1
-    prepElig[idsEligStop] <- 0 
-    
     prepElig.asmm[idsEligStart] <- 1
     prepElig.asmm[idsEligStop] <- 0
 
@@ -196,7 +192,6 @@ prep_adol <- function(dat, at) {
   
 
   #Drops are added back to eligible list.
-  prepElig[idsStpDrop] <- 1
   prepElig.asmm[idsStpDrop] <- 1
 
   ## Initiation ----------------------------------------------------------------
@@ -250,7 +245,6 @@ prep_adol <- function(dat, at) {
   # Attributes
   
   dat$attr$ever.adol.prep <- ever.adol.prep 
-  dat$attr$prepElig <- prepElig
   dat$attr$prepElig.asmm <- prepElig.asmm
   dat$attr$prepStat <- prepStat
   dat$attr$prepEver <- prepEver
