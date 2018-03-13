@@ -111,14 +111,16 @@ prep_msm <- function(dat, at) {
   ## Initiation ----------------------------------------------------------------
 
   if (prep.cov.method == "curr") {
-    prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
-    prepCov.msm <- sum(prepStat == 1 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & asmm == 0, na.rm = TRUE)
+    prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
+    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE) 
+                                                                                           + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+    prepCov.msm <- sum(prepStat == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE) + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
   }
   if (prep.cov.method == "ever") {
-    prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE)
-    prepCov.msm <- sum(prepEver == 1 & asmm == 1, na.rm = TRUE)/sum(prepElig == 1 & asmm == 1, na.rm = TRUE)
+    prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
+    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)
+                                                                                            + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+    prepCov.msm <- sum(prepEver == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE)+ sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
   }
   
   prepCov.adol.naive <- ifelse(is.nan(prepCov.adol.naive), 0, prepCov.adol.naive)
