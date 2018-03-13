@@ -29,9 +29,9 @@ prep_adherence_trans <- function(dat, at) {
   new.class<-old.class
   if(length(new.class) > 0){
   for (i in 1:length(new.class)){
-    if(new.class[i] == 2){new.class[i] <-sample(x=0:3, size=1,prob=c(.082,.287,.41,.221))}
     if(new.class[i] == 3){new.class[i] <-4}
-  }
+    if(new.class[i] == 2){new.class[i] <-sample(x=0:3, size=1,prob=c(.082,.287,.41,.221))}
+      }
   
   prepClass[ids.c]<-new.class
   dat$attr$prepClass <- prepClass
