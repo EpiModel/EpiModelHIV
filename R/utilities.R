@@ -187,3 +187,67 @@ cut_age <- function(age, breaks = c(0, 29, 39, Inf)) {
 keep.attr <- function(attrList, keep) {
   lapply(attrList, function(x) x[keep])
 }
+
+
+
+
+#' @title Select sim with minimum divergence
+#'
+#' @description Loops through a seletion of simulations and selects a simulation with the minimum divergence 
+#'              from a vector of target outcomes among those that are at least 95% the value of the targets.
+#'
+#
+#' @param ... Additional arguments passed to \code{source}.
+#'
+#' @export
+#'
+get_sims2 <- function (x, tar, var) {
+  
+  if (class(x) != "netsim") {
+    stop("x must be of class netsim", call. = FALSE)
+  }
+ 
+   nsims <- x$control$nsims
+  if (length(tar)!=length(var)) {
+    stop("Length of taget stats no equal to length of input statistics", 
+         call. = FALSE)
+  }
+   
+  dlist<-rep(NA,nsims)
+  for (i in 1:nsims){
+    dtemp<-rep(NA,length(tar))
+    for(j in 1:length(tar)){
+    dtemp[j] <- ((tar[j]-mean(tail(x$epi[[var[j]]][,i]), 208))^2)
+    dtemp[j] <- ifelse(dtemp[j] < (.95 * tar[j]) ,Inf,dtemp[j])
+    }
+    dlist[i]<-sqrt(sum(dtemp))
+   
+  }  
+    
+  sims <- which.min(dlist)
+  
+  delsim <- setdiff(1:nsims, sims)
+  out <- x
+  if (length(delsim) > 0) {
+    for (i in seq_along(out$epi)) {
+      out$epi[[i]] <- out$epi[[i]][, -delsim, drop = FALSE]
+    }
+    if (!is.null(out$network)) {
+      out$network[delsim] <- NULL
+    }
+    if (!is.null(out$stats$nwstats)) {
+      out$stats$nwstats[delsim] <- NULL
+    }
+    if (!is.null(out$stats$transmat)) {
+      out$stats$transmat[delsim] <- NULL
+    }
+    if (!is.null(out$control$save.other)) {
+      oname <- out$control$save.other
+      for (i in seq_along(oname)) {
+        out[[oname[i]]][delsim] <- NULL
+      }
+    }
+  }
+  out$control$nsims <- length(sims)
+  return(out)
+}
