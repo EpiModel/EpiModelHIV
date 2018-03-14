@@ -553,6 +553,7 @@ sti_test_msm <- function(dat, at) {
 
   # GC non-PrEP testing
   tst.rgc.hivpos <- tst.gc.nprep.hivpos[which(role.class[tst.gc.nprep.hivpos] %in% c("R", "V"))]
+  tst.rgc.hivpos <- sample(tst.rgc.hivpos, tst.rect.sti.rr * length(tst.rgc.hivpos))
   tst.ugc.hivpos <- tst.gc.nprep.hivpos[which(role.class[tst.gc.nprep.hivpos] %in% c("I", "V"))]
   tst.rgc.pos.hivpos <- tst.rgc.hivpos[which(rGC[tst.rgc.hivpos] == 1)]
   tst.ugc.pos.hivpos <- tst.ugc.hivpos[which(uGC[tst.ugc.hivpos] == 1)]
@@ -562,6 +563,7 @@ sti_test_msm <- function(dat, at) {
 
   # CT non-PrEP testing
   tst.rct.hivpos <- tst.ct.nprep.hivpos[which(role.class[tst.ct.nprep.hivpos] %in% c("R", "V"))]
+  tst.rct.hivpos <- sample(tst.rct.hivpos, tst.rect.sti.rr * length(tst.rct.hivpos))
   tst.uct.hivpos <- tst.ct.nprep.hivpos[which(role.class[tst.ct.nprep.hivpos] %in% c("I", "V"))]
   tst.rct.pos.hivpos <- tst.rct.hivpos[which(rCT[tst.rct.hivpos] == 1)]
   tst.uct.pos.hivpos <- tst.uct.hivpos[which(uCT[tst.uct.hivpos] == 1)]

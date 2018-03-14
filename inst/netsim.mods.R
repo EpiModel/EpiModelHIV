@@ -14,12 +14,14 @@ param <- param_msm(nwstats = st,
                    ai.scale = 1.04,
                    ai.scale.pospos = 1.04,
 
+                   tst.rect.sti.rr = 1,
+
                    # STI acquisition
-                   rgc.tprob = 0, #0.65,
-                   ugc.tprob = 0, #0.55,
-                   rct.tprob = 0, #0.29,
-                   uct.tprob = 0, #0.23,
-                   syph.tprob = 0.06,
+                   rgc.tprob = 0.5161, #0.513,
+                   ugc.tprob = 0.4362, # 0.432
+                   rct.tprob = 0.2813, #0.2797,
+                   uct.tprob = 0.2195, # 0.2165,
+                   syph.tprob = 0.1206, #0.1206,
 
                    # HIV acquisition
                    hiv.rgc.rr = 1.75,
@@ -56,7 +58,7 @@ param <- param_msm(nwstats = st,
                    stihighrisktest.syph.hivpos.coverage = 0.1,
 
                    prep.start = 7000,
-                   stitest.start = 7000,
+                   stitest.start = 3,
                    ept.start = 5201,
 
                    stitest.active.int = 364,
@@ -70,15 +72,15 @@ init <- init_msm(nwstats = st,
                  prev.rgc = 0.010,
                  prev.uct = 0.010,
                  prev.rct = 0.010,
-                 prev.syph.B = 0.010,
-                 prev.syph.W = 0.010)
+                 prev.syph.B = 0,
+                 prev.syph.W = 0)
 
-control <- control_msm(nsteps = 2600)
+control <- control_msm(nsteps = 200)
 
 # control <- control_msm(start = 5201,
 #                        nsteps = 5210)
 
-#sim <- netsim(est, param, init, control)
+sim <- netsim(est, param, init, control)
 
 # debug(initialize_msm)
 # debug(reinit_msm)
@@ -95,8 +97,8 @@ debug(riskhist_stitest_msm)
 debug(sti_test_msm)
 debug(sti_recov_msm)
 debug(sti_tx_msm)
-debug(sti_ept_msm)
-debug(part_msm)
+# debug(sti_ept_msm)
+# debug(part_msm)
 # debug(acts_msm)
 # debug(hiv_test_msm)
 # debug(acts_msm)
