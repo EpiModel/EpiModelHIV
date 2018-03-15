@@ -41,6 +41,10 @@ prep_msm <- function(dat, at) {
 
   ## Eligibility ---------------------------------------------------------------
 
+  ##For first lifecycle paper ASMM no longer continue prep use as adult MSM
+  idsEligSwitch <- which(prepStat ==1 & asmm==0 & ever.adult.prep==0)
+  prepStat[idsEligSwitch] <- 0
+  
   # Base eligibility
   idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 0 & lnt == at)
 
@@ -112,14 +116,23 @@ prep_msm <- function(dat, at) {
 
   if (prep.cov.method == "curr") {
     prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE) 
-                                                                                           + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+    
+    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/ sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE) 
+  
+    #Need to decide how to deal with those on ASMM PrEP in coverage calculation
+    #+ sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+                                                                                              
     prepCov.msm <- sum(prepStat == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE) + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
   }
+  
   if (prep.cov.method == "ever") {
     prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
-    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)
-                                                                                            + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+    
+    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)
+    
+    #Need to decide how to deal with those on ASMM PrEP in coverage calculation                                                                                       
+    # + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
+    
     prepCov.msm <- sum(prepEver == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE)+ sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
   }
   
