@@ -63,6 +63,7 @@ prep_adol <- function(dat, at) {
   # Base eligibility
   idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 1)
 
+
   idsEligStop <- NULL
   if (prep.risk.reassess == TRUE) {
     idsEligStop <- which(active == 1 & prepStat == 1 & asmm == 1)
@@ -174,26 +175,34 @@ prep_adol <- function(dat, at) {
   }
   
  #Drop out for MSM continuing adolecent PrEP into adulthood
-  msm.resid <-which(active==1 & prepStat == 1 & asmm == 0 & ever.adult.prep == 0)
-  idsStpDrop.msm.resid<-integer(0)
-  if (length(msm.resid>=1)){
-    msm.resid.list<-rbinom(length(msm.resid),1,prepDrop)
-    idsStpDrop.msm.resid <-msm.resid[msm.resid.list==1]
-  }
+ # msm.resid <-which(active==1 & prepStat == 1 & asmm == 0 & ever.adult.prep == 0)
+ #idsStpDrop.msm.resid<-integer(0)
+#  if (length(msm.resid>=1)){
+#    msm.resid.list<-rbinom(length(msm.resid),1,prepDrop)
+#    idsStpDrop.msm.resid <-msm.resid[msm.resid.list==1]
+#  }
 
   
   # Transition to ineligibility
   idsStpInelig <- idsEligStop
-
+  
+  #aged out
+  idsEligEnd <- which(active ==1 & prepElig.asmm ==1 & asmm ==0)
+  
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStpDth, idsStpDrop, idsStpInelig, idsStpDrop.msm.resid)
+ # idsStp <- c(idsStpDx, idsStpDth, idsStpDrop, idsStpInelig, idsStpDrop.msm.resid, idsEligEnd)
+  idsStp <- c(idsStpDx, idsStpDth, idsStpDrop, idsStpInelig, idsEligEnd)
   prepStat[idsStp] <- 0
   prepClass[idsStp] <-NA
   
 
   #Drops are added back to eligible list.
   prepElig.asmm[idsStpDrop] <- 1
+  
+  # Remove those that have aged out from eligibility
 
+  prepElig.asmm[idsEligEnd] <-0
+  
   ## Initiation ----------------------------------------------------------------
 
 
