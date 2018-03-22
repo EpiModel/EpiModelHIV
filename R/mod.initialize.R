@@ -1191,6 +1191,8 @@ reinit_msm <- function(x, param, init, control, s) {
   }
 
   dat$temp <- x$temp[[s]]
+
+  # If adding new statistics at follow-up in prevalence module (gets overwritten)
   #dat <- prevalence_msm(dat, at = 5201)
 
   class(dat) <- "dat"

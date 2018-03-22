@@ -607,6 +607,81 @@ hiv_trans_msm <- function(dat, at) {
     (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0 & !(stage.syph[trans[, 1]] %in% c(1,2,3)))) &
                                   (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0 & !(stage.syph[trans[, 2]] %in% c(1,2,3))))))
 
+  if (is.null(dat$epi$cell1_rectureth)) {
+    dat$epi$cell1_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell2_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell3_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell4_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell1_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell2_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell3_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell4_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+  }
+
+  dat$epi$cell1_rectureth[at] <- length(which(
+    #P1 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+       (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+       (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1))))
+
+  dat$epi$cell2_rectureth[at] <- length(which(
+      # Rectal only
+      #P1 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+      (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[ , 1]] == 0)) &
+         (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1)) |
+      #P2 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+      (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 | uCT[trans[ , 1]] == 0)) &
+         (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1))))
+
+  dat$epi$cell3_rectureth[at] <- length(which(
+      # Insertive only
+      #P1 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+      (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 0)) |
+      #P2 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+      (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 0))))
+
+  dat$epi$cell4_rectureth[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+      (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0)) |
+    #P2 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+    (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0))))
+
+
+  dat$epi$cell1_gcct_newinf[at] <- length(which(
+    #P1 is infected, P2 has NG and CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 1 & rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 has NG and CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 & uCT[trans[ , 1]] == 1)))))
+
+  dat$epi$cell2_gcct_newinf[at] <- length(which(
+    # GC only
+    #P1 is infected, P2 has NG and not CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 1 & rCT[trans[ , 2]] == 0)) |
+    #P2 is infected, P1 has NG and not CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 & uCT[trans[ , 1]] == 0)))))
+
+  dat$epi$cell3_gcct_newinf[at] <- length(which(
+    # CT only
+    #P1 is infected, P2 does not have CT and has CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 does not have CT and has CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[ , 1]] == 1)))))
+
+  dat$epi$cell4_gcct_newinf[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+       (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0)) |
+      #P2 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+      ((status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0))))
+
+
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
