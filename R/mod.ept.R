@@ -632,15 +632,19 @@ sti_ept_msm <- function(dat, at) {
     idsprovided.inst <- idsept.inst[which(rbinom(length(idsept.inst), 1,
                                                  ept.provision.inst) == 1)]
 
-    idsprovided_ept <- unique(c(idsprovided.main.ong, idsprovided.pers.ong,
+    idsprovided_ept <- c(idsprovided.main.ong, idsprovided.pers.ong,
                                 idsprovided.main.end, idsprovided.pers.end,
-                                idsprovided.inst))
+                                idsprovided.inst)
 
-    idsprovided.main_ept <- unique(c(idsprovided.main.ong, idsprovided.main.end))
+    idsprovided.main_ept <- c(idsprovided.main.ong, idsprovided.main.end)
 
-    idsprovided.pers_ept <- unique(c(idsprovided.pers.ong, idsprovided.pers.end))
+    idsprovided.pers_ept <- c(idsprovided.pers.ong, idsprovided.pers.end)
 
-    idsprovided.inst_ept <- unique(c(idsprovided.inst))
+    idsprovided.inst_ept <- c(idsprovided.inst)
+
+    # Need to further refine
+    idsprovided_gc <- intersect(idsprovided_ept, ids.ept.gc)
+    idsprovided_ct <- intersect(idsprovided_ept, ids.ept.ct)
 
     # Uptake by non-index ------------------------------------------------------
     # Uptake occurs in same time step (or before next step) but non-index is
@@ -660,6 +664,20 @@ sti_ept_msm <- function(dat, at) {
 
     ## Output -----------------------------------------------------------------
 
+    # Update with new trackers
+    if (is.null(dat$epi$eptpartprovided_gc)) {
+      dat$epi$eptpartprovided_gc <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartprovided_ct <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartprovided_main <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartprovided_pers <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartprovided_inst <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartuptake_main <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartuptake_pers <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartuptake_inst <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartuptake_gc <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartuptake_ct <- rep(NA, length(dat$control$nsteps))
+    }
+
     # Index attributes
     dat$attr$eptindexElig <- eptindexElig
     dat$attr$eptindexStat <- eptindexStat
@@ -676,7 +694,17 @@ sti_ept_msm <- function(dat, at) {
     # Update Epi
     dat$epi$eptpartelig[at] <- length(idsept)
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
+    dat$epi$eptpartprovided_gc[at] <- length(idsprovided_gc)
+    dat$epi$eptpartprovided_ct[at] <- length(idsprovided_ct)
+    dat$epi$eptpartprovided_main[at] <- length(idsprovided.main_ept)
+    dat$epi$eptpartprovided_pers[at] <- length(idsprovided.pers_ept)
+    dat$epi$eptpartprovided_inst[at] <- length(idsprovided.inst_ept)
     dat$epi$eptpartuptake[at] <- length(idsuptake_ept)
+    dat$epi$eptpartuptake_main[at] <- length(idsept_tx.main)
+    dat$epi$eptpartuptake_pers[at] <- length(idsept_tx.pers)
+    dat$epi$eptpartuptake_inst[at] <- length(idsept_tx.inst)
+    dat$epi$eptpartuptake_gc[at] <- length(idsept_tx.gc)
+    dat$epi$eptpartuptake_ct[at] <- length(idsept_tx.ct)
     dat$epi$eptprop_provided[at] <- ifelse((length(idsept) == 0), 0,
                                            dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at])
 

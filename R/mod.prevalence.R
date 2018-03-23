@@ -327,7 +327,17 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
     dat$epi$eptpartprovided <- rNA
+    dat$epi$eptpartprovided_gc <- rNA
+    dat$epi$eptpartprovided_ct <- rNA
+    dat$epi$eptpartprovided_main <- rNA
+    dat$epi$eptpartprovided_pers <- rNA
+    dat$epi$eptpartprovided_inst <- rNA
     dat$epi$eptpartuptake <- rNA
+    dat$epi$eptpartuptake_main <- rNA
+    dat$epi$eptpartuptake_pers <- rNA
+    dat$epi$eptpartuptake_inst <- rNA
+    dat$epi$eptpartuptake_gc <- rNA
+    dat$epi$eptpartuptake_ct <- rNA
     dat$epi$eptTx <- rNA
     dat$epi$propindexeptElig <- rNA
     dat$epi$eptprop_provided <- rNA
