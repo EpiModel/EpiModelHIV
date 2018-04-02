@@ -340,14 +340,13 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptpartuptake_ct <- rNA
     dat$epi$eptTx <- rNA
     dat$epi$propindexeptElig <- rNA
-    dat$epi$eptprop_provided <- rNA
-    dat$epi$eptprop_tx <- rNA
+    # dat$epi$eptprop_tx <- rNA
     dat$epi$eptuninfectedprovided <- rNA
     dat$epi$eptuninfecteduptake <- rNA
     dat$epi$eptgcinfectsti <- rNA
     dat$epi$eptctinfectsti <- rNA
-    dat$epi$eptgcinfecthiv <- rNA
-    dat$epi$eptctinfecthiv <- rNA
+    dat$epi$eptgcinfectundiaghiv <- rNA
+    dat$epi$eptctinfectundiaghiv <- rNA
 
     # STI testing trajectories
     dat$epi$tt.traj.syph1.hivneg <- rep(0, nsteps)

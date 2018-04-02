@@ -1732,7 +1732,7 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$propindexeptElig[at] <- ifelse(length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all))) > 0,
                                          length(unique(ept_tx_all)) /
                                            length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all))),
-                                         0)
+                                         NA)
 
   # Proportion of eligible index who will receive EPT - varies by sim scenario
   dat$epi$eptCov[at] <- eptCov
@@ -1741,9 +1741,9 @@ sti_tx_msm <- function(dat, at) {
   dat$epi$eptTx[at] <- length(unique(alltxEPT))
 
   # Proportion of all non-index eligible to be treated who had treatment success
-  dat$epi$eptprop_tx[at] <- ifelse(length(unique(allidsept)) > 0,
-                                   length(unique(alltxEPT)) / length(unique(allidsept)),
-                                   0)
+  # dat$epi$eptprop_tx[at] <- ifelse(length(unique(allidsept)) > 0,
+  #                                  length(unique(alltxEPT)) / length(unique(allidsept)),
+  #                                  0)
 
   return(dat)
 }

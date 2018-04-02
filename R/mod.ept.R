@@ -675,7 +675,9 @@ sti_ept_msm <- function(dat, at) {
       dat$epi$eptpartuptake_pers <- rep(NA, length(dat$control$nsteps))
       dat$epi$eptpartuptake_inst <- rep(NA, length(dat$control$nsteps))
       dat$epi$eptpartuptake_gc <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartuptake_ct <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptgcinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptctinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptgcctinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
     }
 
     # Index attributes
@@ -705,8 +707,8 @@ sti_ept_msm <- function(dat, at) {
     dat$epi$eptpartuptake_inst[at] <- length(idsept_tx.inst)
     dat$epi$eptpartuptake_gc[at] <- length(idsept_tx.gc)
     dat$epi$eptpartuptake_ct[at] <- length(idsept_tx.ct)
-    dat$epi$eptprop_provided[at] <- ifelse((length(idsept) == 0), 0,
-                                           dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at])
+    # dat$epi$eptprop_provided[at] <- ifelse((length(idsept) == 0), 0,
+    #                                        dat$epi$eptpartprovided[at] / dat$epi$eptpartelig[at])
 
     # Wasted EPT
     dat$epi$eptuninfectedprovided[at] <- ifelse(length(idsprovided_ept) > 0,
@@ -715,14 +717,14 @@ sti_ept_msm <- function(dat, at) {
                                              rCT[idsprovided_ept] == 0 &
                                              uCT[idsprovided_ept] == 0) /
                                          length(idsprovided_ept),
-                                         0)
+                                         NA)
     dat$epi$eptuninfecteduptake[at] <- ifelse(length(idsuptake_ept) > 0,
                                               sum(rGC[idsuptake_ept] == 0 &
                                                   uGC[idsuptake_ept] == 0 &
                                                   rCT[idsuptake_ept] == 0 &
                                                   uCT[idsuptake_ept] == 0) /
                                        length(idsuptake_ept),
-                                       0)
+                                       NA)
 
     # Missed opportunities EPT
     dat$epi$eptgcinfectsti[at] <-  ifelse(length(idsept_tx.gc) > 0,
@@ -730,19 +732,26 @@ sti_ept_msm <- function(dat, at) {
                                                            dat$attr$uCT[idsept_tx.gc] == 1 |
                                                            dat$attr$syphilis[idsept_tx.gc] == 1 |
                                                            dat$attr$status[idsept_tx.gc] == 1)]) / length(idsept_tx.gc),
-                                           0)
+                                           NA)
     dat$epi$eptctinfectsti[at] <- ifelse(length(idsept_tx.ct) > 0,
                                          length(idsept_tx.ct[which(dat$attr$rGC[idsept_tx.ct] == 1 |
                                                           dat$attr$uGC[idsept_tx.ct] == 1 |
                                                           dat$attr$syphilis[idsept_tx.ct] == 1 |
                                                           dat$attr$status[idsept_tx.ct] == 1)]) / length(idsept_tx.ct),
-                                         0)
-    dat$epi$eptgcinfecthiv[at] <- ifelse(length(idsept_tx.gc) > 0,
-                                         length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1)]) / length(idsept_tx.gc),
-                                         0)
-    dat$epi$eptctinfecthiv[at] <- ifelse(length(idsept_tx.ct) > 0,
-                                         length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1)]) / length(idsept_tx.ct),
-                                         0)
+                                         NA)
+    dat$epi$eptgcinfectundiaghiv[at] <- ifelse(length(idsept_tx.gc) > 0,
+                                         length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1 &
+                                                                     dat$attr$diag.status[idsept_tx.gc] == 0)]) / length(idsept_tx.gc),
+                                         NA)
+    dat$epi$eptctinfectundiaghiv[at] <- ifelse(length(idsept_tx.ct) > 0,
+                                         length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1 &
+                                                               dat$attr$diag.status[idsept_tx.ct] == 0)]) / length(idsept_tx.ct),
+                                         NA)
+    dat$epi$eptgcctinfectundiaghiv[at] <- ifelse(length(idsuptake_ept) > 0,
+                                               length(idsuptake_ept[which(dat$attr$status[idsuptake_ept] == 1 &
+                                                                           dat$attr$diag.status[idsuptake_ept] == 0)]) / length(idsuptake_ept),
+                                               NA)
+
 
     return(dat)
 }
