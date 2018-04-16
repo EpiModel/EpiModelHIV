@@ -27,6 +27,12 @@
 #'
 deaths_shamp <- function(dat, at) {
 
+  ##Tracking disease related stats at death.
+  death.stats <- dat$death.stats
+  diag.status <- dat$attr$diag.status
+  diag.time <- dat$attr$diag.time
+  inf.time <- dat$attr$inf.time
+  
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
@@ -113,6 +119,24 @@ deaths_shamp <- function(dat, at) {
   dat$epi$dth.gen[at] <- max(0,length(dth.gen)-length(dth.age))
   dat$epi$dth.dis[at] <- max(0,length(dth.dis))
   dat$epi$dth.age[at] <-max(0,length(dth.age))
+  
+  if (at == 1){
+    death.stats$age <- age[dth.dis]
+    death.stats$race <- race[dth.dis]
+    death.stats$diag.status <- diag.status[dth.dis]
+    death.stats$dur.diagnosed <- at-diag.time[dth.dis]
+    death.stats$dur.positive <- at - inf.time[dth.dis]
+  }
+  
+  if (at > 1){
+    death.stats$age <- c(death.stats$age, age[dth.dis])
+    death.stats$race <- c(death.stats$race, race[dth.dis])
+    death.stats$diag.status <- c(death.stats$diag.status, diag.status[dth.dis])
+    death.stats$dur.diagnosed <- c(death.stats$dur.diagnosed, at-diag.time[dth.dis])
+    death.stats$dur.positive <- c(death.stats$dur.positive, at - inf.time[dth.dis])
+  }
+  
+  dat$death.stats <- death.stats
   
   return(dat)
 }
