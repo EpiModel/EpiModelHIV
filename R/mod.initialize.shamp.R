@@ -36,6 +36,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$temp <- list()
   dat$epi <- list()
   dat$trans.el <- list()
+  dat$death.stats <- list()
   
   ## Network simulation ##
   
@@ -48,7 +49,8 @@ initialize_shamp <- function(x, param, init, control, s) {
     ## est[[1]]$fit is an ergm.ego fit so it includes net.adjustment.  This should be fine for just simulating the starting network.
     ## But ergm.ego must also be run.
     ## The other elements of est must be modified to remove the network size adjustment for tergmLite. 
-    nw[[i]] <- simulate(x[[i]]$fit)
+   
+     nw[[i]] <- simulate(x[[i]]$fit)
   }
   
   
@@ -79,10 +81,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$nwparam <- list()
   for (i in 1:3) {
     dat$nwparam[i] <- list(x[[i]][-which(names(x[[i]]) == "fit")])
-    dat$nwparam[[i]]$formation[2]<-dat$nwparam[[i]]$formation[3]
-    dat$nwparam[[i]]$formation[3]<-NULL
   }
-
 
   ## Nodal attributes ##
 
@@ -95,14 +94,14 @@ initialize_shamp <- function(x, param, init, control, s) {
   
 
   # Race
-  dat$attr$race <- get.vertex.attribute(nw[[2]], "race")
+  dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
   num.B <-sum(dat$attr$race == "B")
   num.BI <-sum(dat$attr$race == "BI")
   num.H <-sum(dat$attr$race == "H")
   num.HI <-sum(dat$attr$race == "HI")
   num.W <-sum(dat$attr$race == "W")
   
-  dat$attr$race3 <- get.vertex.attribute(nw[[2]], "race3")
+  dat$attr$race3 <- get.vertex.attribute(nw[[1]], "race3")
   
   num <-num.B + num.BI + num.H + num.HI + num.W
   ids.B <- which(dat$attr$race == "B")
@@ -138,8 +137,8 @@ initialize_shamp <- function(x, param, init, control, s) {
    #race.sex.pers.
   dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
   
-  dat$attr$p.conc.gr <- get.vertex.attribute(nw[[1]], "p.conc.gr") 
-  dat$attr$x.conc.gr <- get.vertex.attribute(nw[[1]], "x.conc.gr") 
+  dat$attr$p.conc <- get.vertex.attribute(nw[[1]], "p.conc") 
+  dat$attr$x.conc <- get.vertex.attribute(nw[[1]], "x.conc") 
   
   
   
@@ -157,6 +156,7 @@ initialize_shamp <- function(x, param, init, control, s) {
 
   # Age
   dat$attr$age <- get.vertex.attribute(nw[[1]], "age")
+  
   partial<-(0:51)* (time.unit / 365)
   partial<-sample(partial,length(dat$attr$age),replace=TRUE)
   
