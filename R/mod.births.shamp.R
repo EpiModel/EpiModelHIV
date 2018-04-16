@@ -109,6 +109,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$age[newIds] <- rep(0, nBirths)
   dat$attr$sqrt.age[newIds] <- rep(0, nBirths)
   dat$attr$agesq[newIds] <- rep(0, nBirths)
+  dat$attr$agecat[newIds] <- rep(0, nBirths)
   dat$attr$demog.cat[newIds] <- rep(0, nBirths)
   dat$attr$evertest[newIds] <- rep(0, nBirths)
   dat$attr$infected.gen[newIds]<-rep(NA, nBirths)
@@ -172,8 +173,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   dat$attr$agecat[newIds]<-ifelse(dat$att$age[newIds] < 26 ,"18-25",
                           ifelse(dat$attr$age[newIds] >= 26 & dat$attr$age[newIds] < 36,"26-35",
-                                 ifelse(dat$attr$age[newIds] >= 36 & dat$attr$age[newIds] < 46,"36-45",
-                                        ifelse(dat$attr$age[newIds] >= 46,"46-60",dat$attr$agecat[newIds]))))
+                                 ifelse(dat$attr$age[newIds] >= 36 & dat$attr$age[newIds] < 46,"36-45",dat$attr$agecat)))
                       
   
   newF<-which(sex=="F")
@@ -424,8 +424,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
   
-  dat$attr$p.conc.gr[newIds] <- 0 
-  dat$attr$x.conc.gr[newIds] <- 0
+  dat$attr$p.conc[newIds] <- NA 
+  dat$attr$x.conc[newIds] <- NA
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
