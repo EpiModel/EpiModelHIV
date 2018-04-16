@@ -41,19 +41,21 @@ immigration_shamp <- function(dat, at){
   sex.ident <- dat$attr$sex.ident
 
   #Parameters
-
-  depart.BI.f <- dat$param$immig.depart.BI.f
-  depart.HI.f <- dat$param$immig.depart.HI.f
-  depart.BI.m <- dat$param$immig.depart.BI.m
-  depart.HI.m <- dat$param$immig.depart.HI.m
-  return.BI.f <- dat$param$immig.return.BI.f
-  return.HI.f <- dat$param$immig.return.HI.f
-  return.BI.m <- dat$param$immig.return.BI.m
-  return.HI.m <- dat$param$immig.return.HI.m
-  aq.prob.BI.f <- dat$param$immig.aq.prob.BI.f
-  aq.prob.HI.f <- dat$param$immig.aq.prob.HI.f
-  aq.prob.BI.m <- dat$param$immig.aq.prob.BI.m
-  aq.prob.HI.m <- dat$param$immig.aq.prob.HI.m
+  
+  immig.simple <- dat$param$immig.simple
+  
+  depart.BI.f <- dat$param$immig.depart.BI.f * dat$param$depart.scale
+  depart.HI.f <- dat$param$immig.depart.HI.f * dat$param$depart.scale
+  depart.BI.m <- dat$param$immig.depart.BI.m * dat$param$depart.scale
+  depart.HI.m <- dat$param$immig.depart.HI.m * dat$param$depart.scale
+  return.BI.f <- dat$param$immig.return.BI.f * dat$param$return.scale
+  return.HI.f <- dat$param$immig.return.HI.f * dat$param$return.scale
+  return.BI.m <- dat$param$immig.return.BI.m * dat$param$return.scale
+  return.HI.m <- dat$param$immig.return.HI.m * dat$param$return.scale
+  aq.prob.BI.f <- dat$param$immig.aq.prob.BI.f * dat$param$fa.foi.scale
+  aq.prob.HI.f <- dat$param$immig.aq.prob.HI.f * dat$param$fa.foi.scale
+  aq.prob.BI.m <- dat$param$immig.aq.prob.BI.m * dat$param$fa.foi.scale
+  aq.prob.HI.m <- dat$param$immig.aq.prob.HI.m * dat$param$fa.foi.scale
   
   infected <- NULL
   ids.BI.f.inf <- NULL 
@@ -72,6 +74,8 @@ immigration_shamp <- function(dat, at){
   ids.BI.m.r <- NULL
   ids.HI.f.r <- NULL
   ids.HI.m.r <- NULL
+  
+  if (immig.simple == FALSE){
   
   #Of those away who becomes infected
   ids.BI.f.inf<-which(active==1 & immig.loc==1 & sex=="F" & race =="BI" & status==0)
@@ -153,6 +157,38 @@ immigration_shamp <- function(dat, at){
   if (length(returning) > 0) {dat$attr$immig.loc[returning]<-0}
   if (length(departing) > 0) {dat$attr$immig.loc[departing]<-1} 
 
+  }
+  
+  
+  if (immig.simple == TRUE){
+    
+    #Of those away who becomes infected
+    ids.BI.f.inf<-which(active==1 & sex=="F" & race =="BI" & status==0)
+    ids.BI.m.inf<-which(active==1 & sex=="M" & race =="BI" & status==0)
+    ids.H.f.inf<-which(active==1 & sex=="F" & race =="HI" & status==0)
+    ids.HI.m.inf<-which(active==1 & sex=="M" & race =="HI" & status==0)
+    
+    if(length(ids.BI.f.inf) > 0) {
+      ids.BI.f.inf.t<-rbinom(length(ids.BI.f.inf),1,prob = aq.prob.BI.f)
+      ids.BI.f.inf<-ids.BI.f.inf[ids.BI.f.inf.t==1]}
+    
+    if(length(ids.BI.m.inf) > 0) {  
+      ids.BI.m.inf.t<-rbinom(length(ids.BI.m.inf),1,prob = aq.prob.BI.m)
+      ids.BI.m.inf<-ids.BI.m.inf[ids.BI.m.inf.t==1]}
+    
+    if(length(ids.HI.f.inf) > 0) {
+      ids.HI.f.inf.t<-rbinom(length(ids.HI.f.inf),1,prob = aq.prob.HI.f)
+      ids.HI.f.inf<-ids.HI.f.inf[ids.HI.f.inf.t==1]}
+    
+    if(length(ids.HI.m.inf) > 0) {
+      ids.HI.m.inf.t<-rbinom(length(ids.HI.m.inf),1,prob = aq.prob.HI.m)
+      ids.HI.m.inf<-ids.HI.m.inf[ids.HI.m.inf.t==1]}
+    
+    infected <- c(ids.BI.f.inf, ids.BI.m.inf, ids.HI.f.inf, ids.HI.m.inf)
+    
+  }
+  
+  
   ##Track infections
  if (length(infected) >= 1){
     dat$attr$status[infected] <- 1
