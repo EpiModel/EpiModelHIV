@@ -27,6 +27,7 @@
 #'
 deaths_msm <- function(dat, at) {
 
+  
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
@@ -66,6 +67,7 @@ deaths_msm <- function(dat, at) {
   ## Summary Output
   dat$epi$dth.gen[at] <- length(dth.gen)
   dat$epi$dth.dis[at] <- length(dth.dis)
+  
 
   return(dat)
 }
