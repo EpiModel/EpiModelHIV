@@ -14,8 +14,7 @@ demogupdate_shamp <- function(dat, at) {
   #AGECAT
   dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
                            ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
-                                  ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",
-                                         ifelse(dat$attr$age >= 46,"46-60",dat$attr$agecat))))
+                                  ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",dat$attr$agecat)))
   
 
   #Create a new factor for age by sex group by pers.c.
@@ -74,21 +73,21 @@ demogupdate_shamp <- function(dat, at) {
   #Capturing the uniquness of Black male and Black females.
   #Four catagories Black males, Black females, Non-Black males, Non-Black females.
 
-  data$egos$p.conc.gr<-rep(NA,length(data$egos$ego))
-  data$egos$p.conc.gr<-ifelse(data$egos$race == "B" & data$egos$sex == "M", "B.M",
-                              ifelse(data$egos$race == "B" & data$egos$sex == "F", "B.F",
-                                     ifelse(data$egos$race != "B" & data$egos$sex == "M", "non-B.M",
-                                            ifelse(data$egos$race !="B" & data$egos$sex=="F", "non-B.F",
-                                                   data$egos$p.conc.gr))))
+  dat$attr$p.conc<-rep(NA,length(dat$attr$p.conc))
+  dat$attr$p.conc<-ifelse(dat$attr$race == "B" & dat$attr$sex == "M", "B.M",
+                              ifelse(dat$attr$race == "B" & dat$attr$sex == "F", "B.F",
+                                     ifelse(dat$attr$race != "B" & dat$attr$sex == "M", "non-B.M",
+                                            ifelse(dat$attr$race !="B" & dat$attr$sex=="F", "non-B.F",
+                                                   dat$attr$p.conc))))
   
-  data$egos$x.conc.gr<-rep(NA,length(data$egos$ego))
-  data$egos$x.conc.gr<-ifelse((data$egos$race == "B" | data$egos$race == "BI") & data$egos$sex == "M" & data$egos$deg.cohab.c == 0,"B.BI.M.coh-0",
-                              ifelse((data$egos$race=="B" | data$egos$race=="BI") & data$egos$sex=="M" & data$egos$deg.cohab.c==1,"B.BI.M.coh-1",
-                                     ifelse(data$egos$race != "B" & data$egos$race != "BI" & data$egos$sex == "M" & data$egos$deg.cohab.c == 0,"non.B.BI.M.coh-0",
-                                            ifelse((data$egos$race != "B" & data$egos$race != "BI" & data$egos$sex == "M" & data$egos$deg.cohab.c == 1) |
-                                                     (data$egos$sex =="F" &  data$egos$deg.cohab.c == 1),"non.B.BI.M.coh-1.F.coh-1",
-                                                   ifelse(data$egos$sex == "F" &  data$egos$deg.cohab.c == 0, "F.coh-0",
-                                                          data$egos$x.conc.gr)))))
+  dat$attr$x.conc<-rep(NA,length(dat$attr$x.conc))
+  dat$attr$x.conc<-ifelse((dat$attr$race == "B" | dat$attr$race == "BI") & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 0,"B.BI.M.c-0",
+                              ifelse((dat$attr$race=="B" | dat$attr$race=="BI") & dat$attr$sex=="M" & dat$attr$deg.cohab.c==1,"B.BI.M.c-1",
+                                     ifelse(dat$attr$race != "B" & dat$attr$race != "BI" & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 0,"non.B.BI.M.c-0",
+                                            ifelse((dat$attr$race != "B" & dat$attr$race != "BI" & dat$attr$sex == "M" & dat$attr$deg.cohab.c == 1) |
+                                                     (dat$attr$sex =="F" &  dat$attr$deg.cohab.c == 1),"non.B.BI.M.c-1.F.c-1",
+                                                   ifelse(dat$attr$sex == "F" &  dat$attr$deg.cohab.c == 0, "F.c-0",
+                                                          dat$attr$x.conc)))))
   
   
   
