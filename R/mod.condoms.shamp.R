@@ -4,7 +4,7 @@
 #' @description Module function stochastically simulates potential condom use
 #'              for each act on the discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' For each act on the discordant edgelist, condom use is stochastically simulated
