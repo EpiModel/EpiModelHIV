@@ -4,7 +4,7 @@
 #' @description Module function for births or entries into the sexually active
 #'              population.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' New population members are added based on expected numbers of entries among
@@ -186,11 +186,35 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   newHI<-which(race=="HI")
   newW<-which(race=="W")
   
+  newB.m<-which(race=="B" & sex=="M")
+  newBI.m<-which(race=="BI" & sex=="M")
+  newH.m<-which(race=="H" & sex=="M")
+  newHI.m<-which(race=="HI" & sex=="M")
+  newW.m<-which(race=="W" & sex=="M")
+  
   sex.ident<-rep(NA,nBirths)
   sex.ident[newF]<-"f"
-  sex.ident[newM]<-sample(c("msm","msmf","msf"),length(newM),
-                                    prob=c(dat$param$msm.frac,dat$param$msmf.frac,(1-(dat$param$msm.frac+dat$param$msmf.frac))),
+  
+  sex.ident[newB.m]<-sample(c("msm","msmf","msf"),length(newB.m),
+                                    prob=c(dat$param$msm.frac,dat$param$msmf.frac.B,(1-(dat$param$msm.frac+dat$param$msmf.frac.B))),
                                            replace=TRUE)
+  
+  sex.ident[newBI.m]<-sample(c("msm","msmf","msf"),length(newBI.m),
+                          prob=c(dat$param$msm.frac,dat$param$msmf.frac.BI,(1-(dat$param$msm.frac+dat$param$msmf.frac.BI))),
+                          replace=TRUE)
+  
+  sex.ident[newH.m]<-sample(c("msm","msmf","msf"),length(newH.m),
+                          prob=c(dat$param$msm.frac,dat$param$msmf.frac.H,(1-(dat$param$msm.frac+dat$param$msmf.frac.H))),
+                          replace=TRUE)
+  
+  sex.ident[newHI.m]<-sample(c("msm","msmf","msf"),length(newHI.m),
+                          prob=c(dat$param$msm.frac,dat$param$msmf.frac.HI,(1-(dat$param$msm.frac+dat$param$msmf.frac.HI))),
+                          replace=TRUE)
+  
+  sex.ident[newW.m]<-sample(c("msm","msmf","msf"),length(newW.m),
+                          prob=c(dat$param$msm.frac,dat$param$msmf.frac.W,(1-(dat$param$msm.frac+dat$param$msmf.frac.W))),
+                          replace=TRUE)
+  
   dat$attr$sex.ident[newIds] <- sex.ident
   dat$attr$msmf<-ifelse(dat$attr$sex.ident == "msmf",1,0)
   new.msm<-which(sex.ident=="msm")
