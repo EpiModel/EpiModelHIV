@@ -3,7 +3,7 @@
 #'
 #' @description Module updated demographic clasifications that change over time.
 #'
-#' @inheritParams aging_het
+#' @inheritParams aging_shamp
 #'
 #' @keywords module het
 #'
