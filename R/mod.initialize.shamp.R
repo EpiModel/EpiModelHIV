@@ -3207,7 +3207,7 @@ if (num.B.f > 0){
 #'              specified time step given an input \code{netsim} object.
 #'
 #' @param x An \code{EpiModel} object of class \code{\link{netsim}}.
-#' @inheritParams initialize_msm
+#' @inheritParams initialize_shamp
 #'
 #' @details
 #' Currently, the necessary components that must be on \code{x} for a simulation
