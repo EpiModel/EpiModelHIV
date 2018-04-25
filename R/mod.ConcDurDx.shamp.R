@@ -3,7 +3,7 @@
 #'
 #' @description Module function for analysing the duration of concurrencies of particular types.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' At each time step sets of concurent relationships are identified, 
@@ -19,6 +19,7 @@
 #'
 ConcDurDx_shamp <- function(dat, at){
 
+  if(dat$param$conc_dur_dx == TRUE){
 
     # Variables --------------------------------------------------------------
 
@@ -75,6 +76,16 @@ ConcDurDx_shamp <- function(dat, at){
       cel.temp$start[now] <- at
       
       dat$cel.temp <- cel.temp
+      ##CHECK SIZE OF dat$cel.temp.
+      
+      rels <- (cel.temp[,1] * 1000000000) + cel.temp[,2]
+      trelcount <- length(rels)
+      urelcount <- length(unique(rels))
+      duplicates <- trelcount - urelcount
+      dat$epi$duplicates[at] <- duplicates
+      
+  }
+  
       
   return(dat)
 }
