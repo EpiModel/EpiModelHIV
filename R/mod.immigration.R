@@ -5,7 +5,7 @@
 #' @description Stochastically simulates disease transmission from the heat bath given the current
 #'              state of the active HIV negative population.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' This function takes all active HIV negative MSMF nodes and calculates a
