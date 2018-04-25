@@ -5,7 +5,7 @@
 #' @description Stochastically simulates disease transmission from the heat bath given the current
 #'              state of the active HIV negative population.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' This function takes all active HIV negative MSMF nodes and calculates a
@@ -47,11 +47,11 @@ heatbath_msmf_shamp <- function(dat, at){
   prep.hr <- dat$param$prep.class.hr
   prep.class.prob <- dat$param$prep.class.prob
   
-  msm.aq.prob.B <- dat$param$msm.aq.prob.B
-  msm.aq.prob.BI <- dat$param$msm.aq.prob.BI
-  msm.aq.prob.H <- dat$param$msm.aq.prob.H
-  msm.aq.prob.HI <- dat$param$msm.aq.prob.HI
-  msm.aq.prob.W <- dat$param$msm.aq.prob.W
+  msm.aq.prob.B <- dat$param$msm.aq.prob.B * dat$param$msm.foi.scale
+  msm.aq.prob.BI <- dat$param$msm.aq.prob.BI * dat$param$msm.foi.scale
+  msm.aq.prob.H <- dat$param$msm.aq.prob.H * dat$param$msm.foi.scale
+  msm.aq.prob.HI <- dat$param$msm.aq.prob.HI * dat$param$msm.foi.scale
+  msm.aq.prob.W <- dat$param$msm.aq.prob.W * dat$param$msm.foi.scale
 
 
   #Select active negative msmf by race
