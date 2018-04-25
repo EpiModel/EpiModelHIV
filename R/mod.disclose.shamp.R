@@ -4,7 +4,7 @@
 #' @description Module function for disclosure of HIV status to partners given
 #'              non-disclosure in the past.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' Persons who are infected may disclose their status to partners at three
