@@ -4,7 +4,7 @@
 #' @description Module function for simulating progression of CD4 in natural
 #'              disease dynamics and in the presence of ART.
 #'
-#' @inheritParams aging_het
+#' @inheritParams aging_shamp
 #'
 #' @keywords module het
 #'
