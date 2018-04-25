@@ -4,7 +4,7 @@
 #' @description Module function for setting the number of sexual acts on the
 #'              discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' The number of acts at each time step is specified as a function of the race of
