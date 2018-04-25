@@ -4,7 +4,7 @@
 #' @description Module function for simulting both general and disease-related
 #'              deaths among population members.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' Deaths are divided into two categories: general deaths, for which demographic
@@ -27,11 +27,12 @@
 #'
 deaths_shamp <- function(dat, at) {
 
+if(dat$param$death_stats) {
   ##Tracking disease related stats at death.
   death.stats <- dat$death.stats
   diag.status <- dat$attr$diag.status
   diag.time <- dat$attr$diag.time
-  inf.time <- dat$attr$inf.time
+  inf.time <- dat$attr$inf.time}
   
   ## General deaths
   age <- floor(dat$attr$age)
@@ -120,6 +121,8 @@ deaths_shamp <- function(dat, at) {
   dat$epi$dth.dis[at] <- max(0,length(dth.dis))
   dat$epi$dth.age[at] <-max(0,length(dth.age))
   
+  if(dat$param$death_stats){
+  
   if (at == 1){
     death.stats$age <- age[dth.dis]
     death.stats$race <- race[dth.dis]
@@ -137,6 +140,8 @@ deaths_shamp <- function(dat, at) {
   }
   
   dat$death.stats <- death.stats
+  
+  }
   
   return(dat)
 }
