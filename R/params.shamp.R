@@ -310,27 +310,53 @@ param_shamp <- function(race.method = 1,
                       testing.pattern = "memoryless",
                       test.window.int = 15,
                       
+                      #change trajectories based on NSFG NEver test fractions among 35-40
+                      #set MF ratio to observed population ratio but within race
                       
-                      tt.traj.B.f.prob = c(0.741, 0.000, 0.053, 0.206),
-                      tt.traj.BI.f.prob = c(0.741, 0.000, 0.053, 0.206),
-                      tt.traj.H.f.prob = c(0.741, 0.000, 0.041, 0.218),
-                      tt.traj.HI.f.prob = c(0.741, 0.000, 0.041, 0.218),
-                      tt.traj.W.f.prob = c(0.741, 0.000, 0.057, 0.202),
-                      tt.traj.B.msf.prob = c(0.741, 0.000, 0.066, 0.193),
-                      tt.traj.BI.msf.prob = c(0.741, 0.000, 0.066, 0.193),
-                      tt.traj.H.msf.prob = c(0.741, 0.000, 0.067, 0.192),
-                      tt.traj.HI.msf.prob = c(0.741, 0.000, 0.067, 0.192),
-                      tt.traj.W.msf.prob = c(0.741, 0.000, 0.052, 0.207),
+                      #tt.traj.B.f.prob = c(0.741, 0.000, 0.053, 0.206),
+                      #tt.traj.BI.f.prob = c(0.741, 0.000, 0.053, 0.206),
+                      #tt.traj.H.f.prob = c(0.741, 0.000, 0.041, 0.218),
+                      #tt.traj.HI.f.prob = c(0.741, 0.000, 0.041, 0.218),
+                      #tt.traj.W.f.prob = c(0.741, 0.000, 0.057, 0.202),
+                      #tt.traj.B.msf.prob = c(0.741, 0.000, 0.066, 0.193),
+                      #tt.traj.BI.msf.prob = c(0.741, 0.000, 0.066, 0.193),
+                      #tt.traj.H.msf.prob = c(0.741, 0.000, 0.067, 0.192),
+                      #tt.traj.HI.msf.prob = c(0.741, 0.000, 0.067, 0.192),
+                      #tt.traj.W.msf.prob = c(0.741, 0.000, 0.052, 0.207),
+                      #tt.traj.B.msm.prob = c(.025, 0, .065, .911),
+                      #tt.traj.BI.msm.prob = c(.025, 0, .065, .911),
+                      #tt.traj.H.msm.prob = c(.025, 0, .065, .911),
+                      #tt.traj.HI.msm.prob = c(.025, 0, .065, .911),
+                      #tt.traj.W.msm.prob = c(.025, 0, .065, .911),
+                      #tt.traj.B.msmf.prob = c(0.741, 0.000, 0.066, 0.193),
+                      #tt.traj.BI.msmf.prob = c(0.741, 0.000, 0.066, 0.193),
+                      #tt.traj.H.msmf.prob = c(0.741, 0.000, 0.041, 0.218),
+                      #tt.traj.HI.msmf.prob = c(0.741, 0.000, 0.041, 0.218),
+                      #tt.traj.W.msmf.prob = c(0.741, 0.000, 0.052, 0.207),
+                      
+                      tt.traj.B.f.prob = c(0.10, 0.000, 0.182, 0.718),
+                      tt.traj.BI.f.prob = c(0.15, 0.000, 0.172, 0.678),
+                      tt.traj.H.f.prob = c(0.18, 0.000, 0.129, 0.691),
+                      tt.traj.HI.f.prob = c(0.28, 0.000, 0.113, 0.607),
+                      tt.traj.W.f.prob = c(0.30, 0.000, 0.155, 0.545),
+                      
+                      tt.traj.B.msf.prob = c(0.18, 0.000, 0.208, 0.612),
+                      tt.traj.BI.msf.prob = c(0.21, 0.000, 0.201, 0.589),
+                      tt.traj.H.msf.prob = c(0.35, 0.000, 0.168, 0.482),
+                      tt.traj.HI.msf.prob = c(0.55, 0.000, 0.116, 0.334),
+                      tt.traj.W.msf.prob = c(0.45, 0.000, 0.111, 0.439),
+                      
                       tt.traj.B.msm.prob = c(.025, 0, .065, .911),
                       tt.traj.BI.msm.prob = c(.025, 0, .065, .911),
                       tt.traj.H.msm.prob = c(.025, 0, .065, .911),
                       tt.traj.HI.msm.prob = c(.025, 0, .065, .911),
                       tt.traj.W.msm.prob = c(.025, 0, .065, .911),
-                      tt.traj.B.msmf.prob = c(0.741, 0.000, 0.066, 0.193),
-                      tt.traj.BI.msmf.prob = c(0.741, 0.000, 0.066, 0.193),
-                      tt.traj.H.msmf.prob = c(0.741, 0.000, 0.041, 0.218),
-                      tt.traj.HI.msmf.prob = c(0.741, 0.000, 0.041, 0.218),
-                      tt.traj.W.msmf.prob = c(0.741, 0.000, 0.052, 0.207),
+                      
+                      tt.traj.B.msmf.prob = c(0.18, 0.000, 0.208, 0.612),
+                      tt.traj.BI.msmf.prob = c(0.21, 0.000, 0.201, 0.589),
+                      tt.traj.H.msmf.prob = c(0.35, 0.000, 0.168, 0.482),
+                      tt.traj.HI.msmf.prob = c(0.55, 0.000, 0.116, 0.334),
+                      tt.traj.W.msmf.prob = c(0.45, 0.000, 0.111, 0.439),
                       
                       tx.init.B.f.prob = 0.2331,
                       tx.init.BI.f.prob = 0.2331,
@@ -427,16 +453,24 @@ param_shamp <- function(race.method = 1,
                       #b.W.m.rate = 1e-3 / 7,
 
                       birth.age = 18,
-                      exit.age = 60,
+                      exit.age = 46,
                       b.method = "fixed",
                       msm.frac=0.0,
-                      msmf.frac=0.04,
+                      msmf.frac.B=0.04,
+                      msmf.frac.BI=0.023,
+                      msmf.frac.H=0.056,
+                      msmf.frac.HI=0.026,
+                      msmf.frac.W=0.054,
 
                       URAI.prob = 138/10000,
                       UIAI.prob = 11/10000,
                       
                       URVI.prob = 8/10000,
                       UIVI.prob = 4/10000,
+                      
+                      #VI range 1-12.
+                      VI.foi.scale = 1,
+                      AI.foi.scale = 1,
                       
                       acute.rr = 4,
                       circ.rr = .4,
@@ -721,30 +755,35 @@ param_shamp <- function(race.method = 1,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
                       
-                      msm.temp.adjust = 1,
-                      fa.temp.adjust = 1,
-                      depart.adjust = 1,
-                      return.adjust = 1,
-                      immig.depart.BI.f = (1/(42*52*4))*depart.adjust,
-                      immig.depart.HI.f = (1/(42*52*4))*depart.adjust,
-                      immig.depart.BI.m = (1/(42*52*4))*depart.adjust,
-                      immig.depart.HI.m = (1/(42*52*4))*depart.adjust,
-                      immig.return.BI.f = (1/4) * return.adjust,
-                      immig.return.HI.f = (1/4) * return.adjust,
-                      immig.return.BI.m = (1/4) * return.adjust,
-                      immig.return.HI.m = (1/4) * return.adjust,
-                      immig.aq.prob.BI.f = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*URVI.prob * fa.temp.adjust,
-                      immig.aq.prob.HI.f = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*URVI.prob * fa.temp.adjust ,
-                      immig.aq.prob.BI.m = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*UIVI.prob * fa.temp.adjust ,
-                      immig.aq.prob.HI.m = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*UIVI.prob * fa.temp.adjust ,  
+                      ##1:59000
+                      msm.foi.scale = 1,
+                      ##1: 496000 for simple.
+                      fa.foi.scale = 1,
+                      depart.scale = 1,
+                      return.scale = 1,
+                      immig.simple=TRUE,
+                      
+                      
+                      immig.depart.BI.f = (1/(42*52*4)),
+                      immig.depart.HI.f = (1/(42*52*4)),
+                      immig.depart.BI.m = (1/(42*52*4)),
+                      immig.depart.HI.m = (1/(42*52*4)),
+                      immig.return.BI.f = (1/4),
+                      immig.return.HI.f = (1/4),
+                      immig.return.BI.m = (1/4),
+                      immig.return.HI.m = (1/4),
+                      immig.aq.prob.BI.f = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*URVI.prob,
+                      immig.aq.prob.HI.f = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*URVI.prob,
+                      immig.aq.prob.BI.m = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*UIVI.prob,
+                      immig.aq.prob.HI.m = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*UIVI.prob,  
                       #pos.entry.BI = 0,
                       #pos.entry.HI = 0,
                       
-                      msm.aq.prob.B=0.0000168767 * msm.temp.adjust,
-                      msm.aq.prob.BI=0.0000168767 * msm.temp.adjust,
-                      msm.aq.prob.H=0.0000168767 * msm.temp.adjust,
-                      msm.aq.prob.HI=0.0000168767 * msm.temp.adjust,
-                      msm.aq.prob.W= 0.0000168767 * msm.temp.adjust,
+                      msm.aq.prob.B=0.0000168767,
+                      msm.aq.prob.BI=0.0000168767,
+                      msm.aq.prob.H=0.0000168767,
+                      msm.aq.prob.HI=0.0000168767,
+                      msm.aq.prob.W= 0.0000168767,
                       
                       
                       demog.list=data.params[[1]]$demog.list,
@@ -753,6 +792,8 @@ param_shamp <- function(race.method = 1,
                       race.groups=data.params[[1]]$race.groups,
                       age.groups=data.params[[1]]$age.groups,
                       age.adj=data.params[[1]]$age.adj,
+                      conc_dur_dx = TRUE,
+                      death_stats = TRUE,
 
                       ...) {
 
@@ -803,66 +844,56 @@ param_shamp <- function(race.method = 1,
   p$asmr.B.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 10),
-                       rep(0.003065837, 10)))^(1 / age.unit),
+                       rep(0.001378053, 6)))^(1 / age.unit),
                 1)
   p$asmr.BI.f <- c(rep(0, 17),
                  1-(1-c(rep(0.000405376, 12),
                         rep(0.000661066, 10),
-                        rep(0.001378053, 10),
-                        rep(0.003065837, 10)))^(1 / age.unit),
+                        rep(0.001378053, 6)))^(1 / age.unit),
                  1)
   
   p$asmr.H.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 10),
-                       rep(0.003065837, 10)))^(1/age.unit),
+                       rep(0.001378053, 6)))^(1/age.unit),
                 1)
   p$asmr.HI.f <- c(rep(0, 17),
                  1-(1-c(rep(0.000405376, 12),
                         rep(0.000661066, 10),
-                        rep(0.001378053, 10),
-                        rep(0.003065837, 10)))^(1/age.unit),
+                        rep(0.001378053, 6)))^(1/age.unit),
                  1)
   p$asmr.W.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 10),
-                       rep(0.003065837, 10)))^(1/age.unit),
+                       rep(0.001378053, 6)))^(1/age.unit),
                 1)
   
   
   p$asmr.B.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 10),
-                       rep(0.005400669, 10)))^(1 / age.unit),
+                       rep(0.001982864, 6)))^(1 / age.unit),
                 1)
   p$asmr.BI.m <- c(rep(0, 17),
                  1-(1-c(rep(0.000853417, 12),
                         rep(0.001084014, 10),
-                        rep(0.001982864, 10),
-                        rep(0.005400669, 10)))^(1 / age.unit),
+                        rep(0.001982864, 6)))^(1 / age.unit),
                  1)
   
   p$asmr.H.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 10),
-                       rep(0.005400669, 10)))^(1/age.unit),
+                       rep(0.001982864, 6)))^(1/age.unit),
                 1)
   p$asmr.HI.m <- c(rep(0, 17),
                  1-(1-c(rep(0.000853417, 12),
                         rep(0.001084014, 10),
-                        rep(0.001982864, 10),
-                        rep(0.005400669, 10)))^(1/age.unit),
+                        rep(0.001982864, 6)))^(1/age.unit),
                  1)
   p$asmr.W.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 10),
-                       rep(0.005400669, 10)))^(1/age.unit),
+                       rep(0.001982864, 6)))^(1/age.unit),
                 1)
 
 
@@ -914,26 +945,26 @@ init_shamp <- function(prev.B.f = 0.02,
                 dot.args = list(...))
 
   
-  p$init.prev.age.slope.B.f <- prev.B.f / 42
-  p$init.prev.age.slope.BI.f <- prev.BI.f / 42
-  p$init.prev.age.slope.H.f <- prev.H.f / 42
-  p$init.prev.age.slope.HI.f <- prev.HI.f / 42
-  p$init.prev.age.slope.W.f <- prev.W.f / 42
-  p$init.prev.age.slope.B.msf <- prev.B.msf / 42
-  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 42
-  p$init.prev.age.slope.H.msf <- prev.H.msf / 42
-  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 42
-  p$init.prev.age.slope.W.msf <- prev.W.msf / 42
-  p$init.prev.age.slope.B.msm <- prev.B.msm / 42
-  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 42
-  p$init.prev.age.slope.H.msm <- prev.H.msm / 42
-  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 42
-  p$init.prev.age.slope.W.msm <- prev.W.msm / 42
-  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 42
-  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 42
-  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 42
-  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 42
-  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 42
+  p$init.prev.age.slope.B.f <- prev.B.f / 28
+  p$init.prev.age.slope.BI.f <- prev.BI.f / 28
+  p$init.prev.age.slope.H.f <- prev.H.f / 28
+  p$init.prev.age.slope.HI.f <- prev.HI.f / 28
+  p$init.prev.age.slope.W.f <- prev.W.f / 28
+  p$init.prev.age.slope.B.msf <- prev.B.msf / 28
+  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 28
+  p$init.prev.age.slope.H.msf <- prev.H.msf / 28
+  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 28
+  p$init.prev.age.slope.W.msf <- prev.W.msf / 28
+  p$init.prev.age.slope.B.msm <- prev.B.msm / 28
+  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 28
+  p$init.prev.age.slope.H.msm <- prev.H.msm / 28
+  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 28
+  p$init.prev.age.slope.W.msm <- prev.W.msm / 28
+  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 28
+  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 28
+  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 28
+  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 28
+  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 28
  
 
   class(p) <- "init.net"
@@ -971,6 +1002,7 @@ init_shamp <- function(prev.B.f = 0.02,
 #' @param resim_nets.FUN Module function for network resimulation at each time
 #'        step.
 #' @param disclose.FUN Module function for HIV status disclosure.
+#' @param ConcDurDx.FUN Module that analyzes concurrency durations by type (Dianistics only, do not use for general simualtions)
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
 #' @param condoms.FUN Module function to simulate condom use within acts.
@@ -1021,6 +1053,7 @@ control_shamp <- function(simno = 1,
                         #roleclass.FUN = NULL,
                         resim_nets.FUN = simnet_shamp,
                         disclose.FUN = disclose_shamp,
+                        ConcDurDx.FUN = ConcDurDx_shamp,
                         acts.FUN = acts_shamp,
                         condoms.FUN = condoms_shamp,
                         riskhist.FUN = riskhist_shamp,
@@ -1048,7 +1081,7 @@ control_shamp <- function(simno = 1,
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  p$save.other = c("attr", "temp", "el", "p" ,"trans.el")
+  p$save.other = c("attr", "temp", "el", "p" ,"trans.el", "death.stats", "cel.temp")
 
   p$save.network = FALSE
 
