@@ -4,7 +4,7 @@
 #' @description Module function for anti-retroviral treatment initiation and
 #'              adherence over time.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' Persons enter into the simulation with one of four ART "patterns": never
