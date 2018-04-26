@@ -6,7 +6,7 @@
 #' @description Stochastically simulates disease transmission given the current
 #'              state of the discordand edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' This is the final substantive function that occurs within the time loop at
@@ -54,10 +54,10 @@ trans_shamp <- function(dat, at){
   inf.class <- dat$attr$inf.class
 
   # Parameters
-  URAI.prob <- dat$param$URAI.prob
-  UIAI.prob <- dat$param$UIAI.prob
-  URVI.prob <- dat$param$URVI.prob
-  UIVI.prob <- dat$param$UIVI.prob
+  URAI.prob <- dat$param$URAI.prob * dat$param$AI.foi.scale
+  UIAI.prob <- dat$param$UIAI.prob * dat$param$AI.foi.scale
+  URVI.prob <- dat$param$URVI.prob * dat$param$VI.foi.scale
+  UIVI.prob <- dat$param$UIVI.prob * dat$param$VI.foi.scale
   
   acute.rr <- dat$param$acute.rr
   condom.rr <- dat$param$condom.rr
