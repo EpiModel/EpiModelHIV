@@ -4,7 +4,7 @@
 #' @description Module function for HIV disease progression through acute, chronic
 #'              and AIDS stages.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' HIV disease is divided into four stages: acute rising, acute falling, chronic
