@@ -5,7 +5,7 @@
 #' @description Module function for resimulating the main, casual, and one-off
 #'              networks for one time step.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module shamp
 #'
@@ -139,7 +139,7 @@ calc_resim_nwstats <- function(dat, at) {
 #' @description Adjusts the edges coefficients in a dynamic network model
 #'              to preserve the mean degree.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' In HIV/STI modeling, there is typically an assumption that changes in
