@@ -26,45 +26,45 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   mean.test.BI.msmf.int = 1129, mean.test.H.msmf.int = 1129,
   mean.test.HI.msmf.int = 1129, mean.test.W.msmf.int = 1129,
   testing.pattern = "memoryless", test.window.int = 15,
-  tt.traj.B.f.prob = c(0.741, 0, 0.053, 0.206), tt.traj.BI.f.prob = c(0.741,
-  0, 0.053, 0.206), tt.traj.H.f.prob = c(0.741, 0, 0.041, 0.218),
-  tt.traj.HI.f.prob = c(0.741, 0, 0.041, 0.218), tt.traj.W.f.prob = c(0.741,
-  0, 0.057, 0.202), tt.traj.B.msf.prob = c(0.741, 0, 0.066, 0.193),
-  tt.traj.BI.msf.prob = c(0.741, 0, 0.066, 0.193),
-  tt.traj.H.msf.prob = c(0.741, 0, 0.067, 0.192),
-  tt.traj.HI.msf.prob = c(0.741, 0, 0.067, 0.192),
-  tt.traj.W.msf.prob = c(0.741, 0, 0.052, 0.207),
+  tt.traj.B.f.prob = c(0.1, 0, 0.182, 0.718), tt.traj.BI.f.prob = c(0.15, 0,
+  0.172, 0.678), tt.traj.H.f.prob = c(0.18, 0, 0.129, 0.691),
+  tt.traj.HI.f.prob = c(0.28, 0, 0.113, 0.607), tt.traj.W.f.prob = c(0.3, 0,
+  0.155, 0.545), tt.traj.B.msf.prob = c(0.18, 0, 0.208, 0.612),
+  tt.traj.BI.msf.prob = c(0.21, 0, 0.201, 0.589),
+  tt.traj.H.msf.prob = c(0.35, 0, 0.168, 0.482),
+  tt.traj.HI.msf.prob = c(0.55, 0, 0.116, 0.334),
+  tt.traj.W.msf.prob = c(0.45, 0, 0.111, 0.439),
   tt.traj.B.msm.prob = c(0.025, 0, 0.065, 0.911),
   tt.traj.BI.msm.prob = c(0.025, 0, 0.065, 0.911),
   tt.traj.H.msm.prob = c(0.025, 0, 0.065, 0.911),
   tt.traj.HI.msm.prob = c(0.025, 0, 0.065, 0.911),
   tt.traj.W.msm.prob = c(0.025, 0, 0.065, 0.911),
-  tt.traj.B.msmf.prob = c(0.741, 0, 0.066, 0.193),
-  tt.traj.BI.msmf.prob = c(0.741, 0, 0.066, 0.193),
-  tt.traj.H.msmf.prob = c(0.741, 0, 0.041, 0.218),
-  tt.traj.HI.msmf.prob = c(0.741, 0, 0.041, 0.218),
-  tt.traj.W.msmf.prob = c(0.741, 0, 0.052, 0.207),
-  tx.init.B.f.prob = 0.2331, tx.init.BI.f.prob = 0.2331,
-  tx.init.H.f.prob = 0.2331, tx.init.HI.f.prob = 0.2331,
-  tx.init.W.f.prob = 0.2331, tx.init.B.msf.prob = 0.2331,
-  tx.init.BI.msf.prob = 0.2331, tx.init.H.msf.prob = 0.2331,
-  tx.init.HI.msf.prob = 0.2331, tx.init.W.msf.prob = 0.2331,
-  tx.init.B.msm.prob = 0.1467, tx.init.BI.msm.prob = 0.1467,
-  tx.init.H.msm.prob = 0.1467, tx.init.HI.msm.prob = 0.1467,
-  tx.init.W.msm.prob = 0.1467, tx.init.B.msmf.prob = 0.2331,
-  tx.init.BI.msmf.prob = 0.2331, tx.init.H.msmf.prob = 0.2331,
-  tx.init.HI.msmf.prob = 0.2331, tx.init.W.msmf.prob = 0.2331,
-  tx.halt.B.f.prob = 1e-04, tx.halt.BI.f.prob = 1e-04,
-  tx.halt.H.f.prob = 1e-04, tx.halt.HI.f.prob = 1e-04,
-  tx.halt.W.f.prob = 1e-04, tx.halt.B.msf.prob = 1e-04,
-  tx.halt.BI.msf.prob = 1e-04, tx.halt.H.msf.prob = 1e-04,
-  tx.halt.HI.msf.prob = 1e-04, tx.halt.W.msf.prob = 1e-04,
-  tx.halt.B.msm.prob = 1e-04, tx.halt.BI.msm.prob = 1e-04,
-  tx.halt.H.msm.prob = 1e-04, tx.halt.HI.msm.prob = 1e-04,
-  tx.halt.W.msm.prob = 1e-04, tx.halt.B.msmf.prob = 1e-04,
-  tx.halt.BI.msmf.prob = 1e-04, tx.halt.H.msmf.prob = 1e-04,
-  tx.halt.HI.msmf.prob = 1e-04, tx.halt.W.msmf.prob = 1e-04,
-  tx.reinit.B.f.prob = 1, tx.reinit.BI.f.prob = 1, tx.reinit.H.f.prob = 1,
+  tt.traj.B.msmf.prob = c(0.18, 0, 0.208, 0.612),
+  tt.traj.BI.msmf.prob = c(0.21, 0, 0.201, 0.589),
+  tt.traj.H.msmf.prob = c(0.35, 0, 0.168, 0.482),
+  tt.traj.HI.msmf.prob = c(0.55, 0, 0.116, 0.334),
+  tt.traj.W.msmf.prob = c(0.45, 0, 0.111, 0.439), tx.init.B.f.prob = 0.2331,
+  tx.init.BI.f.prob = 0.2331, tx.init.H.f.prob = 0.2331,
+  tx.init.HI.f.prob = 0.2331, tx.init.W.f.prob = 0.2331,
+  tx.init.B.msf.prob = 0.2331, tx.init.BI.msf.prob = 0.2331,
+  tx.init.H.msf.prob = 0.2331, tx.init.HI.msf.prob = 0.2331,
+  tx.init.W.msf.prob = 0.2331, tx.init.B.msm.prob = 0.1467,
+  tx.init.BI.msm.prob = 0.1467, tx.init.H.msm.prob = 0.1467,
+  tx.init.HI.msm.prob = 0.1467, tx.init.W.msm.prob = 0.1467,
+  tx.init.B.msmf.prob = 0.2331, tx.init.BI.msmf.prob = 0.2331,
+  tx.init.H.msmf.prob = 0.2331, tx.init.HI.msmf.prob = 0.2331,
+  tx.init.W.msmf.prob = 0.2331, tx.halt.B.f.prob = 1e-04,
+  tx.halt.BI.f.prob = 1e-04, tx.halt.H.f.prob = 1e-04,
+  tx.halt.HI.f.prob = 1e-04, tx.halt.W.f.prob = 1e-04,
+  tx.halt.B.msf.prob = 1e-04, tx.halt.BI.msf.prob = 1e-04,
+  tx.halt.H.msf.prob = 1e-04, tx.halt.HI.msf.prob = 1e-04,
+  tx.halt.W.msf.prob = 1e-04, tx.halt.B.msm.prob = 1e-04,
+  tx.halt.BI.msm.prob = 1e-04, tx.halt.H.msm.prob = 1e-04,
+  tx.halt.HI.msm.prob = 1e-04, tx.halt.W.msm.prob = 1e-04,
+  tx.halt.B.msmf.prob = 1e-04, tx.halt.BI.msmf.prob = 1e-04,
+  tx.halt.H.msmf.prob = 1e-04, tx.halt.HI.msmf.prob = 1e-04,
+  tx.halt.W.msmf.prob = 1e-04, tx.reinit.B.f.prob = 1,
+  tx.reinit.BI.f.prob = 1, tx.reinit.H.f.prob = 1,
   tx.reinit.HI.f.prob = 1, tx.reinit.W.f.prob = 1,
   tx.reinit.B.msf.prob = 1, tx.reinit.BI.msf.prob = 1,
   tx.reinit.H.msf.prob = 1, tx.reinit.HI.msf.prob = 1,
@@ -80,9 +80,11 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25, birth.age = 18,
-  exit.age = 60, b.method = "fixed", msm.frac = 0, msmf.frac = 0.04,
-  URAI.prob = 138/10000, UIAI.prob = 11/10000, URVI.prob = 8/10000,
-  UIVI.prob = 4/10000, acute.rr = 4, circ.rr = 0.4, condom.rr = 0.25,
+  exit.age = 46, b.method = "fixed", msm.frac = 0, msmf.frac.B = 0.04,
+  msmf.frac.BI = 0.023, msmf.frac.H = 0.056, msmf.frac.HI = 0.026,
+  msmf.frac.W = 0.054, URAI.prob = 138/10000, UIAI.prob = 11/10000,
+  URVI.prob = 8/10000, UIVI.prob = 4/10000, VI.foi.scale = 1,
+  AI.foi.scale = 1, acute.rr = 4, circ.rr = 0.4, condom.rr = 0.25,
   disc.outset.main.B.f.prob = 0, disc.outset.main.BI.f.prob = 0,
   disc.outset.main.H.f.prob = 0, disc.outset.main.HI.f.prob = 0,
   disc.outset.main.W.f.prob = 0, disc.outset.main.B.msf.prob = 0,
@@ -206,32 +208,27 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   prep.class.prob = c(0, 0, 0, 0), prep.class.hr = c(1, 0.69, 0.19, 0.05),
   prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
   prep.tst.int = 90, prep.risk.int = 182, prep.risk.reassess = TRUE,
-  msm.temp.adjust = 1, fa.temp.adjust = 1, depart.adjust = 1,
-  return.adjust = 1, immig.depart.BI.f = (1/(42 * 52 * 4)) * depart.adjust,
-  immig.depart.HI.f = (1/(42 * 52 * 4)) * depart.adjust,
-  immig.depart.BI.m = (1/(42 * 52 * 4)) * depart.adjust,
-  immig.depart.HI.m = (1/(42 * 52 * 4)) * depart.adjust,
-  immig.return.BI.f = (1/4) * return.adjust, immig.return.HI.f = (1/4) *
-  return.adjust, immig.return.BI.m = (1/4) * return.adjust,
-  immig.return.HI.m = (1/4) * return.adjust, immig.aq.prob.BI.f = 0.3 * 0.06
-  * ((base.vi.main.BI.rate + base.vi.pers.BI.rate)/2) * URVI.prob *
-  fa.temp.adjust, immig.aq.prob.HI.f = 0.3 * 0.005 * ((base.vi.main.HI.rate +
-  base.vi.pers.HI.rate)/2) * URVI.prob * fa.temp.adjust,
+  msm.foi.scale = 1, fa.foi.scale = 1, depart.scale = 1,
+  return.scale = 1, immig.simple = TRUE, immig.depart.BI.f = (1/(42 * 52 *
+  4)), immig.depart.HI.f = (1/(42 * 52 * 4)), immig.depart.BI.m = (1/(42 *
+  52 * 4)), immig.depart.HI.m = (1/(42 * 52 * 4)),
+  immig.return.BI.f = (1/4), immig.return.HI.f = (1/4),
+  immig.return.BI.m = (1/4), immig.return.HI.m = (1/4),
+  immig.aq.prob.BI.f = 0.3 * 0.06 * ((base.vi.main.BI.rate +
+  base.vi.pers.BI.rate)/2) * URVI.prob, immig.aq.prob.HI.f = 0.3 * 0.005 *
+  ((base.vi.main.HI.rate + base.vi.pers.HI.rate)/2) * URVI.prob,
   immig.aq.prob.BI.m = 0.3 * 0.06 * ((base.vi.main.BI.rate +
-  base.vi.pers.BI.rate)/2) * UIVI.prob * fa.temp.adjust,
-  immig.aq.prob.HI.m = 0.3 * 0.005 * ((base.vi.main.HI.rate +
-  base.vi.pers.HI.rate)/2) * UIVI.prob * fa.temp.adjust,
-  msm.aq.prob.B = 1.68767e-05 * msm.temp.adjust,
-  msm.aq.prob.BI = 1.68767e-05 * msm.temp.adjust,
-  msm.aq.prob.H = 1.68767e-05 * msm.temp.adjust,
-  msm.aq.prob.HI = 1.68767e-05 * msm.temp.adjust,
-  msm.aq.prob.W = 1.68767e-05 * msm.temp.adjust,
-  demog.list = data.params[[1]]$demog.list,
+  base.vi.pers.BI.rate)/2) * UIVI.prob, immig.aq.prob.HI.m = 0.3 * 0.005 *
+  ((base.vi.main.HI.rate + base.vi.pers.HI.rate)/2) * UIVI.prob,
+  msm.aq.prob.B = 1.68767e-05, msm.aq.prob.BI = 1.68767e-05,
+  msm.aq.prob.H = 1.68767e-05, msm.aq.prob.HI = 1.68767e-05,
+  msm.aq.prob.W = 1.68767e-05, demog.list = data.params[[1]]$demog.list,
   demog.dist = data.params[[1]]$demog.dist,
   sex.groups = data.params[[1]]$sex.groups,
   race.groups = data.params[[1]]$race.groups,
   age.groups = data.params[[1]]$age.groups,
-  age.adj = data.params[[1]]$age.adj, ...)
+  age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
+  death_stats = TRUE, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
@@ -295,10 +292,6 @@ initial time step and \code{"varying"} based on the current time step.}
 
 \item{msm.frac}{The fraction of males entering the population at each time step 
 as a male that has intercourse exclusivly with other males "msm" - 
-males not designated as msm or msmf are considered "msf".}
-
-\item{msmf.frac}{The fraction of males entering the population at each time step as
-as a male that has intercourse with both males and females "msmf" - 
 males not designated as msm or msmf are considered "msf".}
 
 \item{URAI.prob}{Probability of transmission for a man having unprotected
@@ -469,6 +462,10 @@ re-initiate treatment.}
 \item{b.R.S.rate}{Rate at which a person in race group R, where R is a 
 charater (B, BI, H, HI or W), and sex group S, where s is a charter (f, msf, msm, msmf),
 enters the population.}
+
+\item{msmf.frac}{The fraction of males entering the population at each time step as
+as a male that has intercourse with both males and females "msmf" - 
+males not designated as msm or msmf are considered "msf".}
 
 \item{disc.outset.main.R.S.prob}{Probability that an HIV-infected person in race group R,
 where R is a charater (B, BI, H, HI or W), and sex group S, where s is a charter 

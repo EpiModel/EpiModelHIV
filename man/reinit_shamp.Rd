@@ -9,11 +9,11 @@ reinit_shamp(x, param, init, control, s)
 \arguments{
 \item{x}{An \code{EpiModel} object of class \code{\link{netsim}}.}
 
-\item{param}{An \code{EpiModel} object of class \code{\link{param_msm}}.}
+\item{param}{An \code{EpiModel} object of class \code{\link{param_shamp}}.}
 
-\item{init}{An \code{EpiModel} object of class \code{\link{init_msm}}.}
+\item{init}{An \code{EpiModel} object of class \code{\link{init_shamp}}.}
 
-\item{control}{An \code{EpiModel} object of class \code{\link{control_msm}}.}
+\item{control}{An \code{EpiModel} object of class \code{\link{control_shamp}}.}
 
 \item{s}{Simulation number, used for restarting dependent simulations.}
 }
