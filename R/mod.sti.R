@@ -4,7 +4,7 @@
 #' @description Stochastically simulates GC/CT transmission given the current
 #'              state of the edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module msm
 #'
@@ -292,7 +292,7 @@ sti_trans <- function(dat, at) {
 #'
 #' @description Stochastically simulates GC/CT recovery.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module msm
 #'
@@ -477,7 +477,7 @@ sti_recov <- function(dat, at) {
 #'
 #' @description Stochastically simulates GC/CT diagnosis and treatment.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module msm
 #'
