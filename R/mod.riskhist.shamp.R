@@ -4,7 +4,7 @@
 #' @description Module function to track the risk history of uninfected persons
 #'              for purpose of intervention targeting.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module SHAMP
 #'
