@@ -4,7 +4,7 @@
 #' @description Module function for updating act class in main and casual
 #'              partnerships based on probabilities of transition.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @return
 #' This function updates the individual-level attribute \code{role.class} on
