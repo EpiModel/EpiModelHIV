@@ -4,7 +4,7 @@
 #'
 #' @description Module function for tracking partnerships over a predetermined time window.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module shamp
 #'
