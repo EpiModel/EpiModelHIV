@@ -4,7 +4,7 @@
 #' @description Module function for establishing sexual role or position in each
 #'              act on the discordant edgelist.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' The sexual role within each act is determined by each nodes "role identity"
