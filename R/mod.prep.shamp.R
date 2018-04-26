@@ -5,7 +5,7 @@
 #'              prophylaxis (PrEP) to prevent HIV infection.  Only msm and msmf are eligible.
 #'              If dat$attr$immig.loc=1 PrEP can not be started or re-initiated.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @keywords module shamp msm msmf
 #'
