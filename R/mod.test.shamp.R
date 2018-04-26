@@ -3,7 +3,7 @@
 #'
 #' @description Module function for HIV diagnostic testing of infected persons.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' This testing module supports two testing parameterizations, input via the
@@ -34,6 +34,7 @@ test_shamp <- function(dat, at) {
   status <- dat$attr$status
   inf.time <- dat$attr$inf.time
   immig.loc <- dat$attr$immig.loc
+  stage <- dat$attr$stage
 
   prepStat <- dat$attr$prepStat
   prep.tst.int <- dat$param$prep.tst.int
@@ -372,12 +373,23 @@ test_shamp <- function(dat, at) {
 
   tst.pos <- tst.all[status[tst.all] == 1 & inf.time[tst.all] <= at - twind.int]
   tst.neg <- setdiff(tst.all, tst.pos)
+  
+  
+  ##AIDS symptom testing.FINSH LATER
+  tst.symp <- which((diag.status == 0 | is.na(diag.status)) & stage == 4 )
+  tst.symp.results <- rbinom(length(tst.symp), 1, prob=1/52)
+  tst.symp<- tst.symp[which(tst.symp.results == 1)]
+  
 
   # Attributes
   dat$attr$last.neg.test[tst.neg] <- at
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
   dat$attr$evertest[tst.all] <- 1
+  
+  dat$attr$diag.status[tst.symp] <- 1
+  dat$attr$diag.time[tst.symp] <- at
+  dat$attr$evertest[tst.symp] <- 1
 
   return(dat)
 }
