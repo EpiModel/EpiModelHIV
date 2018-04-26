@@ -4,7 +4,7 @@
 #' @description This module calculates demographic, transmission, and clinical
 #'              statistics at each time step within the simulation.
 #'
-#' @inheritParams aging_msm
+#' @inheritParams aging_shamp
 #'
 #' @details
 #' Summary statistic calculations are of two broad forms: prevalence and
@@ -30,6 +30,7 @@ prevalence_shamp <- function(dat, at) {
   sex<-dat$attr$sex
   prepStat <- dat$attr$prepStat
   inf.class <- dat$attr$inf.class
+  diagnosed <- dat$attr$diag.status
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -152,6 +153,18 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$i.prev.HI.msmf <- rNA
     dat$epi$i.prev.W.msmf <- rNA
     
+    dat$epi$i.prev.diag.B.f <- rNA
+    dat$epi$i.prev.diag.BI.f <- rNA
+    dat$epi$i.prev.diag.H.f <- rNA
+    dat$epi$i.prev.diag.HI.f <- rNA
+    dat$epi$i.prev.diag.W.f <- rNA
+    
+    dat$epi$i.prev.diag.B.m <- rNA
+    dat$epi$i.prev.diag.BI.m <- rNA
+    dat$epi$i.prev.diag.H.m <- rNA
+    dat$epi$i.prev.diag.HI.m <- rNA
+    dat$epi$i.prev.diag.W.m <- rNA
+    
     dat$epi$nBirths <- rNA
     dat$epi$dth.gen <- rNA
     dat$epi$dth.dis <- rNA
@@ -198,6 +211,13 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$prop.FA.inf <- rep(0, nsteps)
     dat$epi$prop.FAds.inf <- rep(0, nsteps)
     dat$epi$prop.Lhet.inf <- rep(0, nsteps)
+    
+    dat$epi$duplicates <-  rep(0, nsteps)
+    
+    dat$epi$nCohabs <-  rep(0, nsteps)
+    dat$epi$nPers <-  rep(0, nsteps)
+    dat$epi$nOTduplicates <-  rep(0, nsteps)
+    
   }
 
 
@@ -343,8 +363,21 @@ prevalence_shamp <- function(dat, at) {
   dat$epi$i.prev.HI.msmf[at] <- dat$epi$i.num.HI.msmf[at] / dat$epi$num.HI.msmf[at]
   dat$epi$i.prev.W.msmf[at] <- dat$epi$i.num.W.msmf[at] / dat$epi$num.W.msmf[at]
   
-
-
+  dat$attr$diag.status
+  dat$epi$i.prev.daig.B.f[at] <- sum(status == 1 & race == "B" & sex == "M", na.rm = TRUE) / 
+                                 sum(status == 1 & race == "B" & sex == "M" & diagnosed == 1, na.rm = TRUE)
+  dat$epi$num.B.f[at]
+  dat$epi$i.prev.daig.BI.f[at] <- dat$epi$i.num.BI.f[at] / dat$epi$num.BI.f[at]
+  dat$epi$i.prev.daig.H.f[at] <- dat$epi$i.num.H.f[at] / dat$epi$num.H.f[at]
+  dat$epi$i.prev.daig.HI.f[at] <- dat$epi$i.num.HI.f[at] / dat$epi$num.HI.f[at]
+  dat$epi$i.prev.daig.W.f[at] <- dat$epi$i.num.W.f[at] / dat$epi$num.W.f[at]
+  
+  dat$epi$i.prev.daig.B.m[at] <- dat$epi$i.num.B.m[at] / dat$epi$num.B.m[at]
+  dat$epi$i.prev.daig.BI.m[at] <- dat$epi$i.num.BI.m[at] / dat$epi$num.BI.m[at]
+  dat$epi$i.prev.daig.H.m[at] <- dat$epi$i.num.H.m[at] / dat$epi$num.H.m[at]
+  dat$epi$i.prev.daig.HI.m[at] <- dat$epi$i.num.HI.m[at] / dat$epi$num.HI.m[at]
+  dat$epi$i.prev.daig.W.m[at] <- dat$epi$i.num.W.m[at] / dat$epi$num.W.m[at]
+  
   dat$epi$prepCurr[at] <- sum(prepStat == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum((is.na(prepStat) | prepStat == 0) &
@@ -358,6 +391,13 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] /
                                 sum(prepStat == 1, na.rm = TRUE)
   }
+  
+  
+  dat$epi$nCohabs[at] <- sum(get_degree(dat$el[[1]]), na.rm = TRUE)
+  dat$epi$nPers[at] <- sum(get_degree(dat$el[[2]]), na.rm = TRUE)
+  dat$epi$nOTduplicates[at] <- sum(get_degree(dat$el[[3]]), na.rm = TRUE)
+  
+
 
   return(dat)
 }
