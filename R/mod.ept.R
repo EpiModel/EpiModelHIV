@@ -666,18 +666,18 @@ sti_ept_msm <- function(dat, at) {
 
     # Update with new trackers
     if (is.null(dat$epi$eptpartprovided_gc)) {
-      dat$epi$eptpartprovided_gc <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartprovided_ct <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartprovided_main <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartprovided_pers <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartprovided_inst <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartuptake_main <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartuptake_pers <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartuptake_inst <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptpartuptake_gc <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptgcinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptctinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
-      dat$epi$eptgcctinfectundiaghiv <- rep(NA, length(dat$control$nsteps))
+      dat$epi$eptpartprovided_gc <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartprovided_ct <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartprovided_main <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartprovided_pers <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartprovided_inst <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartuptake_main <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartuptake_pers <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartuptake_inst <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartuptake_gc <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcinfectundiaghiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptctinfectundiaghiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfectundiaghiv <- rep(NA, dat$control$nsteps)
     }
 
     # Index attributes
