@@ -27,12 +27,16 @@
 #'
 deaths_shamp <- function(dat, at) {
 
-if(dat$param$death_stats) {
+if(dat$param$death_stats==TRUE) {
   ##Tracking disease related stats at death.
   death.stats <- dat$death.stats
   diag.status <- dat$attr$diag.status
   diag.time <- dat$attr$diag.time
-  inf.time <- dat$attr$inf.time}
+  inf.time <- dat$attr$inf.time
+  tx.status <- dat$attr$tx.status 
+  cum.time.on.tx <- dat$attr$cum.time.on.tx
+  stage4.onset.time <- dat$attr$stage4.onset.time
+}
   
   ## General deaths
   age <- floor(dat$attr$age)
@@ -101,7 +105,9 @@ if(dat$param$death_stats) {
   dth.all <- unique(c(dth.gen, dth.dis))
   
   ##Those that will age out this time step.
-  dth.age<-which(age >= dat$param$exit.age)
+  dth.age <- which(age >= dat$param$exit.age)
+  dth.age.pos <- which((age >= dat$param$exit.age) & diag.status ==1)
+  dth.age.pos.ontx <- which((age >= dat$param$exit.age) & diag.status == 1  & tx.status == 1)
 
   if (length(dth.all) > 0) {
     dat$attr$active[dth.all] <- 0
@@ -121,22 +127,68 @@ if(dat$param$death_stats) {
   dat$epi$dth.dis[at] <- max(0,length(dth.dis))
   dat$epi$dth.age[at] <-max(0,length(dth.age))
   
-  if(dat$param$death_stats){
+  dat$epi$dth.age.pos[at] <- max(0,length(dth.age.pos))
+  dat$epi$dth.age.pos.ontx[at] <- max(0,length(dth.age.pos.ontx)) 
+    
+  if(dat$param$death_stats==TRUE){
   
   if (at == 1){
     death.stats$age <- age[dth.dis]
     death.stats$race <- race[dth.dis]
     death.stats$diag.status <- diag.status[dth.dis]
-    death.stats$dur.diagnosed <- at-diag.time[dth.dis]
-    death.stats$dur.positive <- at - inf.time[dth.dis]
+    death.stats$diag.time <- diag.time[dth.dis]
+    death.stats$duration.diagnosed <- at - diag.time[dth.dis]
+    death.stats$inf.time <- inf.time[dth.dis]
+    death.stats$duration.positive <- at - inf.time[dth.dis]
+    death.stats$on.treatment <- tx.status[dth.dis]
+    death.stats$duration.on.treatment <- cum.time.on.tx[dth.dis]
+    death.stats$stage4.onset.time <- stage4.onset.time[dth.dis]
+    death.stats$diag.to.stage4 <- stage4.onset.time[dth.dis] - diag.time[dth.dis]  
+    death.stats$stage4.to.death <- at - stage4.onset.time[dth.dis]
+    
+    death.stats$age.out$race <- race[dth.age.pos]
+    death.stats$age.out$diag.status <- diag.status[dth.age.pos]
+    death.stats$age.out$diag.time <- diag.time[dth.age.pos]
+    death.stats$age.out$duration.diagnosed <- at - diag.time[dth.age.pos]
+    death.stats$age.out$inf.time <- inf.time[dth.age.pos]
+    death.stats$age.out$duration.positive <- at - inf.time[dth.age.pos]
+    death.stats$age.out$on.treatment <- tx.status[dth.age.pos]
+    death.stats$age.out$duration.on.treatment <- cum.time.on.tx[dth.age.pos]
+    death.stats$age.out$stage4.onset.time <- stage4.onset.time[dth.age.pos]
+    death.stats$age.out$diag.to.stage4 <- stage4.onset.time[dth.age.pos] - diag.time[dth.age.pos]  
+    death.stats$age.out$stage4.to.ageout <- at -stage4.onset.time[dth.age.pos]  
+    
+    
   }
   
   if (at > 1){
+
+    
     death.stats$age <- c(death.stats$age, age[dth.dis])
     death.stats$race <- c(death.stats$race, race[dth.dis])
     death.stats$diag.status <- c(death.stats$diag.status, diag.status[dth.dis])
-    death.stats$dur.diagnosed <- c(death.stats$dur.diagnosed, at-diag.time[dth.dis])
-    death.stats$dur.positive <- c(death.stats$dur.positive, at - inf.time[dth.dis])
+    death.stats$diag.time <- c(death.stats$diag.time, diag.time[dth.dis])
+    death.stats$duration.diagnosed <- c(death.stats$duration.diagnosed, at-diag.time[dth.dis])
+    death.stats$inf.time <- c(death.stats$inf.time, inf.time[dth.dis])
+    death.stats$duration.positive <- c(death.stats$duration.positive, at - inf.time[dth.dis])
+    death.stats$on.treatment <- c(death.stats$on.treatment, tx.status[dth.dis])
+    death.stats$duration.on.treatment <- c(death.stats$duration.on.treatment, cum.time.on.tx[dth.dis])
+    death.stats$stage4.onset.time <- c(death.stats$stage4.onset.time, stage4.onset.time[dth.dis])
+    death.stats$diag.to.stage4 <- c(death.stats$diag.to.stage4, stage4.onset.time[dth.dis] - diag.time[dth.dis])  
+    death.stats$stage4.to.death <- c(death.stats$stage4.to.death, at - stage4.onset.time[dth.dis])
+    
+    death.stats$age.out$race <- c(death.stats$age.out$race, race[dth.age.pos])
+    death.stats$age.out$diag.status <- c(death.stats$age.out$diag.status, diag.status[dth.age.pos])
+    death.stats$age.out$diag.time <- c(death.stats$age.out$diag.time, diag.time[dth.age.pos])
+    death.stats$age.out$duration.diagnosed <- c(death.stats$age.out$duration.diagnosed, at - diag.time[dth.age.pos])
+    death.stats$age.out$inf.time <- c(death.stats$age.out$inf.time, inf.time[dth.age.pos])
+    death.stats$age.out$duration.positive <- c(death.stats$age.out$duration.positive, at - inf.time[dth.age.pos])
+    death.stats$age.out$on.treatment <- c(death.stats$age.out$on.treatment, tx.status[dth.age.pos])
+    death.stats$age.out$duration.on.treatment <- c(death.stats$age.out$duration.on.treatment, cum.time.on.tx[dth.age.pos])
+    death.stats$age.out$stage4.onset.time <- c(death.stats$age.out$stage4.onset.time, stage4.onset.time[dth.age.pos])
+    death.stats$age.out$diag.to.stage4 <- c(death.stats$age.out$diag.to.stage4, stage4.onset.time[dth.age.pos] - diag.time[dth.age.pos])  
+    death.stats$age.out$stage4.to.ageout <- c(death.stats$age.out$stage4.to.ageout, at - stage4.onset.time[dth.age.pos]  )
+    
   }
   
   dat$death.stats <- death.stats
