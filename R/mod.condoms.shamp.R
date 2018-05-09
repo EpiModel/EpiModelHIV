@@ -361,7 +361,7 @@ condoms_shamp <- function(dat, at) {
   } # end ptype loop
   
   if (length(al.vi)>0 & length(al.ai)>0){
-  al.ai[,pid] <- al.ai[,pid] + max(al.vi[,pid])
+  al.ai[,"pid"] <- al.ai[,"pid"] + max(al.vi[,"pid"])
   al <- rbind(al.vi, al.ai)}
 
   if (length(al.vi) > 0 & length(al.ai) < 1){
