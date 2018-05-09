@@ -43,6 +43,7 @@ progress_msm <- function(dat, at) {
   cum.time.off.tx <- dat$attr$cum.time.off.tx
   stage <- dat$attr$stage
   stage.time <- dat$attr$stage.time
+  stage4.onset.time <- dat$attr$stage4.onset.time
   tt.traj <- dat$attr$tt.traj
   tx.status <- dat$attr$tx.status
 
@@ -90,11 +91,13 @@ progress_msm <- function(dat, at) {
   isAIDS <- c(aids.tx.naive, aids.part.escape, aids.off.tx.full.escape)
   stage[isAIDS] <- 4
   stage.time[isAIDS] <- 1
+  stage4.onset.time[isAIDS] <- at
 
 
   ## Output
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
+  dat$attr$stage4.onset.time <- stage4.onset.time
 
   return(dat)
 }
