@@ -643,6 +643,7 @@ init_status_shamp <- function(dat) {
   
   stage <- rep(NA, num)
   stage.time <- rep(NA, num)
+  stage4.onset.time <- rep(NA, num)
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
@@ -2843,6 +2844,7 @@ init_status_shamp <- function(dat) {
   ## Set all onto dat$attr
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
+  dat$attr$stage4.onset.time <- stage4.onset.time 
   dat$attr$inf.time <- inf.time
   dat$attr$vl <- vl
   dat$attr$diag.status <- diag.status
