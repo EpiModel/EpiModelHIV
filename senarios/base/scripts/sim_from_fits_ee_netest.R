@@ -149,17 +149,17 @@ load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/d
 
 #nw<-simulate(sim.size, directed = FALSE, hyper = FALSE, loops = FALSE,
 #                       multiple = FALSE, bipartite = FALSE)
-nw<-fit.1$fit$newnetwork
-count <- network.edgecount(nw)
-delete.edges(nw,1:count)
+#nw<-fit.1$fit$newnetwork
+#count <- network.edgecount(nw)
+#delete.edges(nw,1:count)
 
 param <- param_shamp(data.params, 
-                     VI.foi.scale = 3,
-                     msm.foi.scale = 1000,
-                     fa.foi.scale = 1000)
+                     VI.foi.scale = 2.4,
+                     msm.foi.scale = 23,
+                     fa.foi.scale = 180)
 
 init <- init_shamp()
-control <- control_shamp(nsteps = 500, save.other = c("attr", "trans.el", "death.stats","cel.temp"), verbose = TRUE)
+control <- control_shamp(nsteps = 100, save.other = c("attr", "trans.el", "death.stats","cel.temp"), verbose = TRUE)
 
 sim <- netsim(est_f, param, init, control)
 
