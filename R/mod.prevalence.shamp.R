@@ -169,6 +169,8 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$dth.gen <- rNA
     dat$epi$dth.dis <- rNA
     dat$epi$dth.age <- rNA
+    dat$epi$dth.age.pos <- rNA
+    dat$epi$dth.age.pos.ontx <- rNA
     dat$epi$incid <- rNA
     
     
