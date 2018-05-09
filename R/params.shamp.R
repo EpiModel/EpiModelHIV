@@ -251,6 +251,12 @@
 #' @param pos.entry.HI The probability that a HI entering into the population that is etering at an
 #' age older than the birth age (replacing deaths from mortality proportional to the demographic
 #' distribution and approximating in-migration) is HIV positive
+#' 
+#' @param conc_dur_dx If TRUE the simulation will store cel.temp (a current edgelist with partnership start time) 
+#' and cel.complete (a complete list of all partnerships including start and end times.  These are used for the analysis of concurrency
+#' and multiplexity.
+#' @param death_stats  IF TRUE the data.frame death.stats stores all care continuum information for individuals at the time of death.  
+#' HIV related death data are store in death.stats, care continuum information for those that age out positive is store in death.stats$age.out.
 #'        
 #'        
 #' @param ... Additional arguments passed to the function.
@@ -267,46 +273,47 @@ param_shamp <- function(race.method = 1,
                       method = 1,
                       age.unit = 52,
                       
-                      last.neg.test.B.f.int = 1464,
-                      last.neg.test.BI.f.int = 1464,
-                      last.neg.test.H.f.int = 1464,
-                      last.neg.test.HI.f.int = 1464,
-                      last.neg.test.W.f.int = 1464,
-                      last.neg.test.B.msf.int = 1708,
-                      last.neg.test.BI.msf.int = 1708,
-                      last.neg.test.H.msf.int = 1708,
-                      last.neg.test.HI.msf.int = 1708,
-                      last.neg.test.W.msf.int = 1708,
-                      last.neg.test.B.msm.int = 1037,
-                      last.neg.test.BI.msm.int = 1037,
-                      last.neg.test.H.msm.int = 1037,
-                      last.neg.test.HI.msm.int = 1037,
-                      last.neg.test.W.msm.int = 1037,
-                      last.neg.test.B.msmf.int = 1129,
-                      last.neg.test.BI.msmf.int = 1129,
-                      last.neg.test.H.msmf.int = 1129,
-                      last.neg.test.HI.msmf.int = 1129,
-                      last.neg.test.W.msmf.int = 1129,
-                      mean.test.B.f.int = 1464,
-                      mean.test.BI.f.int = 1464,
-                      mean.test.H.f.int = 1464,
-                      mean.test.HI.f.int = 1464,
-                      mean.test.W.f.int = 1464,
-                      mean.test.B.msf.int = 1708,
-                      mean.test.BI.msf.int = 1708,
-                      mean.test.H.msf.int = 1708,
-                      mean.test.HI.msf.int = 1708,
-                      mean.test.W.msf.int = 1708,
-                      mean.test.B.msm.int = 1037,
-                      mean.test.BI.msm.int = 1037,
-                      mean.test.H.msm.int = 1037,
-                      mean.test.HI.msm.int = 1037,
-                      mean.test.W.msm.int = 1037,
-                      mean.test.B.msmf.int = 1129,
-                      mean.test.BI.msmf.int = 1129,
-                      mean.test.H.msmf.int = 1129,
-                      mean.test.HI.msmf.int = 1129,
-                      mean.test.W.msmf.int = 1129,
+                      ##Martina's NSFG estimates
+                      last.neg.test.B.f.int = 526,
+                      last.neg.test.BI.f.int = 833,
+                      last.neg.test.H.f.int = 833,
+                      last.neg.test.HI.f.int = 1009,
+                      last.neg.test.W.f.int = 1579,
+                      last.neg.test.B.msf.int = 614,
+                      last.neg.test.BI.msf.int = 702,
+                      last.neg.test.H.msf.int = 1140,
+                      last.neg.test.HI.msf.int = 1535,
+                      last.neg.test.W.msf.int = 1623,
+                      last.neg.test.B.msm.int = 301,
+                      last.neg.test.BI.msm.int = 301,
+                      last.neg.test.H.msm.int = 301,
+                      last.neg.test.HI.msm.int = 301,
+                      last.neg.test.W.msm.int = 301,
+                      last.neg.test.B.msmf.int = 1009,
+                      last.neg.test.BI.msmf.int = 1009,
+                      last.neg.test.H.msmf.int = 1009,
+                      last.neg.test.HI.msmf.int = 1009,
+                      last.neg.test.W.msmf.int = 1009,
+                      mean.test.B.f.int = 526,
+                      mean.test.BI.f.int = 833,
+                      mean.test.H.f.int = 833,
+                      mean.test.HI.f.int = 1009,
+                      mean.test.W.f.int = 1579,
+                      mean.test.B.msf.int = 614,
+                      mean.test.BI.msf.int = 402,
+                      mean.test.H.msf.int = 1140,
+                      mean.test.HI.msf.int = 1535,
+                      mean.test.W.msf.int = 1623,
+                      mean.test.B.msm.int = 301,
+                      mean.test.BI.msm.int = 301,
+                      mean.test.H.msm.int = 301,
+                      mean.test.HI.msm.int = 301,
+                      mean.test.W.msm.int = 301,
+                      mean.test.B.msmf.int = 1009,
+                      mean.test.BI.msmf.int = 1009,
+                      mean.test.H.msmf.int = 1009,
+                      mean.test.HI.msmf.int = 1009,
+                      mean.test.W.msmf.int = 1009,
                       testing.pattern = "memoryless",
                       test.window.int = 15,
                       
@@ -1081,7 +1088,7 @@ control_shamp <- function(simno = 1,
   p$bi.mods <- bi.mods
   p$user.mods <- grep(".FUN", names(dot.args), value = TRUE)
 
-  p$save.other = c("attr", "temp", "el", "p" ,"trans.el", "death.stats", "cel.temp")
+  p$save.other = c("attr", "temp", "el", "p" ,"trans.el", "death.stats", "cel.temp", "cel.complete")
 
   p$save.network = FALSE
 
