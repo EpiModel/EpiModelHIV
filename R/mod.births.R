@@ -156,16 +156,17 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$testing.events.ct[newIds] <- rep(0, nBirths)
   dat$attr$testing.events.ct.asympt[newIds] <- rep(0, nBirths)
 
-
-
+  # Must update this to just have time of last test
   selected <- newIds
-  tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
-  tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
-  dat$attr$time.since.last.test.syph[newIds] <- tslastsyphtest
-  dat$attr$time.since.last.test.rgc[newIds] <- tslastgctest
-  dat$attr$time.since.last.test.ugc[newIds] <- tslastgctest
-  dat$attr$time.since.last.test.rct[newIds] <- tslastcttest
-  dat$attr$time.since.last.test.uct[newIds] <- tslastcttest
+  lastsyphtest <- at - ceiling(runif(length(selected),
+                                     max = (dat$param$mean.test.sti.hivneg.int - 2)))
+  lastgccttest <- at - ceiling(runif(length(selected),
+                                     max = (dat$param$mean.test.sti.hivneg.int - 2)))
+  dat$attr$last.test.syph[newIds] <- lastsyphtest
+  dat$attr$last.test.rgc[newIds] <- lastgccttest
+  dat$attr$last.test.ugc[newIds] <- lastgccttest
+  dat$attr$last.test.rct[newIds] <- lastgccttest
+  dat$attr$last.test.uct[newIds] <- lastgccttest
 
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)

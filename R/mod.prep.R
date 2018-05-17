@@ -187,31 +187,31 @@ prep_msm <- function(dat, at) {
   }
 
     ## Testing
-  tsincelntst.syph <- at - dat$attr$last.neg.test.syph
-  tsincelntst.syph[is.na(tsincelntst.syph)] <- at - dat$attr$arrival.time[is.na(tsincelntst.syph)]
+  tsinceltst.syph <- at - dat$attr$last.test.syph
+  tsinceltst.syph[is.na(tsinceltst.syph)] <- at - dat$attr$arrival.time[is.na(tsinceltst.syph)]
 
-  tsincelntst.rgc <- at - dat$attr$last.neg.test.rgc
-  tsincelntst.ugc <- at - dat$attr$last.neg.test.ugc
-  tsincelntst.rgc[is.na(tsincelntst.rgc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rgc)]
-  tsincelntst.ugc[is.na(tsincelntst.ugc)] <- at - dat$attr$arrival.time[is.na(tsincelntst.ugc)]
-  tsincelntst.gc <- min(tsincelntst.rgc, tsincelntst.ugc)
+  tsinceltst.rgc <- at - dat$attr$last.test.rgc
+  tsinceltst.ugc <- at - dat$attr$last.test.ugc
+  tsinceltst.rgc[is.na(tsinceltst.rgc)] <- at - dat$attr$arrival.time[is.na(tsinceltst.rgc)]
+  tsinceltst.ugc[is.na(tsinceltst.ugc)] <- at - dat$attr$arrival.time[is.na(tsinceltst.ugc)]
+  tsinceltst.gc <- min(tsinceltst.rgc, tsinceltst.ugc)
 
-  tsincelntst.rct <- at - dat$attr$last.neg.test.rct
-  tsincelntst.uct <- at - dat$attr$last.neg.test.uct
-  tsincelntst.rct[is.na(tsincelntst.rct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.rct)]
-  tsincelntst.uct[is.na(tsincelntst.uct)] <- at - dat$attr$arrival.time[is.na(tsincelntst.uct)]
-  tsincelntst.ct <- min(tsincelntst.rct, tsincelntst.uct)
+  tsinceltst.rct <- at - dat$attr$last.test.rct
+  tsinceltst.uct <- at - dat$attr$last.test.uct
+  tsinceltst.rct[is.na(tsinceltst.rct)] <- at - dat$attr$arrival.time[is.na(tsinceltst.rct)]
+  tsinceltst.uct[is.na(tsinceltst.uct)] <- at - dat$attr$arrival.time[is.na(tsinceltst.uct)]
+  tsinceltst.ct <- min(tsinceltst.rct, tsinceltst.uct)
 
   # PrEP STI testing
   tst.syph.prep <- which((diag.status.syph == 0 | is.na(diag.status.syph)) &
                              prepStat == 1 &
-                             tsincelntst.syph >= prep.tst.int)
+                             tsinceltst.syph >= prep.tst.int)
   tst.gc.prep <- which((diag.status.gc == 0 | is.na(diag.status.gc)) &
                            prepStat == 1 &
-                           tsincelntst.gc >= prep.tst.int)
+                           tsinceltst.gc >= prep.tst.int)
   tst.ct.prep <- which((diag.status.ct == 0 | is.na(diag.status.ct)) &
                            prepStat == 1 &
-                           tsincelntst.ct >= prep.tst.int)
+                           tsinceltst.ct >= prep.tst.int)
 
   # Syphilis PrEP testing
   tst.syph.pos <- tst.syph.prep[syphilis[tst.syph.prep] == 1 & stage.syph[tst.syph.prep] %in% c(2, 3, 4, 5, 6)]
@@ -239,25 +239,13 @@ prep_msm <- function(dat, at) {
   tst.uct.neg <- setdiff(tst.uct, tst.uct.pos)
   tst.ct.pos <- unique(c(tst.rct.pos, tst.uct.pos))
 
-  # Syphilis Attributes
-  dat$attr$last.neg.test.syph[tst.syph.neg] <- at
-  dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
+  # Attributes
   dat$attr$diag.status.syph[tst.syph.pos] <- 1
   dat$attr$last.diag.time.syph[tst.syph.pos] <- at
 
-  # GC Attributes
-  dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
-  dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
-  dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
-  dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
   dat$attr$diag.status.gc[tst.gc.pos] <- 1
   dat$attr$last.diag.time.gc[tst.gc.pos] <- at
 
-  # CT Attributes
-  dat$attr$last.neg.test.rct[tst.rct.neg] <- at
-  dat$attr$last.neg.test.uct[tst.uct.neg] <- at
-  dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
-  dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
   dat$attr$diag.status.ct[tst.ct.pos] <- 1
   dat$attr$last.diag.time.ct[tst.ct.pos] <- at
 

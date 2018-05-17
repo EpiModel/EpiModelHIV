@@ -7,7 +7,7 @@
 control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm,
-  hiv_test.FUN = hiv_test_msm, sti_test.FUN = sti_test_msm,
+  hiv_test.FUN = hiv_test_msm, sti_test.FUN = sti_testrate_msm,
   hiv_tx.FUN = hiv_tx_msm, prep.FUN = prep_msm,
   hiv_progress.FUN = hiv_progress_msm,
   syph_progress.FUN = syph_progress_msm, hiv_vl.FUN = hiv_vl_msm,

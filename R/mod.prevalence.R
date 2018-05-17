@@ -39,11 +39,11 @@ prevalence_msm <- function(dat, at) {
   stage.syph <- dat$attr$stage.syph
   diag.status.syph <- dat$attr$diag.status.syph
   last.diag.time.syph <- dat$attr$last.diag.time.syph
-  tslt.rgc <- dat$attr$time.since.last.test.rgc
-  tslt.ugc <- dat$attr$time.since.last.test.ugc
-  tslt.rct <- dat$attr$time.since.last.test.rct
-  tslt.uct <- dat$attr$time.since.last.test.uct
-  tslt.syph <- dat$attr$time.since.last.test.syph
+  tslt.rgc <- at - dat$attr$last.test.rgc
+  tslt.ugc <- at - dat$attr$last.test.ugc
+  tslt.rct <- at - dat$attr$last.test.rct
+  tslt.uct <- at - dat$attr$last.test.uct
+  tslt.syph <- at - dat$attr$last.test.syph
   diag.status <- dat$attr$diag.status
   tt.traj.gc.hivpos <- dat$attr$tt.traj.gc.hivpos
   tt.traj.gc.hivneg <- dat$attr$tt.traj.gc.hivneg

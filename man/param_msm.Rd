@@ -6,35 +6,37 @@
 \usage{
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301, mean.test.W.int = 315,
-  testing.pattern = "memoryless", testing.pattern.sti = "interval",
+  mean.test.sti.hivneg.int = 414, mean.test.sti.hivpos.int = 238,
+  testing.pattern = "memoryless", testing.pattern.sti = "memoryless",
   sti.correlation.time = 12, test.window.int = 21,
   tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
-  0.331, 0.617), tx.init.B.prob = 0.092, tx.init.W.prob = 0.127,
-  tx.halt.B.prob = 0.0102, tx.halt.W.prob = 0.0071,
-  tx.reinit.B.prob = 0.00066, tx.reinit.W.prob = 0.00291,
-  max.time.off.tx.full.int = 520 * 7, max.time.on.tx.part.int = 52 * 15 * 7,
-  max.time.off.tx.part.int = 520 * 7, vl.acute.rise.int = 45,
-  vl.acute.peak = 6.886, vl.acute.fall.int = 45, vl.set.point = 4.5,
-  vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 * 7, vl.fatal = 7,
-  vl.full.supp = 1.5, vl.part.supp = 3.5, full.supp.down.slope = 0.25,
-  full.supp.up.slope = 0.25, part.supp.down.slope = 0.25,
-  part.supp.up.slope = 0.25, incu.syph.int = 28, prim.syph.int = 63,
-  seco.syph.int = 119, earlat.syph.int = 364 - incu.syph.int - prim.syph.int
-  - seco.syph.int, latelat.syph.int = 9 * 52 * 7, latelatelat.syph.int = 20
-  * 52 * 7, tert.syph.int = 20 * 52 * 7,
-  syph.tert.prog.prob = 0.00010776536, b.B.rate = 0.001/7,
-  b.W.rate = 0.001/7, birth.age = 18, b.method = "fixed",
-  URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 * 1.09, acute.rr = 6,
-  circ.rr = 0.4, condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
+  0.331, 0.617), tt.traj.sti.B.prob = c(0.163, 0.837),
+  tt.traj.sti.W.prob = c(0.261, 0.739), tx.init.B.prob = 0.092,
+  tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
+  tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
+  tx.reinit.W.prob = 0.00291, max.time.off.tx.full.int = 520 * 7,
+  max.time.on.tx.part.int = 52 * 15 * 7, max.time.off.tx.part.int = 520 * 7,
+  vl.acute.rise.int = 45, vl.acute.peak = 6.886, vl.acute.fall.int = 45,
+  vl.set.point = 4.5, vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 *
+  7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
+  full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
+  part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
+  incu.syph.int = 28, prim.syph.int = 63, seco.syph.int = 119,
+  earlat.syph.int = 364 - incu.syph.int - prim.syph.int - seco.syph.int,
+  latelat.syph.int = 9 * 52 * 7, latelatelat.syph.int = 20 * 52 * 7,
+  tert.syph.int = 20 * 52 * 7, syph.tert.prog.prob = 0.00010776536,
+  b.B.rate = 0.001/7, b.W.rate = 0.001/7, birth.age = 18,
+  b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
+  1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691, circ.B.prob = 0.874,
+  circ.W.prob = 0.918, ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021,
+  0.176), ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
@@ -121,6 +123,12 @@ white men.}
 
 \item{mean.test.W.int}{Mean intertest interval (days) for white MSM who test.}
 
+\item{mean.test.sti.hivneg.int}{Mean STI intertest interval (days) for MSM
+not diagnosed with HIV.}
+
+\item{mean.test.sti.hivpos.int}{Mean STI intertest interval (days) for MSM
+diagnosed with HIV.}
+
 \item{testing.pattern}{Method for HIV testing, with options
 \code{"memoryless"} for constant hazard without regard to time since
 previous test, or \code{"interval"} deterministic fixed intervals.}
@@ -142,6 +150,14 @@ and test and treated with full suppression.}
 
 \item{tt.traj.W.prob}{Proportion of white MSM who enter into the four
 testing/treatment trajectories, as defined above.}
+
+\item{tt.traj.sti.B.prob}{Proportion of black MSM who enter one of two STI
+testing/treatment trajectories: never screen, or screen at
+regular rate.}
+
+\item{tt.traj.sti.W.prob}{Proportion of white MSM who enter one of two STI
+testing/treatment trajectories: never screen, or screen
+at regular rate.}
 
 \item{tx.init.B.prob}{Probability per time step that a black MSM who has
 tested positive will initiate treatment.}

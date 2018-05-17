@@ -16,6 +16,10 @@
 #' @param last.neg.test.W.int Time range in days for last negative test for
 #'        white men.
 #' @param mean.test.W.int Mean intertest interval (days) for white MSM who test.
+#' @param mean.test.sti.hivneg.int Mean STI intertest interval (days) for MSM
+#'        not diagnosed with HIV.
+#' @param mean.test.sti.hivpos.int Mean STI intertest interval (days) for MSM
+#'        diagnosed with HIV.
 #' @param testing.pattern Method for HIV testing, with options
 #'        \code{"memoryless"} for constant hazard without regard to time since
 #'        previous test, or \code{"interval"} deterministic fixed intervals.
@@ -32,6 +36,12 @@
 #'        and test and treated with full suppression.
 #' @param tt.traj.W.prob Proportion of white MSM who enter into the four
 #'        testing/treatment trajectories, as defined above.
+#' @param tt.traj.sti.B.prob Proportion of black MSM who enter one of two STI
+#'        testing/treatment trajectories: never screen, or screen at
+#'        regular rate.
+#' @param tt.traj.sti.W.prob Proportion of white MSM who enter one of two STI
+#'        testing/treatment trajectories: never screen, or screen
+#'        at regular rate.
 #' @param tx.init.B.prob Probability per time step that a black MSM who has
 #'        tested positive will initiate treatment.
 #' @param tx.init.W.prob Probability per time step that a white MSM who has
@@ -532,13 +542,21 @@ param_msm <- function(nwstats,
                       last.neg.test.W.int = 315,
                       mean.test.B.int = 301,
                       mean.test.W.int = 315,
+                      mean.test.sti.hivneg.int = 414, #364/0.88 screens/year
+                      mean.test.sti.hivpos.int = 238, #364/1.53 screens/year
                       testing.pattern = "memoryless",
-                      testing.pattern.sti = "interval",
+                      testing.pattern.sti = "memoryless",
                       sti.correlation.time = 12,
                       test.window.int = 21,
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
+
+                      # ART-Net data:
+                      # BMSM - 113 of 135 (83.7)  ever tested for STIs
+                      # WMSM - 1144 of 1547 (73.9) ever tested for STIs
+                      tt.traj.sti.B.prob = c(0.163, 0.837),
+                      tt.traj.sti.W.prob = c(0.261, 0.739),
 
                       tx.init.B.prob = 0.092,
                       tx.init.W.prob = 0.127,
@@ -826,6 +844,8 @@ param_msm <- function(nwstats,
     p$mean.test.W.int = (mean.test.W.int + mean.test.B.int)/2
     p$tt.traj.B.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
     p$tt.traj.W.prob = (tt.traj.B.prob + tt.traj.W.prob)/2
+    p$tt.traj.sti.B.prob = (tt.traj.sti.B.prob + tt.traj.sti.W.prob)/2
+    p$tt.traj.sti.W.prob = (tt.traj.sti.B.prob + tt.traj.sti.W.prob)/2
     p$tx.init.B.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.init.W.prob = (tx.init.B.prob + tx.init.W.prob)/2
     p$tx.halt.B.prob = (tx.halt.B.prob + tx.halt.W.prob)/2
@@ -1040,7 +1060,7 @@ control_msm <- function(simno = 1,
                         deaths.FUN = deaths_msm,
                         births.FUN = births_msm,
                         hiv_test.FUN = hiv_test_msm,
-                        sti_test.FUN = sti_test_msm,
+                        sti_test.FUN = sti_testrate_msm,
                         hiv_tx.FUN = hiv_tx_msm,
                         prep.FUN = prep_msm,
                         hiv_progress.FUN = hiv_progress_msm,

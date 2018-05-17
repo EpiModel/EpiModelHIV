@@ -269,6 +269,13 @@ init_status_hiv_msm <- function(dat) {
                                         dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
 
+  tt.traj.sti <- rep(NA, num)
+
+  tt.traj.sti[ids.B] <- sample(apportion_lr(num.B, c(1, 2),
+                                        dat$param$tt.traj.sti.B.prob))
+  tt.traj.sti[ids.W] <- sample(apportion_lr(num.W, c(1, 2),
+                                        dat$param$tt.traj.sti.W.prob))
+  dat$attr$tt.traj.sti <- tt.traj.sti
 
   ## Infection-related attributes
 
@@ -746,7 +753,6 @@ init_status_sti_msm <- function(dat) {
     stage.time.syph <- rep(NA, num)
     diag.status.syph <- rep(NA, num)
     last.diag.time.syph <- rep(NA, num)
-    last.neg.test.syph <- rep(NA, num)
     last.tx.time.syph <- rep(NA, num)
     last.tx.time.syph.prep <- rep(NA, num)
     syph.incub.tx <- rep(NA, num)
@@ -769,8 +775,6 @@ init_status_sti_msm <- function(dat) {
     uGC.sympt <- rep(NA, num)
     diag.status.gc <- rep(NA, num)
     last.diag.time.gc <- rep(NA, num)
-    last.neg.test.rgc <- rep(NA, num)
-    last.neg.test.ugc <- rep(NA, num)
     last.tx.time.rgc <- rep(NA, num)
     last.tx.time.ugc <- rep(NA, num)
     last.tx.time.rgc.prep <- rep(NA, num)
@@ -787,8 +791,6 @@ init_status_sti_msm <- function(dat) {
     uCT.sympt <- rep(NA, num)
     diag.status.ct <- rep(NA, num)
     last.diag.time.ct <- rep(NA, num)
-    last.neg.test.rct <- rep(NA, num)
-    last.neg.test.uct <- rep(NA, num)
     last.tx.time.rct <- rep(NA, num)
     last.tx.time.uct <- rep(NA, num)
     last.tx.time.rct.prep <- rep(NA, num)
@@ -807,8 +809,10 @@ init_status_sti_msm <- function(dat) {
                                       (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
     selected <- which(dat$attr$race %in% c("B", "W"))
-    tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
-    tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    lastsyphtest <- 1 - ceiling(runif(length(selected),
+                                  max = (dat$param$mean.test.sti.hivneg.int - 2)))
+    lastgccttest <- 1 - ceiling(runif(length(selected),
+                                                max = (dat$param$mean.test.sti.hivneg.int - 2)))
 
     ## Syphilis ----------------------------------------------------------------
 
@@ -938,7 +942,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.syph.infTime <- last.syph.infTime
     dat$attr$last.syph.recovTime <- rep(NA, num)
     dat$attr$syph.sympt <- syph.sympt
-    dat$attr$last.neg.test.syph <- last.neg.test.syph
     dat$attr$last.diag.time.syph <- last.diag.time.syph
     dat$attr$syph.incub.tx <- syph.incub.tx
     dat$attr$syph.prim.tx <- syph.prim.tx
@@ -951,7 +954,7 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
     dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
     dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.syph <- tslastsyphtest
+    dat$attr$last.test.syph <- lastsyphtest
     dat$attr$testing.events.syph <- rep(0, num)
     dat$attr$testing.events.syph.asympt <- rep(0, num)
 
@@ -971,8 +974,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.uGC.recovTime <- rep(NA, num)
     dat$attr$rGC.sympt <- rGC.sympt
     dat$attr$uGC.sympt <- uGC.sympt
-    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
-    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
     dat$attr$last.diag.time.gc <- last.diag.time.gc
     dat$attr$rGC.tx <- rep(NA, num)
     dat$attr$uGC.tx <- rep(NA, num)
@@ -984,8 +985,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
     dat$attr$tt.traj.gc.hivpos <- rep(NA, num)
     dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.rgc <- tslastgctest
-    dat$attr$time.since.last.test.ugc <- tslastgctest
+    dat$attr$last.test.rgc <- lastgccttest
+    dat$attr$last.test.ugc <- lastgccttest
     dat$attr$testing.events.rgc <- rep(0, num)
     dat$attr$testing.events.rgc.asympt <- rep(0, num)
     dat$attr$testing.events.ugc <- rep(0, num)
@@ -1009,8 +1010,6 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.uCT.recovTime <- rep(NA, num)
     dat$attr$rCT.sympt <- rCT.sympt
     dat$attr$uCT.sympt <- uCT.sympt
-    dat$attr$last.neg.test.rct <- last.neg.test.rct
-    dat$attr$last.neg.test.uct <- last.neg.test.uct
     dat$attr$last.diag.time.ct <- last.diag.time.ct
     dat$attr$rCT.tx <- rep(NA, num)
     dat$attr$uCT.tx <- rep(NA, num)
@@ -1022,8 +1021,8 @@ init_status_sti_msm <- function(dat) {
     dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
     dat$attr$tt.traj.ct.hivpos <- rep(NA, num)
     dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
-    dat$attr$time.since.last.test.rct <- tslastcttest
-    dat$attr$time.since.last.test.uct <- tslastcttest
+    dat$attr$last.test.rct <- lastgccttest
+    dat$attr$last.test.uct <- lastgccttest
     dat$attr$testing.events.rct <- rep(0, num)
     dat$attr$testing.events.rct.asympt <- rep(0, num)
     dat$attr$testing.events.uct <- rep(0, num)

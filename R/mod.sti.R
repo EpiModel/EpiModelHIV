@@ -783,11 +783,11 @@ sti_tx_msm <- function(dat, at) {
   diag.status.syph <- dat$attr$diag.status.syph
   diag.status.gc <- dat$attr$diag.status.gc
   diag.status.ct <- dat$attr$diag.status.ct
-  tsinceltst.syph <- dat$attr$time.since.last.test.syph
-  tsinceltst.rgc <- dat$attr$time.since.last.test.rgc
-  tsinceltst.ugc <- dat$attr$time.since.last.test.ugc
-  tsinceltst.rct <- dat$attr$time.since.last.test.rct
-  tsinceltst.uct <- dat$attr$time.since.last.test.uct
+  tsinceltst.syph <- at - dat$attr$last.test.syph
+  tsinceltst.rgc <- at - dat$attr$last.test.rgc
+  tsinceltst.ugc <- at - dat$attr$last.test.ugc
+  tsinceltst.rct <- at - dat$attr$last.test.rct
+  tsinceltst.uct <- at - dat$attr$last.test.uct
 
   # EPT
   eptpartEligTx_GC <- dat$attr$eptpartEligTx_GC
@@ -1250,17 +1250,14 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$syph.tx.prep[txsyph_prep] <- 1
   dat$attr$last.tx.time.syph.prep[txsyph_prep] <- at
   dat$attr$last.diag.time.syph[txsyph_sympt] <- at
-  dat$attr$last.neg.test.syph[txsyph_sympt] <- NA
-  dat$attr$time.since.last.test.syph[txsyph_sympt] <- 0
+  dat$attr$last.test.syph[txsyph_sympt] <- at
   dat$attr$diag.status.syph[idssyph_tx_sympt] <- 0
   dat$attr$diag.status.syph[txsyph_sympt] <- 1
 
   ## Correlated Syphilis testing
-  dat$attr$last.neg.test.syph[tst.syph.neg] <- at
-  dat$attr$last.neg.test.syph[tst.syph.pos] <- NA
   dat$attr$diag.status.syph[tst.syph.pos] <- 1
   dat$attr$last.diag.time.syph[tst.syph.pos] <- at
-  dat$attr$time.since.last.test.syph[tst.syph] <- 0
+  dat$attr$last.test.syph[tst.syph] <- at
 
   # Gonorrhea
   dat$attr$rGC.tx[idsRGC_tx] <- 0
@@ -1282,22 +1279,16 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$rGC.tx[which((dat$attr$uGC.tx == 1 | dat$attr$uGC.tx.prep == 1 | dat$attr$uGC.tx.ept == 1) & dat$attr$rGC == 1)] <- 1
   dat$attr$uGC.tx[which((dat$attr$rGC.tx == 1 | dat$attr$rGC.tx.prep == 1 | dat$attr$rGC.tx.ept == 1) & dat$attr$uGC == 1)] <- 1
   dat$attr$last.diag.time.gc[txGC_sympt] <- at
-  dat$attr$last.neg.test.rgc[txRGC_sympt] <- NA
-  dat$attr$last.neg.test.ugc[txUGC_sympt] <- NA
-  dat$attr$time.since.last.test.rgc[txRGC_sympt] <- 0
-  dat$attr$time.since.last.test.ugc[txUGC_sympt] <- 0
+  dat$attr$last.test.rgc[txRGC_sympt] <- at
+  dat$attr$last.test.ugc[txUGC_sympt] <- at
   dat$attr$diag.status.gc[idsGC_tx_sympt] <- 0
   dat$attr$diag.status.gc[txGC_sympt] <- 1
 
   ## Correlated Gonorrhea testing
-  dat$attr$last.neg.test.rgc[tst.rgc.neg] <- at
-  dat$attr$last.neg.test.ugc[tst.ugc.neg] <- at
-  dat$attr$last.neg.test.rgc[tst.rgc.pos] <- NA
-  dat$attr$last.neg.test.ugc[tst.ugc.pos] <- NA
   dat$attr$diag.status.gc[tst.gc.pos] <- 1
   dat$attr$last.diag.time.gc[tst.gc.pos] <- at
-  dat$attr$time.since.last.test.rgc[tst.rgc] <- 0
-  dat$attr$time.since.last.test.ugc[tst.ugc] <- 0
+  dat$attr$last.test.rgc[tst.rgc] <- at
+  dat$attr$last.test.ugc[tst.ugc] <- at
 
   # Chlamydia
   dat$attr$rCT.tx[idsRCT_tx] <- 0
@@ -1319,22 +1310,16 @@ sti_tx_msm <- function(dat, at) {
   dat$attr$rCT.tx[which((dat$attr$uCT.tx == 1 | dat$attr$uCT.tx.prep == 1 | dat$attr$uCT.tx.ept == 1) & dat$attr$rCT == 1)] <- 1
   dat$attr$uCT.tx[which((dat$attr$rCT.tx == 1 | dat$attr$rCT.tx.prep == 1 | dat$attr$rCT.tx.ept == 1) & dat$attr$uCT == 1)] <- 1
   dat$attr$last.diag.time.ct[txCT_sympt] <- at
-  dat$attr$last.neg.test.rct[txRCT_sympt] <- NA
-  dat$attr$last.neg.test.uct[txUCT_sympt] <- NA
-  dat$attr$time.since.last.test.rct[txRCT_sympt] <- 0
-  dat$attr$time.since.last.test.uct[txUCT_sympt] <- 0
+  dat$attr$last.test.rct[txRCT_sympt] <- at
+  dat$attr$last.test.uct[txUCT_sympt] <- at
   dat$attr$diag.status.ct[idsCT_tx_sympt] <- 0
   dat$attr$diag.status.ct[txCT_sympt] <- 1
 
   ## Correlated Chlamydia testing
-  dat$attr$last.neg.test.rct[tst.rct.neg] <- at
-  dat$attr$last.neg.test.uct[tst.uct.neg] <- at
-  dat$attr$last.neg.test.rct[tst.rct.pos] <- NA
-  dat$attr$last.neg.test.uct[tst.uct.pos] <- NA
   dat$attr$diag.status.ct[tst.ct.pos] <- 1
   dat$attr$last.diag.time.ct[tst.ct.pos] <- at
-  dat$attr$time.since.last.test.rct[tst.rct] <- 0
-  dat$attr$time.since.last.test.uct[tst.uct] <- 0
+  dat$attr$last.test.rct[tst.rct] <- at
+  dat$attr$last.test.uct[tst.uct] <- at
 
   # Proportion of infections treated in past year
   dat$epi$tx.gc.prop[at] <- ifelse(length(which(at - dat$attr$last.rGC.infTime <= 52)) +
