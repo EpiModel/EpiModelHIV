@@ -324,8 +324,12 @@ prevalence_msm <- function(dat, at) {
     dat$epi$recentpartners.prop <- rNA
 
     #EPT
+    #EPT
     dat$epi$eptCov <- rNA
     dat$epi$eptpartelig <- rNA
+    dat$epi$eptpartelig_main <- rNA
+    dat$epi$eptpartelig_main <- rNA
+    dat$epi$eptpartelig_main <- rNA
     dat$epi$eptpartprovided <- rNA
     dat$epi$eptpartprovided_gc <- rNA
     dat$epi$eptpartprovided_ct <- rNA
@@ -345,8 +349,18 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptuninfecteduptake <- rNA
     dat$epi$eptgcinfectsti <- rNA
     dat$epi$eptctinfectsti <- rNA
+    dat$epi$eptgcinfecthiv <- rNA
+    dat$epi$eptctinfecthiv <- rNA
+    dat$epi$eptgcctinfecthiv <- rNA
     dat$epi$eptgcinfectundiaghiv <- rNA
     dat$epi$eptctinfectundiaghiv <- rNA
+    dat$epi$eptgcctinfectundiaghiv <- rNA
+    dat$epi$eptgcctinfecthiv_main <- rNA
+    dat$epi$eptgcctinfecthiv_pers <- rNA
+    dat$epi$eptgcctinfecthiv_inst <- rNA
+    dat$epi$eptgcctinfectundiaghiv_main <- rNA
+    dat$epi$eptgcctinfectundiaghiv_pers <- rNA
+    dat$epi$eptgcctinfectundiaghiv_inst <- rNA
 
     # STI testing trajectories
     dat$epi$tt.traj.syph1.hivneg <- rep(0, nsteps)
