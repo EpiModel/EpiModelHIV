@@ -668,6 +668,9 @@ sti_ept_msm <- function(dat, at) {
     if (is.null(dat$epi$eptpartprovided_gc)) {
       dat$epi$eptpartprovided_gc <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_ct <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartelig_main <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartelig_pers <- rep(NA, dat$control$nsteps)
+      dat$epi$eptpartelig_inst <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_main <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_pers <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_inst <- rep(NA, dat$control$nsteps)
@@ -675,9 +678,19 @@ sti_ept_msm <- function(dat, at) {
       dat$epi$eptpartuptake_pers <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartuptake_inst <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartuptake_gc <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcinfecthiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptctinfecthiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfecthiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfecthiv_main <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfecthiv_pers <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfecthiv_inst <- rep(NA, dat$control$nsteps)
       dat$epi$eptgcinfectundiaghiv <- rep(NA, dat$control$nsteps)
       dat$epi$eptctinfectundiaghiv <- rep(NA, dat$control$nsteps)
       dat$epi$eptgcctinfectundiaghiv <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfectundiaghiv_main <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfectundiaghiv_pers <- rep(NA, dat$control$nsteps)
+      dat$epi$eptgcctinfectundiaghiv_inst <- rep(NA, dat$control$nsteps)
+
     }
 
     # Index attributes
@@ -695,6 +708,9 @@ sti_ept_msm <- function(dat, at) {
 
     # Update Epi
     dat$epi$eptpartelig[at] <- length(idsept)
+    dat$epi$eptpartelig_main <- length(unique(c(idsept.main.ong, idsept.main.end)))
+    dat$epi$eptpartelig_pers <- length(unique(c(idsept.pers.ong, idsept.pers.end)))
+    dat$epi$eptpartelig_inst <- length(unique(c(idsept.inst)))
     dat$epi$eptpartprovided[at] <- length(idsprovided_ept)
     dat$epi$eptpartprovided_gc[at] <- length(idsprovided_gc)
     dat$epi$eptpartprovided_ct[at] <- length(idsprovided_ct)
@@ -727,12 +743,51 @@ sti_ept_msm <- function(dat, at) {
                                                           dat$attr$diag.status.ct[idsept_tx.ct] == 1 |
                                                           dat$attr$diag.status.syph[idsept_tx.ct] == 1 |
                                                           dat$attr$diag.status[idsept_tx.ct] == 1)])
-    dat$epi$eptgcinfectundiaghiv[at] <- length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1 &
-                                                                     dat$attr$diag.status[idsept_tx.gc] == 0)])
-    dat$epi$eptctinfectundiaghiv[at] <- length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1 &
-                                                               dat$attr$diag.status[idsept_tx.ct] == 0)])
-    dat$epi$eptgcctinfectundiaghiv[at] <- length(idsuptake_ept[which(dat$attr$status[idsuptake_ept] == 1 &
-                                                                           dat$attr$diag.status[idsuptake_ept] == 0)])
+    # Uptake focus
+    # dat$epi$eptgcinfectsti[at] <-  length(idsept_tx.gc[which(dat$attr$diag.status.gc[idsept_tx.gc] == 1 |
+    #                                                            dat$attr$diag.status.ct[idsept_tx.gc] == 1 |
+    #                                                            dat$attr$diag.status.syph[idsept_tx.gc] == 1 |
+    #                                                            dat$attr$diag.status[idsept_tx.gc] == 1)])
+    # dat$epi$eptctinfectsti[at] <- length(idsept_tx.ct[which(dat$attr$diag.status.gc[idsept_tx.ct] == 1 |
+    #                                                           dat$attr$diag.status.ct[idsept_tx.ct] == 1 |
+    #                                                           dat$attr$diag.status.syph[idsept_tx.ct] == 1 |
+    #                                                           dat$attr$diag.status[idsept_tx.ct] == 1)])
+
+    # Change to provision, not uptake
+
+    # Provision focused
+    dat$epi$eptgcinfectundiaghiv[at] <- length(idsprovided_gc[which(dat$attr$status[idsprovided_gc] == 1 &
+                                                                    dat$attr$diag.status[idsprovided_gc] == 0)])
+    dat$epi$eptctinfectundiaghiv[at] <- length(idsprovided_ct[which(dat$attr$status[idsprovided_ct] == 1 &
+                                                                    dat$attr$diag.status[idsprovided_ct] == 0)])
+    dat$epi$eptgcctinfectundiaghiv[at] <- length(idsprovided_ept[which(dat$attr$status[idsprovided_ept] == 1 &
+                                                                       dat$attr$diag.status[idsprovided_ept] == 0)])
+
+    dat$epi$eptgcctinfectundiaghiv_main[at] <- length(idsprovided.main_ept[which(dat$attr$status[idsprovided.main_ept] == 1 &
+                                                                      dat$attr$diag.status[idsprovided.main_ept] == 0)])
+    dat$epi$eptgcctinfectundiaghiv_pers[at] <- length(idsprovided.pers_ept[which(dat$attr$status[idsprovided.pers_ept] == 1 &
+                                                                      dat$attr$diag.status[idsprovided.pers_ept] == 0)])
+    dat$epi$eptgcctinfectundiaghiv_inst[at] <- length(idsprovided.inst_ept[which(dat$attr$status[idsprovided.inst_ept] == 1 &
+                                                                         dat$attr$diag.status[idsprovided.inst_ept] == 0)])
+
+    dat$epi$eptgcinfecthiv <- length(idsprovided_gc[which(dat$attr$status[idsprovided_gc] == 1)])
+    dat$epi$eptctinfecthiv <- length(idsprovided_ct[which(dat$attr$status[idsprovided_ct] == 1)])
+    dat$epi$eptgcctinfecthiv <- length(idsprovided_ept[which(dat$attr$status[idsprovided_ept] == 1)])
+
+    dat$epi$eptgcctinfecthiv_main <- length(idsprovided.main_ept[which(dat$attr$status[idsprovided.main_ept] == 1)])
+    dat$epi$eptgcctinfecthiv_pers <- length(idsprovided.pers_ept[which(dat$attr$status[idsprovided.pers_ept] == 1)])
+    dat$epi$eptgcctinfecthiv_inst <- length(idsprovided.inst_ept[which(dat$attr$status[idsprovided.inst_ept] == 1)])
+
+    # Uptake focused
+    # dat$epi$eptgcinfectundiaghiv[at] <- length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1 &
+    #                                                                  dat$attr$diag.status[idsept_tx.gc] == 0)])
+    # dat$epi$eptctinfectundiaghiv[at] <- length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1 &
+    #                                                            dat$attr$diag.status[idsept_tx.ct] == 0)])
+    # dat$epi$eptgcctinfectundiaghiv[at] <- length(idsuptake_ept[which(dat$attr$status[idsuptake_ept] == 1 &
+    #                                                                        dat$attr$diag.status[idsuptake_ept] == 0)])
+    # dat$epi$eptgcinfecthiv <- length(idsept_tx.gc[which(dat$attr$status[idsept_tx.gc] == 1)])
+    # dat$epi$eptctinfecthiv <- length(idsept_tx.ct[which(dat$attr$status[idsept_tx.ct] == 1)])
+    # dat$epi$eptgcctinfecthiv <- length(idsuptake_ept[which(dat$attr$status[idsuptake_ept] == 1)])
 
 
     return(dat)
