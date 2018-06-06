@@ -38,6 +38,7 @@ test_shamp <- function(dat, at) {
 
   prepStat <- dat$attr$prepStat
   prep.tst.int <- dat$param$prep.tst.int
+  aids.sypm.test.prob <- dat$param$aids.sypm.test.prob
 
   # Parameters
   testing.pattern <- dat$param$testing.pattern
@@ -375,9 +376,9 @@ test_shamp <- function(dat, at) {
   tst.neg <- setdiff(tst.all, tst.pos)
   
   
-  ##AIDS symptom testing.FINSH LATER
+  ##AIDS symptom testing.
   tst.symp <- which((diag.status == 0 | is.na(diag.status)) & stage == 4 )
-  tst.symp.results <- rbinom(length(tst.symp), 1, prob=1/52)
+  tst.symp.results <- rbinom(length(tst.symp), 1, prob=aids.sypm.test.prob)
   tst.symp<- tst.symp[which(tst.symp.results == 1)]
   
 
@@ -390,6 +391,10 @@ test_shamp <- function(dat, at) {
   dat$attr$diag.status[tst.symp] <- 1
   dat$attr$diag.time[tst.symp] <- at
   dat$attr$evertest[tst.symp] <- 1
+  
+  dat$attr$age.diag[tst.pos] <- dat$attr$age[tst.pos]
+  dat$attr$age.diag[tst.symp] <- dat$attr$age[tst.symp]
+  
 
   return(dat)
 }
