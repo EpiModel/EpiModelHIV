@@ -113,7 +113,10 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$demog.cat[newIds] <- rep(0, nBirths)
   dat$attr$evertest[newIds] <- rep(0, nBirths)
   dat$attr$infected.gen[newIds]<-rep(NA, nBirths)
-
+  
+  dat$attr$age.inf[newIds]<-rep(NA, nBirths)
+  dat$attr$age.diag[newIds]<-rep(NA, nBirths)
+  
   dat$attr$arrival.time[newIds] <- rep(at, nBirths)
 
  
