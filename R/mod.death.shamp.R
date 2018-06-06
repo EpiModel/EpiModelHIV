@@ -30,18 +30,20 @@ deaths_shamp <- function(dat, at) {
 if(dat$param$death_stats==TRUE) {
   ##Tracking disease related stats at death.
   death.stats <- dat$death.stats
-  diag.status <- dat$attr$diag.status
   diag.time <- dat$attr$diag.time
   inf.time <- dat$attr$inf.time
-  tx.status <- dat$attr$tx.status 
   cum.time.on.tx <- dat$attr$cum.time.on.tx
   stage4.onset.time <- dat$attr$stage4.onset.time
+  age.inf <- dat$attr$age.inf
+  age.diag <- dat$attr$age.diag
 }
   
   ## General deaths
   age <- floor(dat$attr$age)
   race <- dat$attr$race
   sex <- dat$attr$sex
+  diag.status <- dat$attr$diag.status
+  tx.status <- dat$attr$tx.status
 
   alive.B.f <- which(race == "B" & sex == "F")
   age.B.f <- age[alive.B.f]
@@ -135,6 +137,8 @@ if(dat$param$death_stats==TRUE) {
   if (at == 1){
     death.stats$age <- age[dth.dis]
     death.stats$race <- race[dth.dis]
+    death.stats$age.inf <- age.inf[dth.dis]
+    death.stats$age.diag <- age.diag[dth.dis]
     death.stats$diag.status <- diag.status[dth.dis]
     death.stats$diag.time <- diag.time[dth.dis]
     death.stats$duration.diagnosed <- at - diag.time[dth.dis]
@@ -147,6 +151,8 @@ if(dat$param$death_stats==TRUE) {
     death.stats$stage4.to.death <- at - stage4.onset.time[dth.dis]
     
     death.stats$age.out$race <- race[dth.age.pos]
+    death.stats$age.out$age.inf <- age.inf[dth.age.pos]
+    death.stats$age.out$age.diag <- age.diag[dth.age.pos]
     death.stats$age.out$diag.status <- diag.status[dth.age.pos]
     death.stats$age.out$diag.time <- diag.time[dth.age.pos]
     death.stats$age.out$duration.diagnosed <- at - diag.time[dth.age.pos]
