@@ -308,6 +308,7 @@ trans_shamp <- function(dat, at){
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
+    dat$attr$age.inf[infected] <- dat$attr$age[infected]
     
     for(k in 1:length(infected)){
     dat$attr$infected.gen[infected[k]] <- dat$attr$infected.gen[infector[k]]+1
