@@ -168,6 +168,9 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$sqrt.age.adj <- get.vertex.attribute(nw[[1]], "sqrt.age.adj")
   dat$attr$agesq <- dat$attr$age^2
   
+  dat$attr$age.inf <-rep(NA, num)
+  dat$attr$age.diag <-rep(NA, num)
+  
   #demographic catagory.
   dat$attr$demog.cat<-rep(NA,length(dat$attr$sex))
   sex.groups<-sort(unique(dat$attr$sex))
