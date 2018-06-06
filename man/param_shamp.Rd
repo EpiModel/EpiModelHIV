@@ -26,11 +26,11 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   mean.test.BI.msmf.int = 1009, mean.test.H.msmf.int = 1009,
   mean.test.HI.msmf.int = 1009, mean.test.W.msmf.int = 1009,
   testing.pattern = "memoryless", test.window.int = 15,
-  tt.traj.B.f.prob = c(0.1, 0, 0.182, 0.718), tt.traj.BI.f.prob = c(0.15, 0,
-  0.172, 0.678), tt.traj.H.f.prob = c(0.18, 0, 0.129, 0.691),
-  tt.traj.HI.f.prob = c(0.28, 0, 0.113, 0.607), tt.traj.W.f.prob = c(0.3, 0,
-  0.155, 0.545), tt.traj.B.msf.prob = c(0.18, 0, 0.208, 0.612),
-  tt.traj.BI.msf.prob = c(0.21, 0, 0.201, 0.589),
+  aids.sypm.test.prob = 1/26, tt.traj.B.f.prob = c(0.1, 0, 0.182, 0.718),
+  tt.traj.BI.f.prob = c(0.15, 0, 0.172, 0.678), tt.traj.H.f.prob = c(0.18,
+  0, 0.129, 0.691), tt.traj.HI.f.prob = c(0.28, 0, 0.113, 0.607),
+  tt.traj.W.f.prob = c(0.3, 0, 0.155, 0.545), tt.traj.B.msf.prob = c(0.18,
+  0, 0.208, 0.612), tt.traj.BI.msf.prob = c(0.21, 0, 0.201, 0.589),
   tt.traj.H.msf.prob = c(0.35, 0, 0.168, 0.482),
   tt.traj.HI.msf.prob = c(0.55, 0, 0.116, 0.334),
   tt.traj.W.msf.prob = c(0.45, 0, 0.111, 0.439),
@@ -236,6 +236,8 @@ for constant hazard without regard to time since previous test, or
 \code{"interval"} deterministic fixed intervals.}
 
 \item{test.window.int}{Length of the HIV test window period in days.}
+
+\item{aids.sypm.test.prob}{probability per time steap of testing given stage 4 symptoms}
 
 \item{max.time.off.tx.full.int}{Number of days off treatment for a full
 suppressor before onset of AIDS, including time before diagnosis.}
