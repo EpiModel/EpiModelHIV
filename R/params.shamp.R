@@ -16,6 +16,7 @@
 #'        for constant hazard without regard to time since previous test, or
 #'        \code{"interval"} deterministic fixed intervals.
 #' @param test.window.int Length of the HIV test window period in days.
+#' @param aids.sypm.test.prob probability per time steap of testing given stage 4 symptoms
 #' @param tt.traj.R.S.prob Proportion of race group R, where R is a charater (B, BI, H, HI or W), 
 #'        and sex group S, where s is a charter (f, msf, msm, msmf), who enter one of four
 #'        testing/treatment trajectories: never test or treat, test and never
@@ -316,6 +317,7 @@ param_shamp <- function(race.method = 1,
                       mean.test.W.msmf.int = 1009,
                       testing.pattern = "memoryless",
                       test.window.int = 15,
+                      aids.sypm.test.prob = 1/26,
                       
                       #change trajectories based on NSFG NEver test fractions among 35-40
                       #set MF ratio to observed population ratio but within race
