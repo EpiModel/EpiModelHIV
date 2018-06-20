@@ -1086,6 +1086,8 @@ sti_tx_msm <- function(dat, at) {
   ept_txUGC_all <- txUGC_all[dat$attr$recentpartners[txUGC_all] > 0]
   ept_txRCT_all <- txRCT_all[dat$attr$recentpartners[txRCT_all] > 0]
   ept_txUCT_all <- txUCT_all[dat$attr$recentpartners[txUCT_all] > 0]
+  ept_txGC_all <- c(ept_txRGC_all, ept_txUGC_all)
+  ept_txCT_all <- c(ept_txRCT_all, ept_txUCT_all)
   ept_tx_all <- unique(c(ept_txRGC_all, ept_txUGC_all, ept_txRCT_all, ept_txUCT_all))
 
   # Update EPT index status and eligibility for GC/CT treated with partners
@@ -1170,6 +1172,9 @@ sti_tx_msm <- function(dat, at) {
 
   # Update EPT index status for those selected to receive EPT for their partners
   dat$attr$eptindexStat[ept_idsStart] <- 1
+
+  index_gc <- intersect(ept_txGC_all, ept_idsStart)
+  index_ct <- intersect(ept_txCT_all, ept_idsStart)
 
   # Correlated testing for other STIs if symptomatic for one -------------------
 
@@ -1728,6 +1733,10 @@ sti_tx_msm <- function(dat, at) {
 
 
   # EPT
+  # Number of index provided with EPT
+  dat$epi$eptindexprovided_gc[at] <- length(index_gc)
+  dat$epi$eptindexprovided_ct[at] <- length(index_ct)
+
   # Proportion of treated GC/CT index who have current partners - e.g. eligibility for EPT
   dat$epi$propindexeptElig[at] <- ifelse(length(unique(c(txRGC_all, txUGC_all, txRCT_all, txUCT_all))) > 0,
                                          length(unique(ept_tx_all)) /

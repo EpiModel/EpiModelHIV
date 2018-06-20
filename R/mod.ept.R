@@ -666,6 +666,8 @@ sti_ept_msm <- function(dat, at) {
 
     # Update with new trackers
     if (is.null(dat$epi$eptpartprovided_gc)) {
+      dat$epi$eptindexprovided_gc <- rep(NA, dat$control$nsteps)
+      dat$epi$eptindexprovided_ct <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_gc <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartprovided_ct <- rep(NA, dat$control$nsteps)
       dat$epi$eptpartelig_main <- rep(NA, dat$control$nsteps)

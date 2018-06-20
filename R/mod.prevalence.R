@@ -330,6 +330,8 @@ prevalence_msm <- function(dat, at) {
     dat$epi$eptpartelig_main <- rNA
     dat$epi$eptpartelig_main <- rNA
     dat$epi$eptpartelig_main <- rNA
+    dat$epi$eptindexprovided_gc <- rNA
+    dat$epi$eptindexprovided_ct <- rNA
     dat$epi$eptpartprovided <- rNA
     dat$epi$eptpartprovided_gc <- rNA
     dat$epi$eptpartprovided_ct <- rNA
