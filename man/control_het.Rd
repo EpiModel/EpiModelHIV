@@ -5,15 +5,15 @@
 \title{Control Settings for Stochastic Network Model of HIV-1 Infection in
        Sub-Saharan Africa}
 \usage{
-control_het(simno = 1, nsteps = 100, start = 1, nsims = 1, ncores = 1,
-  par.type = "single", initialize.FUN = initialize_het,
+control_het(simno = 1, nsteps = 100, start = 1, nsims = 1,
+  ncores = 1, par.type = "single", initialize.FUN = initialize_het,
   aging.FUN = aging_het, cd4.FUN = cd4_het, vl.FUN = vl_het,
   dx.FUN = dx_het, tx.FUN = tx_het, deaths.FUN = deaths_het,
   births.FUN = births_het, resim_nets.FUN = simnet_het,
   trans.FUN = trans_het, prev.FUN = prevalence_het,
-  verbose.FUN = verbose_het, module.order = NULL, save.nwstats = FALSE,
-  save.other = c("el", "attr"), verbose = TRUE, verbose.int = 1,
-  skip.check = TRUE, ...)
+  verbose.FUN = verbose_het, module.order = NULL,
+  save.nwstats = FALSE, save.other = c("el", "attr"), verbose = TRUE,
+  verbose.int = 1, skip.check = TRUE, ...)
 }
 \arguments{
 \item{simno}{Simulation ID number.}

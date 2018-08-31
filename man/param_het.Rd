@@ -7,17 +7,17 @@
 \usage{
 param_het(time.unit = 7, acute.stage.mult = 5, aids.stage.mult = 1,
   vl.acute.topeak = 14, vl.acute.toset = 107, vl.acute.peak = 6.7,
-  vl.setpoint = 4.5, vl.aidsmax = 7, cond.prob = 0.09, cond.eff = 0.78,
-  act.rate.early = 0.362, act.rate.late = 0.197, act.rate.cd4 = 50,
-  acts.rand = TRUE, circ.prob.birth = 0.9, circ.eff = 0.53,
-  tx.elig.cd4 = 350, tx.init.cd4.mean = 120, tx.init.cd4.sd = 40,
-  tx.adhere.full = 0.76, tx.adhere.part = 0.5, tx.vlsupp.time = 365/3,
-  tx.vlsupp.level = 1.5, tx.cd4.recrat.feml = 11.6/30,
-  tx.cd4.recrat.male = 9.75/30, tx.cd4.decrat.feml = 11.6/30,
-  tx.cd4.decrat.male = 9.75/30, tx.coverage = 0.3, tx.prev.eff = 0.96,
-  b.rate = 0.03/365, b.rate.method = "totpop", b.propmale = NULL,
-  ds.exit.age = 55, ds.rate.mult = 1, di.cd4.aids = 50,
-  di.cd4.rate = 2/365, ...)
+  vl.setpoint = 4.5, vl.aidsmax = 7, cond.prob = 0.09,
+  cond.eff = 0.78, act.rate.early = 0.362, act.rate.late = 0.197,
+  act.rate.cd4 = 50, acts.rand = TRUE, circ.prob.birth = 0.9,
+  circ.eff = 0.53, tx.elig.cd4 = 350, tx.init.cd4.mean = 120,
+  tx.init.cd4.sd = 40, tx.adhere.full = 0.76, tx.adhere.part = 0.5,
+  tx.vlsupp.time = 365/3, tx.vlsupp.level = 1.5,
+  tx.cd4.recrat.feml = 11.6/30, tx.cd4.recrat.male = 9.75/30,
+  tx.cd4.decrat.feml = 11.6/30, tx.cd4.decrat.male = 9.75/30,
+  tx.coverage = 0.3, tx.prev.eff = 0.96, b.rate = 0.03/365,
+  b.rate.method = "totpop", b.propmale = NULL, ds.exit.age = 55,
+  ds.rate.mult = 1, di.cd4.aids = 50, di.cd4.rate = 2/365, ...)
 }
 \arguments{
 \item{time.unit}{Unit of time relative to one day.}

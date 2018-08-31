@@ -29,5 +29,6 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 LinkingTo: ergm
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 LazyData: true
+Encoding: UTF-8
