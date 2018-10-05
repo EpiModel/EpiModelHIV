@@ -28,7 +28,10 @@ ConcDurDx_shamp <- function(dat, at){
     uid <- dat$attr$uid
     race <- dat$attr$race
     sex <- dat$attr$sex
+    age <- floor(dat$attr$age)
     sex.ident <- dat$attr$sex.ident
+    Ecohab <- dat$attr$Ecohab
+    Ecohab.timer <- dat$attr$Ecohab.timer
     cel.temp <- dat$cel.temp
     cel.complete <- dat$cel.complete
       
@@ -51,15 +54,29 @@ ConcDurDx_shamp <- function(dat, at){
       cel[,5] <- sex[cel[,2]]
       cel[,6] <- race[cel[,1]]
       cel[,7] <- race[cel[,2]]
+      cel[,8] <- age[cel[,1]]
+      cel[,9] <- age[cel[,2]]
+     
+      ##Check on Ecohab dissolution 
       
+      cel[,10] <- Ecohab[cel[,1]]
+      cel[,11] <- Ecohab[cel[,2]]
+      cel[,12] <- Ecohab.timer[cel[,1]]
+      cel[,13] <- Ecohab.timer[cel[,2]]
+      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2")
+      cel$Ec1<-ifelse(cel$type=="pers",0,cel$Ec1)
+      cel$Ec2<-ifelse(cel$type=="pers",0,cel$Ec2)
+      cel$Ect1<-ifelse(cel$type=="pers",0,cel$Ect1)
+      cel$Ect2<-ifelse(cel$type=="pers",0,cel$Ect2)
+      
+      ##Covert to UID.
       cel[,1] <- uid[cel[,1]]
       cel[,2] <- uid[cel[,2]]
       
-    
-  
       ##Assign rel ID.    
-      rels.cel <- cel[,8] <- (cel[,1] * 1000000000) + cel[,2]
-      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","ID")
+      rels.cel <- cel[,14] <- (cel[,1] * 1000000000) + cel[,2]
+      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID")
+      
       
       
       ##Count duplicates. 
@@ -73,6 +90,9 @@ ConcDurDx_shamp <- function(dat, at){
       el3[,3] <- apply(el3[,c(1,2)], 1, FUN=max)
       el3[,4] <- apply(el3[,c(1,2)], 1, FUN=min)
       el3 <- el3[,3:4]
+      el3[,1] <- uid[el3[,1]]
+      el3[,2] <- uid[el3[,2]]
+      
       rels.OT.cel <- (el3[,1] * 1000000000) + el3[,2]
       all.rels.cel<-c(rels.cel,rels.OT.cel)
       
@@ -88,9 +108,9 @@ ConcDurDx_shamp <- function(dat, at){
       
 
       if(at == 2){cel.temp <- cel
-      cel.temp[,9] <- rep(at,length(cel.temp[,1])) 
-      cel.temp[,10] <- rep(NA,length(cel.temp[,1])) 
-      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","ID", "start", "end")
+      cel.temp[,15] <- rep(at,length(cel.temp[,1])) 
+      cel.temp[,16] <- rep(NA,length(cel.temp[,1])) 
+      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID","start", "end")
       cel.complete <- cel.temp[0,]
       }
     
@@ -100,7 +120,8 @@ ConcDurDx_shamp <- function(dat, at){
         
         ids.new<-NULL
         for(i in 1:length(dat$temp$new.edges[,1])){
-        ids.new[i] <-  (max(dat$temp$new.edges[i,1],dat$temp$new.edges[i,2]) * 1000000000) + min(dat$temp$new.edges[i,1],dat$temp$new.edges[i,2])
+        ids.new[i] <-  (max(dat$attr$uid[dat$temp$new.edges[i,1]],dat$attr$uid[dat$temp$new.edges[i,2]]) * 1000000000) 
+                      + min(dat$attr$uid[dat$temp$new.edges[i,1]],dat$attr$uid[dat$temp$new.edges[i,2]])
         }
         
         ids.cur <- unique(cel[,"ID"])
@@ -111,13 +132,19 @@ ConcDurDx_shamp <- function(dat, at){
         ended$end <-at
         cel.complete <- rbind(cel.complete,ended)
         
+        ##look at ended Ecohab status?
+        ##How many in cohabs in ended are Ecohab Vs Not
+        ##compare to base.t
+        
         cel.temp <- merge(x = cel, y = cel.temp, by = c("p1","p2"), all.x = TRUE)
-        cel.temp <- cel.temp[,c(1:8,15,16)]
+        cel.temp <- cel.temp[,c(1:14,27,28)]
+        
+        
       }
 
       
 
-      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","ID", "start", "end")
+      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID","start", "end")
       now <- which(is.na(cel.temp$start)==TRUE)
       cel.temp$start[now] <- at
       
