@@ -258,7 +258,13 @@
 #' and multiplexity.
 #' @param death_stats  IF TRUE the data.frame death.stats stores all care continuum information for individuals at the time of death.  
 #' HIV related death data are store in death.stats, care continuum information for those that age out positive is store in death.stats$age.out.
-#'        
+#'
+#'
+#' @param Ecohab.window The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.
+#' @param p.growth If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.
+#' @param p.growth.nsteps The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.
+#' @param p.growth.size The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE. 
+
 #'        
 #' @param ... Additional arguments passed to the function.
 #'
@@ -803,7 +809,12 @@ param_shamp <- function(race.method = 1,
                       age.adj=data.params[[1]]$age.adj,
                       conc_dur_dx = TRUE,
                       death_stats = TRUE,
-
+                      
+                      Ecohab.window = round(5*52),
+                      p.growth = FALSE,
+                      p.growth.nsteps = 0,
+                      p.growth.size = 0,
+                      
                       ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
