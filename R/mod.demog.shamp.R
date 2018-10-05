@@ -112,7 +112,22 @@ demogupdate_shamp <- function(dat, at) {
   }
   
   
+  ##Update four catagory concurrency attribute for cross network concurrency (used in the pers network).
   
+    deg.cohab.c <- dat$attr$deg.cohab.c
+    xfour.conc <- dat$attr$xfour.conc
+    race<-dat$attr$race
+    sex<-dat$attr$sex
+    
+    BorBIM<-rep(NA,length(dat$attr$xfour.conc))
+    BorBIM <- ifelse((race=='B' | race=='BI') & sex=='M', TRUE, FALSE)
+    xfour.conc[BorBIM==TRUE & deg.cohab.c==0] <- 'B.BI.M.c-0' 
+    xfour.conc[BorBIM==TRUE & deg.cohab.c==1] <- 'B.BI.M.c-1' 
+    xfour.conc[BorBIM==FALSE & deg.cohab.c==0] <- 'non.B.BI.M.c-0' 
+    xfour.conc[BorBIM==FALSE & deg.cohab.c==1] <- 'non.B.BI.M.c-1' 
+    dat$attr$xfour.conc <- xfour.conc
+    
+
   
   return(dat)
 }
