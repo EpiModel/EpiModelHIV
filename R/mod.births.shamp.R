@@ -40,10 +40,19 @@ births_shamp <- function(dat, at){
   nBirths.gen <- max(dat$epi$dth.gen[at],0) 
   nBirths.dis <- max(dat$epi$dth.dis[at],0)
   nBirths.age <- max(dat$epi$dth.age[at],0)
-  
+
+  ##create population growth
+  if (dat$param$p.growth == TRUE){
+    
+    if (at < dat$param$p.growth.nsteps){
+      
+      nBirths.gen <- nBirths.gen + dat$param$p.growth.size
+    }
+  }  
 
   ##For now we will not replace disease deaths.
   nBirths <- nBirths.age + nBirths.gen
+  
 
   ## Update Attr
 
@@ -86,7 +95,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   ##Not replcing disease deathe at this time
   nBirths <- nBirths.gen + nBirths.age
-
+  
 
   # Set all attributes NA by default
   dat$attr <- lapply(dat$attr, {
@@ -174,9 +183,10 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   #Set agecat
   
-  dat$attr$agecat[newIds]<-ifelse(dat$att$age[newIds] < 26 ,"18-25",
-                          ifelse(dat$attr$age[newIds] >= 26 & dat$attr$age[newIds] < 36,"26-35",
-                                 ifelse(dat$attr$age[newIds] >= 36 & dat$attr$age[newIds] < 46,"36-45",dat$attr$agecat)))
+  dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
+                          ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
+                                 ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",
+                                        ifelse(dat$attr$age >= 46 & dat$attr$age < 76,"46-75",dat$attr$agecat))))
                       
   
   newF<-which(sex=="F")
@@ -451,8 +461,15 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
   
-  dat$attr$p.conc[newIds] <- NA 
-  dat$attr$x.conc[newIds] <- NA
+  dat$attr$p.conc[newIds] <- 0 
+  dat$attr$x.conc[newIds] <- 0
+  
+  dat$attr$Ecohab[newIds] <- 0 
+  dat$attr$Ecohab.timer[newIds] <- 0 
+
+  dat$attr$xfour.conc[newIds]<- ifelse((race=='B' | race=='BI') & sex=="M",'B.BI.M.c-0','non.B.BI.M.c-0' )
+ 
+
 
   # One-off risk group
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
