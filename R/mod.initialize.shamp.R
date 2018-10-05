@@ -86,13 +86,26 @@ initialize_shamp <- function(x, param, init, control, s) {
   ## Nodal attributes ##
 
   # Degree terms
-  dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$newnetwork, "deg.pers")
-  dat$attr$deg.cohab <- get.vertex.attribute(x[[2]]$fit$newnetwork, "deg.cohab")
+  dat$attr$deg.pers <- get_degree(dat$el[[2]])
+  dat$attr$deg.cohab <- get_degree(dat$el[[1]])
   
-  dat$attr$deg.pers.c <- get.vertex.attribute(x[[1]]$fit$newnetwork, "deg.pers.c")
-  dat$attr$deg.cohab.c <- get.vertex.attribute(x[[2]]$fit$newnetwork, "deg.cohab.c")
+  dat$attr$deg.cohab.c <- ifelse(dat$attr$deg.cohab > 0,1,dat$attr$deg.cohab)
+  dat$attr$deg.pers.c <- ifelse(dat$attr$deg.pers > 0,1,dat$attr$deg.pers)
   
+  #Early cohab state.
 
+  dat$attr$Ecohab <- rep(0,length(dat$attr$deg.cohab.c))
+  dat$attr$Ecohab.timer <- rep(0,length(dat$attr$deg.cohab.c))
+  
+  p1 <- dat$el[[1]][,1]
+  p2 <- dat$el[[1]][,2]
+  Ect.list <- sample(1:(dat$param$Ecohab.window*5),length(p1),replace=TRUE)
+  dat$attr$Ecohab.timer[p1] <- Ect.list
+  dat$attr$Ecohab.timer[p2] <- Ect.list
+  dat$attr$Ecohab<-ifelse(dat$attr$Ecohab.timer < dat$param$Ecohab.window,1,0)
+
+  
+  
   # Race
   dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
   num.B <-sum(dat$attr$race == "B")
@@ -139,7 +152,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   dat$attr$p.conc <- get.vertex.attribute(nw[[1]], "p.conc") 
   dat$attr$x.conc <- get.vertex.attribute(nw[[1]], "x.conc") 
-  
+  dat$attr$xfour.conc <- get.vertex.attribute(nw[[1]], "xfour.conc")  
   
   
   # Sex Identity
