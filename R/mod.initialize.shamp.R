@@ -94,7 +94,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   #Early cohab state.
 
-  dat$attr$Ecohab <- rep(0,length(dat$attr$deg.cohab.c))
+  dat$attr$Ecohab <- rep("0",length(dat$attr$deg.cohab.c))
   dat$attr$Ecohab.timer <- rep(0,length(dat$attr$deg.cohab.c))
   
   p1 <- dat$el[[1]][,1]
@@ -102,7 +102,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   Ect.list <- sample(1:(dat$param$Ecohab.window*5),length(p1),replace=TRUE)
   dat$attr$Ecohab.timer[p1] <- Ect.list
   dat$attr$Ecohab.timer[p2] <- Ect.list
-  dat$attr$Ecohab<-ifelse(dat$attr$Ecohab.timer < dat$param$Ecohab.window,1,0)
+  dat$attr$Ecohab<-ifelse(dat$attr$Ecohab.timer < dat$param$Ecohab.window,"1","0")
 
   
   
@@ -153,7 +153,7 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$p.conc <- get.vertex.attribute(nw[[1]], "p.conc") 
   dat$attr$x.conc <- get.vertex.attribute(nw[[1]], "x.conc") 
   dat$attr$xfour.conc <- get.vertex.attribute(nw[[1]], "xfour.conc")  
-  
+  dat$attr$sb <- get.vertex.attribute(nw[[1]], "sb")    
   
   # Sex Identity
   dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex.ident")
