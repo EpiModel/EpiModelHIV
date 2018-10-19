@@ -230,7 +230,7 @@ param_shamp_1875(race.method = 1, time.unit = 7, method = 1,
   age.groups = data.params[[1]]$age.groups,
   age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
   death_stats = TRUE, max.1_cohab = TRUE, Ecohab.window = round(5 * 52),
-  ...)
+  p.growth = FALSE, p.growth.nsteps = 0, p.growth.size = 0, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
