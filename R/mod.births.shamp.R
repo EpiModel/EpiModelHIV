@@ -464,11 +464,14 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$p.conc[newIds] <- 0 
   dat$attr$x.conc[newIds] <- 0
   
-  dat$attr$Ecohab[newIds] <- 0 
+  dat$attr$Ecohab[newIds] <- "0" 
   dat$attr$Ecohab.timer[newIds] <- 0 
 
   dat$attr$xfour.conc[newIds]<- ifelse((race=='B' | race=='BI') & sex=="M",'B.BI.M.c-0','non.B.BI.M.c-0' )
  
+  dat$attr$sb[newIds]<- ifelse(race == 'B' & sex == 'M', 'M.B',
+                               ifelse(race == 'B' & sex == 'F', 'F.B',
+                               ifelse(race != 'B' & sex == 'M', 'M.NB', 'F.NB')))
 
 
   # One-off risk group
