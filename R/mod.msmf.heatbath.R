@@ -149,7 +149,7 @@ heatbath_msmf_shamp <- function(dat, at){
     dat$epi$incid.MSM[at] <- length(infected)
      }
     
-    if (length(infected) < 1){ dat$epi$incid.H[at] <-0}
+    if (length(infected) < 1){ dat$epi$incid.MSM[at] <-0}
   
   }
     
