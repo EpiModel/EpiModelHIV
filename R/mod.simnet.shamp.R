@@ -114,8 +114,8 @@ simnet_shamp <- function(dat, at) {
   
   ##Update Early Cohab attribute and the Early cohab timer.
   dat$attr$Ecohab.timer <- ifelse(dat$attr$deg.cohab.c == 1, dat$attr$Ecohab.timer+1, 0)
-  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 1 & dat$attr$Ecohab.timer < dat$param$Ecohab.window, 1,0)
-  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 0,0,dat$attr$Ecohab) 
+  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 1 & dat$attr$Ecohab.timer < dat$param$Ecohab.window, "1","0")
+  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 0,"0",dat$attr$Ecohab) 
   dat$attr$Ecohab.timer <- ifelse(dat$attr$deg.cohab.c == 0,0,dat$attr$Ecohab.timer) 
   
   
@@ -135,7 +135,7 @@ simnet_shamp <- function(dat, at) {
   
   PlusCohabs<-c(dup.p1,dup.p1.partners,dup.p2,dup.p2.partners)
 
-  dat$attr$Ecohab[PlusCohabs] <- 0
+  dat$attr$Ecohab[PlusCohabs] <- "0"
   dat$attr$Ecohab.timer[PlusCohabs]  <- dat$param$Ecohab.window+2
   }
   ######  IF WE DROP THE ECOHAB APPROACH REMOVE THIS CODE.  
