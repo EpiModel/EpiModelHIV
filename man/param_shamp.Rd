@@ -80,9 +80,9 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25, birth.age = 18,
-  exit.age = 46, b.method = "fixed", msm.frac = 0, msmf.frac.B = 0.04,
-  msmf.frac.BI = 0.023, msmf.frac.H = 0.056, msmf.frac.HI = 0.026,
-  msmf.frac.W = 0.054, URAI.prob = 138/10000, UIAI.prob = 11/10000,
+  exit.age = 46, b.method = "fixed", msm.frac = 0, msmf.frac.B = 0.0131,
+  msmf.frac.BI = 0.008, msmf.frac.H = 0.0219, msmf.frac.HI = 0.0042,
+  msmf.frac.W = 0.015, URAI.prob = 138/10000, UIAI.prob = 11/10000,
   URVI.prob = 8/10000, UIVI.prob = 4/10000, VI.foi.scale = 1,
   AI.foi.scale = 1, acute.rr = 4, circ.rr = 0.4, condom.rr = 0.25,
   disc.outset.main.B.f.prob = 0, disc.outset.main.BI.f.prob = 0,
@@ -228,8 +228,8 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   race.groups = data.params[[1]]$race.groups,
   age.groups = data.params[[1]]$age.groups,
   age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
-  death_stats = TRUE, max.1_cohab = TRUE, Ecohab.window = round(5 * 52),
-  p.growth = FALSE, p.growth.nsteps = 0, p.growth.size = 0, ...)
+  death_stats = TRUE, Ecohab.window = round(5 * 52), p.growth = FALSE,
+  p.growth.nsteps = 0, p.growth.size = 0, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
@@ -439,6 +439,14 @@ and multiplexity.}
 
 \item{death_stats}{IF TRUE the data.frame death.stats stores all care continuum information for individuals at the time of death.
 HIV related death data are store in death.stats, care continuum information for those that age out positive is store in death.stats$age.out.}
+
+\item{Ecohab.window}{The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.}
+
+\item{p.growth}{If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.}
+
+\item{p.growth.nsteps}{The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.}
+
+\item{p.growth.size}{The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE.}
 
 \item{...}{Additional arguments passed to the function.}
 
