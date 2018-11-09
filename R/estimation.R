@@ -96,6 +96,7 @@ calc_nwstats_msm <- function(time.unit = 7,
                              sqrt.adiff.BB,
                              sqrt.adiff.WW,
                              sqrt.adiff.BW,
+                             sqrt.adiff.asmm,
                              diss.main,
                              diss.pers,
                              diss.asmm,
@@ -368,7 +369,9 @@ calc_nwstats_msm <- function(time.unit = 7,
   
   num.riskg.asmm <- (edges.asmm*riskg.asmm)*2
 
+  # Age mixing
   
+  sqrt.adiff.asmm <- edges.asmm * sqrt.adiff.asmm
   
   # Dissolution model
   exp.mort.asmm <- (mean(asmr.B[min(ages.asmm):max(ages.yamsm)]) + mean(asmr.W[min(ages.asmm):max(ages.yamsm)])) / 2
@@ -377,7 +380,7 @@ calc_nwstats_msm <- function(time.unit = 7,
                                    duration = durs.asmm / time.unit,
                                    d.rate = exp.mort.asmm)
   
-  stats.asmm <- c(edges.asmm, num.riskg.asmm[-3], cross.ties)
+  stats.asmm <- c(edges.asmm, num.riskg.asmm[-3], cross.ties, sqrt.adiff.asmm)
   
 
   # Compile results ---------------------------------------------------------
