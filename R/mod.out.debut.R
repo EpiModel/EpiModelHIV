@@ -23,14 +23,17 @@ out_debut_camplc <- function(dat, at) {
   dat$attr$yamsm <- ifelse(dat$attr$age >= 19 & dat$attr$age < 26,1,0)
   dat$attr$oamsm <- ifelse(dat$attr$age >= 26,1,0)
   
-  dat$attr$out <- ifelse(dat$attr$age > dat$attr$out.age,1,dat$attr$out)
+  newout<-which(dat$attr$age <= dat$attr$out.age + ((dat$param$time.unit/365)/2) &  dat$attr$age >= dat$attr$out.age - ((dat$param$time.unit/365)/2) & dat$att$out == 0)
+  oldout<-which(dat$attr$age > dat$attr$out.age & dat$attr$debuted == 0)
   
+  dat$attr$out[newout] <- 1
   
-  ids<-which(dat$attr$debuted == 0)
-  
-  dat$attr$debuted[ids] <- rbinom(ids,1,dat$param$debut.prob)
+  dat$attr$debuted[newout] <- rbinom(newout,1,dat$param$debut.entry.prob)
+  dat$attr$debuted[oldout] <- rbinom(oldout,1,dat$param$debut.prob)
   
   dat$attr$debuted <- ifelse(dat$attr$age >= 19,1,dat$attr$debuted)
+  dat$attr$out <- ifelse(dat$attr$age >= 19,1,dat$attr$out)
+  
 
   return(dat)
 }
