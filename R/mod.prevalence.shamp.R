@@ -399,8 +399,7 @@ prevalence_shamp <- function(dat, at) {
   dat$epi$nPers[at] <- sum(get_degree(dat$el[[2]]), na.rm = TRUE)
   dat$epi$nOTduplicates[at] <- sum(get_degree(dat$el[[3]]), na.rm = TRUE)
   
-
-
+  
   return(dat)
 }
 
