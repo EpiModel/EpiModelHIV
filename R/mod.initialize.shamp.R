@@ -155,6 +155,11 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$xfour.conc <- get.vertex.attribute(nw[[1]], "xfour.conc")  
   dat$attr$sb <- get.vertex.attribute(nw[[1]], "sb")    
   
+  dat$attr$ds.cohab <- get.vertex.attribute(nw[[1]], "ds.cohab")
+  dat$attr$ds.pers <- get.vertex.attribute(nw[[1]], "ds.pers")
+  dat$attr$dsb.cohab <- get.vertex.attribute(nw[[1]], "dsb.cohab") 
+  dat$attr$dsb.pers <- get.vertex.attribute(nw[[1]], "dsb.pers")
+  
   # Sex Identity
   dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex.ident")
   dat$attr$msmf <- ifelse(dat$attr$sex.ident == "msmf" ,1 ,0)
