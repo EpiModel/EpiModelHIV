@@ -128,6 +128,25 @@ demogupdate_shamp <- function(dat, at) {
     dat$attr$xfour.conc <- xfour.conc
     
 
+##Update sex and race specific degree terms.  
+    
+      b <- ifelse(dat$attr$race=='B', 'B', 'NB')
+      dat$attr$sb <- paste(dat$attr$sex, b, sep='.')
+      dat$attr$ds.cohab <- ifelse(dat$attr$deg.cohab.c==0, 
+                         'deg0',
+                         ifelse(dat$attr$sex=='F', 
+                                'deg1pl.F',
+                                'deg1pl.M'))
+      dat$attr$ds.pers <- ifelse(dat$attr$deg.pers.c==0, 
+                        'deg0',
+                        ifelse(dat$attr$sex=='F', 
+                               'deg1pl.F',
+                               'deg1pl.M'))
+      dat$attr$dsb.cohab  <- paste(dat$attr$ds.cohab, b, sep='.')
+      dat$attr$dsb.cohab[dat$attr$deg.cohab.c==0] <- 'deg0'
+      dat$attr$dsb.pers  <- paste(dat$attr$ds.pers, b, sep='.')
+      dat$attr$dsb.pers[dat$attr$deg.pers.c==0] <- 'deg0'
+
   
   return(dat)
 }
