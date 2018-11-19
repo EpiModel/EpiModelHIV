@@ -6,6 +6,7 @@ library(EpiModelHPC)
 #devtools::install_github("statnet/ergm.ego-private",ref="3.7-compat", auth_token ="")
 #devtools::install_github("statnet/tergmLite")
 
+library(latticeExtra)
 library(ergm.ego)
 library(tergmLite)
 library(parallel)
@@ -27,9 +28,9 @@ ego.obj_p<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersPers,egoIDco
 ego.obj_i<-as.egodata(new_data[[2]]$egos,alters=new_data[[2]]$altersOT,egoIDcol="ego", egoWt=new_data[[2]]$egos$weight)
 
 # Location of EpiModelHIV folders
-# epifold <- '~/EpiModelHIV_SHAMP'
+  epifold <- '~/EpiModelHIV_SHAMP'
 # epifold <- '~/'
-epifold <- '~/Dropbox/CFAR/'
+# epifold <- '~/Dropbox/CFAR/'
 
 save(ego.obj_c, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_c.rda"))
 save(ego.obj_p, file = file.path(epifold, "EpiModelHIV_shamp_modeling/scenarios/base/data/ego.obj_p.rda"))
@@ -56,33 +57,31 @@ summary(ego.obj_c ~edges +
 ##Try offset concurrent() ??    
 #nodefactor("race",base=5) +
   
-fit.c.temp<-ergm.ego(ego.obj_c ~edges + 
-                    nodefactor("race.sex", base=c(5,10)) +
-                    nodematch("race",diff=TRUE) +
-                    nodefactor("agecat", base=1) + 
-                    absdiff("sqrt.age.adj") + 
-                    nodefactor("deg.pers.c",base=1) + 
-                    offset(nodematch("sex", diff=FALSE)) + 
-                    offset(concurrent()),
-                    offset.coef = c(-Inf, -Inf),
-                    control=control.ergm.ego(ppopsize=50000, stats.est="asymptotic",
-                                           ergm.control = control.ergm(MCMC.interval=7500,
-                                                                       MCMC.samplesize=500,
-                                                                       MCMC.burnin = 7500,
-                                                                       MPLE.max.dyad.types = 1e7,
-                                                                       init.method = "zeros",
-                                                                       MCMLE.maxit = 400
-                                                                       #parallel = np, 
-                                                                       #parallel.type="PSOCK"
-                                                                       )))
+fit.c <- ergm.ego(ego.obj_c ~ edges + 
+                  nodefactor("race",base=5) +
+                  nodefactor("agecat", base=1) + 
+                  absdiff("sqrt.age.adj") + 
+                  offset(nodematch("sex", diff=FALSE)) + 
+                  offset(concurrent()),
+                offset.coef = c(-Inf, -Inf),
+                control=control.ergm.ego(ppopsize=50000, 
+                                         stats.est="asymptotic",
+                                         ergm.control = 
+                                           control.ergm(MCMC.interval=7500,
+                                                        MCMC.samplesize=7500,
+                                                        MCMC.burnin = 7500,
+                                                        MPLE.max.dyad.types = 1e7,
+                                                        init.method = "zeros",
+                                                        MCMLE.maxit = 400,
+                                                        parallel = np, 
+                                                        parallel.type="PSOCK"
+                                           )))
 
-mcmc.diagnostics(fit.c.temp)
 
-fit.c$egodata <- fit.c$newnetworks <- fit.c$sample <- fit.c$constrained <-NULL 
 
-summary(fit.c)
-test <- simulate(fit.c)
-degreedist(test)
+
+fit.c$egodata <- fit.c$network <- fit.c$newnetworks <- fit.c$sample <- fit.c$constrained <-NULL 
+
 
 ####Casual partnership network.
 ##For concurrent and m.deg use 7 catagory base (BI males for deg cohab).
@@ -101,8 +100,8 @@ summary(ego.obj_p ~edges +
           concurrent(by="pers.conc.group"))
 
 fit.p.temp<-ergm.ego(ego.obj_p ~edges + 
-                    nodefactor("race",base=5) + 
-                    nodematch("race",diff=TRUE) +
+                    nodefactor("race3",base=3) + 
+                    nodematch("race3",diff=TRUE) +
                     nodefactor("agecat", base=1) + 
                     absdiff("sqrt.age.adj") + 
                     concurrent(by="pers.conc.group") +
@@ -124,11 +123,7 @@ fit.p.temp<-ergm.ego(ego.obj_p ~edges +
 
 fit.p <- fit.p.temp
 
-fit.p$egodata <- fit.p$newnetworks <- fit.p$sample <- fit.p$constrained <-NULL 
-
-summary(fit.p)
-test <- simulate(fit.p)
-degreedist(test)
+fit.p$egodata <- fit.p$newnetworks  <- fit.p$network <- fit.p$sample <- fit.p$constrained <-NULL  
 
 
 ######One time partnerships.
@@ -141,8 +136,8 @@ summary(ego.obj_i ~edges +
           nodefactor("deg.pers.c",base=0))
 
 fit.i.temp<-ergm.ego(ego.obj_i ~edges + 
-                    nodefactor("race", base=5) +
-                    nodematch("race",diff=TRUE) +
+                    nodefactor("race3", base=3) +
+                    nodematch("race3",diff=TRUE) +
                     nodefactor("agecat", base=c(3,4)) + 
                     nodefactor("deg.cohab.c",base=1) +
                     nodefactor("deg.pers.c",base=1) +
@@ -160,9 +155,8 @@ fit.i.temp<-ergm.ego(ego.obj_i ~edges +
 
 fit.i <- fit.i.temp
 
-fit.i$egodata <- fit.i$newnetworks <- fit.i$sample <- fit.i$constrained <-NULL 
+fit.i$egodata <- fit.i$newnetworks <- fit.i$network <- fit.i$sample <- fit.i$constrained <-NULL 
 
-summary(fit.i)
 
 
 fullmodelfits <- list(fit.c.temp, fit.p.temp, fit.i.temp)
@@ -390,18 +384,12 @@ load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/f
 load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/data.params.rda")
 
 
-param <- param_shamp(data.params,
-                     msm.temp.adjust = 50,
-                     fa.temp.adjust = 50,
-                     depart.adjust = 1000,
-                     URVI.prob = .05,
-                     UIVI.prob = .05,
-                     return.adjust = 1)
+param <- param_shamp(data.params)
 init <- init_shamp()
 control <- control_shamp(nsteps = 1,
                          save.other = c("attr","trans.el"))
 
-sim1 <- netsim(est, param, init, control)
+sim1_50 <- netsim(est, param, init, control)
 
 
 
