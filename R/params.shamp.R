@@ -770,9 +770,8 @@ param_shamp <- function(race.method = 1,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
                       
-                      ##1:59000
+                    
                       msm.foi.scale = 1,
-                      ##1: 496000 for simple.
                       fa.foi.scale = 1,
                       depart.scale = 1,
                       return.scale = 1,
