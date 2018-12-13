@@ -16,14 +16,9 @@ f <- function(x) {
   
   param <- param_shamp(nwstats = st,
 
-                       msm.temp.adjust = x[2],
-                       fa.temp.adjust = x[3],
-                       depart.adjust = x[4],
-                       return.adjust = x[5],
-                       vi.scale = x[6],
-                       cond.main.scale = x[7],
-                       cond.pers.scale = x[8],
-                       cond.inst.scale = x[9])
+                       vi.foi.scale = x[2],
+                       msm.foi.scale = x[3],
+                       fa.foi.scale = x[4])
   
 
 
@@ -51,15 +46,11 @@ f <- function(x) {
   return(out)
 }
 
-priors <- list(c("unif", 0.35, 0.40),
-               c("unif", 0.30, 0.35),
-               c("unif", 0.21, 0.24),
-               c("unif", 0.20, 0.22),
-               c("unif", 260, 290),
-               c("unif", 2.5, 3),
-               c("unif", 1.5, 2))
+priors <- list(c("unif", 1, 12),
+               c("unif", 1, 0.35),
+               c("unif", 1, 0.24))
 
-targets <- c(4.2, 6.6, 0.26)
+targets <- c(.0027)
 
 ( nsim <- as.numeric(Sys.getenv("NSIM")) )
 ( pacc <- as.numeric(Sys.getenv("PACC")) )

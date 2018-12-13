@@ -15,9 +15,9 @@ np = detectCores()
 
 
 load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/data.params.rda")
-fit.c<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/cohab-conc-A.rds")
-fit.p<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/pers-conc-A.rds")
-fit.i<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/ot-a0.rds")
+fit.c<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/cohab-main-A.rds")
+fit.p<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/pers-main-A.rds")
+fit.i<- readRDS("/net/proj/SHAMPnetdat/model-fits/current/ot-main-A.rds")
 
 
 fit.c$egodata <- fit.c$newnetworks <- fit.c$network <- fit.c$constrained <-NULL 
@@ -220,14 +220,12 @@ fit.3$edapprox <- TRUE
 
 
 
-est_f <- list(fit.1, fit.2, fit.3)
+est_50K_base <- list(fit.1, fit.2, fit.3)
 
-save(est_f, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/fit_f.rda")
-save(data.params, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/data.params.rda")
-
+save(est_50K_base, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/fit_50K_base.rda")
 
 
-load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/fit_f.rda")
+load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/fit_50K_base.rda")
 load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/data.params.rda")
 
 
@@ -237,34 +235,10 @@ load(file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/d
 param <- param_shamp(data.params)
 
 init <- init_shamp()
-control <- control_shamp(nsteps = 1040, save.other = c("attr", "trans.el"), verbose = TRUE)
+control <- control_shamp(nsteps = 104, save.other = c("attr", "trans.el"), verbose = TRUE)
 
-sim_fits <- netsim(est_f, param, init, control)
-save(sim_fits, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/sim_fits.rda")
-
-
-time<-1:520
-plot(time,sim_fits$epi$i.prev[,1] , main = "Baseline")
+sim_50K_base <- netsim(est_50K_base, param, init, control)
+save(sim_50K_base, file = "~/EpiModelHIV_SHAMP/EpiModelHIV_shamp_modeling/scenarios/base/est/sim_50K_base.rda")
 
 
 
-pdf(file = "Baseline.pdf", height = 12, width = 9, pointsize = 16)
-
-par(mfrow = c(2,1), mar = c(3,3,2.5,5), mgp = c(2,1,0))
-
-plot(time,sim_fits$epi$i.prev[,1], main = "HIV Prevalence", xlab = "Weeks", ylab = "Prevalence among adult heterosexuals 18-59")
-plot(time,sim_fits$epi$prop.Lhet.inf[,1], main = "Proportion of infections by class", ylim = c(0, 1), xlab = "Weeks", ylab = "Proportion of infections", col="black")
-lines(time,sim_fits$epi$prop.MSM.inf[,1], col="red")
-lines(time,sim_fits$epi$prop.MSMds.inf[,1], col="pink")
-lines(time,sim_fits$epi$prop.FA.inf[,1], col="blue")
-lines(time,sim_fits$epi$prop.FAds.inf[,1], col="purple")
-
-
-
-legend("right", c("Local Heterosexual - Black","Directly aquired from the MSM associated force of infection - Red",
-                  "Downstream MSM associated infections - Pink",
-                  "Directly Aquired from the foreign associated force of infection - Blue",
-                  "Downstream foreign associated infection - Purple" ), cex=.8)
-
-
-dev.off()
