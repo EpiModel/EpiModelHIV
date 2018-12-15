@@ -40,12 +40,12 @@ initialize_shamp <- function(x, param, init, control, s) {
   
   ## Network simulation ##
  # Do we need to create the nw in each environment?
-  nw<-x[[1]]$fit$newnetwork
+  nw<-x[[1]]$fit$network
   count <- network.edgecount(nw)
-  delete.edges(nw,1:count)
+  delete.edges(nw,10:count)
   environment(x[[2]]$fit$formula) <- environment()
   environment(x[[3]]$fit$formula) <- environment()
-  x[[1]]$fit$newnetwork<-NULL
+  x[[1]]$fit$network<-NULL
   
   
   nw <- list()
