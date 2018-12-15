@@ -43,6 +43,8 @@ initialize_shamp <- function(x, param, init, control, s) {
   nw<-x[[1]]$fit$network
   count <- network.edgecount(nw)
   delete.edges(nw,1:count)
+  environment(x[[2]]$fit$formula) <- environment()
+  environment(x[[3]]$fit$formula) <- environment()
   x[[1]]$fit$network<-NULL
   
   
