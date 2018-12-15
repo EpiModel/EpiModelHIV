@@ -42,13 +42,11 @@ initialize_shamp <- function(x, param, init, control, s) {
  # Do we need to create the nw in each environment?
   nw<-x[[1]]$fit$network
   count <- network.edgecount(nw)
-  delete.edges(nw,10:count)
-  environment(x[[2]]$fit$formula) <- environment()
-  environment(x[[3]]$fit$formula) <- environment()
+  delete.edges(nw,1:count)
   x[[1]]$fit$network<-NULL
   
   
-  nw <- list()
+  nwl <- list()
   for (i in 1:3) {
 
    #nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
@@ -58,12 +56,12 @@ initialize_shamp <- function(x, param, init, control, s) {
     ## But ergm.ego must also be run.
     ## The other elements of est must be modified to remove the network size adjustment for tergmLite. 
    
-     nw[[i]] <- simulate(x[[i]]$fit)
+     nwl[[i]] <- simulate(x[[i]]$fit)
   }
   
   
-  
-
+  nw<-nwl
+  nwl<-NULL
 
   ## ergm_prep here
   dat$el <- list()
