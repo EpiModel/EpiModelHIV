@@ -39,6 +39,14 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$death.stats <- list()
   
   ## Network simulation ##
+ # Do we need to create the nw in each environment?
+  nw<-x[[1]]$fit$newnetwork
+  count <- network.edgecount(nw)
+  delete.edges(nw,1:count)
+  environment(x[[2]]$fit$formula) <- environment()
+  environment(x[[3]]$fit$formula) <- environment()
+  x[[1]]$fit$newnetwork<-NULL
+  
   
   nw <- list()
   for (i in 1:3) {
