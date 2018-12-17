@@ -16,15 +16,16 @@ cat("\n fsimno is ", fsimno)
 ##LOAD FILES
 
 setwd("/gscratch/csde/deven/SHAMP/scenarios/base")
-load(file = "est/est.rda")
+#load(file = "est/est.rda")
 load(file = "est/data.params.rda")
 
-nw<-est[[1]]$fit$network
-count <- network.edgecount(nw)
-delete.edges(nw,1:count)
-environment(est[[2]]$fit$formula) <- environment()
-environment(est[[3]]$fit$formula) <- environment()
-est[[1]]$fit$network<-NULL
+#nw<-est[[1]]$fit$network
+#count <- network.edgecount(nw)
+#delete.edges(nw,1:count)
+#environment(est[[2]]$fit$formula) <- environment()
+#environment(est[[3]]$fit$formula) <- environment()
+#est[[1]]$fit$network<-NULL
+
 
 # general inputs
 time.unit <- 7
@@ -62,13 +63,24 @@ init <- init_shamp(prev.B.f = 0.1,
                    prev.HI.msmf =0.1,
                    prev.W.msmf = 0.1)
 
-control <- control_shamp(nsteps = 52*100)
+control <- control_shamp(simno = fsimno,
+                         nsteps = 100,
+                         nsims = 6,
+                         ncores = 6,
+                         verbose = FALSE)
 
-mod1 <- netsim(est, param, init, control)
+#sim <- netsim(est, param, init, control)
+#print(sim)
+#fn <- paste0("sim.", fsimno, ".rda")
+#save(sim, file = fn)
 
-print(mod1)
 
-fn <- paste0("sim.", fsimno, ".rda")
+## Simulation
+netsim_hpc("est/est.rda", param, init, control,
+           compress = FALSE, verbose = TRUE)
 
-save(mod1, file = fn)
+process_simfiles(simno = simno, min.n = njobs,
+                 outdir = "data/", compress = TRUE)
+
+
 
