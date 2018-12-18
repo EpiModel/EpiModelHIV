@@ -1083,6 +1083,7 @@ control_shamp <- function(simno = 1,
                         prev.FUN = prevalence_shamp,
                         verbose.FUN = verbose_shamp,
                         save.nwstats = FALSE,
+                        save.other = c("el", "attr"),
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {
