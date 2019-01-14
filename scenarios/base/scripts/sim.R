@@ -19,13 +19,6 @@ setwd("/gscratch/csde/deven/SHAMP/scenarios/base")
 #load(file = "est/est.rda")
 load(file = "est/data.params.rda")
 
-#nw<-est[[1]]$fit$network
-#count <- network.edgecount(nw)
-#delete.edges(nw,1:count)
-#environment(est[[2]]$fit$formula) <- environment()
-#environment(est[[3]]$fit$formula) <- environment()
-#est[[1]]$fit$network<-NULL
-
 
 # general inputs
 time.unit <- 7
@@ -37,6 +30,7 @@ param <- param_shamp(data.params,
                      VI.foi.scale = 1.8,
                      msm.foi.scale = 3.8,
                      fa.foi.scale = 12,
+                     conc_dur_dx = FALSE,
                      death_stats = FALSE,
                      p.growth = TRUE,
                      p.growth.nsteps = 75,
@@ -64,20 +58,16 @@ init <- init_shamp(prev.B.f = 0.1,
                    prev.W.msmf = 0.1)
 
 control <- control_shamp(simno = fsimno,
-                         nsteps = 100,
-                         nsims = 6,
-                         ncores = 6,
-                         verbose = FALSE)
-
-#sim <- netsim(est, param, init, control)
-#print(sim)
-#fn <- paste0("sim.", fsimno, ".rda")
-#save(sim, file = fn)
+                         nsteps = 5,
+                         nsims = 10,
+                         ncores = 5,
+                         verbose = TRUE)
 
 
 ## Simulation
-netsim_hpc("est/est.rda", param, init, control,
-           compress = FALSE, verbose = TRUE)
+netsim_hpc("est/est.rda", param, init, control, cp.save.int = 104,
+           compress = FALSE, verbose = TRUE, save.min = TRUE, save.max = FALSE)
+
 
 process_simfiles(simno = simno, min.n = njobs,
                  outdir = "data/", compress = TRUE)
