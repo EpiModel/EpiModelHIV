@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 ## Job Name 
-#SBATCH --job-name=SHAMP
+#SBATCH --job-name=s80
 
 
 ## Allocation Definition
@@ -12,10 +12,10 @@
 #SBATCH --nodes=1
 
 ## Tasks per node
-#SBATCH --ntasks-per-node=6
+#SBATCH --ntasks-per-node=5
 
 ## Walltime
-#SBATCH --time=12-12 
+#SBATCH --time=24-12 
 
 ## E-mail notification
 #SBATCH --mail-type=ALL
