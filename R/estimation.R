@@ -42,6 +42,8 @@
 #' @param sqrt.adiff.BW Vector of length 3 with the mean absolute differences
 #'        in the square root of ages in main, casual, and one-off black-white
 #'        partnerships.
+#' @param cubert.adiff.asmm mean absolute differences in the cube root of ages 
+#'        of ASMM partnerships.
 #' @param diss.main Dissolution model formula for main partnerships.
 #' @param diss.pers Dissolution model formula for casual partnerships.
 #' @param durs.main Vector of length 3 with the duration of BB, BW, and WW main
@@ -96,7 +98,7 @@ calc_nwstats_msm <- function(time.unit = 7,
                              sqrt.adiff.BB,
                              sqrt.adiff.WW,
                              sqrt.adiff.BW,
-                             sqrt.adiff.asmm,
+                             cubert.adiff.asmm,
                              diss.main,
                              diss.pers,
                              diss.asmm,
@@ -239,7 +241,6 @@ calc_nwstats_msm <- function(time.unit = 7,
   # Number of partnerships
   edges.p <- sum(totdeg.p.by.dm) / 2
   
-  edges.p.oamsm<-(1-(length(19:25)/length(19:40))) * ((1+cross.frac) * edges.p)
 
   # Mixing
   if (method == 2) {
@@ -268,10 +269,10 @@ calc_nwstats_msm <- function(time.unit = 7,
   # Compile target statistics
   if (method == 2) {
     stats.p <- c(edges.p, edges.nodemix.p[2:3], totdeg.p.by.dm[c(2, 4)],
-                 conc.p.by.race, sqrt.adiff.p,edges.p.oamsm)
+                 conc.p.by.race, sqrt.adiff.p)
   }
   if (method == 1) {
-    stats.p <- c(edges.p, totdeg.p.by.dm[2], conc.p, sqrt.adiff.p,edges.p.oamsm)
+    stats.p <- c(edges.p, totdeg.p.by.dm[2], conc.p, sqrt.adiff.p)
   }
 
   # Dissolution model
@@ -361,9 +362,12 @@ calc_nwstats_msm <- function(time.unit = 7,
   # ASMM partnerships -------------------------------------------------------
   
 
-  edges.asmm <- ((num.W.asmm + num.B.asmm) * deg.asmm)/2 + cross.frac*(num.msm)
+  #edges.asmm <- ((num.W.asmm + num.B.asmm) * deg.asmm)/2 + cross.frac*(num.msm)
   
-  cross.ties<-cross.frac*(num.msm)
+  edges.asmm <- ((num.W.asmm + num.B.asmm) * deg.asmm)/2 
+  
+  ##
+  cross.ties<-cross.frac*(edges.asmm)
 
   # Risk quantiles
   
@@ -371,7 +375,7 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Age mixing
   
-  sqrt.adiff.asmm <- edges.asmm * sqrt.adiff.asmm
+  cubert.adiff.asmm <- edges.asmm * cubert.adiff.asmm
   
   # Dissolution model
   exp.mort.asmm <- (mean(asmr.B[min(ages.asmm):max(ages.yamsm)]) + mean(asmr.W[min(ages.asmm):max(ages.yamsm)])) / 2
@@ -380,7 +384,7 @@ calc_nwstats_msm <- function(time.unit = 7,
                                    duration = durs.asmm / time.unit,
                                    d.rate = exp.mort.asmm)
   
-  stats.asmm <- c(edges.asmm, num.riskg.asmm[-3], cross.ties, sqrt.adiff.asmm)
+  stats.asmm <- c(edges.asmm, num.riskg.asmm[-3], cross.ties, cubert.adiff.asmm)
   
 
   # Compile results ---------------------------------------------------------
@@ -481,6 +485,7 @@ base_nw_msm <- function(nwstats) {
   ages <- seq(min(ager), max(ager) + 1, 1 / (365 / nwstats$time.unit))
   age <- sample(ages, n, TRUE)
   sqrt.age <- sqrt(age)
+  cubert.age <- age^(1/3)
 
   role.B <- sample(apportion_lr((num.B), c("I", "R", "V"), nwstats$role.B.prob.msm))
   role.W <- sample(apportion_lr((num.W), c("I", "R", "V"), nwstats$role.W.prob.msm))
@@ -501,8 +506,9 @@ base_nw_msm <- function(nwstats) {
   debut.prob<-nwstats$debut.prob
 
   agecat<-floor(age)
-  asmm<-yamsm<-oamsm<-out<-debuted<-rep("0",length(agecat))
+  asmm<-yamsm<-oamsm<-amsm<-out<-debuted<-rep("0",length(agecat))
   asmm[agecat < 19] <-"1"
+  amsm[agecat > 18] <- "1"
   yamsm[agecat > 18 & agecat < 26] <-"1"
   oamsm[agecat > 25] <-"1"
   out[agecat > 18] <-"1"
@@ -531,8 +537,8 @@ for(i in 1:length(agecat)){
   
   
 
-  attr.names <- c("race", "riskg", "sqrt.age", "age", "role.class", "debuted", "out","out.age", "asmm", "oamsm", "yamsm")
-  attr.values <- list(race, riskg, sqrt.age, age, role, debuted, out, out.age, asmm, oamsm, yamsm)
+  attr.names <- c("race", "riskg", "sqrt.age", "age","cubert.age", "role.class", "debuted", "out","out.age", "asmm", "oamsm", "yamsm", "amsm")
+  attr.values <- list(race, riskg, sqrt.age, age, cubert.age, role, debuted, out, out.age, asmm, oamsm, yamsm, amsm)
   nw <- network::set.vertex.attribute(nw, attr.names, attr.values)
 
   return(nw)
