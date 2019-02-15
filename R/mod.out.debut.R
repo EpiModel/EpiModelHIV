@@ -20,6 +20,7 @@ out_debut_camplc <- function(dat, at) {
  
 
   dat$attr$asmm <- ifelse(dat$attr$age < 19,1,0)
+  dat$attr$amsm <- ifelse(dat$attr$age >= 19,1,0)
   dat$attr$yamsm <- ifelse(dat$attr$age >= 19 & dat$attr$age < 26,1,0)
   dat$attr$oamsm <- ifelse(dat$attr$age >= 26,1,0)
   
