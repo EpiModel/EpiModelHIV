@@ -89,6 +89,7 @@ initialize_camplc <- function(x, param, init, control, s) {
 
   # Age
   dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "sqrt.age")
+  dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "cubert.age")
   dat$attr$age <- get.vertex.attribute(nw[[1]], "age")
   dat$attr$of.age<-ifelse(dat$attr$age >= 16,1,0)
 
@@ -101,6 +102,7 @@ initialize_camplc <- function(x, param, init, control, s) {
   
   # Group
   dat$attr$asmm <- get.vertex.attribute(nw[[1]], "asmm")
+  dat$attr$amsm <- get.vertex.attribute(nw[[1]], "amsm")
   dat$attr$yamsm <- get.vertex.attribute(nw[[1]], "yamsm")
   dat$attr$oamsm <- get.vertex.attribute(nw[[1]], "oamsm")
   
@@ -139,9 +141,11 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$attr$prepElig <- rep(0, num)
   dat$attr$prepElig.asmm <- rep(0, num)
   dat$attr$prepStat <- rep(0, num)
+  dat$attr$prepStat.asmm <- rep(0, num)
   dat$attr$prepEver <- rep(0, num)
   dat$attr$ever.adol.prep <- rep(0, num)
   dat$attr$ever.adult.prep <- rep(0, num)
+
   
   # Risk history lists
   nc <- ceiling(dat$param$prep.risk.int)
