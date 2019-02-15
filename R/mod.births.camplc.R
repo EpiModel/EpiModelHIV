@@ -94,7 +94,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   ##Age
   dat$attr$age[newIds] <- rep(dat$param$birth.age,nBirths)
   dat$attr$sqrt.age[newIds] <- rep(sqrt(dat$param$birth.age),nBirths)
-  
+  dat$attr$cubert.age[newIds] <- rep(dat$param$birth.age^(1/3),nBirths)
   
   #Set out age for new births and debut for new births 
   
@@ -119,6 +119,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   
   #set group
   dat$attr$asmm[newIds] <- rep(1, nBirths)
+  dat$attr$amsm[newIds] <- rep(0, nBirths)
   dat$attr$yamsm[newIds] <- rep(0, nBirths)
   dat$attr$oamsm[newIds] <- rep(0, nBirths)
   
@@ -201,13 +202,16 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$uaicount[newIds] <- rep(0,nBirths) 
   
   # PrEP
-  dat$attr$prepEver[newIds] <- 0
-  dat$attr$prepStat[newIds] <- 0
+  dat$attr$prepEver[newIds] <- rep(0, nBirths)
+  dat$attr$prepStat[newIds] <- rep(0, nBirths)
+  dat$attr$prepStat.asmm[newIds] <- rep(0, nBirths)
   dat$attr$prepElig[newIds] <- rep(0, nBirths)
   dat$attr$prepElig.asmm[newIds] <- rep(0, nBirths)
   dat$attr$prepClass[newIds] <- rep(NA, nBirths)
   dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
   dat$attr$ever.adult.prep[newIds] <- rep(0, nBirths)
+
+  
   
   # Risk history matrices
   for (i in 1:length(dat$riskh)) {
