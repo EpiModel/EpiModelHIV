@@ -24,33 +24,29 @@ prep_msm <- function(dat, at) {
   ever.adult.prep  <- dat$attr$ever.adult.prep
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
-
+  
   prepElig <- dat$attr$prepElig
   prepStat <- dat$attr$prepStat
+  prepStat.asmm <- dat$attr$prepStat.asmm
   prepEver <- dat$attr$prepEver
   prepClass <- dat$attr$prepClass
 
   prep.elig.model <- dat$param$prep.elig.model
-  prep.coverage.adol.naive <- dat$param$prep.coverage.adol.naive
-  prep.coverage.adol.exp <- dat$param$prep.coverage.adol.exp
+  prep.coverage <- dat$param$prep.coverage
   prep.cov.method <- dat$param$prep.cov.method
   prep.cov.rate <- dat$param$prep.cov.rate
   prep.class.prob <- dat$param$prep.class.prob
   prep.risk.reassess <- dat$param$prep.risk.reassess
-
+  prep.retained <- dat$attr$prep.retained
 
   ## Eligibility ---------------------------------------------------------------
 
-  ##For first lifecycle paper ASMM no longer continue prep use as adult MSM
-  idsEligSwitch <- which(prepStat ==1 & asmm==0 & ever.adult.prep==0)
-  prepStat[idsEligSwitch] <- 0
-  
   # Base eligibility
   idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & asmm == 0 & lnt == at)
 
   idsEligStop <- NULL
   if (prep.risk.reassess == TRUE) {
-    idsEligStop <- which(active == 1 & prepStat == 1 & asmm == 0 & lnt == at)
+    idsEligStop <- which(active == 1 & prepStat == 1 & prepStat.asmm == 0 & asmm == 0 & lnt == at)
   }
 
   # Core eligiblity scenarios
@@ -90,11 +86,11 @@ prep_msm <- function(dat, at) {
     }
   }
 
-
   prepElig[idsEligStart] <- 1
   prepElig[idsEligStop] <- 0
+  
 
-
+ 
 
   ## Stoppage ------------------------------------------------------------------
 
@@ -110,92 +106,58 @@ prep_msm <- function(dat, at) {
   # Reset PrEP status
   idsStp <- c(idsStpDx, idsStpDth, idsStpInelig)
   prepStat[idsStp] <- 0
-
+  
 
   ## Initiation ----------------------------------------------------------------
 
-  if (prep.cov.method == "curr") {
-    prepCov.adol.naive <- sum(prepStat == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
-    
-    prepCov.adol.exp <- sum(prepStat == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/ sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE) 
-  
-    #Need to decide how to deal with those on ASMM PrEP in coverage calculation
-    #+ sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
-                                                                                              
-    prepCov.msm <- sum(prepStat == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE) + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
-  }
-  
-  if (prep.cov.method == "ever") {
-    prepCov.adol.naive <- sum(prepEver == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 0 & asmm == 0, na.rm = TRUE)
-    
-    prepCov.adol.exp <- sum(prepEver == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)/sum(prepElig == 1 & ever.adol.prep == 1 & asmm == 0, na.rm = TRUE)
-    
-    #Need to decide how to deal with those on ASMM PrEP in coverage calculation                                                                                       
-    # + sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
-    
-    prepCov.msm <- sum(prepEver == 1 & asmm == 0, na.rm = TRUE)/(sum(prepElig == 1 & asmm == 0, na.rm = TRUE)+ sum(asmm == 0 & prepStat == 1 & ever.adult.prep == 0, na.rm = TRUE))
-  }
-  
-  prepCov.adol.naive <- ifelse(is.nan(prepCov.adol.naive), 0, prepCov.adol.naive)
-  prepCov.adol.exp <- ifelse(is.nan(prepCov.adol.exp), 0, prepCov.adol.exp)
-  
-  idsEligSt.adol.naive <- which(prepElig == 1  & ever.adol.prep == 0)
-  idsEligSt.adol.exp <- which(prepElig == 1  & ever.adol.prep == 1)
-    nEligSt.adol.naive <- length(idsEligSt.adol.naive)
-    nEligSt.adol.exp <- length(idsEligSt.adol.exp)
-
-  nStart.adol.naive <- max(0, min(nEligSt.adol.naive, round((prep.coverage.adol.naive - prepCov.adol.naive) *
-                                        sum(prepElig == 1 & ever.adol.prep == 0, na.rm = TRUE))))
-  
-  nStart.adol.exp <- max(0, min(nEligSt.adol.exp, round((prep.coverage.adol.exp - prepCov.adol.exp) *
-                                                              sum(prepElig == 1 & ever.adol.prep == 1, na.rm = TRUE))))
+  ##NEED COV AMONG ELIGIBLE AND TOTAL WITH AND WITHOUT RETAINED
   
 
+    prepCov.msm.elig <- (sum(prepStat == 1 & prepStat.asmm == 0 & asmm == 0, na.rm = TRUE)) / (sum(prepElig == 1 & asmm == 0, na.rm = TRUE))
+    prepCov.msm.elig.w.ret <- (sum(prepStat == 1 & prepElig ==1 & asmm == 0, na.rm = TRUE)) / (sum(prepElig == 1 & asmm == 0, na.rm = TRUE))
+    prepCov.msm.all<- (sum(prepStat == 1 & prepStat.asmm == 0 & asmm == 0, na.rm = TRUE)) / (sum(asmm == 0, na.rm = TRUE))
+    prepCov.msm.all.w.ret<- (sum(prepStat == 1 & asmm == 0, na.rm = TRUE)) / (sum(asmm == 0, na.rm = TRUE))
+
   
-  idsStart.adol.naive <- NULL
-  if (nStart.adol.naive > 0) {
+
+  prepCov.msm.elig <- ifelse(is.nan(prepCov.msm.elig), 0, prepCov.msm.elig)
+  prepCov.msm.elig.w.ret <- ifelse(is.nan(prepCov.msm.elig.w.ret), 0, prepCov.msm.elig.w.ret)
+  prepCov.msm.all <- ifelse(is.nan(prepCov.msm.all), 0, prepCov.msm.all)
+  prepCov.msm.all.w.ret <- ifelse(is.nan(prepCov.msm.all.w.ret), 0, prepCov.msm.all.w.ret)
+
+  
+  idsEligSt <- which(prepElig == 1)
+    nEligSt <- length(idsEligSt)
+
+
+  nStart <- max(0, min(nEligSt, round((prep.coverage - prepCov.msm.elig) *
+                                        sum(prepElig == 1, na.rm = TRUE))))
+  
+  idsStart <- NULL
+  if (nStart > 0) {
     if (prep.cov.rate >= 1) {
-      idsStart.adol.naive <- ssample(idsEligSt.adol.naive, nStart.adol.naive)
+      idsStart <- ssample(idsEligSt, nStart)
     } else {
-      idsStart.adol.naive <- idsEligSt.adol.naive[rbinom(nStart.adol.naive, 1, prep.cov.rate) == 1]
+      idsStart <- idsEligSt[rbinom(nStart, 1, prep.cov.rate) == 1]
     }
   }
 
-  idsStart.adol.exp <- NULL
-  if (nStart.adol.exp > 0) {
-    if (prep.cov.rate >= 1) {
-      idsStart.adol.exp <- ssample(idsEligSt.adol.exp, nStart.adol.exp)
-    } else {
-      idsStart.adol.exp <- idsEligSt.adol.exp[rbinom(nStart.adol.exp, 1, prep.cov.rate) == 1]
-    }
-  }
-  
+
   
   
   # Attributes
-  if (length(idsStart.adol.naive) > 0) {
-    prepStat[idsStart.adol.naive] <- 1
-    prepEver[idsStart.adol.naive] <- 1
-    ever.adult.prep[idsStart.adol.naive] <- 1
+  if (length(idsStart) > 0) {
+    prepStat[idsStart] <- 1
+    prepEver[idsStart] <- 1
+    ever.adult.prep[idsStart] <- 1
 
     # PrEP class is fixed over PrEP cycles
-    needPC <- which(is.na(prepClass[idsStart.adol.naive]))
-    prepClass[idsStart.adol.naive[needPC]] <- sample(x = 0:3, size = length(needPC),
+    needPC <- which(is.na(prepClass[idsStart]))
+    prepClass[idsStart[needPC]] <- sample(x = 0:3, size = length(needPC),
                                           replace = TRUE, prob = prep.class.prob)
   }
   
-  if (length(idsStart.adol.exp) > 0) {
-    prepStat[idsStart.adol.exp] <- 1
-    prepEver[idsStart.adol.exp] <- 1
-    ever.adult.prep[idsStart.adol.exp] <- 1
-    
-    # PrEP class is fixed over PrEP cycles
-    needPC <- which(is.na(prepClass[idsStart.adol.exp]))
-    prepClass[idsStart.adol.exp[needPC]] <- sample(x = 0:3, size = length(needPC),
-                                          replace = TRUE, prob = prep.class.prob)
 
-  }
-  
 
 
   ## Output --------------------------------------------------------------------
@@ -208,10 +170,13 @@ prep_msm <- function(dat, at) {
   dat$attr$ever.adult.prep <- ever.adult.prep
 
   # Summary Statistics
-  dat$epi$prepCov.adol.naive[at] <- prepCov.adol.naive
-  dat$epi$prepCov.adol.exp[at] <- prepCov.adol.exp
-  dat$epi$prepCov.msm[at] <- prepCov.msm
-  dat$epi$prepStart[at] <- length(idsStart.adol.naive) + length(idsStart.adol.exp)
+
+  dat$epi$prepCov.msm.elig[at] <- prepCov.msm.elig 
+  dat$epi$prepCov.msm.elig.w.ret[at] <- prepCov.msm.elig.w.ret 
+  dat$epi$prepCov.msm.all[at] <- prepCov.msm.all 
+  dat$epi$prepCov.msm.all.w.ret[at] <- prepCov.msm.all.w.ret
+  
+  dat$epi$prepStart.msm[at] <- length(idsStart)
 
   return(dat)
 }
