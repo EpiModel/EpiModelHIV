@@ -200,33 +200,20 @@ trans_msm <- function(dat, at){
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
     
-    dat$age.inf.vec$age <- c(dat$age.inf.vec$age,dat$attr$age[infected])
-    dat$age.inf.vec$time <- c(dat$age.inf.vec$time,rep(at,length(infected)))
+    dat$age.inf.vec$age <- c(dat$age.inf.vec$age,dat$attr$age[unique(infected)])
+    dat$age.inf.vec$time <- c(dat$age.inf.vec$time,rep(at,length(unique(infected))))
     
   }
 
   # Summary Output
-  dat$epi$incid[at] <- length(infected)
+  dat$epi$incid[at] <- length(unique(infected))
   
-  msm<-sum(dat$attr$asmm[infected] == 0)
-  asmm<-sum(dat$attr$asmm[infected] == 1)
+  msm<-sum(dat$attr$asmm[unique(infected)] == 0)
+  asmm<-sum(dat$attr$asmm[unique(infected)] == 1)
   
-  dat$epi$incid.msm[at] <- length(msm)
-  dat$epi$incid.asmm[at] <- length(asmm)
+  dat$epi$incid.msm[at] <- msm
+  dat$epi$incid.asmm[at] <- asmm
   
-  dat$epi$incid.cai[at] <- sum(trans.ip[disc.ip[, "uai"] == 0]) +
-    sum(trans.rp[disc.rp[, "uai"] == 0])
-  dat$epi$incid.uai[at] <- sum(trans.ip[disc.ip[, "uai"] == 1]) +
-    sum(trans.rp[disc.rp[, "uai"] == 1])
-  dat$epi$incid.cai.perc[at] <- dat$epi$incid.cai[at] / dat$epi$incid[at]
-
-  if (at >= dat$param$prep.start) {
-    dat$epi$mean.trans[at] <- mean(c(trans.ip.prob, trans.rp.prob))
-    dat$epi$mean.trans.prep[at] <- mean(c(trans.ip.prob[which(ip.prep == 1)],
-                                          trans.rp.prob[which(rp.prep == 1)]))
-    dat$epi$mean.trans.nprep[at] <- mean(c(trans.ip.prob[which(ip.prep == 0)],
-                                           trans.rp.prob[which(rp.prep == 0)]))
-  }
 
   return(dat)
 }
