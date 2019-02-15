@@ -68,28 +68,25 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prepCurr <- rNA
     dat$epi$prepCurr.msm <- rNA
     dat$epi$prepCurr.asmm <- rNA
+    dat$epi$prepCurr.ret <- rNA
     dat$epi$prepEver <- rNA
-    dat$epi$prepCov <- rNA
+    dat$epi$prepCov.msm.elig <- rNA
+    dat$epi$prepCov.msm.elig.w.ret <- rNA 
+    dat$epi$prepCov.msm.all <- rNA
+    dat$epi$prepCov.msm.all.w.ret <- rNA
     dat$epi$prepCov.asmm <- rNA
-    dat$epi$prepCov.msm <- rNA
     dat$epi$prepCov.adol.naive <- rNA
     dat$epi$prepCov.adol.exp <- rNA
     dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
+    dat$epi$prepStart.msm <- rNA
+    dat$epi$prepStart.asmm <- rNA
     dat$epi$i.num.prep0 <- rNA
     dat$epi$i.num.prep1 <- rNA
 
     dat$epi$cprob.always.pers <- rNA
     dat$epi$cprob.always.inst <- rNA
 
-    dat$epi$mean.trans <- rNA
-    dat$epi$mean.trans.prep <- rNA
-    dat$epi$mean.trans.nprep <- rNA
-
-    dat$epi$incid.cai <- rNA
-    dat$epi$incid.uai <- rNA
-    dat$epi$incid.cai.perc <- rNA
-    
     dat$epi$incid.msm <- rNA
     dat$epi$incid.asmm <- rNA
   }
@@ -122,6 +119,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prepCurr[at] <- sum(active == 1 & prepStat == 1, na.rm = TRUE)
   dat$epi$prepCurr.msm[at] <- sum(active == 1 & prepStat == 1 & asmm == 0, na.rm = TRUE)
   dat$epi$prepCurr.asmm[at] <- sum(active == 1 & prepStat == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$prepCurr.ret[at] <- sum(active == 1 & dat$attr$prepStat.asmm == 1 & asmm == 0, na.rm = TRUE)
   dat$epi$prepElig.msm[at] <- sum(active == 1 & dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$prepElig.asmm[at] <- sum(active == 1 & dat$attr$prepElig.asmm == 1, na.rm = TRUE)
   dat$epi$prepEver[at] <- sum(active == 1 & dat$attr$prepEver == 1, na.rm = TRUE)
@@ -134,10 +132,11 @@ prevalence_msm <- function(dat, at) {
   } else {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] / sum(active == 1 & prepStat == 1, na.rm = TRUE)
   }
-  
+ 
   dat$epi$i.prev.msm[at] <- sum(active == 1 & status ==1 & asmm == 0, na.rm = TRUE) / dat$epi$num.msm[at]
   dat$epi$i.prev.asmm[at] <- sum(active == 1 & status ==1 & debuted == 1 & asmm == 1, na.rm = TRUE) / dat$epi$num.asmm.deb[at]
   dat$epi$i.prev.age18[at] <- sum(active == 1 & status ==1 & debuted == 1 & age == 18, na.rm = TRUE) / dat$epi$num.age18.deb[at]
+  dat$epi$prepStart[at] <- dat$epi$prepStart.msm[at] + dat$epi$prepStart.asmm[at]
 
   return(dat)
 }
