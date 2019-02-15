@@ -213,8 +213,6 @@
 #'        low adherence, medium adherence, or high adherence groups (from Liu).
 #' @param prep.class.hr The hazard ratio for infection per act associated with each
 #'        level of adherence (from Grant).
-#' @param prep.coverage.adol.naive The proportion of the eligible MSM population who did 
-#'        not use prep as an asmm that start PrEP once they become eligible.
 #' @param prep.coverage The proportion of the eligible MSM population who used PrEP as an ASMM
 #'        and start PrEP once they become eligible.
 #' @param prep.cov.method The method for calculating PrEP coverage, with options
@@ -238,41 +236,12 @@
 #'        adol.riskhist.older, adol.riskhist.time, adol.riskhist.older.time}
 #'        for all persons who have never been on PrEP or those who have cycled off
 #'        see: prepSpell if \code{TRUE} and are disease-susceptible.
-#' @param prep.efficacy.asmm The per-contact efficacy of PrEP to prevent infection if
-#'        used (parameter not currently used).
-#' @param prep.class.prob.b.asmm The frequency of being in a low, medium, or high class
-#'        of adherence to PrEP for black asmm.
-#' @param prep.class.prob.w.asmm The frequency of being in a low, medium, or high class
+#' @param prep.class.prob.asmm The frequency of being in a low, medium, or high class
 #'        of adherence to PrEP for white asmm.
-#' @param prep.class.effect.asmm The functional effectiveness of PrEP conditional on
-#'        PrEP class.
-#' @param prep.coverage.b.asmm The proportion of the eligible population who are start
-#'        PrEP once they become eligible for black asmm.
-#' @param prep.coverage.w.asmm The proportion of the eligible population who are start
-#'        PrEP once they become eligible for white asmm.
-#' @param prep.cov.method.asmm The method for calculating PrEP coverage, with options
-#'        of \code{"curr"} to base the numerator on the number of people currently
-#'        on PrEP and \code{"ever"} to base it on the number of people ever on
-#'        PrEP for asmm.
-#' @param prep.cov.rate.b.asmm The rate at which persons initiate PrEP conditional on
-#'        their eligibility, with 1 equal to instant start for black asmm.
-#' @param prep.cov.rate.w.asmm The rate at which persons initiate PrEP conditional on
-#'        their eligibility, with 1 equal to instant start for white asmm.
-
-#' @param prep.tst.int.asmm Testing interval for asmm who are actively on PrEP. This
-#'        overrides the mean testing interval parameters.
-#' @param prep.risk.int.asmm Time window for assessment of risk eligibility for PrEP
-#'        in days.
-#' @param prep.risk.reassess.asmm If \code{TRUE}, reassess eligibility for PrEP at
-#'        each testing visit.
-#' @param prep.delay.b.asmm The number of timesteps between becomeing eligible for PreP and starting PrEP for black asmm.
-#' @param prep.delay.w.asmm The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.
-#' @param prepSpell.asmm If \code{TRUE}, there is a constant hazard from dropping PrEP.
-#' @param PrepDrop.b.asmm The hazard for dropping PrEP for black asmm given prepSpell.asmm==TRUE.
-#' @param PrepDrop.w.asmm The hazard for dropping PrEP for white asmm given prepSpell.asmm==TRUE.
-#' @param prep.uaicount.thresh.b.asmm The number of UAI a black asmm must have to initiate prep 
-#'        if PreP eligibility is based on UAI counts.
-#' @param prep.uaicount.thresh.w.asmm The number of UAI a white asmm must have to initiate prep 
+#' @param prep.uptake.asmm The per timestep hazard of starting adolecent PrEP given eligibility.
+#' @param prep.disc.asmm The per timestep hazard of deicontinuing adolecent PrEP given eligibility.
+#' @param prep.delay.asmm The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.
+#' @param prep.uaicount.thresh.asmm The number of UAI a black asmm must have to initiate prep 
 #'        if PreP eligibility is based on UAI counts.
 #' @param rcomp.prob Level of risk compensation from 0 to 1, where 0 is no risk
 #'        compensation, 0.5 is a 50% reduction in the probability of condom use
@@ -464,8 +433,7 @@ param_cl <- function(nwstats,
                       prep.elig.model = "base",
                       prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
                       prep.class.hr = c(1, 0.69, 0.19, 0.05),
-                      prep.coverage.adol.naive = .4,
-                      prep.coverage.adol.exp = .4,
+                      prep.coverage = .4,
                       prep.cov.method = "curr",
                       prep.cov.rate = 1,
                       prep.tst.int = 90,
@@ -473,20 +441,14 @@ param_cl <- function(nwstats,
                       prep.risk.reassess = TRUE,
                       
                       prep.start.asmm = Inf,
+                      prep.uptake.asmm = .1,
+                      prep.disc.asmm = 1/26,
                       prep.elig.model.asmm = "none",
                       prep.class.prob.asmm = c(.209, .244, .131, .416), 
                       #prep.class.effect.asmm = c(0, 0.31, 0.81, 0.95) - replaced by prep.class.hr (the inverse),
-                      prep.coverage.asmm = .30,
-                      prep.cov.method.asmm = "curr",
-                      prep.cov.rate.asmm = 1,
-                      prep.rcomp.asmm = 1,
-                      prep.tst.int.asmm = 90,
-                      prep.risk.int.asmm = 182,
-                      prep.risk.reassess.asmm = FALSE,
                       prep.delay.asmm = 26,
-                      prepSpell.asmm = TRUE,
-                      prepDrop.asmm = .014337,
                       prep.uaicount.thresh.asmm = 10,
+
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:4,
@@ -742,8 +704,8 @@ control_cl <- function(simno = 1,
                         outdebut.FUN = out_debut_camplc,
                         test.FUN = test_msm,
                         tx.FUN = tx_msm,
+                        prep2.FUN = prep_adol, 
                         prep.FUN = prep_msm,
-                        prep2.FUN = prep_adol,
                         prep.classtrans.FUN = prep_adherence_trans,
                         progress.FUN = progress_msm,
                         agemixing.FUN = agemix_campcl,
