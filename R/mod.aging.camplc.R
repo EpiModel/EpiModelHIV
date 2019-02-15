@@ -28,6 +28,7 @@ aging_camplc <- function(dat, at) {
 
   dat$attr$age <- age
   dat$attr$sqrt.age <- sqrt(age)
+  dat$attr$cubert.age <- age^(1/3)
   dat$attr$of.age<-ifelse(dat$attr$age>=16 & dat$attr$active==1,1,0)
   
   dat$attr$risk.age.group<-floor(dat$attr$age)+(dat$attr$riskg/10)
