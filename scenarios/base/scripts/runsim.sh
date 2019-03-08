@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 ## Job Name 
-#SBATCH --job-name=s80
+#SBATCH --job-name=s50
 
 
 ## Allocation Definition
@@ -29,9 +29,8 @@
 
 
 . /suppscr/csde/sjenness/spack/share/spack/setup-env.sh
-module load r-3.5.0-gcc-8.1.0-bcqjjkd
-module load gcc-8.1.0-gcc-4.4.7-eaajvcy
-
+module load gcc-8.2.0-gcc-8.1.0-sh54wqg
+module load r-3.5.2-gcc-8.2.0-sby3icq
 
 
 Rscript sim.R
