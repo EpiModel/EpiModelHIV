@@ -47,8 +47,8 @@ trans_msm <- function(dat, at){
   prepClass <- dat$attr$prepClass
 
   # Parameters
-  URAI.prob <- dat$param$URAI.prob
-  UIAI.prob <- dat$param$UIAI.prob
+  URAI.prob <- dat$param$URAI.prob * dat$param$URAI.prob.scale
+  UIAI.prob <- dat$param$UIAI.prob * dat$param$UIAI.prob.scale
   acute.rr <- dat$param$acute.rr
   condom.rr <- dat$param$condom.rr
   circ.rr <- dat$param$circ.rr
