@@ -197,12 +197,16 @@ calc_nwstats_msm <- function(time.unit = 7,
     sqrt.adiff.m <- edges.m * mean(c(sqrt.adiff.BB[1], sqrt.adiff.BW[1], sqrt.adiff.WW[1]))
   }
 
+  # degrange term to limt multiple main partners.
+  
+  deg.2p <- 0
+  
   # Compile target stats
   if (method == 2) {
-    stats.m <- c(edges.m, edges.nodemix.m[2:3], totdeg.m.by.dp[c(2:3, 5:6)], sqrt.adiff.m)
+    stats.m <- c(edges.m, edges.nodemix.m[2:3], totdeg.m.by.dp[c(2:3, 5:6)], sqrt.adiff.m, deg.2p)
   }
   if (method == 1) {
-    stats.m <- c(edges.m, totdeg.m.by.dp[2:3], sqrt.adiff.m)
+    stats.m <- c(edges.m, totdeg.m.by.dp[2:3], sqrt.adiff.m, deg.2p)
   }
 
   # Dissolution model
