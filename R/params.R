@@ -338,6 +338,8 @@ param_cl <- function(nwstats,
 
                       URAI.prob = 0.0082 * 1.09,
                       UIAI.prob = 0.0031 * 1.09,
+                      URAI.prob.scale = 1,
+                      UIAI.prob.scale = 1,
                       acute.rr = 6,
                       circ.rr = 0.4,
                       condom.rr = 0.295,
