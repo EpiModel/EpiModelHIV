@@ -31,6 +31,8 @@ prevalence_msm <- function(dat, at) {
   debuted <- dat$attr$debuted
   asmm <- dat$attr$asmm
   age <- floor(dat$attr$age)
+  everAI <- dat$attr$everAI
+  cond.int.active <- dat$attr$cond.int.active
   
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -45,6 +47,7 @@ prevalence_msm <- function(dat, at) {
     dat$epi$num.deb <- rNA
     dat$epi$num.asmm.deb <- rNA
     dat$epi$num.age18.deb <- rNA
+    dat$epi$num.asmm.everAI <- rNA
     dat$epi$s.num <- rNA
     dat$epi$i.num <- rNA
     dat$epi$i.num.B <- rNA
@@ -75,8 +78,11 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prepCov.msm.all <- rNA
     dat$epi$prepCov.msm.all.w.ret <- rNA
     dat$epi$prepCov.asmm <- rNA
-    dat$epi$prepCov.adol.naive <- rNA
-    dat$epi$prepCov.adol.exp <- rNA
+    dat$epi$prepCov.elig.asmm <- rNA 
+    dat$epi$prepCov.all.asmm <- rNA 
+    dat$epi$prepCov.deb.asmm <- rNA 
+    dat$epi$prepCov.everAI.asmm <- rNA
+    dat$epi$prepCov.16.AI.asmm <- rNA
     dat$epi$prepElig <- rNA
     dat$epi$prepStart <- rNA
     dat$epi$prepStart.msm <- rNA
@@ -89,6 +95,21 @@ prevalence_msm <- function(dat, at) {
 
     dat$epi$incid.msm <- rNA
     dat$epi$incid.asmm <- rNA
+    
+    ##condom intervention
+    dat$epi$num.cond.int.active <- rNA
+    dat$epi$num.cond.int.active.asmm <- rNA
+    dat$epi$num.cond.int.active.asmm.AI <- rNA
+    dat$epi$num.cond.int.active.msm <- rNA
+    
+    dat$epi$prev.cond.int.active <- rNA
+    dat$epi$prev.cond.int.active.asmm <- rNA
+    dat$epi$prev.cond.int.active.asmm.AI <- rNA
+    dat$epi$prev.cond.int.active.msm <- rNA
+    
+    dat$epi$incid.cond.int.start <- rNA
+    dat$epi$incid.cond.int.stop <- rNA
+    
   }
 
 
@@ -103,6 +124,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$debuted.asmm[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.asmm.deb[at] <- sum(active == 1 & debuted == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$num.age18.deb[at] <- sum(active == 1 & debuted ==1 & age == 18, na.rm = TRUE)
+  dat$epi$num.asmm.everAI[at] <- sum(active == 1 & everAI == 1 & asmm == 1, na.rm = TRUE)
   dat$epi$s.num[at] <- sum(active == 1 & status == 0, na.rm = TRUE)
   dat$epi$i.num[at] <- sum(active == 1 & status == 1, na.rm = TRUE)
   dat$epi$i.num.B[at] <- sum(active == 1 & status == 1 & race == "B", na.rm = TRUE)
@@ -132,11 +154,28 @@ prevalence_msm <- function(dat, at) {
   } else {
     dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] / sum(active == 1 & prepStat == 1, na.rm = TRUE)
   }
- 
+  
+  dat$epi$prepCov.elig.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$prepElig.asmm[at])
+  dat$epi$prepCov.16.AI.asmm[at] <- (dat$epi$prepCurr.asmm[at] / sum(active == 1 & asmm == 1 & everAI ==1 & age >= 16, na.rm = TRUE ))
+  dat$epi$prepCov.all.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$num.asmm[at])
+  dat$epi$prepCov.deb.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$num.asmm.deb[at])
+  dat$epi$prepCov.everAI.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$num.asmm.everAI[at])
+  
+  
   dat$epi$i.prev.msm[at] <- sum(active == 1 & status ==1 & asmm == 0, na.rm = TRUE) / dat$epi$num.msm[at]
   dat$epi$i.prev.asmm[at] <- sum(active == 1 & status ==1 & debuted == 1 & asmm == 1, na.rm = TRUE) / dat$epi$num.asmm.deb[at]
   dat$epi$i.prev.age18[at] <- sum(active == 1 & status ==1 & debuted == 1 & age == 18, na.rm = TRUE) / dat$epi$num.age18.deb[at]
   dat$epi$prepStart[at] <- dat$epi$prepStart.msm[at] + dat$epi$prepStart.asmm[at]
+  
+  dat$epi$num.cond.int.active[at] <- sum(active == 1 & cond.int.active == 1, na.rm = TRUE)
+  dat$epi$num.cond.int.active.asmm[at] <- sum(active == 1 & cond.int.active ==1 & asmm == 1, na.rm = TRUE)
+  dat$epi$num.cond.int.active.asmm.AI[at] <- sum(active == 1 & cond.int.active ==1 & everAI ==1 & asmm == 1, na.rm = TRUE)
+  dat$epi$num.cond.int.active.msm[at] <- sum(active == 1 & cond.int.active ==1 & asmm == 0, na.rm = TRUE)
+  
+  dat$epi$prev.cond.int.active[at] <- dat$epi$num.cond.int.active[at] / sum(active == 1, na.rm = TRUE)
+  dat$epi$prev.cond.int.active.asmm[at] <- dat$epi$num.cond.int.active.asmm[at] / sum(active == 1 & asmm == 1, na.rm = TRUE)
+  dat$epi$prev.cond.int.active.asmm.AI[at] <-  dat$epi$num.cond.int.active.asmm.AI[at] / sum(active == 1 & everAI ==1 & asmm == 1, na.rm = TRUE)
+  dat$epi$prev.cond.int.active.msm[at] <- dat$epi$num.cond.int.active.msm[at] / sum(active == 1 & asmm == 0, na.rm = TRUE)
 
   return(dat)
 }
