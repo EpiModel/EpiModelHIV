@@ -24,7 +24,7 @@ out_debut_camplc <- function(dat, at) {
   dat$attr$yamsm <- ifelse(dat$attr$age >= 19 & dat$attr$age < 26,1,0)
   dat$attr$oamsm <- ifelse(dat$attr$age >= 26,1,0)
   
-  newout<-which(dat$attr$age <= dat$attr$out.age + ((dat$param$time.unit/365)/2) &  dat$attr$age >= dat$attr$out.age - ((dat$param$time.unit/365)/2) & dat$att$out == 0)
+  newout<-which(dat$attr$age <= dat$attr$out.age + ((dat$param$time.unit/365)/2) &  dat$attr$age >= dat$attr$out.age - ((dat$param$time.unit/365)/2) & dat$attr$out == 0)
   oldout<-which(dat$attr$age > dat$attr$out.age & dat$attr$debuted == 0)
   
   dat$attr$out[newout] <- 1
