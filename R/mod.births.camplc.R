@@ -95,6 +95,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$age[newIds] <- rep(dat$param$birth.age,nBirths)
   dat$attr$sqrt.age[newIds] <- rep(sqrt(dat$param$birth.age),nBirths)
   dat$attr$cubert.age[newIds] <- rep(dat$param$birth.age^(1/3),nBirths)
+  dat$attr$age.temp[newIds] <- dat$attr$age[newIds]
   
   #Set out age for new births and debut for new births 
   
@@ -210,6 +211,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$prepClass[newIds] <- rep(NA, nBirths)
   dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
   dat$attr$ever.adult.prep[newIds] <- rep(0, nBirths)
+  dat$attr$hcv.time[newIds] <- sample(1:365, nBirths, replace = TRUE) + at
 
   
   
@@ -224,6 +226,11 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
     x<-c(dat$temp$max.uid - nBirths + i ,rep(0,26))
     dat$riskhist <- rbind(dat$riskhist,x,make.row.names = FALSE)
   }
+  
+  
+ # Condom education
+  dat$attr$cond.int.active[newIds] <- rep(0, nBirths)
+  dat$attr$cond.int.active.dur[newIds] <- rep(0, nBirths)
   
   return(dat)
 }
