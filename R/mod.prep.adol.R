@@ -19,20 +19,21 @@ prep_adol <- function(dat, at) {
   ##Attributes
   active <- dat$attr$active
   status <- dat$attr$status
-  race<- dat$attr$race
+  race <- dat$attr$race
   asmm <- dat$attr$asmm
-  age<- dat$attr$age
+  age <- dat$attr$age
 
 
   diag.status <- dat$attr$diag.status
-  debuted<-dat$attr$debuted
-  debuted.time<-dat$attr$has.debuted.time
-  active.time<-dat$attr$active.time
-  AI.time<-dat$attr$AI.time
+  debuted <- dat$attr$debuted
+  debuted.time <- dat$attr$has.debuted.time
+  active.time <- dat$attr$active.time
+  AI.time <- dat$attr$AI.time
   lnt <- dat$attr$last.neg.test
-  everAI<-dat$attr$everAI
-  of.age<-dat$attr$of.age
-  uaicount<-dat$attr$uaicount
+  everAI <- dat$attr$everAI
+  of.age <- dat$attr$of.age
+  uaicount <- dat$attr$uaicount
+  hcv.time <- dat$attr$hcv.time
  
   prepElig.asmm <- dat$attr$prepElig.asmm
   prepStat <- dat$attr$prepStat
@@ -46,8 +47,8 @@ prep_adol <- function(dat, at) {
 ##PrEP params.
   #Uniform.
   prep.elig.model <- dat$param$prep.elig.model.asmm
-  prep.delay<-dat$param$prep.delay.asmm
-  prep.uaicount.thresh<-dat$param$prep.uaicount.thresh.asmm
+  prep.delay <- dat$param$prep.delay.asmm
+  prep.uaicount.thresh <- dat$param$prep.uaicount.thresh.asmm
 
   prep.uptake.asmm <- dat$param$prep.uptake.asmm
   prep.disc.asmm <- dat$param$prep.disc.asmm
@@ -130,6 +131,10 @@ prep_adol <- function(dat, at) {
         c1 <- ifelse (uaicount > prep.uaicount.thresh,1,0)
         c2 <- of.age
         c3 <- ifelse (at - AI.time > prep.delay,1,0)
+      } else if (prep.elig.model == "adol.AI.older.int") {
+        c1 <- everAI
+        c2 <- of.age
+        c3 <- ifelse (at == hcv.time,1,0)
       }
       
      #Check length of c1 and idsEligStart 
@@ -223,8 +228,8 @@ prep_adol <- function(dat, at) {
   dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
   dat$attr$prepStart.time<-prepStart.time
+  dat$att$hcv.time[dat$att$hcv.time==at] <- at + 365
 
-  
   # Summary Statistics
   dat$epi$prepCov.asmm[at] <- prepCov
   dat$epi$prepStart.asmm[at] <- length(idsStart)
