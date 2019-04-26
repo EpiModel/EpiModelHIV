@@ -110,11 +110,11 @@ prep_msm <- function(dat, at) {
 
   ## Initiation ----------------------------------------------------------------
 
-  ##NEED COV AMONG ELIGIBLE AND TOTAL WITH AND WITHOUT RETAINED
+  ##COV AMONG ELIGIBLE AND TOTAL WITH AND WITHOUT RETAINED
   
 
     prepCov.msm.elig <- (sum(prepStat == 1 & prepStat.asmm == 0 & asmm == 0, na.rm = TRUE)) / (sum(prepElig == 1 & asmm == 0, na.rm = TRUE))
-    prepCov.msm.elig.w.ret <- (sum(prepStat == 1 & prepElig ==1 & asmm == 0, na.rm = TRUE)) / (sum(prepElig == 1 & asmm == 0, na.rm = TRUE))
+    prepCov.msm.elig.w.ret <- (sum(prepStat == 1 & asmm == 0, na.rm = TRUE)) / (sum(prepElig == 1 & asmm == 0, na.rm = TRUE))
     prepCov.msm.all<- (sum(prepStat == 1 & prepStat.asmm == 0 & asmm == 0, na.rm = TRUE)) / (sum(asmm == 0, na.rm = TRUE))
     prepCov.msm.all.w.ret<- (sum(prepStat == 1 & asmm == 0, na.rm = TRUE)) / (sum(asmm == 0, na.rm = TRUE))
 
