@@ -91,7 +91,8 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "sqrt.age")
   dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "cubert.age")
   dat$attr$age <- get.vertex.attribute(nw[[1]], "age")
-  dat$attr$of.age<-ifelse(dat$attr$age >= 16,1,0)
+  dat$attr$of.age <- ifelse(dat$attr$age >= 16,1,0)
+  dat$attr$age.temp <- rep(NA,num)
 
   # Out in the population
   dat$attr$out <- get.vertex.attribute(nw[[1]], "out")
@@ -145,6 +146,7 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$attr$prepEver <- rep(0, num)
   dat$attr$ever.adol.prep <- rep(0, num)
   dat$attr$ever.adult.prep <- rep(0, num)
+  dat$attr$hcv.time <- sample(1:365, num, replace=TRUE)
 
   
   # Risk history lists
@@ -217,6 +219,10 @@ initialize_camplc <- function(x, param, init, control, s) {
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
 
   dat <- prevalence_msm(dat, at = 1)
+  
+  #Condom education
+  dat$attr$cond.int.active <- rep(0, num)
+  dat$attr$cond.int.active.dur <- rep(0, num)
 
   class(dat) <- "dat"
   return(dat)
