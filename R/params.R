@@ -173,6 +173,21 @@
 #'        probability of condom use in a white-white one-off partnerships.
 #' @param cond.always.prob.corr Correlation coefficient for probability of always
 #'        using condoms in both casual and one-off
+#' @param cond.asmm.always.prob Fraction of ASMM that always use a condom.
+#' @param cond.asmm.BB.prob Probability of condom use per act in a black-black ASMM relationship.
+#' @param cond.asmm.BW.prob Probability of condom use per act in a black-white ASMM relationship.
+#' @param cond.asmm.WW.prob Probability of condom use per act in a white-white ASMM relationship.
+#' @param cond.asmm.by.age IF = TRUE age specific condom use probabilities are used for ASMM.
+#' @param cond.asmm.13.15 IF cond.asmm.by.age = TRUE, the probability that a 13-15 year old ASMM uses a condom.
+#' @param cond.asmm.16.17 IF cond.asmm.by.age = TRUE, the probability that a 16-17 year old ASMM uses a condom.
+#' @param cond.asmm.18  IF cond.asmm.by.age = TRUE, the probability that an 18 year old ASMM uses a condom.
+#' @param cond.edu IF TRUE a adolecent condom use intervention is used.
+#' @param sex.exp.edu If TRUE ASMM must have experienced AI for the education intervention to have an impact.
+#' @param cond.edu.start IF cond.edu = TRUE the start time for the adolecent condom use intervention. 
+#' @param cond.edu.start.age The age of ASMM when they recieve the intervention
+#' @param cond.post.edu.prob IF cond.edu = TRUE the condom use probability for those under the intervention.
+#' @param cond.edu.effect.dur IF cond.edu = TRUE the duration of the adolecent condom use intervention effect (carries over into adult Pers and Inst). 
+#' @param cond.edu.cov IF cond.edu = TRUE the fraction of eligible ASMM to recieve the intervention.
 #' @param cond.rr.BB Condom probability scaler for black-black partnerships for
 #'        model calibration purposes.
 #' @param cond.rr.BW Condom probability scaler for black-white partnerships for
@@ -266,6 +281,7 @@
 param_cl <- function(nwstats,
                       race.method = 1,
                       FU=FALSE,
+                      agemix=TRUE,
                       last.neg.test.B.int = 301,
                       last.neg.test.W.int = 315,
                       
@@ -413,6 +429,20 @@ param_cl <- function(nwstats,
                       cond.asmm.BB.prob = 0.54,
                       cond.asmm.BW.prob = 0.54,
                       cond.asmm.WW.prob = 0.54,
+                     
+                      cond.asmm.by.age = TRUE,
+                      cond.asmm.13.15 = .28,
+                      cond.asmm.16.17 = .38,
+                      cond.asmm.18 = .547,
+                     
+                      
+                      cond.edu = TRUE,
+                      cond.edu.start = 2,
+                      sex.exp.edu = TRUE,
+                      cond.edu.cov = 0.25,
+                      cond.edu.effect.dur = 5, 
+                      cond.post.edu.rr = 1.3,
+                      cond.edu.at.age = 18,
                       
        
                       cond.rr.BB = 1,
@@ -443,7 +473,7 @@ param_cl <- function(nwstats,
                       prep.risk.reassess = TRUE,
                       
                       prep.start.asmm = Inf,
-                      prep.uptake.asmm = .1,
+                      prep.uptake.asmm = .5,
                       prep.disc.asmm = 1/26,
                       prep.elig.model.asmm = "none",
                       prep.class.prob.asmm = c(.209, .244, .131, .416), 
@@ -665,6 +695,7 @@ init_cl <- function(nwstats,
 #' @param disclose.FUN Module function for HIV status disclosure.
 #' @param acts.FUN Module function to simulate the number of sexual acts within
 #'        partnerships.
+#' @param condoms_edu.FUN Modulule function to adjust condom use probabilities based on a condom use intervention.
 #' @param condoms.FUN Module function to simulate condom use within acts.
 #' @param riskhist.FUN Module function to calculate risk history for uninfected
 #'        persons in the population.
@@ -718,6 +749,7 @@ control_cl <- function(simno = 1,
                         resim_nets.FUN = simnet_msm,
                         disclose.FUN = disclose_msm,
                         acts.FUN = acts_msm,
+                        condoms_edu.FUN = condoms_edu_campcl,
                         condoms.FUN = condoms_msm,
                         riskhist.FUN = riskhist_msm,
                         riskhistasmm.FUN = riskhist_adol,
