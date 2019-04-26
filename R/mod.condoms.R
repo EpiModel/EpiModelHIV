@@ -30,11 +30,16 @@ condoms_msm <- function(dat, at) {
     uid <- dat$attr$uid
     diag.status <- dat$attr$diag.status
     race <- dat$attr$race
+    age <- dat$attr$age
+    cond.int.active <- dat$attr$cond.int.active
 
     # Parameters
     cond.rr.BB <- dat$param$cond.rr.BB
     cond.rr.BW <- dat$param$cond.rr.BW
     cond.rr.WW <- dat$param$cond.rr.WW
+    cond.asmm.by.age <- dat$param$cond.asmm.by.age
+    cond.edu <- dat$param$cond.edu
+    cond.post.edu.rr <- dat$param$cond.post.edu.rr
 
     if (type == "main") {
       cond.BB.prob <- dat$param$cond.main.BB.prob
@@ -49,6 +54,7 @@ condoms_msm <- function(dat, at) {
       cond.BB.prob <- dat$param$cond.pers.BB.prob
       cond.BW.prob <- dat$param$cond.pers.BW.prob
       cond.WW.prob <- dat$param$cond.pers.WW.prob
+      cond.post.edu.prob <- dat$param$cond.post.edu.prob
       diag.beta <- dat$param$cond.diag.pers.beta
       discl.beta <- dat$param$cond.discl.pers.beta
       cond.always <- dat$attr$cond.always.pers
@@ -58,6 +64,10 @@ condoms_msm <- function(dat, at) {
       cond.BB.prob <- dat$param$cond.asmm.BB.prob
       cond.BW.prob <- dat$param$cond.asmm.BW.prob
       cond.WW.prob <- dat$param$cond.asmm.WW.prob
+      cond.13.15 <- dat$param$cond.asmm.13.15
+      cond.16.17 <- dat$param$cond.asmm.16.17
+      cond.18 <- dat$param$cond.asmm.18
+      cond.post.edu.prob <- dat$param$cond.post.edu.prob
       diag.beta <- dat$param$cond.diag.asmm.beta
       discl.beta <- dat$param$cond.discl.asmm.beta
       cond.always <- dat$attr$cond.always.asmm
@@ -67,6 +77,7 @@ condoms_msm <- function(dat, at) {
       cond.BB.prob <- dat$param$cond.inst.BB.prob
       cond.BW.prob <- dat$param$cond.inst.BW.prob
       cond.WW.prob <- dat$param$cond.inst.WW.prob
+      cond.post.edu.prob <- dat$param$cond.post.edu.prob
       diag.beta <- dat$param$cond.diag.inst.beta
       discl.beta <- dat$param$cond.discl.inst.beta
       cond.always <- dat$attr$cond.always.inst
@@ -78,6 +89,7 @@ condoms_msm <- function(dat, at) {
 
     ## Process ##
 
+
     # Base condom probs
     race.p1 <- race[elt[, 1]]
     race.p2 <- race[elt[, 2]]
@@ -85,8 +97,80 @@ condoms_msm <- function(dat, at) {
     cond.prob <- (num.B == 2) * (cond.BB.prob * cond.rr.BB) +
       (num.B == 1) * (cond.BW.prob * cond.rr.BW) +
       (num.B == 0) * (cond.WW.prob * cond.rr.WW)
+    
 
+    age.p1 <- pmin(floor(age[elt[, 1]]), floor(age[elt[, 2]]))
+    age.p2 <- pmax(floor(age[elt[, 1]]), floor(age[elt[, 2]]))
+    
+    age.p1 <- ifelse(age.p1 < 16,1,
+                     ifelse(age.p1 == 16 | age.p1 == 17,2,
+                            ifelse(age.p1 == 18,3,99)))
+    
+    age.p2 <- ifelse(age.p2 < 16,1,
+                     ifelse(age.p2 == 16 | age.p2 == 17,2,
+                            ifelse(age.p2 == 18,3,99)))
+    
+    # Change the probabilities for relationships with an asmm if using age specific probabilities  
+    if (cond.asmm.by.age == TRUE & ptype == 3){
+      
+    cond.prob <- ifelse(age.p1 == 1 & age.p2 == 1, cond.13.15,
+           ifelse(age.p1 == 1 & age.p2 == 2, (cond.13.15 + cond.16.17)/2,
+                  ifelse(age.p1 == 1 & age.p2 == 3, (cond.13.15 + cond.18)/2,
+                         ifelse(age.p1 == 1 & age.p2 == 99, cond.13.15,
+                                ifelse(age.p1 == 2 & age.p2 == 2, cond.16.17,
+                                       ifelse(age.p1 == 2 & age.p2 == 3, (cond.16.17 + cond.16.17)/2,
+                                              ifelse(age.p1 == 2 & age.p2 == 99, cond.16.17,
+                                                     ifelse(age.p1 == 3 & (age.p2 == 3 | age.p2 == 99), cond.18 , cond.prob))))))))
 
+    }
+    
+    
+    if (cond.asmm.by.age == TRUE & cond.edu == TRUE & (ptype == 2 | ptype == 3 | ptype == 4)){
+      
+      p1 <- pmin(elt[, 1],elt[, 2])
+      p2 <- pmax(elt[, 1],elt[, 2])
+      p1.c <- cond.int.active[p1]
+      p2.c <- cond.int.active[p2]
+      
+      # Update condom probs for education effect
+      
+      cond.prob <-        ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 1 & p2.c ==0, (cond.13.15 * cond.post.edu.rr + cond.13.15)/2,
+                          ifelse(age.p1 == 1 & p1.c == 0 & age.p2 == 1 & p2.c ==1, (cond.13.15 * cond.post.edu.rr + cond.13.15)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 1 & p2.c ==1, (cond.13.15 * cond.post.edu.rr),
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 2 & p2.c == 0, (cond.13.15 * cond.post.edu.rr + cond.16.17)/2,
+                          ifelse(age.p1 == 1 & p1.c == 0 & age.p2 == 2 & p2.c == 1, (cond.13.15 + cond.16.17 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 2 & p2.c == 1, (cond.13.15 * cond.post.edu.rr + cond.16.17 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 3 & p2.c == 0, (cond.13.15 * cond.post.edu.rr + cond.18)/2,
+                          ifelse(age.p1 == 1 & p1.c == 0 & age.p2 == 3 & p2.c == 1, (cond.13.15 + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 3 & p2.c == 1, (cond.13.15 * cond.post.edu.rr + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 99 & p2.c == 0, (cond.13.15 * cond.post.edu.rr + cond.WW.prob)/2,
+                          ifelse(age.p1 == 1 & p1.c == 0 & age.p2 == 99 & p2.c == 1, (cond.13.15 + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 1 & p1.c == 1 & age.p2 == 99 & p2.c == 1, (cond.13.15 * cond.post.edu.rr + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 2 & p2.c == 0, (cond.16.17 * cond.post.edu.rr + cond.16.17)/2,
+                          ifelse(age.p1 == 2 & p1.c == 0 & age.p2 == 2 & p2.c == 1, (cond.16.17 + cond.16.17 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 2 & p2.c == 1, (cond.16.17 * cond.post.edu.rr),
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 3 & p2.c == 0, (cond.16.17 * cond.post.edu.rr + cond.18)/2,
+                          ifelse(age.p1 == 2 & p1.c == 0 & age.p2 == 3 & p2.c == 1, (cond.16.17 + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 3 & p2.c == 1, (cond.16.17 * cond.post.edu.rr + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 99 & p2.c == 0, (cond.16.17 * cond.post.edu.rr + cond.WW.prob)/2,
+                          ifelse(age.p1 == 2 & p1.c == 0 & age.p2 == 99 & p2.c == 1, (cond.16.17 + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 2 & p1.c == 1 & age.p2 == 99 & p2.c == 1, (cond.16.17 * cond.post.edu.rr + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 3 & p1.c == 1 & age.p2 == 3 & p2.c == 0, (cond.18 * cond.post.edu.rr + cond.18)/2,
+                          ifelse(age.p1 == 3 & p1.c == 0 & age.p2 == 3 & p2.c == 1, (cond.18 + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 3 & p1.c == 1 & age.p2 == 3 & p2.c == 1, (cond.18 * cond.post.edu.rr + cond.18 * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 3 & p1.c == 1 & age.p2 == 99 & p2.c == 0, (cond.18 * cond.post.edu.rr + cond.WW.prob)/2,
+                          ifelse(age.p1 == 3 & p1.c == 0 & age.p2 == 99 & p2.c == 1, (cond.18 + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 3 & p1.c == 1 & age.p2 == 99 & p2.c == 1, (cond.18 * cond.post.edu.rr + cond.WW.prob * cond.post.edu.rr)/2,
+                          ifelse(age.p1 == 99 & p1.c == 1 & age.p2 == 99 & p2.c == 0, (cond.WW.prob * cond.post.edu.rr + cond.WW.prob)/2, 
+                          ifelse(age.p1 == 99 & p1.c == 0 & age.p2 == 99 & p2.c == 1, (cond.WW.prob + cond.WW.prob * cond.post.edu.rr)/2, 
+                          ifelse(age.p1 == 99 & p1.c == 1 & age.p2 == 99 & p2.c == 1, (cond.WW.prob * cond.post.edu.rr),cond.prob))))))))))))))))))))))))))))))
+      
+    }
+    
+    
+    
+    
+ 
     # Transform to UAI logit
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))
