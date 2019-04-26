@@ -4,28 +4,29 @@
 \alias{param_cl}
 \title{Epidemic Model Parameters}
 \usage{
-param_cl(nwstats, race.method = 1, FU = FALSE, last.neg.test.B.int = 301,
-  last.neg.test.W.int = 315, last.neg.test.B.int.asmm = 2900,
-  last.neg.test.W.int.asmm = 2900, mean.test.B.int = 301,
-  mean.test.W.int = 315, mean.test.B.int.asmm = 2900,
-  mean.test.W.int.asmm = 2900, testing.pattern = "memoryless",
-  test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
-  tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
-  tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
-  tx.halt.W.prob = 0.0071, tx.reinit.B.prob = 0.00066,
-  tx.reinit.W.prob = 0.00291, tx.init.B.prob.asmm = 0.092,
-  tx.init.W.prob.asmm = 0.127, tx.halt.B.prob.asmm = 0.0102,
-  tx.halt.W.prob.asmm = 0.0071, tx.reinit.B.prob.asmm = 0.00066,
-  tx.reinit.W.prob.asmm = 0.00291, max.time.off.tx.full.int = 520 * 7,
-  max.time.on.tx.part.int = 52 * 15 * 7, max.time.off.tx.part.int = 520 * 7,
-  vl.acute.rise.int = 45, vl.acute.peak = 6.886, vl.acute.fall.int = 45,
-  vl.set.point = 4.5, vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 *
-  7, vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
-  full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
-  part.supp.down.slope = 0.25, part.supp.up.slope = 0.25, birth.age = 13,
-  b.B.rate.asmm = 0.0001348571, b.W.rate.asmm = 0.0001348571,
-  b.method = "fixed", URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 *
-  1.09, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
+param_cl(nwstats, race.method = 1, FU = FALSE, agemix = TRUE,
+  last.neg.test.B.int = 301, last.neg.test.W.int = 315,
+  last.neg.test.B.int.asmm = 2900, last.neg.test.W.int.asmm = 2900,
+  mean.test.B.int = 301, mean.test.W.int = 315,
+  mean.test.B.int.asmm = 2900, mean.test.W.int.asmm = 2900,
+  testing.pattern = "memoryless", test.window.int = 21,
+  tt.traj.B.prob = c(0.077, 0, 0.356, 0.567), tt.traj.W.prob = c(0.052, 0,
+  0.331, 0.617), tx.init.B.prob = 0.092, tx.init.W.prob = 0.127,
+  tx.halt.B.prob = 0.0102, tx.halt.W.prob = 0.0071,
+  tx.reinit.B.prob = 0.00066, tx.reinit.W.prob = 0.00291,
+  tx.init.B.prob.asmm = 0.092, tx.init.W.prob.asmm = 0.127,
+  tx.halt.B.prob.asmm = 0.0102, tx.halt.W.prob.asmm = 0.0071,
+  tx.reinit.B.prob.asmm = 0.00066, tx.reinit.W.prob.asmm = 0.00291,
+  max.time.off.tx.full.int = 520 * 7, max.time.on.tx.part.int = 52 * 15 * 7,
+  max.time.off.tx.part.int = 520 * 7, vl.acute.rise.int = 45,
+  vl.acute.peak = 6.886, vl.acute.fall.int = 45, vl.set.point = 4.5,
+  vl.aids.onset.int = 520 * 7, vl.aids.int = 52 * 2 * 7, vl.fatal = 7,
+  vl.full.supp = 1.5, vl.part.supp = 3.5, full.supp.down.slope = 0.25,
+  full.supp.up.slope = 0.25, part.supp.down.slope = 0.25,
+  part.supp.up.slope = 0.25, birth.age = 13, b.B.rate.asmm = 0.0001348571,
+  b.W.rate.asmm = 0.0001348571, b.method = "fixed", URAI.prob = 0.0082 *
+  1.09, UIAI.prob = 0.0031 * 1.09, URAI.prob.scale = 1,
+  UIAI.prob.scale = 1, acute.rr = 6, circ.rr = 0.4, condom.rr = 0.295,
   disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
   disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
   disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
@@ -51,7 +52,11 @@ param_cl(nwstats, race.method = 1, FU = FALSE, last.neg.test.B.int = 301,
   cond.inst.BB.prob = 0.27, cond.inst.BW.prob = 0.27,
   cond.inst.WW.prob = 0.27, cond.always.prob.corr = 0.5,
   cond.asmm.always.prob = 0, cond.asmm.BB.prob = 0.54,
-  cond.asmm.BW.prob = 0.54, cond.asmm.WW.prob = 0.54, cond.rr.BB = 1,
+  cond.asmm.BW.prob = 0.54, cond.asmm.WW.prob = 0.54,
+  cond.asmm.by.age = TRUE, cond.asmm.13.15 = 0.28, cond.asmm.16.17 = 0.38,
+  cond.asmm.18 = 0.547, cond.edu = TRUE, cond.edu.start = 2,
+  sex.exp.edu = TRUE, cond.edu.cov = 0.25, cond.edu.effect.dur = 5,
+  cond.post.edu.rr = 1.3, cond.edu.at.age = 18, cond.rr.BB = 1,
   cond.rr.BW = 1, cond.rr.WW = 1, cond.diag.main.beta = -0.67,
   cond.discl.main.beta = -0.85, cond.diag.pers.beta = -0.67,
   cond.discl.pers.beta = -0.85, cond.diag.inst.beta = -0.67,
@@ -59,18 +64,14 @@ param_cl(nwstats, race.method = 1, FU = FALSE, last.neg.test.B.int = 301,
   cond.discl.asmm.beta = -0.85, vv.iev.BB.prob = 0.42,
   vv.iev.BW.prob = 0.56, vv.iev.WW.prob = 0.49, prep.start = Inf,
   prep.elig.model = "base", prep.class.prob = c(0.211, 0.07, 0.1, 0.619),
-  prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage.adol.naive = 0.4,
-  prep.coverage.adol.exp = 0.4, prep.cov.method = "curr",
-  prep.cov.rate = 1, prep.tst.int = 90, prep.risk.int = 182,
-  prep.risk.reassess = TRUE, prep.start.asmm = Inf,
+  prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0.4,
+  prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
+  prep.risk.int = 182, prep.risk.reassess = TRUE, prep.start.asmm = Inf,
+  prep.uptake.asmm = 0.5, prep.disc.asmm = 1/26,
   prep.elig.model.asmm = "none", prep.class.prob.asmm = c(0.209, 0.244,
-  0.131, 0.416), prep.coverage.asmm = 0.3, prep.cov.method.asmm = "curr",
-  prep.cov.rate.asmm = 1, prep.rcomp.asmm = 1, prep.tst.int.asmm = 90,
-  prep.risk.int.asmm = 182, prep.risk.reassess.asmm = FALSE,
-  prep.delay.asmm = 26, prepSpell.asmm = TRUE, prepDrop.asmm = 0.014337,
-  prep.uaicount.thresh.asmm = 10, rcomp.prob = 0, rcomp.adh.groups = 0:4,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE,
-  out.age.prob = nwstats$out.age.prob,
+  0.131, 0.416), prep.delay.asmm = 26, prep.uaicount.thresh.asmm = 10,
+  rcomp.prob = 0, rcomp.adh.groups = 0:4, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, out.age.prob = nwstats$out.age.prob,
   debut.entry.prob = nwstats$debut.entry.prob,
   debut.prob = nwstats$debut.prob,
   role.B.prob.asmm = nwstats$role.B.prob.asmm,
@@ -319,6 +320,32 @@ probability of condom use in a white-white one-off partnerships.}
 \item{cond.always.prob.corr}{Correlation coefficient for probability of always
 using condoms in both casual and one-off}
 
+\item{cond.asmm.always.prob}{Fraction of ASMM that always use a condom.}
+
+\item{cond.asmm.BB.prob}{Probability of condom use per act in a black-black ASMM relationship.}
+
+\item{cond.asmm.BW.prob}{Probability of condom use per act in a black-white ASMM relationship.}
+
+\item{cond.asmm.WW.prob}{Probability of condom use per act in a white-white ASMM relationship.}
+
+\item{cond.asmm.by.age}{IF = TRUE age specific condom use probabilities are used for ASMM.}
+
+\item{cond.asmm.13.15}{IF cond.asmm.by.age = TRUE, the probability that a 13-15 year old ASMM uses a condom.}
+
+\item{cond.asmm.16.17}{IF cond.asmm.by.age = TRUE, the probability that a 16-17 year old ASMM uses a condom.}
+
+\item{cond.asmm.18}{IF cond.asmm.by.age = TRUE, the probability that an 18 year old ASMM uses a condom.}
+
+\item{cond.edu}{IF TRUE a adolecent condom use intervention is used.}
+
+\item{cond.edu.start}{IF cond.edu = TRUE the start time for the adolecent condom use intervention.}
+
+\item{sex.exp.edu}{If TRUE ASMM must have experienced AI for the education intervention to have an impact.}
+
+\item{cond.edu.cov}{IF cond.edu = TRUE the fraction of eligible ASMM to recieve the intervention.}
+
+\item{cond.edu.effect.dur}{IF cond.edu = TRUE the duration of the adolecent condom use intervention effect (carries over into adult Pers and Inst).}
+
 \item{cond.rr.BB}{Condom probability scaler for black-black partnerships for
 model calibration purposes.}
 
@@ -375,8 +402,8 @@ low adherence, medium adherence, or high adherence groups (from Liu).}
 \item{prep.class.hr}{The hazard ratio for infection per act associated with each
 level of adherence (from Grant).}
 
-\item{prep.coverage.adol.naive}{The proportion of the eligible MSM population who did 
-not use prep as an asmm that start PrEP once they become eligible.}
+\item{prep.coverage}{The proportion of the eligible MSM population who used PrEP as an ASMM
+and start PrEP once they become eligible.}
 
 \item{prep.cov.method}{The method for calculating PrEP coverage, with options
 of \code{"curr"} to base the numerator on the number of people currently
@@ -397,6 +424,10 @@ each testing visit.}
 
 \item{prep.start.asmm}{Time step at which the PrEP intervention should start.}
 
+\item{prep.uptake.asmm}{The per timestep hazard of starting adolecent PrEP given eligibility.}
+
+\item{prep.disc.asmm}{The per timestep hazard of deicontinuing adolecent PrEP given eligibility.}
+
 \item{prep.elig.model.asmm}{Modeling approach for determining who is eligible for
 PrEP. Current options are limited to: \code{none, adol.entry, adol.debuted, 
 adol.AI, adol.entry.older, adol.debuted.older, adol.AI.older,
@@ -406,21 +437,13 @@ adol.riskhist.older, adol.riskhist.time, adol.riskhist.older.time}
 for all persons who have never been on PrEP or those who have cycled off
 see: prepSpell if \code{TRUE} and are disease-susceptible.}
 
-\item{prep.cov.method.asmm}{The method for calculating PrEP coverage, with options
-of \code{"curr"} to base the numerator on the number of people currently
-on PrEP and \code{"ever"} to base it on the number of people ever on
-PrEP for asmm.}
+\item{prep.class.prob.asmm}{The frequency of being in a low, medium, or high class
+of adherence to PrEP for white asmm.}
 
-\item{prep.tst.int.asmm}{Testing interval for asmm who are actively on PrEP. This
-overrides the mean testing interval parameters.}
+\item{prep.delay.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.}
 
-\item{prep.risk.int.asmm}{Time window for assessment of risk eligibility for PrEP
-in days.}
-
-\item{prep.risk.reassess.asmm}{If \code{TRUE}, reassess eligibility for PrEP at
-each testing visit.}
-
-\item{prepSpell.asmm}{If \code{TRUE}, there is a constant hazard from dropping PrEP.}
+\item{prep.uaicount.thresh.asmm}{The number of UAI a black asmm must have to initiate prep 
+if PreP eligibility is based on UAI counts.}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
@@ -446,46 +469,9 @@ partnerships only, versus all partnerships.}
 \item{ai.scale}{General relative scaler for all act rates for model
 calibration.}
 
-\item{prep.coverage}{The proportion of the eligible MSM population who used PrEP as an ASMM
-and start PrEP once they become eligible.}
+\item{cond.edu.start.age}{The age of ASMM when they recieve the intervention}
 
-\item{prep.efficacy.asmm}{The per-contact efficacy of PrEP to prevent infection if
-used (parameter not currently used).}
-
-\item{prep.class.prob.b.asmm}{The frequency of being in a low, medium, or high class
-of adherence to PrEP for black asmm.}
-
-\item{prep.class.prob.w.asmm}{The frequency of being in a low, medium, or high class
-of adherence to PrEP for white asmm.}
-
-\item{prep.class.effect.asmm}{The functional effectiveness of PrEP conditional on
-PrEP class.}
-
-\item{prep.coverage.b.asmm}{The proportion of the eligible population who are start
-PrEP once they become eligible for black asmm.}
-
-\item{prep.coverage.w.asmm}{The proportion of the eligible population who are start
-PrEP once they become eligible for white asmm.}
-
-\item{prep.cov.rate.b.asmm}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start for black asmm.}
-
-\item{prep.cov.rate.w.asmm}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start for white asmm.}
-
-\item{prep.delay.b.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for black asmm.}
-
-\item{prep.delay.w.asmm}{The number of timesteps between becomeing eligible for PreP and starting PrEP for white asmm.}
-
-\item{PrepDrop.b.asmm}{The hazard for dropping PrEP for black asmm given prepSpell.asmm==TRUE.}
-
-\item{PrepDrop.w.asmm}{The hazard for dropping PrEP for white asmm given prepSpell.asmm==TRUE.}
-
-\item{prep.uaicount.thresh.b.asmm}{The number of UAI a black asmm must have to initiate prep 
-if PreP eligibility is based on UAI counts.}
-
-\item{prep.uaicount.thresh.w.asmm}{The number of UAI a white asmm must have to initiate prep 
-if PreP eligibility is based on UAI counts.}
+\item{cond.post.edu.prob}{IF cond.edu = TRUE the condom use probability for those under the intervention.}
 }
 \value{
 A list object of class \code{param_msm}, which can be passed to

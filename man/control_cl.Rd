@@ -8,17 +8,19 @@ control_cl(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   initialize.FUN = initialize_camplc, followUP.FUN = FU_elements_camplc,
   aging.FUN = aging_camplc, deaths.FUN = deaths_msm,
   births.FUN = births_camplc, outdebut.FUN = out_debut_camplc,
-  test.FUN = test_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
-  prep2.FUN = prep_adol, prep.classtrans.FUN = prep_adherence_trans,
-  progress.FUN = progress_msm, vl.FUN = vl_msm, aiclass.FUN = NULL,
-  roleclass.FUN = NULL, role.classtrans.FUN = roleclass_trans,
-  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
-  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
+  test.FUN = test_msm, tx.FUN = tx_msm, prep2.FUN = prep_adol,
+  prep.FUN = prep_msm, prep.classtrans.FUN = prep_adherence_trans,
+  progress.FUN = progress_msm, agemixing.FUN = agemix_campcl,
+  vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
+  role.classtrans.FUN = roleclass_trans, resim_nets.FUN = simnet_msm,
+  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
+  condoms_edu.FUN = condoms_edu_campcl, condoms.FUN = condoms_msm,
   riskhist.FUN = riskhist_msm, riskhistasmm.FUN = riskhist_adol,
   position.FUN = position_msm, trans.FUN = trans_msm,
   prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
   save.nwstats = FALSE, save.other = c("attr", "temp", "riskh", "el", "p",
-  "riskhist", "age.inf.vec"), verbose = TRUE, verbose.int = 1, ...)
+  "riskhist", "age.inf.vec", "el.age"), verbose = TRUE, verbose.int = 1,
+  ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -53,9 +55,9 @@ model.}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
-\item{prep.FUN}{Module function for PrEP initiation and utilization.}
-
 \item{prep2.FUN}{Module function for PrEP initiation and utilization for ASMM}
+
+\item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
 \item{prep.classtrans.FUN}{Model for transmisioning PrEP adherence class from ASMM to adult MSM at age 19}
 
@@ -74,6 +76,8 @@ step.}
 
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
+
+\item{condoms_edu.FUN}{Modulule function to adjust condom use probabilities based on a condom use intervention.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
 

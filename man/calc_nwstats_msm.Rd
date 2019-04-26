@@ -8,10 +8,10 @@ calc_nwstats_msm(time.unit = 7, method = 1, num.B, num.W, num.B.msm,
   num.W.msm, num.B.asmm, num.W.asmm, deg.mp.B, deg.mp.W, mdeg.inst.B,
   mdeg.inst.W, deg.asmm, cross.frac, qnts.B, qnts.W, prop.hom.mpi.B,
   prop.hom.mpi.W, balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW,
-  sqrt.adiff.BW, diss.main, diss.pers, diss.asmm, durs.main, durs.pers,
-  rates.asmm, durs.asmm, ages, ages.asmm, ages.yamsm, ages.oamsm, ages.msm,
-  birth.age, out.age.prob, debut.entry.prob, debut.prob, asmr.B, asmr.W,
-  role.B.prob.msm, role.W.prob.msm, role.B.prob.asmm, role.W.prob.asmm,
+  sqrt.adiff.BW, cubert.adiff.asmm, diss.main, diss.pers, diss.asmm, durs.main,
+  durs.pers, rates.asmm, durs.asmm, ages, ages.asmm, ages.yamsm, ages.oamsm,
+  ages.msm, birth.age, out.age.prob, debut.entry.prob, debut.prob, asmr.B,
+  asmr.W, role.B.prob.msm, role.W.prob.msm, role.B.prob.asmm, role.W.prob.asmm,
   role.shift)
 }
 \arguments{
@@ -65,6 +65,9 @@ partnerships.}
 \item{sqrt.adiff.BW}{Vector of length 3 with the mean absolute differences
 in the square root of ages in main, casual, and one-off black-white
 partnerships.}
+
+\item{cubert.adiff.asmm}{mean absolute differences in the cube root of ages 
+of ASMM partnerships.}
 
 \item{diss.main}{Dissolution model formula for main partnerships.}
 
