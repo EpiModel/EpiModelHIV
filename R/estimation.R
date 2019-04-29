@@ -447,6 +447,8 @@ calc_nwstats_msm <- function(time.unit = 7,
 }
 
 
+
+
 #' @title Construct Base Network for Model Estimation and Simulation
 #'
 #' @description Initializes the base network for model estimation within
