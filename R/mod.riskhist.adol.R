@@ -13,6 +13,7 @@
 #'
 riskhist_adol <- function(dat, at) {
 
+  if (dat$param$prep.risk.hist.asmm == TRUE){
 
   ## Attributes
   uid <- dat$attr$uid
@@ -47,7 +48,7 @@ riskhist_adol <- function(dat, at) {
     dat$attr$uaicount[mat$rows[i]]<-sum(dat$riskhist[dat$riskhist$V1==mat$uids[i],2:27],na.rm=TRUE)
       }
 
-
+}
   
   return(dat)
 }
