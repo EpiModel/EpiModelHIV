@@ -281,7 +281,7 @@
 param_cl <- function(nwstats,
                       race.method = 1,
                       FU=FALSE,
-                      agemix=TRUE,
+                      agemix=FALSE,
                       last.neg.test.B.int = 301,
                       last.neg.test.W.int = 315,
                       
@@ -478,6 +478,7 @@ param_cl <- function(nwstats,
                       prep.elig.model.asmm = "none",
                       prep.class.prob.asmm = c(.209, .244, .131, .416), 
                       #prep.class.effect.asmm = c(0, 0.31, 0.81, 0.95) - replaced by prep.class.hr (the inverse),
+                      prep.risk.hist.asmm = FALSE,
                       prep.delay.asmm = 26,
                       prep.uaicount.thresh.asmm = 10,
 
