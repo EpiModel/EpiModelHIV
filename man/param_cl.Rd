@@ -4,7 +4,7 @@
 \alias{param_cl}
 \title{Epidemic Model Parameters}
 \usage{
-param_cl(nwstats, race.method = 1, FU = FALSE, agemix = TRUE,
+param_cl(nwstats, race.method = 1, FU = FALSE, agemix = FALSE,
   last.neg.test.B.int = 301, last.neg.test.W.int = 315,
   last.neg.test.B.int.asmm = 2900, last.neg.test.W.int.asmm = 2900,
   mean.test.B.int = 301, mean.test.W.int = 315,
@@ -69,9 +69,10 @@ param_cl(nwstats, race.method = 1, FU = FALSE, agemix = TRUE,
   prep.risk.int = 182, prep.risk.reassess = TRUE, prep.start.asmm = Inf,
   prep.uptake.asmm = 0.5, prep.disc.asmm = 1/26,
   prep.elig.model.asmm = "none", prep.class.prob.asmm = c(0.209, 0.244,
-  0.131, 0.416), prep.delay.asmm = 26, prep.uaicount.thresh.asmm = 10,
-  rcomp.prob = 0, rcomp.adh.groups = 0:4, rcomp.main.only = FALSE,
-  rcomp.discl.only = FALSE, out.age.prob = nwstats$out.age.prob,
+  0.131, 0.416), prep.risk.hist.asmm = FALSE, prep.delay.asmm = 26,
+  prep.uaicount.thresh.asmm = 10, rcomp.prob = 0, rcomp.adh.groups = 0:4,
+  rcomp.main.only = FALSE, rcomp.discl.only = FALSE,
+  out.age.prob = nwstats$out.age.prob,
   debut.entry.prob = nwstats$debut.entry.prob,
   debut.prob = nwstats$debut.prob,
   role.B.prob.asmm = nwstats$role.B.prob.asmm,
