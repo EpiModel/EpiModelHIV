@@ -164,25 +164,13 @@ initialize_camplc <- function(x, param, init, control, s) {
   #Track the age at which each new infection is aquired
   dat$age.inf.vec <- list()
   
+  if (dat$param$prep.risk.hist.asmm == TRUE){
   # Risk history lists adol 
   t1<-t2<-t3<-t4<-t5<-t6<-t7<-t8<-t9<-t10<-t11<-t12<-t13<-t14<-t15<-t16<-t17<-t18<-t19<-t20<-t21<-t22<-t23<-t24<-t25<-t26<-rep(0,length(dat$attr$uid))
   dat$riskhist<-cbind(dat$attr$uid,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26)
   dat$riskhist<-as.data.frame(dat$riskhist)
-  
+  }
 
-  #data frames for tracking race age and risk catagory specific UAI counts and PrEP status
-  dat$counts$uaiCounts.B <-matrix(nrow=6, ncol=5)
-  dat$counts$uaiCounts.W <-matrix(nrow=6, ncol=5)
-  dat$counts$prepCounts.B <-matrix(nrow=6, ncol=5)
-  dat$counts$prepCounts.W <-matrix(nrow=6, ncol=5)
-  dat$counts$status.B <-matrix(nrow=6, ncol=5)
-  dat$counts$status.W <-matrix(nrow=6, ncol=5)
-  dat$counts$tx.B <-matrix(nrow=6, ncol=5)
-  dat$counts$tx.W <-matrix(nrow=6, ncol=5)
-  dat$counts$fsupp.B <-matrix(nrow=6, ncol=5)
-  dat$counts$fsupp.W <-matrix(nrow=6, ncol=5)
-  dat$counts$dx.B <-matrix(nrow=6, ncol=5)
-  dat$counts$dx.W <-matrix(nrow=6, ncol=5)
   
   # One-off AI class
   inst.ai.class <- rep(NA, num)
