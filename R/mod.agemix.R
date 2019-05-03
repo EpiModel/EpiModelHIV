@@ -18,7 +18,7 @@
 #'
 agemix_campcl <- function(dat, at) {
 
-
+if(dat$param$agemix == TRUE){
 if(at < 3){dat$el.age <- list()}
 
 if(at >= 3){
@@ -40,6 +40,7 @@ if(at >= 3){
   dat$el.age <- el.age
   
 }
-
+}
+  
   return(dat)
 }
