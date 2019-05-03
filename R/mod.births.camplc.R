@@ -222,12 +222,14 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   }
   
   # Risk history adolecent
+  
+  if (dat$param$prep.risk.hist.asmm == TRUE){
   for (i in 1:length(newIds)) {
     x<-c(dat$temp$max.uid - nBirths + i ,rep(0,26))
     dat$riskhist <- rbind(dat$riskhist,x,make.row.names = FALSE)
   }
   
-  
+  }
  # Condom education
   dat$attr$cond.int.active[newIds] <- rep(0, nBirths)
   dat$attr$cond.int.active.dur[newIds] <- rep(0, nBirths)
