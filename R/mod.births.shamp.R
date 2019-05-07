@@ -166,17 +166,17 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$race3[newIds] <- race3
   
   ##Race Sex joint catagory.
-  dat$attr$race.sex<-ifelse(dat$attr$race=="B" & dat$attr$sex=="M","B.M",
-                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="M","BI.M",
-                     ifelse(dat$attr$race=="H" & dat$attr$sex=="M","H.M",
-                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="M","HI.M",
-                     ifelse(dat$attr$race=="W" & dat$attr$sex=="M","W.M",
-                     ifelse(dat$attr$race=="B" & dat$attr$sex=="F","B.F",
-                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="F","BI.F",
-                     ifelse(dat$attr$race=="H" & dat$attr$sex=="F","H.F",
-                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="F","HI.F",
-                     ifelse(dat$attr$race=="W" & dat$attr$sex=="F","W.F",
-                            dat$attr$race.sex))))))))))
+#  dat$attr$race.sex<-ifelse(dat$attr$race=="B" & dat$attr$sex=="M","B.M",
+#                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="M","BI.M",
+#                     ifelse(dat$attr$race=="H" & dat$attr$sex=="M","H.M",
+#                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="M","HI.M",
+#                     ifelse(dat$attr$race=="W" & dat$attr$sex=="M","W.M",
+#                     ifelse(dat$attr$race=="B" & dat$attr$sex=="F","B.F",
+#                     ifelse(dat$attr$race=="BI" & dat$attr$sex=="F","BI.F",
+#                     ifelse(dat$attr$race=="H" & dat$attr$sex=="F","H.F",
+#                     ifelse(dat$attr$race=="HI" & dat$attr$sex=="F","HI.F",
+#                     ifelse(dat$attr$race=="W" & dat$attr$sex=="F","W.F",
+#                            dat$attr$race.sex))))))))))
   
   dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
                                 ifelse(dat$attr$sex=="F",dat$attr$sqrt.age + dat$param$age.adj,dat$attr$sqrt.age))
@@ -461,13 +461,13 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
   
-  dat$attr$p.conc[newIds] <- 0 
-  dat$attr$x.conc[newIds] <- 0
+#  dat$attr$p.conc[newIds] <- 0 
+#  dat$attr$x.conc[newIds] <- 0
   
-  dat$attr$Ecohab[newIds] <- "0" 
-  dat$attr$Ecohab.timer[newIds] <- 0 
+   dat$attr$Ecohab[newIds] <- "0" 
+   dat$attr$Ecohab.timer[newIds] <- 0 
 
-  dat$attr$xfour.conc[newIds]<- ifelse((race=='B' | race=='BI') & sex=="M",'B.BI.M.c-0','non.B.BI.M.c-0' )
+#  dat$attr$xfour.conc[newIds]<- ifelse((race=='B' | race=='BI') & sex=="M",'B.BI.M.c-0','non.B.BI.M.c-0' )
  
   dat$attr$sb[newIds]<- ifelse(race == 'B' & sex == 'M', 'M.B',
                                ifelse(race == 'B' & sex == 'F', 'F.B',
