@@ -11,12 +11,60 @@
 #'
 demogupdate_shamp <- function(dat, at) {
 
+  ##Conditional for additioal demographic and concurrency mixing terms (default is FALSE)
+  add.demog.groups <- dat$param$add.demog.groups
+  
+  
   #AGECAT
   dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
                            ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
                                   ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",dat$attr$agecat)))
   
 
+  ##Update sex and race specific degree terms.  
+  
+  b <- ifelse(dat$attr$race=='B', 'B', 'NB')
+  dat$attr$sb <- paste(dat$attr$sex, b, sep='.')
+  dat$attr$ds.cohab <- ifelse(dat$attr$deg.cohab.c==0, 
+                              'deg0',
+                              ifelse(dat$attr$sex=='F', 
+                                     'deg1pl.F',
+                                     'deg1pl.M'))
+  dat$attr$ds.pers <- ifelse(dat$attr$deg.pers.c==0, 
+                             'deg0',
+                             ifelse(dat$attr$sex=='F', 
+                                    'deg1pl.F',
+                                    'deg1pl.M'))
+  dat$attr$dsb.cohab  <- paste(dat$attr$ds.cohab, b, sep='.')
+  dat$attr$dsb.cohab[dat$attr$deg.cohab.c==0] <- 'deg0'
+  dat$attr$dsb.pers  <- paste(dat$attr$ds.pers, b, sep='.')
+  dat$attr$dsb.pers[dat$attr$deg.pers.c==0] <- 'deg0'
+  
+  
+  #  Recalculate the demog.cat for new demog.
+  
+  sex.groups<-sort(unique(dat$attr$sex))
+  for (i in 1:(length(sex.groups))){
+    dat$attr$demog.cat<-ifelse(dat$attr$sex==sex.groups[i],i*1000,dat$attr$demog.cat)      
+  }
+  
+  race.groups<-sort(unique(dat$attr$race))
+  for (i in 1:(length(race.groups))){
+    dat$attr$demog.cat<-ifelse(dat$attr$race==race.groups[i],dat$attr$demog.cat+(i*100),dat$attr$demog.cat)      
+  }
+  
+  age.groups<-sort(unique(floor(dat$attr$age)))
+  age.temp<-floor(dat$attr$age)
+  for (i in 1:(length(age.groups))){   
+    dat$attr$demog.cat<-ifelse (age.temp==age.groups[i],dat$attr$demog.cat+(age.groups[i]),dat$attr$demog.cat)      
+  }
+  
+  
+  #Additioanal demographic and concurrency terms that were tried for model estimation.
+  #They are not calculated by default due to computation time.
+  
+  if (add.demog.groups == TRUE){
+  
   #Create a new factor for age by sex group by pers.c.
   
   dat$attr$race.sex.pers<-rep(NA,length(dat$attr$age)) 
@@ -93,25 +141,7 @@ demogupdate_shamp <- function(dat, at) {
   
   
   
-  #  Recalculate the demog.cat for new demo.
-  
-  sex.groups<-sort(unique(dat$attr$sex))
-  for (i in 1:(length(sex.groups))){
-    dat$attr$demog.cat<-ifelse(dat$attr$sex==sex.groups[i],i*1000,dat$attr$demog.cat)      
-  }
-  
-  race.groups<-sort(unique(dat$attr$race))
-  for (i in 1:(length(race.groups))){
-    dat$attr$demog.cat<-ifelse(dat$attr$race==race.groups[i],dat$attr$demog.cat+(i*100),dat$attr$demog.cat)      
-  }
-  
-  age.groups<-sort(unique(floor(dat$attr$age)))
-  age.temp<-floor(dat$attr$age)
-  for (i in 1:(length(age.groups))){   
-    dat$attr$demog.cat<-ifelse (age.temp==age.groups[i],dat$attr$demog.cat+(age.groups[i]),dat$attr$demog.cat)      
-  }
-  
-  
+
   ##Update four catagory concurrency attribute for cross network concurrency (used in the pers network).
   
     deg.cohab.c <- dat$attr$deg.cohab.c
@@ -128,25 +158,7 @@ demogupdate_shamp <- function(dat, at) {
     dat$attr$xfour.conc <- xfour.conc
     
 
-##Update sex and race specific degree terms.  
-    
-      b <- ifelse(dat$attr$race=='B', 'B', 'NB')
-      dat$attr$sb <- paste(dat$attr$sex, b, sep='.')
-      dat$attr$ds.cohab <- ifelse(dat$attr$deg.cohab.c==0, 
-                         'deg0',
-                         ifelse(dat$attr$sex=='F', 
-                                'deg1pl.F',
-                                'deg1pl.M'))
-      dat$attr$ds.pers <- ifelse(dat$attr$deg.pers.c==0, 
-                        'deg0',
-                        ifelse(dat$attr$sex=='F', 
-                               'deg1pl.F',
-                               'deg1pl.M'))
-      dat$attr$dsb.cohab  <- paste(dat$attr$ds.cohab, b, sep='.')
-      dat$attr$dsb.cohab[dat$attr$deg.cohab.c==0] <- 'deg0'
-      dat$attr$dsb.pers  <- paste(dat$attr$ds.pers, b, sep='.')
-      dat$attr$dsb.pers[dat$attr$deg.pers.c==0] <- 'deg0'
-
+}
   
   return(dat)
 }
