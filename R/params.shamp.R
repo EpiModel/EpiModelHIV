@@ -770,9 +770,21 @@ param_shamp <- function(race.method = 1,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
                       
-                    
+                      #max 59253
                       msm.foi.scale = 1,
-                      fa.foi.scale = 1,
+                      
+                      #max 992063
+                      fa.BI.m.foi.scale = 1,
+                      
+                      #max 496031
+                      fa.BI.f.foi.scale = 1,
+                      
+                      #max 10101010
+                      fa.HI.m.foi.scale = 1,
+                      
+                      #max 5050505
+                      fa.HI.f.foi.scale = 1,
+                      
                       depart.scale = 1,
                       return.scale = 1,
                       immig.simple=TRUE,
@@ -808,6 +820,7 @@ param_shamp <- function(race.method = 1,
                       age.adj=data.params[[1]]$age.adj,
                       conc_dur_dx = TRUE,
                       death_stats = TRUE,
+                      add.demog.groups = FALSE,
                       
                       Ecohab.window = round(5*52),
                       p.growth = FALSE,
@@ -1083,7 +1096,7 @@ control_shamp <- function(simno = 1,
                         prev.FUN = prevalence_shamp,
                         verbose.FUN = verbose_shamp,
                         save.nwstats = FALSE,
-                        save.other = c("el", "attr"),
+                        save.other = "attr",
                         verbose = TRUE,
                         verbose.int = 1,
                         ...) {
