@@ -15,7 +15,8 @@ control_shamp(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   position.FUN = position_shamp, trans.FUN = trans_shamp,
   heatbath.FUN = heatbath_msmf_shamp, immigration.FUN = immigration_shamp,
   prev.FUN = prevalence_shamp, verbose.FUN = verbose_shamp,
-  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
+  save.nwstats = FALSE, save.other = "attr", verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
