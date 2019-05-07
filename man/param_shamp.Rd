@@ -208,7 +208,8 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   prep.class.prob = c(0, 0, 0, 0), prep.class.hr = c(1, 0.69, 0.19, 0.05),
   prep.coverage = 0, prep.cov.method = "curr", prep.cov.rate = 1,
   prep.tst.int = 90, prep.risk.int = 182, prep.risk.reassess = TRUE,
-  msm.foi.scale = 1, fa.foi.scale = 1, depart.scale = 1,
+  msm.foi.scale = 1, fa.BI.m.foi.scale = 1, fa.BI.f.foi.scale = 1,
+  fa.HI.m.foi.scale = 1, fa.HI.f.foi.scale = 1, depart.scale = 1,
   return.scale = 1, immig.simple = TRUE, immig.depart.BI.f = (1/(42 * 52 *
   4)), immig.depart.HI.f = (1/(42 * 52 * 4)), immig.depart.BI.m = (1/(42 *
   52 * 4)), immig.depart.HI.m = (1/(42 * 52 * 4)),
@@ -228,8 +229,8 @@ param_shamp(race.method = 1, time.unit = 7, method = 1, age.unit = 52,
   race.groups = data.params[[1]]$race.groups,
   age.groups = data.params[[1]]$age.groups,
   age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
-  death_stats = TRUE, Ecohab.window = round(5 * 52), p.growth = FALSE,
-  p.growth.nsteps = 0, p.growth.size = 0, ...)
+  death_stats = TRUE, add.demog.groups = FALSE, Ecohab.window = round(5 *
+  52), p.growth = FALSE, p.growth.nsteps = 0, p.growth.size = 0, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
