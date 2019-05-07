@@ -36,7 +36,7 @@ ConcDurDx_shamp <- function(dat, at){
     cel.complete <- dat$cel.complete
       
     ##  USE UID FOR EDGES
-    ## the race and sex now need to be in reference to UID
+    ## get the race and sex 
       el1<-as.data.frame(dat$el[[1]])
       el1[,3] <- apply(el1[,c(1,2)], 1, FUN=max)
       el1[,4] <- apply(el1[,c(1,2)], 1, FUN=min)
@@ -69,6 +69,7 @@ ConcDurDx_shamp <- function(dat, at){
       cel$Ect1<-ifelse(cel$type=="pers",0,cel$Ect1)
       cel$Ect2<-ifelse(cel$type=="pers",0,cel$Ect2)
       
+      ##  USE UID FOR EDGES
       ##Covert to UID.
       cel[,1] <- uid[cel[,1]]
       cel[,2] <- uid[cel[,2]]
