@@ -149,14 +149,15 @@ initialize_shamp <- function(x, param, init, control, s) {
   ids.H.m<-na.omit(ids.M[ids.H])
   ids.HI.m<-na.omit(ids.M[ids.HI])
   ids.W.m<-na.omit(ids.M[ids.W])
-  
-  dat$attr$race.sex <- get.vertex.attribute(nw[[1]], "race.sex")
+ 
+  ##These combined attributes are not used. 
+  #dat$attr$race.sex <- get.vertex.attribute(nw[[1]], "race.sex")
   
   #race.sex.cohab.
-  dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
+  #dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
   
    #race.sex.pers.
-  dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
+  #dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
   
   dat$attr$p.conc <- get.vertex.attribute(nw[[1]], "p.conc") 
   dat$attr$x.conc <- get.vertex.attribute(nw[[1]], "x.conc") 
@@ -187,12 +188,11 @@ initialize_shamp <- function(x, param, init, control, s) {
   partial<-sample(partial,length(dat$attr$age),replace=TRUE)
   
   dat$attr$age<-dat$attr$age+partial
-  
-  dat$attr$sqrt.age <- get.vertex.attribute(nw[[1]], "sqrt.age")
+  dat$attr$sqrt.age <- sqrt(dat$attr$age)
   
   dat$attr$agecat <- get.vertex.attribute(nw[[1]], "agecat")
-  dat$attr$sqrt.age.adj <- get.vertex.attribute(nw[[1]], "sqrt.age.adj")
-  dat$attr$agesq <- dat$attr$age^2
+  dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
+                                ifelse(dat$attr$sex=="F",dat$attr$sqrt.age + dat$param$age.adj,dat$attr$sqrt.age))
   
   dat$attr$age.inf <-rep(NA, num)
   dat$attr$age.diag <-rep(NA, num)
