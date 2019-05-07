@@ -52,10 +52,10 @@ immigration_shamp <- function(dat, at){
   return.HI.f <- dat$param$immig.return.HI.f * dat$param$return.scale
   return.BI.m <- dat$param$immig.return.BI.m * dat$param$return.scale
   return.HI.m <- dat$param$immig.return.HI.m * dat$param$return.scale
-  aq.prob.BI.f <- dat$param$immig.aq.prob.BI.f * dat$param$fa.foi.scale
-  aq.prob.HI.f <- dat$param$immig.aq.prob.HI.f * dat$param$fa.foi.scale
-  aq.prob.BI.m <- dat$param$immig.aq.prob.BI.m * dat$param$fa.foi.scale
-  aq.prob.HI.m <- dat$param$immig.aq.prob.HI.m * dat$param$fa.foi.scale
+  aq.prob.BI.f <- dat$param$immig.aq.prob.BI.f * dat$param$fa.BI.f.foi.scale
+  aq.prob.HI.f <- dat$param$immig.aq.prob.HI.f * dat$param$fa.HI.f.foi.scale
+  aq.prob.BI.m <- dat$param$immig.aq.prob.BI.m * dat$param$fa.BI.m.foi.scale
+  aq.prob.HI.m <- dat$param$immig.aq.prob.HI.m * dat$param$fa.HI.m.foi.scale
   
   infected <- NULL
   ids.BI.f.inf <- NULL 
@@ -162,7 +162,7 @@ immigration_shamp <- function(dat, at){
   
   if (immig.simple == TRUE){
     
-    #Of those away who becomes infected
+    #Who becomes infected
     ids.BI.f.inf<-which(active==1 & sex=="F" & race =="BI" & status==0)
     ids.BI.m.inf<-which(active==1 & sex=="M" & race =="BI" & status==0)
     ids.H.f.inf<-which(active==1 & sex=="F" & race =="HI" & status==0)
