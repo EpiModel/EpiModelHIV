@@ -150,19 +150,19 @@ initialize_shamp <- function(x, param, init, control, s) {
   ids.HI.m<-na.omit(ids.M[ids.HI])
   ids.W.m<-na.omit(ids.M[ids.W])
  
-  ##These combined attributes are not used. 
-  #dat$attr$race.sex <- get.vertex.attribute(nw[[1]], "race.sex")
-  
-  #race.sex.cohab.
-  #dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
-  
-   #race.sex.pers.
-  #dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
-  
+  if(dat$param$add.demog.groups==TRUE){
+    
+  dat$attr$race.sex <- get.vertex.attribute(nw[[1]], "race.sex")
+  dat$attr$race.sex.cohab <- get.vertex.attribute(nw[[1]], "race.sex.cohab")
+  dat$attr$race.sex.pers <- get.vertex.attribute(nw[[1]], "race.sex.pers")
   dat$attr$p.conc <- get.vertex.attribute(nw[[1]], "p.conc") 
   dat$attr$x.conc <- get.vertex.attribute(nw[[1]], "x.conc") 
   dat$attr$xfour.conc <- get.vertex.attribute(nw[[1]], "xfour.conc")  
-  dat$attr$sb <- get.vertex.attribute(nw[[1]], "sb")    
+  
+  }
+  
+
+   dat$attr$sb <- get.vertex.attribute(nw[[1]], "sb")    
   
   dat$attr$ds.cohab <- get.vertex.attribute(nw[[1]], "ds.cohab")
   dat$attr$ds.pers <- get.vertex.attribute(nw[[1]], "ds.pers")
