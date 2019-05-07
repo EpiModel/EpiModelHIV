@@ -263,7 +263,9 @@
 #' @param Ecohab.window The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.
 #' @param p.growth If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.
 #' @param p.growth.nsteps The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.
-#' @param p.growth.size The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE. 
+#' @param p.growth.size The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE.
+#' @param add.demog.groups if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
+#' attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options 
 
 #'        
 #' @param ... Additional arguments passed to the function.
