@@ -42,6 +42,7 @@ initialize_camplc <- function(x, param, init, control, s) {
     nw[[i]] <- remove_bad_roles_msm(nw[[i]])
   }
 
+  
   ## Build initial edgelists
   dat$el <- list()
   dat$p <- list()
@@ -71,9 +72,12 @@ initialize_camplc <- function(x, param, init, control, s) {
   ## Nodal attributes ##
 
   # Degree terms
-  dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
-  dat$attr$deg.main <- get.vertex.attribute(x[[2]]$fit$network, "deg.main")
-  dat$attr$deg.asmm <- get.vertex.attribute(x[[3]]$fit$network, "deg.asmm")
+  #dat$attr$deg.pers <- get.vertex.attribute(x[[1]]$fit$network, "deg.pers")
+  #dat$attr$deg.main <- get.vertex.attribute(x[[2]]$fit$network, "deg.main")
+  #dat$attr$deg.asmm <- get.vertex.attribute(x[[3]]$fit$network, "deg.asmm")
+  
+  dat$attr$deg.pers <- get.vertex.attribute(nw[[1]], "deg.pers")
+  dat$attr$deg.main <- get.vertex.attribute(nw[[2]], "deg.main")
 
   # Race
   dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
