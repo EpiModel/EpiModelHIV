@@ -436,9 +436,9 @@ param_cl <- function(nwstats,
                       cond.asmm.18 = .547,
                      
                       
-                      cond.edu = TRUE,
+                      cond.edu = FALSE,
                       cond.edu.start = 2,
-                      sex.exp.edu = TRUE,
+                      sex.exp.edu = FALSE,
                       cond.edu.cov = 0.25,
                       cond.edu.effect.dur = 5, 
                       cond.post.edu.rr = 1.3,
