@@ -104,6 +104,18 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$i.num.H.m <- rNA
     dat$epi$i.num.HI.m <- rNA
     dat$epi$i.num.W.m <- rNA
+
+    dat$epi$i.num.B.msf <- rNA
+    dat$epi$i.num.BI.msf <- rNA
+    dat$epi$i.num.H.msf <- rNA
+    dat$epi$i.num.HI.msf <- rNA
+    dat$epi$i.num.W.msf <- rNA
+    
+    dat$epi$i.num.B.msmf <- rNA
+    dat$epi$i.num.BI.msmf <- rNA
+    dat$epi$i.num.H.msmf <- rNA
+    dat$epi$i.num.HI.msmf <- rNA
+    dat$epi$i.num.W.msmf <- rNA
     
     dat$epi$i.num.B.msm <- rNA
     dat$epi$i.num.BI.msm <- rNA
@@ -111,59 +123,77 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$i.num.HI.msm <- rNA
     dat$epi$i.num.W.msm <- rNA
     
-    dat$epi$i.prev <- rNA
-    dat$epi$i.prev.B <- rNA
-    dat$epi$i.prev.BI <- rNA
-    dat$epi$i.prev.H <- rNA
-    dat$epi$i.prev.HI <- rNA
-    dat$epi$i.prev.W <- rNA
-    dat$epi$i.prev.m <- rNA
-    dat$epi$i.prev.f <- rNA
-    dat$epi$i.prev.msf <- rNA
-    dat$epi$i.prev.msm <- rNA
-    dat$epi$i.prev.msmf <- rNA
+    dat$epi$prev <- rNA
+    dat$epi$prev.B <- rNA
+    dat$epi$prev.BI <- rNA
+    dat$epi$prev.H <- rNA
+    dat$epi$prev.HI <- rNA
+    dat$epi$prev.W <- rNA
+    dat$epi$prev.m <- rNA
+    dat$epi$prev.f <- rNA
+    dat$epi$prev.msf <- rNA
+    dat$epi$prev.msm <- rNA
+    dat$epi$prev.msmf <- rNA
     
-    dat$epi$i.prev.B.f <- rNA
-    dat$epi$i.prev.BI.f <- rNA
-    dat$epi$i.prev.H.f <- rNA
-    dat$epi$i.prev.HI.f <- rNA
-    dat$epi$i.prev.W.f <- rNA
+    dat$epi$prev.B.f <- rNA
+    dat$epi$prev.BI.f <- rNA
+    dat$epi$prev.H.f <- rNA
+    dat$epi$prev.HI.f <- rNA
+    dat$epi$prev.W.f <- rNA
     
-    dat$epi$i.prev.B.m <- rNA
-    dat$epi$i.prev.BI.m <- rNA
-    dat$epi$i.prev.H.m <- rNA
-    dat$epi$i.prev.HI.m <- rNA
-    dat$epi$i.prev.W.m <- rNA
+    dat$epi$prev.B.m <- rNA
+    dat$epi$prev.BI.m <- rNA
+    dat$epi$prev.H.m <- rNA
+    dat$epi$prev.HI.m <- rNA
+    dat$epi$prev.W.m <- rNA
     
-    dat$epi$i.prev.B.msf <- rNA
-    dat$epi$i.prev.BI.msf <- rNA
-    dat$epi$i.prev.H.msf <- rNA
-    dat$epi$i.prev.HI.msf <- rNA
-    dat$epi$i.prev.W.msf <- rNA
+    dat$epi$prev.B.msf <- rNA
+    dat$epi$prev.BI.msf <- rNA
+    dat$epi$prev.H.msf <- rNA
+    dat$epi$prev.HI.msf <- rNA
+    dat$epi$prev.W.msf <- rNA
     
-    dat$epi$i.prev.B.msm <- rNA
-    dat$epi$i.prev.BI.msm <- rNA
-    dat$epi$i.prev.H.msm <- rNA
-    dat$epi$i.prev.HI.msm <- rNA
-    dat$epi$i.prev.W.msm <- rNA
+    dat$epi$prev.B.msm <- rNA
+    dat$epi$prev.BI.msm <- rNA
+    dat$epi$prev.H.msm <- rNA
+    dat$epi$prev.HI.msm <- rNA
+    dat$epi$prev.W.msm <- rNA
     
-    dat$epi$i.prev.B.msmf <- rNA
-    dat$epi$i.prev.BI.msmf <- rNA
-    dat$epi$i.prev.H.msmf <- rNA
-    dat$epi$i.prev.HI.msmf <- rNA
-    dat$epi$i.prev.W.msmf <- rNA
+    dat$epi$prev.B.msmf <- rNA
+    dat$epi$prev.BI.msmf <- rNA
+    dat$epi$prev.H.msmf <- rNA
+    dat$epi$prev.HI.msmf <- rNA
+    dat$epi$prev.W.msmf <- rNA
     
-    dat$epi$i.prev.diag.B.f <- rNA
-    dat$epi$i.prev.diag.BI.f <- rNA
-    dat$epi$i.prev.diag.H.f <- rNA
-    dat$epi$i.prev.diag.HI.f <- rNA
-    dat$epi$i.prev.diag.W.f <- rNA
+    dat$epi$diag.B.f <- rNA
+    dat$epi$diag.BI.f <- rNA
+    dat$epi$diag.H.f <- rNA
+    dat$epi$diag.HI.f <- rNA
+    dat$epi$diag.W.f <- rNA
     
-    dat$epi$i.prev.diag.B.m <- rNA
-    dat$epi$i.prev.diag.BI.m <- rNA
-    dat$epi$i.prev.diag.H.m <- rNA
-    dat$epi$i.prev.diag.HI.m <- rNA
-    dat$epi$i.prev.diag.W.m <- rNA
+    dat$epi$diag.B.m <- rNA
+    dat$epi$diag.BI.m <- rNA
+    dat$epi$diag.H.m <- rNA
+    dat$epi$diag.HI.m <- rNA
+    dat$epi$diag.W.m <- rNA
+    
+    dat$epi$diag.B.msf <- rNA
+    dat$epi$diag.BI.msf <- rNA
+    dat$epi$diag.H.msf <- rNA
+    dat$epi$diag.HI.msf <- rNA
+    dat$epi$diag.W.msf <- rNA
+    
+    dat$epi$diag.B.msm <- rNA
+    dat$epi$diag.BI.msm <- rNA
+    dat$epi$diag.H.msm <- rNA
+    dat$epi$diag.HI.msm <- rNA
+    dat$epi$diag.W.msm <- rNA
+    
+    dat$epi$diag.B.msmf <- rNA
+    dat$epi$diag.BI.msmf <- rNA
+    dat$epi$diag.H.msmf <- rNA
+    dat$epi$diag.HI.msmf <- rNA
+    dat$epi$diag.W.msmf <- rNA
     
     dat$epi$nBirths <- rNA
     dat$epi$dth.gen <- rNA
@@ -215,10 +245,11 @@ prevalence_shamp <- function(dat, at) {
     dat$epi$prop.Lhet.inf <- rep(0, nsteps)
     
     dat$epi$duplicates <-  rep(0, nsteps)
+    dat$epi$duplicates.w.OT <-  rep(0, nsteps)
     
     dat$epi$nCohabs <-  rep(0, nsteps)
     dat$epi$nPers <-  rep(0, nsteps)
-    dat$epi$nOTduplicates <-  rep(0, nsteps)
+    dat$epi$nOT <-  rep(0, nsteps)
     
   }
 
@@ -323,81 +354,98 @@ prevalence_shamp <- function(dat, at) {
   dat$epi$prop.FAds.inf[at] <- dat$epi$i.num.FAds.inf[at]/dat$epi$i.num[at]
   dat$epi$prop.Lhet.inf[at] <- dat$epi$i.num.Lhet.inf[at]/dat$epi$i.num[at]
   
-  dat$epi$i.prev[at] <- dat$epi$i.num[at] / dat$epi$num[at]
-  dat$epi$i.prev.B[at] <- dat$epi$i.num.B[at] / dat$epi$num.B[at]
-  dat$epi$i.prev.BI[at] <- dat$epi$i.num.BI[at] / dat$epi$num.BI[at]
-  dat$epi$i.prev.H[at] <- dat$epi$i.num.H[at] / dat$epi$num.H[at]
-  dat$epi$i.prev.HI[at] <- dat$epi$i.num.HI[at] / dat$epi$num.HI[at]
-  dat$epi$i.prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
-  dat$epi$i.prev.f[at] <- dat$epi$i.num.f[at] / dat$epi$num.f[at]
-  dat$epi$i.prev.m[at] <- dat$epi$i.num.m[at] / dat$epi$num.m[at]
-  dat$epi$i.prev.msf[at] <- dat$epi$i.num.msf[at] / dat$epi$num.msf[at]  
-  dat$epi$i.prev.msm[at] <- dat$epi$i.num.msm[at] / dat$epi$num.msm[at]
-  dat$epi$i.prev.msmf[at] <- dat$epi$i.num.msmf[at] / dat$epi$num.msmf[at]
+  dat$epi$prev[at] <- dat$epi$i.num[at] / dat$epi$num[at]
+  dat$epi$prev.B[at] <- dat$epi$i.num.B[at] / dat$epi$num.B[at]
+  dat$epi$prev.BI[at] <- dat$epi$i.num.BI[at] / dat$epi$num.BI[at]
+  dat$epi$prev.H[at] <- dat$epi$i.num.H[at] / dat$epi$num.H[at]
+  dat$epi$prev.HI[at] <- dat$epi$i.num.HI[at] / dat$epi$num.HI[at]
+  dat$epi$prev.W[at] <- dat$epi$i.num.W[at] / dat$epi$num.W[at]
+  dat$epi$prev.f[at] <- dat$epi$i.num.f[at] / dat$epi$num.f[at]
+  dat$epi$prev.m[at] <- dat$epi$i.num.m[at] / dat$epi$num.m[at]
+  dat$epi$prev.msf[at] <- dat$epi$i.num.msf[at] / dat$epi$num.msf[at]  
+  dat$epi$prev.msm[at] <- dat$epi$i.num.msm[at] / dat$epi$num.msm[at]
+  dat$epi$prev.msmf[at] <- dat$epi$i.num.msmf[at] / dat$epi$num.msmf[at]
   
-  dat$epi$i.prev.B.f[at] <- dat$epi$i.num.B.f[at] / dat$epi$num.B.f[at]
-  dat$epi$i.prev.BI.f[at] <- dat$epi$i.num.BI.f[at] / dat$epi$num.BI.f[at]
-  dat$epi$i.prev.H.f[at] <- dat$epi$i.num.H.f[at] / dat$epi$num.H.f[at]
-  dat$epi$i.prev.HI.f[at] <- dat$epi$i.num.HI.f[at] / dat$epi$num.HI.f[at]
-  dat$epi$i.prev.W.f[at] <- dat$epi$i.num.W.f[at] / dat$epi$num.W.f[at]
+  dat$epi$prev.B.f[at] <- dat$epi$i.num.B.f[at] / dat$epi$num.B.f[at]
+  dat$epi$prev.BI.f[at] <- dat$epi$i.num.BI.f[at] / dat$epi$num.BI.f[at]
+  dat$epi$prev.H.f[at] <- dat$epi$i.num.H.f[at] / dat$epi$num.H.f[at]
+  dat$epi$prev.HI.f[at] <- dat$epi$i.num.HI.f[at] / dat$epi$num.HI.f[at]
+  dat$epi$prev.W.f[at] <- dat$epi$i.num.W.f[at] / dat$epi$num.W.f[at]
   
-  dat$epi$i.prev.B.m[at] <- dat$epi$i.num.B.m[at] / dat$epi$num.B.m[at]
-  dat$epi$i.prev.BI.m[at] <- dat$epi$i.num.BI.m[at] / dat$epi$num.BI.m[at]
-  dat$epi$i.prev.H.m[at] <- dat$epi$i.num.H.m[at] / dat$epi$num.H.m[at]
-  dat$epi$i.prev.HI.m[at] <- dat$epi$i.num.HI.m[at] / dat$epi$num.HI.m[at]
-  dat$epi$i.prev.W.m[at] <- dat$epi$i.num.W.m[at] / dat$epi$num.W.m[at]
+  dat$epi$prev.B.m[at] <- dat$epi$i.num.B.m[at] / dat$epi$num.B.m[at]
+  dat$epi$prev.BI.m[at] <- dat$epi$i.num.BI.m[at] / dat$epi$num.BI.m[at]
+  dat$epi$prev.H.m[at] <- dat$epi$i.num.H.m[at] / dat$epi$num.H.m[at]
+  dat$epi$prev.HI.m[at] <- dat$epi$i.num.HI.m[at] / dat$epi$num.HI.m[at]
+  dat$epi$prev.W.m[at] <- dat$epi$i.num.W.m[at] / dat$epi$num.W.m[at]
   
-  dat$epi$i.prev.B.msf[at] <- dat$epi$i.num.B.msf[at] / dat$epi$num.B.msf[at]
-  dat$epi$i.prev.BI.msf[at] <- dat$epi$i.num.BI.msf[at] / dat$epi$num.BI.msf[at]
-  dat$epi$i.prev.H.msf[at] <- dat$epi$i.num.H.msf[at] / dat$epi$num.H.msf[at]
-  dat$epi$i.prev.HI.msf[at] <- dat$epi$i.num.HI.msf[at] / dat$epi$num.HI.msf[at]
-  dat$epi$i.prev.W.msf[at] <- dat$epi$i.num.W.msf[at] / dat$epi$num.W.msf[at]
+  dat$epi$prev.B.msf[at] <- dat$epi$i.num.B.msf[at] / dat$epi$num.B.msf[at]
+  dat$epi$prev.BI.msf[at] <- dat$epi$i.num.BI.msf[at] / dat$epi$num.BI.msf[at]
+  dat$epi$prev.H.msf[at] <- dat$epi$i.num.H.msf[at] / dat$epi$num.H.msf[at]
+  dat$epi$prev.HI.msf[at] <- dat$epi$i.num.HI.msf[at] / dat$epi$num.HI.msf[at]
+  dat$epi$prev.W.msf[at] <- dat$epi$i.num.W.msf[at] / dat$epi$num.W.msf[at]
   
-  dat$epi$i.prev.B.msm[at] <- dat$epi$i.num.B.msm[at] / dat$epi$num.B.msm[at]
-  dat$epi$i.prev.BI.msm[at] <- dat$epi$i.num.BI.msm[at] / dat$epi$num.BI.msm[at]
-  dat$epi$i.prev.H.msm[at] <- dat$epi$i.num.H.msm[at] / dat$epi$num.H.msm[at]
-  dat$epi$i.prev.HI.msm[at] <- dat$epi$i.num.HI.msm[at] / dat$epi$num.HI.msm[at]
-  dat$epi$i.prev.W.msm[at] <- dat$epi$i.num.W.msm[at] / dat$epi$num.W.msm[at]
+  dat$epi$prev.B.msm[at] <- dat$epi$i.num.B.msm[at] / dat$epi$num.B.msm[at]
+  dat$epi$prev.BI.msm[at] <- dat$epi$i.num.BI.msm[at] / dat$epi$num.BI.msm[at]
+  dat$epi$prev.H.msm[at] <- dat$epi$i.num.H.msm[at] / dat$epi$num.H.msm[at]
+  dat$epi$prev.HI.msm[at] <- dat$epi$i.num.HI.msm[at] / dat$epi$num.HI.msm[at]
+  dat$epi$prev.W.msm[at] <- dat$epi$i.num.W.msm[at] / dat$epi$num.W.msm[at]
   
-  dat$epi$i.prev.B.msmf[at] <- dat$epi$i.num.B.msmf[at] / dat$epi$num.B.msmf[at]
-  dat$epi$i.prev.BI.msmf[at] <- dat$epi$i.num.BI.msmf[at] / dat$epi$num.BI.msmf[at]
-  dat$epi$i.prev.H.msmf[at] <- dat$epi$i.num.H.msmf[at] / dat$epi$num.H.msmf[at]
-  dat$epi$i.prev.HI.msmf[at] <- dat$epi$i.num.HI.msmf[at] / dat$epi$num.HI.msmf[at]
-  dat$epi$i.prev.W.msmf[at] <- dat$epi$i.num.W.msmf[at] / dat$epi$num.W.msmf[at]
+  dat$epi$prev.B.msmf[at] <- dat$epi$i.num.B.msmf[at] / dat$epi$num.B.msmf[at]
+  dat$epi$prev.BI.msmf[at] <- dat$epi$i.num.BI.msmf[at] / dat$epi$num.BI.msmf[at]
+  dat$epi$prev.H.msmf[at] <- dat$epi$i.num.H.msmf[at] / dat$epi$num.H.msmf[at]
+  dat$epi$prev.HI.msmf[at] <- dat$epi$i.num.HI.msmf[at] / dat$epi$num.HI.msmf[at]
+  dat$epi$prev.W.msmf[at] <- dat$epi$i.num.W.msmf[at] / dat$epi$num.W.msmf[at]
   
-  dat$attr$diag.status
-  dat$epi$i.prev.daig.B.f[at] <- sum(status == 1 & race == "B" & sex == "M", na.rm = TRUE) / 
-                                 sum(status == 1 & race == "B" & sex == "M" & diagnosed == 1, na.rm = TRUE)
-  dat$epi$num.B.f[at]
-  dat$epi$i.prev.daig.BI.f[at] <- dat$epi$i.num.BI.f[at] / dat$epi$num.BI.f[at]
-  dat$epi$i.prev.daig.H.f[at] <- dat$epi$i.num.H.f[at] / dat$epi$num.H.f[at]
-  dat$epi$i.prev.daig.HI.f[at] <- dat$epi$i.num.HI.f[at] / dat$epi$num.HI.f[at]
-  dat$epi$i.prev.daig.W.f[at] <- dat$epi$i.num.W.f[at] / dat$epi$num.W.f[at]
+
+  dat$epi$diag.B.f[at] <- sum(diagnosed == 1 & race == "B" & sex == "F", na.rm = TRUE)
+  dat$epi$diag.BI.f[at] <- sum(diagnosed == 1 & race == "BI" & sex == "F", na.rm = TRUE)
+  dat$epi$diag.H.f[at] <- sum(diagnosed == 1 & race == "H" & sex == "F", na.rm = TRUE)
+  dat$epi$diag.HI.f[at] <- sum(diagnosed == 1 & race == "HI" & sex == "F", na.rm = TRUE)
+  dat$epi$diag.W.f[at] <- sum(diagnosed == 1 & race == "W" & sex == "F", na.rm = TRUE)
   
-  dat$epi$i.prev.daig.B.m[at] <- dat$epi$i.num.B.m[at] / dat$epi$num.B.m[at]
-  dat$epi$i.prev.daig.BI.m[at] <- dat$epi$i.num.BI.m[at] / dat$epi$num.BI.m[at]
-  dat$epi$i.prev.daig.H.m[at] <- dat$epi$i.num.H.m[at] / dat$epi$num.H.m[at]
-  dat$epi$i.prev.daig.HI.m[at] <- dat$epi$i.num.HI.m[at] / dat$epi$num.HI.m[at]
-  dat$epi$i.prev.daig.W.m[at] <- dat$epi$i.num.W.m[at] / dat$epi$num.W.m[at]
+  dat$epi$diag.B.m[at] <- sum(diagnosed == 1 & race == "B" & sex == "M", na.rm = TRUE)
+  dat$epi$diag.BI.m[at] <- sum(diagnosed == 1 & race == "BI" & sex == "M", na.rm = TRUE)
+  dat$epi$diag.H.m[at] <- sum(diagnosed == 1 & race == "H" & sex == "M", na.rm = TRUE)
+  dat$epi$diag.HI.m[at] <- sum(diagnosed == 1 & race == "HI" & sex == "M", na.rm = TRUE)
+  dat$epi$diag.W.m[at] <- sum(diagnosed == 1 & race == "W" & sex == "M", na.rm = TRUE)
+  
+  dat$epi$diag.B.msf[at] <- sum(diagnosed == 1 & race == "B" & sex.ident == "msf", na.rm = TRUE)
+  dat$epi$diag.BI.msf[at] <- sum(diagnosed == 1 & race == "BI" & sex.ident == "msf", na.rm = TRUE)
+  dat$epi$diag.H.msf[at] <- sum(diagnosed == 1 & race == "H" & sex.ident == "msf", na.rm = TRUE)
+  dat$epi$diag.HI.msf[at] <- sum(diagnosed == 1 & race == "HI" & sex.ident == "msf", na.rm = TRUE)
+  dat$epi$diag.W.msf[at] <- sum(diagnosed == 1 & race == "W" & sex.ident == "msf", na.rm = TRUE)
+  
+  dat$epi$diag.B.msm[at] <- sum(diagnosed == 1 & race == "B" & sex.ident == "msm", na.rm = TRUE)
+  dat$epi$diag.BI.msm[at] <- sum(diagnosed == 1 & race == "BI" & sex.ident == "msm", na.rm = TRUE)
+  dat$epi$diag.H.msm[at] <- sum(diagnosed == 1 & race == "H" & sex.ident == "msm", na.rm = TRUE)
+  dat$epi$diag.HI.msm[at] <- sum(diagnosed == 1 & race == "HI" & sex.ident == "msm", na.rm = TRUE)
+  dat$epi$diag.W.msm[at] <- sum(diagnosed == 1 & race == "W" & sex.ident == "msm", na.rm = TRUE)
+  
+  dat$epi$diag.B.msmf[at] <- sum(diagnosed == 1 & race == "B" & sex.ident == "msmf", na.rm = TRUE)
+  dat$epi$diag.BI.msmf[at] <- sum(diagnosed == 1 & race == "BI" & sex.ident == "msmf", na.rm = TRUE)
+  dat$epi$diag.H.msmf[at] <- sum(diagnosed == 1 & race == "H" & sex.ident == "msmf", na.rm = TRUE)
+  dat$epi$diag.HI.msmf[at] <- sum(diagnosed == 1 & race == "HI" & sex.ident == "msmf", na.rm = TRUE)
+  dat$epi$diag.W.msmf[at] <- sum(diagnosed == 1 & race == "W" & sex.ident == "msmf", na.rm = TRUE)
+  
   
   dat$epi$prepCurr[at] <- sum(prepStat == 1, na.rm = TRUE)
   dat$epi$prepElig[at] <- sum(dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum((is.na(prepStat) | prepStat == 0) &
                                  status == 1, na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(prepStat == 1 & status == 1, na.rm = TRUE)
-  dat$epi$i.prev.prep0[at] <- dat$epi$i.num.prep0[at] /
+  dat$epi$prev.prep0[at] <- dat$epi$i.num.prep0[at] /
                               sum((is.na(prepStat) | prepStat == 0), na.rm = TRUE)
   if (at == 1) {
-    dat$epi$i.prev.prep1[1] <- 0
+    dat$epi$prev.prep1[1] <- 0
   } else {
-    dat$epi$i.prev.prep1[at] <- dat$epi$i.num.prep1[at] /
+    dat$epi$prev.prep1[at] <- dat$epi$i.num.prep1[at] /
                                 sum(prepStat == 1, na.rm = TRUE)
   }
   
   
-  dat$epi$nCohabs[at] <- sum(get_degree(dat$el[[1]]), na.rm = TRUE)
-  dat$epi$nPers[at] <- sum(get_degree(dat$el[[2]]), na.rm = TRUE)
-  dat$epi$nOTduplicates[at] <- sum(get_degree(dat$el[[3]]), na.rm = TRUE)
+  dat$epi$nCohabs[at] <- sum(get_degree(dat$el[[1]]), na.rm = TRUE)/2
+  dat$epi$nPers[at] <- sum(get_degree(dat$el[[2]]), na.rm = TRUE)/2
+  dat$epi$nOT[at] <- sum(get_degree(dat$el[[3]]), na.rm = TRUE)/2
   
   
   return(dat)
