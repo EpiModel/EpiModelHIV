@@ -35,7 +35,6 @@ ConcDurDx_shamp <- function(dat, at){
     cel.temp <- dat$cel.temp
     cel.complete <- dat$cel.complete
       
-    ##  USE UID FOR EDGES
     ## get the race and sex 
       el1<-as.data.frame(dat$el[[1]])
       el1[,3] <- apply(el1[,c(1,2)], 1, FUN=max)
@@ -133,10 +132,7 @@ ConcDurDx_shamp <- function(dat, at){
         ended$end <-at
         cel.complete <- rbind(cel.complete,ended)
         
-        ##look at ended Ecohab status?
-        ##How many in cohabs in ended are Ecohab Vs Not
-        ##compare to base.t
-        
+
         cel.temp <- merge(x = cel, y = cel.temp, by = c("p1","p2"), all.x = TRUE)
         cel.temp <- cel.temp[,c(1:14,27,28)]
         
