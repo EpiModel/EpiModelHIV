@@ -441,6 +441,9 @@ and multiplexity.}
 \item{death_stats}{IF TRUE the data.frame death.stats stores all care continuum information for individuals at the time of death.
 HIV related death data are store in death.stats, care continuum information for those that age out positive is store in death.stats$age.out.}
 
+\item{add.demog.groups}{if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
+attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options}
+
 \item{Ecohab.window}{The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.}
 
 \item{p.growth}{If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.}
