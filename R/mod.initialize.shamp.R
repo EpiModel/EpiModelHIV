@@ -3279,13 +3279,25 @@ reinit_shamp <- function(x, param, init, control, s) {
   dat$p <- x$p[[s]]
 
   dat$attr <- x$attr[[s]]
-  dat$attr <- x$trans.el[[s]]
+  dat$trans.el <- x$trans.el[[s]]
 
   if (!is.null(x$stats)) {
     dat$stats <- list()
     if (!is.null(x$stats$nwstats)) {
       dat$stats$nwstats <- x$stats$nwstats[[s]]
     }
+  }
+  
+  if (!is.null(x$cel.temp)) {
+    dat$cel.temp <- x$cel.temp[[s]]
+  }
+  
+  if (!is.null(x$cel.complete)) {
+    dat$cel.complete <- x$cel.complete[[s]]
+  }
+  
+  if (!is.null(x$death.stats)) {
+    dat$death.stats <- x$death.stats[[s]]
   }
 
   dat$temp <- x$temp[[s]]
