@@ -3232,7 +3232,7 @@ if (num.B.f > 0){
 }
 
 
-#' @title Re-Initialization Module _ OLD
+#' @title Re-Initialization Module
 #'
 #' @description This function reinitializes an epidemic model to restart at a
 #'              specified time step given an input \code{netsim} object.
@@ -3252,7 +3252,7 @@ if (num.B.f > 0){
 #' @export
 #' @keywords module shamp
 #'
-reinit_shamp_old <- function(x, param, init, control, s) {
+reinit_shamp <- function(x, param, init, control, s) {
 
   need.for.reinit <- c("param", "control", "nwparam", "epi", "attr", "temp", "el", "p", "trans.el")
   if (!all(need.for.reinit %in% names(x))) {
@@ -3306,77 +3306,3 @@ reinit_shamp_old <- function(x, param, init, control, s) {
   return(dat)
 }
 
-
-#' @title Re-Initialization Module
-#'
-#' @description This function reinitializes an epidemic model to restart at a
-#'              specified time step given an input \code{netsim} object.
-#'
-#' @param x An \code{EpiModel} object of class \code{\link{netsim}}.
-#' @inheritParams initialize_shamp
-#'
-#' @details
-#' Currently, the necessary components that must be on \code{x} for a simulation
-#' to be restarted must be: param, control, nwparam, epi, attr, temp, el, p.
-#' TODO: describe this more.
-#'
-#' @return
-#' This function resets the data elements on the \code{dat} master data object
-#' in the needed ways for the time loop to function.
-#'
-#' @export
-#' @keywords module shamp
-#'
-reinit_shamp <- function(x, param, init, control) {
-  
-  need.for.reinit <- c("param", "control", "nwparam", "epi", "attr", "temp", "el", "p", "trans.el")
-  if (!all(need.for.reinit %in% names(x))) {
-    stop("x must contain the following elements for restarting: ",
-         "param, control, nwparam, epi, attr, temp, el, p, trans.el",
-         call. = FALSE)
-  }
-  
-  if (length(x$el) == 1) {
-    s <- 1
-  }
-  
-  dat <- list()
-  
-  dat$param <- param
-  dat$param$modes <- 1
-  dat$control <- control
-  dat$nwparam <- x$nwparam
-  
-  dat$epi <- sapply(x$epi, function(var) var[])
-  names(dat$epi) <- names(x$epi)
-  
-  dat$el <- x$el
-  dat$p <- x$p
-  
-  dat$attr <- x$attr
-  dat$trans.el <- x$trans.el
-  
-  if (!is.null(x$stats)) {
-    dat$stats <- list()
-    if (!is.null(x$stats$nwstats)) {
-      dat$stats$nwstats <- x$stats$nwstats
-    }
-  }
-  
-  if (!is.null(x$cel.temp)) {
-    dat$cel.temp <- x$cel.temp
-  }
-  
-  if (!is.null(x$cel.complete)) {
-    dat$cel.complete <- x$cel.complete
-  }
-  
-  if (!is.null(x$death.stats)) {
-    dat$death.stats <- x$death.stats
-  }
-  
-  dat$temp <- x$temp
-  
-  class(dat) <- "dat"
-  return(dat)
-}
