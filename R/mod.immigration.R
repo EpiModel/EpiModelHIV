@@ -165,7 +165,7 @@ immigration_shamp <- function(dat, at){
     #Who becomes infected
     ids.BI.f.inf<-which(active==1 & sex=="F" & race =="BI" & status==0)
     ids.BI.m.inf<-which(active==1 & sex=="M" & race =="BI" & status==0)
-    ids.H.f.inf<-which(active==1 & sex=="F" & race =="HI" & status==0)
+    ids.HI.f.inf<-which(active==1 & sex=="F" & race =="HI" & status==0)
     ids.HI.m.inf<-which(active==1 & sex=="M" & race =="HI" & status==0)
     
     if(length(ids.BI.f.inf) > 0) {
