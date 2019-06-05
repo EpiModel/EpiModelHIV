@@ -902,7 +902,10 @@ reinit_msm <- function(x, param, init, control, s) {
 
   dat$attr <- x$attr[[s]]
   dat$riskh <- x$riskh[[s]]
-  dat$riskhist <- x$riskhist[[s]]
+  
+  if(dat$param$prep.risk.hist.asmm == TRUE){
+  dat$riskhist <- x$riskhist[[s]]}
+  
   dat$age.inf.vec <- x$age.inf.vec[[s]]
 
   if (!is.null(x$stats)) {
