@@ -874,7 +874,39 @@ param_shamp <- function(race.method = 1,
   p$method <- method
   p$modes <- 1
 
+  #### new methods ======
   
+  p$asmr.B.f <- c(rep(0, 17),
+                  1-(1-c(rep(asmr.1830.f, 12),
+                         rep(asmr.3040.f, 10),
+                         rep(asmr.4050.f, 6)))^(1 / age.unit),
+                  1)
+  
+  
+  
+    for (r in c("B", "BI", "H", "HI", "W")){
+      assign(paste0("asmr.", r ,".f"), 
+             c(rep(0, 17),
+               1-(1-c(rep(asmr.1830.f, 12),
+                      rep(asmr.3040.f, 10),
+                      rep(asmr.4050.f, 6)))^(1 / age.unit),
+               1),
+               p)
+    }
+  
+  
+  }
+  
+  
+  p$asmr.B.m <- c(rep(0, 17),
+                  1-(1-c(rep(asmr.1830.m, 12),
+                         rep(asmr.3040.m, 10),
+                         rep(asmr.4050.m, 6)))^(1 / age.unit),
+                  1)
+  
+  
+
+  #### old =======
   p$asmr.B.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
