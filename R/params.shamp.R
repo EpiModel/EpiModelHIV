@@ -493,7 +493,8 @@ param_shamp <- function(race.method = 1,
                       circ.rr = .4,
                       condom.rr = 0.25,
 
-                      ##For now aasume no disclosure (may use for calibration)
+                      ##For now assume no disclosure (may use for calibration)
+                      # for sara: set these all to the same thing as diag thing
                       disc.outset.main.B.f.prob = 0,
                       disc.outset.main.BI.f.prob = 0,
                       disc.outset.main.H.f.prob = 0,
@@ -876,92 +877,79 @@ param_shamp <- function(race.method = 1,
 
   #### new methods ======
   
+library(tidyverse)
+  
+  ############# Read in the excel parameters sheet
+  
+  # A. Read in the Excel sheet.
+ parameter_sheet<- readxl::read_excel( 
+   file="C:/Users/SKhan/Desktop/Model Parameters.Sara.work.xlsx",
+   #"C:/Users/SKhan/OneDrive - UW/Model Parameters.Sara.work.xlsx",
+                     sheet = "Estimates from Secondary Source") %>% 
+    select(`Parameter name`, `SHAMP Estimates`) %>% # only grab the parameter name and SHAMP estimates
+    rename(param = 1,
+           est = 2) %>%  # rename the parameters for easier viewing
+  
+  # B. Clean the parameters sheet to only have the estimate and non-missing parameters
+ parameter_sheet<-parameter_sheet %>% mutate(est = as.numeric(est)) %>% 
+   filter(is.na(est)==F,# only have non-missing estimates or parameters
+          is.na(param)==F)
+ 
+  # C. Recursively save all of the parameters as single objects in the global env.
+ param_list$est<-parameter_sheet$est
+ param_list$params<-parameter_sheet$param
+ 
+ # create a temporary list to store all the parameters
+ temp_list<-list()
+ 
+ # take out each estimate, and apply it to the empty list
+ for (i in 1:length(param_list$params)){
+   temp_list[i]<-param_list$est[i]
+ }
+ 
+ # apply the name of the parameter to each element in the list
+ names(temp_list)<-c(test_list$params)
+ 
+ # finally, bring all the parameters to the environment
+ list2env(temp_list,globalenv())
+ 
+ # remove the temporary list
+ rm(temp_list)
+ 
+
+ 
   p$asmr.B.f <- c(rep(0, 17),
-                  1-(1-c(rep(asmr.1830.f, 12),
-                         rep(asmr.3040.f, 10),
-                         rep(asmr.4050.f, 6)))^(1 / age.unit),
+                  1-(1-c(rep(0.000405376, 12),
+                         rep(0.000661066, 10),
+                         rep(0.001378053, 6)))^(1 / age.unit),
                   1)
   
-  
-  
-    for (r in c("B", "BI", "H", "HI", "W")){
-      assign(paste0("asmr.", r ,".f"), 
-             c(rep(0, 17),
-               1-(1-c(rep(asmr.1830.f, 12),
-                      rep(asmr.3040.f, 10),
-                      rep(asmr.4050.f, 6)))^(1 / age.unit),
-               1),
-               p)
-    }
-  
-  
+  for(r in c("B", "BI", "H", "HI", "W")){
+    Ps <- c(rep(0, 17),
+           1-(1-c(rep(parameter_sheet %>% 
+                          filter(param == "asmr.1830.f") %>% 
+                          select(2)$est
+                       , 12),
+                   rep(parameter_sheet %>% 
+                          filter(param == "asmr.3040.f") %>% 
+                          select(2)$est
+                       , 10),
+                   rep(parameter_sheet %>% 
+                          filter(param == "asmr.4050.f") %>% 
+                          select(2)$est
+                       , 6)))^(1 / age.unit),
+            1)
+    p[[paste0("asmr.", r ,".f")]] <- Ps
   }
   
-  
-  p$asmr.B.m <- c(rep(0, 17),
-                  1-(1-c(rep(asmr.1830.m, 12),
-                         rep(asmr.3040.m, 10),
-                         rep(asmr.4050.m, 6)))^(1 / age.unit),
-                  1)
-  
-  
-
-  #### old =======
-  p$asmr.B.f <- c(rep(0, 17),
-                1-(1-c(rep(0.000405376, 12),
-                       rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1 / age.unit),
-                1)
-  p$asmr.BI.f <- c(rep(0, 17),
-                 1-(1-c(rep(0.000405376, 12),
-                        rep(0.000661066, 10),
-                        rep(0.001378053, 6)))^(1 / age.unit),
-                 1)
-  
-  p$asmr.H.f <- c(rep(0, 17),
-                1-(1-c(rep(0.000405376, 12),
-                       rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1/age.unit),
-                1)
-  p$asmr.HI.f <- c(rep(0, 17),
-                 1-(1-c(rep(0.000405376, 12),
-                        rep(0.000661066, 10),
-                        rep(0.001378053, 6)))^(1/age.unit),
-                 1)
-  p$asmr.W.f <- c(rep(0, 17),
-                1-(1-c(rep(0.000405376, 12),
-                       rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1/age.unit),
-                1)
-  
-  
-  p$asmr.B.m <- c(rep(0, 17),
-                1-(1-c(rep(0.000853417, 12),
-                       rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1 / age.unit),
-                1)
-  p$asmr.BI.m <- c(rep(0, 17),
-                 1-(1-c(rep(0.000853417, 12),
-                        rep(0.001084014, 10),
-                        rep(0.001982864, 6)))^(1 / age.unit),
-                 1)
-  
-  p$asmr.H.m <- c(rep(0, 17),
-                1-(1-c(rep(0.000853417, 12),
-                       rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1/age.unit),
-                1)
-  p$asmr.HI.m <- c(rep(0, 17),
-                 1-(1-c(rep(0.000853417, 12),
-                        rep(0.001084014, 10),
-                        rep(0.001982864, 6)))^(1/age.unit),
-                 1)
-  p$asmr.W.m <- c(rep(0, 17),
-                1-(1-c(rep(0.000853417, 12),
-                       rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1/age.unit),
-                1)
-
+  for(r in c("B", "BI", "H", "HI", "W")){
+    Ps <- c(rep(0, 17),
+            1-(1-c(rep(asmr.1830.m, 12),
+                   rep(asmr.3040.m, 10),
+                   rep(asmr.4050.m, 6)))^(1 / age.unit),
+            1)
+    p[[paste0("asmr.", r ,".m")]] <- Ps
+  }
 
   class(p) <- "param.net"
   return(p)
