@@ -471,7 +471,9 @@ param_cl <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
-                      
+                      prep.riskh.reinit = FALSE,
+                     
+                     
                       prep.start.asmm = Inf,
                       prep.uptake.asmm = .5,
                       prep.disc.asmm = 1/26,
