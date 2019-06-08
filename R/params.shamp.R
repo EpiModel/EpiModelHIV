@@ -5,7 +5,7 @@ library(tidyverse)
 
 # A. Read in the Excel sheet.
 parameter_sheet<- readxl::read_excel( 
-  "C:/Users/SKhan/Desktop/Model Parameters.Sara.work.xlsx",
+  "data/Model Parameters.Sara.work.xlsx",
   sheet = 1) %>% 
   select(`Parameter name`, `SHAMP Estimates`) %>% # only grab the parameter name and SHAMP estimates
   rename(param = 1,
