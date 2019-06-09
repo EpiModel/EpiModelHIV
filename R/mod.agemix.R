@@ -19,9 +19,9 @@
 agemix_campcl <- function(dat, at) {
 
 if(dat$param$agemix == TRUE){
-if(at < 3){dat$el.age <- list()}
+if(at < dat$param$agemix.start){dat$el.age <- list()}
 
-if(at >= 3){
+if(at >= dat$param$agemix.start){
     # Attributes
     age <- dat$attr$age
 
