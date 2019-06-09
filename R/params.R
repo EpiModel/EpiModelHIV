@@ -282,6 +282,7 @@ param_cl <- function(nwstats,
                       race.method = 1,
                       FU=FALSE,
                       agemix=FALSE,
+                      agemix.start=Inf,
                       last.neg.test.B.int = 301,
                       last.neg.test.W.int = 315,
                       
