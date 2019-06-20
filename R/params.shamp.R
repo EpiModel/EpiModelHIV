@@ -890,6 +890,8 @@ param_shamp <- function(race.method = 1,
   p <- get_args(formal.args = formals(sys.function()),
                 dot.args = list(...))
 
+  #Method for HIV testing with options \code{"memoryless"}  for constant hazard without regard to time since previous test or 
+  #\code{"interval"} deterministic fixed intervals.
   if (!(testing.pattern %in% c("memoryless", "interval"))) {
     stop("testing.pattern must be \"memoryless\" or \"interval\" ",
           call. = FALSE)
