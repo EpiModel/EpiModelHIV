@@ -860,7 +860,7 @@ param_shamp <- function(race.method = 1,
                       #pos.entry.BI = 0,
                       #pos.entry.HI = 0,
                       
-                      msm.aq = (((1-condom.use)*prev.hiv.msm*(((transmission.receptive*1.09)+(transmission.insertive*1.09)) /2)*(contacts.per.week/weeks.in.year)) + condom.use*prev.hiv.msm*(((transmission.receptive*1.09)+(transmission.insertive*1.09))/2)*(contacts.per.week/weeks.in.year))/2,
+                      msm.aq = (((1-condom.use)*prev.hiv.msm*(((transmission.receptive*transmission.adj)+(transmission.insertive*transmission.adj)) /2)*(contacts.per.week/weeks.in.year)) + condom.use*prev.hiv.msm*(((transmission.receptive*transmission.adj)+(transmission.insertive*transmission.adj))/2)*(contacts.per.week/weeks.in.year))/2,
                       
                       msm.aq.prob.B=msm.aq,
                       msm.aq.prob.BI=msm.aq,
@@ -931,14 +931,11 @@ param_shamp <- function(race.method = 1,
   p$modes <- 1
 
   for(r in c("B", "BI", "H", "HI", "W")){
-    
     Ps <-  c(rep(0, 17),
              1-(1-c(rep(asmr.1830.f, 12),
                     rep(asmr.3040.f, 10),
                     rep(asmr.4050.f, 6)))^(1 / age.unit),
              1)
-    
-  
     p[[paste0("asmr.", r ,".f")]] <- Ps
   }
   
