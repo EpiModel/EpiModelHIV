@@ -58,6 +58,13 @@ verbose_msm <- function(x, type, s, at) {
           prev.ugc <- round(x$epi$prev.ugc[at], 3)
           prev.rct <- round(x$epi$prev.rct[at], 3)
           prev.uct <- round(x$epi$prev.uct[at], 3)
+          incid.hiv <- round(x$epi$incid[at], 3)
+          incid.gc <- round(x$epi$incid.gc[at], 3)
+          incid.ct <- round(x$epi$incid.ct[at], 3)
+          # incid.syph <- round(x$epi$incid.syph[at], 3)
+          # prev.syph <- round(x$epi$prev.syph[at], 3)
+          # prev.pssyph <- round(x$epi$prev.primsecosyph[at], 3)
+          # prev.hiv.pssyph <- round(x$epi$prev.hiv.primsecosyphpos[at], 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -69,14 +76,23 @@ verbose_msm <- function(x, type, s, at) {
           cat("\n------------------------------")
           cat("\nTotal Pop Size:", x$epi$num[at])
           cat("\n------------------------------")
-          cat("\nHIV Curr Incidence:", x$epi$incid[at])
-          cat("\nHIV Cuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
+          #cat("\nHIV Curr Incidence:", x$epi$incid[at])
+          #cat("\nHIV Cuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
           cat("\nHIV Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
-          cat("\n------------------------------")
           cat("\nrGC Prevalence: ", prev.rgc, sep = "")
           cat("\nuGC Prevalence: ", prev.ugc, sep = "")
           cat("\nrCT Prevalence: ", prev.rct, sep = "")
           cat("\nuCT Prevalence: ", prev.uct, sep = "")
+          # cat("\nSyphilis Prevalence: ", prev.syph, sep = "")
+          # cat("\nP and S Syphilis Prevalence: ", prev.pssyph, sep = "")
+          # cat("\nHIV Prevalence in P and S Syphilis: ", prev.hiv.pssyph, sep = "")
+          cat("\n------------------------------")
+          cat("\nHIV Incidence: ", incid.hiv, sep = "")
+          cat("\nGC Incidence: ", incid.gc, sep = "")
+          cat("\nCT Incidence: ", incid.ct, sep = "")
+          # cat("\nSyph Incidence: ", incid.syph, sep = "")
+
+
           cat("\n==============================")
 
         }
@@ -88,8 +104,29 @@ verbose_msm <- function(x, type, s, at) {
 }
 
 
+#' @title Verbose Module
+#'
+#' @description Prints simulation model progress within the time loop.
+#'
+#' @param x If the \code{type} is "startup", then an object of class
+#'        \code{control.net}, otherwise the all master data object in \code{netsim}
+#'        simulations.
+#' @param type Progress type, either of "startup" for starting messages before
+#'        all simulations, or "progress" for time step specific messages.
+#' @param s Current simulation number, if type is "progress"
+#' @param at Current time step, if type is "progress"
+#'
+#' @details
+#' In interactive mode, this module function prints out a standard set of
+#' demographic and epidemiologic summary statistics to the console window. In
+#' non-interactive, batch mode these are saved onto \code{.txt} files in a
+#' \code{verb/} subdirectory. This subdirectory will be created if it does not
+#' exist.
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname verbose_msm
+#'
 verbose_het <- function(x, type, s, at) {
 
   if (type == "startup") {

@@ -60,11 +60,13 @@ cd4_het <- function(dat, at) {
 
   if (length(idsTxFeml) > 0) {
     cd4Cap <- expected_cd4(method = "assign", male = 0, age = 25, ageInf = 25)
-    cd4Count[idsTxFeml] <- pmin(cd4Count[idsTxFeml] + tx.cd4.recrat.feml, cd4Cap)
+    cd4Count[idsTxFeml] <- pmin(cd4Count[idsTxFeml] + tx.cd4.recrat.feml, 
+                                cd4Cap)
   }
   if (length(idsTxMale) > 0) {
     cd4Cap <- expected_cd4(method = "assign", male = 1, age = 25, ageInf = 25)
-    cd4Count[idsTxMale] <- pmin(cd4Count[idsTxMale] + tx.cd4.recrat.male, cd4Cap)
+    cd4Count[idsTxMale] <- pmin(cd4Count[idsTxMale] + tx.cd4.recrat.male, 
+                                cd4Cap)
   }
 
 

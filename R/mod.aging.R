@@ -20,9 +20,9 @@ aging_msm <- function(dat, at) {
   time.unit <- dat$param$time.unit
 
   age <- dat$attr$age
-  active <- dat$attr$active
+  race <- dat$attr$race
 
-  age[active == 1] <- age[active == 1] + time.unit / 365
+  age[race %in% c("B", "W")] <- age[race %in% c("B", "W")] + time.unit / 365
 
   dat$attr$age <- age
   dat$attr$sqrt.age <- sqrt(age)
@@ -31,8 +31,18 @@ aging_msm <- function(dat, at) {
 }
 
 
+#' @title Aging Module
+#'
+#' @description This module ages all active nodes in the population by one time
+#'              unit at each time step.
+#'
+#' @param dat Master data list object of class \code{dat} containing networks,
+#'        individual-level attributes, and summary statistics.
+#' @param at Current time step.
+#'
+#' @keywords module het
 #' @export
-#' @rdname aging_msm
+#'
 aging_het <- function(dat, at) {
 
   ## Parameters
@@ -40,10 +50,10 @@ aging_het <- function(dat, at) {
 
   ## Attributes
   age <- dat$attr$age
-  active <- dat$attr$active
+  race <- dat$attr$race
 
   ## Updates
-  age[active == 1] <- age[active == 1] + time.unit/365
+  age[race %in% c("B", "W")] <- age[race %in% c("B", "W")] + time.unit/365
 
   ## Save out
   dat$attr$age <- age

@@ -13,21 +13,22 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-This function returns the \code{dat} object with the updated discordant act
-list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
-discordant pair repeated the number of times they have AI.
+This function returns the \code{dat} object with the updated edge
+list (\code{el}). An additional column is added with the number of acts for
+each partnership on the edge list (\code{el}).
 }
 \description{
 Module function for setting the number of sexual acts on the
              discordant edgelist.
 }
 \details{
-The number of acts at each time step is specified as a function of the race of
-both members in a pair and the expected values within black-black, black-white,
-and white-white combinations. For one-off partnerships, this is deterministically
-set at 1, whereas for main and causal partnerships it is a stochastic draw
-from a Poisson distribution. The number of total acts may further be modified
-by the level of HIV viral suppression in an infected person.
+The number of acts at each time step is specified as a function of the race
+of both members in a pair and the expected values within black-black,
+black-white,and white-white combinations. For one-off partnerships, this is
+deterministically set at 1, whereas for main and casual partnerships it is a
+stochastic draw from a Poisson distribution. The number of total acts may
+further be modified by the level of HIV viral suppression in an infected
+person.
 }
 \keyword{module}
 \keyword{msm}

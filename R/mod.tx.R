@@ -18,13 +18,14 @@
 #'
 #' @return
 #' This function returns the \code{dat} object with updated \code{tx.status},
-#' \code{tx.init.time}, \code{cum.time.on.tx}, \code{cum.time.off.tx} attributes.
+#' \code{tx.init.time}, \code{cum.time.on.tx}, 
+#' \code{cum.time.off.tx} attributes.
 #'
 #' @keywords module msm
 #'
 #' @export
 #'
-tx_msm <- function(dat, at) {
+hiv_tx_msm <- function(dat, at) {
 
   ## Variables
 
@@ -109,8 +110,17 @@ tx_msm <- function(dat, at) {
 }
 
 
+#' @title HIV Anti-Retroviral Treatment Module
+#'
+#' @description Module function for simulating HIV therapy after diagnosis,
+#'              including adherence and non-adherence to ART.
+#'
+#' @inheritParams aging_het
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname tx_msm
+#'
 tx_het <- function(dat, at) {
 
   # Variables ---------------------------------------------------------------

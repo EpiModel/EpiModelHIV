@@ -2,12 +2,9 @@
 % Please edit documentation in R/mod.simnet.R
 \name{edges_correct_msm}
 \alias{edges_correct_msm}
-\alias{edges_correct_het}
 \title{Adjustment for the Edges Coefficient with Changing Network Size}
 \usage{
 edges_correct_msm(dat, at)
-
-edges_correct_het(dat, at)
 }
 \arguments{
 \item{dat}{Master data list object of class \code{dat} containing networks,

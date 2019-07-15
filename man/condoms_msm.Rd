@@ -13,18 +13,20 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-Updates the discordant edgelist with a \code{uai} variable indicating whether
-condoms were used in that act.
+Updates the edgelist with a \code{uai} variable indicating whether
+condoms were used in that act. An act list \code{al} is created.
+The act list \code{al} is a data frame with the ids of the pair
+repeated the number of times they have AI.
 }
 \description{
 Module function stochastically simulates potential condom use
-             for each act on the discordant edgelist.
+             for each act on the edgelist.
 }
 \details{
-For each act on the discordant edgelist, condom use is stochastically simulated
-based on the partnership type and racial combination of the dyad. Other
-modifiers for the probability of condom use in that pair are diagnosis of
-disease, disclosure of status, and full or partial HIV viral suppression
+For each act on the edgelist, condom use is stochastically
+simulated based on the partnership type and racial combination of the dyad.
+Other modifiers for the probability of condom use in that pair are diagnosis
+of disease, disclosure of status, and full or partial HIV viral suppression
 given HIV anti-retroviral therapy.
 }
 \keyword{module}

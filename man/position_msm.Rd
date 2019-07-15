@@ -13,8 +13,8 @@ individual-level attributes, and summary statistics.}
 \item{at}{Current time step.}
 }
 \value{
-This function returns the updated discordant edgelist with a \code{ins}
-attribute for values of whether the infected node is insertive or the
+This function returns the updated act list with a \code{ins}
+attribute for values of whether the node is insertive or the
 susceptible node is insertive for that act.
 }
 \description{

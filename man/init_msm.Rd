@@ -4,8 +4,11 @@
 \alias{init_msm}
 \title{Epidemic Model Initial Conditions}
 \usage{
-init_msm(nwstats, prev.B = 0.253, prev.W = 0.253, prev.ugc = 0.005,
-  prev.rgc = 0.005, prev.uct = 0.013, prev.rct = 0.013, ...)
+init_msm(nwstats, prev.B = 0.149006, prev.W = 0.149006,
+  prev.ugc = 0.001471584, prev.rgc = 0.001471584,
+  prev.uct = 0.007572175, prev.rct = 0.007572175, prev.syph.B = 0,
+  prev.syph.W = 0, stage.syph.B.prob = c(0.4, 0.2, 0.2, 0.2, 0, 0),
+  stage.syph.W.prob = c(0.4, 0.2, 0.2, 0.2, 0, 0), ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -22,6 +25,18 @@ init_msm(nwstats, prev.B = 0.253, prev.W = 0.253, prev.ugc = 0.005,
 \item{prev.uct}{Initial prevalence of urethral chlamydia.}
 
 \item{prev.rct}{Initial prevalence of rectal chlamydia.}
+
+\item{prev.syph.B}{Initial prevalence of syphilis among black MSM}
+
+\item{prev.syph.W}{Initial prevalence of syphilis among white MSM}
+
+\item{stage.syph.B.prob}{Proportion of black MSM who enter one of the seven
+active stages of syphilis: incubating, primary, secondary, early
+latent, late latent, late late latent, and tertiary.}
+
+\item{stage.syph.W.prob}{Proportion of white MSM who enter one of the seven
+active stages of syphilis: incubating, primary, secondary, early
+latent, late latent, late late latent, and tertiary.}
 
 \item{...}{Additional arguments passed to function.}
 }

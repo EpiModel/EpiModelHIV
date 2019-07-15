@@ -1,8 +1,8 @@
 
 #' @title Definition for absdiffnodemix ERGM Term
 #'
-#' @description This function defines and initialize the absdiffnodemix ERGM term
-#'              that allows for targeting age homophily by race.
+#' @description This function defines and initialize the absdiffnodemix ERGM 
+#'              term that allows for targeting age homophily by race.
 #'
 #' @param nw An object of class \code{network}.
 #' @param arglist A list of arguments as specified in the \code{ergm.userterms}
@@ -11,11 +11,11 @@
 #'        \code{ergm.userterms} package framework.
 #'
 #' @details
-#' This ERGM user term was written to allow for age-based homophily in partnership
-#' formation that is heterogenous by race. The absdiff component allows targets
-#' the distribution of age mixing on that continuous variable, and the nodemix
-#' component differentiates this for black-black, black-white, and white-white
-#' couples.
+#' This ERGM user term was written to allow for age-based homophily in 
+#' partnership formation that is heterogenous by race. The absdiff component 
+#' allows targets the distribution of age mixing on that continuous variable, 
+#' and the nodemix component differentiates this for black-black, black-white, 
+#' and white-white couples.
 #'
 #' @author Steven M. Goodreau
 #'
@@ -53,7 +53,8 @@ InitErgmTerm.absdiffnodemix <- function(nw, arglist, ...) {
   inputs = c(length(nodecov), length(urm), nodecov, nodecovby, urm, ucm)
 
   list(name = "absdiffnodemix",
-       coef.names = paste("absdiffnodemix", a$attrname, a$byattrname, uun, sep = "."),
+       coef.names = paste("absdiffnodemix", a$attrname, a$byattrname, uun, 
+                          sep = "."),
        pkgname = "EpiModelHIV",
        inputs = inputs,
        dependence = FALSE)
@@ -73,10 +74,11 @@ InitErgmTerm.absdiffnodemix <- function(nw, arglist, ...) {
 #'        \code{ergm.userterms} package framework.
 #'
 #' @details
-#' This ERGM user term was written to allow for age-based homophily in partnership
-#' formation that is asymetric by sex. The absdiff component targets age homophily
-#' while the by component allows that to be structed by a binary attribute such
-#' as "male", in order to enforce an offset in the average difference.
+#' This ERGM user term was written to allow for age-based homophily in 
+#' partnershipformation that is asymetric by sex. The absdiff component targets 
+#' age homophily while the by component allows that to be structed by a binary 
+#' attribute suchas "male", in order to enforce an offset in the average 
+#' difference.
 #'
 #' @export
 InitErgmTerm.absdiffby <- function(nw, arglist, ...) {

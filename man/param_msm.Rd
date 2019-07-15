@@ -7,6 +7,7 @@
 param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   last.neg.test.W.int = 315, mean.test.B.int = 301,
   mean.test.W.int = 315, testing.pattern = "memoryless",
+  testing.pattern.sti = "interval", sti.correlation.time = 0,
   test.window.int = 21, tt.traj.B.prob = c(0.077, 0, 0.356, 0.567),
   tt.traj.W.prob = c(0.052, 0, 0.331, 0.617), tx.init.B.prob = 0.092,
   tx.init.W.prob = 0.127, tx.halt.B.prob = 0.0102,
@@ -18,10 +19,14 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   * 7, vl.aids.int = 52 * 2 * 7, vl.fatal = 7, vl.full.supp = 1.5,
   vl.part.supp = 3.5, full.supp.down.slope = 0.25,
   full.supp.up.slope = 0.25, part.supp.down.slope = 0.25,
-  part.supp.up.slope = 0.25, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
-  birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
-  UIAI.prob = 0.0031 * 1.09, acute.rr = 6, circ.rr = 0.4,
-  condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
+  part.supp.up.slope = 0.25, incu.syph.int = 28, prim.syph.int = 63,
+  seco.syph.int = 119, earlat.syph.int = 364 - incu.syph.int -
+  prim.syph.int - seco.syph.int, latelat.syph.int = 9 * 52 * 7,
+  latelatelat.syph.int = 20 * 52 * 7, tert.syph.int = 20 * 52 * 7,
+  syph.tert.prog.prob = 0.00010776536, b.B.rate = 0.001/7,
+  b.W.rate = 0.001/7, birth.age = 18, b.method = "fixed",
+  URAI.prob = 0.0082 * 1.09, UIAI.prob = 0.0031 * 1.09, acute.rr = 6,
+  circ.rr = 0.4, condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
   disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
   disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
   disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
@@ -34,7 +39,8 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
   base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
   base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.scale = 1.15, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
+  ai.scale = 1.061338, ai.scale.pospos = 1.061338,
+  cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
   cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
   cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
   cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
@@ -49,22 +55,62 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   prep.class.prob = c(0.211, 0.07, 0.1, 0.619), prep.class.hr = c(1,
   0.69, 0.19, 0.05), prep.coverage = 0, prep.cov.method = "curr",
   prep.cov.rate = 1, prep.tst.int = 90, prep.risk.int = 182,
-  prep.risk.reassess = TRUE, rcomp.prob = 0, rcomp.adh.groups = 0:3,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE,
-  rgc.tprob = 0.357698, ugc.tprob = 0.248095, rct.tprob = 0.321597,
-  uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
-  ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
-  uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
-  ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363,
-  hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2,
-  ...)
+  prep.risk.reassess = TRUE, riskhist.int = 182, stitest.start = 1,
+  stitest.active.int = 364, tst.rect.sti.rr = 1,
+  sti.highrisktest.int = 182, stitest.elig.model = "all",
+  stianntest.gc.hivneg.coverage = 0.44,
+  stianntest.ct.hivneg.coverage = 0.44,
+  stianntest.syph.hivneg.coverage = 0,
+  stihighrisktest.gc.hivneg.coverage = 0,
+  stihighrisktest.ct.hivneg.coverage = 0,
+  stihighrisktest.syph.hivneg.coverage = 0,
+  stianntest.gc.hivpos.coverage = 0.61,
+  stianntest.ct.hivpos.coverage = 0.61,
+  stianntest.syph.hivpos.coverage = 0,
+  stihighrisktest.gc.hivpos.coverage = 0,
+  stihighrisktest.ct.hivpos.coverage = 0,
+  stihighrisktest.syph.hivpos.coverage = 0,
+  stianntest.cov.method = "curr", stihighrisktest.cov.method = "curr",
+  partnercutoff = 1, ept.start = Inf, ept.risk.int = 60,
+  ept.coverage = 0, ept.cov.method = "curr", ept.cov.rate = 1,
+  ept.provision.partner.main.ong = 0.5,
+  ept.provision.partner.pers.ong = 0.4,
+  ept.provision.partner.main.end = 0.4,
+  ept.provision.partner.pers.end = 0.3,
+  ept.provision.partner.inst = 0.2, ept.uptake.partner.main = 0.8,
+  ept.uptake.partner.pers = 0.8, ept.uptake.partner.inst = 0.8,
+  ept.gc.success = 1, ept.ct.success = 1, rcomp.prob = 0,
+  rcomp.adh.groups = 0:3, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, rgc.tprob = 0.5364416,
+  ugc.tprob = 0.434692, rct.tprob = 0.2493814, uct.tprob = 0.1944415,
+  syph.tprob = 0.1464, syph.incub.rr = 0, syph.earlat.rr = 0.25,
+  syph.late.rr = 0, rgc.sympt.prob = 0.16, ugc.sympt.prob = 0.8,
+  rct.sympt.prob = 0.14, uct.sympt.prob = 0.48,
+  syph.incub.sympt.prob = 0, syph.prim.sympt.prob = 0.5,
+  syph.seco.sympt.prob = 0.85, syph.earlat.sympt.prob = 0,
+  syph.latelat.sympt.prob = 0, syph.tert.sympt.prob = 1,
+  rgc.asympt.rate = 1/(24.78753 * 7), ugc.asympt.rate = 1/(24.78753 *
+  7), gc.tx.int = 7, gc.ntx.int = NA, rct.asympt.rate = 1/(44.28232 *
+  7), uct.asympt.rate = 1/(44.28232 * 7), ct.tx.int = 7,
+  ct.ntx.int = NA, syph.early.tx.int = 7, syph.late.tx.int = 3 * 7,
+  gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
+  gc.asympt.prob.tx = 1, ct.asympt.prob.tx = 1,
+  syph.incub.sympt.prob.tx = 0, syph.incub.asympt.prob.tx = 0,
+  syph.prim.sympt.prob.tx = 0.6, syph.prim.asympt.prob.tx = 1,
+  syph.seco.sympt.prob.tx = 0.688235, syph.seco.asympt.prob.tx = 1,
+  syph.earlat.sympt.prob.tx = 0.1, syph.earlat.asympt.prob.tx = 1,
+  syph.latelat.sympt.prob.tx = 0.1, syph.latelat.asympt.prob.tx = 1,
+  syph.tert.sympt.prob.tx = 1, syph.tert.asympt.prob.tx = 1,
+  prep.sti.screen.int = 182, prep.sti.prob.tx = 1, sti.cond.rr = 0.3,
+  hiv.rgc.rr = 2.175918, hiv.ugc.rr = 1.564797,
+  hiv.rct.rr = 2.175918, hiv.uct.rr = 1.564797, hiv.syph.rr = 1.62,
+  hiv.rgc.rct.rr = 0.2, hiv.rgc.syph.rr = 0.2, hiv.rct.syph.rr = 0.2,
+  hiv.ugc.uct.rr = 0.2, hiv.ugc.syph.rr = 0.2, hiv.uct.syph.rr = 0.2,
+  hiv.all.ureth.rr = 0.2, hiv.all.rect.rr = 0.2, hiv.trans.gc.rr = 1,
+  hiv.trans.ct.rr = 1, hiv.trans.syph.rr = 1,
+  hiv.trans.gc.ct.rr = 0.2, hiv.trans.gc.syph.rr = 0.2,
+  hiv.trans.ct.syph.rr = 0.2, hiv.trans.allsti.rr = 0.2,
+  partlist.start = NULL, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -79,13 +125,21 @@ black men.}
 \item{last.neg.test.W.int}{Time range in days for last negative test for
 white men.}
 
-\item{mean.test.B.int}{Mean intertest interval in days for black MSM who test.}
+\item{mean.test.B.int}{Mean intertest interval (days) for black MSM who test.}
 
-\item{mean.test.W.int}{Mean intertest interval in days for white MSM who test.}
+\item{mean.test.W.int}{Mean intertest interval (days) for white MSM who test.}
 
-\item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
-for constant hazard without regard to time since previous test, or
-\code{"interval"} deterministic fixed intervals.}
+\item{testing.pattern}{Method for HIV testing, with options
+\code{"memoryless"} for constant hazard without regard to time since
+previous test, or \code{"interval"} deterministic fixed intervals.}
+
+\item{testing.pattern.sti}{Method for STI testing, with options
+\code{"memoryless"} for constant hazard without regard to time since
+previous test, or \code{"interval"} deterministic fixed intervals.}
+
+\item{sti.correlation.time}{Length of window lookback (weeks) for correlated
+STI testing (e.g. value of 9 weeks means last test must have been > 9
+weeks prior for a particular STI)}
 
 \item{test.window.int}{Length of the HIV test window period in days.}
 
@@ -121,9 +175,9 @@ re-initiate treatment.}
 suppressor before onset of AIDS, including time before diagnosis.}
 
 \item{max.time.on.tx.part.int}{Number of days on treatment for a
-partial suppressor beofre onset of AIDS.}
+partial suppressor before onset of AIDS.}
 
-\item{max.time.off.tx.part.int}{Nnumber of days off treatment for a
+\item{max.time.off.tx.part.int}{Number of days off treatment for a
 partial suppressor before onset of AIDS, including time before
 diagnosis.}
 
@@ -150,8 +204,8 @@ patient.}
 \item{vl.part.supp}{Log10 viral load at partial suppression on ART.}
 
 \item{full.supp.down.slope}{For full suppressors, number of log10 units that
-viral load falls per time step from treatment initiation or re-initiation
-until the level in \code{vl.full.supp}.}
+viral load falls per time step from treatment initiation or
+re-initiation until the level in \code{vl.full.supp}.}
 
 \item{full.supp.up.slope}{For full suppressors, number of log10 units that
 viral load rises per time step from treatment halting until expected
@@ -162,7 +216,26 @@ that viral load falls per time step from treatment initiation or
 re-initiation until the level in \code{vl.part.supp}.}
 
 \item{part.supp.up.slope}{For partial suppressors, number of log10 units that
-viral load rises per time step from treatment halting until expected value.}
+viral load rises per time step from treatment halting until
+expected value.}
+
+\item{incu.syph.int}{Number of days in incubation stage of syphilis.}
+
+\item{prim.syph.int}{Number of days in primary stage of syphilis.}
+
+\item{seco.syph.int}{Number of days in secondary stage of syphilis.}
+
+\item{earlat.syph.int}{Number of days in early latent stage of syphilis.}
+
+\item{latelat.syph.int}{Number of days in first late latent stage of syphilis.}
+
+\item{latelatelat.syph.int}{Number of days in second stage of late latent
+syphilis for those who will not progress to tertiary infection.}
+
+\item{tert.syph.int}{Number of days in tertiary stage of syphilis.}
+
+\item{syph.tert.prog.prob}{Probability of progression from late latent stage
+of syphilis to tertiary stage at any point in time during late latent.}
 
 \item{b.B.rate}{Rate at which black MSM enter the population.}
 
@@ -191,17 +264,17 @@ negative insertive partner is circumcised.}
 \item{condom.rr}{Relative risk of infection from anal sex when a condom is
 used.}
 
-\item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
-disclose his status at the start of a main partnership.}
+\item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM
+will disclose his status at the start of a main partnership.}
 
-\item{disc.outset.main.W.prob}{Probability that an HIV-infected white MSM will
-disclose his status at the start of a main partnership.}
+\item{disc.outset.main.W.prob}{Probability that an HIV-infected white MSM
+will disclose his status at the start of a main partnership.}
 
-\item{disc.at.diag.main.B.prob}{Probability that a black MSM already in a main
-partnership will disclose at the time of diagnosis.}
+\item{disc.at.diag.main.B.prob}{Probability that a black MSM already in a
+main partnership will disclose at the time of diagnosis.}
 
-\item{disc.at.diag.main.W.prob}{Probability that a white MSM already in a main
-partnership will disclose at the time of diagnosis.}
+\item{disc.at.diag.main.W.prob}{Probability that a white MSM already in a
+main partnership will disclose at the time of diagnosis.}
 
 \item{disc.post.diag.main.B.prob}{Probability that an HIV-infected black MSM
 in a main partnership will disclose his status, assuming he didn't
@@ -211,11 +284,11 @@ at the start of the partnership or at diagnosis.}
 in a main partnership will disclose his status, assuming he didn't
 at the start of the partnership or at diagnosis.}
 
-\item{disc.outset.pers.B.prob}{Probability that an HIV-infected black MSM will
-disclose his status at the start of a casual partnership.}
+\item{disc.outset.pers.B.prob}{Probability that an HIV-infected black MSM
+will disclose his status at the start of a casual partnership.}
 
-\item{disc.outset.pers.W.prob}{Probability that an HIV-infected white MSM will
-disclose his status at the start of a casual partnership.}
+\item{disc.outset.pers.W.prob}{Probability that an HIV-infected white MSM
+will disclose his status at the start of a casual partnership.}
 
 \item{disc.at.diag.pers.B.prob}{Probability that a black MSM already in a
 casual partnership will disclose at the time of diagnosis.}
@@ -251,8 +324,8 @@ among black MSM.}
 mutation (homozygous and heterozygous, respectively) in the CCR5 gene
 among white MSM.}
 
-\item{ccr5.heteroz.rr}{Relative risk of infection for men who are heterozygous
-in the CCR5 mutation.}
+\item{ccr5.heteroz.rr}{Relative risk of infection for men who are
+heterozygous in the CCR5 mutation.}
 
 \item{num.inst.ai.classes}{Number of quantiles into which men should be
 divided in determining their levels of one-off anal intercourse.}
@@ -275,8 +348,11 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.scale}{General relative scaler for all act rates for model
+\item{ai.scale}{General relative scaler for all other act rates for model
 calibration.}
+
+\item{ai.scale.pospos}{General relative scaler for HIV-positive-concordant
+act rates for model calibration.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}
@@ -287,8 +363,8 @@ partnership.}
 \item{cond.main.WW.prob}{Probability of condom use in a white-white main
 partnership.}
 
-\item{cond.pers.always.prob}{Fraction of men in casual partnerships who always
-use condoms in those partnerships.}
+\item{cond.pers.always.prob}{Fraction of men in casual partnerships who
+always use condoms in those partnerships.}
 
 \item{cond.pers.BB.prob}{Of men who are not consistent condom users, per-act
 probability of condom use in a black-black casual partnerships.}
@@ -299,8 +375,8 @@ probability of condom use in a black-white casual partnerships.}
 \item{cond.pers.WW.prob}{Of men who are not consistent condom users, per-act
 probability of condom use in a white-white casual partnerships.}
 
-\item{cond.inst.always.prob}{Fraction of men in instant partnerships who always
-use condoms in those partnerships.}
+\item{cond.inst.always.prob}{Fraction of men in instant partnerships who
+always use condoms in those partnerships.}
 
 \item{cond.inst.BB.prob}{Of men who are not consistent condom users, per-act
 probability of condom use in a black-black one-off partnerships.}
@@ -311,8 +387,8 @@ probability of condom use in a black-white one-off partnerships.}
 \item{cond.inst.WW.prob}{Of men who are not consistent condom users, per-act
 probability of condom use in a white-white one-off partnerships.}
 
-\item{cond.always.prob.corr}{Correlation coefficient for probability of always
-using condoms in both casual and one-off}
+\item{cond.always.prob.corr}{Correlation coefficient for probability of
+always using condoms in both casual and one-off}
 
 \item{cond.rr.BB}{Condom probability scaler for black-black partnerships for
 model calibration purposes.}
@@ -367,16 +443,16 @@ have never been on PrEP and are disease-susceptible.}
 \item{prep.class.prob}{The probability of adherence class in non-adherent,
 low adherence, medium adherence, or high adherence groups (from Liu).}
 
-\item{prep.class.hr}{The hazard ratio for infection per act associated with each
-level of adherence (from Grant).}
+\item{prep.class.hr}{The hazard ratio for infection per act associated with
+each level of adherence (from Grant).}
 
 \item{prep.coverage}{The proportion of the eligible population who are start
 PrEP once they become eligible.}
 
 \item{prep.cov.method}{The method for calculating PrEP coverage, with options
-of \code{"curr"} to base the numerator on the number of people currently
-on PrEP and \code{"ever"} to base it on the number of people ever on
-PrEP.}
+of \code{"curr"} to base the numerator on the number of people
+currently on PrEP and \code{"ever"} to base it on the number of people
+ever on PrEP.}
 
 \item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
 their eligibility, with 1 equal to instant start.}
@@ -390,20 +466,165 @@ in days.}
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
 
+\item{riskhist.int}{Interval of look-back period in which risk history is
+assessed for the STI testing interventions.}
+
+\item{stitest.start}{Time step at which the STI testing guidelines
+intervention should start.}
+
+\item{stitest.active.int}{Intertest interval for lower-risk group in STI
+testing intervention.}
+
+\item{tst.rect.sti.rr}{Relative likelihood of rectal STI testing compared to
+urethral testing among those selected to be tested.}
+
+\item{sti.highrisktest.int}{Intertest interval for higher-risk group in STI
+testing intervention.}
+
+\item{stitest.elig.model}{Modeling approach for determining who is eligible
+for high-risk STI testing. Current options are limited to:
+\code{"all"}.}
+
+\item{stianntest.gc.hivneg.coverage}{The proportion of the eligible population
+(HIV-negative, HIV-positive and undiagnosed, HIV-positive  and
+diagnosed and tt.traj not equal to a treater type) and who are
+starting annual NG testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.ct.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivneg.coverage}{The proportion of the eligible
+population (HIV-negative, HIV-positive and undiagnosed, HIV-positive
+and diagnosed and tt.traj not equal to a treater type) and who are
+starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk NG testing
+once they become eligible.}
+
+\item{stihighrisktest.ct.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivneg.coverage}{The proportion of the non-HIV
+diagnosed eligible population who are starting high-risk syphilis testing
+once they become eligible.}
+
+\item{stianntest.gc.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual NG testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.ct.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual CT testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stianntest.syph.hivpos.coverage}{The proportion of the eligible population
+(HIV-positive and diagnosed and tt.traj equal to a treater type) who
+are starting annual syphilis testing once they become eligible. This is not
+inclusive of those who are simultaneously indicated for more frequent
+testing.}
+
+\item{stihighrisktest.gc.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk NG testing
+once they become eligible.}
+
+\item{stihighrisktest.ct.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk CT testing
+once they become eligible.}
+
+\item{stihighrisktest.syph.hivpos.coverage}{The proportion of the HIV
+diagnosed eligible population who are starting high-risk syphilis testing
+once they become eligible.}
+
+\item{stianntest.cov.method}{The method for calculating STI annual testing,
+with options of \code{"curr"} to base the numerator  on the number of
+people currently annually testing for STI and \code{"ever"} to base it
+on the number of people who have ever been annually tested for STI.
+This is not inclusive of those who are simultaneously indicated for
+more frequent testing.}
+
+\item{stihighrisktest.cov.method}{The method for calculating STI high-risk
+testing, with options of \code{"curr"} to base the numerator on the
+number of people currently high-risk testing for STI and \code{"ever"}
+to base it on the number of people who have ever been high-risk tested
+for STI.}
+
+\item{partnercutoff}{The cutoff point for STI high-risk indication, above
+which person would be indicated for higher-risk testing schedules.}
+
+\item{ept.start}{Time step at which the EPT intervention should start.}
+
+\item{ept.risk.int}{Time window for assessment of risk eligibility for EPT
+in days.}
+
+\item{ept.coverage}{The proportion of the eligible population (index) who are
+starting EPT once they become eligible.}
+
+\item{ept.cov.method}{The method for calculating EPT coverage, with options
+of \code{"curr"} to base the numerator on the number of people
+currently on EPT and \code{"ever"} to base it on the number of people
+ever on EPT.}
+
+\item{ept.cov.rate}{The rate at which persons initiate EPT conditional on
+their eligibility, with 1 equal to instant start.}
+
+\item{ept.provision.partner.main.ong}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership is ongoing.}
+
+\item{ept.provision.partner.pers.ong}{The likelihood of a index partner providing
+EPT medication to a casual partner when partnership is ongoing.}
+
+\item{ept.provision.partner.main.end}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership has ended}
+
+\item{ept.provision.partner.pers.end}{The likelihood of a index partner providing
+EPT medication to a main partner when partnership has ended.}
+
+\item{ept.provision.partner.inst}{The likelihood of a index partner providing
+EPT medication to a one-off partner.}
+
+\item{ept.uptake.partner.main}{The likelihood of a partner taking medication
+provided to them by a main index partner.}
+
+\item{ept.uptake.partner.pers}{The likelihood of a partner taking medication
+provided to them by a casual index partner.}
+
+\item{ept.uptake.partner.inst}{The likelihood of a partner taking medication
+provided to them by a one-off index partner.}
+
+\item{ept.gc.success}{The probability of effective treatment for GC in a
+partner given EPT medication.}
+
+\item{ept.ct.success}{The probability of effective treatment for CT in a
+partner given EPT medication.}
+
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
 per act, and 1 is a complete cessation of condom use following PrEP
 initiation.}
 
 \item{rcomp.adh.groups}{PrEP adherence groups for whom risk compensation
-occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
-low adherence, medium adherence, and high adherence to PrEP.}
+occurs, as a vector with values 0, 1, 2, 3 corresponding to
+non-adherent,low adherence, medium adherence, and high adherence
+to PrEP.}
 
 \item{rcomp.main.only}{Logical, if risk compensation is limited to main
 partnerships only, versus all partnerships.}
 
-\item{rcomp.discl.only}{Logical, if risk compensation is limited known-discordant
-partnerships only, versus all partnerships.}
+\item{rcomp.discl.only}{Logical, if risk compensation is limited
+known-discordant partnerships only, versus all partnerships.}
 
 \item{rgc.tprob}{Probability of rectal gonorrhea infection per act.}
 
@@ -412,6 +633,17 @@ partnerships only, versus all partnerships.}
 \item{rct.tprob}{Probability of rectal chlamydia infection per act.}
 
 \item{uct.tprob}{Probability of urethral chlamydia infection per act.}
+
+\item{syph.tprob}{Base probability of syphilis infection per act.}
+
+\item{syph.incub.rr}{Multiplier for reduced infection probability in
+incubating stage of syphilis infection.}
+
+\item{syph.earlat.rr}{Multiplier for reduced infection probability in early
+latent stage of syphilis infection.}
+
+\item{syph.late.rr}{Multiplier for reduced infection probability in late
+stages of syphilis infection.}
 
 \item{rgc.sympt.prob}{Probability of symptoms given infection with rectal
 gonorrhea.}
@@ -425,59 +657,185 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
+\item{syph.incub.sympt.prob}{Probability of symptoms given incubating stage
+syphilis infection.}
 
-\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
+\item{syph.prim.sympt.prob}{Probability of symptoms given primary stage
+syphilis infection.}
+
+\item{syph.seco.sympt.prob}{Probability of symptoms given secondary stage
+syphilis infection.}
+
+\item{syph.earlat.sympt.prob}{Probability of symptoms given early latent
+stage syphilis infection.}
+
+\item{syph.latelat.sympt.prob}{Probability of symptoms given late latent
+stage syphilis infection.}
+
+\item{syph.tert.sympt.prob}{Probability of symptoms given tertiary stage
+syphilis infection.}
+
+\item{rgc.asympt.rate}{Average duration in days of asymptomatic rectal
+gonorrhea.}
+
+\item{ugc.asympt.rate}{Average duration in days of asymptomatic urethral
+gonorrhea.}
 
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
-\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
+\item{gc.ntx.int}{Average duration in days of untreated, symptomatic
+gonorrhea (both sites). If \code{NA}, uses site-specific durations
+for asymptomatic infections.}
 
-\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
+\item{rct.asympt.rate}{Average in days duration of asymptomatic rectal
+chlamydia.}
 
-\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
+\item{uct.asympt.rate}{Average in days duration of asymptomatic urethral
+chlamydia.}
 
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
+\item{ct.ntx.int}{Average in days duration of untreated, symptomatic
+chlamydia (both sites). If \code{NA}, uses site-specific durations
+for asymptomatic infections.}
 
-\item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with gonorrhea.}
+\item{syph.early.tx.int}{Average in days duration of treatment for early
+syphilis.}
 
-\item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with chlamydia.}
+\item{syph.late.tx.int}{Average in days duration of treatment for late
+syphilis.}
 
 \item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
 
 \item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
 
-\item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
+\item{gc.asympt.prob.tx}{Probability of treatment, given diagnosis, for
+asymptomatic gonorrhea.}
 
-\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+\item{ct.asympt.prob.tx}{Probability of treatment, given diagnosis, for
+asymptomatic chlamydia.}
 
-\item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
+\item{syph.incub.sympt.prob.tx}{Probability of treatment for symptomatic
+incubating stage syphilis infection.}
 
-\item{prep.sti.prob.tx}{Probability of treatment given positive screening during
-PrEP visit.}
+\item{syph.incub.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic incubating stage syphilis infection.}
 
-\item{prep.continue.stand.tx}{Logical, if \code{TRUE} will continue standard
-STI treatment of symptomatic cases even after PrEP initiation.}
+\item{syph.prim.sympt.prob.tx}{Probability of treatment for symptomatic
+primary stage syphilis infection.}
+
+\item{syph.prim.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic primary stage syphilis infection.}
+
+\item{syph.seco.sympt.prob.tx}{Probability of treatment for symptomatic
+secondary stage syphilis infection.}
+
+\item{syph.seco.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic secondary stage syphilis infection.}
+
+\item{syph.earlat.sympt.prob.tx}{Probability of treatment for symptomatic
+early latent stage syphilis infection.}
+
+\item{syph.earlat.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic early latent stage syphilis infection.}
+
+\item{syph.latelat.sympt.prob.tx}{Probability of treatment for symptomatic
+late latent stage syphilis infection.}
+
+\item{syph.latelat.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic late latent stage syphilis infection.}
+
+\item{syph.tert.sympt.prob.tx}{Probability of treatment for symptomatic
+tertiary stage syphilis infection.}
+
+\item{syph.tert.asympt.prob.tx}{Probability of treatment, given diagnosis,
+for asymptomatic tertiary stage syphilis infection.}
+
+\item{prep.sti.screen.int}{Interval in days between STI screening at PrEP
+visits.}
+
+\item{prep.sti.prob.tx}{Probability of treatment given positive screening
+during PrEP visit.}
 
 \item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
 a condom used by the insertive partner.}
 
-\item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
+\item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal
+gonorrhea in the HIV-negative partner.}
 
-\item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral gonorrhea.}
+\item{hiv.ugc.rr}{Relative risk of HIV infection given current urethral
+gonorrhea in the HIV-negative partner.}
 
-\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal chlamydia.}
+\item{hiv.rct.rr}{Relative risk of HIV infection given current rectal
+chlamydia in the HIV-negative partner.}
 
-\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral chlamydia.}
+\item{hiv.uct.rr}{Relative risk of HIV infection given current urethral
+chlamydia in the HIV-negative partner.}
 
-\item{hiv.dual.rr}{Additive proportional risk, from 0 to 1, for HIV infection
-given dual infection with both gonorrhea and chlamydia.}
+\item{hiv.syph.rr}{Relative risk of HIV infection given current
+syphilis infection in the HIV-negative partner.}
+
+\item{hiv.rgc.rct.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal gonorrhea and
+rectal chlamydia in the HIV-negative partner.}
+
+\item{hiv.rgc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal gonorrhea and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.rct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both rectal chlamydia and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.ugc.uct.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral gonorrhea and
+urethral chlamydia in the HIV-negative partner.}
+
+\item{hiv.ugc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral gonorrhea and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.uct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given dual infection with both urethral chlamydia and
+syphilis in the HIV-negative partner.}
+
+\item{hiv.all.ureth.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given triple infection with urethral chlamydia, urethral
+gonorrhea, and syphilis in the HIV-negative partner.}
+
+\item{hiv.all.rect.rr}{Additive proportional risk, from 0 to 1, for HIV
+acquisition given triple infection with rectal chlamydia, rectal
+gonorrhea, and syphilis.}
+
+\item{hiv.trans.gc.rr}{Relative risk for HIV transmission given prevalent
+relevant site-specific gonorrhea infection in HIV-positive partner.}
+
+\item{hiv.trans.ct.rr}{Relative risk for HIV transmission given prevalent
+relevant site-specific chlamydia infection in HIV-positive partner.}
+
+\item{hiv.trans.syph.rr}{Relative risk for HIV transmission given prevalent
+relevant syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.gc.ct.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection and relevant site-specific chlamydia infection in
+HIV-positive partner.}
+
+\item{hiv.trans.gc.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection and syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.ct.syph.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific chlamydia
+infection and syphilis infection in HIV-positive partner.}
+
+\item{hiv.trans.allsti.rr}{Additive proportional risk, from 0 to 1, for HIV
+transmission given prevalent relevant site-specific gonorrhea
+infection, relevant site-specific chlamydia infection, and syphilis
+infection in HIV-positive partner.}
+
+\item{partlist.start}{Time step at which persisting edge list should begin
+accumulating for eventual STI testing indications.}
 
 \item{...}{Additional arguments passed to the function.}
 }

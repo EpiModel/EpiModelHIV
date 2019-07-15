@@ -7,16 +7,19 @@
 control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm,
-  test.FUN = test_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
-  progress.FUN = progress_msm, vl.FUN = vl_msm, aiclass.FUN = NULL,
-  roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
-  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
-  position.FUN = position_msm, trans.FUN = trans_msm,
-  stitrans.FUN = sti_trans, stirecov.FUN = sti_recov,
-  stitx.FUN = sti_tx, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
-  verbose.int = 1, ...)
+  hiv_test.FUN = hiv_test_msm, sti_test.FUN = sti_test_msm,
+  hiv_tx.FUN = hiv_tx_msm, prep.FUN = prep_msm,
+  hiv_progress.FUN = hiv_progress_msm, syph_progress.FUN = NULL,
+  hiv_vl.FUN = hiv_vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
+  resim_nets.FUN = simnet_msm, hiv_disclose.FUN = hiv_disclose_msm,
+  part.FUN = part_msm, acts.FUN = acts_msm,
+  condoms.FUN = condoms_msm, riskhist_prep.FUN = NULL,
+  riskhist_stitest.FUN = riskhist_stitest_msm,
+  position.FUN = position_msm, hiv_trans.FUN = hiv_trans_msm,
+  sti_trans.FUN = sti_trans_msm, sti_recov.FUN = sti_recov_msm,
+  sti_tx.FUN = sti_tx_msm, sti_ept.FUN = sti_ept_msm,
+  prev.FUN = prevalence_msm_ept, verbose.FUN = verbose_msm,
+  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -34,8 +37,8 @@ simulation. This may also be set to 1 greater than the final time
 step of a previous simulation to resume the simulation with different
 parameters.}
 
-\item{initialize.FUN}{Module function to use for initialization of the epidemic
-model.}
+\item{initialize.FUN}{Module function to use for initialization of the
+epidemic model.}
 
 \item{aging.FUN}{Module function for aging.}
 
@@ -43,15 +46,19 @@ model.}
 
 \item{births.FUN}{Module function for births or entries into the population.}
 
-\item{test.FUN}{Module function for diagnostic disease testing.}
+\item{hiv_test.FUN}{Module function for diagnostic disease testing.}
 
-\item{tx.FUN}{Module function for ART initiation and adherence.}
+\item{sti_test.FUN}{Module function for diagnostic testing for STIs}
+
+\item{hiv_tx.FUN}{Module function for ART initiation and adherence.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
-\item{progress.FUN}{Module function for HIV disease progression.}
+\item{hiv_progress.FUN}{Module function for HIV disease progression.}
 
-\item{vl.FUN}{Module function for HIV viral load evolution.}
+\item{syph_progress.FUN}{Module function for syphilis disease progression}
+
+\item{hiv_vl.FUN}{Module function for HIV viral load evolution.}
 
 \item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
 
@@ -60,28 +67,35 @@ model.}
 \item{resim_nets.FUN}{Module function for network resimulation at each time
 step.}
 
-\item{disclose.FUN}{Module function for HIV status disclosure.}
+\item{hiv_disclose.FUN}{Module function for HIV status disclosure.}
+
+\item{part.FUN}{Module function for creating master partnership matrix.}
 
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
 
-\item{riskhist.FUN}{Module function to calculate risk history for uninfected
-persons in the population.}
+\item{riskhist_prep.FUN}{Module function to calculate risk history for uninfected
+persons in the population within a PrEP intervention.}
+
+\item{riskhist_stitest.FUN}{Module function to calculate risk history for uninfected
+persons in the population within a STI testing intervention.}
 
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 
-\item{trans.FUN}{Module function to stochastically simulate HIV transmission
+\item{hiv_trans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}
 
-\item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
-edgelist.}
+\item{sti_trans.FUN}{Module function to simulate GC/CT transmission over
+current edgelist.}
 
-\item{stirecov.FUN}{Module function to simulate recovery from GC/CT, heterogeneous
-by disease, site, symptoms, and treatment status.}
+\item{sti_recov.FUN}{Module function to simulate recovery from GC/CT,
+heterogeneous by disease, site, symptoms, and treatment status.}
 
-\item{stitx.FUN}{Module function to simulate treatment of GC/CT.}
+\item{sti_tx.FUN}{Module function to simulate treatment of GC/CT.}
+
+\item{sti_ept.FUN}{Module function for EPT intervention}
 
 \item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 
@@ -94,8 +108,8 @@ external text files.}
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}
 
-\item{verbose.int}{Integer specifying the interval between time steps at which
-progress is printed.}
+\item{verbose.int}{Integer specifying the interval between time steps at
+which progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
 }

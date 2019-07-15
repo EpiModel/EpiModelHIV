@@ -50,6 +50,7 @@ deaths_msm <- function(dat, at) {
 
   dth.all <- NULL
   dth.all <- unique(c(dth.gen, dth.dis))
+  # dat$epi$deathage[at] <- mean(c(dat$attr$age[dth.all]))
 
   if (length(dth.all) > 0) {
     dat$attr$active[dth.all] <- 0
@@ -64,15 +65,25 @@ deaths_msm <- function(dat, at) {
 
 
   ## Summary Output
-  dat$epi$dth.gen[at] <- length(dth.gen)
-  dat$epi$dth.dis[at] <- length(dth.dis)
+  # dat$epi$dth.gen[at] <- length(dth.gen)
+  # dat$epi$dth.dis[at] <- length(dth.dis)
 
   return(dat)
 }
 
 
+
+#' @title Deaths Module
+#'
+#' @description Module for simulating deaths among susceptible and infected
+#'              persons within the population.
+#'
+#' @inheritParams aging_het
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname deaths_msm
+#'
 deaths_het <- function(dat, at) {
 
   ### 1. Susceptible Deaths ###
@@ -150,10 +161,10 @@ deaths_het <- function(dat, at) {
 
   ## 4. Update Population Structure ##
   inactive <- which(dat$attr$active == 0)
-  dat$el[[1]] <- tergmLite::delete_vertices(dat$el[[1]], inactive)
+  dat$el <- tergmLite::delete_vertices(dat$el, inactive)
   dat$attr <- deleteAttr(dat$attr, inactive)
 
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
+  if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {
     stop("mismatch between el and attr length in death mod")
   }
 
