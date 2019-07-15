@@ -18,8 +18,8 @@ control_het(simno = 1, nsteps = 100, start = 1, nsims = 1,
 \arguments{
 \item{simno}{Simulation ID number.}
 
-\item{nsteps}{Number of time steps to simulate the model over in whatever unit
-implied by \code{time.unit}.}
+\item{nsteps}{Number of time steps to simulate the model over in whatever
+unit implied by \code{time.unit}.}
 
 \item{start}{Starting time step for simulation}
 
@@ -28,8 +28,8 @@ implied by \code{time.unit}.}
 \item{ncores}{Number of parallel cores to use for simulation jobs, if using
 the \code{EpiModel.hpc} package.}
 
-\item{par.type}{Parallelization type, either of \code{"single"} for multi-core
-or \code{"mpi"} for multi-node MPI threads.}
+\item{par.type}{Parallelization type, either of \code{"single"} for
+multi-core or \code{"mpi"} for multi-node MPI threads.}
 
 \item{initialize.FUN}{Module to initialize the model at time 1.}
 
@@ -61,8 +61,8 @@ default function of \code{\link{verbose_het}}.}
 order in which they should be evaluated within each time step. If
 \code{NULL}, the modules will be evaluated as follows: first any
 new modules supplied through \code{...} in the order in which they are
-listed, then the built-in modules in their order of the function listing.
-The \code{initialize.FUN} will always be run first and the
+listed, then the built-in modules in their order of the function
+listing. The \code{initialize.FUN} will always be run first and the
 \code{verbose.FUN} always last.}
 
 \item{save.nwstats}{Save out network statistics.}

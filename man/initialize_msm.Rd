@@ -2,12 +2,9 @@
 % Please edit documentation in R/mod.initialize.R
 \name{initialize_msm}
 \alias{initialize_msm}
-\alias{initialize_het}
 \title{Initialization Module}
 \usage{
 initialize_msm(x, param, init, control, s)
-
-initialize_het(x, param, init, control, s)
 }
 \arguments{
 \item{x}{An \code{EpiModel} object of class \code{\link{netest}}.}
@@ -21,8 +18,8 @@ initialize_het(x, param, init, control, s)
 \item{s}{Simulation number, used for restarting dependent simulations.}
 }
 \value{
-This function returns the updated \code{dat} object with the initialized values
-for demographics and disease-related variables.
+This function returns the updated \code{dat} object with the initialized
+values or demographics and disease-related variables.
 }
 \description{
 This function initializes the master \code{dat} object on which

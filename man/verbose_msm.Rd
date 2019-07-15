@@ -2,12 +2,9 @@
 % Please edit documentation in R/mod.verbose.R
 \name{verbose_msm}
 \alias{verbose_msm}
-\alias{verbose_het}
 \title{Verbose Module}
 \usage{
 verbose_msm(x, type, s, at)
-
-verbose_het(x, type, s, at)
 }
 \arguments{
 \item{x}{If the \code{type} is "startup", then an object of class

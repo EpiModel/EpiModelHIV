@@ -3,8 +3,8 @@
 
 #' @title Network Resimulation Module
 #'
-#' @description Module function for resimulating the sexual networks for one
-#'              time step.
+#' @description Module function for resimulating the main, casual, and one-off
+#'              networks for one time step.
 #'
 #' @inheritParams aging_msm
 #'
@@ -21,11 +21,12 @@ simnet_msm <- function(dat, at) {
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
   if (dat$param$method == 1) {
-    dat$attr$deg.pers <- get_degree(dat$el[[2]])
+      dat$attr$deg.pers <- get_degree(dat$el[[2]])
   } else {
-    dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+      dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
+
 
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
@@ -33,23 +34,28 @@ simnet_msm <- function(dat, at) {
                                              coef.diss = nwparam.m$coef.diss$coef.adj,
                                              save.changes = TRUE)
 
+
   dat$temp$new.edges <- NULL
   if (at == 2) {
-    new.edges.m <- matrix(dat$el[[1]], ncol = 2)
+    new.edges.m <- matrix(dat$attr$uid[dat$el[[1]]], ncol = 2)
+    highlow <- new.edges.m[which(new.edges.m[, 1] > new.edges.m[, 2]), , drop = FALSE]
+    lowhigh <- new.edges.m[which(new.edges.m[, 1] < new.edges.m[, 2]), , drop = FALSE]
+    new.edges.m <- rbind(highlow[, 2:1], lowhigh)
   } else {
     new.edges.m <- attributes(dat$el[[1]])$changes
     new.edges.m <- new.edges.m[new.edges.m[, "to"] == 1, 1:2, drop = FALSE]
+    new.edges.m <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
   }
-  dat$temp$new.edges <- matrix(dat$attr$uid[new.edges.m], ncol = 2)
+  dat$temp$new.edges <- matrix(new.edges.m, ncol = 2)
 
 
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
 
   if (dat$param$method == 1) {
-    dat$attr$deg.main <- get_degree(dat$el[[1]])
+      dat$attr$deg.main <- get_degree(dat$el[[1]])
   } else {
-    dat$attr$deg.main <- paste0(dat$attr$race, get_degree(dat$el[[1]]))
+      dat$attr$deg.main <- paste0(dat$attr$race, get_degree(dat$el[[1]]))
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 2)
 
@@ -60,22 +66,27 @@ simnet_msm <- function(dat, at) {
                                              save.changes = TRUE)
 
   if (at == 2) {
-    new.edges.p <- matrix(dat$el[[2]], ncol = 2)
+    new.edges.p <- matrix(dat$attr$uid[dat$el[[2]]], ncol = 2)
+    highlow <- new.edges.p[which(new.edges.p[, 1] > new.edges.p[, 2]), , drop = FALSE]
+    lowhigh <- new.edges.p[which(new.edges.p[, 1] < new.edges.p[, 2]), , drop = FALSE]
+    new.edges.p <- rbind(highlow[, 2:1], lowhigh)
+
   } else {
     new.edges.p <- attributes(dat$el[[2]])$changes
     new.edges.p <- new.edges.p[new.edges.p[, "to"] == 1, 1:2, drop = FALSE]
+    new.edges.p <- matrix(dat$attr$uid[new.edges.p], ncol = 2)
   }
   dat$temp$new.edges <- rbind(dat$temp$new.edges,
-                              matrix(dat$attr$uid[new.edges.p], ncol = 2))
+                              matrix(new.edges.p, ncol = 2))
 
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
 
   if (dat$param$method == 1) {
-    dat$attr$deg.pers <- get_degree(dat$el[[2]])
+      dat$attr$deg.pers <- get_degree(dat$el[[2]])
   } else {
-    dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+      dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 3)
 
@@ -87,9 +98,53 @@ simnet_msm <- function(dat, at) {
     dat <- calc_resim_nwstats(dat, at)
   }
 
+  # Set last sexually active date - doesn't need to be uid-based
+  # dat$attr$time.last.sex[c(dat$el[[1]], dat$el[[2]], dat$el[[3]])] <- at
+
+  # Calculate discordant/concordant proportion
+  if (is.null(dat$epi$prop.edges.negneg)) {
+    dat$epi$prop.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.main.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.cas.edges.pospos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.negneg <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.negpos <- rep(NA, dat$control$nsteps)
+    dat$epi$prop.inst.edges.pospos <- rep(NA, dat$control$nsteps)
+  }
+
+  alledge <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
+  status <- cbind(dat$attr$status[alledge[, 1]], dat$attr$status[alledge[, 2]])
+
+  main <- rbind(dat$el[[1]])
+  cas <- rbind(dat$el[[2]])
+  inst <- rbind(dat$el[[3]])
+
+  main.status <- cbind(dat$attr$status[main[, 1]], dat$attr$status[main[, 2]])
+  cas.status <- cbind(dat$attr$status[cas[, 1]], dat$attr$status[cas[, 2]])
+  inst.status <- cbind(dat$attr$status[inst[, 1]], dat$attr$status[inst[, 2]])
+
+  dat$epi$prop.edges.negneg[at] <- length(which(status[, 1] == 0 & status[, 2] == 0)) / nrow(alledge)
+  dat$epi$prop.edges.negpos[at] <- length(which((status[, 1] == 1 & status[, 2] == 0) |
+                                                  (status[, 1] == 0 & status[, 2] == 1))) / nrow(alledge)
+  dat$epi$prop.edges.pospos[at] <- length(which(status[, 1] == 1 & status[, 2] == 1)) / nrow(alledge)
+
+  dat$epi$prop.main.edges.negneg[at] <- length(which(main.status[, 1] == 0 & main.status[, 2] == 0)) / nrow(main)
+  dat$epi$prop.main.edges.negpos[at] <- length(which((main.status[, 1] == 1 & main.status[, 2] == 0) | (main.status[, 1] == 0 & main.status[, 2] == 1))) / nrow(main)
+  dat$epi$prop.main.edges.pospos[at] <- length(which(main.status[, 1] == 1 & main.status[, 2] == 1)) / nrow(main)
+  dat$epi$prop.cas.edges.negneg[at] <- length(which(cas.status[, 1] == 0 & cas.status[, 2] == 0)) / nrow(cas)
+  dat$epi$prop.cas.edges.negpos[at] <- length(which((cas.status[, 1] == 1 & cas.status[, 2] == 0) | (cas.status[, 1] == 0 & cas.status[, 2] == 1)))  / nrow(cas)
+  dat$epi$prop.cas.edges.pospos[at] <- length(which(cas.status[, 1] == 1 & cas.status[, 2] == 1)) / nrow(cas)
+  dat$epi$prop.inst.edges.negneg[at] <- length(which(inst.status[, 1] == 0 & inst.status[, 2] == 0)) / nrow(inst)
+  dat$epi$prop.inst.edges.negpos[at] <- length(which((inst.status[, 1] == 1 & inst.status[, 2] == 0) | (inst.status[, 1] == 0 & inst.status[, 2] == 1))) / nrow(inst)
+  dat$epi$prop.inst.edges.pospos[at] <- length(which(inst.status[, 1] == 1 & inst.status[, 2] == 1)) / nrow(inst)
+
   return(dat)
 }
-
 
 
 calc_resim_nwstats <- function(dat, at) {
@@ -111,7 +166,6 @@ calc_resim_nwstats <- function(dat, at) {
 
   return(dat)
 }
-
 
 
 #' @title Adjustment for the Edges Coefficient with Changing Network Size
@@ -146,7 +200,7 @@ calc_resim_nwstats <- function(dat, at) {
 edges_correct_msm <- function(dat, at) {
 
   old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
+  new.num <- sum(dat$attr$race %in% c("B", "W"), na.rm = TRUE)
   adjust <- log(old.num) - log(new.num)
 
   coef.form.m <- get_nwparam(dat, network = 1)$coef.form
@@ -170,36 +224,126 @@ edges_correct_msm <- function(dat, at) {
 # HET -----------------------------------------------------------------
 
 
+#' @title Network Resimulation Module
+#'
+#' @description Module function to resimulate the dynamic network forward one
+#'              time step conditional on current network structure and vertex
+#'              attributes.
+#'
+#' @inheritParams aging_het
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname simnet_msm
+#'
 simnet_het <- function(dat, at) {
 
   # Update edges coefficients
   dat <- edges_correct_het(dat, at)
 
   # Update internal ergm data
-  dat <- tergmLite::updateModelTermInputs(dat, network = 1)
+  dat <- update_nwp_het(dat)
 
   # Pull network parameters
-  nwparam <- get_nwparam(dat, network = 1)
+  nwparam <- get_nwparam(dat)
 
   # Simulate edgelist
-  dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
-                                             el = dat$el[[1]],
-                                             coef.form = nwparam$coef.form,
-                                             coef.diss = nwparam$coef.diss$coef.adj)
+  dat$el <- tergmLite::simulate_network(p = dat$p,
+                                        el = dat$el,
+                                        coef.form = nwparam$coef.form,
+                                        coef.diss = nwparam$coef.diss$coef.adj)
 
   return(dat)
 }
 
+update_nwp_het <- function(dat) {
 
+  mf <- dat$p$model.form
+  md <- dat$p$model.diss
+  mhf <- dat$p$MHproposal.form
+  mhd <- dat$p$MHproposal.diss
+
+  n <- attributes(dat$el)$n
+  maxdyads <- choose(n, 2)
+
+  ## 1. Update model.form ##
+
+  # edges
+  # inputs <- c(0, 1, 0) # not changed
+  mf$terms[[1]]$maxval <- maxdyads
+
+  # nodematch
+  nodecov <- dat$attr$male
+  u <- sort(unique(nodecov))
+  nodecov <- match(nodecov, u, nomatch = length(u) + 1)
+  inputs <- nodecov
+  mf$terms[[2]]$inputs <- c(0, 1, length(inputs), inputs)
+
+  ## Update combined maxval here
+  mf$maxval <- c(maxdyads, Inf)
+
+
+  ## 2. Update model.diss ##
+  md$terms[[1]]$maxval <- maxdyads
+  md$maxval <- maxdyads
+
+
+  ## 3. Update MHproposal.form ##
+  mhf$arguments$constraints$bd$attribs <-
+    matrix(rep(mhf$arguments$constraints$bd$attribs[1], n), ncol = 1)
+  mhf$arguments$constraints$bd$maxout <-
+    matrix(rep(mhf$arguments$constraints$bd$maxout[1], n), ncol = 1)
+  mhf$arguments$constraints$bd$maxin <- matrix(rep(n, n), ncol = 1)
+  mhf$arguments$constraints$bd$minout <-
+    mhf$arguments$constraints$bd$minin <- matrix(rep(0, n), ncol = 1)
+
+
+  ## 4. Update MHproposal.diss ##
+  mhd$arguments$constraints$bd <- mhf$arguments$constraints$bd
+
+
+  ## 5. Output ##
+  p <- list(model.form = mf, model.diss = md,
+            MHproposal.form = mhf, MHproposal.diss = mhd)
+
+  dat$p <- p
+  return(dat)
+}
+
+
+#' @title Adjustment for the Edges Coefficient with Changing Network Size
+#'
+#' @description Adjusts the edges coefficients in a dynamic network model
+#'              to preserve the mean degree.
+#'
+#' @inheritParams aging_het
+#'
+#' @details
+#' In HIV/STI modeling, there is typically an assumption that changes in
+#' population size do not affect one's number of partners, specified as the
+#' mean degree for network models. A person would not have 10 times the number
+#' of partners should he move from a city 10 times as large. This module uses
+#' the adjustment of Krivitsky et al. to adjust the edges coefficients on the
+#' three network models to account for varying population size in order to
+#' preserve that mean degree.
+#'
+#' @return
+#' The network model parameters stored in \code{dat$nwparam} are updated.
+#'
+#' @references
+#' Krivitsky PN, Handcock MS, and Morris M. "Adjusting for network size and
+#' composition effects in exponential-family random graph models." Statistical
+#' Methodology. 2011; 8.4: 319-339.
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname edges_correct_msm
+#'
 edges_correct_het <- function(dat, at) {
 
   # Popsize
   old.num <- dat$epi$num[at - 1]
-  new.num <- sum(dat$attr$active == 1, na.rm = TRUE)
+  new.num <- sum(dat$attr$race %in% c("B", "W"), na.rm = TRUE)
 
   # New Coefs
   coef.form <- get_nwparam(dat)$coef.form

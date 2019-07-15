@@ -2,20 +2,22 @@
 #' @title Condom Use Module
 #'
 #' @description Module function stochastically simulates potential condom use
-#'              for each act on the discordant edgelist.
+#'              for each act on the edgelist.
 #'
 #' @inheritParams aging_msm
 #'
 #' @details
-#' For each act on the discordant edgelist, condom use is stochastically simulated
-#' based on the partnership type and racial combination of the dyad. Other
-#' modifiers for the probability of condom use in that pair are diagnosis of
-#' disease, disclosure of status, and full or partial HIV viral suppression
+#' For each act on the edgelist, condom use is stochastically
+#' simulated based on the partnership type and racial combination of the dyad.
+#' Other modifiers for the probability of condom use in that pair are diagnosis
+#' of disease, disclosure of status, and full or partial HIV viral suppression
 #' given HIV anti-retroviral therapy.
 #'
 #' @return
-#' Updates the discordant edgelist with a \code{uai} variable indicating whether
-#' condoms were used in that act.
+#' Updates the edgelist with a \code{uai} variable indicating whether
+#' condoms were used in that act. An act list \code{al} is created.
+#' The act list \code{al} is a data frame with the ids of the pair
+#' repeated the number of times they have AI.
 #'
 #' @keywords module msm
 #' @export
@@ -91,14 +93,19 @@ condoms_msm <- function(dat, at) {
     uai.prob <- 1 - cond.prob
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
-    # Diagnosis modifier
+    # Diagnosis modifier ---- applies to all diagnosed, discordant
+    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1) # pull vector of discordant
     pos.diag <- diag.status[elt[, 1]]
-    isDx <- which(pos.diag == 1)
-    uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
+    isDx <- which(pos.diag == 1) # pull vector of diagnosis status
+    isDiscord.dx <- intersect(isDiscord, isDx)
+    uai.logodds[isDiscord.dx] <- uai.logodds[isDiscord.dx] + diag.beta
 
-    # Disclosure modifier
+    # Disclosure modifier ---- applies to all discordant, disclosed
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
     delt <- elt[isDiscord, ]
+
+    if (nrow(delt) > 0) {
+
     discl.list <- dat$temp$discl.list
     disclose.cdl <- discl.list[, 1] * 1e7 + discl.list[, 2]
     delt.cdl <- uid[delt[, 1]] * 1e7 + uid[delt[, 2]]
@@ -109,6 +116,8 @@ condoms_msm <- function(dat, at) {
 
     isDisc <- which(discl == 1)
     uai.logodds[isDisc] <- uai.logodds[isDisc] + discl.beta
+
+    }
 
     # Back transform to prob
     old.uai.prob <- uai.prob
@@ -134,8 +143,9 @@ condoms_msm <- function(dat, at) {
     # PrEP Status (risk compensation)
     if (rcomp.prob > 0) {
 
-      idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
-                       (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+      idsRC <- which(
+        (prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
+        (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
 
       if (rcomp.main.only == TRUE & ptype > 1) {
         idsRC <- NULL

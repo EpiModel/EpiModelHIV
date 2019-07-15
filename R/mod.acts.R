@@ -7,17 +7,18 @@
 #' @inheritParams aging_msm
 #'
 #' @details
-#' The number of acts at each time step is specified as a function of the race of
-#' both members in a pair and the expected values within black-black, black-white,
-#' and white-white combinations. For one-off partnerships, this is deterministically
-#' set at 1, whereas for main and causal partnerships it is a stochastic draw
-#' from a Poisson distribution. The number of total acts may further be modified
-#' by the level of HIV viral suppression in an infected person.
+#' The number of acts at each time step is specified as a function of the race
+#' of both members in a pair and the expected values within black-black,
+#' black-white,and white-white combinations. For one-off partnerships, this is
+#' deterministically set at 1, whereas for main and casual partnerships it is a
+#' stochastic draw from a Poisson distribution. The number of total acts may
+#' further be modified by the level of HIV viral suppression in an infected
+#' person.
 #'
 #' @return
-#' This function returns the \code{dat} object with the updated discordant act
-#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
-#' discordant pair repeated the number of times they have AI.
+#' This function returns the \code{dat} object with the updated edge
+#' list (\code{el}). An additional column is added with the number of acts for
+#' each partnership on the edge list (\code{el}).
 #'
 #' @keywords module msm
 #' @export
@@ -34,6 +35,7 @@ acts_msm <- function(dat, at) {
 
     # Parameters
     ai.scale <- dat$param$ai.scale
+    ai.scale.pospos <- dat$param$ai.scale.pospos
     if (type == "main") {
       base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
       base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
@@ -65,6 +67,8 @@ acts_msm <- function(dat, at) {
 
     st1 <- status[el[, 1]]
     st2 <- status[el[, 2]]
+
+    # HIV discordancy
     disc <- abs(st1 - st2) == 1
     el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
     el <- cbind(el, status[el[, 1]], status[el[, 2]])
@@ -72,30 +76,83 @@ acts_msm <- function(dat, at) {
 
     if (nrow(el) > 0) {
 
-      # Base AI rates
-      ai.rate <- rep(NA, nrow(el))
-      race.p1 <- race[el[, 1]]
-      race.p2 <- race[el[, 2]]
-      num.B <- (race.p1 == "B") + (race.p2 == "B")
-      ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                 (num.B == 1) * base.ai.BW.rate +
-                 (num.B == 0) * base.ai.WW.rate
-      ai.rate <- ai.rate * ai.scale
+      el.pospos <- el[which(st1 == 1 & st2 == 1), , drop = FALSE]
 
-      ## STI associated cessation of activity
-      idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
-      noActs <- el[, "p1"] %in% idsCease | el[, "p2"] %in% idsCease
-      ai.rate[noActs] <- 0
+      # If positive-positive, then split el into 2
+      # If no positive-positive, then don't split
+      if (nrow(el.pospos) > 0) {
 
-      # Final act number
-      if (fixed == FALSE) {
-        ai <- rpois(length(ai.rate), ai.rate)
+        # Separate into positive-concordant and non-positive concordant
+        el2 <- el[which(!(st1 == 1 & st2 == 1)), , drop = FALSE]
+
+        # Base AI rates for positive concordant
+        ai.rate.pospos <- rep(NA, nrow(el.pospos))
+        race.p1 <- race[el.pospos[, 1]]
+        race.p2 <- race[el.pospos[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate.pospos <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate.pospos <- ai.rate.pospos * ai.scale.pospos
+
+        # Final act number for positive concordant
+        if (fixed == FALSE) {
+          ai.pospos <- rpois(length(ai.rate.pospos), ai.rate.pospos)
+        } else {
+          ai.pospos <- round(ai.rate.pospos)
+        }
+
+        # Edge list (positive concordant)
+        el.pospos <- cbind(el.pospos, ptype, ai.pospos)
+
+        # Base AI rates for non-positive concordant
+        ai.rate <- rep(NA, nrow(el2))
+        race.p1 <- race[el2[, 1]]
+        race.p2 <- race[el2[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate <- ai.rate * ai.scale
+
+        # Final act number for non-positive concordant
+        if (fixed == FALSE) {
+          ai <- rpois(length(ai.rate), ai.rate)
+        } else {
+          ai <- round(ai.rate)
+        }
+
+        # Edge list (non-positive concordant)
+        el2 <- cbind(el2, ptype, ai)
+
+        # Full edge list (combine positive concordant and non-positive concordant)
+        el <- rbind(el2, el.pospos)
+
       } else {
-        ai <- round(ai.rate)
+
+        # Base AI rates for all
+        ai.rate <- rep(NA, nrow(el))
+        race.p1 <- race[el[, 1]]
+        race.p2 <- race[el[, 2]]
+        num.B <- (race.p1 == "B") + (race.p2 == "B")
+        ai.rate <- (num.B == 2) * base.ai.BB.rate +
+          (num.B == 1) * base.ai.BW.rate +
+          (num.B == 0) * base.ai.WW.rate
+        ai.rate <- ai.rate * ai.scale
+
+
+        # Final act number for non-positive concordant
+        if (fixed == FALSE) {
+          ai <- rpois(length(ai.rate), ai.rate)
+        } else {
+          ai <- round(ai.rate)
+        }
+
+        # Edge list (non-positive concordant)
+        el <- cbind(el, ptype, ai)
+
       }
 
-      # Full edge list
-      el <- cbind(el, ptype, ai)
       colnames(el)[5:6] <- c("ptype", "ai")
 
       if (type == "main") {
@@ -109,6 +166,9 @@ acts_msm <- function(dat, at) {
 
   # Remove inactive edges from el
   dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
+
+  # Update time of last sex for all those with acts at time step
+  dat$attr$time.last.sex[unique(c(dat$temp$el[, "p1"], dat$temp$el[, "p2"]))] <- at
 
   return(dat)
 }

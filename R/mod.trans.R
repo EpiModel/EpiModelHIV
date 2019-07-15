@@ -32,7 +32,7 @@
 #'
 #' @export
 #'
-trans_msm <- function(dat, at) {
+hiv_trans_msm <- function(dat, at) {
 
   # Variables -----------------------------------------------------------
 
@@ -48,10 +48,12 @@ trans_msm <- function(dat, at) {
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  stage.syph <- dat$attr$stage.syph
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
+
   acute.rr <- dat$param$acute.rr
   condom.rr <- dat$param$condom.rr
   circ.rr <- dat$param$circ.rr
@@ -61,18 +63,54 @@ trans_msm <- function(dat, at) {
   hiv.uct.rr <- dat$param$hiv.uct.rr
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
   hiv.rct.rr <- dat$param$hiv.rct.rr
-  hiv.dual.rr <- dat$param$hiv.dual.rr
+  hiv.syph.rr <- dat$param$hiv.syph.rr
+  hiv.rgc.rct.rr <- dat$param$hiv.rgc.rct.rr
+  hiv.rgc.syph.rr <- dat$param$hiv.rgc.syph.rr
+  hiv.rct.syph.rr <- dat$param$hiv.rct.syph.rr
+  hiv.ugc.uct.rr <- dat$param$hiv.ugc.uct.rr
+  hiv.ugc.syph.rr <- dat$param$hiv.ugc.syph.rr
+  hiv.uct.syph.rr <- dat$param$hiv.uct.syph.rr
+  hiv.all.ureth.rr <- dat$param$hiv.all.ureth.rr
+  hiv.all.rect.rr <- dat$param$hiv.all.rect.rr
+
+  hiv.trans.syph.rr <- dat$param$hiv.trans.syph.rr
+  hiv.trans.gc.rr <- dat$param$hiv.trans.gc.rr
+  hiv.trans.ct.rr <- dat$param$hiv.trans.ct.rr
+  hiv.trans.gc.ct.rr <- dat$param$hiv.trans.ct.rr
+  hiv.trans.gc.syph.rr <- dat$param$hiv.trans.gc.syph.rr
+  hiv.trans.ct.syph.rr <- dat$param$hiv.trans.ct.syph.rr
+  hiv.trans.allsti.rr <- dat$param$hiv.trans.allsti.rr
 
 
   # Data
   al <- dat$temp$al
-  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
-  dal <- dal[sample(1:nrow(dal)), ]
-  ncols <- dim(dal)[2]
-
+  dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), , drop = FALSE]
   if (nrow(dal) == 0) {
     return(dat)
   }
+  dal <- dal[sample(1:nrow(dal)), ]
+  ncols <- dim(dal)[2]
+
+  al <- cbind(al, st1 = as.vector(dat$attr$status[al[ ,"p1"]]))
+  al <- cbind(al, st2 = as.vector(dat$attr$status[al[ ,"p2"]]))
+
+  al.negneg <- al[al[, "st1"] == 0 & al[, "st2"] == 0, , drop = FALSE]
+  al.negpos <- al[(al[, "st1"] == 1 & al[, "st2"] == 0) |
+                    (al[, "st1"] == 0 & al[, "st2"] == 1), , drop = FALSE]
+  al.pospos <- al[al[, "st1"] == 1 & al[, "st2"] == 1, , drop = FALSE]
+
+  # Output act and edge stats before evaluating whether discordant pairs exists
+  dat$epi$num.acts.negneg[at] <- nrow(al.negneg)
+  dat$epi$num.acts.negpos[at] <- nrow(al.negpos)
+  dat$epi$num.acts.pospos[at] <- nrow(al.pospos)
+
+  dat$epi$prop.uai.negneg[at] <- sum(al.negneg[, "uai"] == 1) / nrow(al.negneg)
+  dat$epi$prop.uai.negpos[at]  <- sum(al.negpos[, "uai"] == 1) / nrow(al.negpos)
+  dat$epi$prop.uai.pospos[at] <- sum(al.pospos[, "uai"] == 1) / nrow(al.pospos)
+
+  dat$epi$prop.acts.negneg[at] <- nrow(al.negneg) / (nrow(al))
+  dat$epi$prop.acts.negpos[at]  <- nrow(al.negpos) / (nrow(al))
+  dat$epi$prop.acts.pospos[at] <- nrow(al.pospos) / (nrow(al))
 
   ## Reorder by role: ins on the left, rec on the right, flippers represented twice
   disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
@@ -85,6 +123,9 @@ trans_msm <- function(dat, at) {
   # Attributes of infected
   ip.vl <- vl[disc.ip[, 1]]
   ip.stage <- stage[disc.ip[, 1]]
+  ip.stage.syph.infector <- stage.syph[disc.ip[, 1]]
+  ip.uGC.infector <- uGC[disc.ip[, 1]]
+  ip.uCT.infector <- uCT[disc.ip[, 1]]
 
   # Attributes of susceptible
   ip.ccr5 <- ccr5[disc.ip[, 2]]
@@ -92,12 +133,13 @@ trans_msm <- function(dat, at) {
   ip.prepcl <- prepClass[disc.ip[, 2]]
   ip.rGC <- rGC[disc.ip[, 2]]
   ip.rCT <- rCT[disc.ip[, 2]]
+  ip.stage.syph.infectee <- stage.syph[disc.ip[, 2]]
 
   # Base TP from VL
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Transform to log odds
-  ip.tlo <- log(ip.tprob/(1-ip.tprob))
+  ip.tlo <- log(ip.tprob/(1 - ip.tprob))
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
@@ -109,7 +151,7 @@ trans_msm <- function(dat, at) {
 
   # PrEP, cycle through 4 adherence classes
   for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
+    temp.ids <- which(ip.prep == 1 & ip.prepcl == i - 1)
     ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
   }
 
@@ -117,23 +159,124 @@ trans_msm <- function(dat, at) {
   isAcute <- which(ip.stage %in% 1:2)
   ip.tlo[isAcute] <- ip.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for STI
+  ## Multiplier for HIV acquisition due to rectal STI in HIV-negative partner
   is.rGC <- which(ip.rGC == 1)
-
   is.rCT <- which(ip.rCT == 1)
+  is.syph.infectee <- which(ip.stage.syph.infectee %in%  c(1, 2, 3))
 
-  is.rect.dual <- intersect(is.rGC, is.rCT)
+  ### Single infections
+  # NG
+  is.rGC.sing <- setdiff(is.rGC, is.rCT)
+  is.rGC.sing <- setdiff(is.rGC.sing, is.syph.infectee)
 
-  is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
-  is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
+  # CT
+  is.rCT.sing <- setdiff(is.rCT, is.rGC)
+  is.rCT.sing <- setdiff(is.rCT.sing, is.syph.infectee)
 
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infectee, is.rGC)
+  is.syph.sing <- setdiff(is.syph.sing, is.rCT)
+
+  ### Coinfections
+  # NG and CT
+  is.rGC.rCT <- intersect(is.rGC, is.rCT)
+  is.rGC.rCT <- setdiff(is.rGC.rCT, is.syph.infectee)
+
+  # NG and Syph
+  is.rGC.syph <- intersect(is.rGC, is.syph.infectee)
+  is.rGC.syph <- setdiff(is.rGC.syph, is.rCT)
+
+  # CT and Syph
+  is.rCT.syph <- intersect(is.rCT, is.syph.infectee)
+  is.rCT.syph <- setdiff(is.rCT.syph, is.rGC)
+
+  # All three infections
+  is.all <- intersect(is.rGC.rCT, is.syph.infectee)
+
+  ## Add relative risks
+  # Single infections
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
+  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.syph.rr)
 
-  ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
+  # Two infections
+  ip.tlo[is.rGC.rCT] <- ip.tlo[is.rGC.rCT] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
-    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
+    min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.rgc.rct.rr
 
+  ip.tlo[is.rGC.syph] <- ip.tlo[is.rGC.syph] +
+    max(log(hiv.rgc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rgc.rr), log(hiv.syph.rr)) * hiv.rgc.syph.rr
+
+  ip.tlo[is.rCT.syph] <- ip.tlo[is.rCT.syph] +
+    max(log(hiv.rct.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.syph.rr)) * hiv.rct.syph.rr
+
+  # Three infections
+  ip.tlo[is.all] <- ip.tlo[is.all] +
+    max(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.rct.rr), log(hiv.rgc.rr), log(hiv.syph.rr)) * hiv.all.rect.rr
+
+  ## Multiplier for HIV transmission due to urethral STI in HIV-positive partner
+  is.syph.infector <- which(ip.stage.syph.infector %in% c(1, 2, 3))
+  is.uGC.infector <- which(ip.uGC.infector == 1)
+  is.uCT.infector <- which(ip.uCT.infector == 1)
+
+  ### Single infections
+  # NG
+  is.uGC.sing <- setdiff(is.uGC.infector, is.uCT.infector)
+  is.uGC.sing <- setdiff(is.uGC.sing, is.syph.infector)
+
+  # CT
+  is.uCT.sing <- setdiff(is.uCT.infector, is.uGC.infector)
+  is.uCT.sing <- setdiff(is.uCT.sing, is.syph.infector)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infector, is.uGC.infector)
+  is.syph.sing <- setdiff(is.syph.sing, is.uCT.infector)
+
+  ### Coinfections
+  # NG and CT
+  is.uGC.uCT <- intersect(is.uGC.infector, is.uCT.infector)
+  is.uGC.uCT <- setdiff(is.uGC.uCT, is.syph.infector)
+
+  # NG and Syph
+  is.uGC.syph <- intersect(is.uGC.infector, is.syph.infector)
+  is.uGC.syph <- setdiff(is.uGC.syph, is.uCT.infector)
+
+  # CT and Syph
+  is.uCT.syph <- intersect(is.uCT.infector, is.syph.infector)
+  is.uCT.syph <- setdiff(is.uCT.syph, is.uGC.infector)
+
+  # All three infections
+  is.all <- intersect(is.uGC.uCT, is.syph.infector)
+
+  ## Add relative risks
+  # Single infections
+  ip.tlo[is.uGC.sing] <- ip.tlo[is.uGC.sing] + log(hiv.trans.gc.rr)
+  ip.tlo[is.uCT.sing] <- ip.tlo[is.uCT.sing] + log(hiv.trans.ct.rr)
+  ip.tlo[is.syph.sing] <- ip.tlo[is.syph.sing] + log(hiv.trans.syph.rr)
+
+  # Two infections
+  ip.tlo[is.uGC.uCT] <- ip.tlo[is.uGC.uCT] +
+    max(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) * hiv.trans.gc.ct.rr
+
+  ip.tlo[is.uGC.syph] <- ip.tlo[is.uGC.syph] +
+    max(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.gc.syph.rr
+
+  ip.tlo[is.uCT.syph] <- ip.tlo[is.uCT.syph] +
+    max(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) * hiv.trans.ct.syph.rr
+
+  # Three infections
+  ip.tlo[is.all] <- ip.tlo[is.all] +
+    max(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.allsti.rr
+
+
+  ## Re-transform back to probability
   ip.tprob <- plogis(ip.tlo)
   stopifnot(ip.tprob >= 0, ip.tprob <= 1)
 
@@ -143,6 +286,9 @@ trans_msm <- function(dat, at) {
   # Attributes of infected
   rp.vl <- vl[disc.rp[, 2]]
   rp.stage <- stage[disc.rp[, 2]]
+  rp.stage.syph.infector <- stage.syph[disc.rp[, 2]]
+  rp.rGC.infector <- rGC[disc.rp[, 2]]
+  rp.rCT.infector <- rCT[disc.rp[, 2]]
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
@@ -151,12 +297,13 @@ trans_msm <- function(dat, at) {
   rp.prepcl <- prepClass[disc.rp[, 1]]
   rp.uGC <- uGC[disc.rp[, 1]]
   rp.uCT <- uCT[disc.rp[, 1]]
+  rp.stage.syph.infectee <- stage.syph[disc.rp[, 1]]
 
   # Base TP from VL
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Transform to log odds
-  rp.tlo <- log(rp.tprob/(1-rp.tprob))
+  rp.tlo <- log(rp.tprob/(1 - rp.tprob))
 
   # Circumcision
   rp.tlo[rp.circ == 1] <- rp.tlo[rp.circ == 1] + log(circ.rr)
@@ -171,7 +318,7 @@ trans_msm <- function(dat, at) {
 
   # PrEP, cycle through 4 adherence classes
   for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
+    temp.ids <- which(rp.prep == 1 & rp.prepcl == i - 1)
     rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
   }
 
@@ -179,24 +326,121 @@ trans_msm <- function(dat, at) {
   isAcute <- which(rp.stage %in% 1:2)
   rp.tlo[isAcute] <- rp.tlo[isAcute] + log(acute.rr)
 
-  ## Multiplier for STI
+  ## Multiplier for HIV acquisition due to urethral STI in HIV-negative partner
   is.uGC <- which(rp.uGC == 1)
-
   is.uCT <- which(rp.uCT == 1)
+  is.syph.infectee <- which(rp.stage.syph.infectee %in% c(1, 2, 3))
 
-  is.ureth.dual <- intersect(is.uGC, is.uCT)
+  ### Single infections
+  # NG
+  is.uGC.sing <- setdiff(is.uGC, is.uCT)
+  is.uGC.sing <- setdiff(is.uGC.sing, is.syph.infectee)
 
-  is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
-  is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
+  # CT
+  is.uCT.sing <- setdiff(is.uCT, is.uGC)
+  is.uCT.sing <- setdiff(is.uCT.sing, is.syph.infectee)
 
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infectee, is.uGC)
+  is.syph.sing <- setdiff(is.syph.sing, is.uCT)
+
+  ### Coinfections
+  # NG and CT
+  is.uGC.uCT <- intersect(is.uGC, is.uCT)
+  is.uGC.uCT <- setdiff(is.uGC.uCT, is.syph.infectee)
+
+  # NG and Syph
+  is.uGC.syph <- intersect(is.uGC, is.syph.infectee)
+  is.uGC.syph <- setdiff(is.uGC.syph, is.uCT)
+
+  # CT and Syph
+  is.uCT.syph <- intersect(is.uCT, is.syph.infectee)
+  is.uCT.syph <- setdiff(is.uCT.syph, is.uGC)
+
+  # All three infections
+  is.all <- intersect(is.uGC.uCT, is.syph.infectee)
+
+  # Single infections
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
+  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.syph.rr)
 
-  rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
+  # Two infections
+  rp.tlo[is.uGC.uCT] <- rp.tlo[is.uGC.uCT] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
-    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
+    min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.ugc.uct.rr
 
-  # Retransformation to probability
+  rp.tlo[is.uGC.syph] <- rp.tlo[is.uGC.syph] +
+    max(log(hiv.ugc.rr), log(hiv.syph.rr)) +
+    min(log(hiv.ugc.rr), log(hiv.syph.rr)) * hiv.ugc.syph.rr
+
+  rp.tlo[is.uCT.syph] <- rp.tlo[is.uCT.syph] +
+    max(log(hiv.uct.rr), log(hiv.syph.rr)) +
+    min(log(hiv.uct.rr), log(hiv.syph.rr)) * hiv.uct.syph.rr
+
+  # Three infections
+  rp.tlo[is.all] <- rp.tlo[is.all] +
+     max(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.syph.rr)) +
+     min(log(hiv.uct.rr), log(hiv.ugc.rr), log(hiv.syph.rr)) * hiv.all.ureth.rr
+
+  ## Multiplier for HIV transmission due to rectal STI in HIV-positive partner
+  is.syph.infector <- which(rp.stage.syph.infector %in% c(1, 2, 3))
+  is.rGC.infector <- which(rp.rGC.infector == 1)
+  is.rCT.infector <- which(rp.rCT.infector == 1)
+
+  ### Single infections
+  # NG
+  is.rGC.sing <- setdiff(is.rGC.infector, is.rCT.infector)
+  is.rGC.sing <- setdiff(is.rGC.sing, is.syph.infector)
+
+  # CT
+  is.rCT.sing <- setdiff(is.rCT.infector, is.rGC.infector)
+  is.rCT.sing <- setdiff(is.rGC.sing, is.syph.infector)
+
+  # Syph
+  is.syph.sing <- setdiff(is.syph.infector, is.rGC.infector)
+  is.syph.sing <- setdiff(is.syph.sing, is.rCT.infector)
+
+  ### Coinfections
+  # NG and CT
+  is.rGC.rCT <- intersect(is.rGC.infector, is.rCT.infector)
+  is.rGC.rCT <- setdiff(is.rGC.rCT, is.syph.infector)
+
+  # NG and Syph
+  is.rGC.syph <- intersect(is.rGC.infector, is.syph.infector)
+  is.rGC.syph <- setdiff(is.rGC.syph, is.rCT.infector)
+
+  # CT and Syph
+  is.rCT.syph <- intersect(is.rCT.infector, is.syph.infector)
+  is.rCT.syph <- setdiff(is.rCT.syph, is.rGC.infector)
+
+  # All three infections
+  is.all <- intersect(is.rGC.rCT, is.syph.infector)
+
+  # Single infections
+  rp.tlo[is.rGC.sing] <- rp.tlo[is.rGC.sing] + log(hiv.trans.gc.rr)
+  rp.tlo[is.rCT.sing] <- rp.tlo[is.rCT.sing] + log(hiv.trans.ct.rr)
+  rp.tlo[is.syph.sing] <- rp.tlo[is.syph.sing] + log(hiv.trans.syph.rr)
+
+  # Two infections
+  rp.tlo[is.rGC.rCT] <- rp.tlo[is.rGC.rCT] +
+    max(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.ct.rr)) * hiv.trans.gc.ct.rr
+
+  rp.tlo[is.rGC.syph] <- rp.tlo[is.rGC.syph] +
+    max(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.gc.syph.rr
+
+  rp.tlo[is.rCT.syph] <- rp.tlo[is.rCT.syph] +
+    max(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.syph.rr)) * hiv.trans.ct.syph.rr
+
+  # Three infections
+  rp.tlo[is.all] <- rp.tlo[is.all] +
+    max(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) +
+    min(log(hiv.trans.ct.rr), log(hiv.trans.gc.rr), log(hiv.trans.syph.rr)) * hiv.trans.allsti.rr
+
+  ## Retransformation to probability
   rp.tprob <- plogis(rp.tlo)
   stopifnot(rp.tprob >= 0, rp.tprob <= 1)
 
@@ -216,9 +460,10 @@ trans_msm <- function(dat, at) {
   infected <- inf.type <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
-    infected <- c(disc.ip[trans.ip == 1, 2],
-                  disc.rp[trans.rp == 1, 1])
+    infected <- unique(c(disc.ip[trans.ip == 1, 2],
+                  disc.rp[trans.rp == 1, 1]))
     inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
+
     inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
                   disc.rp[trans.rp == 1, "ptype"])
 
@@ -227,21 +472,221 @@ trans_msm <- function(dat, at) {
     dat$attr$vl[infected] <- 0
     dat$attr$stage[infected] <- 1
     dat$attr$stage.time[infected] <- 0
+    dat$attr$stage.time.ar.ndx[infected] <- 0
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
 
-    dat$attr$inf.role[infected] <- inf.role
-    dat$attr$inf.type[infected] <- inf.type
+    dat$attr$inf.role[infected] <- inf.role[infected]
+    dat$attr$inf.type[infected] <- inf.type[infected]
 
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
   }
+  dat$attr$time.hivneg[status == 0] <- dat$attr$time.hivneg[status == 0] + 1
+
+  trans <- rbind(disc.ip[trans.ip == 1, ], disc.rp[trans.rp == 1, ])
+  dat$epi$sum_GC[at] <- length(which(((rGC[trans[, 2]] == 1 | uGC[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                       ((uGC[trans[, 2]] == 1 | rGC[trans[, 1]] == 1) & trans[, 6] == 0)))
+
+  dat$epi$sum_CT[at] <- length(which(((rCT[trans[, 2]] == 1 | uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                       ((uCT[trans[, 2]] == 1 | rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+
+  dat$epi$sum_syph[at] <- length(which(stage.syph[trans[, 2]] %in% c(1,2,3) | stage.syph[trans[, 1]] %in% c(1,2,3)))
+
+  dat$epi$sum_urethral[at] <- length(which(((uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1) & trans[, 6] == 1) |
+                                             ((uGC[trans[, 2]] == 1 | uCT[trans[, 2]] == 1) & trans[, 6] == 0)))
+
+  dat$epi$sum_rectal[at] <- length(which(((rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1) & trans[, 6] == 1) |
+                                           ((rGC[trans[, 1]] == 1 | rCT[trans[, 1]] == 1) & trans[, 6] == 0)))
+  #2x2 for PAF
+  #               HIV+
+  #             STI+  STI-
+  #HIV-   STI +  1    2
+  #       STI -  3    4
+  dat$epi$cell1_gc[at] <- length(which(
+    # P1 is infected, p1 has urethral and p2 has rectal OR
+    (status[trans[, 1]] == 1 & rGC[trans[, 2]] == 1 & uGC[trans[, 1]] == 1) |
+      # P2 is infected, p1 has urethral and p2 has rectal
+    (status[trans[, 2]] == 1 & rGC[trans[, 2]] == 1 & uGC[trans[, 1]] == 1)))
+
+  dat$epi$cell2_gc[at] <- length(which(
+    # P1 is infected, p1 does not have urethral GC, p2 has rectal GC
+    (status[trans[, 1]] == 1 & uGC[trans[, 1]] == 0 & rGC[trans[, 2]] == 1) |
+    # P2 is infected, p1 has urethral GC, p2 does not have rectal GC
+    (status[trans[, 2]] == 1 & uGC[trans[, 1]] == 1 & rGC[trans[, 2]] == 0)))
+
+  dat$epi$cell3_gc[at] <- length(which(
+    # P1 is infected, p1 has urethral GC, p2 does not have rectal GC
+    (status[trans[, 1]] == 1 & uGC[trans[, 1]] == 1 & rGC[trans[, 2]] == 0) |
+    # P2 is infected, p1 does not have urethral GC, p2 does have rectal GC
+    (status[trans[, 2]] == 1 & uGC[trans[, 1]] == 0 & rGC[trans[, 2]] == 1)))
+
+  dat$epi$cell4_gc[at] <- length(which(
+    # P1 is infected, p1 does not have urethral GC, p2 does not have rectal GC
+    (status[trans[, 1]] == 1 & uGC[trans[, 1]] == 0 & rGC[trans[, 2]] == 0) |
+    # P2 is infected, p1 does not have urethral GC, p2 does not have rectal GC
+    (status[trans[, 2]] == 1 & uGC[trans[, 1]] == 0 & rGC[trans[, 2]] == 0)))
+
+  dat$epi$cell1_ct[at] <- length(which(
+    # P1 is infected, p1 has urethral and p2 has rectal OR
+    (status[trans[, 1]] == 1 & rCT[trans[, 2]] == 1 & uCT[trans[, 1]] == 1) |
+      # P2 is infected, p1 has urethral and p2 has rectal
+      (status[trans[, 2]] == 1 & rCT[trans[, 2]] == 1 & uCT[trans[, 1]] == 1)))
+
+  dat$epi$cell2_ct[at] <- length(which(
+    # P1 is infected, p1 does not have urethral CT, p2 has rectal CT
+    (status[trans[, 1]] == 1 & uCT[trans[, 1]] == 0 & rCT[trans[, 2]] == 1) |
+    # P2 is infected, p1 has urethral CT, p2 does not have rectal CT
+    (status[trans[, 2]] == 1 & uCT[trans[, 1]] == 1 & rCT[trans[, 2]] == 0)))
+
+  dat$epi$cell3_ct[at] <- length(which(
+    # P1 is infected, p1 has urethral CT, p2 does not have rectal CT
+    (status[trans[, 1]] == 1 & uCT[trans[, 1]] == 1 & rCT[trans[, 2]] == 0) |
+    # P2 is infected, p1 does not have urethral CT, p2 does have rectal CT
+    (status[trans[, 2]] == 1 & uCT[trans[, 1]] == 0 & rCT[trans[, 2]] == 1)))
+
+  dat$epi$cell4_ct[at] <- length(which(
+    # P1 is infected, p1 does not have urethral CT, p2 does not have rectal CT
+    (status[trans[, 1]] == 1 & uCT[trans[, 1]] == 0 & rCT[trans[, 2]] == 0) |
+    # P2 is infected, p1 does not have urethral CT, p2 does not have rectal CT
+    (status[trans[, 2]] == 1 & uCT[trans[, 1]] == 0 & rCT[trans[, 2]] == 0)))
+
+  dat$epi$cell1_syph[at] <- length(which(
+    #P1 is infected, P1 has syphilis, P2 has syphilis
+    status[trans[, 1]] == 1 & stage.syph[trans[, 2]] %in% c(1,2,3) & stage.syph[trans[, 1]] %in% c(1,2,3) |
+    #P2 is infected, P1 has syphilis, P2 has syphilis
+    status[trans[, 2]] == 1 & stage.syph[trans[, 2]] %in% c(1,2,3) & stage.syph[trans[, 1]] %in% c(1,2,3)))
+
+  dat$epi$cell2_syph[at] <- length(which(
+    #P1 is infected, P1 does not have syphilis, P2 has syphilis
+    status[trans[, 1]] == 1 & stage.syph[trans[, 2]] %in% c(1,2,3) & !(stage.syph[trans[, 1]] %in% c(1,2,3)) |
+    #P2 is infected, P1 has syphilis, P2 does not have syphilis
+    status[trans[, 2]] == 1 & !(stage.syph[trans[, 2]] %in% c(1,2,3)) & stage.syph[trans[, 1]] %in% c(1,2,3)))
+
+  dat$epi$cell3_syph[at] <- length(which(
+    #P1 is infected, P1 has syphilis, P2 does not have syphilis OR
+    status[trans[, 1]] == 1 & stage.syph[trans[, 1]] %in% c(1,2,3) & !(stage.syph[trans[, 2]] %in% c(1,2,3)) |
+    #P2 is infected, P1 does not have syphilis, P2 has syphilis
+    status[trans[, 2]] == 1 & !(stage.syph[trans[, 1]] %in% c(1,2,3)) & stage.syph[trans[, 2]] %in% c(1,2,3)))
+
+  dat$epi$cell4_syph[at] <- length(which(
+    #P1 is infected, P1 does not have syphilis, P2 does not have syphilis OR
+    status[trans[, 1]] == 1 & !(stage.syph[trans[, 1]] %in% c(1,2,3)) & !(stage.syph[trans[, 2]] %in% c(1,2,3)) |
+    #P2 is infected, P1 does not have syphilis, P2 does not have syphilis
+    status[trans[, 2]] == 1 & !(stage.syph[trans[, 1]] %in% c(1,2,3)) & !(stage.syph[trans[, 2]] %in% c(1,2,3))))
+
+  dat$epi$cell1_sti[at] <- length(which(
+    #P1 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1 | stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                  (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1 | stage.syph[trans[, 2]] %in% c(1,2,3))) |
+    #P2 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1 | stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                  (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1 | stage.syph[trans[, 2]] %in% c(1,2,3)))))
+
+  dat$epi$cell2_sti[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0 & !(stage.syph[trans[, 1]] %in% c(1,2,3)))) &
+                                  (rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1 | stage.syph[trans[, 2]] %in% c(1,2,3))) |
+    #P2 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1 | stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                    (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0 & !(stage.syph[trans[, 2]] %in% c(1,2,3))))))
+
+  dat$epi$cell3_sti[at] <- length(which(
+    #P1 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[, 1]] == 1 | stage.syph[trans[, 1]] %in% c(1,2,3))) &
+                                  (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0 & !(stage.syph[trans[, 2]] %in% c(1,2,3)))) |
+    #P2 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0 & !(stage.syph[trans[, 1]] %in% c(1,2,3)))) &
+                                    (rGC[trans[, 2]] == 1 | rCT[trans[, 2]] == 1 | stage.syph[trans[, 2]] %in% c(1,2,3)))))
+
+  dat$epi$cell4_sti[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0 & !(stage.syph[trans[, 1]] %in% c(1,2,3)))) &
+                                  (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0 & !(stage.syph[trans[, 2]] %in% c(1,2,3)))) |
+    #P2 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0 & !(stage.syph[trans[, 1]] %in% c(1,2,3)))) &
+                                  (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0 & !(stage.syph[trans[, 2]] %in% c(1,2,3))))))
+
+  if (is.null(dat$epi$cell1_rectureth)) {
+    dat$epi$cell1_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell2_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell3_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell4_rectureth <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell1_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell2_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell3_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+    dat$epi$cell4_gcct_newinf <- rep(NA, length(dat$control$nsteps))
+  }
+
+  dat$epi$cell1_rectureth[at] <- length(which(
+    #P1 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+       (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 has urethral STI, P2 has rectal STI OR
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+       (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1))))
+
+  dat$epi$cell2_rectureth[at] <- length(which(
+      # Rectal only
+      #P1 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+      (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[ , 1]] == 0)) &
+         (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1)) |
+      #P2 is infected, P1 does not have urethral STI, P2 has rectal STI OR
+      (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 | uCT[trans[ , 1]] == 0)) &
+         (rGC[trans[, 2]] == 1 | rCT[trans[ , 2]] == 1))))
+
+  dat$epi$cell3_rectureth[at] <- length(which(
+      # Insertive only
+      #P1 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+      (status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 0)) |
+      #P2 is infected, P1 has urethral STI, P2 does not have rectal STI OR
+      (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 | uCT[trans[ , 1]] == 1)) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 0))))
+
+  dat$epi$cell4_rectureth[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+      (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0)) |
+    #P2 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+    (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0))))
+
+
+  dat$epi$cell1_gcct_newinf[at] <- length(which(
+    #P1 is infected, P2 has NG and CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 1 & rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 has NG and CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 & uCT[trans[ , 1]] == 1)))))
+
+  dat$epi$cell2_gcct_newinf[at] <- length(which(
+    # GC only
+    #P1 is infected, P2 has NG and not CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 1 & rCT[trans[ , 2]] == 0)) |
+    #P2 is infected, P1 has NG and not CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 1 & uCT[trans[ , 1]] == 0)))))
+
+  dat$epi$cell3_gcct_newinf[at] <- length(which(
+    # CT only
+    #P1 is infected, P2 does not have CT and has CT
+    (status[trans[, 1]] == 1 & (rGC[trans[, 2]] == 0 & rCT[trans[ , 2]] == 1)) |
+    #P2 is infected, P1 does not have CT and has CT
+    (status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[ , 1]] == 1)))))
+
+  dat$epi$cell4_gcct_newinf[at] <- length(which(
+    #P1 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+    ((status[trans[, 1]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+       (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0)) |
+      #P2 is infected, P1 does not have urethral STI, P2 does not have rectal STI OR
+      ((status[trans[, 2]] == 1 & ((uGC[trans[, 1]] == 0 & uCT[trans[, 1]] == 0))) &
+         (rGC[trans[, 2]] == 0 & rCT[trans[, 2]] == 0))))
+
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
 
   dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
+  dat$epi$trans.pers[at] <- sum(inf.type == 2)
   dat$epi$trans.inst[at] <- sum(inf.type == 3)
 
   return(dat)
@@ -249,8 +694,20 @@ trans_msm <- function(dat, at) {
 
 
 
+# HET -----------------------------------------------------------------
+
+#' @title Infection Module
+#'
+#' @description Module function to simulate transmission over an active
+#'              discordant edgelist.
+#'
+#' @inheritParams aging_het
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname trans_msm
+#'
+#'
 trans_het <- function(dat, at) {
 
   ## Discordant Edgelist
@@ -396,7 +853,11 @@ discord_edgelist_het <- function(dat, at) {
 
   if (nInft > 0) {
 
-    el <- dat$el[[1]]
+    if (is.null(dat$el)) {
+      el <- get.dyads.active(dat$nw, at = at)
+    } else {
+      el <- dat$el
+    }
 
     if (nrow(el) > 0) {
       el <- el[sample(1:nrow(el)), , drop = FALSE]
@@ -405,7 +866,6 @@ discord_edgelist_het <- function(dat, at) {
       if (length(disc) > 0) {
         tmp.del <- el[disc, ]
         tmp.del[status[tmp.del[, 2]] == 1, ] <- tmp.del[status[tmp.del[, 2]] == 1, 2:1]
-
         del <- list()
         del$sus <- tmp.del[, 2]
         del$inf <- tmp.del[, 1]

@@ -9,10 +9,10 @@
 #' @details
 #' New population members are added based on expected numbers of entries among
 #' black and white MSM, stochastically determined with draws from Poisson
-#' distributions. For each new entry, a set of attributes is added for that node,
-#' and the nodes are added onto the network objects. Only attributes that are
-#' a part of the network model formulae are updated as vertex attributes on the
-#' network objects.
+#' distributions. For each new entry, a set of attributes is added for that
+#' node, and the nodes are added onto the network objects. Only attributes that
+#' are a part of the network model formulae are updated as vertex attributes on
+#' the network objects.
 #'
 #' @return
 #' This function updates the \code{attr} list with new attributes for each new
@@ -106,6 +106,67 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
 
+  # Non-NA HIV variables
+  dat$attr$time.hivneg[newIds] <- rep(0, nBirths)
+  dat$attr$time.off.prep[newIds] <- rep(0, nBirths)
+  dat$attr$time.on.prep[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.ar.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.ar.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.af.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.af.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.ar.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.ar.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.af.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.af.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.early.chronic.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.early.chronic.dx.yrone[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.early.chronic.dx.yrstwotolate[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.early.chronic.art[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.late.chronic.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.late.chronic.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.late.chronic.art[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.aids.ndx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.aids.dx[newIds] <- rep(0, nBirths)
+  dat$attr$stage.time.aids.art[newIds] <- rep(0, nBirths)
+
+  # Non-NA STI variables
+  dat$attr$syphilis[newIds] <- rep(0, nBirths)
+  dat$attr$rGC[newIds] <- rep(0, nBirths)
+  dat$attr$rCT[newIds] <- rep(0, nBirths)
+  dat$attr$uGC[newIds] <- rep(0, nBirths)
+  dat$attr$uCT[newIds] <- rep(0, nBirths)
+  dat$attr$recentpartners[newIds] <- rep(0, nBirths)
+  dat$attr$stitest.ind.active[newIds] <- rep(0, nBirths)
+  dat$attr$stitest.ind.recentpartners[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.syph[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.syph.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rgc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rgc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ugc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ugc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.gc[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.gc.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.sti[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.sti.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.rct.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.uct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.uct.asympt[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ct[newIds] <- rep(0, nBirths)
+  dat$attr$testing.events.ct.asympt[newIds] <- rep(0, nBirths)
+
+
+
+  selected <- newIds
+  tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
+  tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int)))
+  dat$attr$time.since.last.test.syph[newIds] <- tslastsyphtest
+  dat$attr$time.since.last.test.rgc[newIds] <- tslastgctest
+  dat$attr$time.since.last.test.ugc[newIds] <- tslastgctest
+  dat$attr$time.since.last.test.rct[newIds] <- tslastcttest
+  dat$attr$time.since.last.test.uct[newIds] <- tslastcttest
+
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
@@ -131,11 +192,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$ccr5[newIds[newB]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.B, replace = TRUE,
                                         prob = c(1 - sum(ccr5.B.prob),
-                                                 ccr5.B.prob[2], ccr5.B.prob[1]))
+                                                 ccr5.B.prob[2],
+                                                 ccr5.B.prob[1]))
   dat$attr$ccr5[newIds[newW]] <- sample(c("WW", "DW", "DD"),
                                         nBirths.W, replace = TRUE,
                                         prob = c(1 - sum(ccr5.W.prob),
-                                                 ccr5.W.prob[2], ccr5.W.prob[1]))
+                                                 ccr5.W.prob[2],
+                                                 ccr5.W.prob[1]))
 
 
   # Degree
@@ -149,7 +212,8 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   p1 <- dat$param$cond.pers.always.prob
   p2 <- dat$param$cond.inst.always.prob
   rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr =
+                                  (1 - rho) * diag(2) + rho)
   dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
   dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
 
@@ -161,21 +225,30 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
 
 
+#' @title Births Module
+#'
+#' @description Module for simulating births/entries into the population,
+#'              including initialization of attributes for incoming nodes.
+#'
+#' @inheritParams aging_het
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname births_msm
+#'
 births_het <- function(dat, at) {
 
   # Variables
   b.rate.method <- dat$param$b.rate.method
   b.rate <- dat$param$b.rate
-  active <- dat$attr$active
+  race <- dat$attr$race
 
 
   # Process
   nBirths <- 0
   if (b.rate.method == "stgrowth") {
     exptPopSize <- dat$epi$num[1] * (1 + b.rate*at)
-    numNeeded <- exptPopSize - sum(active == 1)
+    numNeeded <- exptPopSize - sum(race %in% c("B","W"))
     if (numNeeded > 0) {
       nBirths <- rpois(1, numNeeded)
     }
@@ -197,10 +270,10 @@ births_het <- function(dat, at) {
   # Update Population Structure
   if (nBirths > 0) {
     dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el[[1]] <- tergmLite::add_vertices(dat$el[[1]], nBirths)
+    dat$el <- tergmLite::add_vertices(dat$el, nBirths)
   }
 
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
+  if (unique(sapply(dat$attr, length)) != attributes(dat$el)$n) {
     stop("mismatch between el and attr length in births mod")
   }
 
@@ -211,6 +284,19 @@ births_het <- function(dat, at) {
 }
 
 
+#' @title Assign Vertex Attributes at Network Entry
+#'
+#' @description Assigns vertex attributes to incoming nodes at birth/entry into
+#'              the network.
+#'
+#' @inheritParams births_het
+#' @param nBirths Number of new births as determined by \code{\link{births_het}}.
+#'
+#' @keywords het
+#'
+#' @export
+#'
+#'
 setBirthAttr_het <- function(dat, at, nBirths) {
 
   # Set attributes for new births to NA

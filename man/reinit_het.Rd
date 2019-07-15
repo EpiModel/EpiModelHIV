@@ -18,13 +18,13 @@ reinit_het(x, param, init, control, s)
 \item{s}{Simulation number, used for restarting dependent simulations.}
 }
 \value{
-This function returns the updated \code{dat} object with the initialized values
-for demographics and disease-related variables.
+This function returns the updated \code{dat} object with the initialized
+values for demographics and disease-related variables.
 }
 \description{
-This function reinitializes the master \code{dat} object on which
-             data are stored, simulates the initial state of the network, and
-             simulates disease status and other attributes.
+This function reinitializes the master \code{dat} object on
+             which data are stored, simulates the initial state of the
+             network, and simulates disease status and other attributes.
 }
 \keyword{het}
 \keyword{module}

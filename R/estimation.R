@@ -4,12 +4,13 @@
 
 #' @title Calculate Target Statistics for Network Model Estimation
 #'
-#' @description Calculates the target statistics for the formation and dissolution
-#'              components of the network model to be estimated with \code{netest}.
+#' @description Calculates the target statistics for the formation and 
+#'              dissolution components of the network model to be estimated 
+#'              with \code{netest}.
 #'
 #' @param time.unit Time unit relative to 1 for daily.
-#' @param method Method for calculating target statistics by race, with options of
-#'        \code{2} for preserving race-specific statistics and \code{1} for
+#' @param method Method for calculating target statistics by race, with options 
+#'        of \code{2} for preserving race-specific statistics and \code{1} for
 #'        averaging over the statistics and dropping the race-specific terms.
 #' @param num.B Population size of black MSM.
 #' @param num.W Population size of white MSM.
@@ -25,14 +26,14 @@
 #'        \code{NA} to ignore these quantiles in the target statistics.
 #' @param qnts.W Means of one-off rates split into quintiles for black MSM. Use
 #'        \code{NA} to ignore these quantiles in the target statistics.
-#' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, casual,
-#'        and one-off partnerships in same race for black MSM.
-#' @param prop.hom.mpi.W A vector of length 3 for the proportion of main, casual,
-#'        and one-off partnerships in same race for white MSM.
+#' @param prop.hom.mpi.B A vector of length 3 for the proportion of main, 
+#'        casual, and one-off partnerships in same race for black MSM.
+#' @param prop.hom.mpi.W A vector of length 3 for the proportion of main, 
+#'        casual, and one-off partnerships in same race for white MSM.
 #' @param balance Method for balancing of edges by race for number of mixed-race
-#'        partnerships, with options of \code{"black"} to apply black MSM counts,
-#'        \code{"white"} to apply white MSM counts, and \code{"mean"} to take
-#'        the average of the two expectations.
+#'        partnerships, with options of \code{"black"} to apply black MSM 
+#'        counts, \code{"white"} to apply white MSM counts, and \code{"mean"} to
+#'        take the average of the two expectations.
 #' @param sqrt.adiff.BB Vector of length 3 with the mean absolute differences
 #'        in the square root of ages in main, casual, and one-off black-black
 #'        partnerships.
@@ -107,7 +108,8 @@ calc_nwstats_msm <- function(time.unit = 7,
     stop("deg.mp.W must sum to 1.")
   }
   if (!(method %in% 1:2)) {
-    stop("method must either be 1 for one-race models or 2 for two-race models", call. = FALSE)
+    stop("method must either be 1 for one-race models or 2 for two-race models",
+         call. = FALSE)
   }
 
   num <- num.B + num.W
@@ -168,15 +170,18 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Sqrt absdiff term for age
   if (method == 2) {
-    sqrt.adiff.m <- edges.nodemix.m * c(sqrt.adiff.BB[1], sqrt.adiff.BW[1], sqrt.adiff.WW[1])
+    sqrt.adiff.m <- edges.nodemix.m * c(sqrt.adiff.BB[1], sqrt.adiff.BW[1], 
+                                        sqrt.adiff.WW[1])
   }
   if (method == 1) {
-    sqrt.adiff.m <- edges.m * mean(c(sqrt.adiff.BB[1], sqrt.adiff.BW[1], sqrt.adiff.WW[1]))
+    sqrt.adiff.m <- edges.m * mean(c(sqrt.adiff.BB[1], sqrt.adiff.BW[1], 
+                                     sqrt.adiff.WW[1]))
   }
 
   # Compile target stats
   if (method == 2) {
-    stats.m <- c(edges.m, edges.nodemix.m[2:3], totdeg.m.by.dp[c(2:3, 5:6)], sqrt.adiff.m)
+    stats.m <- c(edges.m, edges.nodemix.m[2:3], totdeg.m.by.dp[c(2:3, 5:6)], 
+                 sqrt.adiff.m)
   }
   if (method == 1) {
     stats.m <- c(edges.m, totdeg.m.by.dp[2:3], sqrt.adiff.m)
@@ -236,10 +241,12 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   # Sqrt absdiff term for age
   if (method == 2) {
-    sqrt.adiff.p <- edges.nodemix.p * c(sqrt.adiff.BB[2], sqrt.adiff.BW[2], sqrt.adiff.WW[2])
+    sqrt.adiff.p <- edges.nodemix.p * c(sqrt.adiff.BB[2], sqrt.adiff.BW[2], 
+                                        sqrt.adiff.WW[2])
   }
   if (method == 1) {
-    sqrt.adiff.p <- edges.p * mean(c(sqrt.adiff.BB[2], sqrt.adiff.BW[2], sqrt.adiff.WW[2]))
+    sqrt.adiff.p <- edges.p * mean(c(sqrt.adiff.BB[2], sqrt.adiff.BW[2], 
+                                     sqrt.adiff.WW[2]))
   }
 
   # Compile target statistics
@@ -310,10 +317,12 @@ calc_nwstats_msm <- function(time.unit = 7,
   }
 
   if (method == 2) {
-    sqrt.adiff.i <- edges.nodemix.i * c(sqrt.adiff.BB[3], sqrt.adiff.BW[3], sqrt.adiff.WW[3])
+    sqrt.adiff.i <- edges.nodemix.i * c(sqrt.adiff.BB[3], sqrt.adiff.BW[3], 
+                                        sqrt.adiff.WW[3])
   }
   if (method == 1) {
-    sqrt.adiff.i <- edges.i * mean(c(sqrt.adiff.BB[3], sqrt.adiff.BW[3], sqrt.adiff.WW[3]))
+    sqrt.adiff.i <- edges.i * mean(c(sqrt.adiff.BB[3], sqrt.adiff.BW[3], 
+                                     sqrt.adiff.WW[3]))
   }
 
   if (!is.na(qnts.B[1]) & !is.na(qnts.W[1])) {
@@ -328,7 +337,8 @@ calc_nwstats_msm <- function(time.unit = 7,
 
   } else {
     if (method == 2) {
-      stats.i <- c(edges.i, num.inst.B[-1], num.inst.W, edges.hom.i, sqrt.adiff.i)
+      stats.i <- c(edges.i, num.inst.B[-1], num.inst.W, edges.hom.i, 
+                   sqrt.adiff.i)
     }
     if (method == 1) {
       stats.i <- c(edges.i, num.inst[-1], sqrt.adiff.i)
@@ -383,10 +393,10 @@ calc_nwstats_msm <- function(time.unit = 7,
 #'        \code{\link{calc_nwstats_msm}}.
 #'
 #' @details
-#' This function takes the output of \code{\link{calc_nwstats_msm}} and constructs
-#' an empty network with the necessary attributes for race, square root of age,
-#' and sexual role class. This base network is used for all three network
-#' estimations.
+#' This function takes the output of \code{\link{calc_nwstats_msm}} and 
+#' constructs an empty network with the necessary attributes for race, square 
+#' root of age, and sexual role class. This base network is used for all three 
+#' network estimations.
 #'
 #' @seealso
 #' The final vertex attributes on the network for cross-network degree are
@@ -446,9 +456,9 @@ base_nw_msm <- function(nwstats) {
 #' @param nwstats Object of class \code{nwstats}.
 #'
 #' @details
-#' This function assigns the degree of other networks as a vertex attribute on the
-#' target network given a bivariate degree mixing matrix of main, casual, and
-#' one-partnerships contained in the \code{nwstats} data.
+#' This function assigns the degree of other networks as a vertex attribute on 
+#' the target network given a bivariate degree mixing matrix of main, casual, 
+#' and one-partnerships contained in the \code{nwstats} data.
 #'
 #' @keywords msm
 #' @export
@@ -546,7 +556,8 @@ make_nw_het <- function(n = 10000,
   # Dissolution model
   dissolution <- ~offset(edges)
   dur <- part.dur/time.unit
-  d.rate <- time.unit * (((1 - start.prev) * 1/(55 - 18)/365) + (start.prev * 1/12/365))
+  d.rate <- time.unit * (((1 - start.prev) * 1/(55 - 18)/365) + 
+                           (start.prev * 1/12/365))
   coef.diss <- dissolution_coefs(dissolution, duration = dur, d.rate = d.rate)
 
   out <- list()

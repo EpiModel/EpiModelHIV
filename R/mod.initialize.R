@@ -14,8 +14,8 @@
 #' @param s Simulation number, used for restarting dependent simulations.
 #'
 #' @return
-#' This function returns the updated \code{dat} object with the initialized values
-#' for demographics and disease-related variables.
+#' This function returns the updated \code{dat} object with the initialized
+#' values or demographics and disease-related variables.
 #'
 #' @export
 #' @keywords module msm
@@ -47,15 +47,21 @@ initialize_msm <- function(x, param, init, control, s) {
   for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation,
+                                x[[i]]$coef.diss$dissolution,
+                                x[[i]]$coef.form,
+                                x[[i]]$coef.diss$coef.adj,
+                                x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
   }
   dat$el[[3]] <- as.edgelist(nw[[3]])
   attributes(dat$el[[3]])$vnames <- NULL
-  p <- tergmLite::ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
+  p <- tergmLite::ergm_prep(nw[[3]],
+                            x[[3]]$formation,
+                            x[[3]]$coef.form,
+                            x[[3]]$constraints)
   p$model.form$formula <- NULL
   dat$p[[3]] <- p
 
@@ -137,69 +143,10 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$ins.quot <- ins.quot
 
   # HIV-related attributes
-  dat <- init_status_msm(dat)
+  dat <- init_status_hiv_msm(dat)
 
-  ## GC/CT status
-  idsUreth <- which(role.class %in% c("I", "V"))
-  idsRect <- which(role.class %in% c("R", "V"))
-
-  uGC <- rGC <- rep(0, num)
-  uCT <- rCT <- rep(0, num)
-
-  # Initialize GC infection at both sites
-  idsUGC <- sample(idsUreth, size = round(init$prev.ugc * num), FALSE)
-  uGC[idsUGC] <- 1
-
-  idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(init$prev.rgc * num), FALSE)
-  rGC[idsRGC] <- 1
-
-  dat$attr$rGC <- rGC
-  dat$attr$uGC <- uGC
-
-  dat$attr$rGC.sympt <- dat$attr$uGC.sympt <- rep(NA, num)
-  dat$attr$rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
-  dat$attr$uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
-
-  dat$attr$rGC.infTime <- dat$attr$uGC.infTime <- rep(NA, length(dat$attr$active))
-  dat$attr$rGC.infTime[rGC == 1] <- 1
-  dat$attr$uGC.infTime[uGC == 1] <- 1
-
-  dat$attr$rGC.timesInf <- rep(0, num)
-  dat$attr$rGC.timesInf[rGC == 1] <- 1
-  dat$attr$uGC.timesInf <- rep(0, num)
-  dat$attr$uGC.timesInf[uGC == 1] <- 1
-
-  dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
-  dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
-  dat$attr$GC.cease <- rep(NA, num)
-
-  # Initialize CT infection at both sites
-  idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
-  uCT[idsUCT] <- 1
-
-  idsRCT <- sample(setdiff(idsRect, idsUCT), size = round(init$prev.rct * num), FALSE)
-  rCT[idsRCT] <- 1
-
-  dat$attr$rCT <- rCT
-  dat$attr$uCT <- uCT
-
-  dat$attr$rCT.sympt <- dat$attr$uCT.sympt <- rep(NA, num)
-  dat$attr$rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
-  dat$attr$uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
-
-  dat$attr$rCT.infTime <- dat$attr$uCT.infTime <- rep(NA, num)
-  dat$attr$rCT.infTime[dat$attr$rCT == 1] <- 1
-  dat$attr$uCT.infTime[dat$attr$uCT == 1] <- 1
-
-  dat$attr$rCT.timesInf <- rep(0, num)
-  dat$attr$rCT.timesInf[rCT == 1] <- 1
-  dat$attr$uCT.timesInf <- rep(0, num)
-  dat$attr$uCT.timesInf[uCT == 1] <- 1
-
-  dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
-  dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
-  dat$attr$CT.cease <- rep(NA, num)
-
+  # Syphilis- and STI-related attributes
+  dat <- init_status_sti_msm(dat)
 
   # CCR5
   dat <- init_ccr5_msm(dat)
@@ -214,7 +161,16 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
   colnames(dat$temp$discl.list) <- c("pos", "neg", "discl.time")
 
-  dat <- prevalence_msm(dat, at = 1)
+  # Relationship tracking
+  dat$temp$part.list <- matrix(NA, nrow = 0, ncol = 6)
+  colnames(dat$temp$part.list) <- c("uid1", "uid2", "ptype", "start.time",
+                                    "last.active.time", "end.time")
+
+  if (dat$param$partlist.start == 1) {
+    dat <- part_msm(dat, at = 1)
+  }
+
+  dat <- prevalence_msm_tnt(dat, at = 1)
 
   class(dat) <- "dat"
   return(dat)
@@ -267,7 +223,7 @@ remove_bad_roles_msm <- function(nw) {
 #' @export
 #' @keywords initiation utility msm
 #'
-init_status_msm <- function(dat) {
+init_status_hiv_msm <- function(dat) {
 
   num.B <- dat$init$num.B
   num.W <- dat$init$num.W
@@ -288,10 +244,10 @@ init_status_msm <- function(dat) {
   probInfCrW <- age[ids.W] * dat$init$init.prev.age.slope.W
   probInfW <- probInfCrW + (nInfW - sum(probInfCrW)) / num.W
 
-  if (any(probInfB <= 0) | any(probInfW <= 0)) {
-    stop("Slope of initial prevalence by age must be sufficiently low to ",
-         "avoid non-positive probabilities.", call. = FALSE)
-  }
+  # if (any(probInfB <= 0) | any(probInfW <= 0)) {
+  #   stop("Slope of initial prevalence by age must be sufficiently low to ",
+  #        "avoid non-positive probabilities.", call. = FALSE)
+  # }
 
   # Infection status
   status <- rep(0, num)
@@ -314,11 +270,15 @@ init_status_msm <- function(dat) {
   dat$attr$tt.traj <- tt.traj
 
 
-
   ## Infection-related attributes
 
   stage <- rep(NA, num)
-  stage.time <- rep(NA, num)
+  stage.time <- rep(0, num)
+  stage.time.ar.ndx <- rep(0, num)
+  stage.time.af.ndx <- rep(0, num)
+  stage.time.early.chronic.ndx <- rep(0, num)
+  stage.time.late.chronic.ndx <- rep(0, num)
+  stage.time.aids.ndx <- rep(0, num)
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
@@ -328,16 +288,10 @@ init_status_msm <- function(dat) {
   tx.init.time <- rep(NA, num)
   cum.time.on.tx <- rep(NA, num)
   cum.time.off.tx <- rep(NA, num)
-  infector <- rep(NA, num)
   inf.role <- rep(NA, num)
   inf.type <- rep(NA, num)
-  inf.diag <- rep(NA, num)
-  inf.tx <- rep(NA, num)
-  inf.stage <- rep(NA, num)
-
-  time.sex.active <- pmax(1,
-                          round((365 / dat$param$time.unit) * age - (365 / dat$param$time.unit) *
-                                  min(dat$init$ages), 0))
+  time.sex.active <- pmax(1,round((365 / dat$param$time.unit) * age -
+                                  (365 / dat$param$time.unit) * min(dat$init$ages), 0))
 
   vlar.int <- dat$param$vl.acute.rise.int
   vlap <- dat$param$vl.acute.peak
@@ -349,6 +303,11 @@ init_status_msm <- function(dat) {
   vlds <- (vlf - vlsp) / vl.aids.int
   vl.acute.int <- vlar.int + vlaf.int
 
+  # Seventy percent value for early/late chronic split
+  early.chronic.full.int <- floor(0.7 * dat$param$max.time.off.tx.full.int)
+  early.chronic.part.int <- floor(0.7 * dat$param$max.time.off.tx.part.int)
+  late.chronic.full.int <- floor(0.7 * dat$param$max.time.off.tx.full.int)
+  late.chronic.part.int <- floor(0.7 * dat$param$max.time.off.tx.part.int)
 
   ### Non-treater type: tester and non-tester
   selected <- which(status == 1 & tt.traj %in% c(1, 2))
@@ -364,13 +323,29 @@ init_status_msm <- function(dat) {
   stage[selected[time.since.inf > vl.acute.int & time.since.inf <= vldo.int]] <- 3
   stage[selected[time.since.inf > vldo.int]] <- 4
 
+  # Need to make this ART/no?
   stage.time[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1]
-  stage.time[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] -
-                                                   vlar.int
-  stage.time[selected][stage[selected] == 3] <- time.since.inf[stage[selected] == 3] -
-                                                  vl.acute.int
-  stage.time[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] -
-                                                  vldo.int
+  stage.time[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] - vlar.int
+  stage.time[selected][stage[selected] == 3] <- time.since.inf[stage[selected] == 3] - vl.acute.int
+  stage.time[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] - vldo.int
+
+  # HIV stage times
+  stage.time.ar.ndx[selected][stage[selected] == 1] <- time.since.inf[stage[selected] == 1]
+  stage.time.af.ndx[selected][stage[selected] == 2] <- time.since.inf[stage[selected] == 2] - vlar.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <-
+                                                                                                              time.since.inf[stage[selected] == 3 &
+                                                                                                              cum.time.off.tx[selected] <= early.chronic.full.int] -
+                                                                                        vl.acute.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.full.int] <- time.since.inf[stage[selected] == 3 &
+                                                                                                                                       cum.time.off.tx[selected] > early.chronic.full.int] -
+                                                                                            vl.acute.int - early.chronic.full.int
+  stage.time.aids.ndx[selected][stage[selected] == 4] <- time.since.inf[stage[selected] == 4] - vldo.int
+
+  # Assign time spent in earlier stages for those initialized into later stages
+  stage.time.ar.ndx[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af.ndx[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 4] <- early.chronic.full.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4] <- late.chronic.full.int
 
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
@@ -385,15 +360,13 @@ init_status_msm <- function(dat) {
 
   # Time to next test
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected),
-                             min = 0,
+    ttntest <- ceiling(runif(length(selected), min = 0,
                              max = dat$param$mean.test.B.int * (race[selected] == "B") +
                                    dat$param$mean.test.W.int * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
-    ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                          dat$param$mean.test.W.int * (race[selected] == "W")))
+    ttntest <- rgeom(length(selected), 1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
+                                            dat$param$mean.test.W.int * (race[selected] == "W")))
   }
 
   twind.int <- dat$param$test.window.int
@@ -412,46 +385,34 @@ init_status_msm <- function(dat) {
   tx.init.time.W <- twind.int + dat$param$last.neg.test.W.int + 1 / dat$param$tx.init.W.prob
 
   # Stage for Blacks
-  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob /
-                       (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
-  offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)),
-                    nrow = tx.init.time.B)
-  numsteps.B <- (dat$param$max.time.off.tx.full.int - tx.init.time.B) /
-                (1 - prop.time.on.tx.B)
-  offon.B <- rbind(offon.B,
-                   cbind(tx.init.time.B + (1 - prop.time.on.tx.B) * 1:numsteps.B,
-                         prop.time.on.tx.B * 1:numsteps.B))
+  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob / (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
+  offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)), nrow = tx.init.time.B)
+  numsteps.B <- (dat$param$max.time.off.tx.full.int - tx.init.time.B) / (1 - prop.time.on.tx.B)
+  offon.B <- rbind(offon.B, cbind(tx.init.time.B + (1 - prop.time.on.tx.B) * 1:numsteps.B,
+                                  prop.time.on.tx.B * 1:numsteps.B))
   offon.B <- round(offon.B)
   exp.dur.chronic.B <- nrow(offon.B) - vl.acute.int
   exp.onset.aids.B <- nrow(offon.B)
   offon.last.B <- offon.B[nrow(offon.B), ]
-  offon.B <- rbind(offon.B,
-                   matrix(c(offon.last.B[1] + (1:vl.aids.int),
-                            rep(offon.last.B[2], vl.aids.int)),
-                          ncol = 2))
+  offon.B <- rbind(offon.B, matrix(c(offon.last.B[1] + (1:vl.aids.int), rep(offon.last.B[2], vl.aids.int)),
+                                     ncol = 2))
   max.possible.inf.time.B <- nrow(offon.B)
   offon.B[, 2] <- (1:max.possible.inf.time.B) - offon.B[, 1]
   stage.B <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
   # Stage for Whites
-  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
-    (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
-  offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)),
-                    nrow = tx.init.time.W)
-  numsteps.W <- (dat$param$max.time.off.tx.full.int - tx.init.time.W) /
-    (1 - prop.time.on.tx.W)
-  offon.W <- rbind(offon.W,
-                   cbind(tx.init.time.W + (1 - prop.time.on.tx.W) * 1:numsteps.W,
-                         prop.time.on.tx.W * 1:numsteps.W))
+  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob / (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
+  offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)), nrow = tx.init.time.W)
+  numsteps.W <- (dat$param$max.time.off.tx.full.int - tx.init.time.W) / (1 - prop.time.on.tx.W)
+  offon.W <- rbind(offon.W, cbind(tx.init.time.W + (1 - prop.time.on.tx.W) * 1:numsteps.W,
+                                  prop.time.on.tx.W * 1:numsteps.W))
   offon.W <- round(offon.W)
   exp.dur.chronic.W <- nrow(offon.W) - vl.acute.int
   exp.onset.aids.W <- nrow(offon.W)
   offon.last.W <- offon.W[nrow(offon.W), ]
-  offon.W <- rbind(offon.W,
-                   matrix(c(offon.last.W[1] + (1:vl.aids.int),
-                            rep(offon.last.W[2], vl.aids.int)),
-                          ncol = 2))
+  offon.W <- rbind(offon.W, matrix(c(offon.last.W[1] + (1:vl.aids.int), rep(offon.last.W[2], vl.aids.int)),
+                                     ncol = 2))
   max.possible.inf.time.W <- nrow(offon.W)
   offon.W[, 2] <- (1:max.possible.inf.time.W) - offon.W[, 1]
   stage.W <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
@@ -466,17 +427,31 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.B[time.since.inf, 1]
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
+
+  # HIV stage times
+  stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                   cum.time.off.tx[selected] <= early.chronic.full.int]
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4 & cum.time.off.tx[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 4 &
+                                                                                                                   cum.time.off.tx[selected] > early.chronic.full.int] -
+                                                                                                                 early.chronic.full.int
+  stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+
+  # Assign time spent in earlier stages for those initialized into later stages
+  stage.time.ar.ndx[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af.ndx[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 4] <- early.chronic.full.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4] <- late.chronic.full.int
+
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
-           1, prop.time.on.tx.B)
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <- rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
+                                                                                     1, prop.time.on.tx.B)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
                     ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
-                  (time.since.inf > vlar.int + vlaf.int) *
-                  (time.since.inf <= exp.onset.aids.B) * (vlsp) +
-                  (time.since.inf > exp.onset.aids.B) *
-                  (vlsp + (time.since.inf - exp.onset.aids.B) * vlds)
+                  (time.since.inf > vlar.int + vlaf.int) * (time.since.inf <= exp.onset.aids.B) * (vlsp) +
+                  (time.since.inf > exp.onset.aids.B) * (vlsp + (time.since.inf - exp.onset.aids.B) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
 
   # VL for Whites
@@ -488,36 +463,48 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.W[time.since.inf, 1]
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
+
+  # HIV stage times - 7 years for early chronic, 3 years for late chronic
+  stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                             cum.time.off.tx[selected] <= early.chronic.full.int]
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.full.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                              cum.time.off.tx[selected] > early.chronic.full.int] -
+                                                                                                                  early.chronic.full.int
+  stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+
+  # Assign time spent in earlier stages for those initialized into later stages
+  stage.time.ar.ndx[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af.ndx[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 4] <- early.chronic.full.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4] <- late.chronic.full.int
+
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
-           1, prop.time.on.tx.W)
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <- rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
+                                                                                    1, prop.time.on.tx.W)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
-                  (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
-                     ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
-                  (time.since.inf > vlar.int + vlaf.int) *
-                  (time.since.inf <= exp.onset.aids.W) * (vlsp) +
-                  (time.since.inf > exp.onset.aids.W) *
-                  (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
+                  (time.since.inf > vlar.int) *  (time.since.inf <= vlar.int + vlaf.int) *
+                    ((vlsp - vlap) *  (time.since.inf - vlar.int) / vlaf.int + vlap) +
+                  (time.since.inf > vlar.int + vlaf.int) * (time.since.inf <= exp.onset.aids.W) * (vlsp) +
+                  (time.since.inf > exp.onset.aids.W) * (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.full.supp
 
   # Diagnosis
   selected <- which(status == 1 & tt.traj == 4)
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected),
-                             min = 0,
+    ttntest <- ceiling(runif(length(selected), min = 0,
                              max = dat$param$mean.test.B.int * (race[selected] == "B") +
                                    dat$param$mean.test.W.int * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
-    ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                          dat$param$mean.test.W.int * (race[selected] == "W")))
+    ttntest <- rgeom(length(selected), 1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
+                                            dat$param$mean.test.W.int * (race[selected] == "W")))
   }
 
   diag.status[selected][ttntest > cum.time.off.tx[selected] - twind.int] <- 0
   last.neg.test[selected][ttntest > cum.time.off.tx[selected] - twind.int] <-
-                           -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
+                   -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
   diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
   diag.status[selected][cum.time.on.tx[selected] > 0] <- 1
   last.neg.test[selected][cum.time.on.tx[selected] > 0] <- NA
@@ -527,48 +514,39 @@ init_status_msm <- function(dat) {
 
   # Create set of expected values for (cum.time.off.tx,cum.time.on.tx)
 
-  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob /
-                       (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
-  offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)),
-                    nrow = tx.init.time.B)
+  prop.time.on.tx.B <- dat$param$tx.reinit.B.prob / (dat$param$tx.halt.B.prob + dat$param$tx.reinit.B.prob)
+  offon.B <- matrix(c(1:tx.init.time.B, rep(0, tx.init.time.B)), nrow = tx.init.time.B)
   while (offon.B[nrow(offon.B), 1] / dat$param$max.time.off.tx.part.int +
          offon.B[nrow(offon.B), 2] / dat$param$max.time.on.tx.part.int < 1) {
-    offon.B <- rbind(offon.B,
-                     offon.B[nrow(offon.B), ] + c(1 - prop.time.on.tx.B,
-                                                      prop.time.on.tx.B))
+                      offon.B <- rbind(offon.B,
+                      offon.B[nrow(offon.B), ] + c(1 - prop.time.on.tx.B, prop.time.on.tx.B))
   }
   offon.B <- round(offon.B)
   exp.dur.chronic.B <- nrow(offon.B) - vl.acute.int
   exp.onset.aids.B <- nrow(offon.B)
   offon.last.B <- offon.B[nrow(offon.B), ]
-  offon.B <- rbind(offon.B,
-                   matrix(c(offon.last.B[1] + (1:vl.aids.int),
-                            rep(offon.last.B[2], vl.aids.int)),
-                          ncol = 2))
+  offon.B <- rbind(offon.B, matrix(c(offon.last.B[1] + (1:vl.aids.int), rep(offon.last.B[2], vl.aids.int)),
+                                   ncol = 2))
   max.possible.inf.time.B <- nrow(offon.B)
   offon.B[, 2] <- (1:max.possible.inf.time.B) - offon.B[, 1]
   stage.B <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.B, vl.aids.int))
   stage.time.B <- c(1:vlar.int, 1:vlaf.int, 1:exp.dur.chronic.B, 1:vl.aids.int)
 
-  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob /
-                       (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
-  offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)),
-                    nrow = tx.init.time.W)
+  prop.time.on.tx.W <- dat$param$tx.reinit.W.prob / (dat$param$tx.halt.W.prob + dat$param$tx.reinit.W.prob)
+  offon.W <- matrix(c(1:tx.init.time.W, rep(0, tx.init.time.W)), nrow = tx.init.time.W)
 
   while (offon.W[nrow(offon.W), 1] / dat$param$max.time.off.tx.part.int +
          offon.W[nrow(offon.W), 2] / dat$param$max.time.on.tx.part.int < 1) {
-    offon.W <- rbind(offon.W,
-                     offon.W[nrow(offon.W), ] + c(1 - prop.time.on.tx.W,
+                      offon.W <- rbind(offon.W,
+                      offon.W[nrow(offon.W), ] + c(1 - prop.time.on.tx.W,
                                                   prop.time.on.tx.W))
   }
   offon.W <- round(offon.W)
   exp.dur.chronic.W <- nrow(offon.W) - vl.acute.int
   exp.onset.aids.W <- nrow(offon.W)
   offon.last.W <- offon.W[nrow(offon.W), ]
-  offon.W <- rbind(offon.W,
-                   matrix(c(offon.last.W[1] + (1:vl.aids.int),
-                            rep(offon.last.W[2], vl.aids.int)),
-                          ncol = 2))
+  offon.W <- rbind(offon.W, matrix(c(offon.last.W[1] + (1:vl.aids.int), rep(offon.last.W[2], vl.aids.int)),
+                                     ncol = 2))
   max.possible.inf.time.W <- nrow(offon.W)
   offon.W[, 2] <- (1:max.possible.inf.time.W) - offon.W[, 1]
   stage.W <- rep(c(1, 2, 3, 4), c(vlar.int, vlaf.int, exp.dur.chronic.W, vl.aids.int))
@@ -583,17 +561,31 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.B[time.since.inf, 1]
   stage[selected] <- stage.B[time.since.inf]
   stage.time[selected] <- stage.time.B[time.since.inf]
+
+  # HIV stage times
+  stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                            cum.time.off.tx[selected] <= early.chronic.part.int]
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                          cum.time.off.tx[selected] > early.chronic.part.int] -
+                                                                                                                 early.chronic.part.int
+  stage.time.aids.ndx[selected][stage[selected] == 4]  <- stage.time[selected][stage[selected] == 4]
+
+  # Assign time spent in earlier stages for those initialized into later stages
+  stage.time.ar.ndx[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af.ndx[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 4] <- early.chronic.part.int
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4] <- late.chronic.part.int
+
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
-           1, prop.time.on.tx.B)
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <- rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
+                                                                                     1, prop.time.on.tx.B)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
-                     ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
-                  (time.since.inf > vlar.int + vlaf.int) *
-                  (time.since.inf <= exp.onset.aids.B) * (vlsp) +
-                  (time.since.inf > exp.onset.aids.B) *
-                  (vlsp + (time.since.inf - exp.onset.aids.B) * vlds)
+                    ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
+                  (time.since.inf > vlar.int + vlaf.int) * (time.since.inf <= exp.onset.aids.B) * (vlsp) +
+                  (time.since.inf > exp.onset.aids.B) * (vlsp + (time.since.inf - exp.onset.aids.B) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
 
   # VL for Whites
@@ -605,38 +597,50 @@ init_status_msm <- function(dat) {
   cum.time.off.tx[selected] <- offon.W[time.since.inf, 1]
   stage[selected] <- stage.W[time.since.inf]
   stage.time[selected] <- stage.time.W[time.since.inf]
+
+  # HIV stage times
+  stage.time.ar.ndx[selected][stage[selected] == 1] <- stage.time[selected][stage[selected] == 1]
+  stage.time.af.ndx[selected][stage[selected] == 2] <- stage.time[selected][stage[selected] == 2]
+  stage.time.early.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] <= early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                            cum.time.off.tx[selected] <= early.chronic.part.int]
+  stage.time.late.chronic.ndx[selected][stage[selected] == 3 & cum.time.off.tx[selected] > early.chronic.part.int] <- stage.time[selected][stage[selected] == 3 &
+                                                                                                                          cum.time.off.tx[selected] > early.chronic.part.int] -
+                                                                                                                  early.chronic.part.int
+  stage.time.aids.ndx[selected][stage[selected] == 4] <- stage.time[selected][stage[selected] == 4]
+
+  # Assign time spent in earlier stages for those initialized into later stages
+  stage.time.ar.ndx[selected][stage[selected] %in% c(2, 3, 4)] <- vlar.int
+  stage.time.af.ndx[selected][stage[selected] %in% c(3, 4)] <- vlaf.int
+  stage.time.early.chronic.ndx[selected][stage[selected] == 4] <- 52 * 7
+  stage.time.late.chronic.ndx[selected][stage[selected] == 4] <- 52 * 3
+
   tx.status[selected] <- 0
-  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <-
-    rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
-           1, prop.time.on.tx.W)
+  tx.status[selected][stage[selected] == 3 & cum.time.on.tx[selected] > 0] <- rbinom(sum(stage[selected] == 3 & cum.time.on.tx[selected] > 0),
+                                                                                     1, prop.time.on.tx.W)
   vl[selected] <- (time.since.inf <= vlar.int) * (vlap * time.since.inf / vlar.int) +
                   (time.since.inf > vlar.int) * (time.since.inf <= vlar.int + vlaf.int) *
-                     ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
-                  (time.since.inf > vlar.int + vlaf.int) *
-                  (time.since.inf <= exp.onset.aids.W) * (vlsp) +
-                  (time.since.inf > exp.onset.aids.W) *
-                  (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
+                    ((vlsp - vlap) * (time.since.inf - vlar.int) / vlaf.int + vlap) +
+                  (time.since.inf > vlar.int + vlaf.int) * (time.since.inf <= exp.onset.aids.W) * (vlsp) +
+                  (time.since.inf > exp.onset.aids.W) * (vlsp + (time.since.inf - exp.onset.aids.W) * vlds)
   vl[selected][tx.status[selected] == 1] <- dat$param$vl.part.supp
 
   # Implement diagnosis for both
   selected <- which(status == 1 & tt.traj == 3)
   if (dat$param$testing.pattern == "interval") {
-    ttntest <- ceiling(runif(length(selected),
-                             min = 0,
+    ttntest <- ceiling(runif(length(selected), min = 0,
                              max = dat$param$mean.test.B.int * (race[selected] == "B") +
                                    dat$param$mean.test.W.int * (race[selected] == "W")))
   }
 
   if (dat$param$testing.pattern == "memoryless") {
-    ttntest <- rgeom(length(selected),
-                     1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                          dat$param$mean.test.W.int * (race[selected] == "W")))
+    ttntest <- rgeom(length(selected), 1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
+                                            dat$param$mean.test.W.int * (race[selected] == "W")))
   }
 
 
   diag.status[selected][ttntest > cum.time.off.tx[selected] - twind.int] <- 0
   last.neg.test[selected][ttntest > cum.time.off.tx[selected] - twind.int] <-
-    -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
+                    -ttntest[ttntest > cum.time.off.tx[selected] - twind.int]
 
   diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
   diag.status[selected][cum.time.on.tx[selected] > 0] <- 1
@@ -647,22 +651,37 @@ init_status_msm <- function(dat) {
   selected <- which(status == 0 & tt.traj %in% c(2, 3, 4))
 
   if (dat$param$testing.pattern == "interval") {
-    tslt <- ceiling(runif(length(selected),
-                          min = 0,
+    tslt <- ceiling(runif(length(selected), min = 0,
                           max = dat$param$mean.test.B.int * (race[selected] == "B") +
                                 dat$param$mean.test.W.int * (race[selected] == "W")))
   }
   if (dat$param$testing.pattern == "memoryless") {
-    tslt <- rgeom(length(selected),
-                  1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
-                       dat$param$mean.test.W.int * (race[selected] == "W")))
+    tslt <- rgeom(length(selected), 1 / (dat$param$mean.test.B.int * (race[selected] == "B") +
+                                         dat$param$mean.test.W.int * (race[selected] == "W")))
   }
   last.neg.test[selected] <- -tslt
 
 
   ## Set all onto dat$attr
+  dat$attr$time.hivneg <- rep(0, num)
+  dat$attr$time.on.prep <- rep(0, num)
+  dat$attr$time.off.prep <- rep(0, num)
   dat$attr$stage <- stage
   dat$attr$stage.time <- stage.time
+  dat$attr$stage.time.ar.ndx <- stage.time.ar.ndx
+  dat$attr$stage.time.ar.dx <- rep(0, num)
+  dat$attr$stage.time.af.ndx <- stage.time.af.ndx
+  dat$attr$stage.time.af.dx <- rep(0, num)
+  dat$attr$stage.time.early.chronic.ndx <- stage.time.early.chronic.ndx
+  dat$attr$stage.time.early.chronic.dx.yrone <- rep(0, num)
+  dat$attr$stage.time.early.chronic.dx.yrstwotolate <- rep(0, num)
+  dat$attr$stage.time.early.chronic.art <- rep(0, num)
+  dat$attr$stage.time.late.chronic.ndx <- stage.time.late.chronic.ndx
+  dat$attr$stage.time.late.chronic.dx <- rep(0, num)
+  dat$attr$stage.time.late.chronic.art <- rep(0, num)
+  dat$attr$stage.time.aids.ndx <- stage.time.aids.ndx
+  dat$attr$stage.time.aids.dx <- rep(0, num)
+  dat$attr$stage.time.aids.art <- rep(0, num)
   dat$attr$inf.time <- inf.time
   dat$attr$vl <- vl
   dat$attr$diag.status <- diag.status
@@ -672,14 +691,371 @@ init_status_msm <- function(dat) {
   dat$attr$tx.init.time <- tx.init.time
   dat$attr$cum.time.on.tx <- cum.time.on.tx
   dat$attr$cum.time.off.tx <- cum.time.off.tx
-  dat$attr$infector <- infector
   dat$attr$inf.role <- inf.role
   dat$attr$inf.type <- inf.type
-  dat$attr$inf.diag <- inf.diag
-  dat$attr$inf.tx <- inf.tx
-  dat$attr$inf.stage <- inf.stage
+
 
   return(dat)
+
+}
+
+
+
+#' @title Initialize the STI status of persons in the network
+#'
+#' @description Sets the initial individual-level disease status of persons
+#'              in the network, as well as disease-related attributes for
+#'              infected persons.
+#'
+#' @param dat Data object created in initialization module.
+#'
+#' @export
+#' @keywords initiation utility msm STI syphilis GC CT
+#'
+init_status_sti_msm <- function(dat) {
+
+    ## Initial values and attributes -------------------------------------------
+
+    num.B <- dat$init$num.B
+    num.W <- dat$init$num.W
+    num <- num.B + num.W
+    ids.B <- which(dat$attr$race == "B")
+    ids.W <- which(dat$attr$race == "W")
+    age <- dat$attr$age
+    role.class <- dat$attr$role.class
+
+    # Infection Status
+    nInfsyphB <- round(dat$init$prev.syph.B * num.B)
+    nInfsyphW <- round(dat$init$prev.syph.W * num.W)
+
+    # Syphilis stage-specific starting prevalence (among cases)
+    stage.syph.B.prob <- dat$init$stage.syph.B.prob
+    stage.syph.W.prob <- dat$init$stage.syph.W.prob
+
+    if (dat$param$race.method == 1) {
+        stage.syph.B.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
+        stage.syph.W.prob = (stage.syph.B.prob + stage.syph.W.prob)/2
+    }
+
+    # Infection-related attributes
+    # Syphilis
+    syphilis <- rep(0, num)
+    syph.infTime <- rep(NA, num)
+    last.syph.infTime <- rep(NA, num)
+    stage.syph <- rep(NA, num)
+    stage.time.syph <- rep(NA, num)
+    diag.status.syph <- rep(NA, num)
+    last.diag.time.syph <- rep(NA, num)
+    last.neg.test.syph <- rep(NA, num)
+    last.tx.time.syph <- rep(NA, num)
+    last.tx.time.syph.prep <- rep(NA, num)
+    syph.incub.tx <- rep(NA, num)
+    syph.prim.tx <- rep(NA, num)
+    syph.seco.tx <- rep(NA, num)
+    syph.earlat.tx <- rep(NA, num)
+    syph.latelat.tx <- rep(NA, num)
+    syph.tert.tx <- rep(NA, num)
+    syph.tx.prep <- rep(NA, num)
+    syph.sympt <- rep(NA, num)
+
+    # Gonorrhea
+    uGC <- rep(0, num)
+    rGC <- rep(0, num)
+    rGC.infTime <- rep(NA, num)
+    uGC.infTime <- rep(NA, num)
+    last.rGC.infTime <- rep(NA, num)
+    last.uGC.infTime <- rep(NA, num)
+    rGC.sympt <- rep(NA, num)
+    uGC.sympt <- rep(NA, num)
+    diag.status.gc <- rep(NA, num)
+    last.diag.time.gc <- rep(NA, num)
+    last.neg.test.rgc <- rep(NA, num)
+    last.neg.test.ugc <- rep(NA, num)
+    last.tx.time.rgc <- rep(NA, num)
+    last.tx.time.ugc <- rep(NA, num)
+    last.tx.time.rgc.prep <- rep(NA, num)
+    last.tx.time.ugc.prep <- rep(NA, num)
+
+    # Chlamydia
+    uCT <- rep(0, num)
+    rCT <- rep(0, num)
+    rCT.infTime <- rep(NA, num)
+    uCT.infTime <- rep(NA, num)
+    last.rCT.infTime <- rep(NA, num)
+    last.uCT.infTime <- rep(NA, num)
+    rCT.sympt <- rep(NA, num)
+    uCT.sympt <- rep(NA, num)
+    diag.status.ct <- rep(NA, num)
+    last.diag.time.ct <- rep(NA, num)
+    last.neg.test.rct <- rep(NA, num)
+    last.neg.test.uct <- rep(NA, num)
+    last.tx.time.rct <- rep(NA, num)
+    last.tx.time.uct <- rep(NA, num)
+    last.tx.time.rct.prep <- rep(NA, num)
+    last.tx.time.uct.prep <- rep(NA, num)
+
+    # Syphilis infection parameters
+    incu.syph.int <- dat$param$incu.syph.int
+    prim.syph.int <- dat$param$prim.syph.int
+    seco.syph.int <- dat$param$seco.syph.int
+    earlat.syph.int <- dat$param$earlat.syph.int
+    latelat.syph.int <- dat$param$latelat.syph.int
+
+    # Testing attributes
+    recentpartners <- rep(0, num)
+    time.sex.active <- pmax(1, round((365 / dat$param$time.unit) * age -
+                                      (365 / dat$param$time.unit) * min(dat$init$ages), 0))
+
+    selected <- which(dat$attr$race %in% c("B", "W"))
+    tslastsyphtest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+    tslastcttest <- tslastgctest <- ceiling(runif(length(selected), max = (dat$param$stitest.active.int - 2)))
+
+    ## Syphilis ----------------------------------------------------------------
+
+    # Infection status for syphilis
+    while (sum(syphilis[ids.B]) != nInfsyphB) {
+        syphilis[ids.B] <- rbinom(num.B, 1, dat$init$prev.syph.B)
+    }
+    while (sum(syphilis[ids.W]) != nInfsyphW) {
+        syphilis[ids.W] <- rbinom(num.W, 1, dat$init$prev.syph.W)
+    }
+
+    inf.ids.B <- intersect(ids.B, which(syphilis == 1))
+    inf.ids.W <- intersect(ids.W, which(syphilis == 1))
+    inf.ids <- c(inf.ids.B, inf.ids.W)
+
+    # Stage of syphilis infection
+    if (length(inf.ids.B) > 0 ) {
+    stage.syph[inf.ids.B] <- sample(apportion_lr(length(inf.ids.B), c(1, 2, 3, 4, 5, 6), stage.syph.B.prob))
+    }
+    if (length(inf.ids.W) > 0) {
+    stage.syph[inf.ids.W] <- sample(apportion_lr(length(inf.ids.W), c(1, 2, 3, 4, 5, 6), stage.syph.W.prob))
+    }
+    # Assign duration of untreated infection and symptomatic at beginning
+    # Incubating
+    selected <- intersect(inf.ids, which(stage.syph == 1))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.incub.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$incu.syph.int)
+    time.in.incub.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.incub.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.incub.syph
+
+    # Primary
+    selected <- intersect(inf.ids, which(stage.syph == 2))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.prim.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$prim.syph.int)
+    time.in.prim.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.prim.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.prim.syph - incu.syph.int
+
+    # Secondary
+    selected <- intersect(inf.ids, which(stage.syph == 3))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.seco.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$seco.syph.int)
+    time.in.seco.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.seco.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.seco.syph - prim.syph.int - incu.syph.int
+
+    # Early latent
+    selected <- intersect(inf.ids, which(stage.syph == 4))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.earlat.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$earlat.syph.int)
+    time.in.earlat.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.earlat.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.earlat.syph - seco.syph.int -
+                                  prim.syph.int - incu.syph.int
+
+    # Late latent
+    selected <- intersect(inf.ids, which(stage.syph == 5))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.latelat.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$latelat.syph.int)
+    time.in.latelat.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.latelat.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.latelat.syph - earlat.syph.int -
+                                  seco.syph.int - prim.syph.int - incu.syph.int
+
+    # Tertiary
+    selected <- intersect(inf.ids, which(stage.syph == 6))
+    syph.sympt[selected] <- rbinom(length(selected), 1, dat$param$syph.tert.sympt.prob)
+    max.inf.time <- pmin(time.sex.active[selected], dat$param$tert.syph.int)
+    time.in.tert.syph <- ceiling(runif(length(selected), max = max.inf.time))
+    stage.time.syph[selected] <- time.in.tert.syph
+    syph.infTime[selected] <- last.syph.infTime[selected] <- 1 - time.in.tert.syph - latelat.syph.int -
+                                  earlat.syph.int - seco.syph.int - prim.syph.int -
+                                  incu.syph.int
+
+    # Set diagnosis status for syphilis
+    diag.status.syph[syphilis == 1] <- 0
+
+    ## Gonorrhea (GC) ----------------------------------------------------------
+    idsUreth <- which(role.class %in% c("I", "V"))
+    idsRect <- which(role.class %in% c("R", "V"))
+
+    # Initialize GC infection at both sites
+    idsUGC <- sample(idsUreth, size = round(dat$init$prev.ugc * num), FALSE)
+    uGC[idsUGC] <- 1
+
+    idsRGC <- sample(setdiff(idsRect, idsUGC), size = round(dat$init$prev.rgc * num), FALSE)
+    rGC[idsRGC] <- 1
+
+    rGC.sympt[rGC == 1] <- rbinom(sum(rGC == 1), 1, dat$param$rgc.sympt.prob)
+    uGC.sympt[uGC == 1] <- rbinom(sum(uGC == 1), 1, dat$param$ugc.sympt.prob)
+
+    rGC.infTime[rGC == 1] <- last.rGC.infTime[rGC == 1] <- 1
+    uGC.infTime[uGC == 1] <- last.uGC.infTime[uGC == 1] <- 1
+
+    diag.status.gc[uGC == 1 | rGC == 1] <- 0
+
+    ## Chlamydia (CT) ----------------------------------------------------------
+    idsUreth <- which(role.class %in% c("I", "V"))
+    idsRect <- which(role.class %in% c("R", "V"))
+
+    idsUCT <- sample(idsUreth, size = round(dat$init$prev.uct * num), FALSE)
+    uCT[idsUCT] <- 1
+
+    idsRCT <- sample(setdiff(idsRect, idsUCT), size =
+                       round(dat$init$prev.rct * num), FALSE)
+    rCT[idsRCT] <- 1
+
+    rCT.sympt[rCT == 1] <- rbinom(sum(rCT == 1), 1, dat$param$rct.sympt.prob)
+    uCT.sympt[uCT == 1] <- rbinom(sum(uCT == 1), 1, dat$param$uct.sympt.prob)
+
+    rCT.infTime[rCT == 1] <- last.rCT.infTime[rCT == 1] <- 1
+    uCT.infTime[uCT == 1] <- last.uCT.infTime[uCT == 1] <- 1
+
+    diag.status.ct[uCT == 1 | rCT == 1] <- 0
+
+    ## Set all attributes onto dat$attr ---------------------------------------
+
+    # Syphilis
+    dat$attr$syphilis <- syphilis
+    dat$attr$syph.timesInf <- rep(0, num)
+    dat$attr$syph.timesInf[syphilis == 1] <- 1
+    dat$attr$stage.syph <- stage.syph
+    dat$attr$stage.time.syph <- stage.time.syph
+    dat$attr$diag.status.syph <- diag.status.syph
+    dat$attr$syph.infTime <- syph.infTime
+    dat$attr$last.syph.infTime <- last.syph.infTime
+    dat$attr$last.syph.recovTime <- rep(NA, num)
+    dat$attr$syph.sympt <- syph.sympt
+    dat$attr$last.neg.test.syph <- last.neg.test.syph
+    dat$attr$last.diag.time.syph <- last.diag.time.syph
+    dat$attr$syph.incub.tx <- syph.incub.tx
+    dat$attr$syph.prim.tx <- syph.prim.tx
+    dat$attr$syph.seco.tx <- syph.seco.tx
+    dat$attr$syph.earlat.tx <- syph.earlat.tx
+    dat$attr$syph.latelat.tx <- syph.latelat.tx
+    dat$attr$syph.tert.tx <- syph.tert.tx
+    dat$attr$syph.tx.prep <- syph.tx.prep
+    dat$attr$last.tx.time.syph <- last.tx.time.syph
+    dat$attr$last.tx.time.syph.prep <- last.tx.time.syph.prep
+    dat$attr$tt.traj.syph.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.syph.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.syph <- tslastsyphtest
+    dat$attr$testing.events.syph <- rep(0, num)
+    dat$attr$testing.events.syph.asympt <- rep(0, num)
+
+    # Gonorrhea
+    dat$attr$rGC <- rGC
+    dat$attr$uGC <- uGC
+    dat$attr$rGC.timesInf <- rep(0, num)
+    dat$attr$rGC.timesInf[rGC == 1] <- 1
+    dat$attr$uGC.timesInf <- rep(0, num)
+    dat$attr$uGC.timesInf[uGC == 1] <- 1
+    dat$attr$diag.status.gc <- diag.status.gc
+    dat$attr$rGC.infTime <- rGC.infTime
+    dat$attr$uGC.infTime <- uGC.infTime
+    dat$attr$last.rGC.infTime <- last.rGC.infTime
+    dat$attr$last.uGC.infTime <- last.uGC.infTime
+    dat$attr$last.rGC.recovTime <- rep(NA, num)
+    dat$attr$last.uGC.recovTime <- rep(NA, num)
+    dat$attr$rGC.sympt <- rGC.sympt
+    dat$attr$uGC.sympt <- uGC.sympt
+    dat$attr$last.neg.test.rgc <- last.neg.test.rgc
+    dat$attr$last.neg.test.ugc <- last.neg.test.ugc
+    dat$attr$last.diag.time.gc <- last.diag.time.gc
+    dat$attr$rGC.tx <- rep(NA, num)
+    dat$attr$uGC.tx <- rep(NA, num)
+    dat$attr$rGC.tx.prep <- rep(NA, num)
+    dat$attr$uGC.tx.prep <- rep(NA, num)
+    dat$attr$last.tx.time.rgc <- last.tx.time.rgc
+    dat$attr$last.tx.time.ugc <- last.tx.time.ugc
+    dat$attr$last.tx.time.rgc.prep <- last.tx.time.rgc.prep
+    dat$attr$last.tx.time.ugc.prep <- last.tx.time.ugc.prep
+    dat$attr$tt.traj.gc.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.gc.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.rgc <- tslastgctest
+    dat$attr$time.since.last.test.ugc <- tslastgctest
+    dat$attr$testing.events.rgc <- rep(0, num)
+    dat$attr$testing.events.rgc.asympt <- rep(0, num)
+    dat$attr$testing.events.ugc <- rep(0, num)
+    dat$attr$testing.events.ugc.asympt <- rep(0, num)
+    dat$attr$testing.events.gc <- rep(0, num)
+    dat$attr$testing.events.gc.asympt <- rep(0, num)
+
+    # Chlamydia
+    dat$attr$rCT <- rCT
+    dat$attr$uCT <- uCT
+    dat$attr$rCT.timesInf <- rep(0, num)
+    dat$attr$rCT.timesInf[rCT == 1] <- 1
+    dat$attr$uCT.timesInf <- rep(0, num)
+    dat$attr$uCT.timesInf[uCT == 1] <- 1
+    dat$attr$diag.status.ct <- diag.status.ct
+    dat$attr$rCT.infTime <- rCT.infTime
+    dat$attr$uCT.infTime <- uCT.infTime
+    dat$attr$last.rCT.infTime <- last.rCT.infTime
+    dat$attr$last.uCT.infTime <- last.uCT.infTime
+    dat$attr$last.rCT.recovTime <- rep(NA, num)
+    dat$attr$last.uCT.recovTime <- rep(NA, num)
+    dat$attr$rCT.sympt <- rCT.sympt
+    dat$attr$uCT.sympt <- uCT.sympt
+    dat$attr$last.neg.test.rct <- last.neg.test.rct
+    dat$attr$last.neg.test.uct <- last.neg.test.uct
+    dat$attr$last.diag.time.ct <- last.diag.time.ct
+    dat$attr$rCT.tx <- rep(NA, num)
+    dat$attr$uCT.tx <- rep(NA, num)
+    dat$attr$rCT.tx.prep <- rep(NA, num)
+    dat$attr$uCT.tx.prep <- rep(NA, num)
+    dat$attr$last.tx.time.rct <- last.tx.time.rct
+    dat$attr$last.tx.time.uct <- last.tx.time.uct
+    dat$attr$last.tx.time.rct.prep <- last.tx.time.rct.prep
+    dat$attr$last.tx.time.uct.prep <- last.tx.time.uct.prep
+    dat$attr$tt.traj.ct.hivpos <- rep(NA, num)
+    dat$attr$tt.traj.ct.hivneg <- rep(NA, num)
+    dat$attr$time.since.last.test.rct <- tslastcttest
+    dat$attr$time.since.last.test.uct <- tslastcttest
+    dat$attr$testing.events.rct <- rep(0, num)
+    dat$attr$testing.events.rct.asympt <- rep(0, num)
+    dat$attr$testing.events.uct <- rep(0, num)
+    dat$attr$testing.events.uct.asympt <- rep(0, num)
+    dat$attr$testing.events.ct <- rep(0, num)
+    dat$attr$testing.events.ct.asympt <- rep(0, num)
+
+    # EPT variables
+    dat$attr$eptindexElig <- rep(NA, num)
+    dat$attr$eptindexStat <- rep(NA, num)
+    dat$attr$eptindexEligdate <- rep(NA, num)
+    dat$attr$eptpartEligReceive <- rep(NA, num)
+    dat$attr$eptpartEligTx_GC <- rep(NA, num)
+    dat$attr$eptpartEligTx_CT <- rep(NA, num)
+    dat$attr$eptpartEligTxdate <- rep(NA, num)
+    dat$attr$eptpartTx <- rep(NA, num)
+    dat$attr$rCT.tx.ept <- rep(NA, num)
+    dat$attr$uCT.tx.ept <- rep(NA, num)
+    dat$attr$rGC.tx.ept <- rep(NA, num)
+    dat$attr$uGC.tx.ept <- rep(NA, num)
+
+    # Testing variables
+    dat$attr$time.last.sex <- rep(NA, num)
+    dat$attr$recentpartners <- recentpartners
+    dat$attr$stianntestLastElig <- rep(NA, num)
+    dat$attr$stihighrisktestLastElig <- rep(NA, num)
+    dat$attr$stitest.ind.active <- rep(0, num)
+    dat$attr$stitest.ind.recentpartners <- rep(0, num)
+    dat$attr$testing.events.sti <- rep(0, num)
+    dat$attr$testing.events.sti.asympt <- rep(0, num)
+
+    return(dat)
 
 }
 
@@ -788,6 +1164,10 @@ reinit_msm <- function(x, param, init, control, s) {
     s <- 1
   }
 
+  if (length(x$el) > 1) {
+    s <- round(runif(1, min = 1, max = length(x$attr)), 0)
+  }
+
   dat <- list()
 
   dat$param <- param
@@ -812,6 +1192,9 @@ reinit_msm <- function(x, param, init, control, s) {
 
   dat$temp <- x$temp[[s]]
 
+  # If adding new statistics at follow-up in prevalence module (gets overwritten)
+  #dat <- prevalence_msm(dat, at = 5201)
+
   class(dat) <- "dat"
   return(dat)
 }
@@ -821,23 +1204,39 @@ reinit_msm <- function(x, param, init, control, s) {
 # HET -----------------------------------------------------------------
 
 
+#' @title Initialization Module
+#'
+#' @description This function initializes the master \code{dat} object on which
+#'              data are stored, simulates the initial state of the network, and
+#'              simulates disease status and other attributes.
+#'
+#' @param x An \code{EpiModel} object of class \code{\link{netest}}.
+#' @param param An \code{EpiModel} object of class \code{\link{param_het}}.
+#' @param init An \code{EpiModel} object of class \code{\link{init_het}}.
+#' @param control An \code{EpiModel} object of class \code{\link{control_het}}.
+#' @param s Simulation number, used for restarting dependent simulations.
+#'
+#' @return
+#' This function returns the updated \code{dat} object with the initialized
+#' values for demographics and disease-related variables.
+#'
+#' @keywords module het
+#'
 #' @export
-#' @rdname initialize_msm
+#'
 initialize_het <- function(x, param, init, control, s) {
 
   dat <- list()
   dat$temp <- list()
   nw <- simulate(x$fit, control = control.simulate.ergm(MCMC.burnin = 1e6))
 
-  dat$el <- list()
-  dat$el[[1]] <- as.edgelist(nw)
+  dat$el <- as.edgelist(nw)
   attributes(dat$el)$vnames <- NULL
-  p <- tergmLite::stergm_prep(nw, x$formation, x$coef.diss$dissolution, x$coef.form,
-                              x$coef.diss$coef.adj, x$constraints)
+  p <- tergmLite::stergm_prep(nw, x$formation, x$coef.diss$dissolution,
+                              x$coef.form, x$coef.diss$coef.adj, x$constraints)
   p$model.form$formula <- NULL
   p$model.diss$formula <- NULL
-  dat$p <- list()
-  dat$p[[1]] <- p
+  dat$p <- p
 
   ## Network Model Parameters
   dat$nwparam <- list(x[-which(names(x) == "fit")])
@@ -897,9 +1296,9 @@ initialize_het <- function(x, param, init, control, s) {
 
 #' @title Reinitialization Module
 #'
-#' @description This function reinitializes the master \code{dat} object on which
-#'              data are stored, simulates the initial state of the network, and
-#'              simulates disease status and other attributes.
+#' @description This function reinitializes the master \code{dat} object on
+#'              which data are stored, simulates the initial state of the
+#'              network, and simulates disease status and other attributes.
 #'
 #' @param x An \code{EpiModel} object of class \code{\link{netest}}.
 #' @param param An \code{EpiModel} object of class \code{\link{param_het}}.
@@ -908,51 +1307,28 @@ initialize_het <- function(x, param, init, control, s) {
 #' @param s Simulation number, used for restarting dependent simulations.
 #'
 #' @return
-#' This function returns the updated \code{dat} object with the initialized values
-#' for demographics and disease-related variables.
+#' This function returns the updated \code{dat} object with the initialized
+#' values for demographics and disease-related variables.
 #'
 #' @keywords module het
 #'
 #' @export
 #'
 reinit_het <- function(x, param, init, control, s) {
-
-  need.for.reinit <- c("param", "control", "nwparam", "epi",
-                       "attr", "temp", "el", "p")
-  if (!all(need.for.reinit %in% names(x))) {
-    stop("x must contain the following elements for restarting: ",
-         "param, control, nwparam, epi, attr, temp, el, p",
-         call. = FALSE)
-  }
-
-  if (length(x$el) == 1) {
-    s <- 1
-  }
-
   dat <- list()
-
+  dat$el <- x$el[[s]]
   dat$param <- param
   dat$param$modes <- 1
   dat$control <- control
   dat$nwparam <- x$nwparam
-
   dat$epi <- sapply(x$epi, function(var) var[s])
   names(dat$epi) <- names(x$epi)
-
-  dat$el <- x$el[[s]]
-  dat$p <- x$p[[s]]
-
   dat$attr <- x$attr[[s]]
+  dat$stats <- list()
+  dat$stats$nwstats <- x$stats$nwstats[[s]]
+  dat$temp <- list()
 
-  if (!is.null(x$stats)) {
-    dat$stats <- list()
-    if (!is.null(x$stats$nwstats)) {
-      dat$stats$nwstats <- x$stats$nwstats[[s]]
-    }
-  }
-
-  dat$temp <- x$temp[[s]]
-
+  dat$param$modes <- 1
   class(dat) <- "dat"
 
   return(dat)
@@ -982,7 +1358,6 @@ initStatus_het <- function(dat) {
   return(dat)
 }
 
-
 initInfTime_het <- function(dat) {
 
   status <- dat$attr$status
@@ -994,22 +1369,21 @@ initInfTime_het <- function(dat) {
   inf.time.dist <- dat$init$inf.time.dist
 
   if (inf.time.dist == "allacute") {
-    max.inf.time <- dat$param$vl.acute.topeak + dat$param$vl.acute.toset
-    infTime[infecteds] <- sample(0:(-max.inf.time), length(infecteds), TRUE)
+        max.inf.time <- dat$param$vl.acute.topeak + dat$param$vl.acute.toset
+        infTime[infecteds] <- sample(0:(-max.inf.time), length(infecteds), TRUE)
   } else {
     max.inf.time <- dat$init$max.inf.time / dat$param$time.unit
     if (inf.time.dist == "geometric") {
-      total.d.rate <- 1/max.inf.time
-      infTime[infecteds] <- -rgeom(length(infecteds), total.d.rate)
+        total.d.rate <- 1/max.inf.time
+        infTime[infecteds] <- -rgeom(length(infecteds), total.d.rate)
     }
     if (inf.time.dist == "uniform") {
-      infTime[infecteds] <- sample(0:(-max.inf.time), length(infecteds), TRUE)
+        infTime[infecteds] <- sample(0:(-max.inf.time), length(infecteds), TRUE)
     }
   }
 
   ## Enforce that time infected < age
-  infTime[infecteds] <- pmax(infTime[infecteds],
-                             1 - dat$attr$age[infecteds] * (365 / dat$param$time.unit))
+  infTime[infecteds] <- pmax(infTime[infecteds], 1 - dat$attr$age[infecteds] * (365 / dat$param$time.unit))
 
   dat$attr$infTime <- infTime
 
@@ -1025,7 +1399,7 @@ initInfTime_het <- function(dat) {
 
 initDx_het <- function(dat) {
 
-  n <- sum(dat$attr$active == 1)
+  n <- sum(dat$attr$race %in% c("B", "W"))
   status <- dat$attr$status
 
   dxStat <- rep(NA, n)
@@ -1044,7 +1418,7 @@ initTx_het <- function(dat) {
 
   ## Variables
   status <- dat$attr$status
-  n <- sum(dat$attr$active == 1)
+  n <- sum(dat$attr$race %in% c("B", "W"))
   nInf <- sum(status == 1)
 
   tx.init.cd4.mean <- dat$param$tx.init.cd4.mean
