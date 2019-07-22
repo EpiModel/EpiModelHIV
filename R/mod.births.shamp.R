@@ -449,10 +449,10 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$deg.cohab.c[newIds] <- 0
   dat$attr$deg.pers.c[newIds] <- 0
   
+  dat$attr$cohab.lt[newIds] <- 0
+  dat$attr$pers.lt[newIds] <- 0
+  dat$attr$onetime.lt[newIds] <- 0
   
-   dat$attr$Ecohab[newIds] <- "0" 
-   dat$attr$Ecohab.timer[newIds] <- 0 
-
   dat$attr$sb[newIds]<- ifelse(race == 'B' & sex == 'M', 'M.B',
                                ifelse(race == 'B' & sex == 'F', 'F.B',
                                ifelse(race != 'B' & sex == 'M', 'M.NB', 'F.NB')))
@@ -512,6 +512,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
     
   }
   
+  checks<<-dat
   
   return(dat)
 }
