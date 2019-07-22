@@ -100,20 +100,6 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$deg.cohab.c <- ifelse(dat$attr$deg.cohab > 0,1,dat$attr$deg.cohab)
   dat$attr$deg.pers.c <- ifelse(dat$attr$deg.pers > 0,1,dat$attr$deg.pers)
   
-  #Early cohab state.
-
-  dat$attr$Ecohab <- rep("0",length(dat$attr$deg.cohab.c))
-  dat$attr$Ecohab.timer <- rep(0,length(dat$attr$deg.cohab.c))
-  
-  p1 <- dat$el[[1]][,1]
-  p2 <- dat$el[[1]][,2]
-  Ect.list <- sample(1:(dat$param$Ecohab.window*5),length(p1),replace=TRUE)
-  dat$attr$Ecohab.timer[p1] <- Ect.list
-  dat$attr$Ecohab.timer[p2] <- Ect.list
-  dat$attr$Ecohab<-ifelse(dat$attr$Ecohab.timer < dat$param$Ecohab.window,"1","0")
-
-  
-  
   # Race
   dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
   num.B <-sum(dat$attr$race == "B")
@@ -168,6 +154,10 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr$ds.pers <- get.vertex.attribute(nw[[1]], "ds.pers")
   dat$attr$dsb.cohab <- get.vertex.attribute(nw[[1]], "dsb.cohab") 
   dat$attr$dsb.pers <- get.vertex.attribute(nw[[1]], "dsb.pers")
+  
+  dat$attr$cohab.lt <- rep(0, num)
+  dat$attr$pers.lt <- rep(0, num)
+  dat$attr$onetime.lt <-  rep(0, num)
   
   # Sex Identity
   dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex.ident")
