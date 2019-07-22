@@ -47,6 +47,8 @@ simnet_shamp <- function(dat, at) {
   }
   dat$temp$new.edges <- matrix(dat$attr$uid[new.edges.c], ncol = 2)
   
+  list <- as.numeric(new.edges.c)
+  dat$attr$cohab.lt[list] <- dat$attr$cohab.lt[list]+1
   
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
@@ -78,6 +80,8 @@ simnet_shamp <- function(dat, at) {
   dat$temp$new.edges <- rbind(dat$temp$new.edges,
                               matrix(dat$attr$uid[new.edges.p], ncol = 2))
   
+  list <- as.numeric(new.edges.p)
+  dat$attr$pers.lt[list] <- dat$attr$pers.lt[list]+1
   
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
@@ -102,6 +106,7 @@ simnet_shamp <- function(dat, at) {
     dat <- calc_resim_nwstats(dat, at)
   }
   
+  dat$attr$onetime.lt <- dat$attr$onetime.lt + get_degree(dat$el[[3]])
   
   ##Set degree terms
   dat$attr$deg.cohab <- get_degree(dat$el[[1]])
@@ -112,33 +117,6 @@ simnet_shamp <- function(dat, at) {
   dat$attr$deg.cohab.c <- ifelse(dat$attr$deg.cohab > 0,1,dat$attr$deg.cohab)
   dat$attr$deg.pers.c <- ifelse(dat$attr$deg.pers > 0,1,dat$attr$deg.pers)
   
-  ##Update Early Cohab attribute and the Early cohab timer.
-  dat$attr$Ecohab.timer <- ifelse(dat$attr$deg.cohab.c == 1, dat$attr$Ecohab.timer+1, 0)
-  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 1 & dat$attr$Ecohab.timer < dat$param$Ecohab.window, "1","0")
-  dat$attr$Ecohab <- ifelse(dat$attr$deg.cohab.c == 0,"0",dat$attr$Ecohab) 
-  dat$attr$Ecohab.timer <- ifelse(dat$attr$deg.cohab.c == 0,0,dat$attr$Ecohab.timer) 
-  
-  
-  ######  IF WE DROP THE ECOHAB APPROACH REMOVE THIS CODE.
-  ##Anyone who has 2+ cohabs or is a cohab of someone with 2+ cohab is not an Ecohab (we don't want to force persistence of 2+ cohabs)
-  ##Check row number vs uid
-  if(at==3){
-  dup.p1 <- duplicated(dat$el[[1]][,1])
-  slot <- which(dup.p1==TRUE)
-  dup.p1 <- dat$el[[1]][,1][slot]
-  dup.p1.partners <- dat$el[[1]][,2][slot]
-  
-  dup.p2 <- duplicated(dat$el[[1]][,2])
-  slot <- which(dup.p2==TRUE)
-  dup.p2 <- dat$el[[1]][,2][slot]
-  dup.p2.partners <- dat$el[[1]][,1][slot]
-  
-  PlusCohabs<-c(dup.p1,dup.p1.partners,dup.p2,dup.p2.partners)
-
-  dat$attr$Ecohab[PlusCohabs] <- "0"
-  dat$attr$Ecohab.timer[PlusCohabs]  <- dat$param$Ecohab.window+2
-  }
-  ######  IF WE DROP THE ECOHAB APPROACH REMOVE THIS CODE.  
 
   return(dat)
 }
