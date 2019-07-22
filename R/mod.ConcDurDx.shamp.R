@@ -30,8 +30,6 @@ ConcDurDx_shamp <- function(dat, at){
     sex <- dat$attr$sex
     age <- floor(dat$attr$age)
     sex.ident <- dat$attr$sex.ident
-    Ecohab <- dat$attr$Ecohab
-    Ecohab.timer <- dat$attr$Ecohab.timer
     cel.temp <- dat$cel.temp
     cel.complete <- dat$cel.complete
       
@@ -56,17 +54,9 @@ ConcDurDx_shamp <- function(dat, at){
       cel[,8] <- age[cel[,1]]
       cel[,9] <- age[cel[,2]]
      
-      ##Check on Ecohab dissolution 
-      
-      cel[,10] <- Ecohab[cel[,1]]
-      cel[,11] <- Ecohab[cel[,2]]
-      cel[,12] <- Ecohab.timer[cel[,1]]
-      cel[,13] <- Ecohab.timer[cel[,2]]
-      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2")
-      cel$Ec1<-ifelse(cel$type=="pers",0,cel$Ec1)
-      cel$Ec2<-ifelse(cel$type=="pers",0,cel$Ec2)
-      cel$Ect1<-ifelse(cel$type=="pers",0,cel$Ect1)
-      cel$Ect2<-ifelse(cel$type=="pers",0,cel$Ect2)
+
+      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2")
+
       
       ##  USE UID FOR EDGES
       ##Covert to UID.
@@ -74,8 +64,8 @@ ConcDurDx_shamp <- function(dat, at){
       cel[,2] <- uid[cel[,2]]
       
       ##Assign rel ID.    
-      rels.cel <- cel[,14] <- (cel[,1] * 1000000000) + cel[,2]
-      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID")
+      rels.cel <- cel[,10] <- (cel[,1] * 1000000000) + cel[,2]
+      colnames(cel)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","ID")
       
       
       
@@ -108,9 +98,9 @@ ConcDurDx_shamp <- function(dat, at){
       
 
       if(at == 2){cel.temp <- cel
-      cel.temp[,15] <- rep(at,length(cel.temp[,1])) 
-      cel.temp[,16] <- rep(NA,length(cel.temp[,1])) 
-      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID","start", "end")
+      cel.temp[,11] <- rep(at,length(cel.temp[,1])) 
+      cel.temp[,12] <- rep(NA,length(cel.temp[,1])) 
+      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","ID","start", "end")
       cel.complete <- cel.temp[0,]
       }
     
@@ -134,19 +124,54 @@ ConcDurDx_shamp <- function(dat, at){
         
 
         cel.temp <- merge(x = cel, y = cel.temp, by = c("p1","p2"), all.x = TRUE)
-        cel.temp <- cel.temp[,c(1:14,27,28)]
+        cel.temp <- cel.temp[,c(1:10,19,20)]
         
         
       }
 
       
 
-      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","Ec1","Ec2","Ect1","Ect2", "ID","start", "end")
+      colnames(cel.temp)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","ID","start", "end")
       now <- which(is.na(cel.temp$start)==TRUE)
       cel.temp$start[now] <- at
       
       dat$cel.temp <- cel.temp
+      
+      
+##Append the One time partnerships
+      
+      el3<-as.data.frame(dat$el[[3]])
+      el3[,3] <- apply(el3[,c(1,2)], 1, FUN=max)
+      el3[,4] <- apply(el3[,c(1,2)], 1, FUN=min)
+      el3[,5]<-rep("OT",length(el3[,1]))
+      el3 <- el3[,3:5]
+      
+      
+      el3[,4] <- sex[el3[,1]]
+      el3[,5] <- sex[el3[,2]]
+      el3[,6] <- race[el3[,1]]
+      el3[,7] <- race[el3[,2]]
+      el3[,8] <- age[el3[,1]]
+      el3[,9] <- age[el3[,2]]
+      
+      
+      ##  USE UID FOR EDGES
+      ##Covert to UID.
+      el3[,1] <- uid[el3[,1]]
+      el3[,2] <- uid[el3[,2]]
+      
+      ##Assign rel ID.    
+      el3[,10] <- (el3[,1] * 1000000000) + el3[,2]
+      el3[,11] <- at
+      el3[,12] <- at
+      
+      colnames(el3)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","ID", "start", "end")
+      
+ 
+      cel.complete <- rbind(cel.complete,el3)
+  
       dat$cel.complete <- cel.complete
+      
   }
   
       
