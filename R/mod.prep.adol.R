@@ -220,6 +220,7 @@ prep_adol <- function(dat, at) {
     if(prep.class.prob.asmm.dist==4){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i4}
     if(prep.class.prob.asmm.dist==5){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i5}
     if(prep.class.prob.asmm.dist==6){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i6}
+    if(prep.class.prob.asmm.dist==7){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i7}
     
     needPC <- which(is.na(prepClass[idsStart]))
     needPC <- idsStart[needPC]
