@@ -53,6 +53,7 @@ prep_adol <- function(dat, at) {
   prep.uptake.asmm <- dat$param$prep.uptake.asmm
   prep.disc.asmm <- dat$param$prep.disc.asmm
   prep.class.prob.asmm <- dat$param$prep.class.prob.asmm
+  prep.class.prob.asmm.dist <- dat$param$prep.class.prob.asmm.dist
 
   ## Eligibility ---------------------------------------------------------------
 
@@ -212,6 +213,15 @@ prep_adol <- function(dat, at) {
     prepStart.time[idsStart]<-at
     
     # PrEP class is fixed over PrEP cycles
+
+    prep.class.prob.asmm <- ifelse(prep.class.prob.asmm.dist==1,dat$params$prep.class.prob.asmm.i1,
+                                   ifelse(prep.class.prob.asmm.dist==2,dat$params$prep.class.prob.asmm.i2,
+                                          ifelse(prep.class.prob.asmm.dist==3,dat$params$prep.class.prob.asmm.i3,
+                                                 ifelse(prep.class.prob.asmm.dist==4,dat$params$prep.class.prob.asmm.i4,prep.class.prob.asmm,
+                                                        ifelse(prep.class.prob.asmm.dist==5,dat$params$prep.class.prob.asmm.i5,prep.class.prob.asmm,
+                                                               ifelse(prep.class.prob.asmm.dist==6,dat$params$prep.class.prob.asmm.i6,prep.class.prob.asmm))))))
+
+    
     needPC <- which(is.na(prepClass[idsStart]))
     needPC <- idsStart[needPC]
     prepClass[needPC] <- sample(x = 0:3, size = length(needPC),
