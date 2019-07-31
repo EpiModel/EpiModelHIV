@@ -214,13 +214,12 @@ prep_adol <- function(dat, at) {
     
     # PrEP class is fixed over PrEP cycles
 
-    prep.class.prob.asmm <- ifelse(prep.class.prob.asmm.dist==1,dat$params$prep.class.prob.asmm.i1,
-                                   ifelse(prep.class.prob.asmm.dist==2,dat$params$prep.class.prob.asmm.i2,
-                                          ifelse(prep.class.prob.asmm.dist==3,dat$params$prep.class.prob.asmm.i3,
-                                                 ifelse(prep.class.prob.asmm.dist==4,dat$params$prep.class.prob.asmm.i4,prep.class.prob.asmm,
-                                                        ifelse(prep.class.prob.asmm.dist==5,dat$params$prep.class.prob.asmm.i5,prep.class.prob.asmm,
-                                                               ifelse(prep.class.prob.asmm.dist==6,dat$params$prep.class.prob.asmm.i6,prep.class.prob.asmm))))))
-
+    if(prep.class.prob.asmm.dist==1){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i1}
+    if(prep.class.prob.asmm.dist==2){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i2}
+    if(prep.class.prob.asmm.dist==3){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i3}
+    if(prep.class.prob.asmm.dist==4){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i4}
+    if(prep.class.prob.asmm.dist==5){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i5}
+    if(prep.class.prob.asmm.dist==6){prep.class.prob.asmm <- dat$param$prep.class.prob.asmm.i6}
     
     needPC <- which(is.na(prepClass[idsStart]))
     needPC <- idsStart[needPC]
