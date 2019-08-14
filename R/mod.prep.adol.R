@@ -238,7 +238,7 @@ prep_adol <- function(dat, at) {
   dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
   dat$attr$prepStart.time<-prepStart.time
-  dat$att$hcv.time[dat$att$hcv.time==at] <- at + 365
+  dat$att$hcv.time[dat$att$hcv.time==at] <- at + 52
 
   # Summary Statistics
   dat$epi$prepCov.asmm[at] <- prepCov
