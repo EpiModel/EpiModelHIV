@@ -84,7 +84,7 @@ param_shamp(race.method = 1, time.unit = 7, method = 1,
   vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
-  birth.age = 18, exit.age = 46, b.method = "fixed", msm.frac = 0,
+  birth.age = 18, exit.age = 45, b.method = "fixed", msm.frac = 0,
   msmf.frac.B = 0.0131, msmf.frac.BI = 0.008, msmf.frac.H = 0.0219,
   msmf.frac.HI = 0.0042, msmf.frac.W = 0.015, URAI.prob = 138/10000,
   UIAI.prob = 11/10000, URVI.prob = 8/10000, UIVI.prob = 4/10000,
@@ -256,9 +256,8 @@ param_shamp(race.method = 1, time.unit = 7, method = 1,
   race.groups = data.params[[1]]$race.groups,
   age.groups = data.params[[1]]$age.groups,
   age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
-  death_stats = TRUE, add.demog.groups = FALSE,
-  Ecohab.window = round(5 * 52), p.growth = FALSE,
-  p.growth.nsteps = 0, p.growth.size = 0, ...)
+  death_stats = TRUE, add.demog.groups = FALSE, p.growth = FALSE,
+  p.growth.size = 0, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
@@ -472,11 +471,7 @@ HIV related death data are store in death.stats, care continuum information for 
 \item{add.demog.groups}{if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
 attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options}
 
-\item{Ecohab.window}{The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.}
-
 \item{p.growth}{If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.}
-
-\item{p.growth.nsteps}{The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.}
 
 \item{p.growth.size}{The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE.}
 
@@ -618,6 +613,10 @@ distribution and approximating in-migration) is HIV positive}
 \item{pos.entry.HI}{The probability that a HI entering into the population that is etering at an
 age older than the birth age (replacing deaths from mortality proportional to the demographic
 distribution and approximating in-migration) is HIV positive}
+
+\item{Ecohab.window}{The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.}
+
+\item{p.growth.nsteps}{The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.}
 }
 \value{
 A list object of class \code{param_shamp}, which can be passed to
