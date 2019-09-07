@@ -18,7 +18,7 @@ demogupdate_shamp <- function(dat, at) {
   #AGECAT
   dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
                            ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
-                                  ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",dat$attr$agecat)))
+                                  ifelse(dat$attr$age >= 36 & dat$attr$age < 45,"36-44",dat$attr$agecat)))
   
 
   ##Update sex and race specific degree terms.  
