@@ -44,7 +44,7 @@ births_shamp <- function(dat, at){
   ##create population growth
   if (dat$param$p.growth == TRUE){
     
-    if (at < dat$param$p.growth.nsteps){
+    if (at == 2){
       
       nBirths.gen <- nBirths.gen + dat$param$p.growth.size
     }
@@ -93,7 +93,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   race.groups <- dat$param$race.groups
   age.groups <- dat$param$age.groups
   
-  ##Not replcing disease deathe at this time
+  ##Not replcing disease death at this time
   nBirths <- nBirths.gen + nBirths.age
   
 
@@ -147,12 +147,26 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
     age[i]<-age.groups[age.temp[i]]
   }
  
-  
-  #set age for nBirths.age to 18.
-  ids.birth<-sample(1:length(age),nBirths.age,replace=FALSE)
-  age[ids.birth]<-dat$param$birth.age
-  
 
+
+##Distribute age values over the year.
+    partial<-(0:51)* (time.unit / 365)
+    partial<-sample(partial,length(age),replace=TRUE)
+    age<-age+partial
+
+  
+#People who age out should be 18 or 25 by the observed ratio.
+    
+    ids.birth<-sample(1:length(age),nBirths.age,replace=FALSE)
+    ids.birth.18<-sample(ids.birth,round(.54*(length(ids.birth))),replace=FALSE)
+    ids.birth.25<-ids.birth[ ! ids.birth %in% ids.birth.18 ]
+  
+    age[ids.birth.18]<-18
+    age[ids.birth.25]<-25
+    
+    age[ids.birth.25] <- sample(c(24,25,26),length(ids.birth.25),replace=TRUE)  
+
+#asighn attributes to dat.
   dat$attr$sex[newIds] <- sex
   dat$attr$race[newIds] <- race
   dat$attr$age[newIds] <- age
@@ -173,8 +187,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   
   dat$attr$agecat<-ifelse(dat$att$age < 26 ,"18-25",
                           ifelse(dat$attr$age >= 26 & dat$attr$age < 36,"26-35",
-                                 ifelse(dat$attr$age >= 36 & dat$attr$age < 46,"36-45",
-                                        ifelse(dat$attr$age >= 46 & dat$attr$age < 76,"46-75",dat$attr$agecat))))
+                                 ifelse(dat$attr$age >= 36 & dat$attr$age < 45,"36-44",
+                                        ifelse(dat$attr$age >= 45 & dat$attr$age < 76,"45-75",dat$attr$agecat))))
                       
   
   newF<-which(sex=="F")
@@ -512,8 +526,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
     
   }
   
-  checks<<-dat
-  
+ 
   return(dat)
 }
 
