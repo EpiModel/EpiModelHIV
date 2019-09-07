@@ -470,7 +470,7 @@ param_shamp <- function(race.method = 1,
                       #b.W.m.rate = 1e-3 / 7,
 
                       birth.age = 18,
-                      exit.age = 46,
+                      exit.age = 45,
                       b.method = "fixed",
                       msm.frac=0.0,
                       msmf.frac.B=0.0131,
@@ -824,9 +824,7 @@ param_shamp <- function(race.method = 1,
                       death_stats = TRUE,
                       add.demog.groups = FALSE,
                       
-                      Ecohab.window = round(5*52),
                       p.growth = FALSE,
-                      p.growth.nsteps = 0,
                       p.growth.size = 0,
                       
                       ...) {
@@ -878,56 +876,56 @@ param_shamp <- function(race.method = 1,
   p$asmr.B.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1 / age.unit),
+                       rep(0.001378053, 5)))^(1 / age.unit),
                 1)
   p$asmr.BI.f <- c(rep(0, 17),
                  1-(1-c(rep(0.000405376, 12),
                         rep(0.000661066, 10),
-                        rep(0.001378053, 6)))^(1 / age.unit),
+                        rep(0.001378053, 5)))^(1 / age.unit),
                  1)
   
   p$asmr.H.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1/age.unit),
+                       rep(0.001378053, 5)))^(1/age.unit),
                 1)
   p$asmr.HI.f <- c(rep(0, 17),
                  1-(1-c(rep(0.000405376, 12),
                         rep(0.000661066, 10),
-                        rep(0.001378053, 6)))^(1/age.unit),
+                        rep(0.001378053, 5)))^(1/age.unit),
                  1)
   p$asmr.W.f <- c(rep(0, 17),
                 1-(1-c(rep(0.000405376, 12),
                        rep(0.000661066, 10),
-                       rep(0.001378053, 6)))^(1/age.unit),
+                       rep(0.001378053, 5)))^(1/age.unit),
                 1)
   
   
   p$asmr.B.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1 / age.unit),
+                       rep(0.001982864, 5)))^(1 / age.unit),
                 1)
   p$asmr.BI.m <- c(rep(0, 17),
                  1-(1-c(rep(0.000853417, 12),
                         rep(0.001084014, 10),
-                        rep(0.001982864, 6)))^(1 / age.unit),
+                        rep(0.001982864, 5)))^(1 / age.unit),
                  1)
   
   p$asmr.H.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1/age.unit),
+                       rep(0.001982864, 5)))^(1/age.unit),
                 1)
   p$asmr.HI.m <- c(rep(0, 17),
                  1-(1-c(rep(0.000853417, 12),
                         rep(0.001084014, 10),
-                        rep(0.001982864, 6)))^(1/age.unit),
+                        rep(0.001982864, 5)))^(1/age.unit),
                  1)
   p$asmr.W.m <- c(rep(0, 17),
                 1-(1-c(rep(0.000853417, 12),
                        rep(0.001084014, 10),
-                       rep(0.001982864, 6)))^(1/age.unit),
+                       rep(0.001982864, 5)))^(1/age.unit),
                 1)
 
 
@@ -979,26 +977,26 @@ init_shamp <- function(prev.B.f = 0.02,
                 dot.args = list(...))
 
   
-  p$init.prev.age.slope.B.f <- prev.B.f / 28
-  p$init.prev.age.slope.BI.f <- prev.BI.f / 28
-  p$init.prev.age.slope.H.f <- prev.H.f / 28
-  p$init.prev.age.slope.HI.f <- prev.HI.f / 28
-  p$init.prev.age.slope.W.f <- prev.W.f / 28
-  p$init.prev.age.slope.B.msf <- prev.B.msf / 28
-  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 28
-  p$init.prev.age.slope.H.msf <- prev.H.msf / 28
-  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 28
-  p$init.prev.age.slope.W.msf <- prev.W.msf / 28
-  p$init.prev.age.slope.B.msm <- prev.B.msm / 28
-  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 28
-  p$init.prev.age.slope.H.msm <- prev.H.msm / 28
-  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 28
-  p$init.prev.age.slope.W.msm <- prev.W.msm / 28
-  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 28
-  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 28
-  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 28
-  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 28
-  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 28
+  p$init.prev.age.slope.B.f <- prev.B.f / 27
+  p$init.prev.age.slope.BI.f <- prev.BI.f / 27
+  p$init.prev.age.slope.H.f <- prev.H.f / 27
+  p$init.prev.age.slope.HI.f <- prev.HI.f / 27
+  p$init.prev.age.slope.W.f <- prev.W.f / 27
+  p$init.prev.age.slope.B.msf <- prev.B.msf / 27
+  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 27
+  p$init.prev.age.slope.H.msf <- prev.H.msf / 27
+  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 27
+  p$init.prev.age.slope.W.msf <- prev.W.msf / 27
+  p$init.prev.age.slope.B.msm <- prev.B.msm / 27
+  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 27
+  p$init.prev.age.slope.H.msm <- prev.H.msm / 27
+  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 27
+  p$init.prev.age.slope.W.msm <- prev.W.msm / 27
+  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 27
+  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 27
+  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 27
+  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 27
+  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 27
  
 
   class(p) <- "init.net"
