@@ -13,8 +13,11 @@ prep_adol <- function(dat, at) {
   if (at < dat$param$prep.start.asmm) {
     return(dat)
   }
-  
 
+  if (at == dat$param$prep.start.asmm) {  
+  dat$attr$hcv.time <- sample(0:51,length(dat$attr$hcv.time), replace = TRUE) + at
+  }
+  
   ## Variables
   ##Attributes
   active <- dat$attr$active
@@ -238,7 +241,7 @@ prep_adol <- function(dat, at) {
   dat$attr$prepEver <- prepEver
   dat$attr$prepClass <- prepClass
   dat$attr$prepStart.time<-prepStart.time
-  dat$att$hcv.time[dat$att$hcv.time==at] <- at + 52
+  dat$attr$hcv.time[dat$attr$hcv.time==at] <- at + 52
 
   # Summary Statistics
   dat$epi$prepCov.asmm[at] <- prepCov
