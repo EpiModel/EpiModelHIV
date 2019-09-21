@@ -89,7 +89,29 @@ prevalence_msm <- function(dat, at) {
     dat$epi$prepStart.asmm <- rNA
     dat$epi$i.num.prep0 <- rNA
     dat$epi$i.num.prep1 <- rNA
+    
+    ## sexually active and PrEP coverage among ASMM by age
+    dat$epi$SA.13 <- rNA
+    dat$epi$P.SA.13 <- rNA
+    dat$epi$prev.P.SA.13 <- rNA
+    dat$epi$SA.14 <- rNA
+    dat$epi$P.SA.14 <- rNA
+    dat$epi$prev.P.SA.14 <- rNA
+    dat$epi$SA.15 <- rNA
+    dat$epi$P.SA.15 <- rNA
+    dat$epi$prev.P.SA.15 <- rNA
+    dat$epi$SA.16 <- rNA
+    dat$epi$P.SA.16 <- rNA
+    dat$epi$prev.P.SA.16 <- rNA
+    dat$epi$SA.17 <- rNA
+    dat$epi$P.SA.17 <- rNA
+    dat$epi$prev.P.SA.17 <- rNA
+    dat$epi$SA.18 <- rNA
+    dat$epi$P.SA.18 <- rNA
+    dat$epi$prev.P.SA.18 <- rNA
+    
 
+    ##
     dat$epi$cprob.always.pers <- rNA
     dat$epi$cprob.always.inst <- rNA
 
@@ -161,7 +183,26 @@ prevalence_msm <- function(dat, at) {
   dat$epi$prepCov.deb.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$num.asmm.deb[at])
   dat$epi$prepCov.everAI.asmm[at] <- (dat$epi$prepCurr.asmm[at] / dat$epi$num.asmm.everAI[at])
   
+  dat$epi$SA.13[at] <- sum(active == 1 & age == 13 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.13[at] <- sum(active == 1 & age == 13 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.13[at] <- dat$epi$P.SA.13[at] / dat$epi$SA.13[at]
+  dat$epi$SA.14[at] <- sum(active == 1 & age == 14 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.14[at] <- sum(active == 1 & age == 14 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.14[at] <- dat$epi$P.SA.14[at] / dat$epi$SA.14[at]
+  dat$epi$SA.15[at] <- sum(active == 1 & age == 15 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.15[at] <- sum(active == 1 & age == 15 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.15[at] <- dat$epi$P.SA.15[at] / dat$epi$SA.15[at]
+  dat$epi$SA.16[at] <- sum(active == 1 & age == 16 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.16[at] <- sum(active == 1 & age == 16 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.16[at] <- dat$epi$P.SA.16[at] / dat$epi$SA.16[at]
+  dat$epi$SA.17[at] <- sum(active == 1 & age == 17 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.17[at] <- sum(active == 1 & age == 17 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.17[at] <- dat$epi$P.SA.17[at] / dat$epi$SA.17[at]
+  dat$epi$SA.18[at] <- sum(active == 1 & age == 18 & everAI == 1, na.rm = TRUE)
+  dat$epi$P.SA.18[at] <- sum(active == 1 & age == 18 & everAI == 1 & prepStat ==1 , na.rm = TRUE)
+  dat$epi$prev.P.SA.18[at] <- dat$epi$P.SA.18[at] / dat$epi$SA.18[at]
   
+
   dat$epi$i.prev.msm[at] <- sum(active == 1 & status ==1 & asmm == 0, na.rm = TRUE) / dat$epi$num.msm[at]
   dat$epi$i.prev.asmm[at] <- sum(active == 1 & status ==1 & debuted == 1 & asmm == 1, na.rm = TRUE) / dat$epi$num.asmm.deb[at]
   dat$epi$i.prev.age18[at] <- sum(active == 1 & status ==1 & debuted == 1 & age == 18, na.rm = TRUE) / dat$epi$num.age18.deb[at]
