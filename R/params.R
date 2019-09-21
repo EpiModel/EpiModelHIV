@@ -432,11 +432,15 @@ param_cl <- function(nwstats,
                       cond.asmm.WW.prob = 0.54,
                      
                       cond.asmm.by.age = TRUE,
-                      cond.asmm.13.15 = .28,
-                      cond.asmm.16.17 = .38,
-                      cond.asmm.18 = .547,
+                      #cond.asmm.13.15 = .28,
+                      #cond.asmm.16.17 = .38,
+                      #cond.asmm.18 = .547,
                      
-                      
+                     #adjusted for mixing!
+                      cond.asmm.13.15 = .301,
+                      cond.asmm.16.17 = .427,
+                      cond.asmm.18 = .577,
+                     
                       cond.edu = FALSE,
                       cond.edu.start = 2,
                       sex.exp.edu = FALSE,
