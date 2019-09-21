@@ -136,7 +136,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$has.debuted.time[newIds] <-rep(0,nBirths)
   dat$attr$AI.time[newIds] <-rep(0,nBirths)
   dat$attr$prepStart.time[newIds]<-rep(Inf,nBirths)
-  dat$attr$prep.time <-rep(0,nBirths)
+  dat$attr$prep.time[newIds] <-rep(0,nBirths)
   
   # Disease status and related
   dat$attr$status[newIds] <- rep(0, nBirths)
