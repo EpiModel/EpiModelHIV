@@ -150,7 +150,7 @@ initialize_camplc <- function(x, param, init, control, s) {
   dat$attr$prepEver <- rep(0, num)
   dat$attr$ever.adol.prep <- rep(0, num)
   dat$attr$ever.adult.prep <- rep(0, num)
-  dat$attr$hcv.time <- sample(1:365, num, replace=TRUE)
+  dat$attr$hcv.time <- sample(1:52, num, replace=TRUE)
 
   
   # Risk history lists
