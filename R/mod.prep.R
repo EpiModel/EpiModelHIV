@@ -169,6 +169,11 @@ prep_msm <- function(dat, at) {
   dat$attr$prepClass <- prepClass
   dat$attr$ever.adult.prep <- ever.adult.prep
 
+  x <- which(dat$attr$prepStat == 1)
+  y <- which(dat$attr$prepStat != 1)
+  dat$attr$prep.time[x] <- dat$attr$prep.time + 1
+  dat$attr$prep.time[y] <- 0
+  
   # Summary Statistics
 
   dat$epi$prepCov.msm.elig[at] <- prepCov.msm.elig 
@@ -177,6 +182,6 @@ prep_msm <- function(dat, at) {
   dat$epi$prepCov.msm.all.w.ret[at] <- prepCov.msm.all.w.ret
   
   dat$epi$prepStart.msm[at] <- length(idsStart)
-
-  return(dat)
+  
+    return(dat)
 }
