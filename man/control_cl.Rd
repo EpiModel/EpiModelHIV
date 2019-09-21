@@ -4,12 +4,13 @@
 \alias{control_cl}
 \title{Epidemic Model Control Settings}
 \usage{
-control_cl(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
-  initialize.FUN = initialize_camplc, followUP.FUN = FU_elements_camplc,
-  aging.FUN = aging_camplc, deaths.FUN = deaths_msm,
-  births.FUN = births_camplc, outdebut.FUN = out_debut_camplc,
-  test.FUN = test_msm, tx.FUN = tx_msm, prep2.FUN = prep_adol,
-  prep.FUN = prep_msm, prep.classtrans.FUN = prep_adherence_trans,
+control_cl(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
+  start = 1, initialize.FUN = initialize_camplc,
+  followUP.FUN = FU_elements_camplc, aging.FUN = aging_camplc,
+  deaths.FUN = deaths_msm, births.FUN = births_camplc,
+  outdebut.FUN = out_debut_camplc, test.FUN = test_msm,
+  tx.FUN = tx_msm, prep2.FUN = prep_adol, prep.FUN = prep_msm,
+  prep.classtrans.FUN = prep_adherence_trans,
   progress.FUN = progress_msm, agemixing.FUN = agemix_campcl,
   vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
   role.classtrans.FUN = roleclass_trans, resim_nets.FUN = simnet_msm,
@@ -18,9 +19,9 @@ control_cl(simno = 1, nsims = 1, ncores = 1, nsteps = 100, start = 1,
   riskhist.FUN = riskhist_msm, riskhistasmm.FUN = riskhist_adol,
   position.FUN = position_msm, trans.FUN = trans_msm,
   prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
-  save.nwstats = FALSE, save.other = c("attr", "temp", "riskh", "el", "p",
-  "riskhist", "age.inf.vec", "el.age"), verbose = TRUE, verbose.int = 1,
-  ...)
+  save.nwstats = FALSE, save.other = c("attr", "temp", "riskh", "el",
+  "p", "riskhist", "age.inf.vec", "el.age"), verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes

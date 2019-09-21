@@ -8,11 +8,11 @@ calc_nwstats_msm(time.unit = 7, method = 1, num.B, num.W, num.B.msm,
   num.W.msm, num.B.asmm, num.W.asmm, deg.mp.B, deg.mp.W, mdeg.inst.B,
   mdeg.inst.W, deg.asmm, cross.frac, qnts.B, qnts.W, prop.hom.mpi.B,
   prop.hom.mpi.W, balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW,
-  sqrt.adiff.BW, cubert.adiff.asmm, diss.main, diss.pers, diss.asmm, durs.main,
-  durs.pers, rates.asmm, durs.asmm, ages, ages.asmm, ages.yamsm, ages.oamsm,
-  ages.msm, birth.age, out.age.prob, debut.entry.prob, debut.prob, asmr.B,
-  asmr.W, role.B.prob.msm, role.W.prob.msm, role.B.prob.asmm, role.W.prob.asmm,
-  role.shift)
+  sqrt.adiff.BW, cubert.adiff.asmm, diss.main, diss.pers, diss.asmm,
+  durs.main, durs.pers, rates.asmm, durs.asmm, ages, ages.asmm, ages.yamsm,
+  ages.oamsm, ages.msm, birth.age, out.age.prob, debut.entry.prob,
+  debut.prob, asmr.B, asmr.W, role.B.prob.msm, role.W.prob.msm,
+  role.B.prob.asmm, role.W.prob.asmm, role.shift)
 }
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}
