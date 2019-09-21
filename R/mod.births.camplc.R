@@ -136,7 +136,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$has.debuted.time[newIds] <-rep(0,nBirths)
   dat$attr$AI.time[newIds] <-rep(0,nBirths)
   dat$attr$prepStart.time[newIds]<-rep(Inf,nBirths)
-  
+  dat$attr$prep.time <-rep(0,nBirths)
   
   # Disease status and related
   dat$attr$status[newIds] <- rep(0, nBirths)
@@ -211,7 +211,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$prepClass[newIds] <- rep(NA, nBirths)
   dat$attr$ever.adol.prep[newIds] <- rep(0, nBirths)
   dat$attr$ever.adult.prep[newIds] <- rep(0, nBirths)
-  dat$attr$hcv.time[newIds] <- sample(1:365, nBirths, replace = TRUE) + at
+  dat$attr$hcv.time[newIds] <- sample(1:52, nBirths, replace = TRUE) + at
 
   
   
