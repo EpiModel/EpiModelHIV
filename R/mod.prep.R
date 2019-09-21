@@ -171,7 +171,7 @@ prep_msm <- function(dat, at) {
 
   x <- which(dat$attr$prepStat == 1)
   y <- which(dat$attr$prepStat != 1)
-  dat$attr$prep.time[x] <- dat$attr$prep.time + 1
+  dat$attr$prep.time[x] <- dat$attr$prep.time[x] + 1
   dat$attr$prep.time[y] <- 0
   
   # Summary Statistics
