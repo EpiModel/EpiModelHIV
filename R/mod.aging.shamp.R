@@ -33,17 +33,14 @@ aging_shamp <- function(dat, at) {
   
   dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
                                ifelse(dat$attr$sex=="F",dat$attr$sqrt.age + dat$param$age.adj,dat$attr$sqrt.age))
+  
+  #AGEGROUP
+  dat$attr$age.group<-ifelse(dat$att$age < 20 ,1,
+                          ifelse(dat$attr$age >= 20 & dat$attr$age < 25,2,
+                          ifelse(dat$attr$age >= 25 & dat$attr$age < 30,3,
+                          ifelse(dat$attr$age >= 30 & dat$attr$age < 35,4,
+                          ifelse(dat$attr$age >= 35,5,dat$attr$age.group)))))
 
-
- 
-#  for (i in seq_along(dat$nw)) {
-#    dat$nw[[i]] <- set.vertex.attribute(dat$nw[[i]], "sqrt.age", sqrt(age))
-#  }
-#  
-#  for (i in seq_along(dat$nw)) {
-#    dat$nw[[i]] <- set.vertex.attribute(dat$nw[[i]], "sqrt.age.adj", dat$attr$sqrt.age.adj)
-#  }
-    
 
   return(dat)
 }
