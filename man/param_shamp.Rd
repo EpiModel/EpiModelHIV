@@ -84,7 +84,7 @@ param_shamp(race.method = 1, time.unit = 7, method = 1,
   vl.fatal = 7, vl.full.supp = 1.5, vl.part.supp = 3.5,
   full.supp.down.slope = 0.25, full.supp.up.slope = 0.25,
   part.supp.down.slope = 0.25, part.supp.up.slope = 0.25,
-  birth.age = 18, exit.age = 45, b.method = "fixed", msm.frac = 0,
+  birth.age = 18, exit.age = 40, b.method = "fixed", msm.frac = 0,
   msmf.frac.B = 0.0131, msmf.frac.BI = 0.008, msmf.frac.H = 0.0219,
   msmf.frac.HI = 0.0042, msmf.frac.W = 0.015, URAI.prob = 138/10000,
   UIAI.prob = 11/10000, URVI.prob = 8/10000, UIVI.prob = 4/10000,
@@ -233,31 +233,8 @@ param_shamp(race.method = 1, time.unit = 7, method = 1,
   prep.start = Inf, prep.elig.model = "base", prep.class.prob = c(0,
   0, 0, 0), prep.class.hr = c(1, 0.69, 0.19, 0.05), prep.coverage = 0,
   prep.cov.method = "curr", prep.cov.rate = 1, prep.tst.int = 90,
-  prep.risk.int = 182, prep.risk.reassess = TRUE, msm.foi.scale = 1,
-  fa.BI.m.foi.scale = 1, fa.BI.f.foi.scale = 1,
-  fa.HI.m.foi.scale = 1, fa.HI.f.foi.scale = 1, depart.scale = 1,
-  return.scale = 1, immig.simple = TRUE, immig.depart.BI.f = (1/(42 *
-  52 * 4)), immig.depart.HI.f = (1/(42 * 52 * 4)),
-  immig.depart.BI.m = (1/(42 * 52 * 4)), immig.depart.HI.m = (1/(42 *
-  52 * 4)), immig.return.BI.f = (1/4), immig.return.HI.f = (1/4),
-  immig.return.BI.m = (1/4), immig.return.HI.m = (1/4),
-  immig.aq.prob.BI.f = 0.3 * 0.06 * ((base.vi.main.BI.rate +
-  base.vi.pers.BI.rate)/2) * URVI.prob, immig.aq.prob.HI.f = 0.3 * 0.005
-  * ((base.vi.main.HI.rate + base.vi.pers.HI.rate)/2) * URVI.prob,
-  immig.aq.prob.BI.m = 0.3 * 0.06 * ((base.vi.main.BI.rate +
-  base.vi.pers.BI.rate)/2) * UIVI.prob, immig.aq.prob.HI.m = 0.3 * 0.005
-  * ((base.vi.main.HI.rate + base.vi.pers.HI.rate)/2) * UIVI.prob,
-  msm.aq.prob.B = 1.68767e-05, msm.aq.prob.BI = 1.68767e-05,
-  msm.aq.prob.H = 1.68767e-05, msm.aq.prob.HI = 1.68767e-05,
-  msm.aq.prob.W = 1.68767e-05,
-  demog.list = data.params[[1]]$demog.list,
-  demog.dist = data.params[[1]]$demog.dist,
-  sex.groups = data.params[[1]]$sex.groups,
-  race.groups = data.params[[1]]$race.groups,
-  age.groups = data.params[[1]]$age.groups,
-  age.adj = data.params[[1]]$age.adj, conc_dur_dx = TRUE,
-  death_stats = TRUE, add.demog.groups = FALSE, p.growth = FALSE,
-  p.growth.size = 0, ...)
+  prep.risk.int = 182, prep.risk.reassess = TRUE, conc_dur_dx = TRUE,
+  death_stats = TRUE, p.growth = FALSE, p.growth.size = 0, ...)
 }
 \arguments{
 \item{testing.pattern}{Method for HIV testing, with options \code{"memoryless"}
@@ -458,18 +435,12 @@ in days.}
 \item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
 each testing visit.}
 
-\item{age.adj}{This value is added to the squareroot of age for females in sqrt.age.adj
-so that sex age asymmetry can be captured with an absdiff term}
-
 \item{conc_dur_dx}{If TRUE the simulation will store cel.temp (a current edgelist with partnership start time) 
 and cel.complete (a complete list of all partnerships including start and end times.  These are used for the analysis of concurrency
 and multiplexity.}
 
 \item{death_stats}{IF TRUE the data.frame death.stats stores all care continuum information for individuals at the time of death.
 HIV related death data are store in death.stats, care continuum information for those that age out positive is store in death.stats$age.out.}
-
-\item{add.demog.groups}{if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
-attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options}
 
 \item{p.growth}{If TRUE the number of additional births per time step can be set with 'p.growth.size' and the number of time steps with 'p.growth.nsteps'.}
 
@@ -507,6 +478,9 @@ re-initiate treatment.}
 \item{b.R.S.rate}{Rate at which a person in race group R, where R is a 
 charater (B, BI, H, HI or W), and sex group S, where s is a charter (f, msf, msm, msmf),
 enters the population.}
+
+\item{age.adj}{This value is added to the squareroot of age for females in sqrt.age.adj
+so that sex age asymmetry can be captured with an absdiff term}
 
 \item{msmf.frac}{The fraction of males entering the population at each time step as
 as a male that has intercourse with both males and females "msmf" - 
@@ -617,6 +591,9 @@ distribution and approximating in-migration) is HIV positive}
 \item{Ecohab.window}{The number of time steps individuals in a cohab relationship will have the nodal attribute Ecohab=1.}
 
 \item{p.growth.nsteps}{The number of time steps for which there are 'p.growth.size' additional entries into the population if p.growth = TRUE.}
+
+\item{add.demog.groups}{if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
+attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options}
 }
 \value{
 A list object of class \code{param_shamp}, which can be passed to

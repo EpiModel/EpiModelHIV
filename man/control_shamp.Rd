@@ -7,17 +7,16 @@
 control_shamp(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   start = 1, initialize.FUN = initialize_shamp,
   aging.FUN = aging_shamp, deaths.FUN = deaths_shamp,
-  births.FUN = births_shamp, demogupdate.FUN = demogupdate_shamp,
-  test.FUN = test_shamp, tx.FUN = tx_shamp,
+  births.FUN = births_shamp, test.FUN = test_shamp,
+  tx.FUN = tx_shamp, prep.FUN = prep_shamp,
   progress.FUN = progress_msm, vl.FUN = vl_shamp,
   resim_nets.FUN = simnet_shamp, disclose.FUN = disclose_shamp,
   ConcDurDx.FUN = ConcDurDx_shamp, acts.FUN = acts_shamp,
   condoms.FUN = condoms_shamp, riskhist.FUN = riskhist_shamp,
   position.FUN = position_shamp, trans.FUN = trans_shamp,
-  heatbath.FUN = heatbath_msmf_shamp,
-  immigration.FUN = immigration_shamp, prev.FUN = prevalence_shamp,
-  verbose.FUN = verbose_shamp, save.nwstats = FALSE,
-  save.other = "attr", verbose = TRUE, verbose.int = 1, ...)
+  prev.FUN = prevalence_shamp, verbose.FUN = verbose_shamp,
+  save.nwstats = FALSE, save.other = "attr", verbose = TRUE,
+  verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -48,6 +47,8 @@ model.}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
+\item{prep.FUN}{Module function for PrEP initiation and utilization.}
+
 \item{progress.FUN}{Module function for HIV disease progression.}
 
 \item{vl.FUN}{Module function for HIV viral load evolution.}
@@ -72,13 +73,6 @@ persons in the population.}
 \item{trans.FUN}{Module function to stochastically simulate disease transmission
 over acts given individual and dyadic attributes.}
 
-\item{heatbath.FUN}{Module function to stochastically simulate disease aquisition by msmf via 
-contact with an unsimulated msm population. 
-over acts given individual and dyadic attributes.}
-
-\item{immigration.FUN}{Module function to stochastically simulate disease aquisition by migrants
-via conatct with unsimulated populations in home counties during return trips.}
-
 \item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 
 \item{verbose.FUN}{Module function to print model progress to the console or
@@ -94,8 +88,6 @@ if in interactive mode or text files if in batch mode.}
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
-
-\item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
 \item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
 

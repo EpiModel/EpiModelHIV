@@ -470,7 +470,7 @@ param_shamp <- function(race.method = 1,
                       #b.W.m.rate = 1e-3 / 7,
 
                       birth.age = 18,
-                      exit.age = 45,
+                      exit.age = 40,
                       b.method = "fixed",
                       msm.frac=0.0,
                       msmf.frac.B=0.0131,
@@ -772,57 +772,9 @@ param_shamp <- function(race.method = 1,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
                       
-                      #max 59253
-                      msm.foi.scale = 1,
-                      
-                      #max 992063
-                      fa.BI.m.foi.scale = 1,
-                      
-                      #max 496031
-                      fa.BI.f.foi.scale = 1,
-                      
-                      #max 10101010
-                      fa.HI.m.foi.scale = 1,
-                      
-                      #max 5050505
-                      fa.HI.f.foi.scale = 1,
-                      
-                      depart.scale = 1,
-                      return.scale = 1,
-                      immig.simple=TRUE,
-                      
-                      
-                      immig.depart.BI.f = (1/(42*52*4)),
-                      immig.depart.HI.f = (1/(42*52*4)),
-                      immig.depart.BI.m = (1/(42*52*4)),
-                      immig.depart.HI.m = (1/(42*52*4)),
-                      immig.return.BI.f = (1/4),
-                      immig.return.HI.f = (1/4),
-                      immig.return.BI.m = (1/4),
-                      immig.return.HI.m = (1/4),
-                      immig.aq.prob.BI.f = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*URVI.prob,
-                      immig.aq.prob.HI.f = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*URVI.prob,
-                      immig.aq.prob.BI.m = .3*.06*((base.vi.main.BI.rate+base.vi.pers.BI.rate)/2)*UIVI.prob,
-                      immig.aq.prob.HI.m = .3*.005*((base.vi.main.HI.rate+base.vi.pers.HI.rate)/2)*UIVI.prob,  
-                      #pos.entry.BI = 0,
-                      #pos.entry.HI = 0,
-                      
-                      msm.aq.prob.B=0.0000168767,
-                      msm.aq.prob.BI=0.0000168767,
-                      msm.aq.prob.H=0.0000168767,
-                      msm.aq.prob.HI=0.0000168767,
-                      msm.aq.prob.W= 0.0000168767,
-                      
-                      
-                      demog.list=data.params[[1]]$demog.list,
-                      demog.dist=data.params[[1]]$demog.dist,
-                      sex.groups=data.params[[1]]$sex.groups,
-                      race.groups=data.params[[1]]$race.groups,
-                      age.groups=data.params[[1]]$age.groups,
-                      age.adj=data.params[[1]]$age.adj,
+
                       conc_dur_dx = TRUE,
                       death_stats = TRUE,
-                      add.demog.groups = FALSE,
                       
                       p.growth = FALSE,
                       p.growth.size = 0,
@@ -977,26 +929,26 @@ init_shamp <- function(prev.B.f = 0.02,
                 dot.args = list(...))
 
   
-  p$init.prev.age.slope.B.f <- prev.B.f / 27
-  p$init.prev.age.slope.BI.f <- prev.BI.f / 27
-  p$init.prev.age.slope.H.f <- prev.H.f / 27
-  p$init.prev.age.slope.HI.f <- prev.HI.f / 27
-  p$init.prev.age.slope.W.f <- prev.W.f / 27
-  p$init.prev.age.slope.B.msf <- prev.B.msf / 27
-  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 27
-  p$init.prev.age.slope.H.msf <- prev.H.msf / 27
-  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 27
-  p$init.prev.age.slope.W.msf <- prev.W.msf / 27
-  p$init.prev.age.slope.B.msm <- prev.B.msm / 27
-  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 27
-  p$init.prev.age.slope.H.msm <- prev.H.msm / 27
-  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 27
-  p$init.prev.age.slope.W.msm <- prev.W.msm / 27
-  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 27
-  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 27
-  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 27
-  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 27
-  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 27
+  p$init.prev.age.slope.B.f <- prev.B.f / 21
+  p$init.prev.age.slope.BI.f <- prev.BI.f / 21
+  p$init.prev.age.slope.H.f <- prev.H.f / 21
+  p$init.prev.age.slope.HI.f <- prev.HI.f / 21
+  p$init.prev.age.slope.W.f <- prev.W.f / 21
+  p$init.prev.age.slope.B.msf <- prev.B.msf / 21
+  p$init.prev.age.slope.BI.msf <- prev.BI.msf / 21
+  p$init.prev.age.slope.H.msf <- prev.H.msf / 21
+  p$init.prev.age.slope.HI.msf <- prev.HI.msf / 21
+  p$init.prev.age.slope.W.msf <- prev.W.msf / 21
+  p$init.prev.age.slope.B.msm <- prev.B.msm / 21
+  p$init.prev.age.slope.BI.msm <- prev.BI.msm / 21
+  p$init.prev.age.slope.H.msm <- prev.H.msm / 21
+  p$init.prev.age.slope.HI.msm <- prev.HI.msm / 21
+  p$init.prev.age.slope.W.msm <- prev.W.msm / 21
+  p$init.prev.age.slope.B.msmf <- prev.B.msmf / 21
+  p$init.prev.age.slope.BI.msmf <- prev.BI.msmf / 21
+  p$init.prev.age.slope.H.msmf <- prev.H.msmf / 21
+  p$init.prev.age.slope.HI.msmf <- prev.HI.msmf / 21
+  p$init.prev.age.slope.W.msmf <- prev.W.msmf / 21
  
 
   class(p) <- "init.net"
@@ -1043,11 +995,6 @@ init_shamp <- function(prev.B.f = 0.02,
 #' @param position.FUN Module function to simulate sexual position within acts.
 #' @param trans.FUN Module function to stochastically simulate disease transmission
 #'        over acts given individual and dyadic attributes.
-#' @param heatbath.FUN Module function to stochastically simulate disease aquisition by msmf via 
-#'        contact with an unsimulated msm population. 
-#'        over acts given individual and dyadic attributes.
-#' @param immigration.FUN Module function to stochastically simulate disease aquisition by migrants
-#'        via conatct with unsimulated populations in home counties during return trips.        
 #' @param prev.FUN Module function to calculate prevalence summary statistics.
 #' @param verbose.FUN Module function to print model progress to the console or
 #'        external text files.
@@ -1075,10 +1022,9 @@ control_shamp <- function(simno = 1,
                         aging.FUN = aging_shamp,
                         deaths.FUN = deaths_shamp,
                         births.FUN = births_shamp,
-                        demogupdate.FUN = demogupdate_shamp,
                         test.FUN = test_shamp,
                         tx.FUN = tx_shamp,
-                        #prep.FUN = prep_shamp,
+                        prep.FUN = prep_shamp,
                         progress.FUN = progress_msm,
                         vl.FUN = vl_shamp,
                         #aiclass.FUN = NULL,
@@ -1091,8 +1037,6 @@ control_shamp <- function(simno = 1,
                         riskhist.FUN = riskhist_shamp,
                         position.FUN = position_shamp,
                         trans.FUN = trans_shamp,
-                        heatbath.FUN = heatbath_msmf_shamp,
-                        immigration.FUN = immigration_shamp,
                         prev.FUN = prevalence_shamp,
                         verbose.FUN = verbose_shamp,
                         save.nwstats = FALSE,

@@ -33,7 +33,6 @@ test_shamp <- function(dat, at) {
   tt.traj <- dat$attr$tt.traj
   status <- dat$attr$status
   inf.time <- dat$attr$inf.time
-  immig.loc <- dat$attr$immig.loc
   stage <- dat$attr$stage
 
   prepStat <- dat$attr$prepStat
@@ -62,6 +61,7 @@ test_shamp <- function(dat, at) {
   mean.test.H.msmf.int <- dat$param$mean.test.H.msmf.int
   mean.test.HI.msmf.int <- dat$param$mean.test.HI.msmf.int
   mean.test.W.msmf.int <- dat$param$mean.test.W.msmf.int
+  
 
   twind.int <- dat$param$test.window.int
 
@@ -73,14 +73,14 @@ test_shamp <- function(dat, at) {
   if (testing.pattern == "memoryless") {
     
 #females
-    elig.B.f <- which(race == "B" & sex == "F" & immig.loc == 0 &
+    elig.B.f <- which(race == "B" & sex == "F"  &
                     tt.traj != 1 &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
     rates.B.f <- rep(1/mean.test.B.f.int, length(elig.B.f))
     tst.B.f <- elig.B.f[rbinom(length(elig.B.f), 1, rates.B.f) == 1]
     
-    elig.BI.f <- which(race == "BI" & sex == "F" & immig.loc == 0 &
+    elig.BI.f <- which(race == "BI" & sex == "F"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
@@ -88,21 +88,21 @@ test_shamp <- function(dat, at) {
     tst.BI.f <- elig.BI.f[rbinom(length(elig.BI.f), 1, rates.BI.f) == 1]
     
 
-    elig.H.f <- which(race == "H" & sex == "F" & immig.loc == 0 &
+    elig.H.f <- which(race == "H" & sex == "F"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
     rates.H.f <- rep(1/mean.test.H.f.int, length(elig.H.f))
     tst.H.f <- elig.H.f[rbinom(length(elig.H.f), 1, rates.H.f) == 1]
     
-    elig.HI.f <- which(race == "HI" & sex == "F" & immig.loc == 0 &
+    elig.HI.f <- which(race == "HI" & sex == "F"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          prepStat == 0)
     rates.HI.f <- rep(1/mean.test.HI.f.int, length(elig.HI.f))
     tst.HI.f <- elig.HI.f[rbinom(length(elig.HI.f), 1, rates.HI.f) == 1]    
 
-    elig.W.f <- which(race == "W" & sex == "F" & immig.loc == 0 &
+    elig.W.f <- which(race == "W" & sex == "F"  &
                     tt.traj != 1 &
                     (diag.status == 0 | is.na(diag.status)) &
                     prepStat == 0)
@@ -110,14 +110,14 @@ test_shamp <- function(dat, at) {
     tst.W.f <- elig.W.f[rbinom(length(elig.W.f), 1, rates.W.f) == 1]
     
     #males_het MSF
-    elig.B.msf <- which(race == "B" & sex.ident == "msf" & immig.loc == 0 &
+    elig.B.msf <- which(race == "B" & sex.ident == "msf"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
     rates.B.msf <- rep(1/mean.test.B.msf.int, length(elig.B.msf))
     tst.B.msf <- elig.B.msf[rbinom(length(elig.B.msf), 1, rates.B.msf) == 1]
     
-    elig.BI.msf <- which(race == "BI" & sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    elig.BI.msf <- which(race == "BI" & sex == "M" & sex.ident == "msf"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          prepStat == 0)
@@ -125,21 +125,21 @@ test_shamp <- function(dat, at) {
     tst.BI.msf <- elig.BI.msf[rbinom(length(elig.BI.msf), 1, rates.BI.msf) == 1]
     
     
-    elig.H.msf <- which(race == "H" & sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    elig.H.msf <- which(race == "H" & sex == "M" & sex.ident == "msf"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
     rates.H.msf <- rep(1/mean.test.H.msf.int, length(elig.H.msf))
     tst.H.msf <- elig.H.msf[rbinom(length(elig.H.msf), 1, rates.H.msf) == 1]
     
-    elig.HI.msf <- which(race == "HI" & sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    elig.HI.msf <- which(race == "HI" & sex == "M" & sex.ident == "msf"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          prepStat == 0)
     rates.HI.msf <- rep(1/mean.test.HI.msf.int, length(elig.HI.msf))
     tst.HI.msf <- elig.HI.msf[rbinom(length(elig.HI.msf), 1, rates.HI.msf) == 1]    
     
-    elig.W.msf <- which(race == "W" & sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    elig.W.msf <- which(race == "W" & sex == "M" & sex.ident == "msf"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
@@ -149,14 +149,14 @@ test_shamp <- function(dat, at) {
     #males_msm
     
     
-    elig.B.msm <- which(race == "B" & sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    elig.B.msm <- which(race == "B" & sex == "M" & sex.ident == "msm"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
     rates.B.msm <- rep(1/mean.test.B.msm.int, length(elig.B.msm))
     tst.B.msm <- elig.B.msm[rbinom(length(elig.B.msm), 1, rates.B.msm) == 1]
     
-    elig.BI.msm <- which(race == "BI" & sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    elig.BI.msm <- which(race == "BI" & sex == "M" & sex.ident == "msm"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          prepStat == 0)
@@ -164,21 +164,21 @@ test_shamp <- function(dat, at) {
     tst.BI.msm <- elig.BI.msm[rbinom(length(elig.BI.msm), 1, rates.BI.msm) == 1]
     
     
-    elig.H.msm <- which(race == "H" & sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    elig.H.msm <- which(race == "H" & sex == "M" & sex.ident == "msm"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
     rates.H.msm <- rep(1/mean.test.H.msm.int, length(elig.H.msm))
     tst.H.msm <- elig.H.msm[rbinom(length(elig.H.msm), 1, rates.H.msm) == 1]
     
-    elig.HI.msm <- which(race == "HI" & sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    elig.HI.msm <- which(race == "HI" & sex == "M" & sex.ident == "msm"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          prepStat == 0)
     rates.HI.msm <- rep(1/mean.test.HI.msm.int, length(elig.HI.msm))
     tst.HI.msm <- elig.HI.msm[rbinom(length(elig.HI.msm), 1, rates.HI.msm) == 1]    
     
-    elig.W.msm <- which(race == "W" & sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    elig.W.msm <- which(race == "W" & sex == "M" & sex.ident == "msm"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         prepStat == 0)
@@ -188,14 +188,14 @@ test_shamp <- function(dat, at) {
     #males_msmf
     
     
-    elig.B.msmf <- which(race == "B" & sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    elig.B.msmf <- which(race == "B" & sex == "M" & sex.ident == "msmf"  &
                           tt.traj != 1 &
                           (diag.status == 0 | is.na(diag.status)) &
                           prepStat == 0)
     rates.B.msmf <- rep(1/mean.test.B.msmf.int, length(elig.B.msmf))
     tst.B.msmf <- elig.B.msmf[rbinom(length(elig.B.msmf), 1, rates.B.msmf) == 1]
     
-    elig.BI.msmf <- which(race == "BI" & sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    elig.BI.msmf <- which(race == "BI" & sex == "M" & sex.ident == "msmf"  &
                            tt.traj != 1 &
                            (diag.status == 0 | is.na(diag.status)) &
                            prepStat == 0)
@@ -203,21 +203,21 @@ test_shamp <- function(dat, at) {
     tst.BI.msmf <- elig.BI.msmf[rbinom(length(elig.BI.msmf), 1, rates.BI.msmf) == 1]
     
     
-    elig.H.msmf <- which(race == "H" & sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    elig.H.msmf <- which(race == "H" & sex == "M" & sex.ident == "msmf"  &
                           tt.traj != 1 &
                           (diag.status == 0 | is.na(diag.status)) &
                           prepStat == 0)
     rates.H.msmf <- rep(1/mean.test.H.msmf.int, length(elig.H.msmf))
     tst.H.msmf <- elig.H.msmf[rbinom(length(elig.H.msmf), 1, rates.H.msmf) == 1]
     
-    elig.HI.msmf <- which(race == "HI" & sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    elig.HI.msmf <- which(race == "HI" & sex == "M" & sex.ident == "msmf"  &
                            tt.traj != 1 &
                            (diag.status == 0 | is.na(diag.status)) &
                            prepStat == 0)
     rates.HI.msmf <- rep(1/mean.test.HI.msmf.int, length(elig.HI.msmf))
     tst.HI.msmf <- elig.HI.msmf[rbinom(length(elig.HI.msmf), 1, rates.HI.msmf) == 1]    
     
-    elig.W.msmf <- which(race == "W" & sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    elig.W.msmf <- which(race == "W" & sex == "M" & sex.ident == "msmf"  &
                           tt.traj != 1 &
                           (diag.status == 0 | is.na(diag.status)) &
                           prepStat == 0)
@@ -234,62 +234,62 @@ test_shamp <- function(dat, at) {
   if (testing.pattern == "interval") {
     
     #females
-    tst.B.f <- which(race == "B" & sex=="F" & immig.loc == 0 &
+    tst.B.f <- which(race == "B" & sex=="F"  &
                    tt.traj != 1 &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.B.f.int) &
                    prepStat == 0)
     
-    tst.BI.f <- which(race == "BI" & sex=="F" & immig.loc == 0 &
+    tst.BI.f <- which(race == "BI" & sex=="F"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.BI.f.int) &
                        prepStat == 0)
     
-    tst.H.f <- which(race == "H" &  sex=="F" & immig.loc == 0 &
+    tst.H.f <- which(race == "H" &  sex=="F"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.H.f.int) &
                        prepStat == 0)
     
-    tst.HI.f <- which(race == "HI" & sex=="F" & immig.loc == 0 &
+    tst.HI.f <- which(race == "HI" & sex=="F"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         tsincelntst >= 2*(mean.test.HI.f.int) &
                         prepStat == 0)
 
-    tst.W.f <- which(race == "W" & sex=="F" & immig.loc == 0 &
+    tst.W.f <- which(race == "W" & sex=="F"  &
                    tt.traj != 1 &
                    (diag.status == 0 | is.na(diag.status)) &
                    tsincelntst >= 2*(mean.test.W.f.int) &
                    prepStat == 0)
     ##males Het msf
     
-    tst.B.msf <- which(race == "B" &  sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    tst.B.msf <- which(race == "B" &  sex == "M" & sex.ident == "msf"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.B.msf.int) &
                        prepStat == 0)
     
-    tst.BI.msf <- which(race == "BI" &  sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    tst.BI.msf <- which(race == "BI" &  sex == "M" & sex.ident == "msf"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         tsincelntst >= 2*(mean.test.BI.msf.int) &
                         prepStat == 0)
     
-    tst.H.msf <- which(race == "H" &  sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    tst.H.msf <- which(race == "H" &  sex == "M" & sex.ident == "msf"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.H.msf.int) &
                        prepStat == 0)
     
-    tst.HI.msf <- which(race == "HI" &  sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    tst.HI.msf <- which(race == "HI" &  sex == "M" & sex.ident == "msf"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         tsincelntst >= 2*(mean.test.HI.msf.int) &
                         prepStat == 0)
     
-    tst.W.msf <- which(race == "W" &  sex == "M" & sex.ident == "msf" & immig.loc == 0 &
+    tst.W.msf <- which(race == "W" &  sex == "M" & sex.ident == "msf"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.W.msf.int) &
@@ -297,31 +297,31 @@ test_shamp <- function(dat, at) {
     
     ##males MSM
     
-    tst.B.msm <- which(race == "B" &  sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    tst.B.msm <- which(race == "B" &  sex == "M" & sex.ident == "msm"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.B.msm.int) &
                        prepStat == 0)
     
-    tst.BI.msm <- which(race == "BI" &  sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    tst.BI.msm <- which(race == "BI" &  sex == "M" & sex.ident == "msm"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         tsincelntst >= 2*(mean.test.BI.msm.int) &
                         prepStat == 0)
     
-    tst.H.msm <- which(race == "H" &  sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    tst.H.msm <- which(race == "H" &  sex == "M" & sex.ident == "msm"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.H.msm.int) &
                        prepStat == 0)
     
-    tst.HI.msm <- which(race == "HI" &  sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    tst.HI.msm <- which(race == "HI" &  sex == "M" & sex.ident == "msm"  &
                         tt.traj != 1 &
                         (diag.status == 0 | is.na(diag.status)) &
                         tsincelntst >= 2*(mean.test.HI.msm.int) &
                         prepStat == 0)
     
-    tst.W.msm <- which(race == "W" &  sex == "M" & sex.ident == "msm" & immig.loc == 0 &
+    tst.W.msm <- which(race == "W" &  sex == "M" & sex.ident == "msm"  &
                        tt.traj != 1 &
                        (diag.status == 0 | is.na(diag.status)) &
                        tsincelntst >= 2*(mean.test.W.msm.int) &
@@ -329,31 +329,31 @@ test_shamp <- function(dat, at) {
     
     ##males MSM
     
-    tst.B.msmf <- which(race == "B" &  sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    tst.B.msmf <- which(race == "B" &  sex == "M" & sex.ident == "msmf"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          tsincelntst >= 2*(mean.test.B.msmf.int) &
                          prepStat == 0)
     
-    tst.BI.msmf <- which(race == "BI" &  sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    tst.BI.msmf <- which(race == "BI" &  sex == "M" & sex.ident == "msmf"  &
                           tt.traj != 1 &
                           (diag.status == 0 | is.na(diag.status)) &
                           tsincelntst >= 2*(mean.test.BI.msmf.int) &
                           prepStat == 0)
     
-    tst.H.msmf <- which(race == "H" &  sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    tst.H.msmf <- which(race == "H" &  sex == "M" & sex.ident == "msmf"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          tsincelntst >= 2*(mean.test.H.msmf.int) &
                          prepStat == 0)
     
-    tst.HI.msmf <- which(race == "HI" &  sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    tst.HI.msmf <- which(race == "HI" &  sex == "M" & sex.ident == "msmf"  &
                           tt.traj != 1 &
                           (diag.status == 0 | is.na(diag.status)) &
                           tsincelntst >= 2*(mean.test.HI.msmf.int) &
                           prepStat == 0)
     
-    tst.W.msmf <- which(race == "W" &  sex == "M" & sex.ident == "msmf" & immig.loc == 0 &
+    tst.W.msmf <- which(race == "W" &  sex == "M" & sex.ident == "msmf"  &
                          tt.traj != 1 &
                          (diag.status == 0 | is.na(diag.status)) &
                          tsincelntst >= 2*(mean.test.W.msmf.int) &
@@ -367,7 +367,7 @@ test_shamp <- function(dat, at) {
 
   # PrEP testing
   tst.prep <- which((diag.status == 0 | is.na(diag.status)) &
-                    prepStat == 1 & immig.loc == 0 &
+                    prepStat == 1  &
                     tsincelntst >= prep.tst.int)
 
   tst.all <- c(tst.nprep, tst.prep)

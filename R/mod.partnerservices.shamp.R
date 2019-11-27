@@ -12,8 +12,14 @@
 #'
 pservices_shamp <- function(dat, at) {
   
+dat$attr$diag.time
+cel.temp <- dat$cel.temp
+cel.complete <- dat$cel.complete
+#  follow acute partner for last three mongths and prevalent for the last 12.
+  
 #The partner services relationship edgelist
-psel <- dat$psel
+
+  psel <- dat$psel
 
 #The current edge list
 el <- rbind(dat$el[[1]],dat$el[[2]],dat$el[[3]])  
