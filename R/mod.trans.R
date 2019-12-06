@@ -42,21 +42,33 @@ trans_msm <- function(dat, at) {
   ccr5 <- dat$attr$ccr5
   circ <- dat$attr$circ
   status <- dat$attr$status
+
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
+  prepLA.dlevel <- dat$attr$prepLA.dlevel
+
   rGC <- dat$attr$rGC
   uGC <- dat$attr$uGC
   rCT <- dat$attr$rCT
   uCT <- dat$attr$uCT
+  race <- dat$attr$race
 
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
   acute.rr <- dat$param$acute.rr
-  condom.rr <- dat$param$condom.rr
+
+  cond.eff <- dat$param$cond.eff
+  cond.fail.B <- dat$param$cond.fail.B
+  cond.fail.W <- dat$param$cond.fail.W
+
   circ.rr <- dat$param$circ.rr
   ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
-  prep.hr <- dat$param$prep.class.hr
+  prep.adhr.hr <- dat$param$prep.adhr.hr
+
+  prep.la.hr.beta <- dat$param$prep.la.hr.beta
+  prep.la.hr.rel <- dat$param$prep.la.hr.rel
+
   hiv.ugc.rr <- dat$param$hiv.ugc.rr
   hiv.uct.rr <- dat$param$hiv.uct.rr
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
@@ -90,6 +102,7 @@ trans_msm <- function(dat, at) {
   ip.ccr5 <- ccr5[disc.ip[, 2]]
   ip.prep <- prepStat[disc.ip[, 2]]
   ip.prepcl <- prepClass[disc.ip[, 2]]
+  ip.prep.dl <- prepLA.dlevel[disc.ip[, 2]]
   ip.rGC <- rGC[disc.ip[, 2]]
   ip.rCT <- rCT[disc.ip[, 2]]
 
@@ -97,21 +110,31 @@ trans_msm <- function(dat, at) {
   ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
 
   # Transform to log odds
-  ip.tlo <- log(ip.tprob/(1-ip.tprob))
+  ip.tlo <- log(ip.tprob/(1 - ip.tprob))
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
-  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr)
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.ip))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
   ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(ip.prep == 1 & ip.prepcl == i-1)
-    ip.tlo[temp.ids] <- ip.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  ip.on.prep <- which(ip.prep == 1)
+  ip.tlo[ip.on.prep] <- ip.tlo[ip.on.prep] + log(prep.adhr.hr[ip.prepcl[ip.on.prep]])
+
+  # LA PrEP HR, by drug level
+  ip.tlo[!is.na(ip.prep.dl)] <- ip.tlo[!is.na(ip.prep.dl)] +
+                                log(exp(ip.prep.dl[!is.na(ip.prep.dl)] *
+                                          prep.la.hr.beta)*prep.la.hr.rel)
 
   # Acute-stage multipliers
   isAcute <- which(ip.stage %in% 1:2)
@@ -149,6 +172,7 @@ trans_msm <- function(dat, at) {
   rp.ccr5 <- ccr5[disc.rp[, 1]]
   rp.prep <- prepStat[disc.rp[, 1]]
   rp.prepcl <- prepClass[disc.rp[, 1]]
+  rp.prep.dl <- prepLA.dlevel[disc.rp[, 1]]
   rp.uGC <- uGC[disc.rp[, 1]]
   rp.uCT <- uCT[disc.rp[, 1]]
 
@@ -156,24 +180,35 @@ trans_msm <- function(dat, at) {
   rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
 
   # Transform to log odds
-  rp.tlo <- log(rp.tprob/(1-rp.tprob))
+  rp.tlo <- log(rp.tprob/(1 - rp.tprob))
 
   # Circumcision
   rp.tlo[rp.circ == 1] <- rp.tlo[rp.circ == 1] + log(circ.rr)
 
   # Condom use
   not.UAI <- which(disc.rp[, "uai"] == 0)
-  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr)
+
+  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "B"))
+  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "W"))
+
+  condom.rr <- rep(NA, nrow(disc.rp))
+  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
+  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
+
+  rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr[not.UAI])
 
   # CCR5
   rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
   rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
-  # PrEP, cycle through 4 adherence classes
-  for (i in 1:4) {
-    temp.ids <- which(rp.prep == 1 & rp.prepcl == i-1)
-    rp.tlo[temp.ids] <- rp.tlo[temp.ids] + log(prep.hr[i])
-  }
+  # PrEP, by adherence class
+  rp.on.prep <- which(rp.prep == 1)
+  rp.tlo[rp.on.prep] <- rp.tlo[rp.on.prep] + log(prep.adhr.hr[rp.prepcl[rp.on.prep]])
+
+  # LA PrEP HR, by drug level
+  rp.tlo[!is.na(rp.prep.dl)] <- rp.tlo[!is.na(rp.prep.dl)] +
+                                log(exp(rp.prep.dl[!is.na(rp.prep.dl)] *
+                                          prep.la.hr.beta)*prep.la.hr.rel)
 
   # Acute-stage multipliers
   isAcute <- which(rp.stage %in% 1:2)
@@ -213,14 +248,11 @@ trans_msm <- function(dat, at) {
 
   # Update attributes
 
-  infected <- inf.type <- NULL
+  infected <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
 
     infected <- c(disc.ip[trans.ip == 1, 2],
                   disc.rp[trans.rp == 1, 1])
-    inf.role <- c(rep(0, sum(trans.ip)), rep(1, sum(trans.rp)))
-    inf.type <- c(disc.ip[trans.ip == 1, "ptype"],
-                  disc.rp[trans.rp == 1, "ptype"])
 
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
@@ -230,19 +262,16 @@ trans_msm <- function(dat, at) {
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
 
-    dat$attr$inf.role[infected] <- inf.role
-    dat$attr$inf.type[infected] <- inf.type
-
     dat$attr$cum.time.on.tx[infected] <- 0
     dat$attr$cum.time.off.tx[infected] <- 0
   }
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-
-  dat$epi$trans.main[at] <- sum(inf.type == 1)
-  dat$epi$trans.casl[at] <- sum(inf.type == 2)
-  dat$epi$trans.inst[at] <- sum(inf.type == 3)
+  dat$epi$incid.prep[at] <- sum(dat$attr$prepStat[infected] == 1, na.rm = TRUE) +
+                            sum(dat$attr$prepStat.la[infected] == 1, na.rm = TRUE)
+  dat$epi$incid.oprep[at] <- sum(dat$attr$prepStat[infected] == 1, na.rm = TRUE)
+  dat$epi$incid.iprep[at] <- sum(dat$attr$prepStat.la[infected] == 1, na.rm = TRUE)
 
   return(dat)
 }

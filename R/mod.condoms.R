@@ -28,6 +28,8 @@ condoms_msm <- function(dat, at) {
   race <- dat$attr$race
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
+  prepStat.la <- dat$attr$prepStat.la
+  prepClass.la <- dat$attr$prepClass.la
 
   # Parameters
   rcomp.prob <- dat$param$rcomp.prob
@@ -92,9 +94,11 @@ condoms_msm <- function(dat, at) {
     uai.logodds <- log(uai.prob / (1 - uai.prob))
 
     # Diagnosis modifier
+    isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1) # pull vector of discordant
     pos.diag <- diag.status[elt[, 1]]
-    isDx <- which(pos.diag == 1)
-    uai.logodds[isDx] <- uai.logodds[isDx] + diag.beta
+    isDx <- which(pos.diag == 1) # pull vector of diagnosis status
+    isDiscord.dx <- intersect(isDiscord, isDx)
+    uai.logodds[isDiscord.dx] <- uai.logodds[isDiscord.dx] + diag.beta
 
     # Disclosure modifier
     isDiscord <- which((elt[, "st1"] - elt[, "st2"]) == 1)
@@ -135,7 +139,9 @@ condoms_msm <- function(dat, at) {
     if (rcomp.prob > 0) {
 
       idsRC <- which((prepStat[elt[, 1]] == 1 & prepClass[elt[, 1]] %in% rcomp.adh.groups) |
-                       (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+                     (prepStat[elt[, 2]] == 1 & prepClass[elt[, 2]] %in% rcomp.adh.groups))
+      idsRC.la <- which((prepStat.la[elt[, 1]] == 1 & prepClass.la[elt[, 1]] == 2) |
+                        (prepStat.la[elt[, 2]] == 1 & prepClass.la[elt[, 2]] == 2))
 
       if (rcomp.main.only == TRUE & ptype > 1) {
         idsRC <- NULL

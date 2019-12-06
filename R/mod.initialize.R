@@ -37,8 +37,7 @@ initialize_msm <- function(x, param, init, control, s) {
   ## Network simulation ##
   nw <- list()
   for (i in 1:3) {
-    nw[[i]] <- simulate(x[[i]]$fit)
-    nw[[i]] <- remove_bad_roles_msm(nw[[i]])
+    nw[[i]] <- simulate(x[[i]]$fit, control = control.simulate.ergm(MCMC.burnin = 1e5))
   }
 
   ## Build initial edgelists
@@ -47,8 +46,8 @@ initialize_msm <- function(x, param, init, control, s) {
   for (i in 1:2) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    p <- stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+                     x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
@@ -110,13 +109,20 @@ initialize_msm <- function(x, param, init, control, s) {
   circ[ids.W] <- sample(apportion_lr(num.W, 0:1, 1 - param$circ.W.prob))
   dat$attr$circ <- circ
 
-  # PrEP Attributes
+  ## PrEP Attributes ##
+  dat$attr$prepStat <- rep(0, num)
   dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepElig <- rep(NA, num)
-  dat$attr$prepStat <- rep(0, num)
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
+
+  dat$attr$prepStat.la <- rep(0, num)
+  dat$attr$prepClass.la <- rep(NA, num)
+  dat$attr$prepElig.la <- rep(NA, num)
+  dat$attr$prepTimeLastInj <- rep(NA, num)
+  dat$attr$prepLA.dlevel <- rep(NA, num)
+  dat$attr$prepLA.dlevel.int <- rep(NA, num)
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -171,7 +177,6 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rGC.tx <- dat$attr$uGC.tx <- rep(NA, num)
   dat$attr$rGC.tx.prep <- dat$attr$uGC.tx.prep <- rep(NA, num)
-  dat$attr$GC.cease <- rep(NA, num)
 
   # Initialize CT infection at both sites
   idsUCT <- sample(idsUreth, size = round(init$prev.uct * num), FALSE)
@@ -198,9 +203,7 @@ initialize_msm <- function(x, param, init, control, s) {
 
   dat$attr$rCT.tx <- dat$attr$uCT.tx <- rep(NA, num)
   dat$attr$rCT.tx.prep <- dat$attr$uCT.tx.prep <- rep(NA, num)
-  dat$attr$CT.cease <- rep(NA, num)
-
-
+  
   # CCR5
   dat <- init_ccr5_msm(dat)
 
@@ -328,9 +331,6 @@ init_status_msm <- function(dat) {
   tx.init.time <- rep(NA, num)
   cum.time.on.tx <- rep(NA, num)
   cum.time.off.tx <- rep(NA, num)
-  infector <- rep(NA, num)
-  inf.role <- rep(NA, num)
-  inf.type <- rep(NA, num)
   inf.diag <- rep(NA, num)
   inf.tx <- rep(NA, num)
   inf.stage <- rep(NA, num)
@@ -672,9 +672,6 @@ init_status_msm <- function(dat) {
   dat$attr$tx.init.time <- tx.init.time
   dat$attr$cum.time.on.tx <- cum.time.on.tx
   dat$attr$cum.time.off.tx <- cum.time.off.tx
-  dat$attr$infector <- infector
-  dat$attr$inf.role <- inf.role
-  dat$attr$inf.type <- inf.type
   dat$attr$inf.diag <- inf.diag
   dat$attr$inf.tx <- inf.tx
   dat$attr$inf.stage <- inf.stage

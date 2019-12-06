@@ -7,16 +7,15 @@
 control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm,
-  test.FUN = test_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
-  progress.FUN = progress_msm, vl.FUN = vl_msm, aiclass.FUN = NULL,
-  roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
-  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
-  position.FUN = position_msm, trans.FUN = trans_msm,
-  stitrans.FUN = sti_trans, stirecov.FUN = sti_recov,
-  stitx.FUN = sti_tx, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
-  verbose.int = 1, ...)
+  test.FUN = test_msm, tx.FUN = tx_msm, progress.FUN = progress_msm,
+  vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
+  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
+  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
+  position.FUN = position_msm, prep.FUN = prep_msm,
+  trans.FUN = trans_msm, stitrans.FUN = sti_trans,
+  stirecov.FUN = sti_recov, stitx.FUN = sti_tx,
+  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
+  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -47,8 +46,6 @@ model.}
 
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
-\item{prep.FUN}{Module function for PrEP initiation and utilization.}
-
 \item{progress.FUN}{Module function for HIV disease progression.}
 
 \item{vl.FUN}{Module function for HIV viral load evolution.}
@@ -67,10 +64,9 @@ partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
 
-\item{riskhist.FUN}{Module function to calculate risk history for uninfected
-persons in the population.}
-
 \item{position.FUN}{Module function to simulate sexual position within acts.}
+
+\item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
 \item{trans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}

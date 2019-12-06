@@ -21,21 +21,23 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   part.supp.up.slope = 0.25, b.B.rate = 0.001/7, b.W.rate = 0.001/7,
   birth.age = 18, b.method = "fixed", URAI.prob = 0.0082 * 1.09,
   UIAI.prob = 0.0031 * 1.09, acute.rr = 6, circ.rr = 0.4,
-  condom.rr = 0.295, disc.outset.main.B.prob = 0.685,
-  disc.outset.main.W.prob = 0.889, disc.at.diag.main.B.prob = 1,
-  disc.at.diag.main.W.prob = 1, disc.post.diag.main.B.prob = 0,
-  disc.post.diag.main.W.prob = 0, disc.outset.pers.B.prob = 0.527,
-  disc.outset.pers.W.prob = 0.828, disc.at.diag.pers.B.prob = 1,
-  disc.at.diag.pers.W.prob = 1, disc.post.diag.pers.B.prob = 0,
-  disc.post.diag.pers.W.prob = 0, disc.inst.B.prob = 0.445,
-  disc.inst.W.prob = 0.691, circ.B.prob = 0.874, circ.W.prob = 0.918,
-  ccr5.B.prob = c(0, 0.034), ccr5.W.prob = c(0.021, 0.176),
-  ccr5.heteroz.rr = 0.3, num.inst.ai.classes = 1,
-  base.ai.main.BB.rate = 0.17, base.ai.main.BW.rate = 0.26,
-  base.ai.main.WW.rate = 0.23, base.ai.pers.BB.rate = 0.11,
-  base.ai.pers.BW.rate = 0.16, base.ai.pers.WW.rate = 0.14,
-  ai.scale = 1.15, cond.main.BB.prob = 0.38, cond.main.BW.prob = 0.1,
-  cond.main.WW.prob = 0.15, cond.pers.always.prob = 0.216,
+  cond.eff = 0.95, cond.fail.B = 0.39, cond.fail.W = 0.21,
+  disc.outset.main.B.prob = 0.685, disc.outset.main.W.prob = 0.889,
+  disc.at.diag.main.B.prob = 1, disc.at.diag.main.W.prob = 1,
+  disc.post.diag.main.B.prob = 0, disc.post.diag.main.W.prob = 0,
+  disc.outset.pers.B.prob = 0.527, disc.outset.pers.W.prob = 0.828,
+  disc.at.diag.pers.B.prob = 1, disc.at.diag.pers.W.prob = 1,
+  disc.post.diag.pers.B.prob = 0, disc.post.diag.pers.W.prob = 0,
+  disc.inst.B.prob = 0.445, disc.inst.W.prob = 0.691,
+  circ.B.prob = 0.874, circ.W.prob = 0.918, ccr5.B.prob = c(0,
+  0.034), ccr5.W.prob = c(0.021, 0.176), ccr5.heteroz.rr = 0.3,
+  num.inst.ai.classes = 1, base.ai.main.BB.rate = 0.22,
+  base.ai.main.BW.rate = 0.22, base.ai.main.WW.rate = 0.22,
+  base.ai.pers.BB.rate = 0.14, base.ai.pers.BW.rate = 0.14,
+  base.ai.pers.WW.rate = 0.14, ai.scale.BB = 1.0748572,
+  ai.scale.BW = 1.0748572, ai.scale.WW = 1.0748572,
+  cond.main.BB.prob = 0.21, cond.main.BW.prob = 0.21,
+  cond.main.WW.prob = 0.21, cond.pers.always.prob = 0.216,
   cond.pers.BB.prob = 0.26, cond.pers.BW.prob = 0.26,
   cond.pers.WW.prob = 0.26, cond.inst.always.prob = 0.326,
   cond.inst.BB.prob = 0.27, cond.inst.BW.prob = 0.27,
@@ -45,26 +47,31 @@ param_msm(nwstats, race.method = 1, last.neg.test.B.int = 301,
   cond.diag.pers.beta = -0.67, cond.discl.pers.beta = -0.85,
   cond.diag.inst.beta = -0.67, cond.discl.inst.beta = -0.85,
   vv.iev.BB.prob = 0.42, vv.iev.BW.prob = 0.56,
-  vv.iev.WW.prob = 0.49, prep.start = Inf, prep.elig.model = "base",
-  prep.class.prob = c(0.211, 0.07, 0.1, 0.619), prep.class.hr = c(1,
-  0.69, 0.19, 0.05), prep.coverage = 0, prep.cov.method = "curr",
-  prep.cov.rate = 1, prep.tst.int = 90, prep.risk.int = 182,
-  prep.risk.reassess = TRUE, rcomp.prob = 0, rcomp.adh.groups = 0:3,
-  rcomp.main.only = FALSE, rcomp.discl.only = FALSE,
-  rgc.tprob = 0.357698, ugc.tprob = 0.248095, rct.tprob = 0.321597,
-  uct.tprob = 0.212965, rgc.sympt.prob = 0.076975,
-  ugc.sympt.prob = 0.824368, rct.sympt.prob = 0.103517,
-  uct.sympt.prob = 0.885045, rgc.asympt.int = 35.11851 * 7,
-  ugc.asympt.int = 35.11851 * 7, gc.tx.int = 2 * 7, gc.ntx.int = NA,
-  rct.asympt.int = 44.24538 * 7, uct.asympt.int = 44.24538 * 7,
-  ct.tx.int = 2 * 7, ct.ntx.int = NA, gc.prob.cease = 0,
-  ct.prob.cease = 0, gc.sympt.prob.tx = 0.9, ct.sympt.prob.tx = 0.85,
-  gc.asympt.prob.tx = 0, ct.asympt.prob.tx = 0,
-  prep.sti.screen.int = 182, prep.sti.prob.tx = 1,
-  prep.continue.stand.tx = TRUE, sti.cond.rr = 0.3,
-  hiv.rgc.rr = 2.780673, hiv.ugc.rr = 1.732363,
-  hiv.rct.rr = 2.780673, hiv.uct.rr = 1.732363, hiv.dual.rr = 0.2,
-  ...)
+  vv.iev.WW.prob = 0.49, riskh.start = Inf, prep.start = Inf,
+  prep.la.start = Inf, prep.start.prob = 0.2925,
+  prep.prob.oral = 0.5, prep.adhr.dist = c(0.089, 0.127, 0.785),
+  prep.adhr.hr = c(0.69, 0.19, 0.02), prep.discont.rate = 1 -
+  (2^(-1/224.4237)), prepla.discont.rate = 1 - (2^(-1/224.4237)),
+  prep.inj.int = 8 * 7, prep.adhr.dist.la = c(0.215, 0.785),
+  prepla.dlevel.icpt = 3.59, prepla.dlevel.icpt.err = 2,
+  prepla.dlevel.halflife.int = 35, prep.la.hr.beta = -9.0599,
+  prep.la.hr.rel = 1, prep.tst.int = 90, prep.risk.int = 182,
+  prep.risk.reassess.method = "year", prep.sti.screen.int = 182,
+  prep.la.sti.screen.int = 121, prep.sti.prob.tx = 1,
+  rcomp.prob = 0.41, rcomp.adh.groups = 2:3, rcomp.main.only = FALSE,
+  rcomp.discl.only = FALSE, rgc.tprob = 0.3972, ugc.tprob = 0.306,
+  rct.tprob = 0.222, uct.tprob = 0.1819, rgc.sympt.prob = 0.16,
+  ugc.sympt.prob = 0.9, rct.sympt.prob = 0.16, uct.sympt.prob = 0.58,
+  rgc.ntx.int = 234.14, ugc.ntx.int = 234.14, gc.tx.int = 7,
+  rct.ntx.int = 318.59, uct.ntx.int = 318.59, ct.tx.int = 7,
+  gc.sympt.prob.tx.B = 0.85, gc.sympt.prob.tx.W = 0.85,
+  ct.sympt.prob.tx.B = 0.9, ct.sympt.prob.tx.W = 0.9,
+  gc.asympt.prob.tx.B = 0.1, gc.asympt.prob.tx.W = 0.1,
+  ct.asympt.prob.tx.B = 0.15, ct.asympt.prob.tx.W = 0.15,
+  sti.cond.eff = 0.95, sti.cond.fail.B = 0.39,
+  sti.cond.fail.W = 0.21, hiv.rgc.rr = 2.7426694,
+  hiv.ugc.rr = 1.6936982, hiv.rct.rr = 2.7426694,
+  hiv.uct.rr = 1.6936982, hiv.dual.rr = 0.2, ...)
 }
 \arguments{
 \item{nwstats}{Target statistics for the network model. An object of class
@@ -188,8 +195,14 @@ elevated viral load) when positive partner is in the acute stage.}
 \item{circ.rr}{Relative risk of infection from insertive anal sex when the
 negative insertive partner is circumcised.}
 
-\item{condom.rr}{Relative risk of infection from anal sex when a condom is
-used.}
+\item{cond.eff}{Relative risk of HIV infection from anal sex when a condom is
+used properly (biological efficacy).}
+
+\item{cond.fail.B}{Condom failure rates for HIV for Black MSM, as a reduction
+in the cond.eff parameter.}
+
+\item{cond.fail.W}{Condom failure rates for HIV for White MSM, as a reduction
+in the cond.eff parameter.}
 
 \item{disc.outset.main.B.prob}{Probability that an HIV-infected black MSM will
 disclose his status at the start of a main partnership.}
@@ -275,8 +288,11 @@ partnerships (acts per day).}
 \item{base.ai.pers.WW.rate}{Expected coital frequency in white-white casual
 partnerships (acts per day).}
 
-\item{ai.scale}{General relative scaler for all act rates for model
-calibration.}
+\item{ai.scale.BB}{Relative scaler for all BB act rates.}
+
+\item{ai.scale.BW}{Relative scaler for all BW act rates.}
+
+\item{ai.scale.WW}{Relative scaler for all WW act rates.}
 
 \item{cond.main.BB.prob}{Probability of condom use in a black-black main
 partnership.}
@@ -358,28 +374,46 @@ two versatile men, they will engage in intra-event versatility
 two versatile men, they will engage in intra-event versatility
 ("flipping") given that they're having AI.}
 
+\item{riskh.start}{Time to start the risk history function to calculate PrEP
+indications.}
+
 \item{prep.start}{Time step at which the PrEP intervention should start.}
 
-\item{prep.elig.model}{Modeling approach for determining who is eligible for
-PrEP. Current options are limited to: \code{"all"} for all persons who
-have never been on PrEP and are disease-susceptible.}
+\item{prep.la.start}{Time to start LA PrEP.}
 
-\item{prep.class.prob}{The probability of adherence class in non-adherent,
-low adherence, medium adherence, or high adherence groups (from Liu).}
+\item{prep.start.prob}{Probability of initiating either form of PrEP given
+current indications.}
 
-\item{prep.class.hr}{The hazard ratio for infection per act associated with each
+\item{prep.prob.oral}{Probability of selecting oral PrEP given initiation of
+any PrEP.}
+
+\item{prep.adhr.dist}{Proportion of men who are low, medium, and high
+adherent to PrEP.}
+
+\item{prep.adhr.hr}{The hazard ratio for infection per act associated with each
 level of adherence (from Grant).}
 
-\item{prep.coverage}{The proportion of the eligible population who are start
-PrEP once they become eligible.}
+\item{prep.discont.rate}{Rate of random discontinuation from oral PrEP.}
 
-\item{prep.cov.method}{The method for calculating PrEP coverage, with options
-of \code{"curr"} to base the numerator on the number of people currently
-on PrEP and \code{"ever"} to base it on the number of people ever on
-PrEP.}
+\item{prepla.discont.rate}{Rate of random discontinuation from LA PrEP.}
 
-\item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start.}
+\item{prep.inj.int}{Weeks between LA PrEP injections.}
+
+\item{prep.adhr.dist.la}{Proportion of men who are in low adherence and
+high adherence categories, as a vector of two proportions.}
+
+\item{prepla.dlevel.icpt}{Mean intercept for LA PrEP drug levels for those
+just starting LA PrEP.}
+
+\item{prepla.dlevel.icpt.err}{Standard deviation around intercept for LA PrEP
+drug levels.}
+
+\item{prepla.dlevel.halflife.int}{Interval in days to reach LA PrEP half life.}
+
+\item{prep.la.hr.beta}{Model coefficient for association between current LA
+PrEP drug level and hazard ratio for HIV infection.}
+
+\item{prep.la.hr.rel}{Relative modifier on LA PrEP drug-level hazard ratio.}
 
 \item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
 overrides the mean testing interval parameters.}
@@ -387,8 +421,17 @@ overrides the mean testing interval parameters.}
 \item{prep.risk.int}{Time window for assessment of risk eligibility for PrEP
 in days.}
 
-\item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
-each testing visit.}
+\item{prep.risk.reassess.method}{Method for determining risk-based discontinuation
+of PrEP, with \code{"none"} for no discontinuation, \code{"inst"} for
+reassessment every time step, and \code{"year"} for reassessment at yearly
+HIV diagnostic testing visits.}
+
+\item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
+
+\item{prep.la.sti.screen.int}{Interval in days between STI screening at LA PrEP visits.}
+
+\item{prep.sti.prob.tx}{Probability of treatment given positive screening during
+PrEP visit.}
 
 \item{rcomp.prob}{Level of risk compensation from 0 to 1, where 0 is no risk
 compensation, 0.5 is a 50% reduction in the probability of condom use
@@ -396,7 +439,7 @@ per act, and 1 is a complete cessation of condom use following PrEP
 initiation.}
 
 \item{rcomp.adh.groups}{PrEP adherence groups for whom risk compensation
-occurs, as a vector with values 0, 1, 2, 3 corresponding to non-adherent,
+occurs, as a vector with values 1, 2, 3 corresponding to
 low adherence, medium adherence, and high adherence to PrEP.}
 
 \item{rcomp.main.only}{Logical, if risk compensation is limited to main
@@ -425,48 +468,50 @@ chlamydia.}
 \item{uct.sympt.prob}{Probability of symptoms given infection with urethral
 chlamydia.}
 
-\item{rgc.asympt.int}{Average duration in days of asymptomatic rectal gonorrhea.}
+\item{rgc.ntx.int}{Average duration in days of untreated rectal gonorrhea.}
 
-\item{ugc.asympt.int}{Average duration in days of asymptomatic urethral gonorrhea.}
+\item{ugc.ntx.int}{Average duration in days of untreated urethral gonorrhea.}
 
 \item{gc.tx.int}{Average duration in days of treated gonorrhea (both sites).}
 
-\item{gc.ntx.int}{Average duration in days of untreated, symptomatic gonorrhea (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
+\item{rct.ntx.int}{Average in days duration of untreated rectal chlamydia.}
 
-\item{rct.asympt.int}{Average in days duration of asymptomatic rectal chlamydia.}
-
-\item{uct.asympt.int}{Average in days duration of asymptomatic urethral chlamydia.}
+\item{uct.ntx.int}{Average in days duration of untreated urethral chlamydia.}
 
 \item{ct.tx.int}{Average in days duration of treated chlamydia (both sites).}
 
-\item{ct.ntx.int}{Average in days duration of untreated, symptomatic chlamydia (both sites).
-If \code{NA}, uses site-specific durations for asymptomatic infections.}
+\item{gc.sympt.prob.tx.B}{Probability of treatment for symptomatic gonorrhea
+for Black men.}
 
-\item{gc.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with gonorrhea.}
+\item{gc.sympt.prob.tx.W}{Probability of treatment for symptomatic gonorrhea
+for White men.}
 
-\item{ct.prob.cease}{Probability of ceasing sexual activity during symptomatic
-infection with chlamydia.}
+\item{ct.sympt.prob.tx.B}{Probability of treatment for symptomatic chlamydia
+for Black men.}
 
-\item{gc.sympt.prob.tx}{Probability of treatment for symptomatic gonorrhea.}
+\item{ct.sympt.prob.tx.W}{Probability of treatment for symptomatic chlamydia
+for White men.}
 
-\item{ct.sympt.prob.tx}{Probability of treatment for symptomatic chlamydia.}
+\item{gc.asympt.prob.tx.B}{Probability of treatment for asymptomatic gonorrhea
+for Black men.}
 
-\item{gc.asympt.prob.tx}{Probability of treatment for asymptomatic gonorrhea.}
+\item{gc.asympt.prob.tx.W}{Probability of treatment for asymptomatic gonorrhea
+for White men.}
 
-\item{ct.asympt.prob.tx}{Probability of treatment for asymptomatic chlamydia.}
+\item{ct.asympt.prob.tx.B}{Probability of treatment for asymptomatic chlamydia
+for Black men.}
 
-\item{prep.sti.screen.int}{Interval in days between STI screening at PrEP visits.}
+\item{ct.asympt.prob.tx.W}{Probability of treatment for asymptomatic chlamydia
+for White men.}
 
-\item{prep.sti.prob.tx}{Probability of treatment given positive screening during
-PrEP visit.}
+\item{sti.cond.eff}{Relative risk of STI infection from anal sex when a condom is
+used properly (biological efficacy).}
 
-\item{prep.continue.stand.tx}{Logical, if \code{TRUE} will continue standard
-STI treatment of symptomatic cases even after PrEP initiation.}
+\item{sti.cond.fail.B}{Condom failure rates for STI for Black MSM, as a reduction
+in the cond.eff parameter.}
 
-\item{sti.cond.rr}{Relative risk of STI infection (in either direction) given
-a condom used by the insertive partner.}
+\item{sti.cond.fail.W}{Condom failure rates for STI for White MSM, as a reduction
+in the cond.eff parameter.}
 
 \item{hiv.rgc.rr}{Relative risk of HIV infection given current rectal gonorrhea.}
 

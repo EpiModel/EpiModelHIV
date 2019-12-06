@@ -32,6 +32,8 @@ test_msm <- function(dat, at) {
 
   prepStat <- dat$attr$prepStat
   prep.tst.int <- dat$param$prep.tst.int
+  prepStat.la <- dat$attr$prepStat.la
+  prepTimeLastInj <- dat$attr$prepTimeLastInj
 
   # Parameters
   testing.pattern <- dat$param$testing.pattern
@@ -80,8 +82,11 @@ test_msm <- function(dat, at) {
   tst.prep <- which((diag.status == 0 | is.na(diag.status)) &
                     prepStat == 1 &
                     tsincelntst >= prep.tst.int)
+  tst.prep.la <- which((diag.status == 0 | is.na(diag.status)) &
+                        prepStat.la == 1 &
+                         tsincelntst >= prep.tst.int)
 
-  tst.all <- c(tst.nprep, tst.prep)
+  tst.all <- c(tst.nprep, tst.prep, tst.prep.la)
 
   tst.pos <- tst.all[status[tst.all] == 1 & inf.time[tst.all] <= at - twind.int]
   tst.neg <- setdiff(tst.all, tst.pos)

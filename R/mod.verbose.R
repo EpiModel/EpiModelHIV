@@ -24,40 +24,19 @@
 #'
 verbose_msm <- function(x, type, s, at) {
 
-  if (type == "startup") {
-
-  }
+  if (type == "startup") {  }
 
   if (type == "progress") {
     if (x$control$verbose == TRUE) {
-      if (!interactive()) {
-        if (!is.null(x$control$ncores) && x$control$ncores > 1) {
-          if (x$control$verbose.int > 0 && (at %% x$control$verbose.int == 0)) {
-            simno <- x$control$simno
-            currsim <- x$control$currsim
-            if (file.exists("verb/") == FALSE) {
-              dir.create("verb/")
-            }
-            fn <- paste0("verb/sim", simno, ".s", currsim, ".txt")
-            cat("SIMNO ", paste(simno, currsim, sep = "."),
-                "\n====================",
-                "\nStep: ", at, " (", round(at/x$control$nsteps, 2), ")",
-                "\nPop Size: ", x$epi$num[at],
-                "\nTot Prev: ", round(x$epi$i.num[at] / x$epi$num[at], 3),
-                "\n\n", sep = "", file = fn)
-          }
-        }
-      } else {
-        verbose.int <- x$control$verbose.int
+      verbose.int <- x$control$verbose.int
         if (verbose.int > 0 && (at %% verbose.int == 0)) {
-
           nsteps <- x$control$nsteps
           time.unit <- x$param$time.unit
           prev <- round(x$epi$i.prev[at], 3)
-          prev.rgc <- round(x$epi$prev.rgc[at], 3)
-          prev.ugc <- round(x$epi$prev.ugc[at], 3)
-          prev.rct <- round(x$epi$prev.rct[at], 3)
-          prev.uct <- round(x$epi$prev.uct[at], 3)
+          prev.gc <- round(x$epi$prev.gc[at], 3)
+          prev.ct <- round(x$epi$prev.ct[at], 3)
+          incid.gc <- round(mean(tail(x$epi$ir100.gc, 100), na.rm = TRUE), 3)
+          incid.ct <- round(mean(tail(x$epi$ir100.ct, 100), na.rm = TRUE), 3)
 
           cat("\014")
           cat("\nEpidemic Simulation")
@@ -71,19 +50,16 @@ verbose_msm <- function(x, type, s, at) {
           cat("\n------------------------------")
           cat("\nHIV Curr Incidence:", x$epi$incid[at])
           cat("\nHIV Cuml Incidence:", sum(x$epi$incid, na.rm = TRUE))
+          cat("\n------------------------------")
           cat("\nHIV Prevalence: ", x$epi$i.num[at], " (", prev, ")", sep = "")
           cat("\n------------------------------")
-          cat("\nrGC Prevalence: ", prev.rgc, sep = "")
-          cat("\nuGC Prevalence: ", prev.ugc, sep = "")
-          cat("\nrCT Prevalence: ", prev.rct, sep = "")
-          cat("\nuCT Prevalence: ", prev.uct, sep = "")
+          cat("\nGC Prevalence: ", prev.gc, sep = "")
+          cat("\nGC Incidence: ", incid.gc, sep = "")
+          cat("\nCT Prevalence: ", prev.ct, sep = "")
+          cat("\nCT Incidence: ", incid.ct, sep = "")
           cat("\n==============================")
-
-        }
       }
     }
-
-
   }
 }
 

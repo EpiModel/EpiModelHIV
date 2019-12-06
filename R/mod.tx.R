@@ -100,10 +100,6 @@ tx_msm <- function(dat, at) {
   dat$attr$cum.time.off.tx <- dat$attr$cum.time.off.tx +
                               ((dat$attr$tx.status == 0) %in% TRUE)
 
-  ## Summary statistics
-  dat$epi$tx.init.inc[at] <- length(tx.init)
-  dat$epi$tx.halt.inc[at] <- length(tx.halt)
-  dat$epi$tx.resm.inc[at] <- length(tx.reinit)
 
   return(dat)
 }
