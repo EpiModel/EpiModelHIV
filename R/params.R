@@ -297,12 +297,85 @@
 #'
 param_msm <- function(nwstats,
                       race.method = 1,
+                      
+                      #Set for initialized testing histories
                       last.neg.test.B.int = 301,
                       last.neg.test.W.int = 315,
                       mean.test.B.int = 301,
                       mean.test.W.int = 315,
                       testing.pattern = "memoryless",
                       test.window.int = 21,
+                      
+                      #FOR HOME TESTING INTERVENTION
+                      ##FOR HOME TESTING INTERVENTION
+                      ################################
+                      
+                      # Population fractions for opp only, regular, and risk testers
+                      tt.B.NO.Reg.Rk = c(0.383,0.456,0.161),
+                      tt.W.NO.Reg.Rk = c(0.383,0.456,0.161),
+                      ai.class.high.frac = .4,
+                      
+                      #Opportunistic testing intervals
+                      mean.test.opp.NO.W.int = 183,
+                      mean.test.opp.NO.B.int = 183,
+                      mean.test.opp.ReT.W.int = 183,
+                      mean.test.opp.ReT.B.int = 183,
+                      mean.test.opp.Risk.W.int = 183,
+                      mean.test.opp.Risk.B.int = 183,
+                      
+                      #Probability of opportunistic test uptake by tester type
+                      mean.test.B.opp.prob = 0.6285,
+                      mean.test.W.opp.prob = 0.6285,
+                      mean.test.B.opp.reg.prob = 0.0953,
+                      mean.test.W.opp.reg.prob = 0.0953,
+                      mean.test.B.opp.risk.prob = 0.0953,
+                      mean.test.W.opp.risk.prob = 0.0953,
+                      
+                      #Regular tester time intervals
+                      mean.test.B.low.int = 372,
+                      mean.test.B.high.int = 151,
+                      mean.test.W.low.int = 372,
+                      mean.test.W.high.int = 151,
+                      
+                      #Risk based time interval
+                      mean.test.risk.CAI.nonmain.B.int = round(5.6 * 7),
+                      mean.test.risk.CAI.nonmain.W.int = round(5.6 * 7),
+                      mean.test.risk.AI.known.sd.B.int = round(6.2 * 7),
+                      mean.test.risk.AI.known.sd.W.int = round(6.2 * 7),
+                      mean.test.risk.newmain.B.int = round(8.1 * 7),
+                      mean.test.risk.newmain.W.int = round(8.2 * 7),
+                      
+                     #Risk based testing probabilities
+                     mean.test.risk.CAI.nonmain.B.prob = 0.339,
+                     mean.test.risk.CAI.nonmain.W.prob = 0.339,
+                     mean.test.risk.AI.known.sd.B.prob = 0.52,
+                     mean.test.risk.AI.known.sd.W.prob = 0.52,
+                     mean.test.risk.newmain.B.prob = 0.349,
+                     mean.test.risk.newmain.W.prob = 0.349,
+                     
+                     #Maximum average number of risk-based tests per year
+                     max.risk.test.time=11,
+
+                      #Home testing intervention criteria
+                      Opportunity.replace = TRUE,
+                      Opportunity.supp = TRUE,
+                      Regular.replace = TRUE,
+                      Regular.supp = TRUE,
+                      Risk.replace = TRUE,
+                      Risk.supp = TRUE,
+                      Never.test.supp = TRUE,
+                      
+                      hometest.rep.opp.frac = .25,
+                      hometest.rep.reg.frac = .25,
+                      hometest.rep.risk.frac = .25,
+                      
+                      supp.opp.home.test.prob = 1/52,
+                      supp.reg.home.test.prob = 1/52,
+                      supp.risk.home.test.prob = .1,
+                      supp.nevertest.home.test.prob = 1/52,
+                      hometest.window.int = 90,
+                      
+                      ################################
 
                       tt.traj.B.prob = c(0.077, 0.000, 0.356, 0.567),
                       tt.traj.W.prob = c(0.052, 0.000, 0.331, 0.617),
@@ -364,7 +437,7 @@ param_msm <- function(nwstats,
                       ccr5.W.prob = c(0.021, 0.176),
                       ccr5.heteroz.rr = 0.3,
 
-                      num.inst.ai.classes = 1,
+                      num.inst.ai.classes = 5,
                       base.ai.main.BB.rate = 0.17,
                       base.ai.main.BW.rate = 0.26,
                       base.ai.main.WW.rate = 0.23,
@@ -409,6 +482,7 @@ param_msm <- function(nwstats,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+                      riskh.start = 2,
 
                       rcomp.prob = 0,
                       rcomp.adh.groups = 0:3,
@@ -531,7 +605,7 @@ param_msm <- function(nwstats,
                                 nrow = 3)
 
 
-  p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
+  #p$riskh.start <- max(1, prep.start - prep.risk.int - 1)
 
   p$method <- nwstats$method
   p$modes <- 1
@@ -569,12 +643,12 @@ param_msm <- function(nwstats,
 #'
 #' @export
 init_msm <- function(nwstats,
-                     prev.B = 0.253,
-                     prev.W = 0.253,
-                     prev.ugc = 0.005,
-                     prev.rgc = 0.005,
-                     prev.uct = 0.013,
-                     prev.rct = 0.013,
+                     prev.B = 0.1,
+                     prev.W = 0.1,
+                     prev.ugc = 0.0,
+                     prev.rgc = 0.0,
+                     prev.uct = 0.0,
+                     prev.rct = 0.0,
                      ...) {
 
   p <- get_args(formal.args = formals(sys.function()),
@@ -665,7 +739,7 @@ control_msm <- function(simno = 1,
                         aging.FUN = aging_msm,
                         deaths.FUN = deaths_msm,
                         births.FUN = births_msm,
-                        test.FUN = test_msm,
+                        test.FUN = testing_interventions,
                         tx.FUN = tx_msm,
                         prep.FUN = prep_msm,
                         progress.FUN = progress_msm,
@@ -677,11 +751,12 @@ control_msm <- function(simno = 1,
                         acts.FUN = acts_msm,
                         condoms.FUN = condoms_msm,
                         riskhist.FUN = riskhist_msm,
+                        riskhisttest.FUN = riskhist_risktest_msm,
                         position.FUN = position_msm,
                         trans.FUN = trans_msm,
-                        stitrans.FUN = sti_trans,
-                        stirecov.FUN = sti_recov,
-                        stitx.FUN = sti_tx,
+                        #stitrans.FUN = sti_trans,
+                        #stirecov.FUN = sti_recov,
+                        #stitx.FUN = sti_tx,
                         prev.FUN = prevalence_msm,
                         verbose.FUN = verbose_msm,
                         save.nwstats = FALSE,
