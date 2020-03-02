@@ -14,6 +14,12 @@
 #'
 simnet_msm <- function(dat, at) {
 
+
+  #if(at > 2000){
+    #save(at, file="at.rda")
+    #save(dat, file="dat.rda")
+  #}
+  
   ## Edges correction
   dat <- edges_correct_msm(dat, at)
 
@@ -21,18 +27,25 @@ simnet_msm <- function(dat, at) {
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
   if (dat$param$method == 1) {
-    dat$attr$deg.pers <- get_degree(dat$el[[2]])
+    x<-get_degree(dat$el[[2]])
+    x<-ifelse(x > 2,2,x)
+    #dat$attr$deg.pers <- get_degree(dat$el[[2]])
+    dat$attr$deg.pers <- x
   } else {
-    dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
+    x<-get_degree(dat$el[[2]])
+    x<-ifelse(x > 2,2,x)
+    dat$attr$deg.pers <- paste0(dat$attr$race, x)
+    #dat$attr$deg.pers <- paste0(dat$attr$race, get_degree(dat$el[[2]]))
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
 
+
+  
   dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
                                              el = dat$el[[1]],
                                              coef.form = nwparam.m$coef.form,
                                              coef.diss = nwparam.m$coef.diss$coef.adj,
                                              save.changes = TRUE)
-
   dat$temp$new.edges <- NULL
   if (at == 2) {
     new.edges.m <- matrix(dat$el[[1]], ncol = 2)
@@ -82,6 +95,7 @@ simnet_msm <- function(dat, at) {
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
                                           coef = nwparam.i$coef.form)
+
 
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
