@@ -187,3 +187,69 @@ cut_age <- function(age, breaks = c(0, 29, 39, Inf)) {
 keep.attr <- function(attrList, keep) {
   lapply(attrList, function(x) x[keep])
 }
+
+
+#######################    tergmLite funtions that are no longer being exported.
+
+stergm_prep <- function(nw,
+                        formation,
+                        dissolution,
+                        coef.form,
+                        coef.diss,
+                        constraints,
+                        control = control.simulate.network()) {
+  
+  if (inherits(nw, "network") == FALSE) {
+    stop("A network object must be given")
+  }
+  
+  formation <- statnet.common::nonsimp_update.formula(formation, nw ~ ., from.new = "nw")
+  dissolution <- statnet.common::nonsimp_update.formula(dissolution, nw ~ ., from.new = "nw")
+  
+  model.form <- ergm::ergm_model(formation, nw, role = "formation")
+  if (!missing(coef.form) && ergm::nparam(model.form) != length(coef.form)) {
+    stop("coef.form has ", length(coef.form), " elements, while the model requires ",
+         ergm::nparam(model.form), " parameters.")
+  }
+  model.diss <- ergm::ergm_model(dissolution, nw, role = "dissolution")
+  if (!missing(coef.diss) && ergm::nparam(model.diss) != length(coef.diss)) {
+    stop("coef.diss has ", length(coef.diss), " elements, while the model requires ",
+         ergm::nparam(model.diss), " parameters.")
+  }
+  
+  MHproposal.form <- ergm::ergm_proposal(constraints, control$MCMC.prop.args.form,
+                                         nw, weights = control$MCMC.prop.weights.form,
+                                         class = "f")
+  MHproposal.diss <- ergm::ergm_proposal(constraints, control$MCMC.prop.args.diss,
+                                         nw, weights = control$MCMC.prop.weights.diss,
+                                         class = "d")
+  
+  MHproposal.form$arguments$constraints$.attributes <- NULL
+  MHproposal.diss$arguments$constraints$.attributes <- NULL
+  
+  out <- list(model.form = model.form, model.diss = model.diss,
+              MHproposal.form = MHproposal.form, MHproposal.diss = MHproposal.diss)
+  
+  return(out)
+}
+
+
+
+ergm_prep <- function(nw,
+                      formation,
+                      coef,
+                      constraints,
+                      control = ergm::control.simulate.ergm()) {
+  
+  form <- statnet.common::nonsimp_update.formula(formation, nw ~ ., from.new = "nw")
+  m <- ergm::ergm_model(form, nw, response = NULL, role = "static")
+  
+  MHproposal <- ergm_proposal(constraints, arguments = control$MCMC.prop.args,
+                              nw = nw, weights = control$MCMC.prop.weights, class = "c",
+                              reference = ~Bernoulli, response = NULL)
+  
+  MHproposal$arguments$constraints$.attributes <- NULL
+  
+  out <- list(model.form = m, MHproposal = MHproposal)
+  return(out)
+}
