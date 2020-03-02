@@ -7,16 +7,16 @@
 control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
   start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
   deaths.FUN = deaths_msm, births.FUN = births_msm,
-  test.FUN = test_msm, tx.FUN = tx_msm, prep.FUN = prep_msm,
-  progress.FUN = progress_msm, vl.FUN = vl_msm, aiclass.FUN = NULL,
-  roleclass.FUN = NULL, resim_nets.FUN = simnet_msm,
-  disclose.FUN = disclose_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, riskhist.FUN = riskhist_msm,
+  test.FUN = testing_interventions, tx.FUN = tx_msm,
+  prep.FUN = prep_msm, progress.FUN = progress_msm, vl.FUN = vl_msm,
+  aiclass.FUN = NULL, roleclass.FUN = NULL,
+  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
+  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
+  riskhist.FUN = riskhist_msm,
+  riskhisttest.FUN = riskhist_risktest_msm,
   position.FUN = position_msm, trans.FUN = trans_msm,
-  stitrans.FUN = sti_trans, stirecov.FUN = sti_recov,
-  stitx.FUN = sti_tx, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose_msm, save.nwstats = FALSE, verbose = TRUE,
-  verbose.int = 1, ...)
+  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
+  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -75,14 +75,6 @@ persons in the population.}
 \item{trans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}
 
-\item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
-edgelist.}
-
-\item{stirecov.FUN}{Module function to simulate recovery from GC/CT, heterogeneous
-by disease, site, symptoms, and treatment status.}
-
-\item{stitx.FUN}{Module function to simulate treatment of GC/CT.}
-
 \item{prev.FUN}{Module function to calculate prevalence summary statistics.}
 
 \item{verbose.FUN}{Module function to print model progress to the console or
@@ -98,6 +90,14 @@ if in interactive mode or text files if in batch mode.}
 progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
+
+\item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
+edgelist.}
+
+\item{stirecov.FUN}{Module function to simulate recovery from GC/CT, heterogeneous
+by disease, site, symptoms, and treatment status.}
+
+\item{stitx.FUN}{Module function to simulate treatment of GC/CT.}
 }
 \value{
 A list object of class \code{control_msm}, which can be passed to the
