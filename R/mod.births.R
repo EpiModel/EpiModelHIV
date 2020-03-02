@@ -23,6 +23,7 @@
 #'
 births_msm <- function(dat, at){
 
+
   ## Variables
 
   # Parameters
@@ -98,6 +99,13 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
 
   dat$attr$inst.ai.class[newIds] <- sample(1:dat$param$num.inst.ai.classes,
                                            nBirths, replace = TRUE)
+  
+  ##New class for high low risk.
+  ncl <- param$num.inst.ai.classes
+  
+  dat$attr$ai.class[newIds] <- sample(c("Low_AI", "High_AI"), 
+                                            nBirths, replace = TRUE,
+                                            prob = c(3/ncl,(ncl-3)/ncl))
 
   dat$attr$tt.traj[newIds[newB]] <- sample(c(1, 2, 3, 4),
                                            nBirths.B, replace = TRUE,
@@ -105,7 +113,69 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$tt.traj[newIds[newW]] <- sample(c(1, 2, 3, 4),
                                            nBirths.W, replace = TRUE,
                                            prob = dat$param$tt.traj.W.prob)
+  
+###  testing trajectory
+  
+  dat$attr$tt[newIds[which((dat$attr$tt.traj[newIds] == "NN"))]] <- "NN"
+  
+  # Added by Wei Assign Risk and Interval based testers to New births
+  tt.B.Y.ids <- which(dat$attr$tt.traj[newIds] != "NN" & dat$attr$race[newIds]=="B")
+  tt.W.Y.ids <- which(dat$attr$tt.traj[newIds] != "NN" & dat$attr$race[newIds]=="W")
+  
+  if(sum(dat$param$tt.B.NO.Reg.Rk)!=1|sum(dat$param$tt.W.NO.Reg.Rk)!=1){
+    stop("all testers in tt.B.NO.Reg.Rk or dat$param$tt.W.NO.Reg.Rk must all equal 1.")
+  }
+  
+  dat$attr$tt[newIds[tt.B.Y.ids]] <-sample(c("NO","ReT", "Risk"),length(tt.B.Y.ids), 
+                                           replace = TRUE, prob =dat$param$tt.B.NO.Reg.Rk)
+  dat$attr$tt[newIds[tt.W.Y.ids]]<-sample(c("NO","ReT", "Risk"),length(tt.W.Y.ids), 
+                                          replace = TRUE, prob =dat$param$tt.W.NO.Reg.Rk)
+  
 
+  dat$attr$Opp.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Reg.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Risk.Test.Num[newIds] <- rep(0, nBirths)
+  
+  dat$attr$Opp.Clin.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Risk.Clin.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Reg.Clin.Test.Num[newIds] <- rep(0, nBirths)
+  
+  dat$attr$Opp.HT.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Risk.HT.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$Reg.HT.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$NN.HT.Test.Num[newIds] <- rep(0, nBirths)
+  
+  dat$attr$PrEP.Test.Num[newIds] <- rep(0, nBirths)
+  dat$attr$MASS.HT.Test.Num[newIds] <- rep(0, nBirths)
+  
+  # Record risk behaviors for risk based testing
+  dat$attr$ind.uai.nonmain[newIds] <- rep(NA, nBirths)
+  dat$attr$ind.uai.known.sd[newIds] <- rep(NA, nBirths)
+  dat$attr$ind.newmain[newIds] <- rep(NA, nBirths)
+  dat$attr$main.num[newIds] <- rep(0, nBirths)
+  dat$attr$main.num.previous[newIds] <- rep(0, nBirths)
+  dat$attr$ind.uai.nonmain.clock[newIds] <- rep(NA, nBirths)
+  dat$attr$ind.uai.known.sd.clock[newIds] <- rep(NA, nBirths)
+  dat$attr$ind.newmain.clock[newIds] <- rep(NA, nBirths)
+
+  ## Additional attributes to define diagnosis via a particular test type 
+  dat$attr$diag.opp.clin.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.risk.clin.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.reg.clin.test[newIds] <-  rep(0, nBirths)
+  dat$attr$diag.opp.HT.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.risk.HT.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.reg.HT.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.NN.HT.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.mass.test[newIds] <- rep(0, nBirths)
+  dat$attr$diag.mass.time[newIds] <- rep(0, nBirths)
+  dat$attr$last.neg.test.opp[newIds] <- rep(NA, nBirths)
+  
+  #Count total risk based tests
+  dat$attr$Risk.Test.Num[newIds] <- rep(NA, nBirths)
+  
+  
+  ######################################################################################
+  
   # Circumcision
   dat$attr$circ[newIds[newB]] <- rbinom(nBirths.B, 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newW]] <- rbinom(nBirths.W, 1, dat$param$circ.W.prob)
@@ -146,12 +216,14 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
 
   # UAI group
-  p1 <- dat$param$cond.pers.always.prob
-  p2 <- dat$param$cond.inst.always.prob
-  rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
-  dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
-  dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
+  #p1 <- dat$param$cond.pers.always.prob
+  #p2 <- dat$param$cond.inst.always.prob
+  #rho <- dat$param$cond.always.prob.corr
+  #uai.always <- bindata::rmvbin(nBirths, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  #dat$attr$cond.always.pers[newIds] <- uai.always[, 1]
+  #dat$attr$cond.always.inst[newIds] <- uai.always[, 2]
+  dat$attr$cond.always.pers[newIds] <- rep(0, nBirths)
+  dat$attr$cond.always.inst[newIds] <- rep(0, nBirths)
 
   # PrEP
   dat$attr$prepStat[newIds] <- 0
