@@ -49,6 +49,8 @@ initialize_msm <- function(x, param, init, control, s) {
     attributes(dat$el[[i]])$vnames <- NULL
     p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
                                 x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
+    #p <- stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+    #                            x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
     dat$p[[i]] <- p
@@ -56,6 +58,7 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$el[[3]] <- as.edgelist(nw[[3]])
   attributes(dat$el[[3]])$vnames <- NULL
   p <- tergmLite::ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
+  #p <- ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
   p$model.form$formula <- NULL
   dat$p[[3]] <- p
 
@@ -94,15 +97,20 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$riskg <- get.vertex.attribute(nw[[3]], "riskg")
 
   # UAI group
-  p1 <- dat$param$cond.pers.always.prob
-  p2 <- dat$param$cond.inst.always.prob
-  rho <- dat$param$cond.always.prob.corr
-  uai.always <- bindata::rmvbin(num, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
-  dat$attr$cond.always.pers <- uai.always[, 1]
-  dat$attr$cond.always.inst <- uai.always[, 2]
+  #p1 <- dat$param$cond.pers.always.prob
+  #p2 <- dat$param$cond.inst.always.prob
+  #rho <- dat$param$cond.always.prob.corr
+  #uai.always <- bindata::rmvbin(num, c(p1, p2), bincorr = (1 - rho) * diag(2) + rho)
+  #dat$attr$cond.always.pers <- uai.always[, 1]
+  #dat$attr$cond.always.inst <- uai.always[, 2]
+  dat$attr$cond.always.pers <- rep(0, num)
+  dat$attr$cond.always.inst <- rep(0, num)
+  ##May set cond.always values to zero for simplicity.
 
   # Arrival and departure
   dat$attr$arrival.time <- rep(1, num)
+  # Add a departure time which may not be used as attributes are deleted at exit
+  dat$attr$depart.time <- rep(NA, num)
 
   # Circumcision
   circ <- rep(NA, num)
@@ -117,6 +125,10 @@ initialize_msm <- function(x, param, init, control, s) {
   dat$attr$prepStartTime <- rep(NA, num)
   dat$attr$prepLastRisk <- rep(NA, num)
   dat$attr$prepLastStiScreen <- rep(NA, num)
+  
+  #Home testing used a simplified version of PrEP which included the attributes
+  dat$attr$prepEligTime <- rep(NA, num)
+  dat$attr$prepEver <- rep(NA, num)
 
   # One-off AI class
   inst.ai.class <- rep(NA, num)
@@ -124,6 +136,14 @@ initialize_msm <- function(x, param, init, control, s) {
   inst.ai.class[ids.B] <- sample(apportion_lr(num.B, 1:ncl, rep(1 / ncl, ncl)))
   inst.ai.class[ids.W] <- sample(apportion_lr(num.W, 1:ncl, rep(1 / ncl, ncl)))
   dat$attr$inst.ai.class <- inst.ai.class
+  
+  # Another attribute of AI class to specify high and low AI class
+  # for low and high HIV risk race class
+  ai.class <- rep(NA, num)
+  fhai <- dat$param$ai.class.high.frac
+  ai.class[ids.B] <- sample(apportion_lr(num.B, c("Low_AI", "High_AI"), c(1-fhai,fhai)))
+  ai.class[ids.W] <- sample(apportion_lr(num.W, c("Low_AI", "High_AI"), c(1-fhai,fhai)))
+  dat$attr$ai.class <- ai.class
 
   # Role class
   role.class <- get.vertex.attribute(nw[[1]], "role.class")
@@ -135,10 +155,54 @@ initialize_msm <- function(x, param, init, control, s) {
   ins.quot[role.class == "R"]  <- 0
   ins.quot[role.class == "V"]  <- runif(sum(role.class == "V"))
   dat$attr$ins.quot <- ins.quot
+  
 
+  # Record risk_behaviors for risk based testing
+  dat$attr$ind.uai.nonmain <- rep(NA, num)
+  dat$attr$ind.uai.known.sd <- rep(NA, num)
+  dat$attr$ind.newmain <- rep(NA, num)
+  dat$attr$main.num <- rep(NA, num)
+  dat$attr$main.num.previous <- rep(NA, num)
+  dat$attr$ind.uai.nonmain.clock <- rep(NA, num)
+  dat$attr$ind.uai.known.sd.clock <- rep(NA, num)
+  dat$attr$ind.newmain.clock <- rep(NA, num)
+  
+ 
+  
+  #Record which test type resulted in the diagnosis
+  dat$attr$Opp.Test.Num <- rep(0, num)
+  dat$attr$Reg.Test.Num <- rep(0, num)
+  dat$attr$Risk.Test.Num <- rep(0, num)
+  
+  dat$attr$Opp.Clin.Test.Num <- rep(0, num)
+  dat$attr$Risk.Clin.Test.Num <- rep(0, num)
+  dat$attr$Reg.Clin.Test.Num <- rep(0, num)
+  
+  dat$attr$Opp.HT.Test.Num <- rep(0, num)
+  dat$attr$Risk.HT.Test.Num <- rep(0, num)
+  dat$attr$Reg.HT.Test.Num <- rep(0, num)
+  dat$attr$NN.HT.Test.Num <- rep(0, num)
+  
+  dat$attr$PrEP.Test.Num <- rep(0, num)
+  dat$attr$MASS.HT.Test.Num <- rep(0,num)
+  
+  #Count total risk based tests
+  dat$attr$Risk.Test.Num <- rep(0, num)
+
+  
+  # Record which risk_based testing behaviors 
+  # because we have data of likelihood of testing after event
+  # and time from event to test to distinguish 
+  # CAI in non-main partnership (1), 
+  # CAI within known serodiscordant partnership  (2),
+  # Acquisition of new main partner (High Prevalence) (3)
+  
+  dat$attr$riskType<-rep(0,num)
+  
   # HIV-related attributes
   dat <- init_status_msm(dat)
 
+  ## GC and CT are not use in hometesting but the code will be retained for future potential analysis.
   ## GC/CT status
   idsUreth <- which(role.class %in% c("I", "V"))
   idsRect <- which(role.class %in% c("R", "V"))
@@ -276,6 +340,10 @@ init_status_msm <- function(dat) {
   ids.W <- which(dat$attr$race == "W")
   age <- dat$attr$age
   race <- dat$attr$race
+  
+  # added by Wei for regular testers
+  #  XXX Code departure for clinictest.mard
+  ai.class <-dat$attr$ai.class
 
   # Infection Status
   nInfB <- round(dat$init$prev.B * num.B)
@@ -313,7 +381,31 @@ init_status_msm <- function(dat) {
                                         dat$param$tt.traj.W.prob))
   dat$attr$tt.traj <- tt.traj
 
-
+  ##Add a new testing class variable based on the treatment trajecotry for never testing and 
+  ## the specificn proportiona among testers for the different types of testing "NO", "ReT" and "Risk".
+  ## Code departure XXX.  Need to confirm waht these clasifications mean. ReT is regular tester and Risk is
+  ## Risk based tester.  Not sure about NO.
+  ## This code is from the clinic based testing init_status funtion.
+  ## udated for numeric tt.traj
+  
+  dat$attr$tt[which(tt.traj==1)] <- "NN"
+  ## added by Wei: Assign opp, regular testers vs risk based testers to different individuals
+  
+  tt.B.Y.ids <- which((tt.traj == 2 |tt.traj == 3 |tt.traj== 4) & dat$attr$race == "B")
+  tt.W.Y.ids <- which((tt.traj == 2 |tt.traj == 3 |tt.traj== 4) & dat$attr$race == "W")
+  
+  if(sum(dat$param$tt.B.NO.Reg.Rk)!=1|sum(dat$param$tt.W.NO.Reg.Rk)!=1){
+    stop("all testers in tt.B.NO.Reg.Rk or dat$param$tt.W.NO.Reg.Rk must all equal 1.")
+  }
+  tt.Y <- rep(NA, length(tt.B.Y.ids) + length(tt.W.Y.ids))
+  tt.Y[tt.B.Y.ids]<-sample(apportion_lr(length(tt.B.Y.ids), c("NO","ReT", "Risk"),
+                                        dat$param$tt.B.NO.Reg.Rk))
+  tt.Y[tt.W.Y.ids]<-sample(apportion_lr(length(tt.W.Y.ids), c("NO","ReT", "Risk"),
+                                        dat$param$tt.W.NO.Reg.Rk))
+               
+  dat$attr$tt[tt.B.Y.ids] <- tt.Y[tt.B.Y.ids]
+  dat$attr$tt[tt.W.Y.ids] <- tt.Y[tt.W.Y.ids]
+  
 
   ## Infection-related attributes
 
@@ -322,8 +414,12 @@ init_status_msm <- function(dat) {
   inf.time <- rep(NA, num)
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
+  
   diag.time <- rep(NA, num)
   last.neg.test <- rep(NA, num)
+  last.neg.test.opp <- rep(NA, num)
+
+
   tx.status <- rep(NA, num)
   tx.init.time <- rep(NA, num)
   cum.time.on.tx <- rep(NA, num)
@@ -521,7 +617,7 @@ init_status_msm <- function(dat) {
   diag.status[selected][ttntest <= cum.time.off.tx[selected] - twind.int] <- 1
   diag.status[selected][cum.time.on.tx[selected] > 0] <- 1
   last.neg.test[selected][cum.time.on.tx[selected] > 0] <- NA
-
+  
 
   ### Part adherent type
 
@@ -678,6 +774,54 @@ init_status_msm <- function(dat) {
   dat$attr$inf.diag <- inf.diag
   dat$attr$inf.tx <- inf.tx
   dat$attr$inf.stage <- inf.stage
+  
+
+  
+  ## Additional attributes to define diagnosis via a particular test type 
+  dat$attr$diag.opp.clin.test<-rep(0,num)
+  dat$attr$diag.risk.clin.test<-rep(0,num)
+  dat$attr$diag.reg.clin.test<-rep(0,num)
+  dat$attr$diag.opp.HT.test<-rep(0,num)
+  dat$attr$diag.risk.HT.test<-rep(0,num)
+  dat$attr$diag.reg.HT.test<-rep(0,num)
+  dat$attr$diag.NN.HT.test<-rep(0,num)
+  dat$attr$diag.mass.test <-rep(0,num)
+  dat$attr$diag.mass.time <-rep(0,num) 
+
+
+  ##SET THEN LAST OPPORTUNISTIC TEST TIMES FOR NEGATIVES - POSITIVES ARE NOT CLASSIFIED BY 
+  ##THE TEST CLASS AT INITIALIZATION
+  # Set last neg opportunistic test for opportunistic only testers
+  selected <- which(status == 0 & dat$attr$tt == "NO")
+  
+  tslt <- ceiling(runif(length(selected),
+                        min = 0,
+                        max = dat$param$mean.test.opp.NO.B.int * (race[selected] == "B") +
+                          dat$param$mean.test.opp.NO.W.int * (race[selected] == "W")))
+  
+  last.neg.test.opp[selected] <- -tslt
+  
+  
+  # Last neg opportunistic test for regular testers 
+  selected <- which(status == 0 & dat$attr$tt == "ReT")
+  tslt <- ceiling(runif(length(selected),
+                        min = 0,
+                        max = dat$param$mean.test.opp.ReT.B.int * (race[selected] == "B") +
+                          dat$param$mean.test.opp.ReT.W.int * (race[selected] == "W")))
+  
+  last.neg.test.opp[selected] <- -tslt
+  
+  # Last neg opportunistic test for risk based testers 
+  selected <- which(status == 0 & dat$attr$tt == "Risk")
+  tslt <- ceiling(runif(length(selected),
+                        min = 0,
+                        max = dat$param$mean.test.opp.Risk.B.int * (race[selected] == "B") +
+                          dat$param$mean.test.opp.Risk.W.int * (race[selected] == "W")))
+  
+  last.neg.test.opp[selected] <- -tslt
+  
+  ## Set all onto dat$attr
+  dat$attr$last.neg.test.opp <-last.neg.test.opp
 
   return(dat)
 
@@ -813,6 +957,8 @@ reinit_msm <- function(x, param, init, control, s) {
   dat$temp <- x$temp[[s]]
 
   class(dat) <- "dat"
+  
+  
   return(dat)
 }
 
