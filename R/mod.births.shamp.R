@@ -158,13 +158,13 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
 #People who age out should be 18 or 25 by the observed ratio.
     
     ids.birth<-sample(1:length(age),nBirths.age,replace=FALSE)
-    ids.birth.18<-sample(ids.birth,round(.54*(length(ids.birth))),replace=FALSE)
+    ids.birth.18<-sample(ids.birth,round(.46*(length(ids.birth))),replace=FALSE)
     ids.birth.25<-ids.birth[ ! ids.birth %in% ids.birth.18 ]
   
     age[ids.birth.18]<-18
     age[ids.birth.25]<-25
     
-    age[ids.birth.25] <- sample(c(24,25,26),length(ids.birth.25),replace=TRUE)  
+    age[ids.birth.25] <- sample(c(19:25),length(ids.birth.25),replace=TRUE)  
 
 #asighn attributes to dat.
   dat$attr$sex[newIds] <- sex
