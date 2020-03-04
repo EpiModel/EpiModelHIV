@@ -14,101 +14,102 @@
 #' from a Poisson distribution. The number of total acts may further be modified
 #' by the level of HIV viral suppression in an infected person.
 #'
-#' @return
-#' This function returns the \code{dat} object with the updated discordant act
-#' list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the
-#' discordant pair repeated the number of times they have AI.
-#'
 #' @keywords module msm
 #' @export
 #'
 acts_msm <- function(dat, at) {
 
-  for (type in c("main", "pers", "inst")) {
+  # Attributes
+  status <- dat$attr$status
+  diag.status <- dat$attr$diag.status
+  race <- dat$attr$race
+  age <- dat$attr$age
+  stage <- dat$attr$stage
+  vl <- dat$attr$vl
+  uid <- dat$attr$uid
 
-    ## Variables ##
+  plist <- dat$temp$plist
 
-    # Attributes
-    status <- dat$attr$status
-    race <- dat$attr$race
+  # Parameters
+  acts.mod <- dat$param$epistats$acts.mod
+  acts.aids.vl <- dat$param$acts.aids.vl
+  acts.scale <- dat$param$acts.scale
 
-    # Parameters
-    ai.scale <- dat$param$ai.scale
-    if (type == "main") {
-      base.ai.BB.rate <- dat$param$base.ai.main.BB.rate
-      base.ai.BW.rate <- dat$param$base.ai.main.BW.rate
-      base.ai.WW.rate <- dat$param$base.ai.main.WW.rate
-      fixed <- FALSE
-      ptype <- 1
-      el <- dat$el[[1]]
-    }
-    if (type == "pers") {
-      base.ai.BB.rate <- dat$param$base.ai.pers.BB.rate
-      base.ai.BW.rate <- dat$param$base.ai.pers.BW.rate
-      base.ai.WW.rate <- dat$param$base.ai.pers.WW.rate
-      fixed <- FALSE
-      ptype <- 2
-      el <- dat$el[[2]]
-    }
-    if (type == "inst") {
-      base.ai.BB.rate <- 1
-      base.ai.BW.rate <- 1
-      base.ai.WW.rate <- 1
-      fixed <- ifelse(ai.scale != 1, FALSE, TRUE)
-      ptype <- 3
-      el <- dat$el[[3]]
-    }
+  # Construct edgelist
+  el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
+  ptype  <- rep(1:3, times = c(nrow(dat$el[[1]]),
+                               nrow(dat$el[[2]]),
+                               nrow(dat$el[[3]])))
+  st1 <- status[el[, 1]]
+  st2 <- status[el[, 2]]
 
-    ## Processes ##
+  el <- cbind(el, st1, st2, ptype)
+  colnames(el) <- c("p1", "p2", "st1", "st2", "ptype")
 
-    # Construct edgelist
+  # Subset to main/casual
+  el.mc <- el[el[, "ptype"] != 3, ]
 
-    st1 <- status[el[, 1]]
-    st2 <- status[el[, 2]]
-    disc <- abs(st1 - st2) == 1
-    el[which(disc == 1 & st2 == 1), ] <- el[which(disc == 1 & st2 == 1), 2:1]
-    el <- cbind(el, status[el[, 1]], status[el[, 2]])
-    colnames(el) <- c("p1", "p2", "st1", "st2")
+  # Base AI rates based on Poisson model for main/casual
+  race.combo <- rep(NA, nrow(el.mc))
+  race.combo[race[el.mc[, 1]] == 1 & race[el.mc[, 2]] == 1] <- 1
+  race.combo[race[el.mc[, 1]] == 1 & race[el.mc[, 2]] %in% 2:3] <- 2
+  race.combo[race[el.mc[, 1]] == 2 & race[el.mc[, 2]] %in% c(1, 3)] <- 3
+  race.combo[race[el.mc[, 1]] == 2 & race[el.mc[, 2]] == 2] <- 4
+  race.combo[race[el.mc[, 1]] == 3 & race[el.mc[, 2]] %in% 1:2] <- 5
+  race.combo[race[el.mc[, 1]] == 3 & race[el.mc[, 2]] == 3] <- 6
 
-    if (nrow(el) > 0) {
+  comb.age <- age[el.mc[, 1]] + age[el.mc[, 2]]
 
-      # Base AI rates
-      ai.rate <- rep(NA, nrow(el))
-      race.p1 <- race[el[, 1]]
-      race.p2 <- race[el[, 2]]
-      num.B <- (race.p1 == "B") + (race.p2 == "B")
-      ai.rate <- (num.B == 2) * base.ai.BB.rate +
-                 (num.B == 1) * base.ai.BW.rate +
-                 (num.B == 0) * base.ai.WW.rate
-      ai.rate <- ai.rate * ai.scale
+  # Current partnership durations
+  pid_plist <- plist[, 1]*1e7 + plist[, 2]
+  pid_el <- uid[el.mc[, 1]]*1e7 + uid[el.mc[, 2]]
+  matches <- match(pid_el, pid_plist)
+  durations <- (at - plist[, "start"])[matches]
 
-      ## STI associated cessation of activity
-      idsCease <- which(dat$attr$GC.cease == 1 | dat$attr$CT.cease == 1)
-      noActs <- el[, "p1"] %in% idsCease | el[, "p2"] %in% idsCease
-      ai.rate[noActs] <- 0
+  # HIV-positive concordant
+  hiv.concord.pos <- rep(0, nrow(el.mc))
+  cp <- which(diag.status[el.mc[, 1]] == 1 & diag.status[el.mc[, 2]] == 1)
+  hiv.concord.pos[cp] <- 1
 
-      # Final act number
-      if (fixed == FALSE) {
-        ai <- rpois(length(ai.rate), ai.rate)
-      } else {
-        ai <- round(ai.rate)
-      }
+  # Model predictions
+  x <- data.frame(ptype = el.mc[, "ptype"],
+                  duration = durations,
+                  race.combo = race.combo,
+                  comb.age = comb.age,
+                  hiv.concord.pos = hiv.concord.pos,
+                  city = 1)
+  rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+  rates <- rates * acts.scale
+  ai <- rpois(length(rates), rates)
+  el.mc <- cbind(el.mc, durations, ai)
 
-      # Full edge list
-      el <- cbind(el, ptype, ai)
-      colnames(el)[5:6] <- c("ptype", "ai")
+  # Add one-time partnerships
+  el.oo <- el[el[, "ptype"] == 3, ]
+  ai <- durations <- rep(1, nrow(el.oo))
+  el.oo <- cbind(el.oo, durations, ai)
 
-      if (type == "main") {
-        dat$temp$el <- el
-      } else {
-        dat$temp$el <- rbind(dat$temp$el, el)
-      }
-    }
+  # Bind el back together
+  el <- rbind(el.mc, el.oo)
 
-  } # loop over type end
+  # For AIDS cases with VL above acts.aids.vl, reduce their their acts to 0
+  p1HIV <- which(el[, "st1"] == 1)
+  p1AIDS <- stage[el[p1HIV, "p1"]] == 4 & vl[el[p1HIV, "p1"]] >= acts.aids.vl
+  el[p1HIV[p1AIDS == TRUE], "ai"] <- 0
+
+  p2HIV <- which(el[, "st2"] == 1)
+  p2AIDS <- stage[el[p2HIV, "p2"]] == 4 & vl[el[p2HIV, "p2"]] >= acts.aids.vl
+  el[p2HIV[p2AIDS == TRUE], "ai"] <- 0
+
+  # Flip order of discordant edges
+  disc <- abs(el[, "st1"] - el[, "st2"]) == 1
+  disc.st2pos <- which(disc == TRUE & el[, "st2"] == 1)
+  el[disc.st2pos, 1:4] <- el[disc.st2pos, c(2, 1, 4, 3)]
 
   # Remove inactive edges from el
-  dat$temp$el <- dat$temp$el[-which(dat$temp$el[, "ai"] == 0), ]
+  el <- el[-which(el[, "ai"] == 0), ]
+
+  # Save out
+  dat$temp$el <- el
 
   return(dat)
 }

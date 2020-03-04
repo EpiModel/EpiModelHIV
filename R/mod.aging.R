@@ -17,15 +17,17 @@
 #'
 aging_msm <- function(dat, at) {
 
-  time.unit <- dat$param$time.unit
-
   age <- dat$attr$age
   active <- dat$attr$active
+  age.grp <- dat$attr$age.grp
 
-  age[active == 1] <- age[active == 1] + time.unit / 365
+  age[active == 1] <- age[active == 1] + 7 / 365
 
+  age.breaks <- dat$param$netstats$demog$age.breaks
+  age.grp[active == 1] <- cut(age[active == 1], age.breaks, labels = FALSE)
+
+  dat$attr$age.grp <- age.grp
   dat$attr$age <- age
-  dat$attr$sqrt.age <- sqrt(age)
 
   return(dat)
 }

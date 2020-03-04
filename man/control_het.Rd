@@ -11,9 +11,9 @@ control_het(simno = 1, nsteps = 100, start = 1, nsims = 1,
   dx.FUN = dx_het, tx.FUN = tx_het, deaths.FUN = deaths_het,
   births.FUN = births_het, resim_nets.FUN = simnet_het,
   trans.FUN = trans_het, prev.FUN = prevalence_het,
-  verbose.FUN = verbose_het, module.order = NULL,
+  verbose.FUN = verbose.net, module.order = NULL,
   save.nwstats = FALSE, save.other = c("el", "attr"), verbose = TRUE,
-  verbose.int = 1, skip.check = TRUE, ...)
+  skip.check = TRUE, ...)
 }
 \arguments{
 \item{simno}{Simulation ID number.}
@@ -55,7 +55,7 @@ or \code{"mpi"} for multi-node MPI threads.}
 with the default function of \code{\link{prevalence_het}}.}
 
 \item{verbose.FUN}{Module to print simulation progress to screen, with the
-default function of \code{\link{verbose_het}}.}
+default function of \code{verbose.net}.}
 
 \item{module.order}{A character vector of module names that lists modules the
 order in which they should be evaluated within each time step. If
@@ -70,8 +70,6 @@ The \code{initialize.FUN} will always be run first and the
 \item{save.other}{Other list elements of dat to save out.}
 
 \item{verbose}{If \code{TRUE}, print progress to console.}
-
-\item{verbose.int}{Interval for printing progress to console.}
 
 \item{skip.check}{If \code{TRUE}, skips the error check for parameter values,
 initial conditions, and control settings before running the models.}

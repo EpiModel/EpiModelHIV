@@ -28,9 +28,9 @@ above impact of heightened viral load.}
 \item{aids.stage.mult}{AIDS stage multiplier for increased infectiousness in
 AIDS above impact of heightened viral load.}
 
-\item{vl.acute.topeak}{Time in days to peak viremia during acute infection.}
+\item{vl.acute.topeak}{Time in weeks to peak viremia during acute infection.}
 
-\item{vl.acute.toset}{Time in days to viral set point following peak viremia.}
+\item{vl.acute.toset}{Time in weeks to viral set point following peak viremia.}
 
 \item{vl.acute.peak}{Log 10 viral load at acute peak.}
 
@@ -67,7 +67,7 @@ adherent.}
 \item{tx.adhere.part}{Of the not fully adherent proportion, the percent of time
 they are on medication.}
 
-\item{tx.vlsupp.time}{Time in days from treatment initiation to viral suppression.}
+\item{tx.vlsupp.time}{Time in weeks from treatment initiation to viral suppression.}
 
 \item{tx.vlsupp.level}{Log 10 viral load level at suppression.}
 
