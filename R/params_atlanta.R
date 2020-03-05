@@ -337,6 +337,12 @@ param_atlanta_msm <- function(nwstats,
                       mean.test.W.low.int = 224,
                       mean.test.W.high.int = 224,
                       
+                      #Regular tester time intervals with suppliment
+                      mean.test.B.low.int.supp2 = 139,
+                      mean.test.B.high.int.supp2 = 139,
+                      mean.test.W.low.int.supp2 = 139,
+                      mean.test.W.high.int.supp2 = 139,
+                      
                       #Risk based time interval
                       mean.test.risk.CAI.nonmain.B.int = 39,
                       mean.test.risk.CAI.nonmain.W.int = 39,
@@ -357,18 +363,19 @@ param_atlanta_msm <- function(nwstats,
                      max.risk.test.time=11,
 
                       #Home testing intervention criteria
-                      Opportunity.replace = TRUE,
-                      Opportunity.supp = TRUE,
-                      Regular.replace = TRUE,
-                      Regular.supp = TRUE,
-                      Risk.replace = TRUE,
-                      Risk.supp = TRUE,
-                      Never.test.supp = TRUE,
+                     Opportunity.replace = FALSE,
+                     Opportunity.supp = FALSE,
+                     Regular.replace = FALSE,
+                     Regular.supp = FALSE,
+                     Regular.supp2 = FALSE,
+                     Risk.replace = FALSE,
+                     Risk.supp = FALSE,
+                     Never.test.supp = FALSE,
                       
                      hometest.rep.opp.frac = .25,
                      hometest.rep.reg.frac = .25,
                      hometest.rep.risk.frac = .25,
-                      
+                     
                      supp.opp.home.test.prob = 1/52,
                      supp.reg.home.test.prob = 1/52,
                      supp.risk.home.test.prob = .1,
