@@ -116,11 +116,11 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   
 ###  testing trajectory
   
-  dat$attr$tt[newIds[which((dat$attr$tt.traj[newIds] == "NN"))]] <- "NN"
+  dat$attr$tt[newIds[which((dat$attr$tt.traj[newIds] == 1))]] <- "NN"
   
   # Added by Wei Assign Risk and Interval based testers to New births
-  tt.B.Y.ids <- which(dat$attr$tt.traj[newIds] != "NN" & dat$attr$race[newIds]=="B")
-  tt.W.Y.ids <- which(dat$attr$tt.traj[newIds] != "NN" & dat$attr$race[newIds]=="W")
+  tt.B.Y.ids <- which(dat$attr$tt.traj[newIds] != 1 & dat$attr$race[newIds]=="B")
+  tt.W.Y.ids <- which(dat$attr$tt.traj[newIds] != 1 & dat$attr$race[newIds]=="W")
   
   if(sum(dat$param$tt.B.NO.Reg.Rk)!=1|sum(dat$param$tt.W.NO.Reg.Rk)!=1){
     stop("all testers in tt.B.NO.Reg.Rk or dat$param$tt.W.NO.Reg.Rk must all equal 1.")
