@@ -46,6 +46,7 @@ testing_interventions <- function(dat, at) {
   Opportunity.supp <- dat$param$Opportunity.supp
   Regular.replace <- dat$param$Regular.replace
   Regular.supp <- dat$param$Regular.supp
+  Regular.supp2 <- dat$param$Regular.supp2
   Risk.replace <- dat$param$Risk.replace
   Risk.supp <- dat$param$Risk.supp
   Never.test.supp <- dat$param$Never.test.supp
@@ -68,12 +69,17 @@ testing_interventions <- function(dat, at) {
   supp.nevertest.home.test.prob <- dat$param$supp.nevertest.home.test.prob
   
   #Regular tester testing intervals
-  mean.test.B.int <- dat$param$mean.test.B.int
-  mean.test.W.int <- dat$param$mean.test.W.int
   mean.test.B.low.int <- dat$param$mean.test.B.low.int
   mean.test.B.high.int <- dat$param$mean.test.B.high.int
   mean.test.W.low.int <- dat$param$mean.test.W.low.int
   mean.test.W.high.int <- dat$param$mean.test.W.high.int
+  
+  #Regular tester testing intervals when supplimented with extra annual test
+  mean.test.B.low.int.supp2 <- dat$param$mean.test.B.low.int.supp2
+  mean.test.B.high.int.supp2 <- dat$param$mean.test.B.high.int.supp2
+  mean.test.W.low.int.supp2 <- dat$param$mean.test.W.low.int.supp2
+  mean.test.W.high.int.supp2 <- dat$param$mean.test.W.high.int.supp2
+
   
   #Tester type specific opportunistic testing interval
   mean.test.opp.NO.W.int  <- dat$param$mean.test.opp.NO.W.int
@@ -92,7 +98,6 @@ testing_interventions <- function(dat, at) {
   mean.test.risk.newmain.W.int <- dat$param$mean.test.risk.newmain.W.int
   
   #Risk based testing probabilities
-  #Risk basede testing probabilities
   mean.test.risk.CAI.nonmain.B.prob <- dat$param$mean.test.risk.CAI.nonmain.B.prob
   mean.test.risk.CAI.nonmain.W.prob <- dat$param$mean.test.risk.CAI.nonmain.W.prob
   mean.test.risk.AI.known.sd.B.prob <- dat$param$mean.test.risk.AI.known.sd.B.prob
@@ -162,6 +167,10 @@ testing_interventions <- function(dat, at) {
   ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
   ## The fraction of the tests that are home tests is determined by hometest.rep.frac.
 
+  ##Do the lengths of the home and clinic sum to the original clinic
+  length(clinictestIDs.B_Opp)
+  length(clinictestIDs.W_Opp)
+  
   if (Opportunity.replace==TRUE){
       hometestIDs.B_Opp <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.opp.frac]
       clinictestIDs.B_Opp <- setdiff(tst.B.real,hometestIDs.B_Opp)
@@ -338,7 +347,61 @@ testing_interventions <- function(dat, at) {
     ReT.supp.W.real <- ReT.supp.W[runif(length(ReT.supp.W)) < supp.reg.home.test.prob]    
   }
   
+  ##Supplement with one more test per year by decreasing the regular testing interval (mean.test....supp2)
+  ##and using a home test for the additional test with prob hometest.rep.in.reg.supp2
+  if (Regular.supp2==TRUE){
+    #NULL VALUES
+    tst.all <- tst.B <- tst.W <- tst.B.real <- tst.W.real<- tst.all.real <- 
+      tst.neg <- tst.neg.clinic <- tst.neg.home <- tst.neg.home.s <- tst.neg.not.supp <- 
+      tst.pos <- tst.pos.B <- tst.pos.W <- tst.pos.clinic <- tst.pos.home <- tst.pos.home.s <-
+      tst.pos.B.home <- tst.pos.B.clinic <- tst.pos.B.home.s <-
+      tst.pos.W.home <- tst.pos.W.clinic <- tst.pos.W.home.s <-
+      NO.supp.B.real <- NO.supp.W.real <- ReT.supp.B.real <- ReT.supp.W.real <-
+      Risk.supp.B.real <- Risk.supp.W.real <- NN.supp.B.real <- NN.supp.W.real <-
+      clinictestIDs.B_Opp <- clinictestIDs.W_Opp <- hometestIDs.B_Opp <- hometestIDs.W_Opp <- tst.pos.home.comb <- NULL 
+    
+    
+    tsincelntst <- at - dat$attr$last.neg.test
+    tsincelntst[is.na(tsincelntst)] <- at - dat$attr$arrival.time[is.na(tsincelntst)]
+    
+    tst.B.l <- which(active == 1 & race == "B" & ai.class == "Low_AI" & tt == "ReT" &
+                       (diag.status == 0 | is.na(diag.status)) &
+                       tsincelntst >= mean.test.B.low.int.supp2 & prepStat == 0)  # if the time since their last test is larger than the mean test interval, then there is a chance they test.
+    tst.B.h <- which(active == 1 & race == "B" & ai.class == "High_AI" & tt == "ReT" &
+                       (diag.status == 0 | is.na(diag.status)) &
+                       tsincelntst >= mean.test.B.high.int.supp2 & prepStat == 0)  # if the time since their last test is larger than the mean test interval, then there is a chance they test.
+
+    tst.W.l <- which(active == 1 & race == "W" & ai.class == "Low_AI" & tt== "ReT" &
+                       (diag.status == 0 | is.na(diag.status)) &
+                       tsincelntst >= mean.test.W.low.int.supp2 & prepStat == 0)
+    tst.W.h <- which(active == 1 & race == "W" & ai.class == "High_AI" & tt== "ReT" &
+                       (diag.status == 0 | is.na(diag.status)) &
+                       tsincelntst >= mean.test.W.high.int.supp2 & prepStat == 0)
+
+    
+    
+    ## Replace the increased fractions of tests with home tests
+
+      tst.B.l.home <- tst.B.l[runif(length(tst.B.l)) < 1/(52/mean.test.B.low.int.supp2)]
+      tst.B.l.clin <- setdiff(tst.B.l,tst.B.l.home)
+      
+      tst.B.h.home <- tst.B.h[runif(length(tst.B.h)) < 1/(52/mean.test.B.high.int.supp2)]
+      tst.B.h.clin <- setdiff(tst.B.h,tst.B.h.home)
+      
+      tst.W.l.home <- tst.W.l[runif(length(tst.W.l)) < 1/(52/mean.test.W.low.int.supp2)]
+      tst.W.l.clin <- setdiff(tst.W.l,tst.W.l.home)
+      
+      tst.W.h.home <- tst.W.h[runif(length(tst.W.h)) < 1/(52/mean.test.W.high.int.supp2)]
+      tst.W.h.clin <- setdiff(tst.W.h,tst.W.h.home)
+      
+      
+      hometestIDs.B_Opp <- c(tst.B.l.home, tst.B.h.home)
+      clinictestIDs.B_Opp <- c(tst.B.l.clin, tst.B.h.clin)
   
+      hometestIDs.W_Opp <- c(tst.W.l.home, tst.W.h.home)
+      clinictestIDs.W_Opp <- c(tst.W.l.clin, tst.W.h.clin)
+    
+  }
   
  #TAKE the assigned tests  
   
@@ -378,6 +441,18 @@ testing_interventions <- function(dat, at) {
     tst.neg.home.s <- c(tst.neg.B.home.s, tst.neg.W.home.s)
   }
  
+  if(Regular.supp2 == TRUE){
+    #home test
+    tst.pos.B.home.s <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
+    tst.neg.B.home.s <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
+    
+    tst.pos.W.home.s <- hometestIDs.W_Opp[status[hometestIDs.W_Opp] == 1 & inf.time[hometestIDs.W_Opp] <= at - twind.hometest.int]
+    tst.neg.W.home.s <- setdiff(hometestIDs.W_Opp, tst.pos.W.home)
+    
+    tst.pos.home.s <- c(tst.pos.B.home.s, tst.pos.W.home.s)
+    tst.neg.home.s <- c(tst.neg.B.home.s, tst.neg.W.home.s)
+  }
+  
   tst.neg <- c(tst.neg.clinic, tst.neg.home,tst.neg.home.s)
   tst.neg.not.supp <- c(tst.neg.clinic, tst.neg.home)
   tst.pos <- c(tst.pos.clinic, tst.pos.home,tst.pos.home.s)
@@ -399,7 +474,10 @@ testing_interventions <- function(dat, at) {
   dat$attr$diag.reg.HT.test[tst.pos.home.comb] <- 1
 
   
-  dat$attr$last.neg.test[tst.neg] <- at
+  dat$attr$last.neg.test[tst.neg.not.supp] <- at
+  if(Regular.supp2 == TRUE){
+    dat$attr$last.neg.test[tst.neg] <- at
+  }
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
   
