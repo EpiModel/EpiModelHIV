@@ -444,10 +444,10 @@ testing_interventions <- function(dat, at) {
   if(Regular.supp2 == TRUE){
     #home test
     tst.pos.B.home.s <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
-    tst.neg.B.home.s <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
+    tst.neg.B.home.s <- setdiff(hometestIDs.B_Opp, tst.pos.B.home.s)
     
     tst.pos.W.home.s <- hometestIDs.W_Opp[status[hometestIDs.W_Opp] == 1 & inf.time[hometestIDs.W_Opp] <= at - twind.hometest.int]
-    tst.neg.W.home.s <- setdiff(hometestIDs.W_Opp, tst.pos.W.home)
+    tst.neg.W.home.s <- setdiff(hometestIDs.W_Opp, tst.pos.W.home.s)
     
     tst.pos.home.s <- c(tst.pos.B.home.s, tst.pos.W.home.s)
     tst.neg.home.s <- c(tst.neg.B.home.s, tst.neg.W.home.s)
