@@ -701,7 +701,7 @@ testing_interventions <- function(dat, at) {
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
-     Risk.supp.W <- tst.B[runif(length(tst.W)) < supp.risk.home.test.prob]
+     Risk.supp.W <- tst.W[runif(length(tst.W)) < supp.risk.home.test.prob]
      
      ##Remove IDS already taking an opp test.
      Risk.supp.B.real <- setdiff(Risk.supp.B,tst.B.real)
@@ -852,7 +852,7 @@ testing_interventions <- function(dat, at) {
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
-     Risk.supp.W <- tst.B[runif(length(tst.W)) < supp.risk.home.test.prob]
+     Risk.supp.W <- tst.W[runif(length(tst.W)) < supp.risk.home.test.prob]
      
      ##Remove IDS already taking an opp test.
      Risk.supp.B.real <- setdiff(Risk.supp.B,tst.B.real)
@@ -998,7 +998,7 @@ testing_interventions <- function(dat, at) {
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
-     Risk.supp.W <- tst.B[runif(length(tst.W)) < supp.risk.home.test.prob]
+     Risk.supp.W <- tst.W[runif(length(tst.W)) < supp.risk.home.test.prob]
      
      ##Remove IDS already taking an opp test.
      Risk.supp.B.real <- setdiff(Risk.supp.B,tst.B.real)
