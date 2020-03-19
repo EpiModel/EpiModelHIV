@@ -50,7 +50,7 @@ testing_interventions <- function(dat, at) {
   Risk.replace <- dat$param$Risk.replace
   Risk.supp <- dat$param$Risk.supp
   Never.test.supp <- dat$param$Never.test.supp
-  HT.int.start <- dat$param$HT.int.start
+  HT.start <- dat$param$HT.start
   
   hometest.rep.opp.frac <- dat$param$hometest.rep.opp.frac
   hometest.rep.reg.frac <- dat$param$hometest.rep.reg.frac
@@ -172,7 +172,7 @@ testing_interventions <- function(dat, at) {
   length(clinictestIDs.B_Opp)
   length(clinictestIDs.W_Opp)
   
-  if (Opportunity.replace==TRUE){
+  if (Opportunity.replace == TRUE & at >= HT.start){
       hometestIDs.B_Opp <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.opp.frac]
       clinictestIDs.B_Opp <- setdiff(tst.B.real,hometestIDs.B_Opp)
   
@@ -180,7 +180,7 @@ testing_interventions <- function(dat, at) {
   clinictestIDs.W_Opp <- setdiff(tst.W.real,hometestIDs.W_Opp)}
   
   ## SUPPLIMENT: Opportunistic only testers take additional home tests
-  if (Opportunity.supp==TRUE){
+  if (Opportunity.supp == TRUE & at >= HT.start){
     #Select those eligible for a supplimental test
     NO.supp.B <- which(active == 1 & race == "B" & tt == "NO" &
                      (diag.status == 0 | is.na(diag.status)) & prepStat == 0)  
@@ -211,7 +211,7 @@ testing_interventions <- function(dat, at) {
   
  
   ##Home tests: replacements for opportunistic tests
-  if (Opportunity.replace==TRUE){
+  if (Opportunity.replace == TRUE & at >= HT.start){
   #home test
   tst.pos.B.home <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
   tst.neg.B.home <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
@@ -225,7 +225,7 @@ testing_interventions <- function(dat, at) {
   }
   
   ##Home tests: supplimental tests
-  if (Opportunity.supp==TRUE){
+  if (Opportunity.supp == TRUE & at >= HT.start){
     #home test
     tst.pos.B.home.s <- NO.supp.B.real[status[NO.supp.B.real] == 1 & inf.time[NO.supp.B.real] <= at - twind.hometest.int]
     tst.neg.B.home.s <- setdiff(NO.supp.B.real, tst.pos.B.home.s)
@@ -324,7 +324,7 @@ testing_interventions <- function(dat, at) {
   ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
   ## The fraction of the tests that are home tests is determined by hometest.rep.reg.frac.
   
-  if (Regular.replace==TRUE){
+  if (Regular.replace == TRUE & at >= HT.start){
     hometestIDs.B_Opp <- tst.B[runif(length(tst.B)) < hometest.rep.reg.frac]
     clinictestIDs.B_Opp <- setdiff(tst.B,hometestIDs.B_Opp)
     
@@ -332,7 +332,7 @@ testing_interventions <- function(dat, at) {
     clinictestIDs.W_Opp <- setdiff(tst.W,hometestIDs.W_Opp)}
   
   ## SUPPLIMENT: Regular testers may add additioanl tests at hazard supp.reg.home.test.prob
-  if (Regular.supp==TRUE){
+  if (Regular.supp == TRUE & at >= HT.start){
     #Select those eligible for a supplimental test
     ReT.supp.B <- which(active == 1 & race == "B" & tt == "ReT" &
                          (diag.status == 0 | is.na(diag.status)) & prepStat == 0)  
@@ -350,7 +350,7 @@ testing_interventions <- function(dat, at) {
   
   ##Supplement with one more test per year by decreasing the regular testing interval (mean.test....supp2)
   ##and using a home test for the additional test with prob hometest.rep.in.reg.supp2
-  if (Regular.supp2==TRUE){
+  if (Regular.supp2 == TRUE  & at >= HT.start){
     #NULL VALUES
     tst.all <- tst.B <- tst.W <- tst.B.real <- tst.W.real<- tst.all.real <- 
       tst.neg <- tst.neg.clinic <- tst.neg.home <- tst.neg.home.s <- tst.neg.not.supp <- 
@@ -418,7 +418,7 @@ testing_interventions <- function(dat, at) {
   tst.neg.clinic <- c(tst.neg.B.clinic, tst.neg.W.clinic)
   
   
-  if(Regular.replace == TRUE & at >= HT.int.start){
+  if(Regular.replace == TRUE & at >= HT.start){
     #home test
     tst.pos.B.home <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
     tst.neg.B.home <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
@@ -430,7 +430,7 @@ testing_interventions <- function(dat, at) {
     tst.neg.home <- c(tst.neg.B.home, tst.neg.W.home)
   }
   
-  if(Regular.supp == TRUE & at >= HT.int.start){
+  if(Regular.supp == TRUE & at >= HT.start){
     
     tst.pos.B.home.s <- ReT.supp.B.real[status[ReT.supp.B.real] == 1 & inf.time[ReT.supp.B.real] <= at - twind.hometest.int]
     tst.neg.B.home.s <- setdiff(ReT.supp.B.real, tst.pos.B.home.s)
@@ -442,7 +442,7 @@ testing_interventions <- function(dat, at) {
     tst.neg.home.s <- c(tst.neg.B.home.s, tst.neg.W.home.s)
   }
  
-  if(Regular.supp2 == TRUE & at >= HT.int.start){
+  if(Regular.supp2 == TRUE & at >= HT.start){
     #home test
     tst.pos.B.home.s <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
     tst.neg.B.home.s <- setdiff(hometestIDs.B_Opp, tst.pos.B.home.s)
@@ -476,7 +476,7 @@ testing_interventions <- function(dat, at) {
 
   
   dat$attr$last.neg.test[tst.neg.not.supp] <- at
-  if(Regular.supp2 == TRUE & at >= HT.int.start){
+  if(Regular.supp2 == TRUE & at >= HT.start){
     dat$attr$last.neg.test[tst.neg] <- at
   }
   dat$attr$diag.status[tst.pos] <- 1
@@ -543,7 +543,7 @@ testing_interventions <- function(dat, at) {
   ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
   ## The fraction of the tests that are home tests is determined by hometest.rep.frac.
   
-  if (Opportunity.replace==TRUE){
+  if (Opportunity.replace == TRUE  & at >= HT.start){
     hometestIDs.B_Opp <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.opp.frac]
     clinictestIDs.B_Opp <- setdiff(tst.B.real,hometestIDs.B_Opp)
     
@@ -551,7 +551,7 @@ testing_interventions <- function(dat, at) {
     clinictestIDs.W_Opp <- setdiff(tst.W.real,hometestIDs.W_Opp)}
   
   ## SUPPLIMENT: Opportunistic only testers take additional home tests
-  if (Opportunity.supp==TRUE){
+  if (Opportunity.supp == TRUE & at >= HT.start){
     #Select those eligible for a supplimental test
     ReT.supp.B <- which(active == 1 & race == "B" & tt == "ReT" &
                          (diag.status == 0 | is.na(diag.status)) & prepStat == 0)  
@@ -582,7 +582,7 @@ testing_interventions <- function(dat, at) {
   
   
   ##Home tests: replacements for opportunistic tests
-  if (Opportunity.replace==TRUE){
+  if (Opportunity.replace==TRUE & at >= HT.start){
     #home test
     tst.pos.B.home <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
     tst.neg.B.home <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
@@ -596,7 +596,7 @@ testing_interventions <- function(dat, at) {
   }
   
   ##Home tests: supplimental tests
-  if (Opportunity.supp==TRUE){
+  if (Opportunity.supp == TRUE & at >= HT.start){
     #home test
     tst.pos.B.home.s <- ReT.supp.B.real[status[ReT.supp.B.real] == 1 & inf.time[ReT.supp.B.real] <= at - twind.hometest.int]
     tst.neg.B.home.s <- setdiff(ReT.supp.B.real, tst.pos.B.home.s)
@@ -690,7 +690,7 @@ testing_interventions <- function(dat, at) {
    ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
    ## The fraction of the tests that are home tests is determined by hometest.rep.risk.frac.
    
-   if (Risk.replace==TRUE){
+   if (Risk.replace==TRUE & at >= HT.start){
      hometestIDs.B_Risk <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.risk.frac]
      clinictestIDs.B_Risk <- setdiff(tst.B.real,hometestIDs.B_Risk)
      
@@ -698,7 +698,7 @@ testing_interventions <- function(dat, at) {
      clinictestIDs.W_Risk <- setdiff(tst.W.real,hometestIDs.W_Risk)}
    
    ## SUPPLIMENT: Risk testers may add additional probability of testing with a home test
-   if (Risk.supp==TRUE){
+   if (Risk.supp==TRUE & at >= HT.start){
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
@@ -727,7 +727,7 @@ testing_interventions <- function(dat, at) {
    tst.neg.clinic <- c(tst.neg.B.clinic, tst.neg.W.clinic)
    
    
-   if(Risk.replace == TRUE & at >= HT.int.start){
+   if(Risk.replace == TRUE & at >= HT.start){
      #home test
      tst.pos.B.home <- hometestIDs.B_Risk[status[hometestIDs.B_Risk] == 1 & inf.time[hometestIDs.B_Risk] <= at - twind.hometest.int]
      tst.neg.B.home <- setdiff(hometestIDs.B_Risk, tst.pos.B.home)
@@ -739,7 +739,7 @@ testing_interventions <- function(dat, at) {
      tst.neg.home <- c(tst.neg.B.home, tst.neg.W.home)
    }
    
-   if(Risk.supp == TRUE & at >= HT.int.start){
+   if(Risk.supp == TRUE & at >= HT.start){
      
      tst.pos.B.home.s <- Risk.supp.B.real[status[Risk.supp.B.real] == 1 & inf.time[Risk.supp.B.real] <= at - twind.hometest.int]
      tst.neg.B.home.s <- setdiff(Risk.supp.B.real, tst.pos.B.home.s)
@@ -841,7 +841,7 @@ testing_interventions <- function(dat, at) {
    ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
    ## The fraction of the tests that are home tests is determined by hometest.rep.risk.frac.
    
-   if (Risk.replace==TRUE){
+   if (Risk.replace==TRUE & at >= HT.start){
      hometestIDs.B_Risk <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.risk.frac]
      clinictestIDs.B_Risk <- setdiff(tst.B.real,hometestIDs.B_Risk)
      
@@ -849,7 +849,7 @@ testing_interventions <- function(dat, at) {
      clinictestIDs.W_Risk <- setdiff(tst.W.real,hometestIDs.W_Risk)}
    
    ## SUPPLIMENT: Risk testers may add additional probability of testing with a home test
-   if (Risk.supp==TRUE){
+   if (Risk.supp==TRUE & at >= HT.start){
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
@@ -878,7 +878,7 @@ testing_interventions <- function(dat, at) {
    tst.neg.clinic <- c(tst.neg.B.clinic, tst.neg.W.clinic)
    
    
-   if(Risk.replace == TRUE & at >= HT.int.start){
+   if(Risk.replace == TRUE & at >= HT.start){
      #home test
      tst.pos.B.home <- hometestIDs.B_Risk[status[hometestIDs.B_Risk] == 1 & inf.time[hometestIDs.B_Risk] <= at - twind.hometest.int]
      tst.neg.B.home <- setdiff(hometestIDs.B_Risk, tst.pos.B.home)
@@ -890,7 +890,7 @@ testing_interventions <- function(dat, at) {
      tst.neg.home <- c(tst.neg.B.home, tst.neg.W.home)
    }
    
-   if(Risk.supp == TRUE & at >= HT.int.start){
+   if(Risk.supp == TRUE & at >= HT.start){
      
      tst.pos.B.home.s <- Risk.supp.B.real[status[Risk.supp.B.real] == 1 & inf.time[Risk.supp.B.real] <= at - twind.hometest.int]
      tst.neg.B.home.s <- setdiff(Risk.supp.B.real, tst.pos.B.home.s)
@@ -987,7 +987,7 @@ testing_interventions <- function(dat, at) {
    ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
    ## The fraction of the tests that are home tests is determined by hometest.rep.risk.frac.
    
-   if (Risk.replace==TRUE){
+   if (Risk.replace==TRUE & at >= HT.start){
      hometestIDs.B_Risk <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.risk.frac]
      clinictestIDs.B_Risk <- setdiff(tst.B.real,hometestIDs.B_Risk)
      
@@ -995,7 +995,7 @@ testing_interventions <- function(dat, at) {
      clinictestIDs.W_Risk <- setdiff(tst.W.real,hometestIDs.W_Risk)}
    
    ## SUPPLIMENT: Risk testers may add additional probability of testing with a home test
-   if (Risk.supp==TRUE){
+   if (Risk.supp==TRUE & at >= HT.start){
      #Select those take a supplimental test
      
      Risk.supp.B <- tst.B[runif(length(tst.B)) < supp.risk.home.test.prob]
@@ -1024,7 +1024,7 @@ testing_interventions <- function(dat, at) {
    tst.neg.clinic <- c(tst.neg.B.clinic, tst.neg.W.clinic)
    
    
-   if(Risk.replace == TRUE & at >= HT.int.start){
+   if(Risk.replace == TRUE & at >= HT.start){
      #home test
      tst.pos.B.home <- hometestIDs.B_Risk[status[hometestIDs.B_Risk] == 1 & inf.time[hometestIDs.B_Risk] <= at - twind.hometest.int]
      tst.neg.B.home <- setdiff(hometestIDs.B_Risk, tst.pos.B.home)
@@ -1036,7 +1036,7 @@ testing_interventions <- function(dat, at) {
      tst.neg.home <- c(tst.neg.B.home, tst.neg.W.home)
    }
    
-   if(Risk.supp == TRUE & at >= HT.int.start){
+   if(Risk.supp == TRUE & at >= HT.start){
      
      tst.pos.B.home.s <- Risk.supp.B.real[status[Risk.supp.B.real] == 1 & inf.time[Risk.supp.B.real] <= at - twind.hometest.int]
      tst.neg.B.home.s <- setdiff(Risk.supp.B.real, tst.pos.B.home.s)
@@ -1145,7 +1145,7 @@ testing_interventions <- function(dat, at) {
    ## If tests are being replaced the testers that are selected are split into two groups (clinic tests and home tests)
    ## The fraction of the tests that are home tests is determined by hometest.rep.frac.
    
-   if (Opportunity.replace==TRUE){
+   if (Opportunity.replace == TRUE & at >= HT.start){
      hometestIDs.B_Opp <- tst.B.real[runif(length(tst.B.real)) < hometest.rep.opp.frac]
      clinictestIDs.B_Opp <- setdiff(tst.B.real,hometestIDs.B_Opp)
      
@@ -1153,7 +1153,7 @@ testing_interventions <- function(dat, at) {
      clinictestIDs.W_Opp <- setdiff(tst.W.real,hometestIDs.W_Opp)}
    
    ## SUPPLIMENT: Opportunistic only testers take additional home tests
-   if (Opportunity.supp==TRUE){
+   if (Opportunity.supp == TRUE & at >= HT.start){
      #Select those eligible for a supplimental test
      Risk.supp.B <- which(active == 1 & race == "B" & tt == "Risk" &
                            (diag.status == 0 | is.na(diag.status)) & prepStat == 0)  
@@ -1184,7 +1184,7 @@ testing_interventions <- function(dat, at) {
    
    
    ##Home tests: replacements for opportunistic tests
-   if (Opportunity.replace==TRUE){
+   if (Opportunity.replace == TRUE & at >= HT.start){
      #home test
      tst.pos.B.home <- hometestIDs.B_Opp[status[hometestIDs.B_Opp] == 1 & inf.time[hometestIDs.B_Opp] <= at - twind.hometest.int]
      tst.neg.B.home <- setdiff(hometestIDs.B_Opp, tst.pos.B.home)
@@ -1198,7 +1198,7 @@ testing_interventions <- function(dat, at) {
    }
    
    ##Home tests: supplimental tests
-   if (Opportunity.supp==TRUE){
+   if (Opportunity.supp == TRUE & at >= HT.start){
      #home test
      tst.pos.B.home.s <- Risk.supp.B.real[status[Risk.supp.B.real] == 1 & inf.time[Risk.supp.B.real] <= at - twind.hometest.int]
      tst.neg.B.home.s <- setdiff(Risk.supp.B.real, tst.pos.B.home.s)
@@ -1251,7 +1251,7 @@ testing_interventions <- function(dat, at) {
    #########  NEVER TESTERS
    
   
-   if (Never.test.supp == TRUE & at >= HT.int.start){
+   if (Never.test.supp == TRUE & at >= HT.start){
      
      
      #Clear the vectors with NULL values
