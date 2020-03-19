@@ -371,7 +371,7 @@ param_atlanta_msm <- function(nwstats,
                      Risk.replace = FALSE,
                      Risk.supp = FALSE,
                      Never.test.supp = FALSE,
-                     HT.int.start = Inf,
+                     HT.start = Inf,
                       
                      hometest.rep.opp.frac = .25,
                      hometest.rep.reg.frac = .25,
