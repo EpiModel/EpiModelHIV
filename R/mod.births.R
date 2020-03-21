@@ -169,6 +169,7 @@ setBirthAttr_msm <- function(dat, at, nBirths.B, nBirths.W) {
   dat$attr$diag.mass.test[newIds] <- rep(0, nBirths)
   dat$attr$diag.mass.time[newIds] <- rep(0, nBirths)
   dat$attr$last.neg.test.opp[newIds] <- rep(NA, nBirths)
+  dat$attr$last.neg.test.in.clinic[newIds] <- rep(NA, nBirths)
   
   #Count total risk based tests
   dat$attr$Risk.Test.Num[newIds] <- rep(NA, nBirths)
