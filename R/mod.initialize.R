@@ -417,6 +417,7 @@ init_status_msm <- function(dat) {
   
   diag.time <- rep(NA, num)
   last.neg.test <- rep(NA, num)
+  last.neg.test.in.clinic <- rep(NA, num)
   last.neg.test.opp <- rep(NA, num)
 
 
@@ -754,6 +755,7 @@ init_status_msm <- function(dat) {
                        dat$param$mean.test.W.int * (race[selected] == "W")))
   }
   last.neg.test[selected] <- -tslt
+  last.neg.test.in.clinic[selected] <- -tslt
 
 
   ## Set all onto dat$attr
@@ -764,6 +766,7 @@ init_status_msm <- function(dat) {
   dat$attr$diag.status <- diag.status
   dat$attr$diag.time <- diag.time
   dat$attr$last.neg.test <- last.neg.test
+  dat$attr$last.neg.test.in.clinic <- last.neg.test.in.clinic
   dat$attr$tx.status <- tx.status
   dat$attr$tx.init.time <- tx.init.time
   dat$attr$cum.time.on.tx <- cum.time.on.tx
