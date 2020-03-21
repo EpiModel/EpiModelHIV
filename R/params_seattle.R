@@ -453,7 +453,7 @@ param_seattle_msm <- function(nwstats,
                       base.ai.pers.BB.rate = 0.883 / 7,
                       base.ai.pers.BW.rate = 0.883 / 7,
                       base.ai.pers.WW.rate = 0.883 / 7,
-                      ai.scale = 2.00,
+                      ai.scale = 1.933,
 
                       cond.main.BB.prob = 0.062,
                       cond.main.BW.prob = 0.062,
