@@ -479,6 +479,9 @@ testing_interventions <- function(dat, at) {
   if(Regular.supp2 == TRUE & at >= HT.start){
     dat$attr$last.neg.test[tst.neg] <- at
   }
+  
+  dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
+  
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
   
@@ -774,6 +777,8 @@ testing_interventions <- function(dat, at) {
    
    dat$attr$diag.status[tst.pos] <- 1
    dat$attr$diag.time[tst.pos] <- at
+   dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
+   
    
 
    dat$attr$Risk.Test.Num[tst.all.real] <- max(0,dat$attr$Risk.Test.Num[tst.all.real] + 1)
@@ -923,6 +928,7 @@ testing_interventions <- function(dat, at) {
    
    dat$attr$diag.status[tst.pos] <- 1
    dat$attr$diag.time[tst.pos] <- at
+   dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
    
    
    dat$attr$Risk.Test.Num[tst.all.real] <- max(0,dat$attr$Risk.Test.Num[tst.all.real] + 1)
@@ -1070,6 +1076,7 @@ testing_interventions <- function(dat, at) {
    
    dat$attr$diag.status[tst.pos] <- 1
    dat$attr$diag.time[tst.pos] <- at
+   dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
    
    dat$attr$Risk.Test.Num[tst.all.real] <- max(0,dat$attr$Risk.Test.Num[tst.all.real] + 1)
    dat$attr$Risk.Clin.Test.Num[tst.all.clinic] <- max(0,dat$attr$Risk.Clin.Test.Num[tst.all.clinic] + 1)
