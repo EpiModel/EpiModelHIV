@@ -452,7 +452,7 @@ param_atlanta_msm <- function(nwstats,
                      base.ai.pers.BB.rate = 0.89 / 7,
                      base.ai.pers.BW.rate = 0.89 / 7,
                      base.ai.pers.WW.rate = 0.89 / 7,
-                     ai.scale = 1.18, 
+                     ai.scale = 1.173, 
 
                      cond.main.BB.prob = 0.26,
                      cond.main.BW.prob = 0.26,
