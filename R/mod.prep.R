@@ -22,7 +22,7 @@ prep_msm <- function(dat, at) {
   active <- dat$attr$active
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
-  lnt <- dat$attr$last.neg.test
+  lnt <- dat$attr$last.neg.test.in.clinic
   prepElig <- dat$attr$prepElig
   prepStat <- dat$attr$prepStat
   prepClass <- dat$attr$prepClass
@@ -40,7 +40,7 @@ prep_msm <- function(dat, at) {
   ## Eligibility ---------------------------------------------------------------
 
   # Base eligibility
-  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & (lnt == at | dat$attr$last.neg.test.opp == at))
+  idsEligStart <- which(active == 1 & status == 0 & prepStat == 0 & (lnt == at))
 
   # Core eligiblity
   ind1 <- dat$attr$prep.ind.uai.mono
