@@ -4,20 +4,45 @@
 \alias{control_shamp}
 \title{Epidemic Model Control Settings}
 \usage{
-control_shamp(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize_shamp,
-  aging.FUN = aging_shamp, deaths.FUN = deaths_shamp,
-  births.FUN = births_shamp, demogupdate.FUN = demogupdate_shamp,
-  test.FUN = test_shamp, tx.FUN = tx_shamp,
-  progress.FUN = progress_msm, vl.FUN = vl_shamp,
-  resim_nets.FUN = simnet_shamp, disclose.FUN = disclose_shamp,
-  ConcDurDx.FUN = ConcDurDx_shamp, acts.FUN = acts_shamp,
-  condoms.FUN = condoms_shamp, riskhist.FUN = riskhist_shamp,
-  position.FUN = position_shamp, trans.FUN = trans_shamp,
+control_shamp(
+  simno = 1,
+  nsims = 1,
+  ncores = 1,
+  nsteps = 100,
+  start = 1,
+  initialize.FUN = initialize_shamp,
+  aging.FUN = aging_shamp,
+  deaths.FUN = deaths_shamp,
+  births.FUN = births_shamp,
+  demogupdate.FUN = demogupdate_shamp,
+  test.FUN = test_shamp,
+  tx.FUN = tx_shamp,
+  progress.FUN = progress_msm,
+  vl.FUN = vl_shamp,
+  resim_nets.FUN = simnet_shamp,
+  disclose.FUN = disclose_shamp,
+  ConcDurDx.FUN = ConcDurDx_shamp,
+  acts.FUN = acts_shamp,
+  condoms.FUN = condoms_shamp,
+  riskhist.FUN = riskhist_shamp,
+  position.FUN = position_shamp,
+  trans.FUN = trans_shamp,
   heatbath.FUN = heatbath_msmf_shamp,
-  immigration.FUN = immigration_shamp, prev.FUN = prevalence_shamp,
-  verbose.FUN = verbose_shamp, save.nwstats = FALSE,
-  save.other = "attr", verbose = TRUE, verbose.int = 1, ...)
+  immigration.FUN = immigration_shamp,
+  prev.FUN = prevalence_shamp,
+  verbose.FUN = verbose_shamp,
+  save.nwstats = FALSE,
+  save.other = "attr",
+  verbose = TRUE,
+  verbose.int = 1,
+  MCMC_control = NULL,
+  extract.summary.stats = FALSE,
+  tergmLite = FALSE,
+  monitors = NULL,
+  add_partial_age = TRUE,
+  init_net_fun = NULL,
+  ...
+)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -92,6 +117,28 @@ if in interactive mode or text files if in batch mode.}
 
 \item{verbose.int}{Integer specifying the interval between time steps at which
 progress is printed.}
+
+\item{MCMC_control}{An ordered list of control lists for fine-tuning MCMC
+behavior in \code{tergmLite} simulation.  The order must correspond 
+to that of models in the overall simulation.  Control lists should be 
+of class \code{control.simulate.formula} for \code{ergm} simulation 
+and \code{control.simulate.network.tergm} for \code{tergm} simulation.}
+
+\item{extract.summary.stats}{Calculate and save generative model summary 
+statistics during \code{tergmLite} simulation.}
+
+\item{tergmLite}{logical; are we using tergmLite simulation?}
+
+\item{monitors}{An ordered list of monitoring formulas for additional
+statistics to be computed and included in the summary statistics
+when \code{extract.summary.stats} is \code{TRUE}.  The order of the
+formulas must correspond to that of models in the overall simulation.
+Monitoring statistics are included as additional columns at the end
+of the summary statistics matrices.}
+
+\item{add_partial_age}{logical; should we add fractional age in the initialization function?}
+
+\item{init_net_fun}{function; used to randomize the initial networks.}
 
 \item{...}{Additional arguments passed to the function.}
 
