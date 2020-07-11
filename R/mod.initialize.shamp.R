@@ -33,62 +33,35 @@ initialize_shamp <- function(x, param, init, control, s) {
   dat$attr <- list()
   dat$stats <- list()
   dat$stats$nwstats <- list()
+  dat$stats$summstats <- list()
   dat$temp <- list()
   dat$epi <- list()
   dat$trans.el <- list()
   dat$death.stats <- list()
-  
-  ## Network simulation ##
- # Do we need to create the nw in each environment?
-  nw<-x[[1]]$fit$network
-  count <- network.edgecount(nw)
-  delete.edges(nw,1:count)
-  environment(x[[2]]$fit$formula) <- environment()
-  environment(x[[3]]$fit$formula) <- environment()
-  x[[1]]$fit$network<-NULL
-  
-  
-  nwl <- list()
-  for (i in 1:3) {
-
-   #nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
-   #               control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
-    
-    ## est[[1]]$fit is an ergm.ego fit so it includes net.adjustment.  This should be fine for just simulating the starting network.
-    ## But ergm.ego must also be run.
-    ## The other elements of est must be modified to remove the network size adjustment for tergmLite. 
-   
-     nwl[[i]] <- simulate(x[[i]]$fit)
-  }
-  
-  
-  nw<-nwl
-  nwl<-NULL
-
-  ## ergm_prep here
-  dat$el <- list()
-  dat$p <- list()
-  for (i in 1:2) {
-    dat$el[[i]] <- as.edgelist(nw[[i]])
-    
-       attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
-                                x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
-    p$model.form$formula <- NULL
-    p$model.diss$formula <- NULL
-    dat$p[[i]] <- p
-  }
-  dat$el[[3]] <- as.edgelist(nw[[3]])
-  attributes(dat$el[[3]])$vnames <- NULL
-  p <- tergmLite::ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
-  p$model.form$formula <- NULL
-  dat$p[[3]] <- p
   
 
   # Network parameters
   dat$nwparam <- list()
   for (i in 1:3) {
     dat$nwparam[i] <- list(x[[i]][-which(names(x[[i]]) == "fit")])
+  }
+
+  
+  if(!is.null(control$init_net_fun)) {
+    nw <- control$init_net_fun(x, param, init, control, s)
+  } else {
+    nw <- list(x[[1]]$newnetwork, x[[2]]$newnetwork, x[[3]]$newnetwork)
+  }
+
+  dat$nw <- nw
+  dat <- init_tergmLite(dat)
+
+  # Summary statistics
+  if (dat$control$extract.summary.stats == TRUE) {
+    for (i in 1:3) {
+      summstats <- c(summary(dat$p[[i]]$state), summary(dat$p[[i]]$state_mon))
+      dat$stats$summstats[[i]] <- matrix(summstats, nrow=1, ncol = length(summstats), dimnames=list(NULL,names(summstats)))
+    }
   }
 
   ## Nodal attributes ##
@@ -177,8 +150,12 @@ initialize_shamp <- function(x, param, init, control, s) {
   partial<-(0:51)* (time.unit / 365)
   partial<-sample(partial,length(dat$attr$age),replace=TRUE)
   
-  dat$attr$age<-dat$attr$age+partial
+  if(control$add_partial_age) {
+    dat$attr$age<-dat$attr$age+partial
+  }
+  
   dat$attr$sqrt.age <- sqrt(dat$attr$age)
+  dat$attr$agesq <- dat$attr$age^2
   
   dat$attr$agecat <- get.vertex.attribute(nw[[1]], "agecat")
   dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,

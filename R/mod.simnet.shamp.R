@@ -32,11 +32,13 @@ simnet_shamp <- function(dat, at) {
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
   
     
-  dat$el[[1]] <- tergmLite::simulate_network(p = dat$p[[1]],
-                                             el = dat$el[[1]],
-                                             coef.form = nwparam.c$coef.form,
-                                             coef.diss = nwparam.c$coef.diss$coef.adj,
-                                             save.changes = TRUE)
+  rv_1 <- tergmLite::simulate_network(state = dat$p[[1]]$state,
+                                      coef = c(nwparam.c$coef.form, nwparam.c$coef.diss$coef.adj),
+                                      control = dat$control$MCMC_control[[1]],
+                                      save.changes = TRUE)
+  dat$el[[1]] <- rv_1$el
+  dat$p[[1]]$state$el <- rv_1$state$el
+  dat$p[[1]]$state_mon$el <- rv_1$state$el
   
   dat$temp$new.edges <- NULL
   if (at == 2) {
@@ -65,11 +67,13 @@ simnet_shamp <- function(dat, at) {
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 2)
   
-  dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
-                                             el = dat$el[[2]],
-                                             coef.form = nwparam.p$coef.form,
-                                             coef.diss = nwparam.p$coef.diss$coef.adj,
-                                             save.changes = TRUE)
+  rv_2 <- tergmLite::simulate_network(state = dat$p[[2]]$state, 
+                                      coef = c(nwparam.p$coef.form, nwparam.p$coef.diss$coef.adj),
+                                      control = dat$control$MCMC_control[[2]],
+                                      save.changes = TRUE)
+  dat$el[[2]] <- rv_2$el
+  dat$p[[2]]$state$el <- rv_2$state$el
+  dat$p[[2]]$state_mon$el <- rv_2$state$el
   
   if (at == 2) {
     new.edges.p <- matrix(dat$el[[2]], ncol = 2)
@@ -98,13 +102,23 @@ simnet_shamp <- function(dat, at) {
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 3)
   
-  dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
-                                          el = dat$el[[3]],
-                                          coef = nwparam.i$coef.form)
+  rv_3 <- tergmLite::simulate_ergm(state = dat$p[[3]]$state,
+                                   coef = nwparam.i$coef.form,
+                                   control = dat$control$MCMC_control[[3]])
+  dat$el[[3]] <- rv_3$el
+  dat$p[[3]]$state$el <- rv_3$state$el
+  dat$p[[3]]$state_mon$el <- rv_3$state$el
   
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
   }
+
+  if (dat$control$extract.summary.stats == TRUE) {
+    for (i in 1:3) {
+      dat$stats$summstats[[i]] <- rbind(dat$stats$summstats[[i]], c(summary(dat$p[[i]]$state), summary(dat$p[[i]]$state_mon)))
+    }
+  }
+
   
   dat$attr$onetime.lt <- dat$attr$onetime.lt + get_degree(dat$el[[3]])
   

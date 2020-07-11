@@ -1057,6 +1057,22 @@ init_shamp <- function(prev.B.f = 0.02,
 #'        if in interactive mode or text files if in batch mode.
 #' @param verbose.int Integer specifying the interval between time steps at which
 #'        progress is printed.
+#' @param MCMC_control An ordered list of control lists for fine-tuning MCMC
+#'        behavior in \code{tergmLite} simulation.  The order must correspond 
+#'        to that of models in the overall simulation.  Control lists should be 
+#'        of class \code{control.simulate.formula} for \code{ergm} simulation 
+#'        and \code{control.simulate.network.tergm} for \code{tergm} simulation.
+#' @param extract.summary.stats Calculate and save generative model summary 
+#'        statistics during \code{tergmLite} simulation.
+#' @param monitors An ordered list of monitoring formulas for additional
+#'        statistics to be computed and included in the summary statistics
+#'        when \code{extract.summary.stats} is \code{TRUE}.  The order of the
+#'        formulas must correspond to that of models in the overall simulation.
+#'        Monitoring statistics are included as additional columns at the end
+#'        of the summary statistics matrices.
+#' @param tergmLite logical; are we using tergmLite simulation?
+#' @param add_partial_age logical; should we add fractional age in the initialization function?
+#' @param init_net_fun function; used to randomize the initial networks.
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -1099,6 +1115,12 @@ control_shamp <- function(simno = 1,
                         save.other = "attr",
                         verbose = TRUE,
                         verbose.int = 1,
+                        MCMC_control = NULL,
+                        extract.summary.stats = FALSE,
+                        tergmLite = FALSE,
+                        monitors = NULL,
+                        add_partial_age = TRUE,
+                        init_net_fun = NULL,
                         ...) {
 
   formal.args <- formals(sys.function())
