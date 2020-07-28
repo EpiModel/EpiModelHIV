@@ -29,6 +29,9 @@ simnet_shamp <- function(dat, at) {
     dat$attr$deg.pers.c <- dat$attr$deg.pers
     dat$attr$deg.pers.c<-ifelse(dat$attr$deg.pers.c > 0,1,dat$attr$deg.pers.c)
   }
+  
+  dat$attr$deg.pers.c_ee <- dat$attr$deg.pers.c
+  
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
   
     
@@ -63,7 +66,10 @@ simnet_shamp <- function(dat, at) {
     dat$attr$deg.cohab.c <- dat$attr$deg.cohab
     dat$attr$deg.cohab.c<-ifelse(dat$attr$deg.cohab.c > 0, 1,dat$attr$deg.cohab.c)
   }
-  dat <- tergmLite::updateModelTermInputs(dat, network = 2)
+ 
+  dat$attr$deg.cohab.c_ee <- dat$attr$deg.cohab.c 
+  
+   dat <- tergmLite::updateModelTermInputs(dat, network = 2)
   
   dat$el[[2]] <- tergmLite::simulate_network(p = dat$p[[2]],
                                              el = dat$el[[2]],
@@ -96,7 +102,11 @@ simnet_shamp <- function(dat, at) {
     dat$attr$deg.pers.c <- dat$attr$deg.pers
     dat$attr$deg.pers.c<-ifelse(dat$attr$deg.pers.c > 0, 1,dat$attr$deg.pers.c)
   }
-  dat <- tergmLite::updateModelTermInputs(dat, network = 3)
+ 
+  dat$attr$deg.cohab.c_ee <- dat$attr$deg.cohab.c 
+  dat$attr$deg.pers.c_ee <- dat$attr$deg.pers.c 
+  
+   dat <- tergmLite::updateModelTermInputs(dat, network = 3)
   
   dat$el[[3]] <- tergmLite::simulate_ergm(p = dat$p[[3]],
                                           el = dat$el[[3]],
