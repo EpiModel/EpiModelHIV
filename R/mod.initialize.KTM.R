@@ -40,25 +40,18 @@ initialize_KTM <- function(x, param, init, control, s) {
   
   ## Network simulation ##
  # Do we need to create the nw in each environment?
-  nw<-x[[1]]$fit$network
-  count <- network.edgecount(nw)
-  delete.edges(nw,1:count)
-  environment(x[[2]]$fit$formula) <- environment()
-  environment(x[[3]]$fit$formula) <- environment()
-  x[[1]]$fit$network<-NULL
+  #nw<-x[[1]]$fit$network
+  #count <- network.edgecount(nw)
+  #delete.edges(nw,1:count)
+  #environment(x[[2]]$fit$formula) <- environment()
+  #environment(x[[3]]$fit$formula) <- environment()
+  #x[[1]]$fit$network<-NULL
   
   
   nwl <- list()
   for (i in 1:3) {
 
-   #nw[[i]] <- simulate(x[[i]]$fit, popsize=sim.size, 
-   #               control = control.simulate.ergm.ego(simulate.control = control.simulate(MCMC.burnin = 1e6)))
-    
-    ## est[[1]]$fit is an ergm.ego fit so it includes net.adjustment.  This should be fine for just simulating the starting network.
-    ## But ergm.ego must also be run.
-    ## The other elements of est must be modified to remove the network size adjustment for tergmLite. 
-   
-     nwl[[i]] <- simulate(x[[i]]$fit)
+        nwl[[i]] <- simulate(x[[i]]$fit)
   }
   
   
@@ -72,7 +65,7 @@ initialize_KTM <- function(x, param, init, control, s) {
     dat$el[[i]] <- as.edgelist(nw[[i]])
     
        attributes(dat$el[[i]])$vnames <- NULL
-    p <- tergmLite::stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
+    p <- stergm_prep(nw[[i]], x[[i]]$formation, x[[i]]$coef.diss$dissolution,
                                 x[[i]]$coef.form, x[[i]]$coef.diss$coef.adj, x[[i]]$constraints)
     p$model.form$formula <- NULL
     p$model.diss$formula <- NULL
@@ -80,7 +73,7 @@ initialize_KTM <- function(x, param, init, control, s) {
   }
   dat$el[[3]] <- as.edgelist(nw[[3]])
   attributes(dat$el[[3]])$vnames <- NULL
-  p <- tergmLite::ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
+  p <- ergm_prep(nw[[3]], x[[3]]$formation, x[[3]]$coef.form, x[[3]]$constraints)
   p$model.form$formula <- NULL
   dat$p[[3]] <- p
   
@@ -100,8 +93,14 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$deg.cohab.c <- ifelse(dat$attr$deg.cohab > 0,1,dat$attr$deg.cohab)
   dat$attr$deg.pers.c <- ifelse(dat$attr$deg.pers > 0,1,dat$attr$deg.pers)
   
+  dat$attr$deg.cohab.c_ee <- dat$attr$deg.cohab.c 
+  dat$attr$deg.pers.c_ee <- dat$attr$deg.pers.c
+  
+  dat$attr$deg.inst <- get_degree(dat$el[[3]])
+  dat$attr$deg.tot<-dat$attr$deg.cohab + dat$attr$deg.pers + dat$attr$deg.inst
+  
   # Race
-  dat$attr$race <- get.vertex.attribute(nw[[1]], "race")
+  dat$attr$race <- rep("B", length(dat$attr$deg.pers.c))
   num.B <-sum(dat$attr$race == "B")
   num.BI <-sum(dat$attr$race == "BI")
   num.H <-sum(dat$attr$race == "H")
@@ -142,7 +141,9 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$onetime.lt <-  rep(0, num)
   
   # Sex Identity
-  dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex.ident")
+  dat$attr$sex.ident <- get.vertex.attribute(nw[[1]], "sex")
+  dat$attr$sex.ident[dat$attr$sex.ident=="M"] <- "msf"
+  dat$attr$sex.ident[dat$attr$sex.ident=="F"] <- "f"
   dat$attr$msmf <- ifelse(dat$attr$sex.ident == "msmf" ,1 ,0)
   num.msf <-sum(dat$attr$sex.ident == "msf")
   num.msm <-sum(dat$attr$sex.ident == "msm")
@@ -153,24 +154,30 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$uid <- 1:num
   dat$temp$max.uid <- num
 
+  # Population of interest
+  dat$attr$poi <- get.vertex.attribute(nw[[1]], "poi")
+  
   # Age
-  dat$attr$age <- get.vertex.attribute(nw[[1]], "age")
+  dat$attr$age.adj <- get.vertex.attribute(nw[[1]], "age.adj")
+  dat$attr$age <- get.vertex.attribute(nw[[1]], "est_age")
   
   partial<-(0:51)* (time.unit / 365)
   partial<-sample(partial,length(dat$attr$age),replace=TRUE)
   
   dat$attr$age<-dat$attr$age+partial
+  dat$attr$age.adj<-dat$attr$age.adj+partial
   dat$attr$sqrt.age <- sqrt(dat$attr$age)
+  dat$attr$agesq <- dat$attr$age^2
   
-  dat$attr$age.group <- get.vertex.attribute(nw[[1]], "age.group")
-  dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
-                                ifelse(dat$attr$sex=="F",sqrt(dat$attr$age-5),dat$attr$sqrt.age))
+  dat$attr$age.group <- get.vertex.attribute(nw[[1]], "age_grp")
+  #dat$attr$age.adj.t<-ifelse(dat$attr$sex=="M",dat$attr$age,
+  #                              ifelse(dat$attr$sex=="F",dat$attr$age + dat$param$age.adj, dat$attr$age))
   
   dat$attr$age.inf <-rep(NA, num)
   dat$attr$age.diag <-rep(NA, num)
   
   #sex.age.group.
-  dat$attr$sex.age.group <- get.vertex.attribute(nw[[1]], "sex.age.group")
+  #dat$attr$sex.age.group <- get.vertex.attribute(nw[[1]], "sex.age.group")
   
   # Risk group
   dat$attr$riskg <- get.vertex.attribute(nw[[1]], "riskg")
@@ -195,13 +202,13 @@ initialize_KTM <- function(x, param, init, control, s) {
   uvi.always.het <- bindata::rmvbin(num, c(p1.het, p2.het), bincorr = (1 - rho.het) * diag(2) + rho.het)
   dat$attr$cond.always.pers.het <- uvi.always.het[, 1]
   dat$attr$cond.always.inst.het <- uvi.always.het[, 2]
-  
+  dat$attr$cond.always.main.het <- rbinom(num,1,dat$param$cond.main.always.prob.het)
 
   # Arrival and departure
   dat$attr$arrival.time <- rep(1, num)
 
   # Circumcision
-  circ <- rep(NA, num)
+  circ <- rep(0, num)
 
   if (length(ids.B.m) > 0) {
   circ[ids.B.m] <- sample(apportion_lr(length(ids.B.m), 0:1, 1 - param$circ.B.prob))}
@@ -213,6 +220,7 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$prepClass <- rep(NA, num)
   dat$attr$prepElig <- rep(NA, num)
   dat$attr$prepStat <- rep(0, num)
+  dat$attr$prep.elig.time <- rep(NA, num) 
 
   # One-off AI class
 #  inst.ai.class <- rep(NA, num)
@@ -223,8 +231,10 @@ initialize_KTM <- function(x, param, init, control, s) {
 
   # Role class
 
-  role.class <- get.vertex.attribute(nw[[1]], "role.class")
-  dat$attr$role.class <- role.class
+  dat$attr$role.class <- get.vertex.attribute(nw[[1]], "sex")
+  dat$attr$role.class[dat$attr$role.class=="M"] <- "I"
+  dat$attr$role.class[dat$attr$role.class=="F"] <- "R"
+  role.class <- dat$attr$role.class
   
   # Ins.quot
   ins.quot <- rep(NA, num)
@@ -245,9 +255,12 @@ initialize_KTM <- function(x, param, init, control, s) {
   #dat$stats$nwstats <- list()
   
   #Kenya TM intervention
-  dat$attr$partner.serv <- rep(0,num)
-  dat$attr$partner.serv.time <- rep(0,num)
-
+  dat$attr$partner.serv.part <- rep(0,num)
+  dat$attr$partner.serv.part.time <- rep(0,num)
+  dat$attr$PS.index.acute <- rep(0,num)
+  dat$attr$PS.index.prev <- rep(0,num)
+  dat$attr$PS.diag.neg <- rep(0,num)
+  dat$attr$PS.diag.pos.time <- rep(0,num)
 
   # Prevalence Tracking
   dat$temp$deg.dists <- list()
@@ -260,7 +273,7 @@ initialize_KTM <- function(x, param, init, control, s) {
 
   }
 
-  dat <- prevalence_shamp(dat, at = 1)
+  dat <- prevalence_KTM(dat, at = 1)
 
   class(dat) <- "dat"
   return(dat)
@@ -454,6 +467,8 @@ init_status_shamp <- function(dat) {
   vl <- rep(NA, num)
   diag.status <- rep(NA, num)
   diag.time <- rep(NA, num)
+  PS.diag.pos.time <- rep(NA, num)
+  PS.diag.neg <- rep(NA, num)
   last.neg.test <- rep(NA, num)
   tx.status <- rep(NA, num)
   tx.init.time <- rep(NA, num)
@@ -486,7 +501,7 @@ init_status_shamp <- function(dat) {
 
 
 
-  twind.int <- dat$param$twind.int.ab*7
+  twind.int <- dat$param$test.window.int.ab*7
  
   ### Full adherent type
 
@@ -744,8 +759,9 @@ init_status_shamp <- function(dat) {
   dat$attr$diag.status <- diag.status
   dat$attr$diag.time <- diag.time
   dat$attr$last.neg.test <- last.neg.test
-  dat$attr$evertest<-rep(NA, num)
-  dat$attr$evertest<-ifelse(dat$attr$last.neg.test<=0 | dat$attr$diag.status==1,1,0)
+  dat$attr$evertest <-rep(0, num)
+  dat$attr$evertest[dat$attr$diag.status==1] <- 1
+  #dat$attr$evertest<-ifelse(dat$attr$last.neg.test<=0 | dat$attr$diag.status==1,1,0)
   dat$attr$tx.status <- tx.status
   dat$attr$tx.init.time <- tx.init.time
   dat$attr$cum.time.on.tx <- cum.time.on.tx

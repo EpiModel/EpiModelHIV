@@ -29,10 +29,16 @@ aging_KTM <- function(dat, at) {
 
   dat$attr$age <- age
   dat$attr$sqrt.age <- sqrt(age)
-  dat$attr$agesq <- age^2
+  dat$attr$agesq <- dat$attr$age^2
+
+  dat$attr$age.adj<-ifelse(dat$attr$sex=="M",dat$attr$age,
+                                ifelse(dat$attr$sex=="F",dat$attr$age + dat$param$age.adj,dat$attr$age))
   
+  dat$attr$age_adj <- dat$attr$age.adj
+
   dat$attr$sqrt.age.adj<-ifelse(dat$attr$sex=="M",dat$attr$sqrt.age,
-                               ifelse(dat$attr$sex=="F",dat$attr$sqrt.age + dat$param$age.adj,dat$attr$sqrt.age))
+                                ifelse(dat$attr$sex=="F",sqrt(dat$attr$age-5),dat$attr$sqrt.age))
+  
   
   #AGEGROUP
   dat$attr$age.group<-ifelse(dat$att$age < 20 ,1,
@@ -40,7 +46,14 @@ aging_KTM <- function(dat, at) {
                           ifelse(dat$attr$age >= 25 & dat$attr$age < 30,3,
                           ifelse(dat$attr$age >= 30 & dat$attr$age < 35,4,
                           ifelse(dat$attr$age >= 35,5,dat$attr$age.group)))))
+  
+ dat$attr$age_grp <- dat$attr$age.group
 
-
+ #population of interest
+ 
+ poi<-which(dat$attr$age >= 40)
+ dat$attr$poi[poi]<-1
+ 
+    
   return(dat)
 }

@@ -11,31 +11,149 @@
 #' @export
 #'
 pservices_KTM <- function(dat, at) {
+
   
- # If diag time=at-1 get there partners.  last 12 months for prev and 3 months for acute.
-dat$attr$diag.time
+intervention_TM <- dat$param$intervention_TM
+count <- 0
+  
+  
+if(intervention_TM=="TMP" & at > 2){
+
+    #Attributes    
+index.acute <-  dat$attr$PS.index.acute
+index.prev <- dat$attr$PS.index.prev
+p.prev.follow.win <- dat$param$p.prev.follow.win
+p.acute.follow.win <- dat$param$p.acute.follow.win
+uid <- dat$attr$uid
+
+#Parameters
+partner.serv.part <- dat$attr$partner.serv.part
+partner.serv.part.time <- dat$attr$partner.serv.part.time
+  
+#Partners list
 cel.temp <- dat$cel.temp
 cel.complete <- dat$cel.complete
-#  follow acute partner for last three mongths and prevalent for the last 12.
+
+#For prevalent index cases
+if(any(index.prev==1)==TRUE){
   
-#The partner services relationship edgelist
+  index.prev <- which(index.prev==1)
+  index.prev.ids <- uid[index.prev]
+  
+  #GET CURRENT PARTNERS
+  p1 <- cel.temp[,1]
+  p2 <- cel.temp[,2]
+  
+  p1 <- match(p1,index.prev.ids)
+  p2 <- match(p2,index.prev.ids)
+  
+  p1<-which(p1 >=0)
+  p2<-which(p2 >=0)
+  
+  part.p1 <-cel.temp[p1,2]
+  part.p2 <-cel.temp[p2,1]
+  partners <- c(part.p1, part.p2)
+  partners <- unique(partners)
+  count <- length(partners)
 
-  psel <- dat$psel
+  x <-dat$attr$uid %in% partners
+  dat$attr$partner.serv.part[x==TRUE] <-1
+  dat$attr$partner.serv.part.time[x==TRUE] <- 1
+  
+  #GET PARTNERS IN THE LAST YEAR
+  rows <- which(cel.complete[,12] > at-p.prev.follow.win)
+  recent <- cel.complete[rows,]
+  
+  p1 <- recent[,1]
+  p2 <- recent[,2]
+  
+  p1 <- match(p1,index.prev.ids)
+  p2 <- match(p2,index.prev.ids)
+  
+  p1<-which(p1 >=0)
+  p2<-which(p2 >=0)
+  
+  part.p1 <-recent[p1,2]
+  part.p2 <-recent[p2,1]
+  partners <- c(part.p1, part.p2)
+  partners <- unique(partners)
+  count <- count + length(partners)
+  
+  x <-dat$attr$uid %in% partners
+  dat$attr$partner.serv.part[x==TRUE] <-1
+  dat$attr$partner.serv.part.time[x==TRUE] <- 1
+  
+  
 
-#The current edge list
-el <- rbind(dat$el[[1]],dat$el[[2]],dat$el[[3]])  
+}
 
-#Edges formed in this time step
-new.edges <- rbind(dat$temp$new.edges, dat$el[[3]])
-    #assign new edges a start time.
-    start.time <- rep(at,length(new.edges[,1]))
-    new.edges <- cbind(new.edges,start.time)
-    
-#Merge new edges with psel
-psel<-rbind(psel,new.edges)
-    
 
-## drop relationships that are older than the window and not active  
+
+#For prevalent index cases
+if(any(index.acute==1)==TRUE){
+  
+  index.prev <- which(index.acute==1)
+  index.prev.ids <- uid[index.acute]
+  
+  #GET CURRENT PARTNERS
+  p1 <- cel.temp[,1]
+  p2 <- cel.temp[,2]
+  
+  p1 <- match(p1,index.prev.ids)
+  p2 <- match(p2,index.prev.ids)
+  
+  p1<-which(p1 >=0)
+  p2<-which(p2 >=0)
+  
+  part.p1 <-cel.temp[p1,2]
+  part.p2 <-cel.temp[p2,1]
+  partners <- c(part.p1, part.p2)
+  partners <- unique(partners)
+  count <- count + length(partners)
+  
+  x <-dat$attr$uid %in% partners
+  dat$attr$partner.serv.part[x==TRUE] <-1
+  dat$attr$partner.serv.part.time[x==TRUE] <- 1
+  
+  #GET PARTNERS IN THE LAST 12 weeks
+  rows <- which(cel.complete[,12] >= at - p.acute.follow.win)
+  recent <- cel.complete[rows,]
+  
+  p1 <- recent[,1]
+  p2 <- recent[,2]
+  
+  p1 <- match(p1,index.prev.ids)
+  p2 <- match(p2,index.prev.ids)
+  
+  p1<-which(p1 >=0)
+  p2<-which(p2 >=0)
+  
+  part.p1 <-recent[p1,2]
+  part.p2 <-recent[p2,1]
+  partners <- c(part.p1, part.p2)
+  partners <- unique(partners)
+  count <- count + length(partners)
+  
+  x <-dat$attr$uid %in% partners
+  dat$attr$partner.serv.part[x==TRUE] <-1
+  dat$attr$partner.serv.part.time[x==TRUE] <- 1
+  
+  
+  
+}
+
+
+#Clear partner services index status
+dat$attr$PS.index.acute <- rep(0,length(dat$attr$PS.index.acute))
+dat$attr$PS.index.prev <- rep(0,length(dat$attr$PS.index.prev))
+
+
+#Number of new partners
+dat$epi$partners.sought.new[at] <- count
+
+
+}
+
 
 
   return(dat)

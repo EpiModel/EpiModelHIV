@@ -32,28 +32,32 @@ births_KTM <- function(dat, at){
 
   ## Process
 
-  nBirths.gen <- max(dat$epi$dth.gen[at],0) 
-  nBirths.dis <- max(dat$epi$dth.dis[at],0)
-  nBirths.age <- max(dat$epi$dth.age[at],0)
+  # nBirths.gen <- max(dat$epi$dth.gen[at],0) 
+  # nBirths.dis <- max(dat$epi$dth.dis[at],0)
+  # nBirths.age <- max(dat$epi$dth.age[at],0)
+  # 
+  # ##create population growth
+  # if (dat$param$p.growth == TRUE){
+  #   
+  #   if (at == 2){
+  #     
+  #     nBirths.gen <- nBirths.gen + dat$param$p.growth.size
+  #   }
+  # }  
 
-  ##create population growth
-  if (dat$param$p.growth == TRUE){
-    
-    if (at == 2){
-      
-      nBirths.gen <- nBirths.gen + dat$param$p.growth.size
-    }
-  }  
 
-
-  nBirths <- nBirths.age + nBirths.gen +  nBirths.dis
-  
+  #nBirths <- nBirths.age + nBirths.gen +  nBirths.dis
+  nBirths <- 10000 - sum(dat$attr$age < 40)
 
   ## Update Attr
 
-  if (nBirths.gen > 0 | nBirths.dis > 0 | nBirths.age > 0) {
-    dat <- setBirthAttr_shamp(dat, at, nBirths.gen, nBirths.age, nBirths.dis)
-   }
+#  if (nBirths.gen > 0 | nBirths.dis > 0 | nBirths.age > 0) {
+#    dat <- setBirthAttr_shamp(dat, at, nBirths.gen, nBirths.age, nBirths.dis)
+#  }
+  
+  if (nBirths > 0) {
+    dat <- setBirthAttr_shamp(dat, at, nBirths)
+  }
   
 
  
@@ -76,15 +80,14 @@ births_KTM <- function(dat, at){
 
 #setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
 
-setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
+setBirthAttr_shamp <- function(dat, at, nBirths) {
     
   # Parameters
   percent.male <- dat$param$percent.male
 
 
   
-  ##Not replcing disease death at this time
-  nBirths <- nBirths.gen + nBirths.age + nBirths.dis
+  nBirths <- 10000 - sum(dat$attr$age < 40)
   
 
   # Set all attributes NA by default
@@ -123,7 +126,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$arrival.time[newIds] <- rep(at, nBirths)
 
 
-  sex<-rbinom(length(nBirths),1,dat$param$percent.male)
+  sex<-rbinom(nBirths,1,dat$param$percent.male)
   sex<-ifelse(sex==1,"M","F")
   
   race<-rep("B",nBirths)
@@ -142,6 +145,10 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
                                 ifelse(dat$attr$sex=="F",sqrt(dat$attr$age-5),dat$attr$sqrt.age))
   
   
+  dat$attr$age.adj<-ifelse(dat$attr$sex=="M",dat$attr$age,
+                           ifelse(dat$attr$sex=="F",dat$attr$age + dat$param$age.adj,dat$attr$age))
+  
+  dat$attr$age_adj <- dat$attr$age.adj
   
   #AGEGROUP
   dat$attr$age.group<-ifelse(dat$att$age < 20 ,1,
@@ -150,18 +157,22 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
                                            ifelse(dat$attr$age >= 30 & dat$attr$age < 35,4,
                                                   ifelse(dat$attr$age >= 35,5,dat$attr$age.group)))))
   
+  dat$attr$age_adj <- dat$attr$age.adj
+  dat$attr$age_grp <- dat$attr$age.group
+  
   #SEX.AGE.GROUP.
-  dat$attr$sex.age.group<-ifelse(dat$attr$sex == "M" & dat$attr$age < 20 ,"M.1",
-                        ifelse(dat$attr$sex == "M" & age >= 20 & dat$attr$age < 25,"M.2",
-                               ifelse(dat$attr$sex == "M" & dat$attr$age >= 25 & dat$attr$age < 30,"M.3",
-                                      ifelse(dat$attr$sex == "M" & dat$attr$age >= 30 & dat$attr$age < 35,"M.4",
-                                             ifelse(dat$attr$sex == "M" & dat$attr$age >= 35,"M.5",
-                                                    ifelse(dat$attr$sex == "F" & dat$attr$age < 20 ,"M.1",
-                                                           ifelse(dat$attr$sex == "F" & dat$attr$age >= 20 & dat$attr$age < 25,"M.2",
-                                                                  ifelse(dat$attr$sex == "F" & dat$attr$age >= 25 & dat$attr$age < 30,"M.3",
-                                                                         ifelse(dat$attr$sex == "F" & dat$attr$age >= 30 & dat$attr$age < 35,"M.4",
-                                                                                ifelse(dat$attr$sex == "F" & dat$attr$age >= 35,"M.5",
-                                                                                       dat$attr$sex.age.group))))))))))
+ 
+  # dat$attr$sex.age.group<-ifelse(dat$attr$sex == "M" & dat$attr$age < 20 ,"M.1",
+  #                      ifelse(dat$attr$sex == "M" & age >= 20 & dat$attr$age < 25,"M.2",
+  #                             ifelse(dat$attr$sex == "M" & dat$attr$age >= 25 & dat$attr$age < 30,"M.3",
+  #                                    ifelse(dat$attr$sex == "M" & dat$attr$age >= 30 & dat$attr$age < 35,"M.4",
+  #                                           ifelse(dat$attr$sex == "M" & dat$attr$age >= 35,"M.5",
+  #                                                  ifelse(dat$attr$sex == "F" & dat$attr$age < 20 ,"M.1",
+  #                                                         ifelse(dat$attr$sex == "F" & dat$attr$age >= 20 & dat$attr$age < 25,"M.2",
+  #                                                                ifelse(dat$attr$sex == "F" & dat$attr$age >= 25 & dat$attr$age < 30,"M.3",
+  #                                                                       ifelse(dat$attr$sex == "F" & dat$attr$age >= 30 & dat$attr$age < 35,"M.4",
+  #                                                                              ifelse(dat$attr$sex == "F" & dat$attr$age >= 35,"M.5",
+  #                                                                                     dat$attr$sex.age.group))))))))))
   
                       
   
@@ -247,12 +258,7 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
 
 
   # Circumcision
-  dat$attr$circ[newIds[intersect(newB,newM)]] <- rbinom(length(intersect(newB,newM)), 1, dat$param$circ.B.prob)
-  dat$attr$circ[newIds[intersect(newBI,newM)]] <- rbinom(length(intersect(newBI,newM)), 1, dat$param$circ.BI.prob)
-  dat$attr$circ[newIds[intersect(newH,newM)]] <- rbinom(length(intersect(newH,newM)), 1, dat$param$circ.H.prob)
-  dat$attr$circ[newIds[intersect(newHI,newM)]] <- rbinom(length(intersect(newHI,newM)), 1, dat$param$circ.HI.prob)
-  dat$attr$circ[newIds[intersect(newW,newM)]] <- rbinom(length(intersect(newW,newM)), 1, dat$param$circ.W.prob)
-  
+  dat$attr$circ[newIds[newM]] <- rbinom(length(newM), 1, dat$param$circ.B.prob)
   dat$attr$circ[newIds[newF]] <- 0
   
   # Role
@@ -395,21 +401,28 @@ setBirthAttr_shamp <- function(dat, at, nBirths.gen, nBirths.age, nBirths.dis) {
   dat$attr$cond.always.inst.msm[newIds] <- uai.always.msm[, 2]
   
   # UVI group
-  p1.het <- dat$param$cond.pers.always.prob.het
-  p2.het <- dat$param$cond.inst.always.prob.het
-  rho.het <- dat$param$cond.always.prob.corr.het
-  uvi.always.het <- bindata::rmvbin(nBirths, c(p1.het, p2.het), bincorr = (1 - rho.het) * diag(2) + rho.het)
-  dat$attr$cond.always.pers.het[newIds] <- uvi.always.het[, 1]
-  dat$attr$cond.always.inst.het[newIds] <- uvi.always.het[, 2]
-
+  dat$attr$cond.always.main.het[newIds] <- rbinom(length(newIds), 1, dat$param$cond.main.always.prob.het)
+  dat$attr$cond.always.pers.het[newIds] <- rbinom(length(newIds), 1, dat$param$cond.pers.always.prob.het)
+  dat$attr$cond.always.inst.het[newIds] <- rbinom(length(newIds), 1, dat$param$cond.inst.always.prob.het)
+ 
   # PrEP
   dat$attr$prepStat[newIds] <- 0
+  dat$attr$prep.elig.time[newIds] <- NA 
   
   
   #Kenya TM intervention
-  dat$attr$partner.serv[newIds] <- 0
-  dat$attr$partner.serv.time[newIds] <- 0
- 
+  dat$attr$partner.serv.part[newIds] <- 0
+  dat$attr$partner.serv.part.time[newIds] <- 0
+  dat$attr$PS.index.acute[newIds] <- 0
+  dat$attr$PS.index.prev[newIds] <- 0
+  dat$attr$PS.diag.pos.time[newIds] <- NA
+  dat$attr$PS.diag.neg[newIds] <- NA
+  dat$attr$PS.diag.neg[newIds] <- 0
+  dat$attr$PS.diag.pos.time[newIds] <- 0
+  
+  #Population of interest
+  dat$attr$poi[newIds] <- 0
+  
   return(dat)
 }
 

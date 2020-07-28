@@ -21,30 +21,27 @@
 #'        and test and treated with full suppression.
 #' @param tx.init.R.S.prob Probability per time step that a person in race group R, where R is a 
 #'        charater (B, BI, H, HI or W), and sex group S, where s is a charter (f, msf, msm, msmf),
-#'        who has tested positive will initiate treatment.
+#'        who has tested positive will initiate treatment for the first 8 weeks following diagnosis.
 #' @param tx.halt.R.S.prob Probability per time step that a person in race group R, where R is a 
 #'        charater (B, BI, H, HI or W), and sex group S, where s is a charter (f, msf, msm, msmf),
 #'        who is currently on treatment will halt treatment.
 #' @param tx.reinit.R.S.prob Probability per time step that a person in race group R, where R is a 
 #'        charater (B, BI, H, HI or W), and sex group S, where s is a charter (f, msf, msm, msmf),
 #'        who is not currently on treatment but who has been in the past will
-#'        re-initiate treatment.
+#'        re-initiate treatment or that someone who did not initiate treatment within 8 weeks of diagnosis will initiate treatment.
 #' @param max.time.off.tx.full.int Number of days off treatment for a full
 #'        suppressor before onset of AIDS, including time before diagnosis.
 #' @param max.time.on.tx.part.int Number of days on treatment for a
-#'        partial suppressor beofre onset of AIDS.
+#'        partial suppressor before onset of AIDS.
 #' @param max.time.off.tx.part.int Nnumber of days off treatment for a
 #'        partial suppressor before onset of AIDS, including time before
 #'        diagnosis.
-#' @param vl.acute.rise.int Number of days to peak viremia during acute
-#'        infection.
-#' @param vl.acute.peak Peak viral load (in log10 units) at the height of acute
-#'        infection.
+#' @param vl.acute.rise.int Number of days to peak viremia during acute infection.
+#' @param vl.acute.peak Peak viral load (in log10 units) at the height of acute infection.
 #' @param vl.acute.fall.int Number of days from peak viremia to set-point
 #'        viral load during the acute infection period.
 #' @param vl.set.point Set point viral load (in log10 units).
-#' @param vl.aids.onset.int Number of days to AIDS for a treatment-naive
-#'        patient.
+#' @param vl.aids.onset.int Number of days to AIDS for a treatment-naive patient.
 #' @param vl.aids.int Duration of AIDS stage infection in days.
 #' @param vl.fatal Viral load in AIDS at which death occurs.
 #' @param vl.full.supp Log10 viral load at full suppression on ART.
@@ -53,8 +50,7 @@
 #'        viral load falls per time step from treatment initiation or re-initiation
 #'        until the level in \code{vl.full.supp}.
 #' @param full.supp.up.slope For full suppressors, number of log10 units that
-#'        viral load rises per time step from treatment halting until expected
-#'        value.
+#'        viral load rises per time step from treatment halting until expected value.
 #' @param part.supp.down.slope For partial suppressors, number of log10 units
 #'        that viral load falls per time step from treatment initiation or
 #'        re-initiation until the level in \code{vl.part.supp}.
@@ -67,7 +63,7 @@
 #' @param b.method Method for calculating the number of expected births at each
 #'        time step, with \code{"fixed"} based on the number of persons at the
 #'        initial time step and \code{"varying"} based on the current time step.
-#' @param age.adj This value is added to the squareroot of age for females in sqrt.age.adj
+#' @param age.adj This value is added to the age for females in age.adj
 #'        so that sex age asymmetry can be captured with an absdiff term  
 #' @param msm.frac The fraction of males entering the population at each time step 
 #'        as a male that has intercourse exclusivly with other males "msm" - 
@@ -279,91 +275,115 @@ param_KTM <- function(race.method = 1,
                       method = 1,
                       age.unit = 52,
                       
-                      ##Kenya
-                      test.prob.nevtest.m = c(0.004656910, 0.012052342, 0.006761833),
-                      test.prob.nevtest.f = c(0.006597747, 0.035640496, 0.022500000),
-                      test.prob.tested.m = c(0.0077, 0.01553, 0.01847, 0.01685),
-                      test.prob.tested.f = c(0.0099, 0.018, 0.0192, 0.01593),
-                      
-                     
                       ##For initializing status
                       last.neg.test.B.f.int = 1042,
                       last.neg.test.B.msf.int = 1446,
                       mean.test.B.f.int = 1042,
                       mean.test.B.msf.int = 1446,
                       
+                      ##Kenya testing
+                      ##Sex and age specific background testing rates to match KAIS 2012 ever tested and testing in the last year.
+                      ##Rate are different for never testers and those that have tested before
+                      test.prob.nevtest.m = c(0.004656910, 0.012052342, 0.006761833),
+                      test.prob.nevtest.f = c(0.006597747, 0.035640496, 0.022500000),
+                      test.prob.tested.m = c(0.014126, 0.019322, 0.01983, 0.01352),
+                      test.prob.tested.f = c(0.015517, 0.021565, 0.020283, 0.015),
+                      
+                      #Two test types avaialble: antibody is standard, rna for the Kenya TM plus intervention.
+                      test.window.int.ab = 3*7,
+                      test.window.int.rna = 1*7,
+                      
+                      #Assuming 50:50 partial and full viral suppression
+                      #From KARPR report 2018 77% of PLHIV achieve viral suppression
+                      tt.traj.B.f.prob = c(0,0,.23,.77), 
+                      tt.traj.B.msf.prob = c(0,0,.23,.77) ,
+                     
+                      #KTM INTERVENTION NONE TMP
+                      intervention_TM ="TMP",
+                      #From Sander 2015 65.6% within 3 weeks
+                      seek.hc.AHI.prob = 1-(1-.3)^3,
+                      ##sym.seek.prob can take on 4 values based on estimates of illness and treatment seeking.
+                      ## (0.002606, 0.002994, 0.008179, 0.009395)  
+                      
+                      sym.seek.prob = 0.002606,
+                      
+                      
+                      #Probability of being tested when presenting with symptoms
+                      sym.test.prob.bl = .27,
+                      sym.test.prob.tm = .9,
+                      
+                      #NEED TO GET THE DURATION OF FOLLOWUP AND THE PROBABILITY OF PARTNER TESTING
+                      #PArtner probability if based on being found and testing within 6 weeks.
+                      partner.test.prob.bl = .023,
+                      partner.test.prob.tm = .169,
+                      p.prev.follow.win = 52,
+                      p.acute.follow.win = 12,
+                      PS.time = 6,
+                      tx.init.PS.prob = .159,
                     
-                      twind.int.ab = 3,
-                      twind.int.rna = 1,
-                      #NEED x and y for viral suppression
-                      tt.traj.B.f.prob = c(0,0,.5,.5), 
-                      tt.traj.B.msf.prob = c(0,0,.5,.5) ,
-                      seek.hc.AHI.prob = .325,
-                      sym.prob = .25,
-                      seek.hc.prob.m=0.0,
-                      seek.hc.prob.f=0.0,
-                      PITC.prob=.25,
-                      PITC.TMP.prob=.9,
-                      
-                      partner.test.prob = 0,
-                      #should include location and agreement
                       
 
+                      #Art params worksheet 
+                      tx.init.B.f.prob = 0.15912,
+                      tx.init.BI.f.prob = 0.15912,
+                      tx.init.H.f.prob = 0.15912,
+                      tx.init.HI.f.prob = 0.15912,
+                      tx.init.W.f.prob = 0.15912,
+                      tx.init.B.msf.prob = 0.15912,
+                      tx.init.BI.msf.prob = 0.15912,
+                      tx.init.H.msf.prob = 0.15912,
+                      tx.init.HI.msf.prob = 0.15912,
+                      tx.init.W.msf.prob = 0.15912,
+                      
+                      #NO MSM or MSMF in Kenya TM
+                      tx.init.B.msm.prob = 0.5000,
+                      tx.init.BI.msm.prob = 0.5000,
+                      tx.init.H.msm.prob = 0.5000,
+                      tx.init.HI.msm.prob = 0.5000,
+                      tx.init.W.msm.prob = 0.5000,
+                      tx.init.B.msmf.prob = 0.5000,
+                      tx.init.BI.msmf.prob = 0.5000,
+                      tx.init.H.msmf.prob = 0.5000,
+                      tx.init.HI.msmf.prob = 0.5000,
+                      tx.init.W.msmf.prob = 0.5000,
 
-                      tx.init.B.f.prob = 0.2331,
-                      tx.init.BI.f.prob = 0.2331,
-                      tx.init.H.f.prob = 0.2331,
-                      tx.init.HI.f.prob = 0.2331,
-                      tx.init.W.f.prob = 0.2331,
-                      tx.init.B.msf.prob = 0.2331,
-                      tx.init.BI.msf.prob = 0.2331,
-                      tx.init.H.msf.prob = 0.2331,
-                      tx.init.HI.msf.prob = 0.2331,
-                      tx.init.W.msf.prob = 0.2331,
-                      tx.init.B.msm.prob = 0.1467,
-                      tx.init.BI.msm.prob = 0.1467,
-                      tx.init.H.msm.prob = 0.1467,
-                      tx.init.HI.msm.prob = 0.1467,
-                      tx.init.W.msm.prob = 0.1467,
-                      tx.init.B.msmf.prob = 0.2331,
-                      tx.init.BI.msmf.prob = 0.2331,
-                      tx.init.H.msmf.prob = 0.2331,
-                      tx.init.HI.msmf.prob = 0.2331,
-                      tx.init.W.msmf.prob = 0.2331,
+                      #Art params worksheet 
+                      tx.halt.B.f.prob = 0.0020245,
+                      tx.halt.BI.f.prob = 0.0020245,
+                      tx.halt.H.f.prob = 0.0020245,
+                      tx.halt.HI.f.prob = 0.0020245,
+                      tx.halt.W.f.prob = 0.0020245,
+                      tx.halt.B.msf.prob = 0.0020245,
+                      tx.halt.BI.msf.prob = 0.0020245,
+                      tx.halt.H.msf.prob = 0.0020245,
+                      tx.halt.HI.msf.prob = 0.0020245,
+                      tx.halt.W.msf.prob = 0.0020245,
+                      
+                      #NO MSM or MSMF in Kenya TM
+                      tx.halt.B.msm.prob = 0.5000,
+                      tx.halt.BI.msm.prob = 0.5000,
+                      tx.halt.H.msm.prob = 0.5000,
+                      tx.halt.HI.msm.prob = 0.5000,
+                      tx.halt.W.msm.prob = 0.5000,
+                      tx.halt.B.msmf.prob = 0.5000,
+                      tx.halt.BI.msmf.prob = 0.5000,
+                      tx.halt.H.msmf.prob = 0.5000,
+                      tx.halt.HI.msmf.prob = 0.5000,
+                      tx.halt.W.msmf.prob = 0.5000,
 
-                      #No halting in the basic SHAMP model
-                      tx.halt.B.f.prob = 0.0001,
-                      tx.halt.BI.f.prob = 0.0001,
-                      tx.halt.H.f.prob = 0.0001,
-                      tx.halt.HI.f.prob = 0.0001,
-                      tx.halt.W.f.prob = 0.0001,
-                      tx.halt.B.msf.prob = 0.0001,
-                      tx.halt.BI.msf.prob = 0.0001,
-                      tx.halt.H.msf.prob = 0.0001,
-                      tx.halt.HI.msf.prob = 0.0001,
-                      tx.halt.W.msf.prob = 0.0001,
-                      tx.halt.B.msm.prob = 0.0001,
-                      tx.halt.BI.msm.prob = 0.0001,
-                      tx.halt.H.msm.prob = 0.0001,
-                      tx.halt.HI.msm.prob = 0.0001,
-                      tx.halt.W.msm.prob = 0.0001,
-                      tx.halt.B.msmf.prob = 0.0001,
-                      tx.halt.BI.msmf.prob = 0.0001,
-                      tx.halt.H.msmf.prob = 0.0001,
-                      tx.halt.HI.msmf.prob = 0.0001,
-                      tx.halt.W.msmf.prob = 0.0001,
-
-                      ##With no halting there is also no re-initiation
-                      tx.reinit.B.f.prob = 1,
-                      tx.reinit.BI.f.prob = 1,
-                      tx.reinit.H.f.prob = 1,
-                      tx.reinit.HI.f.prob = 1,
-                      tx.reinit.W.f.prob = 1,
-                      tx.reinit.B.msf.prob = 1,
-                      tx.reinit.BI.msf.prob = 1,
-                      tx.reinit.H.msf.prob = 1,
-                      tx.reinit.HI.msf.prob = 1,
-                      tx.reinit.W.msf.prob = 1,
+                      ##re-initiation is the same as uptake
+                      tx.reinit.B.f.prob = 0.00404902,
+                      tx.reinit.BI.f.prob = 0.00404902,
+                      tx.reinit.H.f.prob = 0.00404902,
+                      tx.reinit.HI.f.prob = 0.00404902,
+                      tx.reinit.W.f.prob = 0.00404902,
+                      tx.reinit.B.msf.prob = 0.00404902,
+                      tx.reinit.BI.msf.prob = 0.00404902,
+                      tx.reinit.H.msf.prob = 0.00404902,
+                      tx.reinit.HI.msf.prob = 0.00404902,
+                      tx.reinit.W.msf.prob = 0.00404902,
+                      
+                      ##No MSM or MSMF in Kenya
                       tx.reinit.B.msm.prob = 1,
                       tx.reinit.BI.msm.prob = 1,
                       tx.reinit.H.msm.prob = 1,
@@ -375,23 +395,28 @@ param_KTM <- function(race.method = 1,
                       tx.reinit.HI.msmf.prob = 1,
                       tx.reinit.W.msmf.prob = 1,
 
-                      ##Lit
-                      max.time.off.tx.full.int = 520 * 7,
+                      ##Lit updated
+                      max.time.off.tx.full.int = 3297,
+                      #NEED TO CONFIRM LIFE EXPECTANCY FOR PART
                       max.time.on.tx.part.int = 52 * 15 * 7,
-                      max.time.off.tx.part.int = 520 * 7,
-                      vl.acute.rise.int = 45,
-                      vl.acute.peak = 6.886,
-                      vl.acute.fall.int = 21,
-                      vl.set.point = 4.5,
-                      vl.aids.onset.int = 520 * 7,
-                      vl.aids.int = 52 * 2 * 7,
+                      max.time.off.tx.part.int = 3297,
+                      vl.acute.rise.int = 12,
+                      vl.acute.peak = 6.76,
+                      vl.acute.fall.int = 20,
+                      vl.set.point = 4.0,
+                      vl.aids.onset.int = 3297,
+                      vl.aids.int = 280,
                       vl.fatal = 7,
-                      vl.full.supp = 1.5,
+                      #Full is 550 copies
+                      vl.full.supp = 2.75,
+                      #Partial is 3000 copies
                       vl.part.supp = 3.5,
                       full.supp.down.slope = 0.25,
                       full.supp.up.slope = 0.25,
                       part.supp.down.slope = 0.25,
                       part.supp.up.slope = 0.25,
+                      
+
 
                       #Births are set for consistent population demographics.
                       #b.B.f.rate = 1e-3 / 7,
@@ -406,9 +431,11 @@ param_KTM <- function(race.method = 1,
                       #b.W.m.rate = 1e-3 / 7,
 
                       birth.age = 18,
-                      exit.age = 40,
+                      exit.age = 76,
+                      age.adj = 7.925357,
                       
                       b.method = "fixed",
+                      #NA no msmf
                       msm.frac=0.0,
                       msmf.frac.B=0,
                       msmf.frac.BI=0,
@@ -420,8 +447,12 @@ param_KTM <- function(race.method = 1,
                       URAI.prob = 138/10000,
                       UIAI.prob = 11/10000,
                       
-                      URVI.prob = 8/10000,
-                      UIVI.prob = 4/10000,
+                      #URVI.prob = 8/10000,
+                      #UIVI.prob = 4/10000,
+                      
+                      URVI.prob = 0.0182,
+                      UIVI.prob = 0.0182,
+                      
                       
                       #VI range 1-12.
                       VI.foi.scale = 1,
@@ -432,7 +463,7 @@ param_KTM <- function(race.method = 1,
                       condom.rr = 0.25,
 
                       ##For now aasume no disclosure (may use for calibration)
-                      disc.outset.main.B.f.prob = 0,
+                      disc.outset.main.B.f.prob = .03,
                       disc.outset.main.BI.f.prob = 0,
                       disc.outset.main.H.f.prob = 0,
                       disc.outset.main.HI.f.prob = 0,
@@ -453,7 +484,7 @@ param_KTM <- function(race.method = 1,
                       disc.outset.main.HI.msmf.prob = 0,
                       disc.outset.main.W.msmf.prob = 0,
                       
-                      disc.at.diag.main.B.f.prob = 0,
+                      disc.at.diag.main.B.f.prob = .03,
                       disc.at.diag.main.BI.f.prob = 0,
                       disc.at.diag.main.H.f.prob = 0,
                       disc.at.diag.main.HI.f.prob = 0,
@@ -496,7 +527,7 @@ param_KTM <- function(race.method = 1,
                       disc.post.diag.main.W.msmf.prob = 0,
                       
                       
-                      disc.outset.pers.B.f.prob = 0,
+                      disc.outset.pers.B.f.prob = .02,
                       disc.outset.pers.BI.f.prob = 0,
                       disc.outset.pers.H.f.prob = 0,
                       disc.outset.pers.HI.f.prob = 0,
@@ -517,7 +548,7 @@ param_KTM <- function(race.method = 1,
                       disc.outset.pers.HI.msmf.prob = 0,
                       disc.outset.pers.W.msmf.prob = 0,
                       
-                      disc.at.diag.pers.B.f.prob = 0,
+                      disc.at.diag.pers.B.f.prob = .02,
                       disc.at.diag.pers.BI.f.prob = 0,
                       disc.at.diag.pers.H.f.prob = 0,
                       disc.at.diag.pers.HI.f.prob = 0,
@@ -559,7 +590,7 @@ param_KTM <- function(race.method = 1,
                       disc.post.diag.pers.HI.msmf.prob = 0,
                       disc.post.diag.pers.W.msmf.prob = 0, 
                       
-                      disc.inst.B.f.prob = 0,
+                      disc.inst.B.f.prob = .01,
                       disc.inst.BI.f.prob = 0,
                       disc.inst.H.f.prob = 0,
                       disc.inst.HI.f.prob = 0,
@@ -580,22 +611,24 @@ param_KTM <- function(race.method = 1,
                       disc.inst.HI.msmf.prob = 0,
                       disc.inst.W.msmf.prob = 0,
 
-                      circ.B.prob = 0.770,
-                      circ.BI.prob = 0.450,
-                      circ.H.prob = 0.480,
-                      circ.HI.prob = 0.360,
-                      circ.W.prob = 0.910,
+                      #From Kenya 2014 DHS
+                      circ.B.prob = 0.925,
+                      circ.BI.prob = 0.500,
+                      circ.H.prob = 0.500,
+                      circ.HI.prob = 0.500,
+                      circ.W.prob = 0.500,
                       
+                      #No CCR5 in Kenya 
                       ccr5.B.f.prob = c(0, 0.0),
                       ccr5.BI.f.prob = c(0, 0.0),
                       ccr5.H.f.prob = c(0, 0.0),
                       ccr5.HI.f.prob = c(0, 0.0),
-                      ccr5.W.f.prob = c(0.017, 0.0),
+                      ccr5.W.f.prob = c(0.0, 0.0),
                       ccr5.B.m.prob = c(0, 0.0),
                       ccr5.BI.m.prob = c(0, 0.0),
                       ccr5.H.m.prob = c(0, 0.0),
                       ccr5.HI.m.prob = c(0, 0.0),
-                      ccr5.W.m.prob = c(0.017, 0.0),
+                      ccr5.W.m.prob = c(0.0, 0.0),
                       ccr5.heteroz.rr = 0,
 
                       num.inst.ai.classes = 1,
@@ -611,62 +644,54 @@ param_KTM <- function(race.method = 1,
                       base.ai.pers.HI.rate = 0.883/7,
                       base.ai.pers.W.rate = 0.883/7,
                       
-                      
-                      base.vi.main.B.rate = 0.25 ,
-                      base.vi.main.BI.rate = 0.19 ,
-                      base.vi.main.H.rate = 0.26,
-                      base.vi.main.HI.rate = 0.24,
-                      base.vi.main.W.rate = 0.22,
-                      base.vi.pers.B.rate = 0.12,
-                      base.vi.pers.BI.rate = 0.09,
-                      base.vi.pers.H.rate = 0.12,
-                      base.vi.pers.HI.rate = 0.09,
-                      base.vi.pers.W.rate = 0.12,
+                      #Waiting on KENYA TM
+                      base.vi.main.B.rate = 0.4818 ,
+                      base.vi.main.BI.rate = 0 ,
+                      base.vi.main.H.rate = 0,
+                      base.vi.main.HI.rate = 0,
+                      base.vi.main.W.rate = 0,
+                      base.vi.pers.B.rate = 0.2311,
+                      base.vi.pers.BI.rate = 0,
+                      base.vi.pers.H.rate = 0,
+                      base.vi.pers.HI.rate = 0,
+                      base.vi.pers.W.rate = 0,
                       ai.scale = 1,
                       vi.scale = 1,
 
                       
-                      # For MSM pulled data from the mobile study but we are not modeling MSM for now.
-                      cond.main.B.prob.msm = 0.062,
-                      cond.main.BI.prob.msm = 0.062,
-                      cond.main.H.prob.msm = 0.062,
-                      cond.main.HI.prob.msm = 0.062,
-                      cond.main.W.prob.msm = 0.062,
+                      # NA for MSM
+                      cond.main.B.prob.msm = 0.500,
+                      cond.main.BI.prob.msm = 0.500,
+                      cond.main.H.prob.msm = 0.500,
+                      cond.main.HI.prob.msm = 0.500,
+                      cond.main.W.prob.msm = 0.500,
                       cond.pers.always.prob.msm = 0.0001,
-                      cond.pers.B.prob.msm = 0.0304,
-                      cond.pers.BI.prob.msm = 0.0304,
-                      cond.pers.H.prob.msm = 0.0304,
-                      cond.pers.HI.prob.msm = 0.0304,
-                      cond.pers.W.prob.msm = 0.0304,
+                      cond.pers.B.prob.msm = 0.500,
+                      cond.pers.BI.prob.msm = 0.500,
+                      cond.pers.H.prob.msm = 0.500,
+                      cond.pers.HI.prob.msm = 0.500,
+                      cond.pers.W.prob.msm = 0.500,
                       cond.inst.always.prob.msm = 0.0001,
-                      cond.inst.B.prob.msm = 0.413,
-                      cond.inst.BI.prob.msm = 0.413 ,
-                      cond.inst.H.prob.msm = 0.413 ,
-                      cond.inst.HI.prob.msm = 0.413 ,
-                      cond.inst.W.prob.msm = 0.413 ,
+                      cond.inst.B.prob.msm = 0.500,
+                      cond.inst.BI.prob.msm = 0.500,
+                      cond.inst.H.prob.msm = 0.500,
+                      cond.inst.HI.prob.msm = 0.500,
+                      cond.inst.W.prob.msm = 0.500,
                       cond.always.prob.corr.msm = 0.001,
                       
-                      cond.main.B.prob.het = 0.12,
-                      cond.main.BI.prob.het = 0.17,
-                      cond.main.H.prob.het = 0.17,
-                      cond.main.HI.prob.het = 0.19,
-                      cond.main.W.prob.het = 0.16,
-                      cond.pers.always.prob.het = .0001,
-                      cond.pers.B.prob.het = 0.54,
-                      cond.pers.BI.prob.het = 0.65,
-                      cond.pers.H.prob.het = 0.5,
-                      cond.pers.HI.prob.het = 0.49,
-                      cond.pers.W.prob.het = 0.48,
-                      cond.inst.always.prob.het = .0001,
-                      cond.inst.B.prob.het = 0.85,
-                      cond.inst.BI.prob.het = 0.73,
-                      cond.inst.H.prob.het = 0.78,
-                      cond.inst.HI.prob.het = 0.76,
-                      cond.inst.W.prob.het = 0.72,
-                      cond.always.prob.corr.het = .001,
+                      #From KAIS II 2014
+                      cond.main.always.prob.het = .01,
+                      cond.main.B.prob.het=.04,
                       
-                      #WAITING ON APRIL AS POSIBLE DATA SOURCE.
-                      #Currect placeholder from home testing project
+                      cond.pers.always.prob.het = .2,
+                      cond.pers.B.prob.het=.09,
+                      
+                      cond.inst.always.prob.het = .46,
+                      cond.inst.B.prob.het =.11,
+                      
+                      cond.always.prob.corr.het = .5,
+                      
+                      #NO MSM
                       cond.diag.main.beta.msm = -0.67,
                       cond.discl.main.beta.msm = -0.85,
                       cond.diag.pers.beta.msm = -0.67,
@@ -674,13 +699,15 @@ param_KTM <- function(race.method = 1,
                       cond.diag.inst.beta.msm = -0.67,
                       cond.discl.inst.beta.msm = -0.85,
                       
-                      cond.diag.main.beta.het = 0,
-                      cond.discl.main.beta.het = 0,
-                      cond.diag.pers.beta.het = 0,
-                      cond.discl.pers.beta.het = 0,  
-                      cond.diag.inst.beta.het = 0,
-                      cond.discl.inst.beta.het = 0,
                       
+                      cond.diag.main.beta.het = -0.67,
+                      cond.discl.main.beta.het = -0.85,
+                      cond.diag.pers.beta.het = -0.67,
+                      cond.discl.pers.beta.het = -0.85,  
+                      cond.diag.inst.beta.het = -0.67,
+                      cond.discl.inst.beta.het = -0.85,
+                      
+                      ##  ROLE NA
                       role.B.msm.prob = c(0.242, 0.321, 0.437),
                       role.BI.msm.prob = c(0.242, 0.321, 0.437),
                       role.H.msm.prob = c(0.242, 0.321, 0.437),
@@ -692,16 +719,19 @@ param_KTM <- function(race.method = 1,
                       role.HI.msmf.prob = c(0.242, 0.321, 0.437),
                       role.W.msmf.prob = c(0.242, 0.321, 0.437),
 
+                      ##NA position not used for HET
                       vv.iev.B.prob = 0.47874,
                       vv.iev.BI.prob = 0.47874,
                       vv.iev.H.prob = 0.47874,
                       vv.iev.HI.prob = 0.47874,
                       vv.iev.W.prob = 0.47874,
 
-                      ##No PrEP in the SHAMP model.
-                      prep.start = Inf,
-                      prep.elig.model = "base",
-                      prep.class.prob = c(0, 0, 0, 0),
+                      ##PrEP.
+                      prep.start = 3,
+                      ## NONE / KTM
+                      prep.elig.model = "NONE",
+                #need a real values for these
+                      prep.class.prob = c(.25, .25, .25, .25),
                       prep.class.hr = c(1, 0.69, 0.19, 0.05),
                       prep.coverage = 0,
                       prep.cov.method = "curr",
@@ -709,9 +739,17 @@ param_KTM <- function(race.method = 1,
                       prep.tst.int = 90,
                       prep.risk.int = 182,
                       prep.risk.reassess = TRUE,
+                #need a real values for these
+                      prep.start.prob = .236,
+                      prep.stop.prob = .0414,
+                      prep.window = 6,
+                      
                       
 
-                      conc_dur_dx = FALSE,
+                      conc_dur_dx = TRUE,
+                      cel.complete.trim = TRUE,
+                      cel.complete.lag = 52,
+                      kill.poi.rels = TRUE,
                       death_stats = FALSE,
                       
                       p.growth = FALSE,
@@ -758,13 +796,23 @@ param_KTM <- function(race.method = 1,
   p$modes <- 1
 
   
+#  p$asmr.B.f <- c(rep(0, 17),
+#                1-(1-c(rep(0.001941328, 7),
+#                       rep(0.003499821, 50)))^(1 / age.unit),1)
+#  
+#  p$asmr.B.m <- c(rep(0, 17),
+#                1-(1-c(rep(0.001941328, 7),
+#                       rep(0.003499821, 50)))^(1 / age.unit),1)
+#  
   p$asmr.B.f <- c(rep(0, 17),
                 1-(1-c(rep(0.001941328, 7),
-                       rep(0.003499821, 15)))^(1 / age.unit),1)
+                       rep(0.003499821, 15),
+                       rep(0.003499821, 36)))^(1 / age.unit),1)
   
   p$asmr.B.m <- c(rep(0, 17),
                 1-(1-c(rep(0.001941328, 7),
-                       rep(0.003499821, 15)))^(1 / age.unit),1)
+                       rep(0.003499821, 15),
+                       rep(0.003499821, 36)))^(1 / age.unit),1)
   
 
   class(p) <- "param.net"
@@ -870,13 +918,14 @@ control_KTM <- function(simno = 1,
                         ncores = 1,
                         nsteps = 100,
                         start = 1,
+                        #tergmLite = TRUE,
                         initialize.FUN = initialize_KTM,
                         aging.FUN = aging_KTM,
-                        deaths.FUN = deaths_shamp,
+                        deaths.FUN = deaths_KTM,
                         births.FUN = births_KTM,
-                        pservices.FUN = pservices_KTM,
                         test.FUN = test_KTM,
-                        tx.FUN = tx_shamp,
+                        pservices.FUN = pservices_KTM,
+                        tx.FUN = tx_KTM,
                         prep.FUN = prep_shamp,
                         progress.FUN = progress_msm,
                         vl.FUN = vl_shamp,
@@ -885,13 +934,13 @@ control_KTM <- function(simno = 1,
                         resim_nets.FUN = simnet_shamp,
                         disclose.FUN = disclose_shamp,
                         ConcDurDx.FUN = ConcDurDx_shamp,
-                        acts.FUN = acts_shamp,
-                        condoms.FUN = condoms_shamp,
+                        acts.FUN = acts_KTM,
+                        condoms.FUN = condoms_KTM,
                         riskhist.FUN = riskhist_shamp,
                         position.FUN = position_shamp,
-                        trans.FUN = trans_shamp,
-                        prev.FUN = prevalence_shamp,
-                        verbose.FUN = verbose_shamp,
+                        trans.FUN = trans_KTM,
+                        prev.FUN = prevalence_KTM,
+                        verbose.FUN = verbose_KTM,
                         save.nwstats = FALSE,
                         save.other = "attr",
                         verbose = TRUE,
