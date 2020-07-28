@@ -121,7 +121,8 @@ ConcDurDx_shamp <- function(dat, at){
         ended <- cel.temp[cel.temp$ID %in% ids.ended,]
         ended$end <-at
         cel.complete <- rbind(cel.complete,ended)
-        
+        dat$epi$nCohab.dis[at] <- sum(ended$type == "cohab")/dat$epi$nCohabs[at-1]
+        dat$epi$nPers.dis[at] <- sum(ended$type == "pers")/dat$epi$nPers[at-1]
 
         cel.temp <- merge(x = cel, y = cel.temp, by = c("p1","p2"), all.x = TRUE)
         cel.temp <- cel.temp[,c(1:10,19,20)]
@@ -167,8 +168,22 @@ ConcDurDx_shamp <- function(dat, at){
       
       colnames(el3)<-c("p1","p2","type", "s1","s2","r1","r2","age1","age2","ID", "start", "end")
       
- 
+
       cel.complete <- rbind(cel.complete,el3)
+      
+      if(dat$param$cel.complete.trim == TRUE){
+        l <- which(cel.complete$end > at- dat$param$cel.complete.lag)
+        cel.complete <- cel.complete[l,]
+      }
+      
+      if(dat$param$kill.poi.rels == TRUE){
+        l<-which(cel.temp$age1 >=40 & cel.temp$age2 >=40)
+        if(length(l)>=1){
+        uids<-c(cel.temp[l,]$p1, cel.temp[l,]$p2)
+        dat$temp.kill<-uids
+        }
+      }
+      
   
       dat$cel.complete <- cel.complete
       
