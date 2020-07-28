@@ -36,7 +36,8 @@ position_shamp <- function(dat, at) {
   status <- dat$attr$status
   sex <- dat$attr$sex
   dal <- al[which(status[al[, 1]] == 1 & status[al[, 2]] == 0), ]
-  if(class(dal)=="numeric"){dal<-as.matrix(t(dal))}
+  y<-class(dal)
+  if(y[1]=="numeric"){dal<-as.matrix(t(dal))}
   dat$temp$al <- NULL
   
   if (nrow(dal) == 0) {
