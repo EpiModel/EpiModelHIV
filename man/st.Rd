@@ -4,7 +4,9 @@
 \name{st}
 \alias{st}
 \title{Network Statistics Network Models for 10000 Person Network}
-\format{A list with 18 elements.}
+\format{
+A list with 18 elements.
+}
 \description{
 A dataset containing the necessary network statistics for efficient
 package testing.

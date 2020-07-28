@@ -4,8 +4,14 @@
 \alias{make_nw_het}
 \title{Calculate Network Statistics}
 \usage{
-make_nw_het(n = 10000, meandeg = 0.8, prop.male = 0.5,
-  start.prev = 0.05, part.dur = 1000, time.unit = 7)
+make_nw_het(
+  n = 10000,
+  meandeg = 0.8,
+  prop.male = 0.5,
+  start.prev = 0.05,
+  part.dur = 1000,
+  time.unit = 7
+)
 }
 \arguments{
 \item{n}{Population size.}

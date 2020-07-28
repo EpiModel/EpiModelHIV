@@ -4,13 +4,29 @@
 \alias{init_shamp}
 \title{Epidemic Model Initial Conditions for SHAMP}
 \usage{
-init_shamp(prev.B.f = 0.02, prev.BI.f = 0.02, prev.H.f = 0.02,
-  prev.HI.f = 0.02, prev.W.f = 0.02, prev.B.msf = 0.02,
-  prev.BI.msf = 0.02, prev.H.msf = 0.02, prev.HI.msf = 0.02,
-  prev.W.msf = 0.02, prev.B.msm = 0.02, prev.BI.msm = 0.02,
-  prev.H.msm = 0.02, prev.HI.msm = 0.02, prev.W.msm = 0.02,
-  prev.B.msmf = 0.02, prev.BI.msmf = 0.02, prev.H.msmf = 0.02,
-  prev.HI.msmf = 0.02, prev.W.msmf = 0.02, ...)
+init_shamp(
+  prev.B.f = 0.02,
+  prev.BI.f = 0.02,
+  prev.H.f = 0.02,
+  prev.HI.f = 0.02,
+  prev.W.f = 0.02,
+  prev.B.msf = 0.02,
+  prev.BI.msf = 0.02,
+  prev.H.msf = 0.02,
+  prev.HI.msf = 0.02,
+  prev.W.msf = 0.02,
+  prev.B.msm = 0.02,
+  prev.BI.msm = 0.02,
+  prev.H.msm = 0.02,
+  prev.HI.msm = 0.02,
+  prev.W.msm = 0.02,
+  prev.B.msmf = 0.02,
+  prev.BI.msmf = 0.02,
+  prev.H.msmf = 0.02,
+  prev.HI.msmf = 0.02,
+  prev.W.msmf = 0.02,
+  ...
+)
 }
 \arguments{
 \item{...}{Additional arguments passed to function.}

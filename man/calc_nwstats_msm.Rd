@@ -4,11 +4,33 @@
 \alias{calc_nwstats_msm}
 \title{Calculate Target Statistics for Network Model Estimation}
 \usage{
-calc_nwstats_msm(time.unit = 7, method = 2, num.B, num.W, deg.mp.B,
-  deg.mp.W, mdeg.inst.B, mdeg.inst.W, qnts.B, qnts.W, prop.hom.mpi.B,
-  prop.hom.mpi.W, balance = "mean", sqrt.adiff.BB, sqrt.adiff.WW,
-  sqrt.adiff.BW, diss.main, diss.pers, durs.main, durs.pers, ages, asmr.B,
-  asmr.W, role.B.prob, role.W.prob)
+calc_nwstats_msm(
+  time.unit = 7,
+  method = 2,
+  num.B,
+  num.W,
+  deg.mp.B,
+  deg.mp.W,
+  mdeg.inst.B,
+  mdeg.inst.W,
+  qnts.B,
+  qnts.W,
+  prop.hom.mpi.B,
+  prop.hom.mpi.W,
+  balance = "mean",
+  sqrt.adiff.BB,
+  sqrt.adiff.WW,
+  sqrt.adiff.BW,
+  diss.main,
+  diss.pers,
+  durs.main,
+  durs.pers,
+  ages,
+  asmr.B,
+  asmr.W,
+  role.B.prob,
+  role.W.prob
+)
 }
 \arguments{
 \item{time.unit}{Time unit relative to 1 for daily.}

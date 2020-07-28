@@ -4,19 +4,38 @@
 \alias{control_KTM}
 \title{Epidemic Model Control Settings}
 \usage{
-control_KTM(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize_KTM, aging.FUN = aging_KTM,
-  deaths.FUN = deaths_shamp, births.FUN = births_KTM,
-  pservices.FUN = pservices_KTM, test.FUN = test_KTM,
-  tx.FUN = tx_shamp, prep.FUN = prep_shamp,
-  progress.FUN = progress_msm, vl.FUN = vl_shamp,
-  resim_nets.FUN = simnet_shamp, disclose.FUN = disclose_shamp,
-  ConcDurDx.FUN = ConcDurDx_shamp, acts.FUN = acts_shamp,
-  condoms.FUN = condoms_shamp, riskhist.FUN = riskhist_shamp,
-  position.FUN = position_shamp, trans.FUN = trans_shamp,
-  prev.FUN = prevalence_shamp, verbose.FUN = verbose_shamp,
-  save.nwstats = FALSE, save.other = "attr", verbose = TRUE,
-  verbose.int = 1, ...)
+control_KTM(
+  simno = 1,
+  nsims = 1,
+  ncores = 1,
+  nsteps = 100,
+  start = 1,
+  initialize.FUN = initialize_KTM,
+  aging.FUN = aging_KTM,
+  deaths.FUN = deaths_KTM,
+  births.FUN = births_KTM,
+  test.FUN = test_KTM,
+  pservices.FUN = pservices_KTM,
+  tx.FUN = tx_KTM,
+  prep.FUN = prep_shamp,
+  progress.FUN = progress_msm,
+  vl.FUN = vl_shamp,
+  resim_nets.FUN = simnet_shamp,
+  disclose.FUN = disclose_shamp,
+  ConcDurDx.FUN = ConcDurDx_shamp,
+  acts.FUN = acts_KTM,
+  condoms.FUN = condoms_KTM,
+  riskhist.FUN = riskhist_shamp,
+  position.FUN = position_shamp,
+  trans.FUN = trans_KTM,
+  prev.FUN = prevalence_KTM,
+  verbose.FUN = verbose_KTM,
+  save.nwstats = FALSE,
+  save.other = "attr",
+  verbose = TRUE,
+  verbose.int = 1,
+  ...
+)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
