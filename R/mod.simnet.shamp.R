@@ -13,8 +13,18 @@
 #'
 simnet_shamp <- function(dat, at) {
   
+  #Confirm at least 1 poi=1 for offset not to cause an error and crash.
+  poi <- sum(dat$attr$poi)
+  if(poi < 2){
+    lpoi<-which(dat$attr$age >= 39 & dat$attr$deg.cohab==0 & dat$attr$deg.pers==0)
+    id<-sample(lpoi,1)
+    dat$attr$poi[id]<-1
+  }
+  
   ## Edges correction
   dat <- edges_correct_msm(dat, at)
+  
+  
   
   ## Main network
   nwparam.c <- EpiModel::get_nwparam(dat, network = 1)
