@@ -161,7 +161,7 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$age.adj <- get.vertex.attribute(nw[[1]], "age.adj")
   dat$attr$age <- get.vertex.attribute(nw[[1]], "est_age")
   
-  partial<-(0:51)* (time.unit / 365)
+  partial<-(0:51)* (dat$param$time.unit / 365)
   partial<-sample(partial,length(dat$attr$age),replace=TRUE)
   
   dat$attr$age<-dat$attr$age+partial
