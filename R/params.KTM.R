@@ -299,7 +299,7 @@ param_KTM <- function(race.method = 1,
                       tt.traj.B.msf.prob = c(0,0,.23,.77) ,
                      
                       #KTM INTERVENTION NONE TMP
-                      intervention_TM ="TMP",
+                      intervention_TM ="NONE",
                       #From Sander 2015 65.6% within 3 weeks
                       seek.hc.AHI.prob = 1-(1-.3)^3,
                       ##sym.seek.prob can take on 4 values based on estimates of illness and treatment seeking.
@@ -727,8 +727,7 @@ param_KTM <- function(race.method = 1,
                       vv.iev.W.prob = 0.47874,
 
                       ##PrEP.
-                      prep.start = 3,
-                      ## NONE / KTM
+                      prep.start = Inf,
                       prep.elig.model = "NONE",
                 #need a real values for these
                       prep.class.prob = c(.25, .25, .25, .25),
