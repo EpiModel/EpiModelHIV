@@ -126,14 +126,6 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$n.tests.tst.ps <- rep(0, nsteps)
     dat$epi$n.tests.bg <- rep(0, nsteps)
     
-    dat$epi$diag.prevalent.poi <- rep(0, nsteps)
-    dat$epi$diag.acute.poi <- rep(0, nsteps)
-    dat$epi$n.tests.poi <- rep(0, nsteps)
-    dat$epi$n.tests.ab.poi <- rep(0, nsteps)
-    dat$epi$n.tests.rna.poi <- rep(0, nsteps)
-    dat$epi$n.tests.tst.ps.poi <- rep(0, nsteps)
-    dat$epi$n.tests.bg.poi <- rep(0, nsteps)
-    
     dat$epi$partners.sought.new <- rep(0, nsteps)
     dat$epi$partners.found <- rep(0, nsteps)
     dat$epi$partners.positive <- rep(0, nsteps)
@@ -143,11 +135,6 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$tx.cov.PLHIV <-rNA
     dat$epi$tx.init.ps <- rep(0, nsteps)
     
-    dat$epi$partners.sought.new.poi <- rep(0, nsteps)
-    dat$epi$partners.found.poi <- rep(0, nsteps)
-    dat$epi$partners.positive.poi <- rep(0, nsteps)
-    dat$epi$partners.negative.poi <- rep(0, nsteps)
-    dat$epi$PS.prior.diag.poi <- rep(0, nsteps) 
     dat$epi$tx.cov.diag.poi <-rNA
     dat$epi$tx.cov.PLHIV.poi <-rNA
     dat$epi$tx.init.ps.poi <- rep(0, nsteps)
@@ -218,13 +205,7 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$mdeg.Pers.poi[at] <-  sum(dat$attr$deg.pers[poi])/length(poi)
   dat$epi$mdeg.poi[at] <-  sum(dat$attr$deg.inst[poi])/length(poi)
   
-  dat$epi$tx.cov.diag[at] <- sum(dat$attr$tx.status)/sum(dat$attr$diag.status)
-  dat$epi$tx.cov.PLHIV[at] <-sum(dat$attr$tx.status)/sum(dat$attr$status) 
-  
-  dat$epi$tx.cov.diag.poi[at] <- sum(dat$attr$tx.status[poi])/sum(dat$attr$diag.status[poi])
-  dat$epi$tx.cov.PLHIV.poi[at] <-sum(dat$attr$tx.status[poi])/sum(dat$attr$status[poi]) 
-  
-  
+
   
   return(dat)
 }
