@@ -73,7 +73,8 @@ test_KTM <- function(dat, at) {
   tst.pos.rna <- NULL
   tst.ab <- NULL
   tst.rna <- NULL
-
+  prep.elig <- NULL
+  
 ## Process
 
 #females
@@ -237,7 +238,7 @@ test_KTM <- function(dat, at) {
     ##TEST tst.background, tst.PREP, partner services -  Antibody tests
     ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
     
-    tst.ab <- c(tst.background, tst.prep, sym_HIV, sym, tst.ps)
+    tst.ab <- c(tst.background, sym_HIV, sym, tst.ps)
     in.clinic <- c(sym_HIV, sym, tst.ps)
     
     tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
