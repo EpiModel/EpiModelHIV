@@ -89,7 +89,7 @@ if(any(index.prev==1)==TRUE){
 
 
 
-#For prevalent index cases
+#For acute index cases
 if(any(index.acute==1)==TRUE){
   
   index.prev <- which(index.acute==1)
