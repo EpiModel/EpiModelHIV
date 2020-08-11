@@ -152,12 +152,12 @@ tx_KTM <- function(dat, at) {
   dat$epi$tx.init.inc[at] <- length(tx.init)
   dat$epi$tx.halt.inc[at] <- length(tx.halt)
   dat$epi$tx.resm.inc[at] <- length(tx.reinit)
-  dat$epi$tx.cov.diag[at] <-sum(dat$attr$diag.status, na.rm = TRUE)/sum(dat$attr$tx.status, na.rm = TRUE)
-  dat$epi$tx.cov.PLHIV[at] <-sum(dat$attr$status, na.rm = TRUE)/sum(dat$attr$tx.status, na.rm = TRUE)
+  dat$epi$tx.cov.diag[at] <-sum(dat$attr$tx.status, na.rm = TRUE) / sum(dat$attr$diag.status, na.rm = TRUE)
+  dat$epi$tx.cov.PLHIV[at] <-sum(dat$attr$tx.status, na.rm = TRUE) / sum(dat$attr$status, na.rm = TRUE)
   
   poi<-which(age < 40)
-  dat$epi$tx.cov.diag.poi[at] <-sum(dat$attr$diag.status[poi], na.rm = TRUE)/sum(dat$attr$tx.status[poi], na.rm = TRUE)
-  dat$epi$tx.cov.PLHIV.poi[at] <-sum(dat$attr$status[poi], na.rm = TRUE)/sum(dat$attr$tx.status[poi], na.rm = TRUE)
+  dat$epi$tx.cov.diag.poi[at] <-sum(dat$attr$tx.status[poi], na.rm = TRUE) / sum(dat$attr$diag.status[poi], na.rm = TRUE)
+  dat$epi$tx.cov.PLHIV.poi[at] <-sum(dat$attr$tx.status[poi], na.rm = TRUE) / sum(dat$attr$status[poi], na.rm = TRUE)
   
   
   return(dat)
