@@ -388,9 +388,17 @@ test_KTM <- function(dat, at) {
   dat$attr$evertest[tst.ab] <- 1
   dat$attr$evertest[tst.rna] <- 1
   
-  dat$attr$PS.diag.pos.time[dat$attr$diag.status[tst.ps]==1] <- at
-  dat$attr$PS.diag.neg[dat$attr$diag.status[tst.ps]==0] <- 1
+  ##PS
+  PS.pos<-which(dat$attr$diag.status[tst.ps]==1)
+  PS.pos <- tst.ps[PS.pos]
+  PS.neg<-which(dat$attr$diag.status[tst.ps]==1 | is.na(dat$attr$diag.status[tst.ps])==TRUE)
+  PS.neg<-tst.ps[PS.neg]
   
+  dat$attr$PS.diag.pos.time[PS.pos] <- at
+  dat$attr$PS.diag.neg[PS.neg] <- 1
+  dat$attr$diag.status[PS.neg] <- 0
+  
+  ##
   dat$attr$age.diag[tst.pos.ab] <- dat$attr$age[tst.pos.ab]
   dat$attr$age.diag[tst.pos.rna] <- dat$attr$age[tst.pos.rna]
   
@@ -413,6 +421,7 @@ test_KTM <- function(dat, at) {
   dat$epi$diag.acute[at] <- acute
   
   dat$attr$prepElig[prep.elig]<-1
+  
   
   return(dat)
 }
