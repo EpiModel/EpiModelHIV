@@ -6,12 +6,6 @@
 \usage{
 condoms_KTM(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 Updates the discordant edgelist with a \code{uai} variable indicating whether
 condoms were used in that act for male-male dyads and a \code{uvi} variable 

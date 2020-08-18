@@ -6,12 +6,6 @@
 \usage{
 cd4_het(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \description{
 Module function for simulating progression of CD4 in natural
              disease dynamics and in the presence of ART.

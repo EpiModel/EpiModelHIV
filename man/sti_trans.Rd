@@ -6,12 +6,6 @@
 \usage{
 sti_trans(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \description{
 Stochastically simulates GC/CT transmission given the current
              state of the edgelist.

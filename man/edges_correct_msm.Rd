@@ -6,12 +6,6 @@
 \usage{
 edges_correct_msm(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 The network model parameters stored in \code{dat$nwparam} are updated for
 each of the three network models.

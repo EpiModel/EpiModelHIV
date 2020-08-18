@@ -6,12 +6,6 @@
 \usage{
 position_shamp(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 This function returns the updated discordant edgelist with a \code{ins}
 attribute for values of whether the infected node is insertive or the

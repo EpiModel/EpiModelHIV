@@ -6,12 +6,6 @@
 \usage{
 acts_KTM(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 This function returns the \code{dat} object with the updated discordant act
 list (\code{dal}). Each element of \code{dal} is a data frame with the ids of the

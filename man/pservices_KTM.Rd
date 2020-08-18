@@ -6,12 +6,6 @@
 \usage{
 pservices_KTM(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \description{
 Module function for tracking partnerships over a predetermined time window.
 }

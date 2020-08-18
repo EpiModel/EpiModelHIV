@@ -6,12 +6,6 @@
 \usage{
 prep_shamp(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \description{
 Module function for implementation and uptake of pre-exposure
              prophylaxis (PrEP) to prevent HIV infection.  Only msm and msmf are eligible.

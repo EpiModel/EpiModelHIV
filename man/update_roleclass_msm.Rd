@@ -6,12 +6,6 @@
 \usage{
 update_roleclass_msm(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 This function updates the individual-level attribute \code{role.class} on
 \code{dat$attr}.

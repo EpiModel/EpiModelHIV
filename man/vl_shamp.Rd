@@ -6,12 +6,6 @@
 \usage{
 vl_shamp(dat, at)
 }
-\arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
-
-\item{at}{Current time step.}
-}
 \value{
 This function returns the \code{dat} object with updated \code{vl} attribute.
 }
