@@ -54,27 +54,29 @@ prep_msm <- function(dat, at) {
 
   # Parameters --------------------------------------------------------------
 
-  # Oral PrEP parameters
+  # Shared
+  prep.require.lnt <- dat$param$prep.require.lnt
+  prep.risk.reassess.method <- dat$param$prep.risk.reassess.method
   prep.start.prob <- dat$param$prep.start.prob
   prep.prob.oral <- dat$param$prep.prob.oral
+
+  # Oral PrEP
   prep.adhr.dist <- dat$param$prep.adhr.dist
+  prep.discont.rate <- dat$param$prep.discont.rate
 
   # LA PrEP parameters
   prep.adhr.dist.la <- dat$param$prep.adhr.dist.la
+  prepla.discont.rate <- dat$param$prepla.discont.rate
   prep.inj.int <- dat$param$prep.inj.int
   icept <- dat$param$prepla.dlevel.icpt
   icept.err <- dat$param$prepla.dlevel.icpt.err
   half.life <- dat$param$prepla.dlevel.halflife.int
 
-  # Shared PrEP parameters
-  prep.risk.reassess.method <- dat$param$prep.risk.reassess.method
-  prep.discont.rate <- dat$param$prep.discont.rate
-  prepla.discont.rate <- dat$param$prepla.discont.rate
-
   # Indications -------------------------------------------------------------
 
   ind1 <- dat$attr$prep.ind.uai.mono
-  ind2 <- dat$attr$prep.ind.uai.nmain
+  # ind2 <- dat$attr$prep.ind.uai.nmain
+  ind2 <- dat$attr$prep.ind.uai.conc
   ind3 <- dat$attr$prep.ind.sti
 
   twind <- at - dat$param$prep.risk.int
@@ -83,9 +85,13 @@ prep_msm <- function(dat, at) {
   idsNoIndic <- which((ind1 < twind | is.na(ind1)) &
                       (ind2 < twind | is.na(ind2)) &
                       (ind3 < twind | is.na(ind3)))
+  base.cond.no <- which(active == 0 | diag.status == 1)
+  idsNoIndic <- union(idsNoIndic, base.cond.no)
 
   # Indications in window
   idsIndic <- which(ind1 >= twind | ind2 >= twind | ind3 >= twind)
+  base.cond.yes <- which(active == 1 & diag.status == 0)
+  idsIndic <- intersect(idsIndic, base.cond.yes)
 
   # Set eligibility to 1 if indications
   prepElig[idsIndic] <- 1
@@ -103,8 +109,7 @@ prep_msm <- function(dat, at) {
   if (prep.risk.reassess.method == "none") {
     idsStpInd <- NULL
   } else if (prep.risk.reassess.method == "inst") {
-    idsRiskAssess <- which(active == 1 &
-                           (prepStat == 1 | prepStat.la == 1))
+    idsRiskAssess <- which(active == 1 & (prepStat == 1 | prepStat.la == 1))
     prepLastRisk[idsRiskAssess] <- at
     idsStpInd <- intersect(idsNoIndic, idsRiskAssess)
   } else if (prep.risk.reassess.method == "year") {
@@ -127,7 +132,9 @@ prep_msm <- function(dat, at) {
   idsStpRand.inj <- idsEligStpRand.inj[which(vecStpRand.inj == 1)]
 
   # Diagnosis
-  idsStpDx <- which(active == 1 & (prepStat == 1 | prepStat.la == 1) & diag.status == 1)
+  idsStpDx <- which(active == 1 &
+                    (prepStat == 1 | prepStat.la == 1) &
+                    diag.status == 1)
 
   # Death
   idsStpDth <- which(active == 0 & (prepStat == 1 | prepStat.la == 1))
@@ -139,32 +146,28 @@ prep_msm <- function(dat, at) {
 
   # Update attributes for stoppers
   prepStat[idsStp.oral] <- 0
-  # prepElig[idsStp.oral] <- 0
   prepStat.la[idsStp.la] <- 0
-  # prepElig.la[idsStp.la] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
   prepLastStiScreen[idsStp] <- NA
-
 
   ## Initiation ----------------------------------------------------------------
 
   ## Eligibility ##
 
-  # Indications to start either formulation
-  idsEligStart <- which(active == 1 &
-                        status == 0 &
-                        prepStat == 0 &
-                        prepStat.la == 0 &
-                        lnt == at)
-  idsEligStart <- intersect(idsIndic, idsEligStart)
-  prepElig[idsEligStart] <- prepElig.la[idsEligStart] <- 1
+  # Indications to start
+  if (prep.require.lnt == TRUE) {
+    idsEligStart <- which(prepStat == 0 & prepStat.la == 0 & lnt == at)
+  } else {
+    idsEligStart <- which(prepStat == 0 & prepStat.la == 0)
+  }
 
-  if (!identical(which(prepElig == 1), idsIndic)) browser()
+  idsEligStart <- intersect(idsIndic, idsEligStart)
+  prepElig[idsEligStart] <- 1
+  prepElig.la[idsEligStart] <- 1
 
   vecStart <- rbinom(length(idsEligStart), 1, prep.start.prob)
   idsStart <- idsEligStart[which(vecStart == 1)]
-
 
   # No LA starts if LA PrEP not yet started
   if (dat$param$prep.la.start > at) {
@@ -174,35 +177,37 @@ prep_msm <- function(dat, at) {
   idsStartOral <- idsStart[which(vecOral == 1)]
   idsStartInj <- idsStart[which(vecOral == 0)]
 
+  # Set common attributes for starters
+  prepStartTime[idsStart] <- at
+  prepLastRisk[idsStart] <- at
+
   ## Oral ##
 
   # Set attributes for oral starters
   if (length(idsStartOral) > 0) {
     prepStat[idsStartOral] <- 1
-    prepStartTime[idsStartOral] <- at
-    prepLastRisk[idsStartOral] <- at
 
     # PrEP adherence class
     needPC <- which(is.na(prepClass[idsStartOral]))
-    prepClass[idsStartOral[needPC]] <- sample(x = 1:3, size = length(needPC),
-                                              replace = TRUE, prob = prep.adhr.dist)
+    prepClass[idsStartOral[needPC]] <- sample(
+      x = 1:3, size = length(needPC),
+      replace = TRUE, prob = prep.adhr.dist
+    )
   }
-
 
   ## Injectable ##
 
   # Set attributes for LA starters
   if (length(idsStartInj) > 0) {
     prepStat.la[idsStartInj] <- 1
-    prepStartTime[idsStartInj] <- at
-    prepLastRisk[idsStartInj] <- at
 
     # LA PrEP adherence class
     needPC <- which(is.na(prepClass.la[idsStartInj]))
-    prepClass.la[idsStartInj[needPC]] <- sample(x = 1:2, size = length(needPC),
-                                                replace = TRUE, prob = prep.adhr.dist.la)
+    prepClass.la[idsStartInj[needPC]] <- sample(
+      x = 1:2, size = length(needPC),
+      replace = TRUE, prob = prep.adhr.dist.la
+    )
   }
-
 
   # LA PrEP Interval Injection ----------------------------------------------
 
@@ -226,14 +231,18 @@ prep_msm <- function(dat, at) {
 
   # Set drug level intercept for those newly started
   prepLA.dlevel.int[startLAtoday] <- pmax(0.1,
-                                         rnorm(length(startLAtoday),
-                                               icept, icept.err))
+                                          rnorm(length(startLAtoday),
+                                                icept, icept.err))
 
   # Update dlevel for all active users
   prepLA.dlevel <- prepLA.dlevel.int * 0.5^(last.inj/half.life)
 
 
   ## Output --------------------------------------------------------------------
+
+  # Random discontinuation
+  dat$epi$prep.rand.stop[at] <- length(idsStpRand.oral)
+  dat$epi$prep.la.rand.stop[at] <- length(idsStpRand.inj)
 
   # Attributes
   dat$attr$prepElig <- prepElig
@@ -279,7 +288,6 @@ riskhist_msm <- function(dat, at) {
   uCT.tx <- dat$attr$uCT.tx
 
   ## Parameters
-  time.unit <- dat$param$time.unit
 
   ## Edgelist, adds uai summation per partnership from act list
   pid <- NULL # For R CMD Check
@@ -298,6 +306,9 @@ riskhist_msm <- function(dat, at) {
     dat$attr$prep.ind.uai.mono <- rep(NA, n)
     dat$attr$prep.ind.uai.nmain <- rep(NA, n)
     dat$attr$prep.ind.sti <- rep(NA, n)
+  }
+  if (is.null(dat$attr$prep.ind.uai.conc)) {
+    dat$attr$prep.ind.uai.conc <- rep(NA, n)
   }
 
   ## Degree ##
@@ -325,9 +336,15 @@ riskhist_msm <- function(dat, at) {
   ##               partner not tested in past 6 months
   uai.mono1.neg <- intersect(uai.mono1, all.neg)
   part.id1 <- c(el2[el2$p1 %in% uai.mono1.neg, 2], el2[el2$p2 %in% uai.mono1.neg, 1])
-  not.tested.6mo <- since.test[part.id1] > (180/time.unit)
+  not.tested.6mo <- since.test[part.id1] > (180/7)
   part.not.tested.6mo <- uai.mono1.neg[which(not.tested.6mo == TRUE)]
   dat$attr$prep.ind.uai.mono[part.not.tested.6mo] <- at
+
+  ## Condition 2a: UAI + concurrency
+  el2.uai <- el2[el2$uai > 0, ]
+  vec <- c(el2.uai[, 1], el2.uai[, 2])
+  uai.conc <- unique(vec[duplicated(vec)])
+  dat$attr$prep.ind.uai.conc[uai.conc] <- at
 
   ## Condition 2b: UAI in non-main partnerships
   uai.nmain <- unique(c(el2$p1[el2$st1 == 0 & el2$uai > 0 & el2$ptype %in% 2:3],
@@ -339,4 +356,30 @@ riskhist_msm <- function(dat, at) {
   dat$attr$prep.ind.sti[idsDx] <- at
 
   return(dat)
+}
+
+
+#' @title Proportionally Reallocate PrEP Adherence Class Probability
+#'
+#' @description Shifts probabilities from the high-adherence category to the lower
+#'              three adherence categories while maintaining the proportional
+#'              distribution of those lower categories.
+#'
+#' @param in.pcp Input vector of length four for the \code{prep.adhr.dist}
+#'        parameters.
+#' @param reall The pure percentage points to shift from the high adherence
+#'        group to the lower three groups.
+#'
+#' @export
+#'
+reallocate_pcp <- function(in.pcp = c(0.089, 0.127, 0.784), reall = 0) {
+
+  dist <- in.pcp[1]/sum(in.pcp[1:2])
+  dist[2] <- in.pcp[2]/sum(in.pcp[1:2])
+
+  out.pcp <- rep(NA, 3)
+  out.pcp[1:2] <- in.pcp[1:2] - (dist * reall)
+  out.pcp[3] <- 1 - sum(out.pcp[1:2])
+
+  return(out.pcp)
 }

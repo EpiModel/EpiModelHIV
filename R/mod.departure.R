@@ -1,8 +1,8 @@
 
-#' @title Death Module
+#' @title Depature Module
 #'
 #' @description Module function for simulting both general and disease-related
-#'              deaths among population members.
+#'              departures, including deaths, among population members.
 #'
 #' @inheritParams aging_msm
 #'
@@ -10,10 +10,6 @@
 #' Deaths are divided into two categories: general deaths, for which demographic
 #' data on age-specific mortality rates applies; and disease-related diseases,
 #' for which the rate of death is a function of progression to end-stage AIDS.
-#' Which nodes have died is determined stochastically for general deaths using
-#' draws from a binomial distribution, and deterministically for disease-related
-#' deaths after nodes have reach a maximum viral load value set in the
-#' \code{vl.fatal} parameter.
 #'
 #' @return
 #' This function returns the updated \code{dat} object accounting for deaths.
@@ -25,54 +21,78 @@
 #' @keywords module msm
 #' @export
 #'
-deaths_msm <- function(dat, at) {
+departure_msm <- function(dat, at) {
 
-  ## General deaths
+  ## General departures
+  active <- dat$attr$active
   age <- floor(dat$attr$age)
   race <- dat$attr$race
+  status <- dat$attr$status
+  stage <- dat$attr$stage
+  tx.status <- dat$attr$tx.status
 
-  alive.B <- which(race == "B")
-  age.B <- age[alive.B]
-  death.B.prob <- dat$param$asmr.B[age.B]
-  deaths.B <- alive.B[rbinom(length(death.B.prob), 1, death.B.prob) == 1]
+  aids.mr <- dat$param$aids.mr
+  asmr <- dat$param$netstats$demog$asmr
 
-  alive.W <- which(race == "W")
-  age.W <- age[alive.W]
-  death.W.prob <- dat$param$asmr.W[age.W]
-  deaths.W <- alive.W[rbinom(length(death.W.prob), 1, death.W.prob) == 1]
+  idsElig <- which(active == 1)
+  rates <- rep(NA, length(idsElig))
 
-  dth.gen <- c(deaths.B, deaths.W)
+  races <- sort(unique(race))
+  for (i in seq_along(races)) {
+    ids.race <- which(race == races[i])
+    rates[ids.race] <- asmr[age[ids.race], i + 1]
+  }
+  idsDep <- idsElig[rbinom(length(rates), 1, rates) == 1]
 
+  ## HIV-related deaths
+  idsEligAIDS <- which(stage == 4)
+  idsDepAIDS <- idsEligAIDS[rbinom(length(idsEligAIDS), 1, aids.mr) == 1]
 
-  ## Disease deaths
-  dth.dis <- which(dat$attr$stage == 4 &
-                   dat$attr$vl >= dat$param$vl.fatal)
+  idsDepAll <- unique(c(idsDep, idsDepAIDS))
+  depHIV <- intersect(idsDepAll, which(status == 1))
+  depHIV.old <- intersect(depHIV, which(age >= 65))
 
-  dth.all <- NULL
-  dth.all <- unique(c(dth.gen, dth.dis))
+  # Cumulative R0 calculations
+  # if (at == 2) {
+  #   dat$temp$R0 <- NA
+  # }
+  # if (length(depHIV) > 0) {
+  #   newR0 <- dat$attr$count.trans[depHIV]
+  #   dat$temp$R0 <- c(dat$temp$R0, newR0)
+  # }
 
-  if (length(dth.all) > 0) {
-    dat$attr$active[dth.all] <- 0
+  if (length(idsDepAll) > 0) {
+    dat$attr$active[idsDepAll] <- 0
     for (i in 1:3) {
-      dat$el[[i]] <- tergmLite::delete_vertices(dat$el[[i]], dth.all)
+      dat$el[[i]] <- tergmLite::delete_vertices(dat$el[[i]], idsDepAll)
     }
-    dat$attr <- deleteAttr(dat$attr, dth.all)
+    dat$attr <- deleteAttr(dat$attr, idsDepAll)
     if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-      stop("mismatch between el and attr length in death mod")
+      stop("mismatch between el and attr length in departures mod")
     }
   }
 
+  # Update clinical history
+  if (dat$control$save.clin.hist == TRUE & length(idsDepAll) > 0) {
+    m <- dat$temp$clin.hist
+    for (i in 1:length(m)) {
+      m[[i]] <- m[[i]][-idsDepAll, ]
+    }
+    dat$temp$clin.hist <- m
+  }
 
   ## Summary Output
-  dat$epi$dth.gen[at] <- length(dth.gen)
-  dat$epi$dth.dis[at] <- length(dth.dis)
+  dat$epi$dep.gen[at] <- length(idsDep)
+  dat$epi$dep.AIDS[at] <- length(idsDepAIDS)
+  dat$epi$dep.HIV[at] <- length(depHIV)
+  dat$epi$dep.HIV.old[at] <- length(depHIV.old)
 
   return(dat)
 }
 
 
 #' @export
-#' @rdname deaths_msm
+#' @rdname departure_msm
 deaths_het <- function(dat, at) {
 
   ### 1. Susceptible Deaths ###

@@ -4,18 +4,38 @@
 \alias{control_msm}
 \title{Epidemic Model Control Settings}
 \usage{
-control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
-  deaths.FUN = deaths_msm, births.FUN = births_msm,
-  test.FUN = test_msm, tx.FUN = tx_msm, progress.FUN = progress_msm,
-  vl.FUN = vl_msm, aiclass.FUN = NULL, roleclass.FUN = NULL,
-  resim_nets.FUN = simnet_msm, disclose.FUN = disclose_msm,
-  acts.FUN = acts_msm, condoms.FUN = condoms_msm,
-  position.FUN = position_msm, prep.FUN = prep_msm,
-  trans.FUN = trans_msm, stitrans.FUN = sti_trans,
-  stirecov.FUN = sti_recov, stitx.FUN = sti_tx,
-  prev.FUN = prevalence_msm, verbose.FUN = verbose_msm,
-  save.nwstats = FALSE, verbose = TRUE, verbose.int = 1, ...)
+control_msm(
+  simno = 1,
+  nsims = 1,
+  ncores = 1,
+  nsteps = 100,
+  start = 1,
+  initialize.FUN = initialize_msm,
+  param_changer.FUN = param_changer,
+  aging.FUN = aging_msm,
+  departure.FUN = departure_msm,
+  arrival.FUN = arrival_msm,
+  hivtest.FUN = hivtest_msm,
+  hivtx.FUN = hivtx_msm,
+  hivprogress.FUN = hivprogress_msm,
+  hivvl.FUN = hivvl_msm,
+  resim_nets.FUN = simnet_msm,
+  acts.FUN = acts_msm,
+  condoms.FUN = condoms_msm,
+  position.FUN = position_msm,
+  prep.FUN = prep_msm,
+  hivtrans.FUN = hivtrans_msm,
+  stitrans.FUN = stitrans_msm,
+  stirecov.FUN = stirecov_msm,
+  stitx.FUN = stitx_msm,
+  prev.FUN = prevalence_msm,
+  verbose.FUN = verbose.net,
+  save.nwstats = FALSE,
+  save.clin.hist = FALSE,
+  truncate.plist = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -38,26 +58,20 @@ model.}
 
 \item{aging.FUN}{Module function for aging.}
 
-\item{deaths.FUN}{Module function for general and disease-realted deaths.}
+\item{departure.FUN}{Module function for general and disease-realted depatures.}
 
-\item{births.FUN}{Module function for births or entries into the population.}
+\item{arrival.FUN}{Module function for entries into the sexually active population.}
 
-\item{test.FUN}{Module function for diagnostic disease testing.}
+\item{hivtest.FUN}{Module function for HIV diagnostic disease testing.}
 
-\item{tx.FUN}{Module function for ART initiation and adherence.}
+\item{hivtx.FUN}{Module function for ART initiation and adherence.}
 
-\item{progress.FUN}{Module function for HIV disease progression.}
+\item{hivprogress.FUN}{Module function for HIV disease progression.}
 
-\item{vl.FUN}{Module function for HIV viral load evolution.}
-
-\item{aiclass.FUN}{Module function for one-off AI risk class transitions.}
-
-\item{roleclass.FUN}{Module function for transitions in sexual roles.}
+\item{hivvl.FUN}{Module function for HIV viral load evolution.}
 
 \item{resim_nets.FUN}{Module function for network resimulation at each time
 step.}
-
-\item{disclose.FUN}{Module function for HIV status disclosure.}
 
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
@@ -68,7 +82,7 @@ partnerships.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
-\item{trans.FUN}{Module function to stochastically simulate HIV transmission
+\item{hivtrans.FUN}{Module function to stochastically simulate HIV transmission
 over acts given individual and dyadic attributes.}
 
 \item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
@@ -87,11 +101,13 @@ external text files.}
 \item{save.nwstats}{Calculate and save network statistics as defined in the
 \code{simnet} modules.}
 
+\item{save.clin.hist}{Save individual-level clinical history matrices.}
+
+\item{truncate.plist}{Truncate the cumulative partnership list to only include
+active partnerships.}
+
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}
-
-\item{verbose.int}{Integer specifying the interval between time steps at which
-progress is printed.}
 
 \item{...}{Additional arguments passed to the function.}
 }

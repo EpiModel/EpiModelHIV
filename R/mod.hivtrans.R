@@ -17,7 +17,7 @@
 #'
 #' The per-act transmission probability depends on the following elements:
 #' insertive versus receptive role, viral load of the infected partner, an
-#' acute stage infection excess risk, condom use, and the CCR5 genetic allele.
+#' acute stage infection excess risk, and condom use.
 #' Given these transmission probabilities, transmission is stochastically
 #' simulating by drawing from a binomial distribution for each act conditional
 #' on the per-act probability.
@@ -32,14 +32,13 @@
 #'
 #' @export
 #'
-trans_msm <- function(dat, at) {
+hivtrans_msm <- function(dat, at) {
 
   # Variables -----------------------------------------------------------
 
   # Attributes
   vl <- dat$attr$vl
   stage <- dat$attr$stage
-  ccr5 <- dat$attr$ccr5
   circ <- dat$attr$circ
   status <- dat$attr$status
 
@@ -56,19 +55,17 @@ trans_msm <- function(dat, at) {
   # Parameters
   URAI.prob <- dat$param$URAI.prob
   UIAI.prob <- dat$param$UIAI.prob
+  trans.scale <- dat$param$trans.scale
   acute.rr <- dat$param$acute.rr
 
   cond.eff <- dat$param$cond.eff
-  cond.fail.B <- dat$param$cond.fail.B
-  cond.fail.W <- dat$param$cond.fail.W
+  cond.fail <- dat$param$cond.fail
 
-  circ.rr <- dat$param$circ.rr
-  ccr5.heteroz.rr <- dat$param$ccr5.heteroz.rr
-  prep.adhr.hr <- dat$param$prep.adhr.hr
-
+  prep.hr <- dat$param$prep.adhr.hr
   prep.la.hr.beta <- dat$param$prep.la.hr.beta
   prep.la.hr.rel <- dat$param$prep.la.hr.rel
 
+  circ.rr <- dat$param$circ.rr
   hiv.ugc.rr <- dat$param$hiv.ugc.rr
   hiv.uct.rr <- dat$param$hiv.uct.rr
   hiv.rgc.rr <- dat$param$hiv.rgc.rr
@@ -86,9 +83,9 @@ trans_msm <- function(dat, at) {
     return(dat)
   }
 
-  ## Reorder by role: ins on the left, rec on the right, flippers represented twice
-  disc.ip <- dal[dal[, "ins"] %in% 1:2, ]
-  disc.rp <- dal[dal[, "ins"] %in% c(0, 2), c(2:1, 3:ncols)]
+  ## Reorder by role: ins on the left, rec on the right
+  disc.ip <- dal[dal[, "ins"] == 1, ]
+  disc.rp <- dal[dal[, "ins"] == 0, c(2:1, 3:ncols)]
   colnames(disc.ip)[1:2] <- colnames(disc.rp)[1:2] <- c("ins", "rec")
 
 
@@ -99,7 +96,6 @@ trans_msm <- function(dat, at) {
   ip.stage <- stage[disc.ip[, 1]]
 
   # Attributes of susceptible
-  ip.ccr5 <- ccr5[disc.ip[, 2]]
   ip.prep <- prepStat[disc.ip[, 2]]
   ip.prepcl <- prepClass[disc.ip[, 2]]
   ip.prep.dl <- prepLA.dlevel[disc.ip[, 2]]
@@ -107,34 +103,29 @@ trans_msm <- function(dat, at) {
   ip.rCT <- rCT[disc.ip[, 2]]
 
   # Base TP from VL
-  ip.tprob <- URAI.prob * 2.45^(ip.vl - 4.5)
+  ip.tprob <- pmin(0.99, URAI.prob * 2.45^(ip.vl - 4.5))
 
   # Transform to log odds
   ip.tlo <- log(ip.tprob/(1 - ip.tprob))
 
   # Condom use
   not.UAI <- which(disc.ip[, "uai"] == 0)
-  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "B"))
-  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.ip[, 1]] == "W"))
-
   condom.rr <- rep(NA, nrow(disc.ip))
-  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
-  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
-
+  races <- sort(unique(race[disc.ip[, 1]]))
+  for (i in races) {
+    not.UAI.race <- intersect(not.UAI, which(race[disc.ip[, 1]] == i))
+    condom.rr[not.UAI.race] <- 1 - (cond.eff - cond.fail[i])
+  }
   ip.tlo[not.UAI] <- ip.tlo[not.UAI] + log(condom.rr[not.UAI])
-
-  # CCR5
-  ip.tlo[ip.ccr5 == "DD"] <- ip.tlo[ip.ccr5 == "DD"] + -Inf
-  ip.tlo[ip.ccr5 == "DW"] <- ip.tlo[ip.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
   # PrEP, by adherence class
   ip.on.prep <- which(ip.prep == 1)
-  ip.tlo[ip.on.prep] <- ip.tlo[ip.on.prep] + log(prep.adhr.hr[ip.prepcl[ip.on.prep]])
+  ip.tlo[ip.on.prep] <- ip.tlo[ip.on.prep] + log(prep.hr[ip.prepcl[ip.on.prep]])
 
   # LA PrEP HR, by drug level
   ip.tlo[!is.na(ip.prep.dl)] <- ip.tlo[!is.na(ip.prep.dl)] +
-                                log(exp(ip.prep.dl[!is.na(ip.prep.dl)] *
-                                          prep.la.hr.beta)*prep.la.hr.rel)
+    log(exp(ip.prep.dl[!is.na(ip.prep.dl)] *
+              prep.la.hr.beta)*prep.la.hr.rel)
 
   # Acute-stage multipliers
   isAcute <- which(ip.stage %in% 1:2)
@@ -142,21 +133,21 @@ trans_msm <- function(dat, at) {
 
   ## Multiplier for STI
   is.rGC <- which(ip.rGC == 1)
-
   is.rCT <- which(ip.rCT == 1)
-
   is.rect.dual <- intersect(is.rGC, is.rCT)
-
   is.rGC.sing <- setdiff(is.rGC, is.rect.dual)
   is.rCT.sing <- setdiff(is.rCT, is.rect.dual)
-
   ip.tlo[is.rGC.sing] <- ip.tlo[is.rGC.sing] + log(hiv.rgc.rr)
   ip.tlo[is.rCT.sing] <- ip.tlo[is.rCT.sing] + log(hiv.rct.rr)
-
   ip.tlo[is.rect.dual] <- ip.tlo[is.rect.dual] +
     max(log(hiv.rgc.rr), log(hiv.rct.rr)) +
     min(log(hiv.rgc.rr), log(hiv.rct.rr)) * hiv.dual.rr
 
+  # Race-specific scalar for calibration
+  races <- race[disc.ip[, 2]]
+  ip.tlo <- ip.tlo + log(trans.scale[races])
+
+  # Convert back to probability
   ip.tprob <- plogis(ip.tlo)
   stopifnot(ip.tprob >= 0, ip.tprob <= 1)
 
@@ -169,7 +160,6 @@ trans_msm <- function(dat, at) {
 
   # Attributes of susceptible
   rp.circ <- circ[disc.rp[, 1]]
-  rp.ccr5 <- ccr5[disc.rp[, 1]]
   rp.prep <- prepStat[disc.rp[, 1]]
   rp.prepcl <- prepClass[disc.rp[, 1]]
   rp.prep.dl <- prepLA.dlevel[disc.rp[, 1]]
@@ -177,7 +167,7 @@ trans_msm <- function(dat, at) {
   rp.uCT <- uCT[disc.rp[, 1]]
 
   # Base TP from VL
-  rp.tprob <- UIAI.prob * 2.45^(rp.vl - 4.5)
+  rp.tprob <- pmin(0.99, UIAI.prob * 2.45^(rp.vl - 4.5))
 
   # Transform to log odds
   rp.tlo <- log(rp.tprob/(1 - rp.tprob))
@@ -187,28 +177,22 @@ trans_msm <- function(dat, at) {
 
   # Condom use
   not.UAI <- which(disc.rp[, "uai"] == 0)
-
-  not.UAI.B.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "B"))
-  not.UAI.W.ins <- intersect(not.UAI, which(race[disc.rp[, 1]] == "W"))
-
   condom.rr <- rep(NA, nrow(disc.rp))
-  condom.rr[not.UAI.B.ins] <- 1 - (cond.eff - cond.fail.B)
-  condom.rr[not.UAI.W.ins] <- 1 - (cond.eff - cond.fail.W)
-
+  races <- sort(unique(race[disc.rp[, 1]]))
+  for (i in races) {
+    not.UAI.race <- intersect(not.UAI, which(race[disc.rp[, 1]] == i))
+    condom.rr[not.UAI.race] <- 1 - (cond.eff - cond.fail[i])
+  }
   rp.tlo[not.UAI] <- rp.tlo[not.UAI] + log(condom.rr[not.UAI])
-
-  # CCR5
-  rp.tlo[rp.ccr5 == "DD"] <- rp.tlo[rp.ccr5 == "DD"] + -Inf
-  rp.tlo[rp.ccr5 == "DW"] <- rp.tlo[rp.ccr5 == "DW"] + log(ccr5.heteroz.rr)
 
   # PrEP, by adherence class
   rp.on.prep <- which(rp.prep == 1)
-  rp.tlo[rp.on.prep] <- rp.tlo[rp.on.prep] + log(prep.adhr.hr[rp.prepcl[rp.on.prep]])
+  rp.tlo[rp.on.prep] <- rp.tlo[rp.on.prep] + log(prep.hr[rp.prepcl[rp.on.prep]])
 
   # LA PrEP HR, by drug level
   rp.tlo[!is.na(rp.prep.dl)] <- rp.tlo[!is.na(rp.prep.dl)] +
-                                log(exp(rp.prep.dl[!is.na(rp.prep.dl)] *
-                                          prep.la.hr.beta)*prep.la.hr.rel)
+    log(exp(rp.prep.dl[!is.na(rp.prep.dl)] *
+              prep.la.hr.beta)*prep.la.hr.rel)
 
   # Acute-stage multipliers
   isAcute <- which(rp.stage %in% 1:2)
@@ -216,44 +200,39 @@ trans_msm <- function(dat, at) {
 
   ## Multiplier for STI
   is.uGC <- which(rp.uGC == 1)
-
   is.uCT <- which(rp.uCT == 1)
-
   is.ureth.dual <- intersect(is.uGC, is.uCT)
-
   is.uGC.sing <- setdiff(is.uGC, is.ureth.dual)
   is.uCT.sing <- setdiff(is.uCT, is.ureth.dual)
-
   rp.tlo[is.uGC.sing] <- rp.tlo[is.uGC.sing] + log(hiv.ugc.rr)
   rp.tlo[is.uCT.sing] <- rp.tlo[is.uCT.sing] + log(hiv.uct.rr)
-
   rp.tlo[is.ureth.dual] <- rp.tlo[is.ureth.dual] +
     max(log(hiv.ugc.rr), log(hiv.uct.rr)) +
     min(log(hiv.ugc.rr), log(hiv.uct.rr)) * hiv.dual.rr
 
-  # Retransformation to probability
+  # Race-specific scalar for calibration
+  races <- race[disc.rp[, 1]]
+  rp.tlo <- rp.tlo + log(trans.scale[races])
+
+  # Convert back to probability
   rp.tprob <- plogis(rp.tlo)
   stopifnot(rp.tprob >= 0, rp.tprob <= 1)
 
 
   # Transmission --------------------------------------------------------
 
-  ## Bernoulli transmission events
   trans.ip <- rbinom(length(ip.tprob), 1, ip.tprob)
   trans.rp <- rbinom(length(rp.tprob), 1, rp.tprob)
 
 
   # Output --------------------------------------------------------------
 
-
-  # Update attributes
-
   infected <- NULL
   if (sum(trans.ip, trans.rp) > 0) {
-
     infected <- c(disc.ip[trans.ip == 1, 2],
                   disc.rp[trans.rp == 1, 1])
 
+    # Attributes of newly infected
     dat$attr$status[infected] <- 1
     dat$attr$inf.time[infected] <- at
     dat$attr$vl[infected] <- 0
@@ -261,25 +240,30 @@ trans_msm <- function(dat, at) {
     dat$attr$stage.time[infected] <- 0
     dat$attr$diag.status[infected] <- 0
     dat$attr$tx.status[infected] <- 0
+    dat$attr$cuml.time.on.tx[infected] <- 0
+    dat$attr$cuml.time.off.tx[infected] <- 0
 
-    dat$attr$cum.time.on.tx[infected] <- 0
-    dat$attr$cum.time.off.tx[infected] <- 0
+    # Attributes of transmitter
+    transmitter <- c(disc.ip[trans.ip == 1, 1],
+                     disc.rp[trans.rp == 1, 2])
+    tab.trans <- table(transmitter)
+    uni.trans <- as.numeric(names(tab.trans))
+    dat$attr$count.trans[uni.trans] <- dat$attr$count.trans[uni.trans] +
+                                       as.numeric(tab.trans)
   }
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
-  dat$epi$incid.prep[at] <- sum(dat$attr$prepStat[infected] == 1, na.rm = TRUE) +
-                            sum(dat$attr$prepStat.la[infected] == 1, na.rm = TRUE)
-  dat$epi$incid.oprep[at] <- sum(dat$attr$prepStat[infected] == 1, na.rm = TRUE)
-  dat$epi$incid.iprep[at] <- sum(dat$attr$prepStat.la[infected] == 1, na.rm = TRUE)
+  dat$epi$incid.B[at] <- sum(dat$attr$race[infected] == 1)
+  dat$epi$incid.H[at] <- sum(dat$attr$race[infected] == 2)
+  dat$epi$incid.W[at] <- sum(dat$attr$race[infected] == 3)
 
   return(dat)
 }
 
 
-
 #' @export
-#' @rdname trans_msm
+#' @rdname hivtrans_msm
 trans_het <- function(dat, at) {
 
   ## Discordant Edgelist
@@ -477,4 +461,12 @@ hughes_tp <- function(vls, susmales, susages, suscircs, prop.male, fmat = FALSE)
   }
 
   return(tp.full)
+}
+
+keep.attr <- function(attrList, keep) {
+  lapply(attrList, function(x) x[keep])
+}
+
+nbsdtosize <- function(mu, sd) {
+  mu ^ 2 / (sd ^ 2 - mu)
 }

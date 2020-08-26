@@ -19,9 +19,9 @@
 #' @aliases EpiModelHIV
 #'
 #' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
-#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis rnorm
-#' @importFrom utils tail
+#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis predict
 #' @importFrom dplyr group_by summarise
+#' @importFrom utils tail
 #'
 #' @docType package
 #' @keywords package msm het

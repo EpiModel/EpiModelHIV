@@ -18,95 +18,113 @@
 #'
 #' @return
 #' This function returns the \code{dat} object with updated \code{tx.status},
-#' \code{tx.init.time}, \code{cum.time.on.tx}, \code{cum.time.off.tx} attributes.
+#' \code{tx.init.time}, \code{cuml.time.on.tx}, \code{cuml.time.off.tx} attributes.
 #'
 #' @keywords module msm
 #'
 #' @export
 #'
-tx_msm <- function(dat, at) {
-
-  ## Variables
+hivtx_msm <- function(dat, at) {
 
   # Attributes
   race <- dat$attr$race
   status <- dat$attr$status
   tx.status <- dat$attr$tx.status
   diag.status <- dat$attr$diag.status
+  cuml.time.on.tx <- dat$attr$cuml.time.on.tx
+  cuml.time.off.tx <- dat$attr$cuml.time.off.tx
+  tx.period.first <- dat$attr$tx.period.first
+  tx.period.last <- dat$attr$tx.period.last
+  tx.init.time <- dat$attr$tx.init.time
   tt.traj <- dat$attr$tt.traj
-  cum.time.on.tx <- dat$attr$cum.time.on.tx
-  stage <- dat$attr$stage
 
   # Parameters
-  tx.init.B.prob <- dat$param$tx.init.B.prob
-  tx.init.W.prob <- dat$param$tx.init.W.prob
-  tx.halt.B.prob <- dat$param$tx.halt.B.prob
-  tx.halt.W.prob <- dat$param$tx.halt.W.prob
-  tx.reinit.B.prob <- dat$param$tx.reinit.B.prob
-  tx.reinit.W.prob <- dat$param$tx.reinit.W.prob
-
+  tx.init.prob <- dat$param$tx.init.prob
+  tx.halt.part.prob <- dat$param$tx.halt.part.prob
+  tx.reinit.part.prob <- dat$param$tx.reinit.part.prob
+  tx.halt.full.rr <- dat$param$tx.halt.full.rr
+  tx.halt.dur.rr <- dat$param$tx.halt.dur.rr
+  tx.reinit.full.rr <- dat$param$tx.reinit.full.rr
+  tx.reinit.dur.rr <- dat$param$tx.reinit.full.rr
 
   ## Initiation
-  tx.init.elig.B <- which(race == "B" & status == 1 &
-                          tx.status == 0 & diag.status == 1 &
-                          tt.traj %in% c(3, 4) & cum.time.on.tx == 0 &
-                          stage != 4)
-  tx.init.B <- tx.init.elig.B[rbinom(length(tx.init.elig.B), 1,
-                                     tx.init.B.prob) == 1]
-
-  tx.init.elig.W <- which(race == "W" & status == 1 &
-                          tx.status == 0 & diag.status == 1 &
-                          tt.traj %in% c(3, 4) & cum.time.on.tx == 0 &
-                          stage != 4)
-  tx.init.W <- tx.init.elig.W[rbinom(length(tx.init.elig.W), 1,
-                                     tx.init.W.prob) == 1]
-
-  tx.init <- c(tx.init.B, tx.init.W)
-
-  dat$attr$tx.status[tx.init] <- 1
-  dat$attr$tx.init.time[tx.init] <- at
-
+  tx.init.elig <- which(status == 1 &
+                        tx.status == 0 &
+                        diag.status == 1 &
+                        cuml.time.on.tx == 0)
+  rates <- tx.init.prob[race[tx.init.elig]]
+  tx.init <- tx.init.elig[rbinom(length(tx.init.elig), 1, rates) == 1]
 
   ## Halting
-  tx.halt.elig.B <- which(race == "B" & tx.status == 1)
-  tx.halt.B <- tx.halt.elig.B[rbinom(length(tx.halt.elig.B), 1,
-                                     tx.halt.B.prob) == 1]
+  tx.halt.part.elig <- which(tx.status == 1 & tt.traj == 1)
+  rates.part <- tx.halt.part.prob[race[tx.halt.part.elig]]
+  tx.halt.part <- tx.halt.part.elig[rbinom(length(tx.halt.part.elig), 1, rates.part) == 1]
 
-  tx.halt.elig.W <- which(race == "W" & tx.status == 1)
-  tx.halt.W <- tx.halt.elig.W[rbinom(length(tx.halt.elig.W),
-                                     1, tx.halt.W.prob) == 1]
-  tx.halt <- c(tx.halt.B, tx.halt.W)
-  dat$attr$tx.status[tx.halt] <- 0
+  tx.halt.full.elig <- which(tx.status == 1 & tt.traj == 2)
+  rates.full <- tx.halt.part.prob[race[tx.halt.full.elig]] * tx.halt.full.rr[race[tx.halt.full.elig]]
+  tx.halt.full <- tx.halt.full.elig[rbinom(length(tx.halt.full.elig), 1, rates.full) == 1]
 
+  tx.halt.dur.elig <- which(tx.status == 1 & tt.traj == 3)
+  rates.dur <- tx.halt.part.prob[race[tx.halt.dur.elig]] * tx.halt.dur.rr[race[tx.halt.dur.elig]]
+  tx.halt.dur <- tx.halt.dur.elig[rbinom(length(tx.halt.dur.elig), 1, rates.dur) == 1]
+
+  tx.halt <- c(tx.halt.part, tx.halt.full, tx.halt.dur)
 
   ## Restarting
-  tx.reinit.elig.B <- which(race == "B" & tx.status == 0 &
-                            cum.time.on.tx > 0 & stage != 4)
-  tx.reinit.B <- tx.reinit.elig.B[rbinom(length(tx.reinit.elig.B),
-                                         1, tx.reinit.B.prob) == 1]
+  tx.reinit.part.elig <- which(tx.status == 0 & tt.traj == 1 &
+                               cuml.time.on.tx > 0)
+  rates.part <- tx.reinit.part.prob[race[tx.reinit.part.elig]]
+  tx.reinit.part <- tx.reinit.part.elig[rbinom(length(tx.reinit.part.elig), 1, rates.part) == 1]
 
-  tx.reinit.elig.W <- which(race == "W" & tx.status == 0 &
-                            cum.time.on.tx > 0 & stage != 4)
-  tx.reinit.W <- tx.reinit.elig.W[rbinom(length(tx.reinit.elig.W),
-                                         1, tx.reinit.W.prob) == 1]
+  tx.reinit.full.elig <- which(tx.status == 0 & tt.traj == 2 &
+                               cuml.time.on.tx > 0)
+  rates.full <- tx.reinit.part.prob[race[tx.reinit.full.elig]] * tx.reinit.full.rr[race[tx.reinit.full.elig]]
+  tx.reinit.full <- tx.reinit.full.elig[rbinom(length(tx.reinit.full.elig), 1, rates.full) == 1]
 
-  tx.reinit <- c(tx.reinit.B, tx.reinit.W)
-  dat$attr$tx.status[tx.reinit] <- 1
+  tx.reinit.dur.elig <- which(tx.status == 0 & tt.traj == 3 &
+                              cuml.time.on.tx > 0)
+  rates.dur <- tx.reinit.part.prob[race[tx.reinit.dur.elig]] * tx.reinit.dur.rr[race[tx.reinit.dur.elig]]
+  tx.reinit.dur <- tx.reinit.dur.elig[rbinom(length(tx.reinit.dur.elig), 1, rates.dur) == 1]
 
+  tx.reinit <- c(tx.reinit.part, tx.reinit.full, tx.reinit.dur)
 
-  ## Other output
-  dat$attr$cum.time.on.tx <- dat$attr$cum.time.on.tx +
-                             ((dat$attr$tx.status == 1) %in% TRUE)
-  dat$attr$cum.time.off.tx <- dat$attr$cum.time.off.tx +
-                              ((dat$attr$tx.status == 0) %in% TRUE)
+  ## Update Attributes
+  tx.status[tx.init] <- 1
+  tx.status[tx.halt] <- 0
+  tx.status[tx.reinit] <- 1
 
+  cuml.time.on.tx[which(tx.status == 1)] <- cuml.time.on.tx[which(tx.status == 1)] + 1
+  cuml.time.off.tx[which(tx.status == 0)] <- cuml.time.off.tx[which(tx.status == 0)] + 1
+
+  tx.init.time[tx.init] <- at
+
+  idsSetPeriod <- union(tx.init, tx.reinit)
+  tx.period.first[idsSetPeriod] <- at
+  tx.period.last[idsSetPeriod] <- at
+
+  idsContPeriod <- setdiff(which(tx.status == 1), idsSetPeriod)
+  tx.period.last[idsContPeriod] <- at
+
+  dat$attr$tt.traj <- tt.traj
+  dat$attr$tx.status <- tx.status
+  dat$attr$cuml.time.on.tx <- cuml.time.on.tx
+  dat$attr$cuml.time.off.tx <- cuml.time.off.tx
+  dat$attr$tx.period.first <- tx.period.first
+  dat$attr$tx.period.last <- tx.period.last
+  dat$attr$tx.init.time <- tx.init.time
+
+  dat$epi$mean.tx.on[at] <- mean(cuml.time.on.tx, na.rm = TRUE)
+  dat$epi$mean.tx.off[at] <- mean(cuml.time.off.tx, na.rm = TRUE)
+
+  dat$epi$mean.tx.on.part[at] <- mean(cuml.time.on.tx[tt.traj == 1], na.rm = TRUE)
+  dat$epi$mean.tx.off.part[at] <- mean(cuml.time.off.tx[tt.traj == 1], na.rm = TRUE)
 
   return(dat)
 }
 
 
 #' @export
-#' @rdname tx_msm
+#' @rdname hivtx_msm
 tx_het <- function(dat, at) {
 
   # Variables ---------------------------------------------------------------
@@ -214,4 +232,3 @@ tx_het <- function(dat, at) {
 
   return(dat)
 }
-
