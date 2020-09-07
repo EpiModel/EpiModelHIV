@@ -41,6 +41,7 @@ control_shamp(
   monitors = NULL,
   add_partial_age = TRUE,
   init_net_fun = NULL,
+  track_duration = FALSE,
   ...
 )
 }
@@ -139,6 +140,14 @@ of the summary statistics matrices.}
 \item{add_partial_age}{logical; should we add fractional age in the initialization function?}
 
 \item{init_net_fun}{function; used to randomize the initial networks.}
+
+\item{track_duration}{logical; should we track durational information
+(\code{time} and \code{lasttoggle}) for \code{tergm} models in 
+\code{tergmLite} simulation?  If \code{TRUE}, the \code{time} and
+\code{lasttoggle} values are initialized from the network attributes
+of the networks passed to \code{init_tergmLite}, with \code{time}
+defaulting to \code{0} and \code{lasttoggle} defaulting to all 
+\code{lasttoggle} times unspecified (effectively \code{-INT_MAX/2}).}
 
 \item{...}{Additional arguments passed to the function.}
 
