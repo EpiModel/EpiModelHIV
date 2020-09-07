@@ -31,14 +31,20 @@ simnet_shamp <- function(dat, at) {
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
   
+  if (dat$control$extract.summary.stats == TRUE) {
+    dat$stats$summstats[[1]] <- rbind(dat$stats$summstats[[1]], c(summary(dat$p[[1]]$state), summary(dat$p[[1]]$state_mon)))
+  }
     
   rv_1 <- tergmLite::simulate_network(state = dat$p[[1]]$state,
                                       coef = c(nwparam.c$coef.form, nwparam.c$coef.diss$coef.adj),
                                       control = dat$control$MCMC_control[[1]],
                                       save.changes = TRUE)
   dat$el[[1]] <- rv_1$el
-  dat$p[[1]]$state$el <- rv_1$state$el
-  dat$p[[1]]$state_mon$el <- rv_1$state$el
+  
+  if(dat$control$track_duration) {
+    dat$p[[1]]$state$nw0 %n% "time" <- rv_1$state$nw0 %n% "time"
+    dat$p[[1]]$state$nw0 %n% "lasttoggle" <- rv_1$state$nw0 %n% "lasttoggle"
+  }
   
   dat$temp$new.edges <- NULL
   if (at == 2) {
@@ -67,13 +73,20 @@ simnet_shamp <- function(dat, at) {
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 2)
   
+  if (dat$control$extract.summary.stats == TRUE) {
+    dat$stats$summstats[[2]] <- rbind(dat$stats$summstats[[2]], c(summary(dat$p[[2]]$state), summary(dat$p[[2]]$state_mon)))
+  }
+
   rv_2 <- tergmLite::simulate_network(state = dat$p[[2]]$state, 
                                       coef = c(nwparam.p$coef.form, nwparam.p$coef.diss$coef.adj),
                                       control = dat$control$MCMC_control[[2]],
                                       save.changes = TRUE)
   dat$el[[2]] <- rv_2$el
-  dat$p[[2]]$state$el <- rv_2$state$el
-  dat$p[[2]]$state_mon$el <- rv_2$state$el
+  
+  if(dat$control$track_duration) {
+    dat$p[[2]]$state$nw0 %n% "time" <- rv_2$state$nw0 %n% "time"
+    dat$p[[2]]$state$nw0 %n% "lasttoggle" <- rv_2$state$nw0 %n% "lasttoggle"
+  }  
   
   if (at == 2) {
     new.edges.p <- matrix(dat$el[[2]], ncol = 2)
@@ -102,23 +115,18 @@ simnet_shamp <- function(dat, at) {
   }
   dat <- tergmLite::updateModelTermInputs(dat, network = 3)
   
+  if (dat$control$extract.summary.stats == TRUE) {
+    dat$stats$summstats[[3]] <- rbind(dat$stats$summstats[[3]], c(summary(dat$p[[3]]$state), summary(dat$p[[3]]$state_mon)))
+  }
+
   rv_3 <- tergmLite::simulate_ergm(state = dat$p[[3]]$state,
                                    coef = nwparam.i$coef.form,
                                    control = dat$control$MCMC_control[[3]])
   dat$el[[3]] <- rv_3$el
-  dat$p[[3]]$state$el <- rv_3$state$el
-  dat$p[[3]]$state_mon$el <- rv_3$state$el
   
   if (dat$control$save.nwstats == TRUE) {
     dat <- calc_resim_nwstats(dat, at)
   }
-
-  if (dat$control$extract.summary.stats == TRUE) {
-    for (i in 1:3) {
-      dat$stats$summstats[[i]] <- rbind(dat$stats$summstats[[i]], c(summary(dat$p[[i]]$state), summary(dat$p[[i]]$state_mon)))
-    }
-  }
-
   
   dat$attr$onetime.lt <- dat$attr$onetime.lt + get_degree(dat$el[[3]])
   

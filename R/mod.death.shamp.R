@@ -115,6 +115,9 @@ if(dat$param$death_stats==TRUE) {
     dat$attr$active[dth.all] <- 0
     for (i in 1:3) {
       dat$el[[i]] <- tergmLite::delete_vertices(dat$el[[i]], dth.all)
+      if(i <= 2 && dat$control$track_duration) {
+        dat$p[[i]]$state$nw0 %n% "lasttoggle" <- delete_vertices(dat$p[[i]]$state$nw0 %n% "lasttoggle", dth.all)
+      }
     }
     dat$attr <- deleteAttr(dat$attr, dth.all)
     if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
