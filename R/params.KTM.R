@@ -731,7 +731,7 @@ param_KTM <- function(race.method = 1,
                       prep.start = Inf,
                       prep.elig.model = "NONE",
                 #need a real values for these
-                      prep.class.prob = c(.25, .25, .25, .25),
+                      prep.class.prob = c(0, 0, 0, 1),
                       ##46% reduction in aquisition risk from nam aidsmap May 2020 Roger Pebody / Roger Chou et al 2019 JAMA
                       prep.class.hr = c(1, 0, 0, 0.54),
                       prep.coverage = 0,
