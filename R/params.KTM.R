@@ -302,9 +302,10 @@ param_KTM <- function(race.method = 1,
                       intervention_TM ="NONE",
                       #From Sander 2015 65.6% within 3 weeks
                       seek.hc.AHI.prob = 1-(1-.3)^3,
+                      
+                      
                       ##sym.seek.prob can take on 4 values based on estimates of illness and treatment seeking.
                       ## (0.002606, 0.002994, 0.008179, 0.009395)  
-                      
                       sym.seek.prob = 0.002606,
                       
                       
@@ -731,7 +732,8 @@ param_KTM <- function(race.method = 1,
                       prep.elig.model = "NONE",
                 #need a real values for these
                       prep.class.prob = c(.25, .25, .25, .25),
-                      prep.class.hr = c(1, 0.69, 0.19, 0.05),
+                      ##46% reduction in aquisition risk from nam aidsmap May 2020 Roger Pebody / Roger Chou et al 2019 JAMA
+                      prep.class.hr = c(1, 0, 0, 0.54),
                       prep.coverage = 0,
                       prep.cov.method = "curr",
                       prep.cov.rate = 1,
