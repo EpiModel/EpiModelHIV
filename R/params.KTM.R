@@ -310,7 +310,7 @@ param_KTM <- function(race.method = 1,
                       
                       
                       #Probability of being tested when presenting with symptoms
-                      sym.test.prob.bl = .27,
+                      sym.test.prob.bl = .28,
                       sym.test.prob.tm = .9,
                       
                       #NEED TO GET THE DURATION OF FOLLOWUP AND THE PROBABILITY OF PARTNER TESTING
