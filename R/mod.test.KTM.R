@@ -406,7 +406,7 @@ test_KTM <- function(dat, at) {
 
   
   dat$epi$partners.found[at] <- max(0,length(tst.ps)+length(PS.prior.diag))
-  dat$epi$partners.positive [at] <- max(0,sum(dat$attr$diag.status[tst.ps])) 
+  dat$epi$partners.positive[at] <- max(0,sum(dat$attr$diag.status[tst.ps])) 
   dat$epi$partners.negative[at] <- max(0,length(tst.ps)-sum(dat$attr$diag.status[tst.ps]))
   dat$epi$PS.prior.diag[at] <- max(0, length(PS.prior.diag))
  
