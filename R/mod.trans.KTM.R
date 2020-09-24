@@ -308,6 +308,8 @@ trans_KTM <- function(dat, at){
   age.poi <- age.poi[poi]
   dat$epi$incid.age.poi[at] <-max(0,mean(age.poi, na.rm = TRUE))
   
+  dat$epi$incid.f.poi[at] <- max(0, sum(age[infected] < 40 & sex[infected] == "F", na.rm = TRUE), na.rm = TRUE)
+  dat$epi$incid.m.poi[at] <- max(0, sum(age[infected] < 40 & sex[infected] == "M", na.rm = TRUE), na.rm = TRUE)
   
 
   return(dat)
