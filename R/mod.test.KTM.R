@@ -220,6 +220,8 @@ test_KTM <- function(dat, at) {
     
     if(length(tst.background) < n.keep){
       dat$epi$undertest[at]<-1}
+      else
+        {dat$epi$undertest[at]<-0}
     
     dat$epi$n.tests.bg[at] <- max(0,length(tst.background))
    
@@ -310,6 +312,8 @@ test_KTM <- function(dat, at) {
       
       if(length(tst.background) < n.keep){
         dat$epi$undertest[at]<-1}
+        else
+          {dat$epi$undertest[at]<-0}
       
       dat$epi$n.tests.bg[at] <- max(0,length(tst.background))
 
