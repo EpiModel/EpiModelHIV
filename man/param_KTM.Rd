@@ -24,7 +24,7 @@ param_KTM(
   intervention_TM = "NONE",
   seek.hc.AHI.prob = 1 - (1 - 0.3)^3,
   sym.seek.prob = 0.002606,
-  sym.test.prob.bl = 0.27,
+  sym.test.prob.bl = 0.28,
   sym.test.prob.tm = 0.9,
   partner.test.prob.bl = 0.023,
   partner.test.prob.tm = 0.169,
