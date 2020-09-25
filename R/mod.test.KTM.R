@@ -395,8 +395,8 @@ test_KTM <- function(dat, at) {
   ##PS
   PS.pos<-which(dat$attr$diag.status[tst.ps]==1)
   PS.pos <- tst.ps[PS.pos]
-  PS.neg<-which(dat$attr$diag.status[tst.ps]==1 | is.na(dat$attr$diag.status[tst.ps])==TRUE)
-  PS.neg<-tst.ps[PS.neg]
+  PS.neg<-setdiff(tst.ps,PS.pos)
+  
   
   dat$attr$PS.diag.pos.time[PS.pos] <- at
   dat$attr$PS.diag.neg[PS.neg] <- 1
