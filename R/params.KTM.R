@@ -300,8 +300,8 @@ param_KTM <- function(race.method = 1,
                      
                       #KTM INTERVENTION NONE TMP
                       intervention_TM ="NONE",
-                      #From Sander 2015 65.6% within 3 weeks
-                      seek.hc.AHI.prob = 1-(1-.3)^3,
+                      #From Sander 2015 65.6% within 3 weeks 1-(1-.3)^3
+                      seek.hc.AHI.prob = .3,
                       
                       
                       ##sym.seek.prob can take on 4 values based on estimates of illness and treatment seeking.
