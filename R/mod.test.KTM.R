@@ -219,7 +219,7 @@ test_KTM <- function(dat, at) {
     tst.background <- sample(tst.background,n.keep,replace=FALSE)}
     
     if(length(tst.background) < n.keep){
-      dat$epi$undertest[at]<-1}
+      dat$epi$undertest[at] <- n.keep - length(tst.background)}
       else
         {dat$epi$undertest[at]<-0}
     
@@ -311,7 +311,7 @@ test_KTM <- function(dat, at) {
         tst.background <- sample(tst.background,n.keep,replace=FALSE)}
       
       if(length(tst.background) < n.keep){
-        dat$epi$undertest[at]<-1}
+        dat$epi$undertest[at] <- n.keep - length(tst.background)}
         else
           {dat$epi$undertest[at]<-0}
       
