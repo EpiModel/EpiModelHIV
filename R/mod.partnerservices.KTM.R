@@ -92,15 +92,15 @@ if(any(index.prev==1)==TRUE){
 #For acute index cases
 if(any(index.acute==1)==TRUE){
   
-  index.prev <- which(index.acute==1)
-  index.prev.ids <- uid[index.acute]
+  index.acute <- which(index.acute==1)
+  index.acute.ids <- uid[index.acute]
   
   #GET CURRENT PARTNERS
   p1 <- cel.temp[,1]
   p2 <- cel.temp[,2]
   
-  p1 <- match(p1,index.prev.ids)
-  p2 <- match(p2,index.prev.ids)
+  p1 <- match(p1,index.acute.ids)
+  p2 <- match(p2,index.acute.ids)
   
   p1<-which(p1 >=0)
   p2<-which(p2 >=0)
@@ -122,8 +122,8 @@ if(any(index.acute==1)==TRUE){
   p1 <- recent[,1]
   p2 <- recent[,2]
   
-  p1 <- match(p1,index.prev.ids)
-  p2 <- match(p2,index.prev.ids)
+  p1 <- match(p1,index.acute.ids)
+  p2 <- match(p2,index.acute.ids)
   
   p1<-which(p1 >=0)
   p2<-which(p2 >=0)
