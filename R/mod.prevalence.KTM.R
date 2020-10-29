@@ -32,6 +32,8 @@ prevalence_KTM <- function(dat, at) {
   inf.class <- dat$attr$inf.class
   diagnosed <- dat$attr$diag.status
   age <- floor(dat$attr$age)
+  tx.status <- dat$attr$tx.status
+  vl <- dat$attr$vl
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -135,6 +137,14 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$tx.cov.PLHIV <-rNA
     dat$epi$tx.init.ps <- rep(0, nsteps)
     
+    dat$epi$n.inf <-rNA
+    dat$epi$n.diag <-rNA
+    dat$epi$n.txt <-rNA
+    dat$epi$n.vsup <-rNA
+    dat$epi$incid.diag <-rNA
+    dat$epi$mean.age.diag[at] 
+
+    
     dat$epi$tx.cov.diag.poi <-rNA
     dat$epi$tx.cov.PLHIV.poi <-rNA
     dat$epi$tx.init.ps.poi <- rep(0, nsteps)
@@ -157,7 +167,12 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$s.num[at] <- sum(status == 0, na.rm = TRUE)
   dat$epi$i.num[at] <- sum(status == 1, na.rm = TRUE)
   dat$epi$i.num.poi[at] <- sum(status == 1 & age < 40, na.rm = TRUE)
-
+  
+  dat$epi$n.inf[at] <- sum(status == 1 & age < 40, na.rm = TRUE)
+  dat$epi$n.diag[at] <- sum(status == 1 & diagnosed == 1 & age < 40, na.rm = TRUE)
+  dat$epi$n.txt[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & age < 40, na.rm = TRUE)
+  dat$epi$n.vsup[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & vl < 4 & age < 40, na.rm = TRUE)
+  
   dat$epi$i.num.f[at] <- sum(status == 1 & sex == "F", na.rm = TRUE)
   dat$epi$i.num.m[at] <- sum(status == 1 & sex == "M", na.rm = TRUE)
   
