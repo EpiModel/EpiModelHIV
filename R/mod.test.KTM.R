@@ -74,6 +74,8 @@ test_KTM <- function(dat, at) {
   tst.ab <- NULL
   tst.rna <- NULL
   prep.elig <- NULL
+  clinic.test <- NULL
+  tst.pos.clinic.test <- NULL
   
 ## Process
 
@@ -380,7 +382,104 @@ test_KTM <- function(dat, at) {
                                                 
     }
   
-
+    if(intervention_TM=="TESTS"){
+      #THE SYMPT TESTS THAT WOULD BE DONE ANTWAY ARE BACKGROUND BUT WE NEED TO ADD NEW TESTS FOR BETTER PITC 
+      ##WHO HAS HIV SYMPTOMS AND SELECT THEM FOR TESTING
+      
+      #Those with HIV
+      sym_HIV <- which(status == 1 & inf.time > (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
+      selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.tm)
+      sym_HIV.bg.count<-sum(rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl))
+      sym_HIV <- sym_HIV[selected == 1]
+      
+      
+      #Those with other illness
+      sym<-which((diag.status == 0 | is.na(diag.status) == TRUE)  & age < 40)
+      selected <- rbinom(length(sym),1,sym.seek.prob*sym.test.prob.tm)
+      sym.bg.count<- sum(rbinom(length(sym),1,sym.seek.prob*sym.test.prob.bl))
+      sym <- sym[selected == 1]
+      
+      #remove individuals selected for testing as both background and none AHI symptoms from list for background
+      ntest<-length(tst.background)
+      n.keep <- ntest - sym.bg.count - sym_HIV.bg.count
+      
+      tst.background <- tst.background[!(tst.background %in% sym_HIV)]
+      tst.background <- tst.background[!(tst.background %in% sym)]
+      
+      
+      if(length(tst.background) >= n.keep){
+        tst.background <- sample(tst.background,n.keep,replace=FALSE)}
+      
+      if(length(tst.background) < n.keep){
+        dat$epi$undertest[at] <- n.keep - length(tst.background)}
+      else
+      {dat$epi$undertest[at]<-0}
+      
+      dat$epi$n.tests.bg[at] <- max(0,length(tst.background))
+      
+      
+      #PARTNER SERVICES
+      
+      
+      #Partner services testing
+      tst.ps <- which(partner.serv.part==1)
+      selected <- rbinom(length(tst.ps),1,partner.test.prob.tm)
+      tst.ps <- tst.ps[selected == 1]
+      
+      #Select off partners that are already diagnosed
+      exclude <- which(diag.status==1)
+      PS.prior.diag <- intersect(tst.ps,exclude)
+      tst.ps <- setdiff(tst.ps,exclude)
+      
+      #PREP
+      
+      tst.prep <- which(prepStat == 1 & lnt == at- prep.tst.int)
+      
+      
+      ##TEST tst.background, tst.PREP, partner services -  Antibody tests
+      ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
+      
+      tst.ab <- c(tst.background, tst.prep,sym_HIV, sym, tst.ps)
+      clinic.test <-c(sym_HIV, sym, tst.ps)
+      tst.rna <- NULL
+      
+      tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
+      tst.pos.clinic.test <- clinic.test[status[clinic.test] == 1 & inf.time[clinic.test] <= at - twind.int.ab ]
+      tst.neg.ab <- setdiff(tst.ab, tst.pos.ab)
+  
+      ##If they are testing because of partner services and are negative they are eligible for PrEP
+      prep.elig <- intersect(tst.ps,tst.neg.ab)
+      prep.elig.time[prep.elig] <- at
+      
+      ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
+      ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
+      acute <- which(inf.time[tst.pos.clinic.test] >= at - twind.int.ab )
+      prev <- which(inf.time[tst.pos.clinic.test] < at - twind.int.ab )
+      
+      
+      dat$attr$PS.index.acute[tst.pos.clinic.test[acute]]<-1
+      dat$attr$PS.index.prev[tst.pos.clinic.test[prev]]<-1
+      
+      
+      ##Remove partner that have been tested from list of those being tracked for testing and stop the clock
+      dat$attr$partner.serv.part[tst.ps] <- 0
+      dat$attr$partner.serv.part.time[tst.ps] <- 0
+      
+      ##Remove followed-up and already diagnosed from continued follow-up that have been tested from list of those being tracked for testing and stop the clock
+      dat$attr$partner.serv.part[PS.prior.diag] <- 0
+      dat$attr$partner.serv.part.time[PS.prior.diag] <- 0
+      
+      ##Advance the clock on partners still being followed
+      dat$attr$partner.serv.part.time <- ifelse(dat$attr$partner.serv.part.time >=1, dat$attr$partner.serv.part.time + 1, 
+                                                ifelse(dat$attr$partner.serv.part.time > PS.time, 0, dat$attr$partner.serv.part.time))
+      
+      ##Remove those that have been lost to follow-up from the partner services list
+      
+      
+      dat$attr$partner.serv.part <- ifelse(dat$attr$partner.serv.part.time == 0, 0, dat$attr$partner.serv.part)
+      
+    }
+    
 
   # Attributes
   dat$attr$last.neg.test[tst.neg.ab] <- at
@@ -423,6 +522,12 @@ test_KTM <- function(dat, at) {
   acute <- max(length(acute),0)
   dat$epi$diag.prevalent[at] <- sum(length(tst.pos.ab),length(tst.pos.rna)) - acute
   dat$epi$diag.acute[at] <- acute
+  
+  dat$epi$incid.diag[at] <- sum(length(tst.pos.ab),length(tst.pos.rna))
+  
+  age1<- dat$attr$age[tst.pos.ab]
+  age2<- dat$attr$age[tst.pos.rna]
+  dat$epi$mean.age.diag[at] <- max(0,mean(c(age1,age2)))
   
   dat$attr$prepElig[prep.elig]<-1
   
