@@ -301,6 +301,9 @@ param_KTM <- function(race.method = 1,
                       #KTM INTERVENTION NONE TMP
                       intervention_TM ="NONE",
                       #From Sander 2015 69.2% within 3 weeks 1-(1-.325)^3
+                      # 69.2% comes from 50 of 72 participants.
+                      # Binomial CI is 57.5% to 79.76%
+                      # 57.5% within 3 weeks is 1-(1-.248)^3
                       seek.hc.AHI.prob = .325,
                       
                       
