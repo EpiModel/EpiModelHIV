@@ -142,7 +142,11 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$n.txt <-rNA
     dat$epi$n.vsup <-rNA
     dat$epi$incid.diag <-rNA
-    dat$epi$mean.age.diag[at] 
+    dat$epi$mean.age.diag <-rNA 
+    
+    dat$epi$pct.diag <-rNA
+    dat$epi$pct.txt <-rNA
+    dat$epi$pct.vsup <-rNA
 
     
     dat$epi$tx.cov.diag.poi <-rNA
@@ -172,6 +176,10 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$n.diag[at] <- sum(status == 1 & diagnosed == 1 & age < 40, na.rm = TRUE)
   dat$epi$n.txt[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & age < 40, na.rm = TRUE)
   dat$epi$n.vsup[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & vl < 4 & age < 40, na.rm = TRUE)
+  
+  dat$epi$pct.diag <- max(0, dat$epi$n.inf[at] / dat$epi$n.diag[at])
+  dat$epi$pct.txt <- max(0, dat$epi$n.txt[at] / dat$epi$n.inf[at])
+  dat$epi$pct.vsup <- max(0, dat$epi$n.vsup[at] / dat$epi$n.txt[at])
   
   dat$epi$i.num.f[at] <- sum(status == 1 & sex == "F", na.rm = TRUE)
   dat$epi$i.num.m[at] <- sum(status == 1 & sex == "M", na.rm = TRUE)
