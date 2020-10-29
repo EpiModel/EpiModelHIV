@@ -22,7 +22,7 @@ param_KTM(
   tt.traj.B.f.prob = c(0, 0, 0.23, 0.77),
   tt.traj.B.msf.prob = c(0, 0, 0.23, 0.77),
   intervention_TM = "NONE",
-  seek.hc.AHI.prob = 1 - (1 - 0.3)^3,
+  seek.hc.AHI.prob = 0.325,
   sym.seek.prob = 0.002606,
   sym.test.prob.bl = 0.28,
   sym.test.prob.tm = 0.9,
