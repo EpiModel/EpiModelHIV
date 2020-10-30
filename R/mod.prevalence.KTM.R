@@ -177,9 +177,9 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$n.txt[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & age < 40, na.rm = TRUE)
   dat$epi$n.vsup[at] <- sum(status == 1 & diagnosed == 1 & tx.status == 1 & vl < 4 & age < 40, na.rm = TRUE)
   
-  dat$epi$pct.diag <- max(0, dat$epi$n.inf[at] / dat$epi$n.diag[at])
-  dat$epi$pct.txt <- max(0, dat$epi$n.txt[at] / dat$epi$n.inf[at])
-  dat$epi$pct.vsup <- max(0, dat$epi$n.vsup[at] / dat$epi$n.txt[at])
+  dat$epi$pct.diag[at] <- max(0, dat$epi$n.diag[at] / dat$epi$n.inf[at])
+  dat$epi$pct.txt[at] <- max(0, dat$epi$n.txt[at] / dat$epi$n.inf[at])
+  dat$epi$pct.vsup[at] <- max(0, dat$epi$n.vsup[at] / dat$epi$n.txt[at])
   
   dat$epi$i.num.f[at] <- sum(status == 1 & sex == "F", na.rm = TRUE)
   dat$epi$i.num.m[at] <- sum(status == 1 & sex == "M", na.rm = TRUE)
