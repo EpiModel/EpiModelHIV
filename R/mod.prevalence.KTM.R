@@ -153,7 +153,7 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$tx.cov.PLHIV.poi <-rNA
     dat$epi$tx.init.ps.poi <- rep(0, nsteps)
     dat$epi$undertest <- rep(0, nsteps)
-    
+    dat$epi$ir100 <- rNA
 
     
   }
@@ -227,6 +227,8 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$mdeg.Cohabs.poi[at] <-   sum(dat$attr$deg.cohab[poi])/length(poi)
   dat$epi$mdeg.Pers.poi[at] <-  sum(dat$attr$deg.pers[poi])/length(poi)
   dat$epi$mdeg.poi[at] <-  sum(dat$attr$deg.inst[poi])/length(poi)
+  
+  dat$epi$ir100[at] <- (dat$epi$incid.poi[at] / sum(status == 0 & age < 40,  na.rm = TRUE)) * 5200
   
 
   
