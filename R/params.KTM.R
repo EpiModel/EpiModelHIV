@@ -375,17 +375,18 @@ param_KTM <- function(race.method = 1,
                       tx.halt.HI.msmf.prob = 0.5000,
                       tx.halt.W.msmf.prob = 0.5000,
 
-                      ##re-initiation is the same as uptake
-                      tx.reinit.B.f.prob = 0.00404902,
-                      tx.reinit.BI.f.prob = 0.00404902,
-                      tx.reinit.H.f.prob = 0.00404902,
-                      tx.reinit.HI.f.prob = 0.00404902,
-                      tx.reinit.W.f.prob = 0.00404902,
-                      tx.reinit.B.msf.prob = 0.00404902,
-                      tx.reinit.BI.msf.prob = 0.00404902,
-                      tx.reinit.H.msf.prob = 0.00404902,
-                      tx.reinit.HI.msf.prob = 0.00404902,
-                      tx.reinit.W.msf.prob = 0.00404902,
+                      ##re-initiation is the same as uptake (original guess .00404902) yields 61%ish
+                      ##fit to hit ~ 75% coverage
+                      tx.reinit.B.f.prob = 0.010,
+                      tx.reinit.BI.f.prob = 0.010,
+                      tx.reinit.H.f.prob = 0.010,
+                      tx.reinit.HI.f.prob = 0.010,
+                      tx.reinit.W.f.prob = 0.010,
+                      tx.reinit.B.msf.prob = 0.010,
+                      tx.reinit.BI.msf.prob = 0.010,
+                      tx.reinit.H.msf.prob = 0.010,
+                      tx.reinit.HI.msf.prob = 0.010,
+                      tx.reinit.W.msf.prob = 0.010,
                       
                       ##No MSM or MSMF in Kenya
                       tx.reinit.B.msm.prob = 1,
