@@ -197,7 +197,7 @@ test_KTM <- function(dat, at) {
     ## Symptom based testing
 
     #Those with HIV
-    sym_HIV <- which(status == 1 & inf.time > (at - 3) & diag.status ==0  & partner.serv.part==0 & age < 40)
+    sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status ==0  & partner.serv.part==0 & age < 40)
     selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl)
     sym_HIV <- sym_HIV[selected == 1]
     
@@ -289,7 +289,7 @@ test_KTM <- function(dat, at) {
       ##WHO HAS HIV SYMPTOMS AND SELECT THEM FOR TESTING
       
       #Those with HIV
-      sym_HIV <- which(status == 1 & inf.time > (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
+      sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
       selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.tm)
       sym_HIV.bg.count<-sum(rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl))
       sym_HIV <- sym_HIV[selected == 1]
@@ -387,7 +387,7 @@ test_KTM <- function(dat, at) {
       ##WHO HAS HIV SYMPTOMS AND SELECT THEM FOR TESTING
       
       #Those with HIV
-      sym_HIV <- which(status == 1 & inf.time > (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
+      sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
       selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.tm)
       sym_HIV.bg.count<-sum(rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl))
       sym_HIV <- sym_HIV[selected == 1]
