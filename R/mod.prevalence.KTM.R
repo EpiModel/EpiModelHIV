@@ -34,6 +34,8 @@ prevalence_KTM <- function(dat, at) {
   age <- floor(dat$attr$age)
   tx.status <- dat$attr$tx.status
   vl <- dat$attr$vl
+  evertest <- dat$attr$evertest
+  lnt <- dat$attr$last.neg.test
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -154,6 +156,10 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$tx.init.ps.poi <- rep(0, nsteps)
     dat$epi$undertest <- rep(0, nsteps)
     dat$epi$ir100 <- rNA
+    
+    dat$epi$pct.evertest <-rNA
+    dat$epi$pct.test.ly <-rNA
+    dat$epi$num.poi.undiag <- rNA
 
 
     
@@ -162,7 +168,8 @@ prevalence_KTM <- function(dat, at) {
 
   dat$epi$num[at] <- length(status)
   dat$epi$num.poi[at] <- sum(age < 40)
-
+  dat$epi$num.poi.undiag[at] <- sum(age < 40 & (is.na(diagnosed) == TRUE | diagnosed == 0))
+  
   dat$epi$num.f[at] <- sum(sex == "F", na.rm = TRUE)
   dat$epi$num.m[at] <- sum(sex == "M", na.rm = TRUE)
   
@@ -231,6 +238,10 @@ prevalence_KTM <- function(dat, at) {
   
 
   dat$epi$ir100[at] <- (dat$epi$incid.poi[at] / sum(status == 0 & age < 40, dat$epi$incid.poi[at],  na.rm = TRUE)) * 5200
+  
+  dat$epi$pct.evertest[at] <- sum(evertest == 1 & age < 40, na.rm = TRUE) / dat$epi$num.poi[at]
+  dat$epi$pct.test.ly[at] <- sum(lnt > at-52 & age < 40, na.rm = TRUE) / dat$epi$num.poi.undiag[at]
+
 
 
   
