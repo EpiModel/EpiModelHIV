@@ -261,7 +261,10 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$PS.index.prev <- rep(0,num)
   dat$attr$PS.diag.neg <- rep(0,num)
   dat$attr$PS.diag.pos.time <- rep(0,num)
-
+  
+  dat$attr$cat.5.status  <- rep(0,num)
+  dat$attr$testclin  <- rep(0,num)
+  
   # Prevalence Tracking
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
@@ -294,6 +297,7 @@ initialize_KTM <- function(x, param, init, control, s) {
 #'
 init_status_shamp <- function(dat) {
   
+
   age <- dat$attr$age
   race <- dat$attr$race
   sex<- dat$attr$sex
