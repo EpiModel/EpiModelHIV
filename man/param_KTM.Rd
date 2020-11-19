@@ -32,6 +32,10 @@ param_KTM(
   p.acute.follow.win = 12,
   PS.time = 6,
   tx.init.PS.prob = 0.159,
+  ab.test.sens = 0.999 * 1,
+  ab.test.spec = (0.998 + 0.994) - (0.998 * 0.994),
+  rna.test.sens = 0.989,
+  rna.test.spec = 1,
   tx.init.B.f.prob = 0.15912,
   tx.init.BI.f.prob = 0.15912,
   tx.init.H.f.prob = 0.15912,
@@ -383,9 +387,37 @@ param_KTM(
 )
 }
 \arguments{
-\item{test.window.int.ab}{Length of the HIV antibody test window period in weeks.}
+\item{test.window.int.ab}{The test window of an antibody test}
 
-\item{test.window.int.rna}{Length of the RNA HIV test window period in weeks.}
+\item{test.window.int.rna}{The test window of an RNA test}
+
+\item{intervention_TM}{The intervention state of KTM plus}
+
+\item{seek.hc.AHI.prob}{The probability of seeking health care while experiencing Acute HIV symptoms}
+
+\item{sym.seek.prob}{the joint probability of experiencing acute HIV LIKE symptoms and seeking treatment}
+
+\item{sym.test.prob.bl}{The probability of PITC for those presenting with symptoms with no intervention}
+
+\item{partner.test.prob.bl}{Probability of finding and testing a partner of a positive case without the KTM plus intervention}
+
+\item{partner.test.prob.tm}{Probability of finding and testing a partner of a positive case with the KTM plus intervention}
+
+\item{p.prev.follow.win}{The number of weeks back partner services will look for partners of prevalent cases}
+
+\item{p.acute.follow.win}{The number of weeks back partner services will look for partners of acute cases}
+
+\item{PS.time}{How long partner services will continue to look for partners in weeks}
+
+\item{tx.init.PS.prob}{Probability someone identified as positive via partner services will initiate treatment}
+
+\item{ab.test.sens}{The sensitivity of the antibody test}
+
+\item{ab.test.spec}{The specificity of the antibody test}
+
+\item{rna.test.sens}{The sensitivity of the RNA test}
+
+\item{rna.test.spec}{The specificity of the RNA test}
 
 \item{max.time.off.tx.full.int}{Number of days off treatment for a full
 suppressor before onset of AIDS, including time before diagnosis.}
@@ -732,6 +764,12 @@ distribution and approximating in-migration) is HIV positive}
 
 \item{add.demog.groups}{if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
 attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options}
+
+\item{test.prob.nevtest.S}{The age group specific vector of probabilities of testing if the node has never tested by sex=S}
+
+\item{test.prob.tested.S}{The age group specific vector of probabilities of testing if the node has previously tested by sex=S}
+
+\item{ssym.test.prob.tm}{The probability of PITC for those presenting with symtoms with the KTM plus intervention}
 }
 \value{
 A list object of class \code{param_KTM}, which can be passed to
