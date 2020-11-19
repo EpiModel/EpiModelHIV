@@ -420,6 +420,8 @@ setBirthAttr_shamp <- function(dat, at, nBirths) {
   dat$attr$PS.diag.neg[newIds] <- 0
   dat$attr$PS.diag.pos.time[newIds] <- 0
   
+  dat$attr$cat.5.status[newIds] <- 0
+
   #Population of interest
   dat$attr$poi[newIds] <- 0
   
