@@ -36,6 +36,7 @@ prevalence_KTM <- function(dat, at) {
   vl <- dat$attr$vl
   evertest <- dat$attr$evertest
   lnt <- dat$attr$last.neg.test
+  cat.5.status <- dat$attr$cat.5.status
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -162,7 +163,16 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$num.poi.undiag <- rNA
 
 
+    dat$epi$nFP <-rNA
+    dat$epi$FP.prev <-rNA
+    dat$epi$nTP <-rNA
+    dat$epi$TP.prev <-rNA
+    dat$epi$nFN <-rNA
+    dat$epi$FN.prev <-rNA
+    dat$epi$nTN <-rNA
+    dat$epi$TN.prev <-rNA
     
+    dat$epi$missed.pos <-rep(0, nsteps)
   }
 
 
@@ -241,6 +251,17 @@ prevalence_KTM <- function(dat, at) {
   
   dat$epi$pct.evertest[at] <- sum(evertest == 1 & age < 40, na.rm = TRUE) / dat$epi$num.poi[at]
   dat$epi$pct.test.ly[at] <- sum(lnt > at-52 & age < 40, na.rm = TRUE) / dat$epi$num.poi.undiag[at]
+  
+  dat$epi$nTN[at] <- max(0,sum(cat.5.status == 1 & age < 40, na.rm = TRUE))
+  dat$epi$TN.prev[at] <-  dat$epi$nTN[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE) 
+  dat$epi$nFN[at] <- max(0,sum(cat.5.status == 2 & age < 40, na.rm = TRUE))
+  dat$epi$FN.prev[at] <-dat$epi$nFN[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE)
+  dat$epi$nTP[at] <- max(0,sum(cat.5.status == 3 & age < 40, na.rm = TRUE))
+  dat$epi$TP.prev[at] <-  dat$epi$nTP[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE)
+  dat$epi$nFP[at] <- max(0,sum(cat.5.status == 4 & age < 40, na.rm = TRUE))
+  dat$epi$FP.prev[at] <- dat$epi$nFP[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE)
+
+ 
 
 
 
