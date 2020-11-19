@@ -259,8 +259,32 @@
 #' @param p.growth.size The number of additioan entries made at each time step 2 to p.growth.nsteps if p.growth =TRUE.
 #' @param add.demog.groups if TRUE will include the calcualtion of additional attributes that are conmbinations of attributes as well as
 #' attributes that change based on concurrency status. These were used as attributes during the estimation process but no included in our final model. additioanl attribute combinations as an options 
-
-#'        
+#'
+#' @param test.prob.nevtest.S The age group specific vector of probabilities of testing if the node has never tested by sex=S
+#' @param test.prob.tested.S The age group specific vector of probabilities of testing if the node has previously tested by sex=S
+#' @param test.window.int.ab The test window of an antibody test
+#' @param test.window.int.rna The test window of an RNA test
+#'
+#' @param intervention_TM The intervention state of KTM plus
+#' @param seek.hc.AHI.prob The probability of seeking health care while experiencing Acute HIV symptoms
+#' @param sym.seek.prob the joint probability of experiencing acute HIV LIKE symptoms and seeking treatment 
+#'
+#' @param sym.test.prob.bl The probability of PITC for those presenting with symptoms with no intervention
+#' @param ssym.test.prob.tm The probability of PITC for those presenting with symtoms with the KTM plus intervention
+#'
+#' @param partner.test.prob.bl Probability of finding and testing a partner of a positive case without the KTM plus intervention
+#' @param partner.test.prob.tm Probability of finding and testing a partner of a positive case with the KTM plus intervention
+#' @param p.prev.follow.win The number of weeks back partner services will look for partners of prevalent cases 
+#' @param p.acute.follow.win The number of weeks back partner services will look for partners of acute cases
+#' @param PS.time How long partner services will continue to look for partners in weeks
+#' @param tx.init.PS.prob Probability someone identified as positive via partner services will initiate treatment
+#'
+#' @param ab.test.sens The sensitivity of the antibody test
+#' @param ab.test.spec The specificity of the antibody test
+#' @param rna.test.sens The sensitivity of the RNA test
+#' @param rna.test.spec The specificity of the RNA test
+#' 
+#'
 #' @param ... Additional arguments passed to the function.
 #'
 #' @return
@@ -325,6 +349,11 @@ param_KTM <- function(race.method = 1,
                       PS.time = 6,
                       tx.init.PS.prob = .159,
                     
+                      #Add in sensitivity and specificity for cost effectiveness analysis
+                      ab.test.sens = .999 * 1,
+                      ab.test.spec = (.998 + .994) - (.998 * .994),
+                      rna.test.sens = .989,
+                      rna.test.spec = 1.0,
                       
 
                       #Art params worksheet 
