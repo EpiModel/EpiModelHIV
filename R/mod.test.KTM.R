@@ -41,6 +41,9 @@ test_KTM <- function(dat, at) {
   prepStat <- dat$attr$prepStat
   prep.elig.time <- dat$attr$prep.elig.time 
   prep.tst.int <- dat$param$prep.tst.int
+  
+  cat.5.status <- dat$attr$cat.5.status
+
 
 
   # Parameters
@@ -63,19 +66,51 @@ test_KTM <- function(dat, at) {
   partner.test.prob.tm <- dat$param$partner.test.prob.tm
   PS.time <- dat$param$PS.time
   
+  
+  ab.test.sens <- dat$param$ab.test.sens
+  ab.test.spec <- dat$param$ab.test.spec 
+  rna.test.sens <- dat$param$rna.test.sens 
+  rna.test.spec <- dat$param$rna.test.spec 
+  
 
   intervention_TM <- dat$param$intervention_TM
   
   ##Place holders
-  tst.neg.ab <- NULL
-  tst.neg.rna <- NULL
-  tst.pos.ab <- NULL
-  tst.pos.rna <- NULL
+  tst.negatives.ab <- NULL
+  tst.negatives.rna <- NULL
+  tst.positives.ab <- NULL
+  tst.positives.rna <- NULL
   tst.ab <- NULL
   tst.rna <- NULL
+  
+  tst.bg <- NULL
+  tst.pos.bg <- NULL
+  tst.neg.bg <- NULL
+  true.pos.ab <- NULL
+  true.neg.ab <- NULL
+  true.pos.rna <- NULL
+  true.neg.rna <- NULL
+  false.pos.ab <- NULL
+  false.neg.ab <- NULL
+  false.pos.rna <- NULL
+  false.neg.rna <- NULL
+  test.positive <- NULL
+  test.positive.ab <- NULL
+  test.positive.rna <- NULL
+  test.negative <- NULL
+  test.negative.ab <- NULL
+  test.negative.rna <- NULL
+  
   prep.elig <- NULL
   clinic.test <- NULL
   tst.pos.clinic.test <- NULL
+  
+  prev <- NULL
+  acute <- NULL
+  missed.pos <- NULL
+  
+  t <- NULL
+  f <- NULL
   
 ## Process
 
@@ -242,16 +277,36 @@ test_KTM <- function(dat, at) {
     ##TEST tst.background, tst.PREP, partner services -  Antibody tests
     ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
     
-    tst.ab <- c(tst.background, sym_HIV, sym, tst.ps)
-    in.clinic <- c(sym_HIV, sym, tst.ps)
+    tst.bg <- c(tst.background)
+    tst.ab <- c(sym_HIV, sym, tst.ps)
     
-    tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
-    tst.neg.ab <- setdiff(tst.ab, tst.pos.ab)
+    tst.positives.ab <-  tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
+    missed.pos <-  tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] > at - twind.int.ab ]
+    sens <- rbinom(length(tst.positives.ab),1,ab.test.sens)
+    t <- which(sens==1)
+    f <- which(sens==0)
+    true.pos.ab <-  tst.positives.ab[t]
+    false.neg.ab <- tst.positives.ab[f]
+
+
+    tst.negatives.ab <- setdiff(tst.ab, tst.positives.ab)
+    spec <- rbinom(length(tst.negatives.ab),1,ab.test.spec)
+    t <- which(spec==1)
+    f <- which(spec==0)
+    true.neg.ab <-  tst.negatives.ab[t]
+    false.pos.ab <- tst.negatives.ab[f]
+
+    test.positive.ab<-c(true.pos.ab,false.pos.ab)
+    test.negative.ab<-c(true.neg.ab,false.neg.ab)
+    
+    tst.pos.bg <- tst.bg[status[tst.bg] == 1 & inf.time[tst.bg] <= at - twind.int.ab ]
+    tst.neg.bg <- setdiff(tst.bg, tst.pos.bg)
   
+    prev <- test.positive.ab
     
     ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
     ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
-    PS.index<-intersect(in.clinic,tst.pos.ab)
+    PS.index<-test.positive.ab
     
     ##Select all symptom based for background partner services
     dat$attr$PS.index.prev[PS.index]<-1
@@ -273,13 +328,6 @@ test_KTM <- function(dat, at) {
     
     
     dat$attr$partner.serv.part <- ifelse(dat$attr$partner.serv.part.time == 0, 0, dat$attr$partner.serv.part)
-    
-    ##TEST tst.background, sym_HIV, sym   -  all Antibody tests
-    
-    tst.ab <- c(tst.background, sym_HIV, sym)
-    
-    tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
-    tst.neg.ab <- setdiff(tst.ab, tst.pos.ab)
     
     }
     
@@ -341,26 +389,63 @@ test_KTM <- function(dat, at) {
       ##TEST tst.background, tst.PREP, partner services -  Antibody tests
       ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
       
-      tst.ab <- c(tst.background, tst.prep)
+      tst.bg <- c(tst.background, tst.prep)
       tst.rna <- c(sym_HIV, sym, tst.ps)
       
-      tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
-      tst.pos.rna <- tst.rna[status[tst.rna] == 1 & inf.time[tst.rna] <= at - twind.int.rna ]
-      tst.neg.ab <- setdiff(tst.ab, tst.pos.ab)
-      tst.neg.rna <- setdiff(tst.rna, tst.pos.rna)
+      tst.pos.bg <- tst.bg[status[tst.bg] == 1 & inf.time[tst.bg] <= at - twind.int.ab ]
+      tst.neg.bg <- setdiff(tst.bg, tst.pos.bg)
+      
+      
+      #########################################
+      #tst.positives.ab <-  tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
+      #sens <- rbinom(length(tst.positives.ab),1,ab.test.sens)
+      #t <- which(sens==1)
+      #f <- which(sens==0)
+      #true.pos.ab <-  tst.positives.ab[t]
+      #false.neg.ab <- tst.positives.ab[f]
+      
+      #tst.negatives.ab <- setdiff(tst.ab, tst.positives.ab)
+      #spec <- rbinom(length(tst.negatives.ab),1,ab.test.spec)
+      #t <- which(spec==1)
+      #f <- which(spec==0)
+      #true.neg.ab <-  tst.negatives.ab[t]
+      #false.pos.ab <- tst.negatives.ab[f]
+      
+      
+      tst.positives.rna <-  tst.rna[status[tst.rna] == 1 & inf.time[tst.rna] <= at - twind.int.rna ]
+      missed.pos <-  tst.rna[status[tst.rna] == 1 & inf.time[tst.rna] > at - twind.int.rna ]
+      sens <- rbinom(length(tst.positives.rna),1,rna.test.sens)
+      t <- which(sens==1)
+      f <- which(sens==0)
+      true.pos.rna <-  tst.positives.rna [t]
+      false.neg.rna <- tst.positives.rna [f]
+      
+      tst.negatives.rna <- setdiff(tst.rna, tst.positives.rna)
+      spec <- rbinom(length(tst.negatives.rna),1,rna.test.spec)
+      t <- which(spec==1)
+      f <- which(spec==0)
+      true.neg.rna <-  tst.negatives.rna[t]
+      false.pos.rna <- tst.negatives.rna[f]
+      
+      test.negative.rna<-c(true.neg.rna, false.neg.rna)
+      test.positive.rna<-c(true.pos.rna, false.pos.rna)
+      test.negative.ab<-c(true.neg.ab, false.neg.ab)
+      test.positive.ab<-c(true.pos.ab, false.pos.ab)
+      ###############################################
       
       ##If they are testing because of partner services and are negative they are eligible for PrEP
-      prep.elig <- intersect(tst.ps,tst.neg.rna)
+      prep.elig <- intersect(tst.ps,test.negative.rna)
       prep.elig.time[prep.elig] <- at
       
       ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
       ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
-      acute <- which(inf.time[tst.pos.rna] >= at - twind.int.ab )
-      prev <- which(inf.time[tst.pos.rna] < at - twind.int.ab )
-
       
-      dat$attr$PS.index.acute[tst.pos.rna[acute]]<-1
-      dat$attr$PS.index.prev[tst.pos.rna[prev]]<-1
+      acute <- test.positive.rna[inf.time[test.positive.rna] >= at - twind.int.ab ]
+      prev <- test.positive.rna[inf.time[test.positive.rna] < at - twind.int.ab ]
+      
+
+      dat$attr$PS.index.acute[acute] <-1
+      dat$attr$PS.index.prev[prev] <-1
       
       
       ##Remove partner that have been tested from list of those being tracked for testing and stop the clock
@@ -439,26 +524,45 @@ test_KTM <- function(dat, at) {
       ##TEST tst.background, tst.PREP, partner services -  Antibody tests
       ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
       
-      tst.ab <- c(tst.background, tst.prep,sym_HIV, sym, tst.ps)
-      clinic.test <-c(sym_HIV, sym, tst.ps)
+      tst.bg <- c(tst.background, tst.prep)
+      tst.ab <-c(sym_HIV, sym, tst.ps)
       tst.rna <- NULL
       
+      tst.pos.bg <- tst.bg[status[tst.bg] == 1 & inf.time[tst.bg] <= at - twind.int.ab ]
+      
+      
       tst.pos.ab <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
-      tst.pos.clinic.test <- clinic.test[status[clinic.test] == 1 & inf.time[clinic.test] <= at - twind.int.ab ]
-      tst.neg.ab <- setdiff(tst.ab, tst.pos.ab)
-  
+      missed.pos <- tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] > at - twind.int.ab ]
+      tst.positive.ab <- tst.pos.ab 
+      sens <- rbinom(length(tst.positive.ab),1,ab.test.sens)
+      t <- which(sens==1)
+      f <- which(sens==0)
+      true.pos.ab <-  tst.positive.ab[t]
+      false.neg.ab <- tst.positive.ab[f]
+      
+      
+      tst.negative.ab <- setdiff(tst.ab, tst.positive.ab)
+      spec <- rbinom(length(tst.negative.ab),1,ab.test.spec)
+      t <- which(spec==1)
+      f <- which(spec==0)
+      true.neg.ab <-  tst.negative.ab[t]
+      false.pos.ab <- tst.negative.ab[f]
+      
+      test.positive.ab <- c(true.pos.ab, false.pos.ab)
+      test.negative.ab <- c(true.neg.ab, false.neg.ab)
       ##If they are testing because of partner services and are negative they are eligible for PrEP
-      prep.elig <- intersect(tst.ps,tst.neg.ab)
+      prep.elig <- intersect(tst.ps,test.negative.ab)
       prep.elig.time[prep.elig] <- at
       
       ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
       ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
-      acute <- which(inf.time[tst.pos.clinic.test] >= at - twind.int.ab )
-      prev <- which(inf.time[tst.pos.clinic.test] < at - twind.int.ab )
+   
+      ##SHOULD BE ZERO ACUTE
+      prev <- which(inf.time[test.positive.ab] < at - twind.int.ab )
       
       
-      dat$attr$PS.index.acute[tst.pos.clinic.test[acute]]<-1
-      dat$attr$PS.index.prev[tst.pos.clinic.test[prev]]<-1
+      dat$attr$PS.index.acute[test.positive.ab[acute]]<-1
+      dat$attr$PS.index.prev[test.positive.ab[prev]]<-1
       
       
       ##Remove partner that have been tested from list of those being tracked for testing and stop the clock
@@ -482,14 +586,52 @@ test_KTM <- function(dat, at) {
     
 
   # Attributes
-  dat$attr$last.neg.test[tst.neg.ab] <- at
-  dat$attr$last.neg.test[tst.neg.rna] <- at
-  dat$attr$diag.status[tst.pos.ab] <- 1 
-  dat$attr$diag.status[tst.pos.rna]  <- 1
-  dat$attr$diag.time[tst.pos.ab] <- at
-  dat$attr$diag.time[tst.pos.rna] <- at
+  dat$attr$last.neg.test[true.neg.ab] <- at
+  dat$attr$last.neg.test[true.neg.rna] <- at
+  dat$attr$last.neg.test[false.neg.ab] <- at
+  dat$attr$last.neg.test[false.neg.rna] <- at
+  dat$attr$last.neg.test[false.neg.rna] <- at
+  dat$attr$last.neg.test[tst.neg.bg] <- at
+  
+  dat$attr$diag.status[true.pos.ab] <- 1 
+  dat$attr$diag.status[true.pos.rna]  <- 1
+  dat$attr$diag.status[false.pos.ab] <- 1 
+  dat$attr$diag.status[false.pos.rna]  <- 1
+  dat$attr$diag.status[tst.pos.bg] <- 1
+  
+  dat$attr$diag.time[true.pos.ab] <- at
+  dat$attr$diag.time[true.pos.rna] <- at
+  dat$attr$diag.time[false.pos.ab] <- at
+  dat$attr$diag.time[false.pos.rna] <- at
+  dat$attr$diag.time[tst.pos.bg] <- at
+  
   dat$attr$evertest[tst.ab] <- 1
   dat$attr$evertest[tst.rna] <- 1
+  dat$attr$evertest[tst.bg] <- 1
+  
+  dat$attr$testclin[true.pos.ab] <- 1
+  dat$attr$testclin[true.neg.ab] <- 1
+  dat$attr$testclin[false.pos.ab] <- 1
+  dat$attr$testclin[false.neg.ab] <- 1
+  dat$attr$testclin[true.pos.rna] <- 1
+  dat$attr$testclin[true.neg.rna] <- 1
+  dat$attr$testclin[false.pos.rna] <- 1
+  dat$attr$testclin[false.neg.rna] <- 1
+  
+  #####################################  
+  dat$attr$cat.5.status[true.neg.ab] <- 1
+  dat$attr$cat.5.status[true.neg.rna] <- 1
+  
+  dat$attr$cat.5.status[false.neg.ab] <- 2
+  dat$attr$cat.5.status[false.neg.rna] <- 2
+  
+  dat$attr$cat.5.status[true.pos.ab] <- 3
+  dat$attr$cat.5.status[true.pos.rna] <- 3
+  
+  dat$attr$cat.5.status[false.pos.ab] <- 4
+  dat$attr$cat.5.status[false.pos.rna] <- 4
+
+  #######################################
   
   ##PS
   PS.pos<-which(dat$attr$diag.status[tst.ps]==1)
@@ -502,8 +644,10 @@ test_KTM <- function(dat, at) {
   dat$attr$diag.status[PS.neg] <- 0
   
   ##
-  dat$attr$age.diag[tst.pos.ab] <- dat$attr$age[tst.pos.ab]
-  dat$attr$age.diag[tst.pos.rna] <- dat$attr$age[tst.pos.rna]
+  dat$attr$age.diag[true.pos.ab] <- dat$attr$age[true.pos.ab]
+  dat$attr$age.diag[false.pos.ab] <- dat$attr$age[false.pos.ab]
+  dat$attr$age.diag[true.pos.rna] <- dat$attr$age[true.pos.rna]
+  dat$attr$age.diag[false.pos.rna] <- dat$attr$age[false.pos.rna]
   
   # Prevalence
 
@@ -513,20 +657,24 @@ test_KTM <- function(dat, at) {
   dat$epi$partners.negative[at] <- max(0,length(tst.ps)-sum(dat$attr$diag.status[tst.ps]))
   dat$epi$PS.prior.diag[at] <- max(0, length(PS.prior.diag))
  
-  dat$epi$n.tests[at] <- sum(length(tst.neg.ab),length(tst.neg.rna),length(tst.pos.ab),length(tst.pos.rna))
-  dat$epi$n.tests.ab[at] <- sum(length(tst.neg.ab),length(tst.pos.ab))
-  dat$epi$n.tests.rna[at] <- sum(length(tst.neg.rna),length(tst.pos.rna))
+  dat$epi$n.tests[at] <- max(0,  (sum  (length(test.positive.ab),length(test.negative.ab),length(test.positive.rna),length(test.negative.rna) ) ))
+  dat$epi$n.tests.ab[at] <- max(0,(sum(length(test.positive.ab),length(test.negative.ab))))
+  dat$epi$n.tests.rna[at] <- max(0,(sum(length(test.positive.rna),length(test.negative.rna))))
   dat$epi$n.tests.tst.ps[at] <- max(0,length(tst.ps))
   
-  acute <- which(inf.time[tst.pos.rna] >= at - twind.int.ab )
+  dat$epi$missed.pos[at] <- length(missed.pos)
+  
+  acute <- which(inf.time[test.positive.rna] >= at - twind.int.ab )
   acute <- max(length(acute),0)
-  dat$epi$diag.prevalent[at] <- sum(length(tst.pos.ab),length(tst.pos.rna)) - acute
-  dat$epi$diag.acute[at] <- acute
+  ##HERE HERE
+  dat$epi$diag.prevalent[at] <- length(prev)
+  dat$epi$diag.acute[at] <- length(acute)
   
-  dat$epi$incid.diag[at] <- sum(length(tst.pos.ab),length(tst.pos.rna))
+  dat$epi$incid.diag[at] <- sum(length(test.positive.ab),length(test.positive.rna))
   
-  age1<- dat$attr$age[tst.pos.ab]
-  age2<- dat$attr$age[tst.pos.rna]
+
+  age1<- dat$attr$age[test.positive.ab]
+  age2<- dat$attr$age[test.positive.rna]
   dat$epi$mean.age.diag[at] <- max(0,mean(c(age1,age2)))
   
   dat$attr$prepElig[prep.elig]<-1
