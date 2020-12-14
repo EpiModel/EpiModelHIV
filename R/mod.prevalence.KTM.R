@@ -37,6 +37,7 @@ prevalence_KTM <- function(dat, at) {
   evertest <- dat$attr$evertest
   lnt <- dat$attr$last.neg.test
   cat.5.status <- dat$attr$cat.5.status
+  inf.to.diag <- dat$attr$time.inf.diag
 
   nsteps <- dat$control$nsteps
   rNA <- rep(NA, nsteps)
@@ -172,7 +173,38 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$nTN <-rNA
     dat$epi$TN.prev <-rNA
     
-    dat$epi$missed.pos <-rep(0, nsteps)
+    dat$epi$missed.pos <-rNA
+    
+
+    dat$epi$pct.evertest.m1 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.m1 <-rep(0, nsteps)
+    dat$epi$pct.evertest.m2 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.m2 <-rep(0, nsteps)
+    dat$epi$pct.evertest.m3 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.m3 <-rep(0, nsteps)
+    dat$epi$pct.evertest.m4 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.m4 <-rep(0, nsteps)
+    dat$epi$pct.evertest.f1 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.f1 <-rep(0, nsteps)
+    dat$epi$pct.evertest.f2 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.f2 <-rep(0, nsteps)
+
+    dat$epi$pct.evertest.f3 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.f3 <-rep(0, nsteps)
+    dat$epi$pct.evertest.f4 <-rep(0, nsteps)
+    dat$epi$pct.test.ly.f4 <-rep(0, nsteps)
+    
+    dat$epi$time.inf.diag <-rNA
+    
+    dat$epi$n.presented.pos <-rep(0, nsteps)
+    dat$epi$n.presented.neg <-rep(0, nsteps)
+    dat$epi$n.presented <-rep(0, nsteps)
+    
+    dat$epi$n.false.neg <-rep(0, nsteps)
+    dat$epi$n.false.pos <-rep(0, nsteps)
+    dat$epi$n.true.neg <-rep(0, nsteps)
+    dat$epi$n.true.pos <-rep(0, nsteps)
+    
   }
 
 
@@ -252,6 +284,41 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$pct.evertest[at] <- sum(evertest == 1 & age < 40, na.rm = TRUE) / dat$epi$num.poi[at]
   dat$epi$pct.test.ly[at] <- sum(lnt > at-52 & age < 40, na.rm = TRUE) / dat$epi$num.poi.undiag[at]
   
+  ####By age and sex
+  # Male 15-19
+  dat$epi$pct.evertest.m1[at] <- sum(sex == "M" & evertest == 1 & age < 20, na.rm = TRUE) / sum(sex == "M" &age < 20)
+  dat$epi$pct.test.ly.m1[at] <- sum(sex == "M" & lnt > at-52 & age < 20, na.rm = TRUE) / sum(sex == "M" & age < 20 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Male 20-24
+  dat$epi$pct.evertest.m2[at] <- sum(sex == "M" & evertest == 1 & age >= 20 & age < 25, na.rm = TRUE) / sum(sex == "M" & age >= 20  & age < 25)
+  dat$epi$pct.test.ly.m2[at] <- sum(sex == "M" & lnt > at-52 & age >= 20 & age < 25, na.rm = TRUE) / sum(sex == "M" & age >= 20  & age < 25 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Male 25-29
+  dat$epi$pct.evertest.m3[at] <- sum(sex == "M" & evertest == 1 & age >= 25 & age < 30, na.rm = TRUE) / sum(sex == "M" & age >= 25  & age < 30)
+  dat$epi$pct.test.ly.m3[at] <- sum(sex == "M" & lnt > at-52 & age >= 25 & age < 30, na.rm = TRUE) / sum(sex == "M" & age >= 25  & age < 30 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Male 30-39
+  dat$epi$pct.evertest.m4[at] <- sum(sex == "M" & evertest == 1 & age >= 30 & age < 40, na.rm = TRUE) / sum(sex == "M" & age >= 30  & age < 40)
+  dat$epi$pct.test.ly.m4[at] <- sum(sex == "M" & lnt > at-52 & age >= 30 & age < 40, na.rm = TRUE) / sum(sex == "M" & age >= 30  & age < 40 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+
+  # Female 15-19
+  dat$epi$pct.evertest.f1[at] <- sum(sex == "F" & evertest == 1 & age < 20, na.rm = TRUE) / sum(sex == "F" & age < 20)
+  dat$epi$pct.test.ly.f1[at] <- sum(sex == "F" & lnt > at-52 & age < 20, na.rm = TRUE) / sum(sex == "F" & age < 20 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Female 20-24
+  dat$epi$pct.evertest.f2[at] <- sum(sex == "F" & evertest == 1 & age >= 20 & age < 25, na.rm = TRUE) / sum(sex == "F" & age >= 20  & age < 25)
+  dat$epi$pct.test.ly.f2[at] <- sum(sex == "F" & lnt > at-52 & age >= 20 & age < 25, na.rm = TRUE) / sum(sex == "F" & age >= 20  & age < 25 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Female 25-29
+  dat$epi$pct.evertest.f3[at] <- sum(sex == "F" & evertest == 1 & age >= 25 & age < 30, na.rm = TRUE) / sum(sex == "F" & age >= 25  & age < 30)
+  dat$epi$pct.test.ly.f3[at] <- sum(sex == "F" & lnt > at-52 & age >= 25 & age < 30, na.rm = TRUE) / sum(sex == "F" & age >= 25  & age < 30 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  # Female 30-39
+  dat$epi$pct.evertest.f4[at] <- sum(sex == "F" & evertest == 1 & age >= 30 & age < 40, na.rm = TRUE) / sum(sex == "F" & age >= 30  & age < 40)
+  dat$epi$pct.test.ly.f4[at] <- sum(sex == "F" & lnt > at-52 & age >= 30 & age < 40, na.rm = TRUE) / sum(sex == "F" & age >= 30  & age < 40 & (diagnosed == 0 | is.na(diagnosed==TRUE)))
+  
+  
+  
   dat$epi$nTN[at] <- max(0,sum(cat.5.status == 1 & age < 40, na.rm = TRUE))
   dat$epi$TN.prev[at] <-  dat$epi$nTN[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE) 
   dat$epi$nFN[at] <- max(0,sum(cat.5.status == 2 & age < 40, na.rm = TRUE))
@@ -261,8 +328,8 @@ prevalence_KTM <- function(dat, at) {
   dat$epi$nFP[at] <- max(0,sum(cat.5.status == 4 & age < 40, na.rm = TRUE))
   dat$epi$FP.prev[at] <- dat$epi$nFP[at] / sum(dat$attr$testclin == 1 & age < 40, na.rm = TRUE)
 
- 
-
+  sel<-which(age < 40 & dat$att$diag.time > at - 520)
+  dat$epi$time.inf.diag[at] <- mean(inf.to.diag[poi], na.rm = TRUE)
 
 
   
