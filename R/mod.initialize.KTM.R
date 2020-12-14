@@ -265,6 +265,8 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$cat.5.status  <- rep(0,num)
   dat$attr$testclin  <- rep(0,num)
   
+  dat$attr$time.inf.diag  <- rep(NA,num)
+  
   # Prevalence Tracking
   dat$temp$deg.dists <- list()
   dat$temp$discl.list <- matrix(NA, nrow = 0, ncol = 3)
