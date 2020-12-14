@@ -30,7 +30,6 @@ test_KTM <- function(dat, at) {
   sex <- dat$attr$sex
   age.group <- dat$attr$age.group
   status <- dat$attr$status
-  inf.time <- dat$attr$inf.time
   stage <- dat$attr$stage
   evertest <- dat$attr$evertest
   age <- dat$attr$age
@@ -111,6 +110,14 @@ test_KTM <- function(dat, at) {
   
   t <- NULL
   f <- NULL
+  
+  presented.HIV <- NULL
+  presented.HIV.neg <- NULL  
+  presented.HIV.pos <- NULL
+  
+  presented.OI <- NULL
+  presented.OI.neg <- NULL
+  presented.OI.pos <- NULL
   
 ## Process
 
@@ -233,14 +240,22 @@ test_KTM <- function(dat, at) {
 
     #Those with HIV
     sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status ==0  & partner.serv.part==0 & age < 40)
-    selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl)
-    sym_HIV <- sym_HIV[selected == 1]
+    presented <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob)
+    presented <- sym_HIV[presented ==1]
+    presented.HIV.pos <- sum(status[presented])
+    presented.HIV.neg <- length(presented) - sum(status[presented])
+    selected <- rbinom(length(presented),1,sym.test.prob.bl)
+    sym_HIV <- presented[selected == 1]
     
 
     #Those with other illness
     sym<-which((diag.status == 0 | is.na(diag.status) == TRUE)  & age < 40)
-    selected <- rbinom(length(sym),1,sym.seek.prob*sym.test.prob.bl)
-    sym <- sym[selected == 1]
+    presented.OI <- rbinom(length(sym),1,sym.seek.prob)
+    presented.OI <- sym[presented.OI ==1]
+    presented.OI.pos <- sum(status[presented.OI])
+    presented.OI.neg <- length(presented.OI) - sum(status[presented.OI])
+    selected <- rbinom(length(presented.OI),1,sym.test.prob.bl)
+    sym <- presented.OI[selected == 1]
     
     #Count total number of background tests.  AHI symptom and other symptom tests will need to be removed from the background 
     #to be counted separately
@@ -338,17 +353,26 @@ test_KTM <- function(dat, at) {
       
       #Those with HIV
       sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
-      selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.tm)
-      sym_HIV.bg.count<-sum(rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl))
-      sym_HIV <- sym_HIV[selected == 1]
+      presented <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob)
+      presented <- sym_HIV[presented ==1]
+      presented.HIV.pos <- sum(status[presented])
+      presented.HIV.neg <- length(presented) - sum(status[presented]) 
+      selected <- rbinom(length(presented),1,sym.test.prob.tm)
+      sym_HIV.bg.count<-sum(rbinom(length(presented),1,sym.test.prob.bl))
+      sym_HIV <- presented[selected == 1]
       
-      
+
       #Those with other illness
       sym<-which((diag.status == 0 | is.na(diag.status) == TRUE)  & age < 40)
-      selected <- rbinom(length(sym),1,sym.seek.prob*sym.test.prob.tm)
-      sym.bg.count<- sum(rbinom(length(sym),1,sym.seek.prob*sym.test.prob.bl))
-      sym <- sym[selected == 1]
-      
+      presented.OI <- rbinom(length(sym),1,sym.seek.prob)
+      presented.OI <- sym[presented.OI ==1]
+      presented.OI.pos <- sum(status[presented.OI])
+      presented.OI.neg <- length(presented.OI) - sum(status[presented.OI])
+      selected <- rbinom(length(presented.OI),1,sym.test.prob.tm)
+      sym.bg.count<- sum(rbinom(length(presented.OI),1,sym.test.prob.bl))
+      sym <- presented.OI[selected == 1]
+
+
       #remove individuals selected for testing as both background and none AHI symptoms from list for background
       ntest<-length(tst.background)
       n.keep <- ntest - sym.bg.count - sym_HIV.bg.count
@@ -473,16 +497,24 @@ test_KTM <- function(dat, at) {
       
       #Those with HIV
       sym_HIV <- which(status == 1 & inf.time >= (at - 3) & diag.status == 0  & partner.serv.part==0  & age < 40)
-      selected <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.tm)
-      sym_HIV.bg.count<-sum(rbinom(length(sym_HIV),1,seek.hc.AHI.prob*sym.test.prob.bl))
-      sym_HIV <- sym_HIV[selected == 1]
-      
+      presented <- rbinom(length(sym_HIV),1,seek.hc.AHI.prob)
+      presented <- sym_HIV[presented ==1]
+      presented.HIV.pos <- sum(status[presented])
+      presented.HIV.neg <- length(presented) - sum(status[presented]) 
+      selected <- rbinom(length(presented),1,sym.test.prob.tm)
+      sym_HIV.bg.count<-sum(rbinom(length(presented),1,sym.test.prob.bl))
+      sym_HIV <- presented[selected == 1]
       
       #Those with other illness
       sym<-which((diag.status == 0 | is.na(diag.status) == TRUE)  & age < 40)
-      selected <- rbinom(length(sym),1,sym.seek.prob*sym.test.prob.tm)
-      sym.bg.count<- sum(rbinom(length(sym),1,sym.seek.prob*sym.test.prob.bl))
-      sym <- sym[selected == 1]
+      presented.OI <- rbinom(length(sym),1,sym.seek.prob)
+      presented.OI <- sym[presented.OI ==1]
+      presented.OI.pos <- sum(status[presented.OI])
+      presented.OI.neg <- length(presented.OI) - sum(status[presented.OI])
+      selected <- rbinom(length(presented.OI),1,sym.test.prob.tm)
+      sym.bg.count<- sum(rbinom(length(presented.OI),1,sym.test.prob.bl))
+      sym <- presented.OI[selected == 1]
+      
       
       #remove individuals selected for testing as both background and none AHI symptoms from list for background
       ntest<-length(tst.background)
@@ -662,11 +694,29 @@ test_KTM <- function(dat, at) {
   dat$epi$n.tests.rna[at] <- max(0,(sum(length(test.positive.rna),length(test.negative.rna))))
   dat$epi$n.tests.tst.ps[at] <- max(0,length(tst.ps))
   
+  dat$epi$n.false.neg[at] <- sum(0, length(false.neg.ab), length(false.neg.rna), na.rm = TRUE) 
+  dat$epi$n.false.pos[at] <- sum(0, length(false.pos.ab), length(false.pos.ab), na.rm = TRUE)
+  dat$epi$n.true.neg[at] <- sum(0, length(true.neg.ab), length(true.neg.rna), na.rm = TRUE)
+  dat$epi$n.true.pos[at] <- sum(0, length(true.pos.ab), length(true.pos.rna), na.rm = TRUE)
+  
+ 
+  dat$epi$n.presented.pos[at] <- sum(presented.HIV.pos, presented.OI.pos)
+  dat$epi$n.presented.neg[at] <- sum(presented.HIV.neg, presented.OI.neg)
+  dat$epi$n.presented[at] <- sum(dat$epi$n.presented.pos[at], dat$epi$n.presented.neg[at])
+    
   dat$epi$missed.pos[at] <- length(missed.pos)
   
   acute <- which(inf.time[test.positive.rna] >= at - twind.int.ab )
   acute <- max(length(acute),0)
-  ##HERE HERE
+
+  
+##Get time from infection to diagnosis.
+dat$attr$time.inf.diag[true.pos.ab] <- dat$attr$diag.time[true.pos.ab] - dat$attr$inf.time[true.pos.ab]
+dat$attr$time.inf.diag[true.pos.rna] <- dat$attr$diag.time[true.pos.rna] - dat$attr$inf.time[true.pos.rna]
+dat$attr$time.inf.diag[PS.pos] <- dat$attr$diag.time[PS.pos] - dat$attr$inf.time[PS.pos]
+dat$attr$time.inf.diag[tst.pos.bg] <- dat$attr$diag.time[tst.pos.bg] - dat$attr$inf.time[tst.pos.bg]
+
+
   dat$epi$diag.prevalent[at] <- length(prev)
   dat$epi$diag.acute[at] <- length(acute)
   
