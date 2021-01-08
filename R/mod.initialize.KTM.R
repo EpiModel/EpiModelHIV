@@ -263,7 +263,8 @@ initialize_KTM <- function(x, param, init, control, s) {
   dat$attr$PS.diag.pos.time <- rep(0,num)
   
   dat$attr$cat.5.status  <- rep(0,num)
-  dat$attr$testclin  <- rep(0,num)
+  dat$attr$testclin <- rep(0,num)
+  dat$attr$testTMP <- rep(0,num)
   
   dat$attr$time.inf.diag  <- rep(NA,num)
   
