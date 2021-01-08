@@ -650,6 +650,8 @@ test_KTM <- function(dat, at) {
   dat$attr$testclin[false.pos.rna] <- 1
   dat$attr$testclin[false.neg.rna] <- 1
   
+  dat$attr$testTMP[true.pos.rna] <- 1
+  
   #####################################  
   dat$attr$cat.5.status[true.neg.ab] <- 1
   dat$attr$cat.5.status[true.neg.rna] <- 1
