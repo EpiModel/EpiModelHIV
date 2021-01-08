@@ -17,8 +17,10 @@ intervention_TM <- dat$param$intervention_TM
 count <- 0
   
   
-if(intervention_TM=="TMP" & at > 2){
+#if(intervention_TM=="TMP" & at > 2){
 
+if(at > 2){
+  
     #Attributes    
 index.acute <-  dat$attr$PS.index.acute
 index.prev <- dat$attr$PS.index.prev
