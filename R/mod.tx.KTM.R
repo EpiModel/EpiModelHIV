@@ -41,8 +41,13 @@ tx_KTM <- function(dat, at) {
   stage <- dat$attr$stage
   PS.diag.pos.time <- dat$attr$PS.diag.pos.time
   age<-dat$attr$age
+  testTMP <- dat$attr$testTMP
 
   # Parameters
+
+  #The init rate is used for the first 6 weeks for those in TMP to get to 89% starting within 6 weeks  
+  tx.init.TMP.prob <- dat$param$tx.init.TMP.prob
+  
   #The init rate is used for the first 8 weeks to get to 75% starting within 8 weeks
   tx.init.B.f.prob <- dat$param$tx.init.B.f.prob
   tx.init.B.msf.prob <- dat$param$tx.init.B.msf.prob
@@ -61,11 +66,18 @@ tx_KTM <- function(dat, at) {
   PS.time <- dat$param$PS.time
   
   ## Initiation
+  
+  #TMP intervention
+  tx.init.elig.TMP <- which(tx.status == 0 & diag.status == 1 & diag.time >= (at-6) & cum.time.on.tx == 0 & age < 40 & testTMP == 1)
+
+  tx.init.TMP <- tx.init.elig.TMP[rbinom(length(tx.init.elig.TMP), 1,
+                                         tx.init.TMP.prob) == 1]
+  
   #Females
   
   #First 8 weeks
   tx.init.elig.B.f <- which(race == "B" & status == 1 & sex == "F" &
-                          tx.status == 0 & diag.status == 1 & diag.time >= (at-8) & cum.time.on.tx == 0 & age < 40)
+                          tx.status == 0 & diag.status == 1 & diag.time >= (at-8) & cum.time.on.tx == 0 & age < 40 & testTMP == 0)
   
   tx.init.B.f <- tx.init.elig.B.f[rbinom(length(tx.init.elig.B.f), 1,
                                      tx.init.B.f.prob) == 1]
@@ -79,7 +91,7 @@ tx_KTM <- function(dat, at) {
   
   #First 8 weeks
   tx.init.elig.B.msf <- which(race == "B" & status == 1 & sex == "M" & sex.ident=="msf" &
-                            tx.status == 0 & diag.status == 1 & diag.time >= (at-8) & cum.time.on.tx == 0 & age < 40)
+                            tx.status == 0 & diag.status == 1 & diag.time >= (at-8) & cum.time.on.tx == 0 & age < 40  & testTMP ==0)
   
   tx.init.B.msf <- tx.init.elig.B.msf[rbinom(length(tx.init.elig.B.msf), 1,
                                      tx.init.B.msf.prob) == 1]
@@ -99,7 +111,7 @@ tx_KTM <- function(dat, at) {
   dat$epi$tx.init.ps[at] <- max(0,length(tx.init.PS))
   
   
-  tx.init <- c(tx.init.B.f, tx.init.B.f.late, tx.init.B.msf, tx.init.B.msf.late, tx.init.PS)
+  tx.init <- c(tx.init.TMP, tx.init.B.f, tx.init.B.f.late, tx.init.B.msf, tx.init.B.msf.late, tx.init.PS)
 
   dat$attr$tx.status[tx.init] <- 1
   dat$attr$tx.init.time[tx.init] <- at
