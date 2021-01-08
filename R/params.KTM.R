@@ -357,6 +357,7 @@ param_KTM <- function(race.method = 1,
                       
 
                       #Art params worksheet 
+                      tx.init.TMP.prob = .31,
                       tx.init.B.f.prob = 0.15912,
                       tx.init.BI.f.prob = 0.15912,
                       tx.init.H.f.prob = 0.15912,
@@ -445,10 +446,10 @@ param_KTM <- function(race.method = 1,
                       vl.full.supp = 2.75,
                       #Partial is 3000 copies
                       vl.part.supp = 3.5,
-                      full.supp.down.slope = 0.25,
-                      full.supp.up.slope = 0.25,
-                      part.supp.down.slope = 0.25,
-                      part.supp.up.slope = 0.25,
+                      full.supp.down.slope = 0.11,
+                      full.supp.up.slope = 0.11,
+                      part.supp.down.slope = 0.11,
+                      part.supp.up.slope = 0.11,
                       
 
 
@@ -493,8 +494,14 @@ param_KTM <- function(race.method = 1,
                       AI.foi.scale = 1,
                       
                       acute.rr = 4,
+                      #5.2 based on https://doi.org/10.1371/journal.pmed.1001801
+                      #acute.rr = 5.2,
                       circ.rr = .4,
                       condom.rr = 0.25,
+                      
+                     # .2 may better reflect VARGHESE et al 2002
+                     # and Weller DOI: 10.1002/14651858.CD003255
+                      #condom.rr = 0.2,
 
                       ##For now aasume no disclosure (may use for calibration)
                       disc.outset.main.B.f.prob = .03,
