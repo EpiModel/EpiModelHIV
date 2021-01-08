@@ -425,6 +425,9 @@ setBirthAttr_shamp <- function(dat, at, nBirths) {
   #Population of interest
   dat$attr$poi[newIds] <- 0
   
+  #tested positive due to intervention
+  dat$attr$testTMP[newIds] <- 0
+  
   return(dat)
 }
 
