@@ -1322,7 +1322,7 @@ testing_interventions <- function(dat, at) {
      dat$epi$NN.home.test.pos[at] <- max(0,length(tst.pos.home.s[!is.na(tst.pos.home.s)]))
      
      ###########ADD THESE COUNTS
-     dat$attr$NN.HT.Test.Num[tst.all.HT ] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
+     dat$attr$NN.HT.Test.Num[tst.all.HT ] <- dat$attr$NN.HT.Test.Num[tst.all.HT] + 1
 }
      
    
