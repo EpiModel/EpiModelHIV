@@ -271,7 +271,7 @@ testing_interventions <- function(dat, at) {
   ###########ADD THESE COUNTS
   dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
   dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
-  dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
+  #dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
   
   
 ###########################################################################################################
@@ -636,7 +636,7 @@ testing_interventions <- function(dat, at) {
   
   dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
   dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
-  dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
+  #dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
 
   
   ### Summary statistics
@@ -1243,7 +1243,7 @@ testing_interventions <- function(dat, at) {
    
    dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
    dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
-   dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
+   #dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
 
    
    ### Summary statistics
