@@ -270,9 +270,9 @@ testing_interventions <- function(dat, at) {
 
   ###########ADD THESE COUNTS
   
-  tst.all.real <- !is.na(tst.all.real)
-  tst.all.clinic <- !is.na(tst.all.clinic)
-  tst.all.HT <- !is.na(tst.all.HT)
+  tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+  tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+  tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
   
   dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
   dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
@@ -490,9 +490,9 @@ testing_interventions <- function(dat, at) {
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
   
-  tst.all.real <- !is.na(tst.all.real)
-  tst.all.clinic <- !is.na(tst.all.clinic)
-  tst.all.HT <- !is.na(tst.all.HT)
+  tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+  tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+  tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
   
   dat$attr$Reg.Test.Num[tst.all.real] <- dat$attr$Reg.Test.Num[tst.all.real ]  + 1
   dat$attr$Reg.Clin.Test.Num[tst.all.clinic] <- dat$attr$Reg.Clin.Test.Num[tst.all.clinic]  + 1
@@ -643,9 +643,9 @@ testing_interventions <- function(dat, at) {
   dat$attr$diag.status[tst.pos] <- 1
   dat$attr$diag.time[tst.pos] <- at
   
-  tst.all.real <- !is.na(tst.all.real)
-  tst.all.clinic <- !is.na(tst.all.clinic)
-  tst.all.HT <- !is.na(tst.all.HT)
+  tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+  tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+  tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
   dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
   dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
   dat$attr$Opp.HT.Test.Num[tst.all.HT] <- dat$attr$Opp.HT.Test.Num[tst.all.HT] + 1
@@ -792,9 +792,9 @@ testing_interventions <- function(dat, at) {
    dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
    
    
-   tst.all.real <- !is.na(tst.all.real)
-   tst.all.clinic <- !is.na(tst.all.clinic)
-   tst.all.HT <- !is.na(tst.all.HT)
+   tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+   tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+   tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
    
    dat$attr$Risk.Test.Num[tst.all.real] <- dat$attr$Risk.Test.Num[tst.all.real] + 1
    dat$attr$Risk.Clin.Test.Num[tst.all.clinic] <- dat$attr$Risk.Clin.Test.Num[tst.all.clinic] + 1
@@ -946,9 +946,9 @@ testing_interventions <- function(dat, at) {
    dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
    
    
-   tst.all.real <- !is.na(tst.all.real)
-   tst.all.clinic <- !is.na(tst.all.clinic)
-   tst.all.HT <- !is.na(tst.all.HT)
+   tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+   tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+   tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
    
    dat$attr$Risk.Test.Num[tst.all.real] <- dat$attr$Risk.Test.Num[tst.all.real] + 1
    dat$attr$Risk.Clin.Test.Num[tst.all.clinic] <- dat$attr$Risk.Clin.Test.Num[tst.all.clinic] + 1
@@ -1097,9 +1097,9 @@ testing_interventions <- function(dat, at) {
    dat$attr$diag.time[tst.pos] <- at
    dat$attr$last.neg.test.in.clinic[tst.all.clinic] <- at
    
-   tst.all.real <- !is.na(tst.all.real)
-   tst.all.clinic <- !is.na(tst.all.clinic)
-   tst.all.HT <- !is.na(tst.all.HT)
+   tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+   tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+   tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
    dat$attr$Risk.Test.Num[tst.all.real] <- dat$attr$Risk.Test.Num[tst.all.real] + 1
    dat$attr$Risk.Clin.Test.Num[tst.all.clinic] <- dat$attr$Risk.Clin.Test.Num[tst.all.clinic] + 1
    dat$attr$Risk.HT.Test.Num[tst.all.HT ] <- dat$attr$Risk.HT.Test.Num[tst.all.HT] + 1
@@ -1263,9 +1263,9 @@ testing_interventions <- function(dat, at) {
    dat$attr$diag.status[tst.pos] <- 1
    dat$attr$diag.time[tst.pos] <- at
    
-   tst.all.real <- !is.na(tst.all.real)
-   tst.all.clinic <- !is.na(tst.all.clinic)
-   tst.all.HT <- !is.na(tst.all.HT)
+   tst.all.real <- tst.all.real[!is.na(tst.all.real)]
+   tst.all.clinic <- tst.all.clinic[!is.na(tst.all.clinic)]
+   tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
    
    dat$attr$Opp.Test.Num[tst.all.real] <- dat$attr$Opp.Test.Num[tst.all.real] + 1
    dat$attr$Opp.Clin.Test.Num[tst.all.clinic] <- dat$attr$Opp.Clin.Test.Num[tst.all.clinic] + 1
@@ -1348,7 +1348,7 @@ testing_interventions <- function(dat, at) {
      dat$epi$NN.home.test.pos[at] <- max(0,length(tst.pos.home.s[!is.na(tst.pos.home.s)]))
      
      ###########ADD THESE COUNTS
-     tst.all.HT <- !is.na(tst.all.HT)
+     tst.all.HT <- tst.all.HT[!is.na(tst.all.HT)]
      
      dat$attr$NN.HT.Test.Num[tst.all.HT ] <- dat$attr$NN.HT.Test.Num[tst.all.HT] + 1
 }
