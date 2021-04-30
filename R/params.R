@@ -348,8 +348,10 @@ param_cl <- function(nwstats,
                       
                       #b.B.rate.asmm = 0.004262/7,
                       #b.W.rate.asmm = 0.004262/7,
-                      b.B.rate.asmm = 0.0001348571,
-                      b.W.rate.asmm = 0.0001348571,
+                      #b.B.rate.asmm = 0.0001348571,
+                      #b.W.rate.asmm = 0.0001348571,
+                      b.B.rate.asmm = 0.0001308571,
+                      b.W.rate.asmm = 0.0001308571,
                       b.method = "fixed",
                       
 
@@ -432,18 +434,15 @@ param_cl <- function(nwstats,
                       cond.asmm.WW.prob = 0.54,
                      
                       cond.asmm.by.age = TRUE,
-                      #cond.asmm.13.15 = .28,
-                      #cond.asmm.16.17 = .38,
-                      #cond.asmm.18 = .547,
+                      cond.asmm.13.15 = .28,
+                      cond.asmm.16.17 = .38,
+                      cond.asmm.18 = .547,
                      
-                     #adjusted for mixing!
-                      cond.asmm.13.15 = .301,
-                      cond.asmm.16.17 = .427,
-                      cond.asmm.18 = .577,
-                     
+
                       cond.edu = FALSE,
                       cond.edu.start = 2,
                       sex.exp.edu = FALSE,
+                      sex.edu.no.sex = FALSE,
                       cond.edu.cov = 0.25,
                       cond.edu.effect.dur = 5, 
                       cond.post.edu.rr = 1.3,
