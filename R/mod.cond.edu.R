@@ -37,7 +37,7 @@ condoms_edu_campcl <- function(dat, at) {
    cond.edu.cov <- dat$param$cond.edu.cov
    cond.edu.effect.dur <- dat$param$cond.edu.effect.dur
    
-   if (dat$param$sex.exp.edu == FALSE) {
+   if (dat$param$sex.exp.edu == FALSE & dat$param$sex.edu.no.sex == FALSE) {
    elig <- which(age.temp < cond.edu.at.age & age >= cond.edu.at.age)
    num.elig <- length(elig)
    if (num.elig >=1){
@@ -46,7 +46,18 @@ condoms_edu_campcl <- function(dat, at) {
    }
    }
    
-   if (dat$param$sex.exp.edu == TRUE) {
+   if (dat$param$sex.exp.edu == FALSE & dat$param$sex.edu.no.sex == TRUE) {
+      elig <- which(age.temp < cond.edu.at.age & age >= cond.edu.at.age)
+      num.elig <- length(elig)
+      if (num.elig >=1){
+         selected <- rbinom(num.elig,1,cond.edu.cov)
+         elig <- elig[selected==1]
+         AI <- everAI[elig]
+         elig <- elig[AI==0]
+      }
+   }
+   
+   if (dat$param$sex.exp.edu == TRUE & dat$param$sex.edu.no.sex == FALSE) {
      elig <- which(age.temp < cond.edu.at.age & age >= cond.edu.at.age)
      num.elig <- length(elig)
      if (num.elig >=1){
