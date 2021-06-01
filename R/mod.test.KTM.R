@@ -39,8 +39,7 @@ test_KTM <- function(dat, at) {
 
   prepStat <- dat$attr$prepStat
   prep.elig.time <- dat$attr$prep.elig.time 
-  prep.tst.int <- dat$param$prep.tst.int
-  
+
   cat.5.status <- dat$attr$cat.5.status
 
 
@@ -65,6 +64,7 @@ test_KTM <- function(dat, at) {
   partner.test.prob.tm <- dat$param$partner.test.prob.tm
   PS.time <- dat$param$PS.time
   
+  prep.tst.int <- dat$param$prep.tst.int
   
   ab.test.sens <- dat$param$ab.test.sens
   ab.test.spec <- dat$param$ab.test.spec 
@@ -81,7 +81,7 @@ test_KTM <- function(dat, at) {
   tst.positives.rna <- NULL
   tst.ab <- NULL
   tst.rna <- NULL
-  
+
   tst.bg <- NULL
   tst.pos.bg <- NULL
   tst.neg.bg <- NULL
@@ -118,6 +118,11 @@ test_KTM <- function(dat, at) {
   presented.OI <- NULL
   presented.OI.neg <- NULL
   presented.OI.pos <- NULL
+  
+  
+  tst.ps <- NULL
+  dat$attr$tested.negative <- rep(0,length(dat$attr$age))
+  dat$attr$prep.ind.ps <- rep(0,length(dat$attr$age))
   
 ## Process
 
@@ -676,6 +681,7 @@ test_KTM <- function(dat, at) {
   dat$attr$PS.diag.pos.time[PS.pos] <- at
   dat$attr$PS.diag.neg[PS.neg] <- 1
   dat$attr$diag.status[PS.neg] <- 0
+  dat$attr$prep.ind.ps[PS.neg] <- 1
   
   ##
   dat$attr$age.diag[true.pos.ab] <- dat$attr$age[true.pos.ab]
@@ -729,8 +735,11 @@ dat$attr$time.inf.diag[tst.pos.bg] <- dat$attr$diag.time[tst.pos.bg] - dat$attr$
   age2<- dat$attr$age[test.positive.rna]
   dat$epi$mean.age.diag[at] <- max(0,mean(c(age1,age2)))
   
-  dat$attr$prepElig[prep.elig]<-1
+
   
   
+  dat$attr$tested.negative[test.negative.rna] <- 1
+  dat$attr$tested.negative[test.negative.ab] <- 1
+
   return(dat)
 }
