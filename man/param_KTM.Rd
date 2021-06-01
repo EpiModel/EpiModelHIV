@@ -25,7 +25,7 @@ param_KTM(
   seek.hc.AHI.prob = 0.325,
   sym.seek.prob = 0.002606,
   sym.test.prob.bl = 0.256,
-  sym.test.prob.tm = 0.9,
+  sym.test.prob.tm = 0.949,
   partner.test.prob.bl = 0.023,
   partner.test.prob.tm = 0.169,
   p.prev.follow.win = 52,
@@ -133,146 +133,13 @@ param_KTM(
   acute.rr = 4,
   circ.rr = 0.4,
   condom.rr = 0.25,
-  disc.outset.main.B.f.prob = 0.03,
-  disc.outset.main.BI.f.prob = 0,
-  disc.outset.main.H.f.prob = 0,
-  disc.outset.main.HI.f.prob = 0,
-  disc.outset.main.W.f.prob = 0,
-  disc.outset.main.B.msf.prob = 0,
-  disc.outset.main.BI.msf.prob = 0,
-  disc.outset.main.H.msf.prob = 0,
-  disc.outset.main.HI.msf.prob = 0,
-  disc.outset.main.W.msf.prob = 0,
-  disc.outset.main.B.msm.prob = 0,
-  disc.outset.main.BI.msm.prob = 0,
-  disc.outset.main.H.msm.prob = 0,
-  disc.outset.main.HI.msm.prob = 0,
-  disc.outset.main.W.msm.prob = 0,
-  disc.outset.main.B.msmf.prob = 0,
-  disc.outset.main.BI.msmf.prob = 0,
-  disc.outset.main.H.msmf.prob = 0,
-  disc.outset.main.HI.msmf.prob = 0,
-  disc.outset.main.W.msmf.prob = 0,
-  disc.at.diag.main.B.f.prob = 0.03,
-  disc.at.diag.main.BI.f.prob = 0,
-  disc.at.diag.main.H.f.prob = 0,
-  disc.at.diag.main.HI.f.prob = 0,
-  disc.at.diag.main.W.f.prob = 0,
-  disc.at.diag.main.B.msf.prob = 0,
-  disc.at.diag.main.BI.msf.prob = 0,
-  disc.at.diag.main.H.msf.prob = 0,
-  disc.at.diag.main.HI.msf.prob = 0,
-  disc.at.diag.main.W.msf.prob = 0,
-  disc.at.diag.main.B.msm.prob = 0,
-  disc.at.diag.main.BI.msm.prob = 0,
-  disc.at.diag.main.H.msm.prob = 0,
-  disc.at.diag.main.HI.msm.prob = 0,
-  disc.at.diag.main.W.msm.prob = 0,
-  disc.at.diag.main.B.msmf.prob = 0,
-  disc.at.diag.main.BI.msmf.prob = 0,
-  disc.at.diag.main.H.msmf.prob = 0,
-  disc.at.diag.main.HI.msmf.prob = 0,
-  disc.at.diag.main.W.msmf.prob = 0,
-  disc.post.diag.main.B.f.prob = 0,
-  disc.post.diag.main.BI.f.prob = 0,
-  disc.post.diag.main.H.f.prob = 0,
-  disc.post.diag.main.HI.f.prob = 0,
-  disc.post.diag.main.W.f.prob = 0,
-  disc.post.diag.main.B.msf.prob = 0,
-  disc.post.diag.main.BI.msf.prob = 0,
-  disc.post.diag.main.H.msf.prob = 0,
-  disc.post.diag.main.HI.msf.prob = 0,
-  disc.post.diag.main.W.msf.prob = 0,
-  disc.post.diag.main.B.msm.prob = 0,
-  disc.post.diag.main.BI.msm.prob = 0,
-  disc.post.diag.main.H.msm.prob = 0,
-  disc.post.diag.main.HI.msm.prob = 0,
-  disc.post.diag.main.W.msm.prob = 0,
-  disc.post.diag.main.B.msmf.prob = 0,
-  disc.post.diag.main.BI.msmf.prob = 0,
-  disc.post.diag.main.H.msmf.prob = 0,
-  disc.post.diag.main.HI.msmf.prob = 0,
-  disc.post.diag.main.W.msmf.prob = 0,
-  disc.outset.pers.B.f.prob = 0.02,
-  disc.outset.pers.BI.f.prob = 0,
-  disc.outset.pers.H.f.prob = 0,
-  disc.outset.pers.HI.f.prob = 0,
-  disc.outset.pers.W.f.prob = 0,
-  disc.outset.pers.B.msf.prob = 0,
-  disc.outset.pers.BI.msf.prob = 0,
-  disc.outset.pers.H.msf.prob = 0,
-  disc.outset.pers.HI.msf.prob = 0,
-  disc.outset.pers.W.msf.prob = 0,
-  disc.outset.pers.B.msm.prob = 0,
-  disc.outset.pers.BI.msm.prob = 0,
-  disc.outset.pers.H.msm.prob = 0,
-  disc.outset.pers.HI.msm.prob = 0,
-  disc.outset.pers.W.msm.prob = 0,
-  disc.outset.pers.B.msmf.prob = 0,
-  disc.outset.pers.BI.msmf.prob = 0,
-  disc.outset.pers.H.msmf.prob = 0,
-  disc.outset.pers.HI.msmf.prob = 0,
-  disc.outset.pers.W.msmf.prob = 0,
-  disc.at.diag.pers.B.f.prob = 0.02,
-  disc.at.diag.pers.BI.f.prob = 0,
-  disc.at.diag.pers.H.f.prob = 0,
-  disc.at.diag.pers.HI.f.prob = 0,
-  disc.at.diag.pers.W.f.prob = 0,
-  disc.at.diag.pers.B.msf.prob = 0,
-  disc.at.diag.pers.BI.msf.prob = 0,
-  disc.at.diag.pers.H.msf.prob = 0,
-  disc.at.diag.pers.HI.msf.prob = 0,
-  disc.at.diag.pers.W.msf.prob = 0,
-  disc.at.diag.pers.B.msm.prob = 0,
-  disc.at.diag.pers.BI.msm.prob = 0,
-  disc.at.diag.pers.H.msm.prob = 0,
-  disc.at.diag.pers.HI.msm.prob = 0,
-  disc.at.diag.pers.W.msm.prob = 0,
-  disc.at.diag.pers.B.msmf.prob = 0,
-  disc.at.diag.pers.BI.msmf.prob = 0,
-  disc.at.diag.pers.H.msmf.prob = 0,
-  disc.at.diag.pers.HI.msmf.prob = 0,
-  disc.at.diag.pers.W.msmf.prob = 0,
-  disc.post.diag.pers.B.f.prob = 0,
-  disc.post.diag.pers.BI.f.prob = 0,
-  disc.post.diag.pers.H.f.prob = 0,
-  disc.post.diag.pers.HI.f.prob = 0,
-  disc.post.diag.pers.W.f.prob = 0,
-  disc.post.diag.pers.B.msf.prob = 0,
-  disc.post.diag.pers.BI.msf.prob = 0,
-  disc.post.diag.pers.H.msf.prob = 0,
-  disc.post.diag.pers.HI.msf.prob = 0,
-  disc.post.diag.pers.W.msf.prob = 0,
-  disc.post.diag.pers.B.msm.prob = 0,
-  disc.post.diag.pers.BI.msm.prob = 0,
-  disc.post.diag.pers.H.msm.prob = 0,
-  disc.post.diag.pers.HI.msm.prob = 0,
-  disc.post.diag.pers.W.msm.prob = 0,
-  disc.post.diag.pers.B.msmf.prob = 0,
-  disc.post.diag.pers.BI.msmf.prob = 0,
-  disc.post.diag.pers.H.msmf.prob = 0,
-  disc.post.diag.pers.HI.msmf.prob = 0,
-  disc.post.diag.pers.W.msmf.prob = 0,
-  disc.inst.B.f.prob = 0.01,
-  disc.inst.BI.f.prob = 0,
-  disc.inst.H.f.prob = 0,
-  disc.inst.HI.f.prob = 0,
-  disc.inst.W.f.prob = 0,
-  disc.inst.B.msf.prob = 0,
-  disc.inst.BI.msf.prob = 0,
-  disc.inst.H.msf.prob = 0,
-  disc.inst.HI.msf.prob = 0,
-  disc.inst.W.msf.prob = 0,
-  disc.inst.B.msm.prob = 0,
-  disc.inst.BI.msm.prob = 0,
-  disc.inst.H.msm.prob = 0,
-  disc.inst.HI.msm.prob = 0,
-  disc.inst.W.msm.prob = 0,
-  disc.inst.B.msmf.prob = 0,
-  disc.inst.BI.msmf.prob = 0,
-  disc.inst.H.msmf.prob = 0,
-  disc.inst.HI.msmf.prob = 0,
-  disc.inst.W.msmf.prob = 0,
+  disc.outset.main.prob = 0.03,
+  disc.at.diag.main.prob = 0.03,
+  disc.post.diag.main.prob = 0,
+  disc.outset.pers.prob = 0.02,
+  disc.at.diag.pers.prob = 0.02,
+  disc.post.diag.pers.prob = 0,
+  disc.inst.prob = 0.01,
   circ.B.prob = 0.925,
   circ.BI.prob = 0.5,
   circ.H.prob = 0.5,
@@ -364,19 +231,18 @@ param_KTM(
   vv.iev.H.prob = 0.47874,
   vv.iev.HI.prob = 0.47874,
   vv.iev.W.prob = 0.47874,
+  riskh.start = Inf,
   prep.start = Inf,
-  prep.elig.model = "NONE",
+  prep.ps = FALSE,
+  prep.disc = FALSE,
+  prep.risk = "NONE",
+  prep.risk.int = 12,
   prep.class.prob = c(0, 0, 0, 1),
-  prep.class.hr = c(1, 0, 0, 0.54),
-  prep.coverage = 0,
-  prep.cov.method = "curr",
-  prep.cov.rate = 1,
+  prep.class.hr = c(1, 0, 0, 0.29),
   prep.tst.int = 90,
-  prep.risk.int = 182,
-  prep.risk.reassess = TRUE,
-  prep.start.prob = 0.236,
+  prep.start.prob.ps = 0.236,
+  prep.start.prob.parts = 0.236,
   prep.stop.prob = 0.0414,
-  prep.window = 6,
   conc_dur_dx = TRUE,
   cel.complete.trim = TRUE,
   cel.complete.lag = 52,
@@ -579,35 +445,17 @@ his status.}
 
 \item{prep.start}{Time step at which the PrEP intervention should start.}
 
-\item{prep.elig.model}{Modeling approach for determining who is eligible for
-PrEP. Current options are limited to: \code{"all"} for all persons who
-have never been on PrEP and are disease-susceptible.}
-
-\item{prep.class.prob}{The probability of adherence class in non-adherent,
-low adherence, medium adherence, or high adherence groups (from Liu).}
-
-\item{prep.class.hr}{The hazard ratio for infection per act associated with each
-level of adherence (from Grant).}
-
-\item{prep.coverage}{The proportion of the eligible population who are start
-PrEP once they become eligible.}
-
-\item{prep.cov.method}{The method for calculating PrEP coverage, with options
-of \code{"curr"} to base the numerator on the number of people currently
-on PrEP and \code{"ever"} to base it on the number of people ever on
-PrEP.}
-
-\item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
-their eligibility, with 1 equal to instant start.}
-
-\item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
-overrides the mean testing interval parameters.}
-
 \item{prep.risk.int}{Time window for assessment of risk eligibility for PrEP
 in days.}
 
-\item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
-each testing visit.}
+\item{prep.class.prob}{The probability of adherence class in non-adherent,
+low adherence, medium adherence, or high adherence groups.}
+
+\item{prep.class.hr}{The hazard ratio for infection per act associated with each
+level of adherence (from Patel et all and Lasry et al both based on studies by Baetan et al and Thigpen et al).}
+
+\item{prep.tst.int}{Testing interval for those who are actively on PrEP. This
+overrides the mean testing interval parameters.}
 
 \item{conc_dur_dx}{If TRUE the simulation will store cel.temp (a current edgelist with partnership start time) 
 and cel.complete (a complete list of all partnerships including start and end times.  These are used for the analysis of concurrency
@@ -737,6 +585,24 @@ males of race group R, where R is a charater (B, BI, H, HI or W).}
 \item{vv.iev.R.prob}{Probability that a person of group R, where R is a charater (B, BI, H, HI or W),
 in a male male relationship will engage in intra-event versatility
 ("flipping") given that they're having AI.}
+
+\item{prep.elig.model}{Modeling approach for determining who is eligible for
+PrEP. Current options are limited to: \code{"all"} for all persons who
+have never been on PrEP and are disease-susceptible.}
+
+\item{prep.coverage}{The proportion of the eligible population who are start
+PrEP once they become eligible.}
+
+\item{prep.cov.method}{The method for calculating PrEP coverage, with options
+of \code{"curr"} to base the numerator on the number of people currently
+on PrEP and \code{"ever"} to base it on the number of people ever on
+PrEP.}
+
+\item{prep.cov.rate}{The rate at which persons initiate PrEP conditional on
+their eligibility, with 1 equal to instant start.}
+
+\item{prep.risk.reassess}{If \code{TRUE}, reassess eligibility for PrEP at
+each testing visit.}
 
 \item{immig.depart.R.S}{The probability per time step that a person of group R,
 where R is a charater (BI or HI), and sex S, were S is a charater (f or m), leaves the population

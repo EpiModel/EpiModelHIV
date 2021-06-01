@@ -16,16 +16,16 @@ control_KTM(
   births.FUN = births_KTM,
   test.FUN = test_KTM,
   pservices.FUN = pservices_KTM,
+  disclose.FUN = disclose_shamp,
+  riskhist.FUN = riskhist_KTM,
   tx.FUN = tx_KTM,
-  prep.FUN = prep_shamp,
+  prep.FUN = prep_KTM,
   progress.FUN = progress_msm,
   vl.FUN = vl_shamp,
   resim_nets.FUN = simnet_shamp,
-  disclose.FUN = disclose_shamp,
   ConcDurDx.FUN = ConcDurDx_shamp,
   acts.FUN = acts_KTM,
   condoms.FUN = condoms_KTM,
-  riskhist.FUN = riskhist_shamp,
   position.FUN = position_shamp,
   trans.FUN = trans_KTM,
   prev.FUN = prevalence_KTM,
@@ -64,6 +64,11 @@ model.}
 
 \item{test.FUN}{Module function for diagnostic disease testing.}
 
+\item{disclose.FUN}{Module function for HIV status disclosure.}
+
+\item{riskhist.FUN}{Module function to calculate risk history for uninfected
+persons in the population.}
+
 \item{tx.FUN}{Module function for ART initiation and adherence.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
@@ -75,17 +80,12 @@ model.}
 \item{resim_nets.FUN}{Module function for network resimulation at each time
 step.}
 
-\item{disclose.FUN}{Module function for HIV status disclosure.}
-
 \item{ConcDurDx.FUN}{Module that analyzes concurrency durations by type (Dianistics only, do not use for general simualtions)}
 
 \item{acts.FUN}{Module function to simulate the number of sexual acts within
 partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
-
-\item{riskhist.FUN}{Module function to calculate risk history for uninfected
-persons in the population.}
 
 \item{position.FUN}{Module function to simulate sexual position within acts.}
 
