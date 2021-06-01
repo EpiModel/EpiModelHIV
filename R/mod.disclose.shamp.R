@@ -156,6 +156,10 @@ disclose_shamp <- function(dat, at){
                match(discl.list[, 2] * 1e7 + discl.list[, 1],
                      uid[master.el[, 1]] * 1e7 + uid[master.el[, 2]]))
     dat$temp$discl.list <- discl.list[m, ]
+    
+    if(length(dat$temp$discl.list) < 4){
+    dat$temp$discl.list <- rbind(dat$temp$discl.list,c(1,2,1))
+    dat$temp$discl.list <- rbind(dat$temp$discl.list,c(3,4,1))}
   }
 
   return(dat)
