@@ -205,6 +205,11 @@ prevalence_KTM <- function(dat, at) {
     dat$epi$n.true.neg <-rep(0, nsteps)
     dat$epi$n.true.pos <-rep(0, nsteps)
     
+    
+    dat$epi$prep.ind.ps <-rep(0, nsteps)
+    dat$epi$prep.ind.disc <-rep(0, nsteps)
+    dat$epi$prep.ind.parts <-rep(0, nsteps)
+    
   }
 
 
@@ -251,7 +256,7 @@ prevalence_KTM <- function(dat, at) {
   
   
   dat$epi$prepCurr[at] <- sum(prepStat == 1, na.rm = TRUE)
-  dat$epi$prepElig[at] <- sum(dat$attr$prepElig == 1, na.rm = TRUE)
+  #dat$epi$prepElig[at] <- sum(dat$attr$prepElig == 1, na.rm = TRUE)
   dat$epi$i.num.prep0[at] <- sum((is.na(prepStat) | prepStat == 0) &
                                  status == 1, na.rm = TRUE)
   dat$epi$i.num.prep1[at] <- sum(prepStat == 1 & status == 1, na.rm = TRUE)
