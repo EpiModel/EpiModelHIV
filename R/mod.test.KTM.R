@@ -297,7 +297,13 @@ test_KTM <- function(dat, at) {
     ##TEST tst.background, tst.PREP, partner services -  Antibody tests
     ##sym_HIV, tst.sym.m, tst.sym.f.   -  RNA tests
     
-    tst.bg <- c(tst.background)
+    #PREP
+    
+    tst.prep <- which(prepStat == 1 & lnt == at- prep.tst.int)
+    
+    ##########
+    
+    tst.bg <- c(tst.background,tst.prep)
     tst.ab <- c(sym_HIV, sym, tst.ps)
     
     tst.positives.ab <-  tst.ab[status[tst.ab] == 1 & inf.time[tst.ab] <= at - twind.int.ab ]
@@ -462,9 +468,7 @@ test_KTM <- function(dat, at) {
       test.positive.ab<-c(true.pos.ab, false.pos.ab)
       ###############################################
       
-      ##If they are testing because of partner services and are negative they are eligible for PrEP
-      prep.elig <- intersect(tst.ps,test.negative.rna)
-      prep.elig.time[prep.elig] <- at
+
       
       ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
       ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
@@ -587,9 +591,7 @@ test_KTM <- function(dat, at) {
       
       test.positive.ab <- c(true.pos.ab, false.pos.ab)
       test.negative.ab <- c(true.neg.ab, false.neg.ab)
-      ##If they are testing because of partner services and are negative they are eligible for PrEP
-      prep.elig <- intersect(tst.ps,test.negative.ab)
-      prep.elig.time[prep.elig] <- at
+
       
       ##PUT IN INDICATOR FOR NEW INDEX FOR PARTNER SERVICES
       ##ZERO OUT THE INDICATOR AFTER THE OS MODULE IS RUN
