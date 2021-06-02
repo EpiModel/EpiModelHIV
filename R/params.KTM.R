@@ -639,7 +639,6 @@ param_KTM <- function(race.method = 1,
                      # prep.risk "RISK" or "ALL"
                       prep.risk = "NONE",
                       prep.risk.int = 12,
-                #need a real values for these
                       prep.class.prob = c(0, 0, 0, 1),
                       prep.class.hr = c(1, 0, 0, 0.29),
                       prep.tst.int = 90,
