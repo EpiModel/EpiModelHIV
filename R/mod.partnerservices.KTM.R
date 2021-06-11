@@ -13,11 +13,7 @@
 pservices_KTM <- function(dat, at) {
 
   
-intervention_TM <- dat$param$intervention_TM
 count <- 0
-  
-  
-#if(intervention_TM=="TMP" & at > 2){
 
 if(at > 2){
   
