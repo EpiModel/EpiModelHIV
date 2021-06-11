@@ -393,12 +393,14 @@ setBirthAttr_shamp <- function(dat, at, nBirths) {
   dat$attr$riskg[newIds] <- sample(1:5, nBirths, TRUE)
 
   # UAI group
-  p1.msm <- dat$param$cond.pers.always.prob.msm
-  p2.msm <- dat$param$cond.inst.always.prob.msm
-  rho.msm <- dat$param$cond.always.prob.corr.msm
-  uai.always.msm <- bindata::rmvbin(nBirths, c(p1.msm, p2.msm), bincorr = (1 - rho.msm) * diag(2) + rho.msm)
-  dat$attr$cond.always.pers.msm[newIds] <- uai.always.msm[, 1]
-  dat$attr$cond.always.inst.msm[newIds] <- uai.always.msm[, 2]
+  #p1.msm <- dat$param$cond.pers.always.prob.msm
+  #p2.msm <- dat$param$cond.inst.always.prob.msm
+  #rho.msm <- dat$param$cond.always.prob.corr.msm
+  #uai.always.msm <- bindata::rmvbin(nBirths, c(p1.msm, p2.msm), bincorr = (1 - rho.msm) * diag(2) + rho.msm)
+  #dat$attr$cond.always.pers.msm[newIds] <- uai.always.msm[, 1]
+  #dat$attr$cond.always.inst.msm[newIds] <- uai.always.msm[, 2]
+  dat$attr$cond.always.pers.msm[newIds] <- 0
+  dat$attr$cond.always.inst.msm[newIds] <- 0
   
   # UVI group
   dat$attr$cond.always.main.het[newIds] <- rbinom(length(newIds), 1, dat$param$cond.main.always.prob.het)
