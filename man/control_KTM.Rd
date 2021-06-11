@@ -10,6 +10,7 @@ control_KTM(
   ncores = 1,
   nsteps = 100,
   start = 1,
+  tergmLite = TRUE,
   initialize.FUN = initialize_KTM,
   aging.FUN = aging_KTM,
   deaths.FUN = deaths_KTM,
