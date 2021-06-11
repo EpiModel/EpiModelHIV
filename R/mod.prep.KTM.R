@@ -29,8 +29,7 @@ prep_KTM <- function(dat, at) {
   prep.risk <- dat$param$prep.risk
   prep.disc <- dat$param$prep.disc
   prep.class.prob <- dat$param$prep.class.prob
-  prep.start.prob.ps <- dat$param$prep.start.prob.ps
-  prep.start.prob.parts <- dat$param$prep.start.prob.parts
+  prep.start.prob <- dat$param$prep.start.prob
   prep.stop.prob <- dat$param$prep.stop.prob
   prep.window <- dat$param$prep.window
   
@@ -51,23 +50,23 @@ prep_KTM <- function(dat, at) {
   # Base eligibility
   if(prep.ps == TRUE){
   idsEligStart.ps <- which(prep.ind.ps == 1 & prepStat==0 & status == 0)
-  selected <- rbinom(length(idsEligStart.ps),1,prep.start.prob.ps)
+  selected <- rbinom(length(idsEligStart.ps),1,prep.start.prob)
   idsStart.ps <-idsEligStart.ps[selected==1]}
   
-  #Use the same Prep start prob as ps since both are a form of known discordant rel
+  #Use the same Prep start prob for all risk groups.
   if(prep.disc == TRUE){
     idsEligStart.disc <- which(dat$attr$tested.negative == 1 & prep.ind.disc == 1 & prepStat==0 & status == 0)
-    selected <- rbinom(length(idsEligStart.disc),1,prep.start.prob.ps)
+    selected <- rbinom(length(idsEligStart.disc),1,prep.start.prob)
     idsStart.disc <-idsEligStart.disc[selected==1]}
   
   if(prep.risk == "RISK"){
     idsEligStart.parts <- which(dat$attr$tested.negative == 1 & prep.ind.parts == 1 & prepStat==0 & status == 0)
-    selected <- rbinom(length(idsEligStart.parts),1,prep.start.prob.parts)
+    selected <- rbinom(length(idsEligStart.parts),1,prep.start.prob)
     idsStart.parts <-idsEligStart.parts[selected==1]}
   
   if(prep.risk == "ALL"){
     idsEligStart.parts <- which(dat$attr$tested.negative == 1 & prepStat==0 & status == 0)
-    selected <- rbinom(length(idsEligStart.parts),1,prep.start.prob.parts)
+    selected <- rbinom(length(idsEligStart.parts),1,prep.start.prob)
     idsStart.parts <-idsEligStart.parts[selected==1]}
   
   idsEligStop <- which(prepStat == 1)
@@ -79,10 +78,14 @@ prep_KTM <- function(dat, at) {
 
   # Diagnosis
   idsStpDx <- which(prepStat == 1 & diag.status == 1)
+  
+  #Not in the person of interest age range
+  n.poi<-which(dat$attr$poi==1)
+  
 
 
   # Reset PrEP status
-  idsStp <- c(idsStpDx, idsStop)
+  idsStp <- c(idsStpDx, idsStop, n.poi)
   prepStat[idsStp] <- 0
 
   ## Initiation ----------------------------------------------------------------
@@ -121,6 +124,8 @@ prep_KTM <- function(dat, at) {
   dat$attr$prep.ind.ps <-rep(0,length(dat$attr$prep.ind.ps))
   dat$attr$prep.ind.disc <-rep(0,length(dat$attr$prep.ind.disc))
   dat$attr$prep.ind.parts <-rep(0,length(dat$attr$prep.ind.parts))
+  
+
   
   return(dat)
 }
