@@ -503,7 +503,7 @@ param_KTM <- function(race.method = 1,
                      # and Weller DOI: 10.1002/14651858.CD003255
                       #condom.rr = 0.2,
 
-                      ##For now assume no disclosure (may use for calibration)
+                      ##Disclosure
                       
                      disc.outset.main.prob = .03,
                      disc.at.diag.main.prob = .03,
@@ -640,12 +640,15 @@ param_KTM <- function(race.method = 1,
                       prep.risk = "NONE",
                       prep.risk.int = 12,
                       prep.class.prob = c(0, 0, 0, 1),
-                      prep.class.hr = c(1, 0, 0, 0.29),
+                     #Relative risk of transmission on PrEP is .29 following Patel at al and Lasry et al 
+                     #both based on Baeten et al 2012 and Thigpen et al 2012
+                      prep.class.hr = c(0, 0, 0, 0.29),
                       prep.tst.int = 90,
                 #need a real values for these
-                      prep.start.prob.ps = .236,
-                      prep.start.prob.parts = .236,
-                      prep.stop.prob = .0414,
+                      prep.start.prob = .236,
+                #Heffron et al the median duration of prep use was 12 months
+                #The implied mean is 52/log(2) weeks = 75
+                      prep.stop.prob = .0092,
                       
                       
 
@@ -821,7 +824,7 @@ control_KTM <- function(simno = 1,
                         ncores = 1,
                         nsteps = 100,
                         start = 1,
-                        #tergmLite = TRUE,
+                        tergmLite = TRUE,
                         initialize.FUN = initialize_KTM,
                         aging.FUN = aging_KTM,
                         deaths.FUN = deaths_KTM,
