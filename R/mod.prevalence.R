@@ -178,23 +178,6 @@ prevalence_msm <- function(dat, at) {
   dat$epi$cc.dx.delay.int.W[at] <- mean(diag.time[diag.time >= 3380 & race == 3] -
                                       inf.time[diag.time >= 3380 & race == 3], na.rm = TRUE)
 
-  # same as above, but with medians
-  dat$epi$cc.dx.delay.med[at] <- median(diag.time[diag.time >= 2] - inf.time[diag.time >= 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.B.med[at] <- median(diag.time[diag.time >= 2 & race == 1] -
-                                      inf.time[diag.time >= 2 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.H.med[at] <- median(diag.time[diag.time >= 2 & race == 2] -
-                                      inf.time[diag.time >= 2 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.W.med[at] <- median(diag.time[diag.time >= 2 & race == 3] -
-                                      inf.time[diag.time >= 2 & race == 3], na.rm = TRUE)
-
-  dat$epi$cc.dx.delay.int.med[at] <- median(diag.time[diag.time >= 3380] - inf.time[diag.time >= 3380], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.B.med[at] <- median(diag.time[diag.time >= 3380 & race == 1] -
-                                          inf.time[diag.time >= 3380 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.H.med[at] <- median(diag.time[diag.time >= 3380 & race == 2] -
-                                          inf.time[diag.time >= 3380 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.W.med[at] <- median(diag.time[diag.time >= 3380 & race == 3] -
-                                          inf.time[diag.time >= 3380 & race == 3], na.rm = TRUE)
-
   # dat$epi$cc.tx.any1y[at] <- sum((at - dat$attr$tx.period.last <= 52), na.rm = TRUE) /
   #   sum(dat$attr$diag.status == 1, na.rm = TRUE)
   # dat$epi$cc.tx.any1y.B[at] <- sum((at - dat$attr$tx.period.last <= 52) & race == 1, na.rm = TRUE) /

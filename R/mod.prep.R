@@ -29,7 +29,6 @@ prep_msm <- function(dat, at) {
 
   # Core Attributes
   active <- dat$attr$active
-  status <- dat$attr$status
   diag.status <- dat$attr$diag.status
   lnt <- dat$attr$last.neg.test
 
@@ -41,6 +40,16 @@ prep_msm <- function(dat, at) {
   prepStartTime <- dat$attr$prepStartTime
   prepLastStiScreen <- dat$attr$prepLastStiScreen
 
+  if (is.null(dat$attr$pOptimInitStatus)) {
+    n <- length(active)
+    dat$attr$pOptimInitStatus <- rep(NA, n)
+    dat$attr$pOptimAdhrStatus <- rep(NA, n)
+    dat$attr$pOptimRetnStatus <- rep(NA, n)
+  }
+  pOptimInitStatus <- dat$attr$pOptimInitStatus
+  pOptimAdhrStatus <- dat$attr$pOptimAdhrStatus
+  pOptimRetnStatus <- dat$attr$pOptimRetnStatus
+
 
   # Parameters --------------------------------------------------------------
 
@@ -50,11 +59,18 @@ prep_msm <- function(dat, at) {
   prep.risk.reassess.method <- dat$param$prep.risk.reassess.method
   prep.discont.rate <- dat$param$prep.discont.rate
 
+  prep.optim.start <- dat$param$prep.optim.start
+  prep.optim.init.prob <- dat$param$prep.optim.init.prob
+  prep.start.prob.optim <- dat$param$prep.start.prob.optim
+  prep.adhr.dist.optim <- dat$param$prep.adhr.dist.optim
+  prep.optim.adhr.cap <- dat$param$prep.optim.adhr.cap
+  prep.optim.retn.cap <- dat$param$prep.optim.retn.cap
+  prep.discont.rate.optim <- dat$param$prep.discont.rate.optim
+
 
   # Indications -------------------------------------------------------------
 
   ind1 <- dat$attr$prep.ind.uai.mono
-  # ind2 <- dat$attr$prep.ind.uai.nmain
   ind2 <- dat$attr$prep.ind.uai.conc
   ind3 <- dat$attr$prep.ind.sti
 
@@ -71,6 +87,8 @@ prep_msm <- function(dat, at) {
   idsIndic <- which(ind1 >= twind | ind2 >= twind | ind3 >= twind)
   base.cond.yes <- which(active == 1 & diag.status == 0)
   idsIndic <- intersect(idsIndic, base.cond.yes)
+
+  idsNewIndic <- intersect(which(prepElig == 0), idsIndic)
 
   # Set eligibility to 1 if indications
   prepElig[idsIndic] <- 1
@@ -98,10 +116,18 @@ prep_msm <- function(dat, at) {
     idsStpInd <- intersect(idsNoIndic, idsRiskAssess)
   }
 
-  # Random discontinuation
-  idsEligStpRand <- which(active == 1 & prepStat == 1)
+  # Random Discontinuation (Non-Intervention)
+  idsEligStpRand <- which(active == 1 & prepStat == 1 & is.na(pOptimRetnStatus))
   vecStpRand <- rbinom(length(idsEligStpRand), 1, prep.discont.rate)
   idsStpRand <- idsEligStpRand[which(vecStpRand == 1)]
+
+  # Random Discontinuation (Intervention)
+  idsStpRandOptim <- NULL
+  if (at >= prep.optim.start) {
+    idsEligStpRandOptim <- which(active == 1 & prepStat == 1 & pOptimRetnStatus == 1)
+    vecStpRandOptim <- rbinom(length(idsEligStpRandOptim), 1, prep.discont.rate.optim)
+    idsStpRandOptim <- idsEligStpRandOptim[which(vecStpRandOptim == 1)]
+  }
 
   # Diagnosis
   idsStpDx <- which(active == 1 & prepStat == 1 & diag.status == 1)
@@ -110,42 +136,127 @@ prep_msm <- function(dat, at) {
   idsStpDth <- which(active == 0 & prepStat == 1)
 
   # Reset PrEP status
-  idsStp <- c(idsStpInd, idsStpRand, idsStpDx, idsStpDth)
+  idsStp <- c(idsStpInd, idsStpRand, idsStpRandOptim, idsStpDx, idsStpDth)
 
   # Update attributes for stoppers
   prepStat[idsStp] <- 0
   prepLastRisk[idsStp] <- NA
   prepStartTime[idsStp] <- NA
   prepLastStiScreen[idsStp] <- NA
+  prepClass[idsStp] <- NA
+
+  PrEPStopsInd <- length(idsStpInd)
+  PrEPStopsRand <- length(idsStpRand)
+  PrEPStopsRandOptim <- length(idsStpRandOptim)
 
 
   ## Initiation ----------------------------------------------------------------
 
-  ## Eligibility ##
-
-  # Indications to start
+  ## Initiation (non-intervention)
   if (prep.require.lnt == TRUE) {
     idsEligStart <- which(prepStat == 0 & lnt == at)
   } else {
     idsEligStart <- which(prepStat == 0)
   }
-
   idsEligStart <- intersect(idsIndic, idsEligStart)
-  prepElig[idsEligStart] <- 1
 
   vecStart <- rbinom(length(idsEligStart), 1, prep.start.prob)
   idsStart <- idsEligStart[which(vecStart == 1)]
+  PrEPStarts <- length(idsStart)
 
   # Set attributes for starters
   if (length(idsStart) > 0) {
     prepStat[idsStart] <- 1
     prepStartTime[idsStart] <- at
     prepLastRisk[idsStart] <- at
+  }
 
-    # PrEP adherence class
-    needPC <- which(is.na(prepClass[idsStart]))
-    prepClass[idsStart[needPC]] <- sample(x = 1:3, size = length(needPC),
-                                          replace = TRUE, prob = prep.adhr.dist)
+  ## PrEP adherence class
+  needPC <- which(is.na(prepClass[idsStart]))
+  prepClass[idsStart[needPC]] <- sample(x = 1:3, size = length(needPC),
+                                        replace = TRUE, prob = prep.adhr.dist)
+
+  ## Initiation (intervention; assuming effects rollling)
+  OptimInitStarts <- 0
+  PrEPStartsOptim <- 0
+  if (at >= prep.optim.start) {
+    # Starts (assumes intervention eligible one time rather than rolling)
+    idsEligStartInit <- intersect(idsNewIndic,
+                                  which(prepStat == 0 & prepElig == 1 & is.na(pOptimInitStatus)))
+    idsStartInit <- idsEligStartInit[which(rbinom(length(idsEligStartInit), 1, prep.optim.init.prob) == 1)]
+    OptimInitStarts <- length(idsStartInit)
+    pOptimInitStatus[idsStartInit] <- 1
+
+    # Stops
+    idsEligStopInit <- which(!is.na(pOptimInitStatus) & prepElig == 0)
+    pOptimInitStatus[idsEligStopInit] <- NA
+
+    # PrEP initiation on intervention
+    idsEligStartOptim <- intersect(idsIndic,
+                                   which(prepStat == 0 & pOptimInitStatus == 1))
+
+    vecStartOptim <- rbinom(length(idsEligStartOptim), 1, prep.start.prob.optim)
+    idsStartOptim <- idsEligStartOptim[which(vecStartOptim == 1)]
+    PrEPStartsOptim <- length(idsStartOptim)
+
+    # Set attributes for starters
+    if (length(idsStartOptim) > 0) {
+      prepStat[idsStartOptim] <- 1
+      prepStartTime[idsStartOptim] <- at
+      prepLastRisk[idsStartOptim] <- at
+    }
+
+    ## PrEP adherence class
+    needPCoptim <- which(is.na(prepClass[idsStartOptim]))
+    prepClass[idsStartOptim[needPCoptim]] <- sample(x = 1:3, size = length(needPCoptim),
+                                                    replace = TRUE, prob = prep.adhr.dist)
+  }
+
+
+  # Adherence & Retention Interventions -------------------------------------
+
+  OptimAdhrStarts <- 0
+  OptimRetnStarts <- 0
+  if (at >= prep.optim.start) {
+    ## Adherence
+    # Starts (assumes intervention eligible one time rather than rolling)
+    idsEligStartAdhr <- which(prepStat == 1 & prepStartTime == at)
+    adhrSlotsOpen <- round(prep.optim.adhr.cap)
+    if (length(idsEligStartAdhr) > 0 & adhrSlotsOpen > 0) {
+      idsStartAdhrOptim <- ssample(idsEligStartAdhr,
+                                   min(length(idsEligStartAdhr), adhrSlotsOpen))
+      OptimAdhrStarts <- length(idsStartAdhrOptim)
+      pOptimAdhrStatus[idsStartAdhrOptim] <- 1
+    }
+
+    ## PrEP adherence class (intervention)
+    if (OptimAdhrStarts > 0) {
+      prepClass[idsStartAdhrOptim] <- sample(x = 1:3,
+                                             size = OptimAdhrStarts,
+                                             replace = TRUE,
+                                             prob = prep.adhr.dist.optim)
+    }
+
+    # Stops
+    idsEligStopAdhr <- intersect(idsStp, which(!is.na(pOptimAdhrStatus)))
+    pOptimAdhrStatus[idsEligStopAdhr] <- NA
+
+
+    ## Retention
+    # Starts (assumes intervention eligible one time rather than rolling)
+    idsEligStartRetn <- which(prepStat == 1 & prepStartTime == at)
+    retnCurrCov <- sum(pOptimRetnStatus == 1, na.rm = TRUE)
+    retnSlotsOpen <- round(prep.optim.retn.cap - retnCurrCov)
+    if (length(idsEligStartRetn) > 0 & retnSlotsOpen > 0) {
+      idsStartRetnOptim <- ssample(idsEligStartRetn,
+                                   min(length(idsEligStartRetn), retnSlotsOpen))
+      OptimRetnStarts <- length(idsStartRetnOptim)
+      pOptimRetnStatus[idsStartRetnOptim] <- 1
+    }
+
+    # Stops
+    idsEligStopRetn <- intersect(idsStp, which(!is.na(pOptimRetnStatus)))
+    pOptimRetnStatus[idsEligStopRetn] <- NA
   }
 
 
@@ -162,6 +273,25 @@ prep_msm <- function(dat, at) {
   dat$attr$prepStartTime <- prepStartTime
   dat$attr$prepLastRisk <- prepLastRisk
   dat$attr$prepLastStiScreen <- prepLastStiScreen
+
+  dat$attr$pOptimInitStatus <- pOptimInitStatus
+  dat$attr$pOptimAdhrStatus <- pOptimAdhrStatus
+  dat$attr$pOptimRetnStatus <- pOptimRetnStatus
+
+  # Summary Stats
+  dat$epi$OptimInitStarts[at] <- OptimInitStarts
+  dat$epi$OptimInitPrev[at] <- sum(pOptimInitStatus == 1, na.rm = TRUE)
+  dat$epi$PrEPStarts[at] <- PrEPStarts
+  dat$epi$PrEPStartsOptim[at] <- PrEPStartsOptim
+  dat$epi$OptimAdhrStarts[at] <- OptimAdhrStarts
+  dat$epi$OptimAdhrPrev[at] <- sum(pOptimAdhrStatus == 1, na.rm = TRUE)
+  dat$epi$OptimRetnStarts[at] <- OptimRetnStarts
+  dat$epi$OptimRetnPrev[at] <- sum(pOptimRetnStatus == 1, na.rm = TRUE)
+
+  dat$epi$PrEPHighAdr[at] <- mean(dat$attr$prepClass == 3, na.rm = TRUE)
+  dat$epi$PrEPStopsInd[at] <- PrEPStopsInd
+  dat$epi$PrEPStopsRand[at] <- PrEPStopsRand
+  dat$epi$PrEPStopsRandOptim[at] <- PrEPStopsRandOptim
 
   return(dat)
 }
