@@ -28,6 +28,6 @@ Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 LazyData: true
 Encoding: UTF-8

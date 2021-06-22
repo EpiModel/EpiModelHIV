@@ -4,18 +4,38 @@
 \alias{control_msm}
 \title{Epidemic Model Control Settings}
 \usage{
-control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
-  departure.FUN = departure_msm, arrival.FUN = arrival_msm,
-  hivtest.FUN = hivtest_msm, hivtx.FUN = hivtx_msm,
-  hivprogress.FUN = hivprogress_msm, hivvl.FUN = hivvl_msm,
-  resim_nets.FUN = simnet_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, position.FUN = position_msm,
-  prep.FUN = prep_msm, hivtrans.FUN = hivtrans_msm,
-  stitrans.FUN = stitrans_msm, stirecov.FUN = stirecov_msm,
-  stitx.FUN = stitx_msm, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose.net, save.nwstats = FALSE,
-  save.clin.hist = FALSE, truncate.plist = TRUE, verbose = TRUE, ...)
+control_msm(
+  simno = 1,
+  nsims = 1,
+  ncores = 1,
+  nsteps = 100,
+  start = 1,
+  initialize.FUN = initialize_msm,
+  param_updater.FUN = param_updater,
+  aging.FUN = aging_msm,
+  departure.FUN = departure_msm,
+  arrival.FUN = arrival_msm,
+  hivtest.FUN = hivtest_msm,
+  hivtx.FUN = hivtx_msm,
+  hivprogress.FUN = hivprogress_msm,
+  hivvl.FUN = hivvl_msm,
+  resim_nets.FUN = simnet_msm,
+  acts.FUN = acts_msm,
+  condoms.FUN = condoms_msm,
+  position.FUN = position_msm,
+  prep.FUN = prep_msm,
+  hivtrans.FUN = hivtrans_msm,
+  stitrans.FUN = stitrans_msm,
+  stirecov.FUN = stirecov_msm,
+  stitx.FUN = stitx_msm,
+  prev.FUN = prevalence_msm,
+  verbose.FUN = verbose.net,
+  save.nwstats = FALSE,
+  save.clin.hist = FALSE,
+  truncate.plist = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes

@@ -24,6 +24,8 @@ condoms_msm <- function(dat, at) {
 
   # Attributes
   race <- dat$attr$race
+  race.flag <- dat$param$netstats$race
+  geog.lvl <- dat$param$netstats$race
   age <- dat$attr$age
   diag.status <- dat$attr$diag.status
   prepStat <- dat$attr$prepStat
@@ -55,32 +57,95 @@ condoms_msm <- function(dat, at) {
 
   ## Main/casual partnerships ##
   mc.parts <- which(el[, "ptype"] != 3)
-  el.mc <- el[mc.parts, ]
+  el.mc <- el[mc.parts, , drop = FALSE]
 
-  x <- data.frame(ptype = el.mc[, "ptype"],
-                  duration = el.mc[, "durations"],
-                  race.combo = race.combo[mc.parts],
-                  comb.age = comb.age[mc.parts],
-                  hiv.concord.pos = hiv.concord.pos[mc.parts],
-                  prep = any.prep[mc.parts],
-                  city = 1)
-  cond.prob <- unname(predict(cond.mc.mod, newdata = x, type = "response"))
-  el.mc <- cbind(el.mc, cond.prob)
+  if (nrow(el.mc) > 0) {
+    if (!is.null(geog.lvl)) {
+      if (race.flag == TRUE){
+        x <- data.frame(ptype = el.mc[, "ptype"],
+                        duration = el.mc[, "durations"],
+                        race.combo = race.combo[mc.parts],
+                        comb.age = comb.age[mc.parts],
+                        hiv.concord.pos = hiv.concord.pos[mc.parts],
+                        prep = any.prep[mc.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.mc.mod, newdata = x, type = "response"))
+      } else {
+        x <- data.frame(ptype = el.mc[, "ptype"],
+                        duration = el.mc[, "durations"],
+                        comb.age = comb.age[mc.parts],
+                        hiv.concord.pos = hiv.concord.pos[mc.parts],
+                        prep = any.prep[mc.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.mc.mod, newdata = x, type = "response"))
+      }
+    } else {
+      if (race.flag == TRUE){
+        x <- data.frame(ptype = el.mc[, "ptype"],
+                        duration = el.mc[, "durations"],
+                        race.combo = race.combo[mc.parts],
+                        comb.age = comb.age[mc.parts],
+                        hiv.concord.pos = hiv.concord.pos[mc.parts],
+                        prep = any.prep[mc.parts])
+        cond.prob <- unname(predict(cond.mc.mod, newdata = x, type = "response"))
+      } else {
+        x <- data.frame(ptype = el.mc[, "ptype"],
+                        duration = el.mc[, "durations"],
+                        comb.age = comb.age[mc.parts],
+                        hiv.concord.pos = hiv.concord.pos[mc.parts],
+                        prep = any.prep[mc.parts])
+        cond.prob <- unname(predict(cond.mc.mod, newdata = x, type = "response"))
+      }
+    }
+    el.mc <- cbind(el.mc, cond.prob)
+  }
 
   ## One-off partnerships ##
   oo.parts <- which(el[, "ptype"] == 3)
-  el.oo <- el[oo.parts, ]
+  el.oo <- el[oo.parts, , drop = FALSE]
 
-  x <- data.frame(race.combo = race.combo[oo.parts],
-                  comb.age = comb.age[oo.parts],
-                  hiv.concord.pos = hiv.concord.pos[oo.parts],
-                  prep = any.prep[oo.parts],
-                  city = 1)
-  cond.prob <- unname(predict(cond.oo.mod, newdata = x, type = "response"))
-  el.oo <- cbind(el.oo, cond.prob)
+  if (nrow(el.oo) > 0) {
+    if (!is.null(geog.lvl)) {
+      if (race.flag == TRUE){
+        x <- data.frame(race.combo = race.combo[oo.parts],
+                        comb.age = comb.age[oo.parts],
+                        hiv.concord.pos = hiv.concord.pos[oo.parts],
+                        prep = any.prep[oo.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.oo.mod, newdata = x, type = "response"))
+        el.oo <- cbind(el.oo, cond.prob)
+      } else {
+        x <- data.frame(comb.age = comb.age[oo.parts],
+                        hiv.concord.pos = hiv.concord.pos[oo.parts],
+                        prep = any.prep[oo.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.oo.mod, newdata = x, type = "response"))
+        el.oo <- cbind(el.oo, cond.prob)
+      }
+    } else {
+      if (race.flag == TRUE){
+        x <- data.frame(race.combo = race.combo[oo.parts],
+                        comb.age = comb.age[oo.parts],
+                        hiv.concord.pos = hiv.concord.pos[oo.parts],
+                        prep = any.prep[oo.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.oo.mod, newdata = x, type = "response"))
+        el.oo <- cbind(el.oo, cond.prob)
+      } else {
+        x <- data.frame(comb.age = comb.age[oo.parts],
+                        hiv.concord.pos = hiv.concord.pos[oo.parts],
+                        prep = any.prep[oo.parts],
+                        geogYN = 1)
+        cond.prob <- unname(predict(cond.oo.mod, newdata = x, type = "response"))
+        el.oo <- cbind(el.oo, cond.prob)
+      }
+    }
 
-  ## Bind el together
-  el <- rbind(el.mc, el.oo)
+    ## Bind el together
+    el <- rbind(el.mc, el.oo)
+  } else {
+    el <- el.mc
+  }
 
   # Acts
   ai.vec <- el[, "ai"]

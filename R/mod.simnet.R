@@ -20,6 +20,11 @@ simnet_msm <- function(dat, at) {
   ## Main network
   nwparam.m <- EpiModel::get_nwparam(dat, network = 1)
 
+  nwparam.m$coef.form[1] <-
+    nwparam.m$coef.form[1] + log(dat$param$netresim.form.rr[1])
+  nwparam.m$coef.diss$coef.adj[1] <-
+    nwparam.m$coef.diss$coef.adj[1] - log(dat$param$netresim.disl.rr[1])
+
   dat$attr$deg.casl <- get_degree(dat$el[[2]])
   dat <- tergmLite::updateModelTermInputs(dat, network = 1)
 
@@ -31,9 +36,13 @@ simnet_msm <- function(dat, at) {
 
   plist1 <- update_plist(dat, at, ptype = 1)
 
-
   ## Casual network
   nwparam.p <- EpiModel::get_nwparam(dat, network = 2)
+
+  nwparam.p$coef.form[1] <-
+    nwparam.p$coef.form[1] + log(dat$param$netresim.form.rr[2])
+  nwparam.p$coef.diss$coef.adj[1] <-
+    nwparam.p$coef.diss$coef.adj[1] - log(dat$param$netresim.disl.rr[2])
 
   dat$attr$deg.main <- get_degree(dat$el[[1]])
   dat <- tergmLite::updateModelTermInputs(dat, network = 2)
@@ -54,6 +63,8 @@ simnet_msm <- function(dat, at) {
 
   ## One-off network
   nwparam.i <- EpiModel::get_nwparam(dat, network = 3)
+  nwparam.i$coef.form[1] <-
+    nwparam.i$coef.form[1] + log(dat$param$netresim.form.rr[3])
 
   dat$attr$deg.tot <- pmin(dat$attr$deg.main + get_degree(dat$el[[2]]), 3)
   dat <- tergmLite::updateModelTermInputs(dat, network = 3)
@@ -86,7 +97,9 @@ update_plist <- function(dat, at, ptype) {
 
   # look up new formations, row bind them
   news_uid_start <- news_uid[news_uid[, 3] == 1, , drop = FALSE]
-  plist1 <- rbind(plist1, cbind(news_uid_start[, 1:2, drop = FALSE], ptype, at, NA))
+  if (nrow(news_uid_start) > 0) {
+    plist1 <- rbind(plist1, cbind(news_uid_start[, 1:2, drop = FALSE], ptype, at, NA))
+  }
 
   return(plist1)
 }

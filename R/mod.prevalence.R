@@ -27,7 +27,6 @@ prevalence_msm <- function(dat, at) {
   active <- dat$attr$active
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
-  diag.stage <- dat$attr$diag.stage
   diag.time <- dat$attr$diag.time
   aids.time <- dat$attr$aids.time
   inf.time <- dat$attr$inf.time
@@ -81,26 +80,17 @@ prevalence_msm <- function(dat, at) {
 
   # Care continuum stats (primary)
   dat$epi$cc.dx[at] <- sum(diag.status == 1 & inf.time >= 2, na.rm = TRUE) /
-                       sum(status == 1 & inf.time >= 2, na.rm = TRUE)
+    sum(status == 1 & inf.time >= 2, na.rm = TRUE)
   dat$epi$cc.dx.B[at] <- sum(diag.status == 1 & inf.time >= 2 & race == 1, na.rm = TRUE) /
-                         sum(status == 1 & inf.time >= 2 & race == 1, na.rm = TRUE)
+    sum(status == 1 & inf.time >= 2 & race == 1, na.rm = TRUE)
   dat$epi$cc.dx.H[at] <- sum(diag.status == 1 & inf.time >= 2 & race == 2, na.rm = TRUE) /
-                         sum(status == 1 & inf.time >= 2 & race == 2, na.rm = TRUE)
+    sum(status == 1 & inf.time >= 2 & race == 2, na.rm = TRUE)
   dat$epi$cc.dx.W[at] <- sum(diag.status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE) /
-                         sum(status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE)
+    sum(status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE)
 
   dat$epi$cc.dx.aids[at] <- sum(diag.status == 1 & stage == 4 & inf.time >= 2 &
                                   aids.time - diag.time <= 52, na.rm = TRUE) /
                             sum(diag.status == 1 & inf.time >= 2, na.rm = TRUE)
-  dat$epi$cc.dx.aids.B[at] <- sum(diag.status == 1 & stage == 4 & inf.time >= 2 &
-                                    aids.time - diag.time <= 52 & race == 1, na.rm = TRUE) /
-                              sum(diag.status == 1 & inf.time >= 2 & race == 1, na.rm = TRUE)
-  dat$epi$cc.dx.aids.H[at] <- sum(diag.status == 1 & stage == 4 &  inf.time >= 2 &
-                                    aids.time - diag.time <= 52 & race == 2, na.rm = TRUE) /
-                              sum(diag.status == 1 & inf.time >= 2 & race == 2, na.rm = TRUE)
-  dat$epi$cc.dx.aids.W[at] <- sum(diag.status == 1 & stage == 4 & inf.time >= 2 &
-                                    aids.time - diag.time <= 52 & race == 3, na.rm = TRUE) /
-                              sum(diag.status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE)
 
   dat$epi$cc.linked1m[at] <- sum(tx.init.time - diag.time <= 4 & diag.time >= 2, na.rm = TRUE) /
                              sum(dat$attr$diag.status == 1 & diag.time >= 2, na.rm = TRUE)
@@ -123,13 +113,13 @@ prevalence_msm <- function(dat, at) {
   dat$epi$cc.vsupp[at] <- sum(vl <= log10(200) & diag.status == 1 & diag.time >= 2, na.rm = TRUE) /
                           sum(diag.status == 1 & diag.time >= 2, na.rm = TRUE)
   dat$epi$cc.vsupp.B[at] <- sum(vl <= log10(200) & diag.status == 1 &
-                                diag.time >= 2 & race == 1, na.rm = TRUE) /
+                                  diag.time >= 2 & race == 1, na.rm = TRUE) /
                             sum(diag.status == 1 & diag.time >= 2 & race == 1, na.rm = TRUE)
   dat$epi$cc.vsupp.H[at] <- sum(vl <= log10(200) & diag.status == 1 &
-                                diag.time >= 2 & race == 2, na.rm = TRUE) /
+                                  diag.time >= 2 & race == 2, na.rm = TRUE) /
                             sum(diag.status == 1 & diag.time >= 2 & race == 2, na.rm = TRUE)
   dat$epi$cc.vsupp.W[at] <- sum(vl <= log10(200) & diag.status == 1 &
-                                diag.time >= 2 & race == 3, na.rm = TRUE) /
+                                  diag.time >= 2 & race == 3, na.rm = TRUE) /
                             sum(diag.status == 1 & diag.time >= 2 & race == 3, na.rm = TRUE)
 
   dat$epi$cc.vsupp.all[at] <- sum(vl <= log10(200) & status == 1 & inf.time >= 2, na.rm = TRUE) /
@@ -141,102 +131,7 @@ prevalence_msm <- function(dat, at) {
   dat$epi$cc.vsupp.all.W[at] <- sum(vl <= log10(200) & status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE) /
                                 sum(status == 1 & inf.time >= 2 & race == 3, na.rm = TRUE)
 
-  dat$epi$cc.vsupp.dur1y[at] <- 1 - (sum((at - vl.last.usupp) <= 52 & diag.time >= 2 &
-                                         diag.status == 1, na.rm = TRUE) /
-                                     sum(diag.status == 1 & diag.time >= 2, na.rm = TRUE))
-  dat$epi$cc.vsupp.dur1y.B[at] <- 1 - (sum((at - vl.last.usupp) <= 52 & diag.time >= 2 &
-                                         diag.status == 1 & race == 1, na.rm = TRUE) /
-                                     sum(diag.status == 1 & diag.time >= 2 & race == 1, na.rm = TRUE))
-  dat$epi$cc.vsupp.dur1y.H[at] <- 1 - (sum((at - vl.last.usupp) <= 52 & diag.time >= 2 &
-                                           diag.status == 1 & race == 2, na.rm = TRUE) /
-                                       sum(diag.status == 1 & diag.time >= 2 & race == 2, na.rm = TRUE))
-  dat$epi$cc.vsupp.dur1y.W[at] <- 1 - (sum((at - vl.last.usupp) <= 52 & diag.time >= 2 &
-                                           diag.status == 1 & race == 3, na.rm = TRUE) /
-                                       sum(diag.status == 1 & diag.time >= 2 & race == 3, na.rm = TRUE))
-
   dat$epi$cc.HIV.mr[at] <- (dat$epi$dep.HIV[at]/dat$epi$i.num[at])*52
-
-  # Care continuum stats (secondary)
-  dat$epi$cc.test.int[at] <- mean(at - last.neg.test[diag.status == 0], na.rm = TRUE)
-  dat$epi$cc.test.int.B[at] <- mean(at - last.neg.test[diag.status == 0 & race == 1], na.rm = TRUE)
-  dat$epi$cc.test.int.H[at] <- mean(at - last.neg.test[diag.status == 0 & race == 2], na.rm = TRUE)
-  dat$epi$cc.test.int.W[at] <- mean(at - last.neg.test[diag.status == 0 & race == 3], na.rm = TRUE)
-
-  dat$epi$cc.dx.delay[at] <- mean(diag.time[diag.time >= 2] - inf.time[diag.time >= 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.B[at] <- mean(diag.time[diag.time >= 2 & race == 1] -
-                                      inf.time[diag.time >= 2 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.H[at] <- mean(diag.time[diag.time >= 2 & race == 2] -
-                                      inf.time[diag.time >= 2 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.W[at] <- mean(diag.time[diag.time >= 2 & race == 3] -
-                                      inf.time[diag.time >= 2 & race == 3], na.rm = TRUE)
-
-  dat$epi$cc.dx.delay.int[at] <- mean(diag.time[diag.time >= 3380] - inf.time[diag.time >= 3380], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.B[at] <- mean(diag.time[diag.time >= 3380 & race == 1] -
-                                      inf.time[diag.time >= 3380 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.H[at] <- mean(diag.time[diag.time >= 3380 & race == 2] -
-                                      inf.time[diag.time >= 3380 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.W[at] <- mean(diag.time[diag.time >= 3380 & race == 3] -
-                                      inf.time[diag.time >= 3380 & race == 3], na.rm = TRUE)
-
-  # same as above, but with medians
-  dat$epi$cc.dx.delay.med[at] <- median(diag.time[diag.time >= 2] - inf.time[diag.time >= 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.B.med[at] <- median(diag.time[diag.time >= 2 & race == 1] -
-                                      inf.time[diag.time >= 2 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.H.med[at] <- median(diag.time[diag.time >= 2 & race == 2] -
-                                      inf.time[diag.time >= 2 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.W.med[at] <- median(diag.time[diag.time >= 2 & race == 3] -
-                                      inf.time[diag.time >= 2 & race == 3], na.rm = TRUE)
-
-  dat$epi$cc.dx.delay.int.med[at] <- median(diag.time[diag.time >= 3380] - inf.time[diag.time >= 3380], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.B.med[at] <- median(diag.time[diag.time >= 3380 & race == 1] -
-                                          inf.time[diag.time >= 3380 & race == 1], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.H.med[at] <- median(diag.time[diag.time >= 3380 & race == 2] -
-                                          inf.time[diag.time >= 3380 & race == 2], na.rm = TRUE)
-  dat$epi$cc.dx.delay.int.W.med[at] <- median(diag.time[diag.time >= 3380 & race == 3] -
-                                          inf.time[diag.time >= 3380 & race == 3], na.rm = TRUE)
-
-  # dat$epi$cc.tx.any1y[at] <- sum((at - dat$attr$tx.period.last <= 52), na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1, na.rm = TRUE)
-  # dat$epi$cc.tx.any1y.B[at] <- sum((at - dat$attr$tx.period.last <= 52) & race == 1, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & race == 1, na.rm = TRUE)
-  # dat$epi$cc.tx.any1y.H[at] <- sum((at - dat$attr$tx.period.last <= 52) & race == 2, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & race == 2, na.rm = TRUE)
-  # dat$epi$cc.tx.any1y.W[at] <- sum((at - dat$attr$tx.period.last <= 52) & race == 3, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & race == 3, na.rm = TRUE)
-
-  # dat$epi$cc.dx.delay[at] <- mean(dat$attr$diag.time - dat$attr$inf.time, na.rm = TRUE)
-  # dat$epi$cc.testpy[at] <- 1-sum((at - dat$attr$last.neg.test) > 52 & status == 0,
-  #     is.na(dat$attr$last.neg.test) & status == 0, na.rm = TRUE) /
-  #   sum(status == 0)
-  # dat$epi$cc.linked[at] <- sum(dat$attr$cuml.time.on.tx > 0, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1, na.rm = TRUE)
-  # dat$epi$cc.tx[at] <- sum(dat$attr$tx.status == 1, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1, na.rm = TRUE)
-  # dat$epi$cc.tx.ret3m[at] <- sum((at - dat$attr$tx.period.last) <= 52 &
-  #       (dat$attr$tx.period.last - dat$attr$tx.period.first) > 13, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1, na.rm = TRUE)
-  # dat$epi$cc.vsupp.tt1[at] <- sum(dat$attr$vl <= log10(200) & dat$attr$tt.traj == 1, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & dat$attr$tt.traj == 1, na.rm = TRUE)
-  # dat$epi$cc.vsupp.tt2[at] <- sum(dat$attr$vl <= log10(200) & dat$attr$tt.traj == 2, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & dat$attr$tt.traj == 2, na.rm = TRUE)
-  # dat$epi$cc.vsupp.tt3[at] <- sum(dat$attr$vl <= log10(200) & dat$attr$tt.traj == 3, na.rm = TRUE) /
-  #   sum(dat$attr$diag.status == 1 & dat$attr$tt.traj == 3, na.rm = TRUE)
-
-
-  # HIV screening outcomes
-  dat$epi$mean.neg.tests[at] <- mean(dat$attr$num.neg.tests[diag.status == 0], na.rm = TRUE)
-  dat$epi$mean.neg.tests.B[at] <- mean(dat$attr$num.neg.tests[diag.status == 0 & race == 1], na.rm = TRUE)
-  dat$epi$mean.neg.tests.H[at] <- mean(dat$attr$num.neg.tests[diag.status == 0 & race == 2], na.rm = TRUE)
-  dat$epi$mean.neg.tests.W[at] <- mean(dat$attr$num.neg.tests[diag.status == 0 & race == 3], na.rm = TRUE)
-
-  dat$epi$test.past.year[at] <- sum(at - dat$attr$last.neg.test <= 52 & diag.status == 0, na.rm = TRUE) /
-    sum(diag.status == 0, na.rm = TRUE)
-  dat$epi$test.past.year.B[at] <- sum(at - dat$attr$last.neg.test <= 52 & diag.status == 0 & race == 1, na.rm = TRUE) /
-    sum(diag.status == 0 & race == 1, na.rm = TRUE)
-  dat$epi$test.past.year.H[at] <- sum(at - dat$attr$last.neg.test <= 52 & diag.status == 0 & race == 2, na.rm = TRUE) /
-    sum(diag.status == 0 & race == 2, na.rm = TRUE)
-  dat$epi$test.past.year.W[at] <- sum(at - dat$attr$last.neg.test <= 52 & diag.status == 0 & race == 3, na.rm = TRUE) /
-    sum(diag.status == 0 & race == 3, na.rm = TRUE)
 
   # HIV stage
   dat$epi$hstage.acute[at] <- sum(stage %in% 1:2 & diag.time >= 2, na.rm = TRUE) /
@@ -268,6 +163,56 @@ prevalence_msm <- function(dat, at) {
   ir100.uct <- (dat$epi$incid.uct[at]/sum(uCT == 0, dat$epi$incid.uct[at], na.rm = TRUE))*5200
   dat$epi$ir100.ct[at] <- ir100.rct + ir100.uct
   dat$epi$ir100.sti[at] <- dat$epi$ir100.gc[at] + dat$epi$ir100.ct[at]
+
+
+  # STI tx
+  dat$epi$gc.tx[at] <- sum(dat$attr$uGC.tx | dat$attr$rGC.tx, na.rm = TRUE)
+  dat$epi$ct.tx[at] <- sum(dat$attr$uCT.tx | dat$attr$rCT.tx, na.rm = TRUE)
+
+  dat$epi$gc.tx.B[at] <- sum(race == 1 & (dat$attr$uGC.tx | dat$attr$rGC.tx), na.rm = TRUE)
+  dat$epi$ct.tx.B[at] <- sum(race == 1 & (dat$attr$uCT.tx | dat$attr$rCT.tx), na.rm = TRUE)
+
+  dat$epi$gc.tx.H[at] <- sum(race == 2 & (dat$attr$uGC.tx | dat$attr$rGC.tx), na.rm = TRUE)
+  dat$epi$ct.tx.H[at] <- sum(race == 2 & (dat$attr$uCT.tx | dat$attr$rCT.tx), na.rm = TRUE)
+
+  dat$epi$gc.tx.W[at] <- sum(race == 3 & (dat$attr$uGC.tx | dat$attr$rGC.tx), na.rm = TRUE)
+  dat$epi$ct.tx.W[at] <- sum(race == 3 & (dat$attr$uCT.tx | dat$attr$rCT.tx), na.rm = TRUE)
+
+  gc <- rGC == 1 | uGC == 1
+  ct <- rCT == 1 | uCT == 1
+
+  dat$epi$gc[at] <- sum(gc, na.rm = TRUE)
+  dat$epi$ct[at] <- sum(ct, na.rm = TRUE)
+
+  dat$epi$gc.B[at] <- sum(race == 1 & gc, na.rm = TRUE)
+  dat$epi$ct.B[at] <- sum(race == 1 & ct, na.rm = TRUE)
+
+  dat$epi$gc.H[at] <- sum(race == 2 & gc, na.rm = TRUE)
+  dat$epi$ct.H[at] <- sum(race == 2 & ct, na.rm = TRUE)
+
+  dat$epi$gc.W[at] <- sum(race == 3 & gc, na.rm = TRUE)
+  dat$epi$ct.W[at] <- sum(race == 3 & ct, na.rm = TRUE)
+
+  # Mean degrees
+  main.deg <- get_degree(dat$el[[1]])
+  casl.deg <- get_degree(dat$el[[2]])
+  inst.deg <- get_degree(dat$el[[3]])
+
+  dat$epi$main.deg[at] <- mean(main.deg, na.rm = TRUE)
+  dat$epi$casl.deg[at] <- mean(casl.deg, na.rm = TRUE)
+  dat$epi$inst.deg[at] <- mean(inst.deg, na.rm = TRUE)
+
+  dat$epi$main.deg.B[at] <- mean(main.deg[which(race == 1)], na.rm = TRUE)
+  dat$epi$casl.deg.B[at] <- mean(casl.deg[which(race == 1)], na.rm = TRUE)
+  dat$epi$inst.deg.B[at] <- mean(inst.deg[which(race == 1)], na.rm = TRUE)
+
+  dat$epi$main.deg.H[at] <- mean(main.deg[which(race == 2)], na.rm = TRUE)
+  dat$epi$casl.deg.H[at] <- mean(casl.deg[which(race == 2)], na.rm = TRUE)
+  dat$epi$inst.deg.H[at] <- mean(inst.deg[which(race == 2)], na.rm = TRUE)
+
+  dat$epi$main.deg.W[at] <- mean(main.deg[which(race == 3)], na.rm = TRUE)
+  dat$epi$casl.deg.W[at] <- mean(casl.deg[which(race == 3)], na.rm = TRUE)
+  dat$epi$inst.deg.W[at] <- mean(inst.deg[which(race == 3)], na.rm = TRUE)
 
   return(dat)
 }

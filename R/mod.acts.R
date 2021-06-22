@@ -23,6 +23,8 @@ acts_msm <- function(dat, at) {
   status <- dat$attr$status
   diag.status <- dat$attr$diag.status
   race <- dat$attr$race
+  geog.lvl <- dat$param$netstats$geog.lvl
+  race.flag <- dat$param$netstats$race
   age <- dat$attr$age
   stage <- dat$attr$stage
   vl <- dat$attr$vl
@@ -33,7 +35,8 @@ acts_msm <- function(dat, at) {
   # Parameters
   acts.mod <- dat$param$epistats$acts.mod
   acts.aids.vl <- dat$param$acts.aids.vl
-  acts.scale <- dat$param$acts.scale
+  acts.scale.main <- dat$param$acts.scale.main
+  acts.scale.casl <- dat$param$acts.scale.casl
 
   # Construct edgelist
   el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
@@ -72,14 +75,43 @@ acts_msm <- function(dat, at) {
   hiv.concord.pos[cp] <- 1
 
   # Model predictions
-  x <- data.frame(ptype = el.mc[, "ptype"],
-                  duration = durations,
-                  race.combo = race.combo,
-                  comb.age = comb.age,
-                  hiv.concord.pos = hiv.concord.pos,
-                  city = 1)
-  rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
-  rates <- rates * acts.scale
+  if (!is.null(geog.lvl)) {
+    if (race.flag == TRUE) {
+      x <- data.frame(ptype = el.mc[, "ptype"],
+                      duration = durations,
+                      race.combo = race.combo,
+                      comb.age = comb.age,
+                      hiv.concord.pos = hiv.concord.pos,
+                      geogYN = 1)
+      rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+    } else {
+      x <- data.frame(ptype = el.mc[, "ptype"],
+                      duration = durations,
+                      comb.age = comb.age,
+                      hiv.concord.pos = hiv.concord.pos,
+                      geogYN = 1)
+      rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+    }
+  } else {
+    if (race.flag == TRUE) {
+      x <- data.frame(ptype = el.mc[, "ptype"],
+                      duration = durations,
+                      race.combo = race.combo,
+                      comb.age = comb.age,
+                      hiv.concord.pos = hiv.concord.pos)
+      rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+    } else {
+      x <- data.frame(ptype = el.mc[, "ptype"],
+                      duration = durations,
+                      comb.age = comb.age,
+                      hiv.concord.pos = hiv.concord.pos)
+      rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+    }
+  }
+
+  rates[x$ptype == 1] <- rates[x$ptype == 1] * acts.scale.main
+  rates[x$ptype == 2] <- rates[x$ptype == 2] * acts.scale.casl
+
   ai <- rpois(length(rates), rates)
   el.mc <- cbind(el.mc, durations, ai)
 

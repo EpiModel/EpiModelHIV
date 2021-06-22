@@ -33,6 +33,10 @@ departure_msm <- function(dat, at) {
 
   aids.mr <- dat$param$aids.mr
   asmr <- dat$param$netstats$demog$asmr
+  asmr.row <- apply(as.matrix(age), 1,
+                      FUN = function(x) which(asmr[,"age"] == floor(x)))
+  asmr.temp <- asmr[asmr.row,]
+
 
   idsElig <- which(active == 1)
   rates <- rep(NA, length(idsElig))
@@ -40,7 +44,7 @@ departure_msm <- function(dat, at) {
   races <- sort(unique(race))
   for (i in seq_along(races)) {
     ids.race <- which(race == races[i])
-    rates[ids.race] <- asmr[age[ids.race], i + 1]
+    rates[ids.race] <- asmr.temp[ids.race, i + 1]
   }
   idsDep <- idsElig[rbinom(length(rates), 1, rates) == 1]
 

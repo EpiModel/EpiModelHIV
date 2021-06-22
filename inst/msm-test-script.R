@@ -3,40 +3,97 @@ rm(list = ls())
 suppressMessages(library("EpiModelHIV"))
 devtools::load_all("~/Dropbox/Dev/EpiModelHIV/EpiModelHIV-p")
 
-scr.dir <- "~/Dropbox/Dev/ARTnet/"
-netstats <- readRDS(file.path(scr.dir, "data/artnet.NetStats.Atlanta.rda"))
-epistats <- readRDS(file.path(scr.dir, "data/artnet.EpiStats.Atlanta.rda"))
-est <- readRDS(file.path(scr.dir, "data/artnet.NetEst.Atlanta.rda"))
+scr.dir <- "~/Dropbox/Projects/SexualDistancing/"
+netstats <- readRDS(file.path(scr.dir, "out/est/netstats.rds"))
+epistats <- readRDS(file.path(scr.dir, "out/est/epistats.rds"))
+est <- readRDS(file.path(scr.dir, "out/est/netest.rds"))
 
-param <- param_msm(netstats = netstats,
-                   epistats = epistats,
-                   hiv.test.int = c(43, 43, 45),
-                   a.rate = 0.00055,
-                   riskh.start = 2,
-                   prep.start = 30,
-                   prep.start.prob = 0.10,
-                   tt.part.supp = c(0.20, 0.20, 0.20),
-                   tt.full.supp = c(0.40, 0.40, 0.40),
-                   tt.dur.supp = c(0.40, 0.40, 0.40),
-                   tx.halt.full.rr = 0.8,
-                   tx.halt.dur.rr = 0.1,
-                   tx.reinit.full.rr = 2.0,
-                   tx.reinit.dur.rr = 5.0,
-                   hiv.rgc.rr = 2.5,
-                   hiv.ugc.rr = 1.5,
-                   hiv.rct.rr = 2.5,
-                   hiv.uct.rr = 1.5,
-                   hiv.dual.rr = 0.0,
-                   rgc.tprob = 0.35,
-                   ugc.tprob = 0.25,
-                   rct.tprob = 0.20,
-                   uct.tprob = 0.16,
-                   rgc.ntx.int = 16.8,
-                   ugc.ntx.int = 16.8,
-                   rct.ntx.int = 32,
-                   uct.ntx.int = 32,
-                   acts.aids.vl = 5.75)
-init <- init_msm()
+full_tx_eff <- rep(1, 3)
+
+param <- param_msm(
+  netstats = netstats,
+  epistats = epistats,
+  hiv.test.rate = c(0.00385, 0.00385, 0.0069),
+  hiv.test.late.prob = rep(0, 3),
+  tx.init.prob = c(0.1775, 0.19, 0.2521),
+  tt.part.supp = 1 - full_tx_eff,
+  tt.full.supp = full_tx_eff,
+  tt.dur.supp = rep(0, 3),
+  tx.halt.part.prob = c(0.0065, 0.0053, 0.003),
+  tx.halt.full.rr = rep(0.45, 3),
+  tx.halt.dur.rr = rep(0.45, 3),
+  tx.reinit.part.prob = rep(0.00255, 3),
+  tx.reinit.full.rr = rep(1, 3),
+  tx.reinit.dur.rr = rep(1, 3),
+  max.time.off.tx.full.int = 52 * 15,
+  max.time.on.tx.part.int = 52 * 10,
+  max.time.off.tx.part.int = 52 * 10,
+  aids.mr = 1 / 250,
+  trans.scale =  c(2.7, 0.35, 0.243), #c(2.21, 0.405, 0.255),
+  acts.scale.main = 1.00,
+  acts.scale.casl = 0.10,
+  acts.aids.vl = 5.75,
+  circ.prob = c(0.874, 0.874, 0.918),
+  a.rate = 0.00052,
+  prep.start = (52 * 60) + 1,
+  riskh.start = 52 * 59,
+  prep.adhr.dist = c(0.089, 0.127, 0.784),
+  prep.adhr.hr = c(0.69, 0.19, 0.01),
+  prep.start.prob =  0.71, # 0.00896,
+  prep.discont.rate = 0.02138792, # 1 - (2^(-1/(224.4237/7)))
+  ## prep.tst.int = 90/7,         # do I need that?
+  ## prep.risk.int = 182/7,       # do I need that?
+  ## prep.sti.screen.int = 182/7,
+  ## prep.sti.prob.tx = 1,
+  prep.risk.reassess.method = "year",
+  prep.require.lnt = TRUE, # FALSE -> start with random PrEP initiation
+
+  ## STI PARAMS (default: from combprev2, make it gaps)
+  ## Using values in prep-race: scripts/burnin/sim.burn.R
+  ## If not mentionned -> default from prep disparities
+  ## for H : mean(c(B, W))
+  #ok
+  rgc.tprob = 0.2267303, #logistic(logit(0.19) + log(1.25)) #0.357,  # gaps appendix 9.4
+  ugc.tprob = 0.19,# 0.248,  # gaps appendix 9.4
+  rct.tprob = 0.2038369, #logistic(logit(0.17) + log(1.25)) #0.3216, # gaps appendix 9.3
+  uct.tprob = 0.17,#0.213,  # gaps appendix 9.3
+  rgc.sympt.prob = 0.1,#0.077, # gaps appendix 10.3
+  ugc.sympt.prob = 0.9333333,#0.824, # gaps appendix 10.3
+  rct.sympt.prob = 0.1,#0.1035,# gaps appendix 10.2
+  uct.sympt.prob = 0.95,#0.885, # gaps appendix 10.2
+  rgc.ntx.int = 26,#35.11851, # gaps appendix 11.2
+  ugc.ntx.int = 26,#35.11851, # gaps appendix 11.2
+  gc.tx.int   = 2, # gaps appendix 11.2 - mentionned, not explicit
+  rct.ntx.int = 32,#44.24538, # gaps appendix 11.1
+  uct.ntx.int = 32,#44.24538, # gaps appendix 11.1
+  ct.tx.int   = 2, # gaps appendix 11.1 - mentionned, not explicit
+
+  gc.sympt.prob.tx =  rep(0.9, 3),  #c(0.86, 0.91, 0.96),
+  ct.sympt.prob.tx =  rep(0.9, 3),  #c(0.72, 0.785, 0.85),
+  gc.asympt.prob.tx = rep(0.1, 3), #c(0.10, 0.145, 0.19),
+  ct.asympt.prob.tx = rep(0.1, 3), #c(0.05, 0.525, 0.10),
+  # gaps appendix 9.3 - 9.4 (not explained this way but similar result)
+  sti.cond.eff = 0.95,
+  sti.cond.fail = c(0.39, 0.3, 0.21),
+  # gaps appendix 9.2
+  hiv.rgc.rr = 2.78,
+  hiv.ugc.rr = 1.73,
+  hiv.rct.rr = 2.78,
+  hiv.uct.rr = 1.73,
+  # if both ct + gc -> log(RRgc) + 0.2 * log(RRct) | swap ct and gc if RRct > RRgc
+  hiv.dual.rr = 0.2, # not mentionned in appendix
+
+  netresim.form.rr = rep(1, 3),
+  netresim.disl.rr = rep(1, 2),
+
+)
+
+init <- init_msm(
+  prev.ugc = 0.05,
+  prev.rct = 0.05,
+  prev.rgc = 0.05,
+  prev.uct = 0.05
+)
 control <- control_msm(simno = 1,
                        nsteps = 52 * 2,
                        nsims = 1,
@@ -44,6 +101,7 @@ control <- control_msm(simno = 1,
                        save.nwstats = FALSE,
                        save.clin.hist = FALSE)
 
+debug(acts_msm)
 sim <- netsim(est, param, init, control)
 
 # Explore clinical history

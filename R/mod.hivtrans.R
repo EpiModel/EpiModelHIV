@@ -236,37 +236,13 @@ hivtrans_msm <- function(dat, at) {
     dat$attr$cuml.time.on.tx[infected] <- 0
     dat$attr$cuml.time.off.tx[infected] <- 0
 
-    # Attributes of transmitter
-    transmitter <- as.numeric(c(disc.ip[trans.ip == 1, 1],
-                                disc.rp[trans.rp == 1, 2]))
-    tab.trans <- table(transmitter)
-    uni.trans <- as.numeric(names(tab.trans))
-    dat$attr$count.trans[uni.trans] <- dat$attr$count.trans[uni.trans] +
-                                       as.numeric(tab.trans)
-   }
+  }
 
   # Summary Output
   dat$epi$incid[at] <- length(infected)
   dat$epi$incid.B[at] <- sum(dat$attr$race[infected] == 1)
   dat$epi$incid.H[at] <- sum(dat$attr$race[infected] == 2)
   dat$epi$incid.W[at] <- sum(dat$attr$race[infected] == 3)
-
-  if (length(infected) > 0) {
-    dat$epi$incid.undx[at] <- sum(dat$attr$diag.status[transmitter] == 0)
-    dat$epi$incid.dx[at] <- sum(dat$attr$diag.status[transmitter] == 1 &
-                                dat$attr$cuml.time.on.tx[transmitter] == 0)
-    dat$epi$incid.linked[at] <- sum(dat$attr$diag.status[transmitter] == 1 &
-                                    dat$attr$cuml.time.on.tx[transmitter] > 0 &
-                                    dat$attr$vl[transmitter] > log10(200))
-    dat$epi$incid.vsupp[at] <- sum(dat$attr$diag.status[transmitter] == 1 &
-                                   dat$attr$cuml.time.on.tx[transmitter] > 0 &
-                                   dat$attr$vl[transmitter] <= log10(200))
-  } else {
-    dat$epi$incid.undx[at] <- 0
-    dat$epi$incid.dx[at] <- 0
-    dat$epi$incid.linked[at] <- 0
-    dat$epi$incid.vsupp[at] <- 0
-  }
 
   return(dat)
 }

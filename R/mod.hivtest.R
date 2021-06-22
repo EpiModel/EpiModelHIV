@@ -87,14 +87,6 @@ hivtest_msm <- function(dat, at) {
 
   dat$epi$tot.neg.tests[at] <- length(tstNeg)
 
-  # number of new diagnoses by timing
-  dat$epi$newDx[at] <- length(tstPos)
-  diag.time <- dat$attr$diag.time
-  dat$epi$newDx45[at] <- length(intersect(tstPos, which(diag.time - inf.time <= 45/7)))
-  dat$epi$newDx140[at] <- length(intersect(tstPos, which(diag.time - inf.time <= 140/7)))
-  dat$epi$newDx200[at] <- length(intersect(tstPos, which(diag.time - inf.time <= 200/7)))
-  dat$epi$newDx2y[at] <- length(intersect(tstPos, which(diag.time - inf.time > 104)))
-
   return(dat)
 }
 

@@ -300,6 +300,20 @@ stitrans_msm <- function(dat, at) {
   dat$epi$incid.ct.B[at] <- length(intersect(union(idsInf_rct, idsInf_uct), which(race == 2)))
   dat$epi$incid.ct.W[at] <- length(intersect(union(idsInf_rct, idsInf_uct), which(race == 3)))
 
+  dat$epi$incid.rct.B[at] <- length(intersect(idsInf_rct, which(race == 1)))
+  dat$epi$incid.rct.H[at] <- length(intersect(idsInf_rct, which(race == 2)))
+  dat$epi$incid.rct.W[at] <- length(intersect(idsInf_rct, which(race == 3)))
+  dat$epi$incid.uct.B[at] <- length(intersect(idsInf_uct, which(race == 1)))
+  dat$epi$incid.uct.H[at] <- length(intersect(idsInf_uct, which(race == 2)))
+  dat$epi$incid.uct.W[at] <- length(intersect(idsInf_uct, which(race == 3)))
+
+  dat$epi$incid.rgc.B[at] <- length(intersect(idsInf_rgc, which(race == 1)))
+  dat$epi$incid.rgc.H[at] <- length(intersect(idsInf_rgc, which(race == 2)))
+  dat$epi$incid.rgc.W[at] <- length(intersect(idsInf_rgc, which(race == 3)))
+  dat$epi$incid.ugc.B[at] <- length(intersect(idsInf_ugc, which(race == 1)))
+  dat$epi$incid.ugc.H[at] <- length(intersect(idsInf_ugc, which(race == 2)))
+  dat$epi$incid.ugc.W[at] <- length(intersect(idsInf_ugc, which(race == 3)))
+
   # Check all infected have all STI attributes
   stopifnot(all(!is.na(rGC.infTime[rGC == 1])),
             all(!is.na(rGC.sympt[rGC == 1])),
