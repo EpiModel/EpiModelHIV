@@ -30,5 +30,5 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 LinkingTo: ergm
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 LazyData: true
