@@ -270,7 +270,7 @@
 #' @param sym.seek.prob the joint probability of experiencing acute HIV LIKE symptoms and seeking treatment 
 #'
 #' @param sym.test.prob.bl The probability of PITC for those presenting with symptoms with no intervention
-#' @param ssym.test.prob.tm The probability of PITC for those presenting with symtoms with the KTM plus intervention
+#' @param sym.test.prob.tm The probability of PITC for those presenting with symtoms with the KTM plus intervention
 #'
 #' @param partner.test.prob.bl Probability of finding and testing a partner of a positive case without the KTM plus intervention
 #' @param partner.test.prob.tm Probability of finding and testing a partner of a positive case with the KTM plus intervention
@@ -316,6 +316,7 @@ param_KTM <- function(race.method = 1,
                       #Two test types avaialble: antibody is standard, rna for the Kenya TM plus intervention.
                       test.window.int.ab = 3*7,
                       test.window.int.rna = 1*7,
+                      test.window.int.rna.alt = 2*7,
                       
                       #Assuming 50:50 partial and full viral suppression
                       #From KARPR report 2018 77% of PLHIV achieve viral suppression
@@ -354,7 +355,11 @@ param_KTM <- function(race.method = 1,
                       ab.test.spec = (.998 + .994) - (.998 * .994),
                       rna.test.sens = .989,
                       rna.test.spec = 1.0,
-                      
+                      rna.alt.test.acute.sens = .862,
+                      rna.alt.test.acute.spec = .999,
+                      rna.alt.test.prev.sens = .999,
+                      rna.alt.test.prev.spec = .9972,
+
 
                       #Art params worksheet 
                       tx.init.TMP.prob = .31,
