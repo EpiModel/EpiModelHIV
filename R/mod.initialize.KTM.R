@@ -1,7 +1,7 @@
 
 # SHAMP ego -----------------------------------------------------------------
 
-#' @title Initialization Module for up to 5 race groups heterosexuals and MSM.
+#' @title Initialization Module for up to 5 race groups heterosexuals and MSM set for KENYA TMP.
 #'
 #' @description This function initializes the master \code{dat} object on which
 #'              data are stored, initial state of the network is simulated using ergm.ego, and
@@ -18,7 +18,7 @@
 #' for demographics and disease-related variables.
 #'
 #' @export
-#' @keywords module HET MSM ego 
+#' @keywords module HET TMP 
 #'
 
 
