@@ -119,10 +119,10 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "2.0.2",
+      "Version": "3.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ff0becff7bfdfe3f75d29aff8f3172dd"
+      "Hash": "1bdb126893e9ce6aae50ad1d6fc32faf"
     },
     "coda": {
       "Package": "coda",
@@ -152,13 +152,13 @@
       "Repository": "CRAN",
       "Hash": "0d57bc8e27b7ba9e45dba825ebc0de6b"
     },
-    "deSolve": {
-      "Package": "deSolve",
-      "Version": "1.28",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "eb265b52c7e032cc8276f0c96c14466c"
-    },
+#    "deSolve": {
+#      "Package": "deSolve",
+#      "Version": "1.28",
+#      "Source": "Repository",
+#      "Repository": "CRAN",
+#      "Hash": "eb265b52c7e032cc8276f0c96c14466c"
+#    },
     "desc": {
       "Package": "desc",
       "Version": "1.2.0",
@@ -252,10 +252,10 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.4.1",
+      "Version": "1.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f43e0d5e85ccb0a4045670c0607ee504"
+      "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e"
     },
     "gtable": {
       "Package": "gtable",
@@ -467,7 +467,7 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.7",
+      "Version": "0.4.10",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "c06d2a6887f4b414f8e927afd9ee976a"
@@ -507,13 +507,13 @@
       "Repository": "CRAN",
       "Hash": "a2b691b369a036bbdf4e74ec77ac968a"
     },
-    "stringi": {
-      "Package": "stringi",
-      "Version": "1.4.6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e99d8d656980d2dd416a962ae55aec90"
-    },
+#    "stringi": {
+#      "Package": "stringi",
+#      "Version": "1.4.6",
+#      "Source": "Repository",
+#      "Repository": "CRAN",
+#      "Hash": "e99d8d656980d2dd416a962ae55aec90"
+#    },
     "stringr": {
       "Package": "stringr",
       "Version": "1.4.0",
@@ -609,6 +609,25 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "2826c5d9efb0a88f657c7a679c7106db"
-    }
+    },
+    
+    "roxygen2": {
+      "Package": "roxygen2",
+      "Version": "7.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "devtools": {
+      "Package": "devtools",
+      "Version": "2.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+      },
+    "usethis": {
+      "Package": "usethis",
+      "Version": "1.6.0",
+      "Source": "Repository",
+      "Repository": "CRAN"
+      }
   }
 }
