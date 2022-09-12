@@ -19,6 +19,7 @@ param_KTM(
   test.prob.tested.f = c(0.015517, 0.021565, 0.020283, 0.015),
   test.window.int.ab = 3 * 7,
   test.window.int.rna = 1 * 7,
+  test.window.int.rna.alt = 2 * 7,
   tt.traj.B.f.prob = c(0, 0, 0.23, 0.77),
   tt.traj.B.msf.prob = c(0, 0, 0.23, 0.77),
   intervention_TM = "NONE",
@@ -36,6 +37,10 @@ param_KTM(
   ab.test.spec = (0.998 + 0.994) - (0.998 * 0.994),
   rna.test.sens = 0.989,
   rna.test.spec = 1,
+  rna.alt.test.acute.sens = 0.989,
+  rna.alt.test.acute.spec = 1,
+  rna.alt.test.prev.sens = 0.989,
+  rna.alt.test.prev.spec = 1,
   tx.init.TMP.prob = 0.31,
   tx.init.B.f.prob = 0.15912,
   tx.init.BI.f.prob = 0.15912,
@@ -264,6 +269,8 @@ param_KTM(
 \item{sym.seek.prob}{the joint probability of experiencing acute HIV LIKE symptoms and seeking treatment}
 
 \item{sym.test.prob.bl}{The probability of PITC for those presenting with symptoms with no intervention}
+
+\item{sym.test.prob.tm}{The probability of PITC for those presenting with symtoms with the KTM plus intervention}
 
 \item{partner.test.prob.bl}{Probability of finding and testing a partner of a positive case without the KTM plus intervention}
 
@@ -634,8 +641,6 @@ attributes that change based on concurrency status. These were used as attribute
 \item{test.prob.nevtest.S}{The age group specific vector of probabilities of testing if the node has never tested by sex=S}
 
 \item{test.prob.tested.S}{The age group specific vector of probabilities of testing if the node has previously tested by sex=S}
-
-\item{ssym.test.prob.tm}{The probability of PITC for those presenting with symtoms with the KTM plus intervention}
 }
 \value{
 A list object of class \code{param_KTM}, which can be passed to

@@ -2,16 +2,14 @@
 % Please edit documentation in R/mod.prep.KTM.R
 \name{prep_KTM}
 \alias{prep_KTM}
-\title{PrEP Module for up to 5 race groups heterosexuals and MSM.}
+\title{PrEP Module for TMP using 4 indications.}
 \usage{
 prep_KTM(dat, at)
 }
 \description{
 Module function for implementation and uptake of pre-exposure
-             prophylaxis (PrEP) to prevent HIV infection.  Only msm and msmf are eligible.
-             If dat$attr$immig.loc=1 PrEP can not be started or re-initiated.
+             prophylaxis (PrEP) to prevent HIV infection.  Indications are based on Partner services, 
+             disclosure, risk(partners) and all negatives identified through TMP.
 }
 \keyword{module}
-\keyword{msm}
-\keyword{msmf}
 \keyword{shamp}

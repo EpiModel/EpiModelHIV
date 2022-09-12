@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod.initialize.KTM.R
 \name{initialize_KTM}
 \alias{initialize_KTM}
-\title{Initialization Module for up to 5 race groups heterosexuals and MSM.}
+\title{Initialization Module for up to 5 race groups heterosexuals and MSM set for KENYA TMP.}
 \usage{
 initialize_KTM(x, param, init, control, s)
 }
@@ -27,6 +27,5 @@ This function initializes the master \code{dat} object on which
              simulates disease status and other attributes are initialized.
 }
 \keyword{HET}
-\keyword{MSM}
-\keyword{ego}
+\keyword{TMP}
 \keyword{module}

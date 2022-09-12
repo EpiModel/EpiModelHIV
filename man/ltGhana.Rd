@@ -4,9 +4,7 @@
 \name{ltGhana}
 \alias{ltGhana}
 \title{Life Table for Ghana}
-\format{
-A data frame with 132 rows and 5 variables.
-}
+\format{A data frame with 132 rows and 5 variables.}
 \description{
 A dataset containing age-sex-period specific mortality rates.
 }
