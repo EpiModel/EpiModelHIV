@@ -15,24 +15,22 @@
 #' determined stochastically for each act.
 #'
 #' @return
-#' This function returns the updated discordant edgelist with a \code{ins}
+#' This function returns the updated discordant edgelist with a `ins`
 #' attribute for values of whether the infected node is insertive or the
 #' susceptible node is insertive for that act.
-#'
-#' @keywords module msm
 #'
 #' @export
 #'
 position_msm <- function(dat, at) {
 
-  al <- dat$temp$al
+  al <- dat[["temp"]][["al"]]
   if (nrow(al) == 0) {
     return(dat)
   }
 
   # Attributes
-  role.class <- dat$attr$role.class
-  ins.quot <- dat$attr$ins.quot
+  role.class <- get_attr(dat, "role.class")
+  ins.quot   <- get_attr(dat, "ins.quot")
 
   # Parameters
 
@@ -50,12 +48,12 @@ position_msm <- function(dat, at) {
   vv <- which(p1.role.class == 2 & p2.role.class == 2)
   p1.ins.prob <- ins.quot[al[, 1][vv]] /
                  (ins.quot[al[, 1][vv]] + ins.quot[al[, 2][vv]])
-  p1.ins <- rbinom(length(vv), 1, p1.ins.prob)
-  ins[vv[p1.ins == 1]] <- 1
-  ins[vv[p1.ins == 0]] <- 0
+  p1.ins <- runif(length(vv)) < p1.ins.prob
+  ins[vv[p1.ins]] <- 1
+  ins[vv[!p1.ins]] <- 0
 
   ## Output
-  dat$temp$al <- cbind(al, ins)
+  dat[["temp"]][["al"]] <- cbind(al, ins)
 
   return(dat)
 }

@@ -1,8 +1,7 @@
 
 #' @title Arrivals Module
 #'
-#' @description Module function for arrivals into the sexually active
-#'              population.
+#' @description Module function for arrivals into the sexually active population.
 #'
 #' @inheritParams aging_msm
 #'
@@ -10,25 +9,23 @@
 #' New population members are added based on expected numbers of entries,
 #' stochastically determined with draws from Poisson distributions. For each new
 #' entry, a set of attributes is added for that node, and the nodes are added onto
-#' the network objects. Only attributes that are a part of the network model
-#' formulae are updated as vertex attributes on the network objects.
+#' the network objects.
 #'
 #' @return
-#' This function updates the \code{attr} list with new attributes for each new
-#' population member, and the \code{nw} objects with new vertices.
+#' This function updates the `attr` list with new attributes for each new population member.
 #'
-#' @keywords module msm
 #' @export
 #'
-arrival_msm <- function(dat, at){
+arrival_msm <- function(dat, at) {
 
-  ## Variables
+  ## Input
+  # Attributes
 
   # Parameters
-  a.rate <- dat$param$a.rate
+  a.rate   <- get_param(dat, "a.rate")
 
   ## Process
-  num <- dat$epi$num[1]
+  num <- get_epi(dat, "num", at = 1)
 
   nNew <- rpois(1, a.rate * num)
 
@@ -40,12 +37,12 @@ arrival_msm <- function(dat, at){
   # Update Networks
   if (nNew > 0) {
     for (i in 1:3) {
-      dat$el[[i]] <- tergmLite::add_vertices(dat$el[[i]], nNew)
+      dat[["el"]][[i]] <- add_vertices(dat[["el"]][[i]], nNew)
     }
   }
 
   ## Output
-  dat$epi$nNew[at] <- nNew
+  dat <- set_epi(dat, "nNew", at, nNew)
 
   return(dat)
 }
@@ -53,207 +50,111 @@ arrival_msm <- function(dat, at){
 
 setNewAttr_msm <- function(dat, at, nNew) {
 
+  dat <- append_core_attr(dat, at, nNew)
+
+  ## Inputs
+  # Attributes
+  active <- get_attr(dat, "active")
+
+  # Parameters
+  netstats             <- get_param(dat, "netstats")
+  tt.partial.supp.prob <- get_param(dat, "tt.partial.supp.prob")
+  tt.full.supp.prob    <- get_param(dat, "tt.full.supp.prob")
+  tt.durable.supp.prob <- get_param(dat, "tt.durable.supp.prob")
+  hiv.circ.prob        <- get_param(dat, "hiv.circ.prob")
+  arrival.age          <- get_param(dat, "arrival.age")
+
+
   # Set all attributes NA by default
-  dat$attr <- lapply(dat$attr, {
-    function(x)
-      c(x, rep(NA, nNew))
-  })
-  newIds <- which(is.na(dat$attr$active))
+  attrToInit <- names(which(vapply(dat[["attr"]], length, 0) < length(active)))
+  for (attr_name in attrToInit) {
+    attr_val <- get_attr(dat, attr_name)
+    attr_val <- c(attr_val, rep(NA, nNew))
+    dat <- set_attr(dat, attr_name, attr_val, override.length.check = TRUE)
+  }
+  newIds <- which(get_attr(dat, "entrTime") == at)
 
-  # Demographic
-  dat$attr$active[newIds] <- rep(1, nNew)
-  dat$attr$uid[newIds] <- dat$temp$max.uid + (1:nNew)
-  dat$temp$max.uid <- dat$temp$max.uid + nNew
+  race.dist <- prop.table(table(netstats[["attr"]][["race"]]))
 
-  dat$attr$arrival.time[newIds] <- rep(at, nNew)
+  race <- sample(sort(unique(get_attr(dat, "race"))), nNew, TRUE, race.dist)
+  dat <- set_attr(dat, "race", race, posit_ids = newIds)
 
-  race.dist <- prop.table(table(dat$param$netstats$attr$race))
-
-  race <- sample(sort(unique(dat$attr$race)), nNew, TRUE, race.dist)
-  dat$attr$race[newIds] <- race
-
-  dat$attr$age[newIds] <- rep(dat$param$arrival.age, nNew)
-  age.breaks <- dat$param$netstats$demog$age.breaks
-  attr_age.grp <- cut(dat$attr$age[newIds], age.breaks, labels = FALSE)
-  dat$attr$age.grp[newIds] <- attr_age.grp
+  dat <- set_attr(dat, "age", rep(arrival.age, nNew), posit_ids = newIds)
+  age.breaks <- netstats[["demog"]][["age.breaks"]]
+  attr_age.grp <- cut(
+    get_attr(dat, "age", posit_ids = newIds),
+    age.breaks,
+    labels = FALSE,
+    right = FALSE
+  )
+  dat <- set_attr(dat, "age.grp", attr_age.grp, posit_ids = newIds)
 
   # Disease status and related
-  dat$attr$status[newIds] <- rep(0, nNew)
-  dat$attr$diag.status[newIds] <- rep(0, nNew)
-  dat$attr$rGC[newIds] <- dat$attr$GC.timesInf[newIds] <- 0
-  dat$attr$uGC[newIds] <- dat$attr$GC.timesInf[newIds] <- 0
-  dat$attr$rCT[newIds] <- dat$attr$CT.timesInf[newIds] <- 0
-  dat$attr$uCT[newIds] <- dat$attr$CT.timesInf[newIds] <- 0
+  dat <- set_attr(dat, "status", rep(0, nNew), posit_ids = newIds)
+  dat <- set_attr(dat, "diag.status", rep(0, nNew), posit_ids = newIds)
+  dat <- set_attr(dat, "rGC", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "uGC", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "rCT", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "uCT", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "rGC.timesInf", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "uGC.timesInf", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "rCT.timesInf", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "uCT.timesInf", 0, posit_ids = newIds)
 
-  dat$attr$count.trans[newIds] <- 0
+  rates <- get_param(dat, "hiv.test.late.prob")[race]
+  late.tester <- runif(length(rates)) < rates
+  dat <- set_attr(dat, "late.tester", late.tester, posit_ids = newIds)
 
-  rates <- dat$param$hiv.test.late.prob[race]
-  dat$attr$late.tester[newIds] <- rbinom(length(rates), 1, rates)
-
-  races <- sort(unique(dat$attr$race[newIds]))
+  race.new <- get_attr(dat, "race", posit_ids = newIds)
+  races <- sort(unique(race.new))
   tt.traj <- rep(NA, nNew)
   for (i in races) {
-    ids.race <- which(dat$attr$race[newIds] == i)
-    tt.traj[ids.race] <- sample(1:3, length(ids.race), TRUE,
-                                c(dat$param$tt.part.supp[i],
-                                  dat$param$tt.full.supp[i],
-                                  dat$param$tt.dur.supp[i]))
+    ids.race <- which(get_attr(dat, "race")[newIds] == i)
+    tt.traj[ids.race] <- sample(
+      1:3, length(ids.race), TRUE,
+      c(tt.partial.supp.prob[i], tt.full.supp.prob[i], tt.durable.supp.prob[i])
+    )
 
   }
-  dat$attr$tt.traj[newIds] <- tt.traj
+  dat <- set_attr(dat, "tt.traj", tt.traj, posit_ids = newIds)
 
   # Circumcision
   circ <- rep(NA, nNew)
   for (i in races) {
-    ids.race <- which(dat$attr$race[newIds] == i)
-    circ[ids.race] <- rbinom(length(ids.race), 1, dat$param$circ.prob[i])
+    ids.race <- which(race.new == i)
+    circ[ids.race] <- runif(length(ids.race)) < hiv.circ.prob[i]
   }
-  dat$attr$circ[newIds] <- circ
+  dat <- set_attr(dat, "circ", circ, posit_ids = newIds)
 
   # Role
-  ns <- dat$param$netstats$attr
+  ns <- netstats[["attr"]]
   role.class <- rep(NA, nNew)
   for (i in races) {
-    ids.race <- which(dat$attr$race[newIds] == i)
-    rc.probs <- prop.table(table(ns$role.class[ns$race == i]))
+    ids.race <- which(race.new == i)
+    rc.probs <- prop.table(table(ns[["role.class"]][ns[["race"]] == i]))
     role.class[ids.race] <- sample(0:2, length(ids.race), TRUE, rc.probs)
   }
-  dat$attr$role.class[newIds] <- role.class
+  dat <- set_attr(dat, "role.class", role.class, posit_ids = newIds)
 
   ins.quot <- rep(NA, nNew)
-  ins.quot[dat$attr$role.class[newIds] == 0]  <- 1
-  ins.quot[dat$attr$role.class[newIds] == 1]  <- 0
-  ins.quot[dat$attr$role.class[newIds] == 2]  <-
-                                  runif(sum(dat$attr$role.class[newIds] == 2))
-  dat$attr$ins.quot[newIds] <- ins.quot
+  role.class.new <- get_attr(dat, "role.class", posit_ids = newIds)
+  ins.quot[role.class.new == 0]  <- 1
+  ins.quot[role.class.new == 1]  <- 0
+  ins.quot[role.class.new == 2]  <- runif(sum(role.class.new == 2))
+
+  dat <- set_attr(dat, "ins.quot", ins.quot, posit_ids = newIds)
 
   # Degree
-  dat$attr$deg.main[newIds] <- 0
-  dat$attr$deg.casl[newIds] <- 0
-  dat$attr$deg.tot[newIds] <- 0
+  dat <- set_attr(dat, "deg.main", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "deg.casl", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "deg.tot", 0, posit_ids = newIds)
 
   # One-off risk group
-  dat$attr$risk.grp[newIds] <- sample(1:5, nNew, TRUE)
+  dat <- set_attr(dat, "risk.grp", sample(1:5, nNew, TRUE), posit_ids = newIds)
 
   # PrEP
-  dat$attr$prepStat[newIds] <- 0
-
-  # HIV screening
-  dat$attr$num.neg.tests[newIds] <- 0
-
-  # Update clinical history
-  if (dat$control$save.clin.hist == TRUE & length(newIds) > 0) {
-    m <- dat$temp$clin.hist
-    for (i in 1:length(m)) {
-      new.m <- array(dim = c(length(newIds), dat$control$nsteps))
-      m[[i]] <- rbind(m[[i]], new.m)
-    }
-    dat$temp$clin.hist <- m
-  }
-
-  ## Check attributes written as expected
-  # cbind(sapply(dat$attr, function(x) is.na(tail(x, 1))))
-
-  return(dat)
-}
-
-
-
-#' @export
-#' @rdname arrival_msm
-births_het <- function(dat, at) {
-
-  # Variables
-  b.rate.method <- dat$param$b.rate.method
-  b.rate <- dat$param$b.rate
-  active <- dat$attr$active
-
-
-  # Process
-  nBirths <- 0
-  if (b.rate.method == "stgrowth") {
-    exptPopSize <- dat$epi$num[1] * (1 + b.rate*at)
-    numNeeded <- exptPopSize - sum(active == 1)
-    if (numNeeded > 0) {
-      nBirths <- rpois(1, numNeeded)
-    }
-  }
-  if (b.rate.method == "totpop") {
-    nElig <- dat$epi$num[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-  if (b.rate.method == "fpop") {
-    nElig <- dat$epi$num.feml[at - 1]
-    if (nElig > 0) {
-      nBirths <- rpois(1, nElig * b.rate)
-    }
-  }
-
-
-  # Update Population Structure
-  if (nBirths > 0) {
-    dat <- setBirthAttr_het(dat, at, nBirths)
-    dat$el[[1]] <- tergmLite::add_vertices(dat$el[[1]], nBirths)
-  }
-
-  if (unique(sapply(dat$attr, length)) != attributes(dat$el[[1]])$n) {
-    stop("mismatch between el and attr length in births mod")
-  }
-
-  # Output
-  dat$epi$b.flow[at] <- nBirths
-
-  return(dat)
-}
-
-
-setBirthAttr_het <- function(dat, at, nBirths) {
-
-  # Set attributes for new births to NA
-  dat$attr <- lapply(dat$attr, function(x) c(x, rep(NA, nBirths)))
-  newIds <- which(is.na(dat$attr$active))
-
-
-  # Network Status
-  dat$attr$active[newIds] <- rep(1, nBirths)
-  dat$attr$entTime[newIds] <- rep(at, nBirths)
-
-
-  # Demography
-  prop.male <- ifelse(is.null(dat$param$b.propmale),
-                      dat$epi$propMale[1],
-                      dat$param$b.propmale)
-  dat$attr$male[newIds] <- rbinom(nBirths, 1, prop.male)
-
-  dat$attr$age[newIds] <- rep(18, nBirths)
-
-  # Circumcision
-  entTime <- dat$attr$entTime
-
-  idsNewMale <- which(dat$attr$male == 1 & entTime == at)
-
-  if (length(idsNewMale) > 0) {
-    age <- dat$attr$age[idsNewMale]
-    newCirc <- rbinom(length(idsNewMale), 1, dat$param$circ.prob.birth)
-    isCirc <- which(newCirc == 1)
-
-    newCircTime <- rep(NA, length(idsNewMale))
-    newCircTime[isCirc] <- round(-age[isCirc] * (365 / dat$param$time.unit))
-
-    dat$attr$circStat[idsNewMale] <- newCirc
-    dat$attr$circTime[idsNewMale] <- newCircTime
-  }
-
-
-  # Epi/Clinical
-  dat$attr$status[newIds] <- rep(0, nBirths)
-
-  if (length(unique(sapply(dat$attr, length))) != 1) {
-    sapply(dat$attr, length)
-    stop("Attribute dimensions not unique")
-  }
+  dat <- set_attr(dat, "prepStat", 0, posit_ids = newIds)
+  dat <- set_attr(dat, "edp.prepStat", 0, posit_ids = newIds)
 
   return(dat)
 }

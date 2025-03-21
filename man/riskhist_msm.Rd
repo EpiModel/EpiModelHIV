@@ -7,14 +7,14 @@
 riskhist_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \description{
-Sub-Module function to track the risk history of uninfected persons
-             for purpose of PrEP targeting.
+Sub-Module function to track the risk history of uninfected
+persons for purpose of PrEP targeting.
 }
 \keyword{module}
 \keyword{msm}

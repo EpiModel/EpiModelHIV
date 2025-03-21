@@ -2,22 +2,17 @@
 % Please edit documentation in R/mod.simnet.R
 \name{simnet_msm}
 \alias{simnet_msm}
-\alias{simnet_het}
 \title{Network Resimulation Module}
 \usage{
 simnet_msm(dat, at)
-
-simnet_het(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \description{
 Module function for resimulating the sexual networks for one
-             time step.
+time step.
 }
-\keyword{module}
-\keyword{msm}

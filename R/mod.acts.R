@@ -19,27 +19,37 @@
 #'
 acts_msm <- function(dat, at) {
 
+  ## Inputs
   # Attributes
-  status <- dat$attr$status
-  diag.status <- dat$attr$diag.status
-  race <- dat$attr$race
-  age <- dat$attr$age
-  stage <- dat$attr$stage
-  vl <- dat$attr$vl
-  uid <- dat$attr$uid
-
-  plist <- dat$temp$plist
+  status      <- get_attr(dat, "status")
+  diag.status <- get_attr(dat, "diag.status")
+  race        <- get_attr(dat, "race")
+  age         <- get_attr(dat, "age")
+  stage       <- get_attr(dat, "stage")
+  vl          <- get_attr(dat, "vl")
 
   # Parameters
-  acts.mod <- dat$param$epistats$acts.mod
-  acts.aids.vl <- dat$param$acts.aids.vl
-  acts.scale <- dat$param$acts.scale
+  acts.aids.vl <- get_param(dat, "acts.aids.vl")
+  acts.scale   <- get_param(dat, "acts.scale")
+  netstats     <- get_param(dat, "netstats")
+  epistats     <- get_param(dat, "epistats")
+  time.unit    <- get_param(dat, "time.unit")
 
-  # Construct edgelist
-  el <- rbind(dat$el[[1]], dat$el[[2]], dat$el[[3]])
-  ptype  <- rep(1:3, times = c(nrow(dat$el[[1]]),
-                               nrow(dat$el[[2]]),
-                               nrow(dat$el[[3]])))
+  geog.lvl     <- netstats[["geog.lvl"]]
+  race.flag    <- netstats[["race"]]
+  acts.mod     <- epistats[["acts.mod"]]
+
+  el <- get_cumulative_edgelists_df(dat)
+  el <- el[is.na(el[["stop"]]), ]
+  ptype <- el[["network"]]
+  durations <- at - el[["start"]]
+
+  el <- cbind(
+    get_posit_ids(dat, el[["head"]]),
+    get_posit_ids(dat, el[["tail"]])
+  )
+
+  # # Construct edgelist
   st1 <- status[el[, 1]]
   st2 <- status[el[, 2]]
 
@@ -50,21 +60,12 @@ acts_msm <- function(dat, at) {
   el.mc <- el[el[, "ptype"] != 3, ]
 
   # Base AI rates based on Poisson model for main/casual
-  race.combo <- rep(NA, nrow(el.mc))
-  race.combo[race[el.mc[, 1]] == 1 & race[el.mc[, 2]] == 1] <- 1
-  race.combo[race[el.mc[, 1]] == 1 & race[el.mc[, 2]] %in% 2:3] <- 2
-  race.combo[race[el.mc[, 1]] == 2 & race[el.mc[, 2]] %in% c(1, 3)] <- 3
-  race.combo[race[el.mc[, 1]] == 2 & race[el.mc[, 2]] == 2] <- 4
-  race.combo[race[el.mc[, 1]] == 3 & race[el.mc[, 2]] %in% 1:2] <- 5
-  race.combo[race[el.mc[, 1]] == 3 & race[el.mc[, 2]] == 3] <- 6
+  race.combo <- get_race_combo(race[el.mc[, 1]], race[el.mc[, 2]])
 
   comb.age <- age[el.mc[, 1]] + age[el.mc[, 2]]
 
-  # Current partnership durations
-  pid_plist <- plist[, 1]*1e7 + plist[, 2]
-  pid_el <- uid[el.mc[, 1]]*1e7 + uid[el.mc[, 2]]
-  matches <- match(pid_el, pid_plist)
-  durations <- (at - plist[, "start"])[matches]
+  # Current partnership durations (main and casual)
+  durations <- durations[el[, "ptype"] != 3]
 
   # HIV-positive concordant
   hiv.concord.pos <- rep(0, nrow(el.mc))
@@ -72,13 +73,48 @@ acts_msm <- function(dat, at) {
   hiv.concord.pos[cp] <- 1
 
   # Model predictions
-  x <- data.frame(ptype = el.mc[, "ptype"],
-                  duration = durations,
-                  race.combo = race.combo,
-                  comb.age = comb.age,
-                  hiv.concord.pos = hiv.concord.pos,
-                  city = 1)
-  rates <- unname(predict(acts.mod, newdata = x, type = "response"))/52
+  if (!is.null(geog.lvl)) {
+    if (race.flag == TRUE) {
+      x <- data.frame(
+        ptype = el.mc[, "ptype"],
+        duration.time = durations,
+        race.combo = race.combo,
+        comb.age = comb.age,
+        hiv.concord.pos = hiv.concord.pos,
+        geogYN = 1
+      )
+      rates <- unname(predict(acts.mod, newdata = x, type = "response")) / (364 / time.unit)
+
+    } else {
+      x <- data.frame(
+        ptype = el.mc[, "ptype"],
+        duration.time = durations,
+        comb.age = comb.age,
+        hiv.concord.pos = hiv.concord.pos,
+        geogYN = 1
+      )
+      rates <- unname(predict(acts.mod, newdata = x, type = "response")) / (364 / time.unit)
+    }
+  } else {
+    if (race.flag == TRUE) {
+      x <- data.frame(
+        ptype = el.mc[, "ptype"],
+        duration.time = durations,
+        race.combo = race.combo,
+        comb.age = comb.age,
+        hiv.concord.pos = hiv.concord.pos
+      )
+      rates <- unname(predict(acts.mod, newdata = x, type = "response")) / (364 / time.unit)
+    } else {
+      x <- data.frame(
+        ptype = el.mc[, "ptype"],
+        duration.time = durations,
+        comb.age = comb.age,
+        hiv.concord.pos = hiv.concord.pos
+      )
+      rates <- unname(predict(acts.mod, newdata = x, type = "response")) / (364 / time.unit)
+    }
+  }
   rates <- rates * acts.scale
   ai <- rpois(length(rates), rates)
   el.mc <- cbind(el.mc, durations, ai)
@@ -109,7 +145,17 @@ acts_msm <- function(dat, at) {
   el <- el[-which(el[, "ai"] == 0), ]
 
   # Save out
-  dat$temp$el <- el
+  dat[["temp"]][["el"]] <- el
 
   return(dat)
+}
+
+# race combo codes:
+# 1: 1 and 1 , 2: 1 and !1
+# 3: 2 and !2, 4: 2 and 2
+# 5: 3 and !3, 6: 3 and 3
+get_race_combo <- function(race_p1, race_p2) {
+  race.combo <- ifelse(race_p1 == race_p2, race_p1, race_p1 + 3)
+  race.combo <- c(1, 4, 6, 2, 3, 5)[race.combo]
+  return(race.combo)
 }

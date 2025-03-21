@@ -2,26 +2,23 @@
 % Please edit documentation in R/mod.hivtx.R
 \name{hivtx_msm}
 \alias{hivtx_msm}
-\alias{tx_het}
 \title{Treatment Module}
 \usage{
 hivtx_msm(dat, at)
-
-tx_het(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \value{
-This function returns the \code{dat} object with updated \code{tx.status},
-\code{tx.init.time}, \code{cuml.time.on.tx}, \code{cuml.time.off.tx} attributes.
+This function returns the \code{dat} object with updated \code{tx.status}, \code{tx.init.time},
+\code{cuml.time.on.tx}, \code{cuml.time.off.tx} attributes.
 }
 \description{
-Module function for anti-retroviral treatment initiation and
-             adherence over time.
+Module function for antiretroviral treatment initiation and
+adherence over time.
 }
 \details{
 Persons enter into the simulation with one of four ART "patterns": never
@@ -33,5 +30,3 @@ and off treatment conditional on empirical race-specific adherence rates. ART
 initiation, non-adherence, and restarting are all stochastically simulated
 based on binomial statistical models.
 }
-\keyword{module}
-\keyword{msm}

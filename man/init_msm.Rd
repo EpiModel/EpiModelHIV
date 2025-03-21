@@ -4,8 +4,7 @@
 \alias{init_msm}
 \title{Epidemic Model Initial Conditions}
 \usage{
-init_msm(prev.ugc = 0.005, prev.rgc = 0.005, prev.uct = 0.013,
-  prev.rct = 0.013, ...)
+init_msm(prev.ugc = 0, prev.rgc = 0, prev.uct = 0, prev.rct = 0, ...)
 }
 \arguments{
 \item{prev.ugc}{Initial prevalence of urethral gonorrhea.}
@@ -19,11 +18,9 @@ init_msm(prev.ugc = 0.005, prev.rgc = 0.005, prev.uct = 0.013,
 \item{...}{Additional arguments passed to function.}
 }
 \value{
-A list object of class \code{init_msm}, which can be passed to EpiModel
-function \code{\link{netsim}}.
+A list object of class \code{init.net}, which can be passed to EpiModel function \code{\link{netsim}}.
 }
 \description{
 Sets the initial conditions for a stochastic epidemic models
-             simulated with \code{\link{netsim}}.
+simulated with \code{\link{netsim}}.
 }
-\keyword{msm}

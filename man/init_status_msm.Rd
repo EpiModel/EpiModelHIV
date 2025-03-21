@@ -11,9 +11,6 @@ init_status_msm(dat)
 }
 \description{
 Sets the initial individual-level disease status of persons
-             in the network, as well as disease-related attributes for
-             infected persons.
+in the network, as well as disease-related attributes for
+infected persons.
 }
-\keyword{initiation}
-\keyword{msm}
-\keyword{utility}

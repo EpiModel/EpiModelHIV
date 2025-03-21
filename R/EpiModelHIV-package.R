@@ -1,29 +1,36 @@
-#' Network-Based Epidemic Modeling of HIV Transmission among MSM and Heterosexual Populations
+#' Network-Based Epidemic Modeling of HIV/STI Transmission
 #'
 #' \tabular{ll}{
 #'    Package: \tab EpiModelHIV\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 1.5.0\cr
-#'    Date: \tab 2017-05-04\cr
+#'    Version: \tab 2.6.0\cr
+#'    Date: \tab 2022-12-21\cr
 #'    License: \tab GPL-3\cr
 #'    LazyLoad: \tab yes\cr
 #' }
 #'
 #' @details
 #' EpiModelHIV provides extensions to our general EpiModel package to allow
-#' for simulating HIV transmission dynamics among two populations: men who
-#' have sex with men (MSM) in the United States and heterosexual adults in
-#' sub-Saharan Africa.
+#' for simulating HIV/STI transmission dynamics.
 #'
 #' @name EpiModelHIV-package
 #' @aliases EpiModelHIV
 #'
-#' @import EpiModel EpiModelHPC network networkDynamic tergmLite tergm ergm bindata
-#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis predict
-#' @importFrom dplyr group_by summarise
+#' @import EpiModel network networkDynamic tergm ergm
+#' @importFrom stats rbinom rgeom rmultinom rpois runif simulate rnbinom plogis
+#'                   predict
 #' @importFrom utils tail
+#' @importFrom statnet.common set.control.class
+#' @importFrom dplyr select filter
+#' @importFrom networkLite networkLite
 #'
 #' @docType package
 #' @keywords package msm het
 #'
 NULL
+
+# Avoids NOTE about Rglpk import
+f1 <- function() {
+  Rglpk::Rglpk_read_file(system.file(file.path("examples", "plan.lp"),
+                                     package = "Rglpk"), type = "CPLEX_LP")
+}

@@ -2,34 +2,27 @@
 % Please edit documentation in R/mod.departure.R
 \name{departure_msm}
 \alias{departure_msm}
-\alias{deaths_het}
-\title{Depature Module}
+\title{Departure Module}
 \usage{
 departure_msm(dat, at)
-
-deaths_het(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \value{
-This function returns the updated \code{dat} object accounting for deaths.
-The deaths are deactivated from the main and casual networks, as those are in
-\code{networkDynamic} class objects; dead nodes are not deleted from the
-instant network until the \code{\link{simnet_msm}} module for bookkeeping
-purposes.
+This function returns the updated \code{dat} object accounting for deaths and other departures
+from the population.
 }
 \description{
-Module function for simulting both general and disease-related
-             departures, including deaths, among population members.
+Module function for simulating departures departures, including deaths,
+among population members.
 }
 \details{
-Deaths are divided into two categories: general deaths, for which demographic
-data on age-specific mortality rates applies; and disease-related diseases,
-for which the rate of death is a function of progression to end-stage AIDS.
+Departures are divided into three categories: general deaths, for which demographic
+data on age- and race-specific mortality rates apply; AIDS-related deaths, for which the
+rate of death depends on current ART status; and sexual activity cessation, which may remove
+persons from the active network for reasons other than mortality.
 }
-\keyword{module}
-\keyword{msm}

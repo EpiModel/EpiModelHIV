@@ -7,8 +7,8 @@
 position_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
@@ -19,7 +19,7 @@ susceptible node is insertive for that act.
 }
 \description{
 Module function for establishing sexual role or position in each
-             act on the discordant edgelist.
+act on the discordant edgelist.
 }
 \details{
 The sexual role within each act is determined by each nodes "role identity"
@@ -29,5 +29,3 @@ partner for that act. For the first two role identity types, that is
 deterministic based on identity. For versatile-versatile pairs, this is
 determined stochastically for each act.
 }
-\keyword{module}
-\keyword{msm}

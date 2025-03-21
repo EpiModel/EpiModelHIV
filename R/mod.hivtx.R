@@ -1,7 +1,7 @@
 
 #' @title Treatment Module
 #'
-#' @description Module function for anti-retroviral treatment initiation and
+#' @description Module function for antiretroviral treatment initiation and
 #'              adherence over time.
 #'
 #' @inheritParams aging_msm
@@ -10,237 +10,200 @@
 #' Persons enter into the simulation with one of four ART "patterns": never
 #' tested, tested but never treated, treated and achieving partial HIV viral
 #' suppression, or treated with full viral suppression (these types are stored
-#' as individual-level attributes in \code{tt.traj}). This module initiates ART
+#' as individual-level attributes in `tt.traj`). This module initiates ART
 #' for treatment naive persons in the latter two types, and then cycles them on
 #' and off treatment conditional on empirical race-specific adherence rates. ART
 #' initiation, non-adherence, and restarting are all stochastically simulated
 #' based on binomial statistical models.
 #'
 #' @return
-#' This function returns the \code{dat} object with updated \code{tx.status},
-#' \code{tx.init.time}, \code{cuml.time.on.tx}, \code{cuml.time.off.tx} attributes.
-#'
-#' @keywords module msm
+#' This function returns the `dat` object with updated `tx.status`, `tx.init.time`,
+#' `cuml.time.on.tx`, `cuml.time.off.tx` attributes.
 #'
 #' @export
 #'
 hivtx_msm <- function(dat, at) {
 
+  ## Input
   # Attributes
-  race <- dat$attr$race
-  status <- dat$attr$status
-  tx.status <- dat$attr$tx.status
-  diag.status <- dat$attr$diag.status
-  cuml.time.on.tx <- dat$attr$cuml.time.on.tx
-  cuml.time.off.tx <- dat$attr$cuml.time.off.tx
-  tx.period.first <- dat$attr$tx.period.first
-  tx.period.last <- dat$attr$tx.period.last
-  tx.init.time <- dat$attr$tx.init.time
-  tt.traj <- dat$attr$tt.traj
+  race             <- get_attr(dat, "race")
+  status           <- get_attr(dat, "status")
+  tx.status        <- get_attr(dat, "tx.status")
+  diag.status      <- get_attr(dat, "diag.status")
+  cuml.time.on.tx  <- get_attr(dat, "cuml.time.on.tx")
+  cuml.time.off.tx <- get_attr(dat, "cuml.time.off.tx")
+  tx.init.time     <- get_attr(dat, "tx.init.time")
+  tt.traj          <- get_attr(dat, "tt.traj")
+
+  part.ident       <- get_attr(dat, "part.ident")
 
   # Parameters
-  tx.init.prob <- dat$param$tx.init.prob
-  tx.halt.part.prob <- dat$param$tx.halt.part.prob
-  tx.reinit.part.prob <- dat$param$tx.reinit.part.prob
-  tx.halt.full.rr <- dat$param$tx.halt.full.rr
-  tx.halt.dur.rr <- dat$param$tx.halt.dur.rr
-  tx.reinit.full.rr <- dat$param$tx.reinit.full.rr
-  tx.reinit.dur.rr <- dat$param$tx.reinit.full.rr
+  tx.init.rate           <- get_param(dat, "tx.init.rate")
+  tx.halt.partial.rate   <- get_param(dat, "tx.halt.partial.rate")
+  tx.halt.full.or        <- get_param(dat, "tx.halt.full.or")
+  tx.halt.durable.or     <- get_param(dat, "tx.halt.durable.or")
+  tx.reinit.partial.rate <- get_param(dat, "tx.reinit.partial.rate")
+  tx.reinit.full.or      <- get_param(dat, "tx.reinit.full.or")
+  tx.reinit.durable.or   <- get_param(dat, "tx.reinit.durable.or")
 
-  if (at == 3381) {
-    races <- sort(unique(race))
-    for (i in races) {
-      ids.race <- which(dat$attr$race == i)
-      tt.traj[ids.race] <- sample(1:3, length(ids.race), TRUE,
-                                  c(dat$param$tt.part.supp[i],
-                                    dat$param$tt.full.supp[i],
-                                    dat$param$tt.dur.supp[i]))
-    }
-  }
+  part.tx.init.rate      <- get_param(dat, "part.tx.init.rate")
+  part.tx.reinit.rate    <- get_param(dat, "part.tx.reinit.rate")
 
-  ## Initiation
-  tx.init.elig <- which(status == 1 &
-                        tx.status == 0 &
-                        diag.status == 1 &
-                        cuml.time.on.tx == 0)
-  rates <- tx.init.prob[race[tx.init.elig]]
-  tx.init <- tx.init.elig[rbinom(length(tx.init.elig), 1, rates) == 1]
+  ## Process
+  # Initiation (partner services)
+  part.tx.init.elig <- which(
+    status == 1 &
+    tx.status == 0 &
+    diag.status == 1 &
+    cuml.time.on.tx == 0 &
+    part.ident == at
+  )
 
-  ## Halting
-  tx.halt.part.elig <- which(tx.status == 1 & tt.traj == 1)
-  rates.part <- tx.halt.part.prob[race[tx.halt.part.elig]]
-  tx.halt.part <- tx.halt.part.elig[rbinom(length(tx.halt.part.elig), 1, rates.part) == 1]
+  rates.init.part <- part.tx.init.rate[race[part.tx.init.elig]]
+  part.tx.init <- part.tx.init.elig[
+    runif(length(part.tx.init.elig)) < rates.init.part
+  ]
+
+  ## Initiation (general)
+  tx.init.elig <- which(
+    status == 1 &
+    tx.status == 0 &
+    diag.status == 1 &
+    cuml.time.on.tx == 0
+  )
+
+  tx.init.elig <- setdiff(tx.init.elig, part.tx.init.elig)
+  rates.init.gen <- tx.init.rate[race[tx.init.elig]]
+  tx.init <- tx.init.elig[
+    runif(length(tx.init.elig)) < rates.init.gen
+  ]
+
+  tx.init.all <- c(tx.init, part.tx.init)
+
+  ## Halting (general)
+  tx.halt.partial.elig <- which(tx.status == 1 & tt.traj == 1)
+  rates.halt.partial <- tx.halt.partial.rate[race[tx.halt.partial.elig]]
+  tx.halt.partial <- tx.halt.partial.elig[
+    runif(length(tx.halt.partial.elig)) < rates.halt.partial
+  ]
 
   tx.halt.full.elig <- which(tx.status == 1 & tt.traj == 2)
-  rates.full <- tx.halt.part.prob[race[tx.halt.full.elig]] * tx.halt.full.rr[race[tx.halt.full.elig]]
-  tx.halt.full <- tx.halt.full.elig[rbinom(length(tx.halt.full.elig), 1, rates.full) == 1]
 
-  tx.halt.dur.elig <- which(tx.status == 1 & tt.traj == 3)
-  rates.dur <- tx.halt.part.prob[race[tx.halt.dur.elig]] * tx.halt.dur.rr[race[tx.halt.dur.elig]]
-  tx.halt.dur <- tx.halt.dur.elig[rbinom(length(tx.halt.dur.elig), 1, rates.dur) == 1]
+  rates.halt.full <- tx.halt.partial.rate[race[tx.halt.full.elig]]
+  halt.full.lo <- log(rates.halt.full / (1 - rates.halt.full))
+  halt.full.lo <- halt.full.lo + log(tx.halt.full.or[race[tx.halt.full.elig]])
+  rates.halt.full <- plogis(halt.full.lo)
 
-  tx.halt <- c(tx.halt.part, tx.halt.full, tx.halt.dur)
+  tx.halt.full <- tx.halt.full.elig[
+    runif(length(tx.halt.full.elig)) < rates.halt.full
+  ]
 
-  ## Restarting
-  tx.reinit.part.elig <- which(tx.status == 0 & tt.traj == 1 &
-                               cuml.time.on.tx > 0)
-  rates.part <- tx.reinit.part.prob[race[tx.reinit.part.elig]]
-  tx.reinit.part <- tx.reinit.part.elig[rbinom(length(tx.reinit.part.elig), 1, rates.part) == 1]
+  tx.halt.durable.elig <- which(tx.status == 1 & tt.traj == 3)
 
-  tx.reinit.full.elig <- which(tx.status == 0 & tt.traj == 2 &
-                               cuml.time.on.tx > 0)
-  rates.full <- tx.reinit.part.prob[race[tx.reinit.full.elig]] * tx.reinit.full.rr[race[tx.reinit.full.elig]]
-  tx.reinit.full <- tx.reinit.full.elig[rbinom(length(tx.reinit.full.elig), 1, rates.full) == 1]
+  rates.halt.durable <- tx.halt.partial.rate[race[tx.halt.durable.elig]]
+  halt.durable.lo <- log(rates.halt.durable / (1 - rates.halt.durable))
+  halt.durable.lo <- halt.durable.lo +
+    log(tx.halt.durable.or[race[tx.halt.durable.elig]])
+  rates.halt.durable <- plogis(halt.durable.lo)
 
-  tx.reinit.dur.elig <- which(tx.status == 0 & tt.traj == 3 &
-                              cuml.time.on.tx > 0)
-  rates.dur <- tx.reinit.part.prob[race[tx.reinit.dur.elig]] * tx.reinit.dur.rr[race[tx.reinit.dur.elig]]
-  tx.reinit.dur <- tx.reinit.dur.elig[rbinom(length(tx.reinit.dur.elig), 1, rates.dur) == 1]
+  tx.halt.durable <- tx.halt.durable.elig[
+    runif(length(tx.halt.durable.elig)) < rates.halt.durable
+  ]
 
-  tx.reinit <- c(tx.reinit.part, tx.reinit.full, tx.reinit.dur)
+  tx.halt <- c(tx.halt.partial, tx.halt.full, tx.halt.durable)
+
+  ## Restarting (partner services)
+  part.tx.reinit.elig <- which(
+    tx.status == 0 &
+    part.ident == at &
+    cuml.time.on.tx > 0
+  )
+  rates.reinit.part <- part.tx.reinit.rate[race[part.tx.reinit.elig]]
+  tx.reinit.part <- part.tx.reinit.elig[
+    runif(length(part.tx.reinit.elig)) < rates.reinit.part
+  ]
+
+  ## Restarting (general)
+  tx.reinit.partial.elig <- which(
+    tx.status == 0 &
+    tt.traj == 1 &
+    cuml.time.on.tx > 0
+  )
+  tx.reinit.partial.elig <- setdiff(tx.reinit.partial.elig, part.tx.reinit.elig)
+  rates.reinit.partial <- tx.reinit.partial.rate[race[tx.reinit.partial.elig]]
+  tx.reinit.partial <- tx.reinit.partial.elig[
+    runif(length(tx.reinit.partial.elig)) < rates.reinit.partial
+  ]
+
+  tx.reinit.full.elig <- which(
+    tx.status == 0 &
+    tt.traj == 2 &
+    cuml.time.on.tx > 0
+  )
+  tx.reinit.full.elig <- setdiff(tx.reinit.full.elig, part.tx.reinit.elig)
+
+  rates.reinit.full <- tx.reinit.partial.rate[race[tx.reinit.full.elig]]
+  reinit.full.lo <- log(rates.reinit.full / (1 - rates.reinit.full))
+  reinit.full.lo <- reinit.full.lo +
+    log(tx.reinit.full.or[race[tx.reinit.full.elig]])
+  rates.reinit.full <- plogis(reinit.full.lo)
+
+  tx.reinit.full <- tx.reinit.full.elig[
+    runif(length(tx.reinit.full.elig)) < rates.reinit.full
+  ]
+
+  tx.reinit.durable.elig <- which(
+    tx.status == 0 &
+    tt.traj == 3 &
+    cuml.time.on.tx > 0
+  )
+
+  tx.reinit.durable.elig <- setdiff(
+    tx.reinit.durable.elig,
+    tx.reinit.partial.elig
+  )
+
+  rates.reinit.durable <- tx.reinit.partial.rate[race[tx.reinit.durable.elig]]
+  reinit.durable.lo <- log(rates.reinit.durable / (1 - rates.reinit.durable))
+  reinit.durable.lo <- reinit.durable.lo +
+    log(tx.reinit.durable.or[race[tx.reinit.durable.elig]])
+  rates.reinit.durable <- plogis(reinit.durable.lo)
+
+  tx.reinit.durable <- tx.reinit.durable.elig[
+    runif(length(tx.reinit.durable.elig)) < rates.reinit.durable
+  ]
+
+  tx.reinit <- c(
+    tx.reinit.part,
+    tx.reinit.partial,
+    tx.reinit.full,
+    tx.reinit.durable
+  )
 
   ## Update Attributes
-  tx.status[tx.init] <- 1
+  tx.status[tx.init.all] <- 1
   tx.status[tx.halt] <- 0
   tx.status[tx.reinit] <- 1
 
   cuml.time.on.tx[which(tx.status == 1)] <- cuml.time.on.tx[which(tx.status == 1)] + 1
   cuml.time.off.tx[which(tx.status == 0)] <- cuml.time.off.tx[which(tx.status == 0)] + 1
 
-  tx.init.time[tx.init] <- at
+  tx.init.time[tx.init.all] <- at
 
-  idsSetPeriod <- union(tx.init, tx.reinit)
-  tx.period.first[idsSetPeriod] <- at
-  tx.period.last[idsSetPeriod] <- at
+  dat <- set_attr(dat, "tx.status", tx.status)
+  dat <- set_attr(dat, "cuml.time.on.tx", cuml.time.on.tx)
+  dat <- set_attr(dat, "cuml.time.off.tx", cuml.time.off.tx)
+  dat <- set_attr(dat, "tx.init.time", tx.init.time)
 
-  idsContPeriod <- setdiff(which(tx.status == 1), idsSetPeriod)
-  tx.period.last[idsContPeriod] <- at
+  dat <- set_attr(dat, "part.tx.init.time", at, posit_ids = part.tx.init)
+  dat <- set_attr(dat, "part.tx.reinit.time", at, posit_ids = tx.reinit.part)
 
-  dat$attr$tt.traj <- tt.traj
-  dat$attr$tx.status <- tx.status
-  dat$attr$cuml.time.on.tx <- cuml.time.on.tx
-  dat$attr$cuml.time.off.tx <- cuml.time.off.tx
-  dat$attr$tx.period.first <- tx.period.first
-  dat$attr$tx.period.last <- tx.period.last
-  dat$attr$tx.init.time <- tx.init.time
-
-  dat$epi$mean.tx.on[at] <- mean(cuml.time.on.tx, na.rm = TRUE)
-  dat$epi$mean.tx.off[at] <- mean(cuml.time.off.tx, na.rm = TRUE)
-
-  dat$epi$mean.tx.on.part[at] <- mean(cuml.time.on.tx[tt.traj == 1], na.rm = TRUE)
-  dat$epi$mean.tx.off.part[at] <- mean(cuml.time.off.tx[tt.traj == 1], na.rm = TRUE)
+  dat <- set_epi(dat, "mean.tx.on", at, mean(cuml.time.on.tx, na.rm = TRUE))
+  dat <- set_epi(dat, "mean.tx.off", at, mean(cuml.time.off.tx, na.rm = TRUE))
+  # dat <- set_epi(dat, "mean.tx.on.part", at,
+  #                mean(cuml.time.on.tx[tt.traj == 1], na.rm = TRUE))
+  # dat <- set_epi(dat, "mean.tx.off.part", at,
+  #                mean(cuml.time.off.tx[tt.traj == 1], na.rm = TRUE))
 
   return(dat)
 }
-
-
-#' @export
-#' @rdname hivtx_msm
-tx_het <- function(dat, at) {
-
-  # Variables ---------------------------------------------------------------
-  dxStat <- dat$attr$dxStat
-  txStat <- dat$attr$txStat
-  txStartTime <- dat$attr$txStartTime
-  txStops <- dat$attr$txStops
-  txTimeOn <- dat$attr$txTimeOn
-  txTimeOff <- dat$attr$txTimeOff
-  txCD4start <- dat$attr$txCD4start
-
-  cd4Count <- dat$attr$cd4Count
-  tx.elig.cd4 <- dat$param$tx.elig.cd4
-  tx.coverage <- dat$param$tx.coverage
-
-  txType <- dat$attr$txType
-  tx.adhere.full <- dat$param$tx.adhere.full
-  tx.adhere.part <- dat$param$tx.adhere.part
-
-
-  # Start tx for tx naive ---------------------------------------------------
-
-  ## Calculate tx coverage
-  allElig <- which((cd4Count < tx.elig.cd4 | !is.na(txStartTime)))
-  txCov <- sum(!is.na(txStartTime[allElig]))/length(allElig)
-  if (is.nan(txCov)) {
-    txCov <- 0
-  }
-
-  idsElig <- which(dxStat == 1 & txStat == 0 &
-                   is.na(txStartTime) & cd4Count < tx.elig.cd4)
-  nElig <- length(idsElig)
-  idsTx <- NULL
-
-
-  ## Treatment coverage
-  nStart <- max(0, min(nElig, round((tx.coverage - txCov) * length(allElig))))
-  if (nStart > 0) {
-    idsTx <- ssample(idsElig, nStart)
-  }
-
-
-  ## Treatment type assignment
-  if (length(idsTx) > 0) {
-    needtxType <- which(is.na(txType[idsTx]))
-    if (length(needtxType) > 0) {
-      txType[idsTx[needtxType]] <- rbinom(length(needtxType), 1, tx.adhere.full)
-    }
-    if (tx.adhere.part == 0) {
-      idsTx <- intersect(idsTx, which(txType == 1))
-    }
-  }
-
-  if (length(idsTx) > 0) {
-    txStat[idsTx] <- 1
-    txStartTime[idsTx] <- at
-    txStops[idsTx] <- 0
-    txTimeOn[idsTx] <- 0
-    txTimeOff[idsTx] <- 0
-    txCD4start[idsTx] <- cd4Count[idsTx]
-  }
-
-
-  # Stop tx -----------------------------------------------------------------
-  idsStop <- NULL
-  idsEligStop <- which(dat$attr$txStat == 1 & txType == 0)
-  nEligStop <- length(idsEligStop)
-  if (nEligStop > 0) {
-    vecStop <- which(rbinom(nEligStop, 1, (1 - tx.adhere.part)) == 1)
-    if (length(vecStop) > 0) {
-      idsStop <- idsEligStop[vecStop]
-      txStat[idsStop] <- 0
-      txStops[idsStop] <- txStops[idsStop] + 1
-    }
-  }
-
-
-  # Restart tx --------------------------------------------------------------
-  idsRest <- NULL
-  idsEligRest <- which(dat$attr$txStat == 0 & txStops > 0)
-  nEligRest <- length(idsEligRest)
-  if (nEligRest > 0) {
-    vecRes <- which(rbinom(nEligRest, 1, tx.adhere.part) == 1)
-    if (length(vecRes) > 0) {
-      idsRest <- idsEligRest[vecRes]
-      txStat[idsRest] <- 1
-      dat$attr$vlSlope[idsRest] <- NA
-    }
-  }
-
-
-  # Output ------------------------------------------------------------------
-  idsOnTx <- which(txStat == 1)
-  idsOffTx <- which(txStat == 0 & !is.na(txStartTime))
-  txTimeOn[idsOnTx] <- txTimeOn[idsOnTx] + 1
-  txTimeOff[idsOffTx] <- txTimeOff[idsOffTx] + 1
-
-  dat$attr$txStat <- txStat
-  dat$attr$txStartTime <- txStartTime
-  dat$attr$txStops <- txStops
-  dat$attr$txTimeOn <- txTimeOn
-  dat$attr$txTimeOff <- txTimeOff
-  dat$attr$txType <- txType
-  dat$attr$txCD4start <- txCD4start
-
-  return(dat)
-}
-

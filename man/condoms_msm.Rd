@@ -7,8 +7,8 @@
 condoms_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
@@ -18,14 +18,12 @@ condoms were used in that act.
 }
 \description{
 Module function stochastically simulates potential condom use
-             for each act on the discordant edgelist.
+for each act on the discordant edgelist.
 }
 \details{
 For each act on the discordant edgelist, condom use is stochastically simulated
 based on the partnership type and racial combination of the dyad. Other
 modifiers for the probability of condom use in that pair are diagnosis of
 disease, and full or partial HIV viral suppression
-given HIV anti-retroviral therapy.
+given HIV antiretroviral therapy.
 }
-\keyword{module}
-\keyword{msm}

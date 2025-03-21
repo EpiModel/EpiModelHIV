@@ -4,22 +4,20 @@
 \name{EpiModelHIV-package}
 \alias{EpiModelHIV-package}
 \alias{EpiModelHIV}
-\title{Network-Based Epidemic Modeling of HIV Transmission among MSM and Heterosexual Populations}
+\title{Network-Based Epidemic Modeling of HIV/STI Transmission}
 \description{
 \tabular{ll}{
-   Package: \tab EpiModelHIV\cr
-   Type: \tab Package\cr
-   Version: \tab 1.5.0\cr
-   Date: \tab 2017-05-04\cr
-   License: \tab GPL-3\cr
-   LazyLoad: \tab yes\cr
+Package: \tab EpiModelHIV\cr
+Type: \tab Package\cr
+Version: \tab 2.6.0\cr
+Date: \tab 2022-12-21\cr
+License: \tab GPL-3\cr
+LazyLoad: \tab yes\cr
 }
 }
 \details{
 EpiModelHIV provides extensions to our general EpiModel package to allow
-for simulating HIV transmission dynamics among two populations: men who
-have sex with men (MSM) in the United States and heterosexual adults in
-sub-Saharan Africa.
+for simulating HIV/STI transmission dynamics.
 }
 \keyword{het}
 \keyword{msm}

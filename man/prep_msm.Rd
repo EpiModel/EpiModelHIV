@@ -7,14 +7,12 @@
 prep_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \description{
 Module function for implementation and uptake of pre-exposure
-             prophylaxis (PrEP) to prevent HIV infection.
+prophylaxis (PrEP) to prevent HIV infection.
 }
-\keyword{module}
-\keyword{msm}

@@ -2,12 +2,9 @@
 % Please edit documentation in R/mod.initialize.R
 \name{initialize_msm}
 \alias{initialize_msm}
-\alias{initialize_het}
 \title{Initialization Module}
 \usage{
 initialize_msm(x, param, init, control, s)
-
-initialize_het(x, param, init, control, s)
 }
 \arguments{
 \item{x}{An \code{EpiModel} object of class \code{\link{netest}}.}
@@ -26,8 +23,6 @@ for demographics and disease-related variables.
 }
 \description{
 This function initializes the master \code{dat} object on which
-             data are stored, simulates the initial state of the network, and
-             simulates disease status and other attributes.
+data are stored, simulates the initial state of the network, and
+simulates disease status and other attributes.
 }
-\keyword{module}
-\keyword{msm}

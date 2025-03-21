@@ -2,16 +2,13 @@
 % Please edit documentation in R/mod.simnet.R
 \name{edges_correct_msm}
 \alias{edges_correct_msm}
-\alias{edges_correct_het}
 \title{Adjustment for the Edges Coefficient with Changing Network Size}
 \usage{
 edges_correct_msm(dat, at)
-
-edges_correct_het(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
@@ -21,7 +18,7 @@ each of the three network models.
 }
 \description{
 Adjusts the edges coefficients in a dynamic network model
-             to preserve the mean degree.
+to preserve the mean degree.
 }
 \details{
 In HIV/STI modeling, there is typically an assumption that changes in

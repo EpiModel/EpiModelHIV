@@ -2,19 +2,19 @@
 % Please edit documentation in R/mod.prep.R
 \name{reallocate_pcp}
 \alias{reallocate_pcp}
-\title{Proportionally Reallocate PrEP Adherence Class Probability}
+\title{Proportionally Reallocate EDP PrEP Adherence Class Probability}
 \usage{
-reallocate_pcp(in.pcp = c(0.089, 0.127, 0.784), reall = 0)
+reallocate_pcp(in.pcp = c(0.11, 0.06, 0.09, 0.74), reall = 0)
 }
 \arguments{
-\item{in.pcp}{Input vector of length four for the \code{prep.adhr.dist}
-parameters.}
+\item{in.pcp}{Input vector of length four for the \code{prep.adhr.edp.dist}
+parameter.}
 
 \item{reall}{The pure percentage points to shift from the high adherence
 group to the lower three groups.}
 }
 \description{
-Shifts probabilities from the high-adherence category to the lower
-             three adherence categories while maintaining the proportional
-             distribution of those lower categories.
+Shifts probabilities from the excellent-adherence category to the lower
+three adherence categories while maintaining the proportional
+distribution of those lower categories.
 }

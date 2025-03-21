@@ -7,14 +7,14 @@
 acts_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \description{
 Module function for setting the number of sexual acts on the
-             discordant edgelist.
+discordant edgelist.
 }
 \details{
 The number of acts at each time step is specified as a function of the race of

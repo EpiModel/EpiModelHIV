@@ -2,16 +2,13 @@
 % Please edit documentation in R/mod.prevalence.R
 \name{prevalence_msm}
 \alias{prevalence_msm}
-\alias{prevalence_het}
 \title{Prevalence Calculations within Time Steps}
 \usage{
 prevalence_msm(dat, at)
-
-prevalence_het(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
@@ -21,7 +18,7 @@ attributes stored in \code{dat$epi}.
 }
 \description{
 This module calculates demographic, transmission, and clinical
-             statistics at each time step within the simulation.
+statistics at each time step within the simulation.
 }
 \details{
 Summary statistic calculations are of two broad forms: prevalence and

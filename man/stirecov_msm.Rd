@@ -7,13 +7,11 @@
 stirecov_msm(dat, at)
 }
 \arguments{
-\item{dat}{Master data list object of class \code{dat} containing networks,
-individual-level attributes, and summary statistics.}
+\item{dat}{Master data list object of class \code{dat} containing networks, individual-level
+attributes, and summary statistics.}
 
 \item{at}{Current time step.}
 }
 \description{
 Stochastically simulates GC/CT recovery.
 }
-\keyword{module}
-\keyword{msm}

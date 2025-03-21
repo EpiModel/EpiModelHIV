@@ -4,18 +4,47 @@
 \alias{control_msm}
 \title{Epidemic Model Control Settings}
 \usage{
-control_msm(simno = 1, nsims = 1, ncores = 1, nsteps = 100,
-  start = 1, initialize.FUN = initialize_msm, aging.FUN = aging_msm,
-  departure.FUN = departure_msm, arrival.FUN = arrival_msm,
-  hivtest.FUN = hivtest_msm, hivtx.FUN = hivtx_msm,
-  hivprogress.FUN = hivprogress_msm, hivvl.FUN = hivvl_msm,
-  resim_nets.FUN = simnet_msm, acts.FUN = acts_msm,
-  condoms.FUN = condoms_msm, position.FUN = position_msm,
-  prep.FUN = prep_msm, hivtrans.FUN = hivtrans_msm,
-  stitrans.FUN = stitrans_msm, stirecov.FUN = stirecov_msm,
-  stitx.FUN = stitx_msm, prev.FUN = prevalence_msm,
-  verbose.FUN = verbose.net, save.nwstats = FALSE,
-  save.clin.hist = FALSE, truncate.plist = TRUE, verbose = TRUE, ...)
+control_msm(
+  simno = 1,
+  nsims = 1,
+  ncores = 1,
+  nsteps = 100,
+  start = 1,
+  cumulative.edgelist = TRUE,
+  truncate.el.cuml = 0,
+  initialize.FUN = initialize_msm,
+  aging.FUN = aging_msm,
+  departure.FUN = departure_msm,
+  arrival.FUN = arrival_msm,
+  partident.FUN = partident_msm,
+  hivtest.FUN = hivtest_msm,
+  hivtx.FUN = hivtx_msm,
+  hivprogress.FUN = hivprogress_msm,
+  hivvl.FUN = hivvl_msm,
+  resim_nets.FUN = simnet_msm,
+  acts.FUN = acts_msm,
+  condoms.FUN = condoms_msm,
+  position.FUN = position_msm,
+  prep.FUN = prep_msm,
+  hivtrans.FUN = hivtrans_msm,
+  stitrans.FUN = stitrans_msm,
+  stirecov.FUN = stirecov_msm,
+  stitx.FUN = stitx_msm,
+  prev.FUN = prevalence_msm,
+  verbose.FUN = verbose.net,
+  cleanup.FUN = cleanup_msm,
+  save.nwstats = FALSE,
+  nwstats.formula.1 = "formation",
+  nwstats.formula.2 = "formation",
+  nwstats.formula.3 = "formation",
+  tergmLite = TRUE,
+  tergmLite.track.duration = FALSE,
+  set.control.ergm = control.simulate.formula(MCMC.burnin = 2e+05),
+  set.control.tergm = control.simulate.formula.tergm(MCMC.burnin.min = 5000),
+  set.control.stergm = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{simno}{Unique ID for the simulation run, used for file naming purposes
@@ -23,24 +52,32 @@ if used in conjunction with the \code{EpiModelHPC} package.}
 
 \item{nsims}{Number of simulations.}
 
-\item{ncores}{Number of cores per run, if parallelization is used within the
-\code{EpiModelHPC} package.}
+\item{ncores}{Number of cores per run, if parallel processing is used.}
 
 \item{nsteps}{Number of time steps per simulation.}
 
-\item{start}{Starting time step for simulation, with default to 1 to run new
+\item{start}{Starting time step for simulation, with default to \code{1} to run new
 simulation. This may also be set to 1 greater than the final time
 step of a previous simulation to resume the simulation with different
 parameters.}
 
-\item{initialize.FUN}{Module function to use for initialization of the epidemic
-model.}
+\item{cumulative.edgelist}{If \code{TRUE}, calculates a cumulative edgelist
+within the network simulation module. This is used when tergmLite is
+used and the entire networkDynamic object is not used.}
+
+\item{truncate.el.cuml}{Number of time steps of the cumulative edgelist to
+retain. See help file for \code{EpiModel::update_cumulative_edgelist}
+for options.}
+
+\item{initialize.FUN}{Module function to use for initialization of the epidemic model.}
 
 \item{aging.FUN}{Module function for aging.}
 
-\item{departure.FUN}{Module function for general and disease-realted depatures.}
+\item{departure.FUN}{Module function for general and disease-related departures.}
 
 \item{arrival.FUN}{Module function for entries into the sexually active population.}
+
+\item{partident.FUN}{Module function for partner identification process.}
 
 \item{hivtest.FUN}{Module function for HIV diagnostic disease testing.}
 
@@ -50,11 +87,9 @@ model.}
 
 \item{hivvl.FUN}{Module function for HIV viral load evolution.}
 
-\item{resim_nets.FUN}{Module function for network resimulation at each time
-step.}
+\item{resim_nets.FUN}{Module function for network resimulation at each time step.}
 
-\item{acts.FUN}{Module function to simulate the number of sexual acts within
-partnerships.}
+\item{acts.FUN}{Module function to simulate the number of sexual acts within partnerships.}
 
 \item{condoms.FUN}{Module function to simulate condom use within acts.}
 
@@ -62,14 +97,13 @@ partnerships.}
 
 \item{prep.FUN}{Module function for PrEP initiation and utilization.}
 
-\item{hivtrans.FUN}{Module function to stochastically simulate HIV transmission
-over acts given individual and dyadic attributes.}
+\item{hivtrans.FUN}{Module function to stochastically simulate HIV
+transmission over acts given individual and dyadic attributes.}
 
-\item{stitrans.FUN}{Module function to simulate GC/CT transmission over current
-edgelist.}
+\item{stitrans.FUN}{Module function to simulate GC/CT transmission.}
 
-\item{stirecov.FUN}{Module function to simulate recovery from GC/CT, heterogeneous
-by disease, site, symptoms, and treatment status.}
+\item{stirecov.FUN}{Module function to simulate recovery from GC/CT,
+heterogeneous by disease, site, symptoms, and treatment status.}
 
 \item{stitx.FUN}{Module function to simulate treatment of GC/CT.}
 
@@ -78,13 +112,35 @@ by disease, site, symptoms, and treatment status.}
 \item{verbose.FUN}{Module function to print model progress to the console or
 external text files.}
 
+\item{cleanup.FUN}{Module function to tidy the \code{dat} object at the end
+of each step.}
+
 \item{save.nwstats}{Calculate and save network statistics as defined in the
 \code{simnet} modules.}
 
-\item{save.clin.hist}{Save individual-level clinical history matrices.}
+\item{nwstats.formula.1}{Right-hand side formula for network statistics to
+monitor for network 1, with default \code{"formation"} equal to the
+model formula.}
 
-\item{truncate.plist}{Truncate the cumulative partnership list to only include
-active partnerships.}
+\item{nwstats.formula.2}{Right-hand side formula for network statistics to
+monitor for network 2, with default \code{"formation"} equal to the
+model formula.}
+
+\item{nwstats.formula.3}{Right-hand side formula for network statistics to
+monitor for network 3, with default \code{"formation"} equal to the
+model formula.}
+
+\item{tergmLite}{Logical indicating usage of \code{tergmLite} (non-modifiable
+currently for \code{EpiModelHIV}).}
+
+\item{tergmLite.track.duration}{If \code{TRUE}, track duration information
+for models in \code{tergmLite} simulations.}
+
+\item{set.control.ergm}{Control arguments passed to \code{ergm}'s \code{simulate_formula.network}.}
+
+\item{set.control.tergm}{Control arguments passed to \code{tergm}'s \code{simulate_formula.network}.}
+
+\item{set.control.stergm}{Deprecated; use \code{set.control.tergm} instead.}
 
 \item{verbose}{If \code{TRUE}, print out simulation progress to the console
 if in interactive mode or text files if in batch mode.}
@@ -92,11 +148,8 @@ if in interactive mode or text files if in batch mode.}
 \item{...}{Additional arguments passed to the function.}
 }
 \value{
-A list object of class \code{control_msm}, which can be passed to the
-EpiModel function \code{netsim}.
+A list object of class \code{control.net}, which can be passed to the EpiModel function \code{\link{netsim}}.
 }
 \description{
-Sets the controls for stochastic network models simulated with
-             \code{\link{netsim}}.
+Sets the controls for stochastic network models simulated with \code{\link{netsim}}.
 }
-\keyword{msm}

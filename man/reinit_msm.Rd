@@ -7,7 +7,7 @@
 reinit_msm(x, param, init, control, s)
 }
 \arguments{
-\item{x}{An \code{EpiModel} object of class \code{\link{netsim}}.}
+\item{x}{An \code{EpiModel} object of class \code{netsim}.}
 
 \item{param}{An \code{EpiModel} object of class \code{\link{param_msm}}.}
 
@@ -23,12 +23,9 @@ in the needed ways for the time loop to function.
 }
 \description{
 This function reinitializes an epidemic model to restart at a
-             specified time step given an input \code{netsim} object.
+specified time step given an input \code{netsim} object.
 }
 \details{
 Currently, the necessary components that must be on \code{x} for a simulation
-to be restarted must be: param, control, nwparam, epi, attr, temp, el, p.
-TODO: describe this more.
+to be restarted must be: param, control, nwparam, epi, attr, temp, el.
 }
-\keyword{module}
-\keyword{msm}
