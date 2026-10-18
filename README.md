@@ -1,3 +1,15 @@
+## About this branch
+
+This branch is a frozen snapshot of the EpiModelHIV engine used in:
+
+> Weiss KM, Jones JS, Anderson EJ, Gift T, Chesson H, Bernstein K, Workowski K, Tuite A, Rosenberg ES, Sullivan PS, Jenness SM. Optimizing Coverage vs Frequency for Sexually Transmitted Infection Screening of Men Who Have Sex With Men. _Open Forum Infect Dis._ 2019; 6(10): ofz405. https://doi.org/10.1093/ofid/ofz405
+
+- Analysis code: https://github.com/EpiModel/stitestguidelines
+- Release: https://github.com/EpiModel/EpiModelHIV/releases/tag/STITest-OFID
+- Install: `remotes::install_github("EpiModel/EpiModelHIV@STITest-OFID")`
+
+It is not maintained. Its R code matches EpiModelHIV-p tag `syph_ept` at `b5be1be` (February 26, 2019). It has no private package dependencies. The older `ofid1` release for this paper points to the public `syph_ept` branch as of June 2018, which lacks `prevalence_msm_tnt()`, a function the project's scripts call; use `STITest-OFID` instead.
+
 EpiModelHIV
 ===============
 
