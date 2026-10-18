@@ -509,10 +509,6 @@ hivtrans_msm <- function(dat, at) {
 
   # EDP Epi Trackers
   ## Adherence trackers
-  dat <- set_epi(dat, "prep.class.1", at, length(which(prepClass == 1 & prepStat == 1))/length(which(prepStat == 1)))
-  dat <- set_epi(dat, "prep.class.2", at, length(which(prepClass == 2 & prepStat == 1))/length(which(prepStat == 1)))
-  dat <- set_epi(dat, "prep.class.3", at, length(which(prepClass == 3 & prepStat == 1))/length(which(prepStat == 1)))
-
   dat <- set_epi(dat, "edp.class.1", at, length(which(edp.prepClass == 1))/length(which(sex.edp == 1)))
   dat <- set_epi(dat, "edp.class.2", at, length(which(edp.prepClass == 2))/length(which(sex.edp == 1)))
   dat <- set_epi(dat, "edp.class.3", at, length(which(edp.prepClass == 3))/length(which(sex.edp == 1)))
@@ -535,7 +531,7 @@ hivtrans_msm <- function(dat, at) {
   dat <- set_epi(dat, "pillspp", at, sum(pillCount, na.rm = TRUE) / length(which(edp.prepStat == 1)))
 
   ## Record attribute history for EDP users
-  dat <- edp_attr_logger(dat, at)
+  #dat <- edp_attr_logger(dat, at)
 
   return(dat)
 }
@@ -557,8 +553,6 @@ edp_attr_logger <- function(dat, at) {
   if (at >= prep.edp.start) {
 
     # Attributes
-    prepClass        <- get_attr(dat, "prepClass")
-    prepStat         <- get_attr(dat, "prepStat")
     edp.prepClass    <- get_attr(dat, "edp.prepClass")
     edp.prepStat     <- get_attr(dat, "edp.prepStat")
     sex.edp          <- get_attr(dat, "sex.edp")
@@ -567,55 +561,40 @@ edp_attr_logger <- function(dat, at) {
     pillCount        <- get_attr(dat, "pillCount")
 
     edp.user <- which(edp.prepStat == 1)
-    prep.user <- which(prepStat == 1 | edp.prepStat == 1)
 
     dat <- EpiModel::record_attr_history(
       dat, at,
       "edp.prepClass",
-      prep.user,
-      edp.prepClass[prep.user]
-    )
-
-    dat <- EpiModel::record_attr_history(
-      dat, at,
-      "prepStat",
-      prep.user,
-      prepStat[prep.user]
-    )
-
-    dat <- EpiModel::record_attr_history(
-      dat, at,
-      "edp.prepClass",
-      prep.user,
-      edp.prepClass[prep.user]
+      edp.user,
+      edp.prepClass[edp.user]
     )
 
     dat <- EpiModel::record_attr_history(
       dat, at,
       "sex.edp",
-      prep.user,
-      sex.edp[prep.user]
+      edp.user,
+      sex.edp[edp.user]
     )
 
     dat <- EpiModel::record_attr_history(
       dat, at,
       "lastPrepCombo",
-      prep.user,
-      lastPrepCombo[prep.user]
+      edp.user,
+      lastPrepCombo[edp.user]
     )
 
     dat <- EpiModel::record_attr_history(
       dat, at,
       "timeLastSex",
-      prep.user,
-      timeLastSex[prep.user]
+      edp.user,
+      timeLastSex[edp.user]
     )
 
     dat <- EpiModel::record_attr_history(
       dat, at,
       "pillCount",
-      prep.user,
-      pillCount[prep.user]
+      edp.user,
+      pillCount[edp.user]
     )
 
   }

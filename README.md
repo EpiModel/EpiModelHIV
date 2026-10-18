@@ -1,3 +1,15 @@
+## About this branch
+
+This branch is a frozen snapshot of the EpiModelHIV engine used in:
+
+> Chandra C, Maloney KM, Le Guillou A, Hoover KW, Jenness SM. Modeling the Potential Impact of Scaling Up Event-Driven PrEP Among Gay, Bisexual, and Other Men Who Have Sex With Men. _J Acquir Immune Defic Syndr._ 2026; 101(11): 1219-1230. https://doi.org/10.1097/QAI.0000000000003934
+
+- Analysis code: https://github.com/EpiModel/EventDrivenPrEP
+- Release: https://github.com/EpiModel/EpiModelHIV/releases/tag/EDP-JAIDS
+- Install: `remotes::install_github("EpiModel/EpiModelHIV@EDP-JAIDS")`
+
+It is not maintained. Its engine code is a copy of EpiModelHIV-p `EDP` at `096e28d` (December 1, 2023), the version pinned in the project's `renv.lock`. The private ARTnetData package is listed only under Suggests, so the package installs without it.
+
 EpiModelHIV
 ===============
 

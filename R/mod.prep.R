@@ -470,7 +470,7 @@ riskhist_msm <- function(dat, at) {
   idsAnySex.noInd <- setdiff(idsAnySex, idsPrepInd)
   dat <- set_attr(dat, "edp.ind3", at, posit_ids = idsAnySex.noInd)
 
-  ## Low DO PrEP adherence and not on PrEP
+  ## Low DO PrEP adherence
   idsLowAdhr <- which(prepClass == 1)
   dat <- set_attr(dat, "edp.ind4", at, posit_ids = idsLowAdhr)
 
