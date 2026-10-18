@@ -1,0 +1,42 @@
+Package: EpiModelHIV
+Version: 3.0.0
+Date: 2023-10-18
+Type: Package
+Title: Network-Based Epidemic Modeling of HIV/STI Transmission
+Description: EpiModelHIV provides extensions to our general EpiModel package to allow
+  for simulating HIV/STI transmission dynamics.
+Maintainer: Samuel M. Jenness <samuel.m.jenness@emory.edu>
+Authors@R: c(
+    person("Samuel M.", "Jenness", role = c("cre", "aut"),
+        email = "samuel.m.jenness@emory.edu"),
+    person("Steven M.", "Goodreau", role = "aut", email = "goodeau@uw.edu"))
+License: GPL-3
+Depends:
+    R (>= 4.1.0),
+    EpiModel (>= 2.4.0)
+Imports:
+    tergm,
+    ergm (>= 4.3.1),
+    network,
+    networkDynamic (>= 0.11.3),
+    statnet.common,
+    progressr,
+    dplyr,
+    networkLite (>= 1.0.1),
+    collections
+Suggests:
+    knitr,
+    testthat (>= 3.0.0),
+    withr,
+    ARTnet (>= 2.7.0),
+    ARTnetData,
+    Rglpk
+Remotes:
+    github::EpiModel/ARTnet@main,
+    github::EpiModel/ARTnetData@main,
+    github::EpiModel/EpiModel@main
+VignetteBuilder: knitr
+RoxygenNote: 7.3.1
+Encoding: UTF-8
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
