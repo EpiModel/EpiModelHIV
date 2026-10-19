@@ -33,8 +33,6 @@ This repository holds the version of EpiModelHIV used in each of the published p
 
 ARTnetData, the data package for the ARTnet survey of men who have sex with men, is private. It is needed only to re-estimate the network models; see the [ARTnet repository](https://github.com/EpiModel/ARTnet) for how to request access.
 
-Lockfiles made before October 2026 may pin ARTnet commits that are no longer public. If `renv::restore()` stops on ARTnet, run `renv::restore(exclude = c("ARTnet", "ARTnetData"))` instead. ARTnet is also used only for network estimation, and `remotes::install_github("EpiModel/ARTnet")` installs the current version.
-
 ## Papers
 
 Newest first. The last column gives the EpiModel and R versions recorded in the analysis repository's `renv.lock`, or, where there is no lockfile, the oldest EpiModel version the snapshot accepts.
